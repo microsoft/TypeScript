@@ -1224,6 +1224,7 @@ namespace ts.server {
                     containerName: info.containerName,
                     kind: info.kind,
                     name: info.name,
+                    ...info.unverified && { unverified: info.unverified },
                 };
             });
         }
@@ -1300,8 +1301,8 @@ namespace ts.server {
             }));
         }
 
-        private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.FileSpanWithContext[] {
-            return definitions.map(def => this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project));
+        private mapDefinitionInfo(definitions: readonly DefinitionInfo[], project: Project): readonly protocol.DefinitionInfo[] {
+            return definitions.map(def => ({ ...this.toFileSpanWithContext(def.fileName, def.textSpan, def.contextSpan, project), ...def.unverified && { unverified: def.unverified } }));
         }
 
         /*
@@ -1838,10 +1839,10 @@ namespace ts.server {
             const prefix = args.prefix || "";
             const entries = stableSort(mapDefined<CompletionEntry, protocol.CompletionEntry>(completions.entries, entry => {
                 if (completions.isMemberCompletion || startsWith(entry.name.toLowerCase(), prefix.toLowerCase())) {
-                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, data } = entry;
+                    const { name, kind, kindModifiers, sortText, insertText, replacementSpan, hasAction, source, sourceDisplay, isSnippet, isRecommended, isPackageJsonImport, isImportStatementCompletion, data } = entry;
                     const convertedSpan = replacementSpan ? toProtocolTextSpan(replacementSpan, scriptInfo) : undefined;
                     // Use `hasAction || undefined` to avoid serializing `false`.
-                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, data };
+                    return { name, kind, kindModifiers, sortText, insertText, replacementSpan: convertedSpan, isSnippet, hasAction: hasAction || undefined, source, sourceDisplay, isRecommended, isPackageJsonImport, isImportStatementCompletion, data };
                 }
             }), (a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
@@ -2200,10 +2201,18 @@ namespace ts.server {
             }
         }
 
-        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
-            Debug.assert(scope.type === "file");
-            const { file, project } = this.getFileAndProject(scope.args);
-            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
+        private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
+            Debug.assert(args.scope.type === "file");
+            const { file, project } = this.getFileAndProject(args.scope.args);
+            const changes = project.getLanguageService().organizeImports(
+                {
+                    fileName: file,
+                    skipDestructiveCodeActions: args.skipDestructiveCodeActions,
+                    type: "file",
+                },
+                this.getFormatOptions(file),
+                this.getPreferences(file)
+            );
             if (simplifiedResult) {
                 return this.mapTextChangesToCodeEdits(changes);
             }

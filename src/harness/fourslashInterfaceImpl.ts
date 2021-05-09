@@ -537,6 +537,10 @@ namespace FourSlashInterface {
             this.state.verifySyntacticClassifications(classifications);
         }
 
+        public encodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, length: number) {
+            this.state.verifyEncodedSemanticClassificationsLength(format, length);
+        }
+
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
@@ -1175,7 +1179,7 @@ namespace FourSlashInterface {
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+            ["private", "protected", "public", "readonly", "override"].map((name): ExpectedCompletionEntryObject => ({
                 name,
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords

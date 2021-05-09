@@ -48,7 +48,7 @@ namespace ts.refactor {
     });
 
     // If a VariableStatement, will have exactly one VariableDeclaration, with an Identifier for a name.
-    type ExportToConvert = FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration | TypeAliasDeclaration | VariableStatement;
+    type ExportToConvert = FunctionDeclaration | ClassDeclaration | InterfaceDeclaration | EnumDeclaration | NamespaceDeclaration | TypeAliasDeclaration | VariableStatement | ExportAssignment;
     interface ExportInfo {
         readonly exportNode: ExportToConvert;
         readonly exportName: Identifier; // This is exportNode.name except for VariableStatement_s.
@@ -67,7 +67,8 @@ namespace ts.refactor {
 
         const exportingModuleSymbol = isSourceFile(exportNode.parent) ? exportNode.parent.symbol : exportNode.parent.parent.symbol;
 
-        const flags = getSyntacticModifierFlags(exportNode);
+        const flags = getSyntacticModifierFlags(exportNode) || ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
+
         const wasDefault = !!(flags & ModifierFlags.Default);
         // If source file already has a default export, don't offer refactor.
         if (!(flags & ModifierFlags.Export) || !wasDefault && exportingModuleSymbol.exports!.has(InternalSymbolName.Default)) {
@@ -95,6 +96,11 @@ namespace ts.refactor {
                 Debug.assert(!wasDefault, "Can't have a default flag here");
                 return isIdentifier(decl.name) ? { exportNode: vs, exportName: decl.name, wasDefault, exportingModuleSymbol } : undefined;
             }
+            case SyntaxKind.ExportAssignment: {
+                const node = exportNode as ExportAssignment;
+                const exp = node.expression as Identifier;
+                return node.isExportEquals ? undefined : { exportNode: node, exportName: exp, wasDefault, exportingModuleSymbol };
+            }
             default:
                 return undefined;
         }
@@ -107,7 +113,14 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: ExportInfo, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
+            if (isExportAssignment(exportNode) && !exportNode.isExportEquals) {
+                const exp = exportNode.expression as Identifier;
+                const spec = makeExportSpecifier(exp.text, exp.text);
+                changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*isTypeOnly*/ false, factory.createNamedExports([spec])));
+            }
+            else {
+                changes.delete(exportingSourceFile, Debug.checkDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword), "Should find a default keyword in modifier list"));
+            }
         }
         else {
             const exportKeyword = Debug.checkDefined(findModifier(exportNode, SyntaxKind.ExportKeyword), "Should find an export keyword in modifier list");
@@ -134,7 +147,7 @@ namespace ts.refactor {
                     changes.insertNodeAfter(exportingSourceFile, exportNode, factory.createExportDefault(factory.createIdentifier(exportName.text)));
                     break;
                 default:
-                    Debug.assertNever(exportNode, `Unexpected exportNode kind ${(exportNode as ExportToConvert).kind}`);
+                    Debug.fail(`Unexpected exportNode kind ${(exportNode as ExportToConvert).kind}`);
             }
         }
     }

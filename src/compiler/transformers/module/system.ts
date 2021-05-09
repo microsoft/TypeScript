@@ -1529,7 +1529,7 @@ namespace ts {
         }
 
         /**
-         * Determines whether the target of a destructuring assigment refers to an exported symbol.
+         * Determines whether the target of a destructuring assignment refers to an exported symbol.
          *
          * @param node The destructuring target.
          */

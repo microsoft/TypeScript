@@ -1,130 +1,251 @@
 Exit Code: 2
 Standard output:
-lib/auth/legacy.js(9,81): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/auth/sso.js(68,17): error TS2554: Expected 0 arguments, but got 2.
-lib/birthday.js(5,20): error TS2538: Type 'Buffer' cannot be used as an index type.
-lib/bugs.js(44,17): error TS2554: Expected 0 arguments, but got 2.
-lib/cache.js(108,32): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+lib/access.js(27,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Access'.
+lib/adduser.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'AddUser'.
+lib/audit.js(14,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Audit'.
+lib/base-command.js(15,29): error TS2339: Property 'description' does not exist on type 'Function'.
+lib/base-command.js(20,26): error TS2339: Property 'description' does not exist on type 'Function'.
+lib/base-command.js(21,43): error TS2339: Property 'description' does not exist on type 'Function'.
+lib/base-command.js(24,27): error TS2339: Property 'usage' does not exist on type 'Function'.
+lib/base-command.js(27,43): error TS2339: Property 'usage' does not exist on type 'Function'.
+lib/base-command.js(29,26): error TS2339: Property 'params' does not exist on type 'Function'.
+lib/base-command.js(31,58): error TS2339: Property 'params' does not exist on type 'Function'.
+lib/bin.js(9,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Bin'.
+lib/bugs.js(12,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Bugs'.
+lib/cache.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Cache'.
+lib/cache.js(119,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/cache.js(109,24): error TS2532: Object is possibly 'undefined'.
-lib/ci.js(20,16): error TS2769: No overload matches this call.
+lib/cache.js(120,26): error TS2532: Object is possibly 'undefined'.
+lib/ci.js(13,16): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-lib/ci.js(25,16): error TS2769: No overload matches this call.
+lib/ci.js(18,16): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
-lib/ci.js(31,9): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/cli.js(45,27): error TS2339: Property 'exit' does not exist on type '(er: any) => void'.
-lib/completion.js(61,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+lib/ci.js(29,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'CI'.
+lib/ci.js(40,11): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/cli.js(47,27): error TS2339: Property 'exit' does not exist on type '(er: any) => void'.
+lib/completion.js(54,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Completion'.
+lib/completion.js(65,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/completion.js(62,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+lib/completion.js(66,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/completion.js(179,7): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/completion.js(199,9): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/config.js(201,14): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/docs.js(37,17): error TS2554: Expected 0 arguments, but got 2.
-lib/doctor.js(246,17): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)'.
-lib/doctor.js(246,29): error TS2349: This expression is not callable.
-  Not all constituents of type 'string | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)' are callable.
-    Type 'string' has no call signatures.
-lib/doctor.js(246,35): error TS2488: Type 'string | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/doctor.js(248,17): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)'.
-lib/doctor.js(260,7): error TS2322: Type 'string | false | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)' is not assignable to type 'boolean'.
+lib/completion.js(208,7): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/completion.js(228,9): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/config.js(38,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Config'.
+lib/config.js(218,16): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/dedupe.js(14,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Dedupe'.
+lib/dedupe.js(25,10): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/deprecate.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Deprecate'.
+lib/diff.js(20,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Diff'.
+lib/dist-tag.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'DistTag'.
+lib/docs.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Docs'.
+lib/doctor.js(41,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Doctor'.
+lib/doctor.js(80,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | any[]'.
+lib/doctor.js(80,36): error TS2538: Type 'any[]' cannot be used as an index type.
+lib/doctor.js(82,19): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'string | any[]'.
+lib/doctor.js(92,9): error TS2322: Type 'string | false | any[]' is not assignable to type 'boolean'.
   Type 'string' is not assignable to type 'boolean'.
-lib/doctor.js(266,7): error TS2322: Type 'string | false | any[] | ((root: any, shouldOwn: any, mask?: any) => Promise<string>) | (() => Promise<any>)' is not assignable to type 'boolean'.
-lib/fund.js(144,11): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/fund.js(155,20): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/fund.js(174,9): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/fund.js(180,9): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/help.js(135,7): error TS2322: Type 'boolean' is not assignable to type 'string'.
-lib/help.js(150,35): error TS2769: No overload matches this call.
+lib/doctor.js(98,9): error TS2322: Type 'string | false | any[]' is not assignable to type 'boolean'.
+lib/edit.js(17,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Edit'.
+lib/edit.js(56,13): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/exec.js(62,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Exec'.
+lib/exec.js(79,22): error TS2345: Argument of type '{ path: any; runPath: string; }' is not assignable to parameter of type '{ locationMsg: any; path: any; runPath: any; }'.
+  Property 'locationMsg' is missing in type '{ path: any; runPath: string; }' but required in type '{ locationMsg: any; path: any; runPath: any; }'.
+lib/explain.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Explain'.
+lib/explain.js(27,33): error TS2554: Expected 0-1 arguments, but got 2.
+lib/explore.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Explore'.
+lib/find-dupes.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'FindDupes'.
+lib/fund.js(31,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Fund'.
+lib/fund.js(52,33): error TS2554: Expected 0-1 arguments, but got 2.
+lib/fund.js(71,11): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/fund.js(77,11): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/fund.js(221,22): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/get.js(10,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Get'.
+lib/help-search.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'HelpSearch'.
+lib/help.js(21,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Help'.
+lib/help.js(73,26): error TS2531: Object is possibly 'null'.
+lib/help.js(74,26): error TS2531: Object is possibly 'null'.
+lib/help.js(78,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+lib/help.js(78,29): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+lib/help.js(98,9): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/help.js(132,35): error TS2769: No overload matches this call.
   The last overload gave the following error.
-    Argument of type '{ env: { MANPATH: string; }; stdio: string; }' is not assignable to parameter of type 'SpawnOptions'.
+    Argument of type '{ env: {}; stdio: string; }' is not assignable to parameter of type 'SpawnOptions'.
       Types of property 'stdio' are incompatible.
         Type 'string' is not assignable to type 'StdioOptions | undefined'.
-lib/help.js(151,10): error TS2339: Property 'on' does not exist on type 'never'.
+lib/help.js(134,12): error TS2339: Property 'on' does not exist on type 'never'.
   The intersection 'ChildProcessWithoutNullStreams & ChildProcessByStdio<Writable, Readable, Readable> & ... 7 more ... & ChildProcess' was reduced to 'never' because property 'stdin' has conflicting types in some constituents.
-lib/help.js(165,7): error TS2322: Type 'string' is not assignable to type 'number'.
-lib/help.js(168,7): error TS2322: Type 'string' is not assignable to type 'number'.
-lib/help.js(171,7): error TS2322: Type 'string' is not assignable to type 'number'.
-lib/help.js(176,70): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-lib/init.js(46,55): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/init.js(77,16): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/ls.js(288,68): error TS2345: Argument of type '{ node: any; seenNodes: any; }' is not assignable to parameter of type '{ node: any; }'.
-  Object literal may only specify known properties, and 'seenNodes' does not exist in type '{ node: any; }'.
-lib/ls.js(392,5): error TS2345: Argument of type '{ arb: any; args: any; global: any; json: any; }' is not assignable to parameter of type '{ arb: any; args: any; json: any; }'.
-  Object literal may only specify known properties, and 'global' does not exist in type '{ arb: any; args: any; json: any; }'.
-lib/npm.js(72,18): error TS2769: No overload matches this call.
+lib/help.js(138,16): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/hook.js(12,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Hook'.
+lib/init.js(13,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Init'.
+lib/init.js(58,62): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/init.js(89,18): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+lib/install-ci-test.js(12,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'InstallCITest'.
+lib/install-test.js(12,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'InstallTest'.
+lib/install.js(20,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Install'.
+lib/link.js(21,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Link'.
+lib/ll.js(5,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'LL'.
+lib/logout.js(13,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Logout'.
+lib/ls.js(32,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'LS'.
+lib/ls.js(43,33): error TS2554: Expected 0-1 arguments, but got 2.
+lib/npm.js(56,18): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-lib/npm.js(97,18): error TS2769: No overload matches this call.
+lib/npm.js(85,18): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-lib/npm.js(120,22): error TS2769: No overload matches this call.
+lib/npm.js(112,22): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
-lib/npm.js(142,18): error TS2769: No overload matches this call.
-  The last overload gave the following error.
-    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
-lib/npm.js(153,20): error TS2769: No overload matches this call.
+lib/npm.js(117,22): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
-lib/npm.js(191,40): error TS2554: Expected 0-1 arguments, but got 2.
-lib/npm.js(290,44): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+lib/npm.js(139,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(147,20): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(166,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(168,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(175,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(177,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(186,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(190,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(192,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(194,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(197,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(199,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(203,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(207,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(209,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"time"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(212,18): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
+lib/npm.js(300,44): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/owner.js(193,25): error TS2339: Property 'name' does not exist on type 'string'.
-lib/owner.js(193,35): error TS2339: Property 'error' does not exist on type 'string'.
-lib/owner.js(203,3): error TS2322: Type '{ name: any; email: any; }' is not assignable to type 'string'.
-lib/owner.js(203,17): error TS2339: Property 'name' does not exist on type 'string'.
-lib/owner.js(203,32): error TS2339: Property 'email' does not exist on type 'string'.
-lib/profile.js(20,3): error TS2554: Expected 0-3 arguments, but got 4.
-lib/repo.js(49,17): error TS2554: Expected 0 arguments, but got 2.
-lib/run-script.js(99,22): error TS2769: No overload matches this call.
+lib/org.js(12,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Org'.
+lib/outdated.js(22,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Outdated'.
+lib/outdated.js(119,7): error TS2532: Object is possibly 'undefined'.
+lib/outdated.js(125,9): error TS2532: Object is possibly 'undefined'.
+lib/outdated.js(128,9): error TS2532: Object is possibly 'undefined'.
+lib/outdated.js(180,9): error TS2532: Object is possibly 'undefined'.
+lib/owner.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Owner'.
+lib/owner.js(150,27): error TS2339: Property 'name' does not exist on type 'string'.
+lib/owner.js(150,37): error TS2339: Property 'error' does not exist on type 'string'.
+lib/owner.js(160,5): error TS2322: Type '{ name: any; email: any; }' is not assignable to type 'string'.
+lib/owner.js(160,19): error TS2339: Property 'name' does not exist on type 'string'.
+lib/owner.js(160,34): error TS2339: Property 'email' does not exist on type 'string'.
+lib/pack.js(20,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Pack'.
+lib/ping.js(17,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Ping'.
+lib/prefix.js(10,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Prefix'.
+lib/profile.js(46,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Profile'.
+lib/prune.js(13,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Prune'.
+lib/publish.js(27,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Publish'.
+lib/rebuild.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Rebuild'.
+lib/rebuild.js(26,33): error TS2554: Expected 0-1 arguments, but got 2.
+lib/repo.js(17,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Repo'.
+lib/restart.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Restart'.
+lib/root.js(9,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Root'.
+lib/root.js(19,15): error TS2554: Expected 0 arguments, but got 1.
+lib/run-script.js(20,20): error TS2769: No overload matches this call.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Type 'string' is not assignable to type 'never'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Type 'string' is not assignable to type 'never'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Type 'string' is not assignable to type 'never'.
+lib/run-script.js(43,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'RunScript'.
+lib/run-script.js(76,63): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+lib/search.js(35,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Search'.
 lib/search/format-package-stream.js(40,19): error TS2339: Property 'emit' does not exist on type 'JSONOutputStream'.
-lib/shrinkwrap.js(25,8): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/set-script.js(21,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'SetScript'.
+lib/set.js(9,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Set'.
+lib/shrinkwrap.js(16,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Shrinkwrap'.
+lib/shrinkwrap.js(34,10): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/star.js(14,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Star'.
+lib/stars.js(14,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Stars'.
+lib/start.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Start'.
+lib/stop.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Stop'.
+lib/team.js(13,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Team'.
+lib/test.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Test'.
+lib/token.js(18,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Token'.
+lib/uninstall.js(15,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Uninstall'.
+lib/unpublish.js(20,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Unpublish'.
+lib/unstar.js(10,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Unstar'.
+lib/update.js(17,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Update'.
+lib/update.js(33,33): error TS2554: Expected 0-1 arguments, but got 2.
 lib/utils/cleanup-log-files.js(15,16): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
 lib/utils/cleanup-log-files.js(19,16): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
 lib/utils/cleanup-log-files.js(27,13): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-lib/utils/config.js(30,14): error TS2532: Object is possibly 'undefined'.
-lib/utils/config.js(31,41): error TS2769: No overload matches this call.
-  Overload 1 of 2, '(...items: ConcatArray<undefined>[]): undefined[]', gave the following error.
-    Argument of type 'string[]' is not assignable to parameter of type 'ConcatArray<undefined>'.
+lib/utils/config/definition.js(48,52): error TS2339: Property 'default' does not exist on type 'Definition'.
+lib/utils/config/definition.js(50,48): error TS2339: Property 'type' does not exist on type 'Definition'.
+lib/utils/config/definition.js(73,39): error TS2339: Property 'description' does not exist on type 'Definition'.
+lib/utils/config/definition.js(77,30): error TS2339: Property 'deprecated' does not exist on type 'Definition'.
+lib/utils/config/definition.js(78,40): error TS2339: Property 'deprecated' does not exist on type 'Definition'.
+lib/utils/config/definitions.js(66,14): error TS2532: Object is possibly 'undefined'.
+lib/utils/config/definitions.js(67,41): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(...items: ConcatArray<null>[]): null[]', gave the following error.
+    Argument of type 'string[]' is not assignable to parameter of type 'ConcatArray<null>'.
       The types returned by 'slice(...)' are incompatible between these types.
-        Type 'string[]' is not assignable to type 'undefined[]'.
-          Type 'string' is not assignable to type 'undefined'.
-  Overload 2 of 2, '(...items: (ConcatArray<undefined> | undefined)[]): undefined[]', gave the following error.
-    Argument of type 'string[]' is not assignable to parameter of type 'ConcatArray<undefined>'.
-lib/utils/config.js(38,3): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+        Type 'string[]' is not assignable to type 'null[]'.
+          Type 'string' is not assignable to type 'null'.
+  Overload 2 of 2, '(...items: (ConcatArray<null> | null)[]): null[]', gave the following error.
+    Argument of type 'string[]' is not assignable to parameter of type 'ConcatArray<null>'.
+lib/utils/config/definitions.js(74,3): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
+lib/utils/config/index.js(35,22): error TS2322: Type 'string' is not assignable to type 'never'.
 lib/utils/error-handler.js(34,16): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
-lib/utils/error-handler.js(141,11): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/utils/error-handler.js(143,8): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/utils/error-handler.js(174,18): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/utils/error-handler.js(182,18): error TS2339: Property 'errno' does not exist on type 'Error'.
-lib/utils/error-handler.js(182,42): error TS2339: Property 'errno' does not exist on type 'Error'.
-lib/utils/error-handler.js(182,60): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/utils/error-handler.js(182,83): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/utils/error-handler.js(149,11): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/utils/error-handler.js(151,8): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/utils/error-handler.js(182,18): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/utils/error-handler.js(190,18): error TS2339: Property 'errno' does not exist on type 'Error'.
+lib/utils/error-handler.js(190,42): error TS2339: Property 'errno' does not exist on type 'Error'.
+lib/utils/error-handler.js(190,60): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/utils/error-handler.js(190,83): error TS2339: Property 'code' does not exist on type 'Error'.
 lib/utils/is-windows-bash.js(3,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-lib/utils/npm-usage.js(66,15): error TS2322: Type 'string' is not assignable to type 'never'.
-lib/utils/npm-usage.js(66,18): error TS2322: Type 'any' is not assignable to type 'never'.
-lib/utils/npm-usage.js(71,26): error TS2339: Property 'localeCompare' does not exist on type 'never'.
-lib/utils/npm-usage.js(72,11): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
-lib/utils/npm-usage.js(72,61): error TS2339: Property 'length' does not exist on type 'never'.
-lib/utils/npm-usage.js(73,14): error TS2339: Property 'split' does not exist on type 'never'.
+lib/utils/npm-usage.js(61,15): error TS2322: Type 'string' is not assignable to type 'never'.
+lib/utils/npm-usage.js(61,18): error TS2322: Type 'any' is not assignable to type 'never'.
+lib/utils/npm-usage.js(65,26): error TS2339: Property 'localeCompare' does not exist on type 'never'.
+lib/utils/npm-usage.js(66,11): error TS2488: Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator.
+lib/utils/npm-usage.js(66,61): error TS2339: Property 'length' does not exist on type 'never'.
+lib/utils/npm-usage.js(67,14): error TS2339: Property 'split' does not exist on type 'never'.
+lib/utils/open-url.js(42,14): error TS2794: Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
 lib/utils/path.js(4,18): error TS2532: Object is possibly 'undefined'.
 lib/utils/perf.js(11,18): error TS2769: No overload matches this call.
   The last overload gave the following error.
     Argument of type '"timing"' is not assignable to parameter of type '"removeListener"'.
-lib/utils/reify-output.js(76,36): error TS2769: No overload matches this call.
+lib/utils/reify-output.js(74,40): error TS2769: No overload matches this call.
   Overload 1 of 2, '(value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string', gave the following error.
     Argument of type '0' is not assignable to parameter of type '((this: any, key: string, value: any) => any) | undefined'.
   Overload 2 of 2, '(value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string', gave the following error.
@@ -135,10 +256,12 @@ lib/utils/usage.js(8,21): error TS2769: No overload matches this call.
     Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
   Overload 2 of 2, '(...items: ConcatArray<never>[]): never[]', gave the following error.
     Argument of type 'string' is not assignable to parameter of type 'ConcatArray<never>'.
-lib/view.js(117,8): error TS2339: Property 'statusCode' does not exist on type 'Error'.
-lib/view.js(118,8): error TS2339: Property 'code' does not exist on type 'Error'.
-lib/view.js(119,8): error TS2339: Property 'pkgid' does not exist on type 'Error'.
-lib/whoami.js(13,44): error TS2554: Expected 0-1 arguments, but got 2.
+lib/version.js(10,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Version'.
+lib/view.js(38,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'View'.
+lib/view.js(215,10): error TS2339: Property 'statusCode' does not exist on type 'Error'.
+lib/view.js(216,10): error TS2339: Property 'code' does not exist on type 'Error'.
+lib/view.js(217,10): error TS2339: Property 'pkgid' does not exist on type 'Error'.
+lib/whoami.js(11,14): error TS2699: Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'Whoami'.
 
 
 

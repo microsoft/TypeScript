@@ -35,7 +35,7 @@ class D extends B{
     override readonly p4: number;
 >p4 : number
 
-    override static sp: number;
+    static override sp: number;
 >sp : number
 
     override override oop: number;

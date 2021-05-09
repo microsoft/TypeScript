@@ -683,6 +683,7 @@ namespace ts {
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
+                    (node as SourceFile).endFlowNode = currentFlow;
                 }
 
                 if (currentReturnTarget) {
@@ -2122,9 +2123,9 @@ namespace ts {
             const saveParent = parent;
             const saveCurrentFlow = currentFlow;
             for (const typeAlias of delayedTypeAliases) {
-                const host = getJSDocHost(typeAlias);
-                container = (host && findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer))) || file;
-                blockScopeContainer = (host && getEnclosingBlockScopeContainer(host)) || file;
+                const host = typeAlias.parent.parent;
+                container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
+                blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
                 currentFlow = initFlowNode({ flags: FlowFlags.Start });
                 parent = typeAlias;
                 bind(typeAlias.typeExpression);
@@ -2767,8 +2768,8 @@ namespace ts {
 
         function bindExportAssignment(node: ExportAssignment) {
             if (!container.symbol || !container.symbol.exports) {
-                // Export assignment in some sort of block construct
-                bindAnonymousDeclaration(node, SymbolFlags.Alias, getDeclarationName(node)!);
+                // Incorrect export assignment in some sort of block construct
+                bindAnonymousDeclaration(node, SymbolFlags.Value, getDeclarationName(node)!);
             }
             else {
                 const flags = exportAssignmentIsAlias(node)

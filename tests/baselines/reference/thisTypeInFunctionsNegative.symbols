@@ -646,9 +646,11 @@ function optional(this?: C): number { return this.n; }
 
 function decorated(@deco() this: C): number { return this.n; }
 >decorated : Symbol(decorated, Decl(thisTypeInFunctionsNegative.ts, 169, 54))
-> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 170, 19))
->this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 26))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 19))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
+>this.n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 170, 19))
+>n : Symbol(C.n, Decl(thisTypeInFunctionsNegative.ts, 0, 9))
 
 function initializer(this: C = new C()): number { return this.n; }
 >initializer : Symbol(initializer, Decl(thisTypeInFunctionsNegative.ts, 170, 62))

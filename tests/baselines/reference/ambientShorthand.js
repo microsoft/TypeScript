@@ -20,4 +20,4 @@ exports.__esModule = true;
 var jquery_1 = require("jquery");
 var baz = require("fs");
 var boom = require("jquery");
-(0, jquery_1["default"])(jquery_1.bar, baz, boom);
+jquery_1["default"](jquery_1.bar, baz, boom);

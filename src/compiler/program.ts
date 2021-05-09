@@ -843,6 +843,7 @@ namespace ts {
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
+        let typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
         let actualResolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
@@ -857,7 +858,7 @@ namespace ts {
             });
         }
         else {
-            moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x), options);
+            moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache, redirectedReference).resolvedModule!; // TODO: GH#18217
             actualResolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
@@ -867,7 +868,15 @@ namespace ts {
             actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
-            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
+            typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(
+                typesRef,
+                containingFile,
+                options,
+                host,
+                redirectedReference,
+                typeReferenceDirectiveResolutionCache,
+            ).resolvedTypeReferenceDirective!; // TODO: GH#18217
             actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
@@ -1035,6 +1044,8 @@ namespace ts {
                 }
             );
         }
+
+        typeReferenceDirectiveResolutionCache = undefined;
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
@@ -2896,6 +2907,7 @@ namespace ts {
                 const moduleNames = getModuleNames(file);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
+                const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
                 for (let index = 0; index < moduleNames.length; index++) {
                     const resolution = resolutions[index];
                     setResolvedModule(file, moduleNames[index], resolution);
@@ -2922,11 +2934,11 @@ namespace ts {
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                     const shouldAddFile = resolvedFileName
-                        && !getResolutionDiagnostic(options, resolution)
-                        && !options.noResolve
+                        && !getResolutionDiagnostic(optionsForFile, resolution)
+                        && !optionsForFile.noResolve
                         && index < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !getAllowJSCompilerOption(options))
+                        && !(isJsFile && !getAllowJSCompilerOption(optionsForFile))
                         && (isInJSFile(file.imports[index]) || !(file.imports[index].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {

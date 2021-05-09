@@ -1444,7 +1444,7 @@ namespace ts {
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1493,9 +1493,13 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.");
-
-                        return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        if (hostFileInformation.scriptKind === oldSourceFile.scriptKind) {
+                            return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        }
+                        else {
+                            // Release old source file and fall through to aquire new file with new script kind
+                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
+                        }
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
@@ -1531,7 +1535,7 @@ namespace ts {
                 // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;
@@ -1666,7 +1670,7 @@ namespace ts {
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return !isLabelName(node) && !isTagName(node);
+                    return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                     // Don't return quickInfo if inside the comment in `a/**/.b`
@@ -1878,17 +1882,8 @@ namespace ts {
             return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
-        function isTsOrTsxFile(fileName: string): boolean {
-            const kind = getScriptKind(fileName, host);
-            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
-        }
-
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return [];
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -1901,10 +1896,6 @@ namespace ts {
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return { spans: [], endOfLineState: EndOfLineState.None };
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -2013,13 +2004,13 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+        function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             synchronizeHostData();
-            Debug.assert(scope.type === "file");
-            const sourceFile = getValidSourceFile(scope.fileName);
+            Debug.assert(args.type === "file");
+            const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
