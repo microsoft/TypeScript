@@ -1,0 +1,33 @@
+=== tests/cases/compiler/formatToPartsBigInt.ts ===
+// Intl.NumberFormat.formatToParts should support bigInt
+
+// Test BigInt functions
+let bigintVal: bigint = BigInt(123);
+>bigintVal : bigint
+>BigInt(123) : bigint
+>BigInt : BigIntConstructor
+>123 : 123
+
+// Test Intl methods with new parameter type
+new Intl.NumberFormat("fr").formatToParts(3000n);
+>new Intl.NumberFormat("fr").formatToParts(3000n) : Intl.NumberFormatPart[]
+>new Intl.NumberFormat("fr").formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>"fr" : "fr"
+>formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>3000n : 3000n
+
+new Intl.NumberFormat("fr").formatToParts(bigintVal);
+>new Intl.NumberFormat("fr").formatToParts(bigintVal) : Intl.NumberFormatPart[]
+>new Intl.NumberFormat("fr").formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>"fr" : "fr"
+>formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
+>bigintVal : bigint
+
