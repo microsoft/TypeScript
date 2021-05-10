@@ -267,6 +267,8 @@ declare namespace Intl {
         signDisplay?: string;
         unit?: string;
         unitDisplay?: string;
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -275,6 +277,8 @@ declare namespace Intl {
         signDisplay?: string;
         unit?: string;
         unitDisplay?: string;
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {

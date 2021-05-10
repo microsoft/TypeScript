@@ -4295,8 +4295,6 @@ declare namespace Intl {
         localeMatcher?: string;
         style?: string;
         currency?: string;
-        currencyDisplay?: string;
-        currencySign?: string;
         useGrouping?: boolean;
         minimumIntegerDigits?: number;
         minimumFractionDigits?: number;
@@ -4310,8 +4308,6 @@ declare namespace Intl {
         numberingSystem: string;
         style: string;
         currency?: string;
-        currencyDisplay?: string;
-        currencySign?: string;
         minimumIntegerDigits: number;
         minimumFractionDigits: number;
         maximumFractionDigits: number;
