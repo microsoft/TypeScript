@@ -1,0 +1,43 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodClassExpression.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+
+    #field = this.#method();
+>#field : Symbol(C.#field, Decl(privateNameMethodClassExpression.ts, 0, 17))
+>this.#method : Symbol(C.#method, Decl(privateNameMethodClassExpression.ts, 1, 28))
+>this : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 9))
+
+    #method() { return 42; }
+>#method : Symbol(C.#method, Decl(privateNameMethodClassExpression.ts, 1, 28))
+
+    static getInstance() { return new C(); }
+>getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+
+    getField() { return this.#field };
+>getField : Symbol(C.getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+>this.#field : Symbol(C.#field, Decl(privateNameMethodClassExpression.ts, 0, 17))
+>this : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 9))
+}
+
+console.log(C.getInstance().getField());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.getInstance().getField : Symbol(C.getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+>C.getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>getField : Symbol(C.getField, Decl(privateNameMethodClassExpression.ts, 3, 44))
+
+C.getInstance().#method; // Error
+>C.getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+
+C.getInstance().#field; // Error
+>C.getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+>C : Symbol(C, Decl(privateNameMethodClassExpression.ts, 0, 5))
+>getInstance : Symbol(C.getInstance, Decl(privateNameMethodClassExpression.ts, 2, 28))
+
+

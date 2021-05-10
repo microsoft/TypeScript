@@ -57,7 +57,7 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
+            if (canBeConvertedToAsync(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
@@ -118,10 +118,9 @@ namespace ts {
             returnsPromise(node, checker);
     }
 
-    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
-        const functionType = checker.getTypeAtLocation(node);
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
-        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+    export function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        const signature = checker.getSignatureFromDeclaration(node);
+        const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
         return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 
@@ -213,5 +212,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

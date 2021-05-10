@@ -205,7 +205,9 @@ namespace ts {
     }
 
     export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-        return oldResolution.resolvedFileName === newResolution.resolvedFileName && oldResolution.primary === newResolution.primary;
+        return oldResolution.resolvedFileName === newResolution.resolvedFileName
+            && oldResolution.primary === newResolution.primary
+            && oldResolution.originalPath === newResolution.originalPath;
     }
 
     export function hasChangesInResolutions<T>(
@@ -478,7 +480,12 @@ namespace ts {
             return getTokenPosOfNode((<SyntaxList>node)._children[0], sourceFile, includeJsDoc);
         }
 
-        return skipTrivia((sourceFile || getSourceFileOfNode(node)).text, node.pos);
+        return skipTrivia(
+            (sourceFile || getSourceFileOfNode(node)).text,
+            node.pos,
+            /*stopAfterLineBreak*/ false,
+            /*stopAtComments*/ false,
+            isInJSDoc(node));
     }
 
     export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
@@ -603,9 +610,11 @@ namespace ts {
                 DataView: ["setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"],
                 RelativeTimeFormat: ["format", "formatToParts", "resolvedOptions"]
             },
-            esnext: {
+            es2021: {
                 PromiseConstructor: ["any"],
-                String: ["replaceAll"],
+                String: ["replaceAll"]
+            },
+            esnext: {
                 NumberFormat: ["formatToParts"]
             }
         };
@@ -734,9 +743,9 @@ namespace ts {
         return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
-    function isShorthandAmbientModule(node: Node): boolean {
+    function isShorthandAmbientModule(node: Node | undefined): boolean {
         // The only kind of module that can be missing a body is a shorthand ambient module.
-        return node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
+        return !!node && node.kind === SyntaxKind.ModuleDeclaration && (!(<ModuleDeclaration>node).body);
     }
 
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
@@ -1204,7 +1213,8 @@ namespace ts {
             node.kind === SyntaxKind.TypeParameter ||
             node.kind === SyntaxKind.FunctionExpression ||
             node.kind === SyntaxKind.ArrowFunction ||
-            node.kind === SyntaxKind.ParenthesizedExpression) ?
+            node.kind === SyntaxKind.ParenthesizedExpression ||
+            node.kind === SyntaxKind.VariableDeclaration) ?
             concatenate(getTrailingCommentRanges(text, node.pos), getLeadingCommentRanges(text, node.pos)) :
             getLeadingCommentRanges(text, node.pos);
         // True if the comment starts with '/**' but not if it is '/**/'
@@ -1730,6 +1740,14 @@ namespace ts {
         return !!node && isVariableDeclaration(node) && node.initializer?.kind === SyntaxKind.ThisKeyword;
     }
 
+    export function isThisInitializedObjectBindingExpression(node: Node | undefined): boolean {
+        return !!node
+            && (isShorthandPropertyAssignment(node) || isPropertyAssignment(node))
+            && isBinaryExpression(node.parent.parent)
+            && node.parent.parent.operatorToken.kind === SyntaxKind.EqualsToken
+            && node.parent.parent.right.kind === SyntaxKind.ThisKeyword;
+    }
+
     export function getEntityNameFromTypeNode(node: TypeNode): EntityNameOrEntityNameExpression | undefined {
         switch (node.kind) {
             case SyntaxKind.TypeReference:
@@ -1953,6 +1971,10 @@ namespace ts {
             node = node.parent;
         }
         return node.kind === SyntaxKind.TypeQuery;
+    }
+
+    export function isNamespaceReexportDeclaration(node: Node): boolean {
+        return isNamespaceExport(node) && !!node.parent.moduleSpecifier;
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node): node is ImportEqualsDeclaration & { moduleReference: ExternalModuleReference } {
@@ -2401,6 +2423,19 @@ namespace ts {
         return decl.kind === SyntaxKind.FunctionDeclaration || isVariableDeclaration(decl) && decl.initializer && isFunctionLike(decl.initializer);
     }
 
+    export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrRequire): string | undefined {
+        switch (node.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return node.initializer.arguments[0].text;
+            case SyntaxKind.ImportDeclaration:
+                return tryCast(node.moduleSpecifier, isStringLiteralLike)?.text;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike)?.text;
+            default:
+                Debug.assertNever(node);
+        }
+    }
+
     export function importFromModuleSpecifier(node: StringLiteralLike): AnyValidImportOrReExport {
         return tryGetImportFromModuleSpecifier(node) || Debug.failBadSyntaxKind(node.parent);
     }
@@ -2575,6 +2610,7 @@ namespace ts {
             parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
+            parent.kind === SyntaxKind.ReturnStatement ||
             getNestedModuleDeclaration(parent) ||
             isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.EqualsToken) {
             return parent;
@@ -2694,6 +2730,9 @@ namespace ts {
                 case SyntaxKind.SpreadElement:
                 case SyntaxKind.NonNullExpression:
                     node = parent;
+                    break;
+                case SyntaxKind.SpreadAssignment:
+                    node = parent.parent;
                     break;
                 case SyntaxKind.ShorthandPropertyAssignment:
                     if ((parent as ShorthandPropertyAssignment).name !== node) {
@@ -4204,8 +4243,10 @@ namespace ts {
         return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
             !sourceFile.isDeclarationFile &&
             !host.isSourceFileFromExternalLibrary(sourceFile) &&
-            !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
-            (forceDtsEmit || !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName));
+            (forceDtsEmit || (
+                !(isJsonSourceFile(sourceFile) && host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) &&
+                !host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)
+            ));
     }
 
     export function getSourceFilePathInNewDir(fileName: string, host: EmitHost, newDirPath: string): string {
@@ -4639,6 +4680,18 @@ namespace ts {
         return hasSyntacticModifier(node, ModifierFlags.Static);
     }
 
+    export function hasOverrideModifier(node: Node): boolean {
+        return hasEffectiveModifier(node, ModifierFlags.Override);
+    }
+
+    export function hasAbstractModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Abstract);
+    }
+
+    export function hasAmbientModifier(node: Node): boolean {
+        return hasSyntacticModifier(node, ModifierFlags.Ambient);
+    }
+
     export function hasEffectiveReadonlyModifier(node: Node): boolean {
         return hasEffectiveModifier(node, ModifierFlags.Readonly);
     }
@@ -4697,6 +4750,7 @@ namespace ts {
                 if (getJSDocPrivateTagNoCache(node)) flags |= ModifierFlags.Private;
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
+                if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
             }
             if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
@@ -4749,8 +4803,13 @@ namespace ts {
             case SyntaxKind.DefaultKeyword: return ModifierFlags.Default;
             case SyntaxKind.AsyncKeyword: return ModifierFlags.Async;
             case SyntaxKind.ReadonlyKeyword: return ModifierFlags.Readonly;
+            case SyntaxKind.OverrideKeyword: return ModifierFlags.Override;
         }
         return ModifierFlags.None;
+    }
+
+    export function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
+        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
     }
 
     export function isLogicalOperator(token: SyntaxKind): boolean {
@@ -4801,6 +4860,9 @@ namespace ts {
             && isLeftHandSideExpression(node.left);
     }
 
+    export function isLeftHandSideOfAssignment(node: Node) {
+        return isAssignmentExpression(node.parent) && node.parent.left === node;
+    }
     export function isDestructuringAssignment(node: Node): node is DestructuringAssignment {
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const kind = node.left.kind;
@@ -5256,9 +5318,10 @@ namespace ts {
         return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
     }
 
-    export function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
+    export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false): ModifierFlags {
         if (s.valueDeclaration) {
-            const flags = getCombinedModifierFlags(s.valueDeclaration);
+            const declaration = (isWrite && s.declarations && find(s.declarations, d => d.kind === SyntaxKind.SetAccessor)) || s.valueDeclaration;
+            const flags = getCombinedModifierFlags(declaration);
             return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
         }
         if (getCheckFlags(s) & CheckFlags.Synthetic) {
@@ -5373,14 +5436,14 @@ namespace ts {
     /**
      * clears already present map by calling onDeleteExistingValue callback before deleting that key/value
      */
-    export function clearMap<T>(map: { forEach: ESMap<string, T>["forEach"]; clear: ESMap<string, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: string) => void) {
+    export function clearMap<K, T>(map: { forEach: ESMap<K, T>["forEach"]; clear: ESMap<K, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: K) => void) {
         // Remove all
         map.forEach(onDeleteValue);
         map.clear();
     }
 
-    export interface MutateMapSkippingNewValuesOptions<T, U> {
-        onDeleteValue(existingValue: T, key: string): void;
+    export interface MutateMapSkippingNewValuesOptions<K, T, U> {
+        onDeleteValue(existingValue: T, key: K): void;
 
         /**
          * If present this is called with the key when there is value for that key both in new map as well as existing map provided
@@ -5388,16 +5451,16 @@ namespace ts {
          * If the key is removed, caller will get callback of createNewValue for that key.
          * If this callback is not provided, the value of such keys is not updated.
          */
-        onExistingValue?(existingValue: T, valueInNewMap: U, key: string): void;
+        onExistingValue?(existingValue: T, valueInNewMap: U, key: K): void;
     }
 
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMapSkippingNewValues<T, U>(
-        map: ESMap<string, T>,
-        newMap: ReadonlyESMap<string, U>,
-        options: MutateMapSkippingNewValuesOptions<T, U>
+    export function mutateMapSkippingNewValues<K, T, U>(
+        map: ESMap<K, T>,
+        newMap: ReadonlyESMap<K, U>,
+        options: MutateMapSkippingNewValuesOptions<K, T, U>
     ) {
         const { onDeleteValue, onExistingValue } = options;
         // Needs update
@@ -5415,14 +5478,14 @@ namespace ts {
         });
     }
 
-    export interface MutateMapOptions<T, U> extends MutateMapSkippingNewValuesOptions<T, U> {
-        createNewValue(key: string, valueInNewMap: U): T;
+    export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOptions<K, T, U> {
+        createNewValue(key: K, valueInNewMap: U): T;
     }
 
     /**
      * Mutates the map with newMap such that keys in map will be same as newMap.
      */
-    export function mutateMap<T, U>(map: ESMap<string, T>, newMap: ReadonlyESMap<string, U>, options: MutateMapOptions<T, U>) {
+    export function mutateMap<K, T, U>(map: ESMap<K, T>, newMap: ReadonlyESMap<K, U>, options: MutateMapOptions<K, T, U>) {
         // Needs update
         mutateMapSkippingNewValues(map, newMap, options);
 
@@ -5609,8 +5672,8 @@ namespace ts {
     function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
-        this.declarations = undefined!;
-        this.valueDeclaration = undefined!;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
         this.id = undefined;
         this.mergeId = undefined;
         this.parent = undefined;
@@ -6020,6 +6083,10 @@ namespace ts {
         return compilerOptions.allowJs === undefined ? !!compilerOptions.checkJs : compilerOptions.allowJs;
     }
 
+    export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
+        return compilerOptions.useDefineForClassFields === undefined ? compilerOptions.target === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+    }
+
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
@@ -6041,7 +6108,7 @@ namespace ts {
 
     export function getJSXImplicitImportBase(compilerOptions: CompilerOptions, file?: SourceFile): string | undefined {
         const jsxImportSourcePragmas = file?.pragmas.get("jsximportsource");
-        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[0] : jsxImportSourcePragmas;
+        const jsxImportSourcePragma = isArray(jsxImportSourcePragmas) ? jsxImportSourcePragmas[jsxImportSourcePragmas.length - 1] : jsxImportSourcePragmas;
         return compilerOptions.jsx === JsxEmit.ReactJSX ||
             compilerOptions.jsx === JsxEmit.ReactJSXDev ||
             compilerOptions.jsxImportSource ||
@@ -6084,6 +6151,8 @@ namespace ts {
         getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
         setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
         setSymlinkedFile(symlinkPath: Path, real: string): void;
+        /*@internal*/
+        setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
@@ -6107,16 +6176,31 @@ namespace ts {
                     }
                     (symlinkedDirectories || (symlinkedDirectories = new Map())).set(symlinkPath, real);
                 }
-            }
+            },
+            setSymlinkedDirectoryFromSymlinkedFile(symlink, real) {
+                this.setSymlinkedFile(toPath(symlink, cwd, getCanonicalFileName), real);
+                const [commonResolved, commonOriginal] = guessDirectorySymlink(real, symlink, cwd, getCanonicalFileName) || emptyArray;
+                if (commonResolved && commonOriginal) {
+                    this.setSymlinkedDirectory(commonOriginal, {
+                        real: commonResolved,
+                        realPath: toPath(commonResolved, cwd, getCanonicalFileName),
+                    });
+                }
+            },
         };
     }
 
     export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
         const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatten<readonly [string, string]>(mapDefined(files, sf =>
-            sf.resolvedModules && compact(arrayFrom(mapIterator(sf.resolvedModules.values(), res =>
-                res && res.originalPath && res.resolvedFileName !== res.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined)))));
+        const symlinks = flatMap(files, sf => {
+            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
+                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
+            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
+                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
+        });
+
         for (const [resolvedPath, originalPath] of symlinks) {
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
             const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(

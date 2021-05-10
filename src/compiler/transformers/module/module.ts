@@ -1,5 +1,6 @@
 /*@internal*/
 namespace ts {
+
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -1762,11 +1763,9 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
                 }
-
                 return node;
             }
-
-            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
+            else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
@@ -1777,7 +1776,6 @@ namespace ts {
                         /*location*/ node
                     );
                 }
-
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {

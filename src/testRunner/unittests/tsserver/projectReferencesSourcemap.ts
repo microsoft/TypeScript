@@ -892,7 +892,7 @@ fn5();
                 }
 
                 function expectedScriptInfos() {
-                    return [dependencyTs.path, dependencyConfig.path, libFile.path, mainTs.path, randomFile.path];
+                    return [dependencyTs.path, libFile.path, mainTs.path, randomFile.path];
                 }
 
                 function expectedWatchedFiles() {
@@ -1303,7 +1303,7 @@ ${dependencyTs.content}`);
                 }
 
                 function expectedScriptInfosWhenMapped() {
-                    return [mainTs.path, randomFile.path, dependencyTs.path, libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path];
+                    return [mainTs.path, randomFile.path, dependencyTs.path, libFile.path, dtsPath, dtsMapLocation];
                 }
 
                 function expectedWatchedFilesWhenMapped() {
@@ -3298,7 +3298,7 @@ ${dependencyTs.content}`);
                 }
 
                 function expectedScriptInfosAfterGotoDef() {
-                    return [dependencyTs.path, dependencyConfig.path, libFile.path, mainTs.path, randomFile.path];
+                    return [dependencyTs.path, libFile.path, mainTs.path, randomFile.path];
                 }
 
                 function expectedWatchedFilesAfterGotoDef() {
@@ -3933,7 +3933,7 @@ ${dependencyTs.content}`);
                 }
 
                 function expectedScriptInfosWhenMapped() {
-                    return [mainTs.path, randomFile.path, dependencyTs.path, libFile.path, dtsPath, dtsMapLocation, dependencyConfig.path];
+                    return [mainTs.path, randomFile.path, dependencyTs.path, libFile.path, dtsPath, dtsMapLocation];
                 }
 
                 function expectedWatchedFilesWhenMapped() {

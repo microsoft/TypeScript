@@ -28,6 +28,7 @@ namespace ts {
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
         ["es2020", "lib.es2020.d.ts"],
+        ["es2021", "lib.es2021.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -67,14 +68,17 @@ namespace ts {
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2021.promise", "lib.es2021.promise.d.ts"],
+        ["es2021.string", "lib.es2021.string.d.ts"],
+        ["es2021.weakref", "lib.es2021.weakref.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-        ["esnext.string", "lib.esnext.string.d.ts"],
-        ["esnext.promise", "lib.esnext.promise.d.ts"],
-        ["esnext.weakref", "lib.esnext.weakref.d.ts"]
+        ["esnext.string", "lib.es2021.string.d.ts"],
+        ["esnext.promise", "lib.es2021.promise.d.ts"],
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
     ];
 
     /**
@@ -101,11 +105,12 @@ namespace ts {
                 fixedpollinginterval: WatchFileKind.FixedPollingInterval,
                 prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
                 dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchFileKind.FixedChunkSizePolling,
                 usefsevents: WatchFileKind.UseFsEvents,
                 usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
+            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling_UseFsEvents_UseFsEventsOnParentDirectory,
         },
         {
             name: "watchDirectory",
@@ -113,9 +118,10 @@ namespace ts {
                 usefsevents: WatchDirectoryKind.UseFsEvents,
                 fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
                 dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchDirectoryKind.FixedChunkSizePolling,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
+            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling,
         },
         {
             name: "fallbackPolling",
@@ -123,9 +129,10 @@ namespace ts {
                 fixedinterval: PollingWatchKind.FixedInterval,
                 priorityinterval: PollingWatchKind.PriorityInterval,
                 dynamicpriority: PollingWatchKind.DynamicPriority,
+                fixedchunksize: PollingWatchKind.FixedChunkSize,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
+            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority_FixedChunkSize,
         },
         {
             name: "synchronousWatchDirectory",
@@ -287,6 +294,7 @@ namespace ts {
             es2018: ScriptTarget.ES2018,
             es2019: ScriptTarget.ES2019,
             es2020: ScriptTarget.ES2020,
+            es2021: ScriptTarget.ES2021,
             esnext: ScriptTarget.ESNext,
         })),
         affectsSourceFile: true,
@@ -295,13 +303,11 @@ namespace ts {
         paramType: Diagnostics.VERSION,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Basic_Options,
-        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
-        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -666,6 +672,14 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
+        },
+        {
+            name: "noImplicitOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -1091,6 +1105,12 @@ namespace ts {
     ];
 
     /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsWithoutBuild,
+    ];
+
+    /* @internal */
     export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1110,9 +1130,7 @@ namespace ts {
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
-    /* @internal */
-    export const buildOpts: CommandLineOption[] = [
-        ...commonOptionsWithBuild,
+    const commandOptionsOnlyBuild: CommandLineOption[]  = [
         {
             name: "verbose",
             shortName: "v",
@@ -1140,6 +1158,12 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean"
         }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsOnlyBuild,
     ];
 
     /* @internal */
@@ -1201,8 +1225,13 @@ namespace ts {
 
     /* @internal */
     export function getOptionsNameMap(): OptionsNameMap {
-        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
+        return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
     }
+
+    const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+        getOptionsNameMap: getBuildOptionsNameMap
+    };
 
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
@@ -1283,6 +1312,10 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
+        if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
+            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
+        }
+
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ?
             createDiagnostics(diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
@@ -1448,6 +1481,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: compilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1489,7 +1523,13 @@ namespace ts {
         return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
 
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        getOptionsNameMap
+    };
+
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: buildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
@@ -1556,7 +1596,7 @@ namespace ts {
      */
     export function getParsedCommandLineOfConfigFile(
         configFileName: string,
-        optionsToExtend: CompilerOptions,
+        optionsToExtend: CompilerOptions | undefined,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,

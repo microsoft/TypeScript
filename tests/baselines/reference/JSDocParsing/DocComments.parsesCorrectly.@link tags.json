@@ -1,9 +1,425 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 63,
+    "end": 674,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": "{@link first link}\nInside {@link link text} thing"
+    "comment": {
+        "0": {
+            "kind": "JSDocText",
+            "pos": 0,
+            "end": 7,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "text": ""
+        },
+        "1": {
+            "kind": "JSDocLink",
+            "pos": 7,
+            "end": 21,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "name": {
+                "kind": "Identifier",
+                "pos": 14,
+                "end": 19,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "first"
+            },
+            "text": ""
+        },
+        "2": {
+            "kind": "JSDocText",
+            "pos": 21,
+            "end": 32,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "text": "\nInside "
+        },
+        "3": {
+            "kind": "JSDocLink",
+            "pos": 32,
+            "end": 49,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "name": {
+                "kind": "Identifier",
+                "pos": 39,
+                "end": 43,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "link"
+            },
+            "text": "text"
+        },
+        "4": {
+            "kind": "JSDocText",
+            "pos": 49,
+            "end": 59,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "text": " thing"
+        },
+        "length": 5,
+        "pos": 0,
+        "end": 59,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    },
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 59,
+            "end": 102,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 60,
+                "end": 65,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 70,
+                    "end": 79,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "See also "
+                },
+                "1": {
+                    "kind": "JSDocLink",
+                    "pos": 79,
+                    "end": 98,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "FirstNode",
+                        "pos": 86,
+                        "end": 97,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "left": {
+                            "kind": "Identifier",
+                            "pos": 86,
+                            "end": 87,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "A"
+                        },
+                        "right": {
+                            "kind": "Identifier",
+                            "pos": 88,
+                            "end": 97,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "Reference"
+                        }
+                    },
+                    "text": ""
+                },
+                "length": 2,
+                "pos": 70,
+                "end": 102,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 66,
+                "end": 69,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "foo"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "1": {
+            "kind": "JSDocParameterTag",
+            "pos": 102,
+            "end": 589,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 103,
+                "end": 108,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "param"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 113,
+                    "end": 120,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Or see "
+                },
+                "1": {
+                    "kind": "JSDocLink",
+                    "pos": 120,
+                    "end": 152,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 127,
+                        "end": 131,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "escapedText": "http"
+                    },
+                    "text": "://www.zombocom.com "
+                },
+                "2": {
+                    "kind": "JSDocText",
+                    "pos": 152,
+                    "end": 156,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "\n"
+                },
+                "3": {
+                    "kind": "JSDocLink",
+                    "pos": 156,
+                    "end": 183,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "FirstNode",
+                        "pos": 163,
+                        "end": 181,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "left": {
+                            "kind": "Identifier",
+                            "pos": 163,
+                            "end": 173,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "Standalone"
+                        },
+                        "right": {
+                            "kind": "Identifier",
+                            "pos": 174,
+                            "end": 181,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "Complex"
+                        }
+                    },
+                    "text": ""
+                },
+                "4": {
+                    "kind": "JSDocText",
+                    "pos": 183,
+                    "end": 203,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "\nThis empty one: "
+                },
+                "5": {
+                    "kind": "JSDocLink",
+                    "pos": 203,
+                    "end": 210,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": ""
+                },
+                "6": {
+                    "kind": "JSDocText",
+                    "pos": 210,
+                    "end": 244,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " is OK.\nThis double-space one: "
+                },
+                "7": {
+                    "kind": "JSDocLink",
+                    "pos": 244,
+                    "end": 262,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 252,
+                        "end": 259,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "escapedText": "doubled"
+                    },
+                    "text": ""
+                },
+                "8": {
+                    "kind": "JSDocText",
+                    "pos": 262,
+                    "end": 326,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " is OK too.\nThis should work, despite being badly formatted: "
+                },
+                "9": {
+                    "kind": "JSDocLink",
+                    "pos": 326,
+                    "end": 340,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "FirstNode",
+                        "pos": 333,
+                        "end": 338,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "left": {
+                            "kind": "Identifier",
+                            "pos": 333,
+                            "end": 335,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "oh"
+                        },
+                        "right": {
+                            "kind": "Identifier",
+                            "pos": 336,
+                            "end": 338,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
+                            "escapedText": "no"
+                        }
+                    },
+                    "text": ""
+                },
+                "10": {
+                    "kind": "JSDocText",
+                    "pos": 340,
+                    "end": 369,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "\nForgot to close this one "
+                },
+                "11": {
+                    "kind": "JSDocLink",
+                    "pos": 369,
+                    "end": 403,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 376,
+                        "end": 381,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "escapedText": "https"
+                    },
+                    "text": "://typescriptlang.org"
+                },
+                "12": {
+                    "kind": "JSDocText",
+                    "pos": 403,
+                    "end": 526,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " * But it's still OK.\nAlthough it skips the newline so parses the asterisks in the wrong state.\nThis shouldn't work: "
+                },
+                "13": {
+                    "kind": "JSDocLink",
+                    "pos": 526,
+                    "end": 541,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "* nope"
+                },
+                "14": {
+                    "kind": "JSDocText",
+                    "pos": 541,
+                    "end": 589,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " * }, because of the intermediate asterisks."
+                },
+                "length": 15,
+                "pos": 113,
+                "end": 589,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 109,
+                "end": 112,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "bar"
+            },
+            "isNameFirst": true,
+            "isBracketed": false
+        },
+        "2": {
+            "kind": "JSDocAuthorTag",
+            "pos": 589,
+            "end": 672,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 590,
+                "end": 596,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "escapedText": "author"
+            },
+            "comment": {
+                "0": {
+                    "kind": "JSDocText",
+                    "pos": 597,
+                    "end": 624,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": "Alfa Romero <a@parsing.com>"
+                },
+                "1": {
+                    "kind": "JSDocText",
+                    "pos": 624,
+                    "end": 643,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "text": " See my home page: "
+                },
+                "2": {
+                    "kind": "JSDocLink",
+                    "pos": 643,
+                    "end": 670,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
+                    "name": {
+                        "kind": "Identifier",
+                        "pos": 650,
+                        "end": 655,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
+                        "escapedText": "https"
+                    },
+                    "text": "://example.com"
+                },
+                "length": 3,
+                "pos": 597,
+                "end": 672,
+                "hasTrailingComma": false,
+                "transformFlags": 0
+            }
+        },
+        "length": 3,
+        "pos": 59,
+        "end": 672,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
 }

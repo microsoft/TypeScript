@@ -63,9 +63,18 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 >generator : Symbol(generator, Decl(tslib.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
-export declare function __classPrivateFieldGet(): any;
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
 >__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, --, --))
+>a : Symbol(a, Decl(tslib.d.ts, --, --))
+>b : Symbol(b, Decl(tslib.d.ts, --, --))
+>c : Symbol(c, Decl(tslib.d.ts, --, --))
+>d : Symbol(d, Decl(tslib.d.ts, --, --))
 
-export declare function __classPrivateFieldSet(): any;
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
 >__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, --, --))
+>a : Symbol(a, Decl(tslib.d.ts, --, --))
+>b : Symbol(b, Decl(tslib.d.ts, --, --))
+>c : Symbol(c, Decl(tslib.d.ts, --, --))
+>d : Symbol(d, Decl(tslib.d.ts, --, --))
+>e : Symbol(e, Decl(tslib.d.ts, --, --))
 
