@@ -18,6 +18,8 @@ namespace ts {
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
         const mappingCharCodes: number[] = [];
+        // We will create a string from the char code buffer whenever it exceeds this length
+        const mappingCommitThreshold = 1000;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -221,12 +223,14 @@ namespace ts {
             // Line/Comma delimiters
             if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
+                // This loop can potentially overflow the stack on the char code conversion if it were a single operation
                 do {
                     mappingCharCodes.push(CharacterCodes.semicolon); // ';'
                     lastGeneratedLine++;
-                    lastGeneratedCharacter = 0;
                 }
                 while (lastGeneratedLine < pendingGeneratedLine);
+                // Only need to set this once
+                lastGeneratedCharacter = 0;
             }
             else {
                 Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
@@ -260,20 +264,29 @@ namespace ts {
                 }
             }
 
+            if (mappings.length > mappingCommitThreshold) {
+                flushMappingBuffer();
+            }
+
             hasLast = true;
             exit();
         }
 
-        function serializeMappings(): void {
-            for (let i = 0, len = mappingCharCodes.length; i < len; i += 1024) {
-                mappings += String.fromCharCode.apply(undefined, mappingCharCodes.slice(i, i + 1024));
+        function flushMappingBuffer(): void {
+            const len = mappingCharCodes.length;
+            if (len > 0) {
+                // If there are a very large number of skipped lines in the source mapping, this loop can iterate multiple times
+                // Otherwise it should always have 1 iteration
+                for (let i = 0; i < len; i += 1024) {
+                    mappings += String.fromCharCode.apply(undefined, mappingCharCodes.slice(i, i + 1024));
+                }
+                mappingCharCodes.length = 0;
             }
-            mappingCharCodes.length = 0;
         }
 
         function toJSON(): RawSourceMap {
             commitPendingMapping();
-            serializeMappings();
+            flushMappingBuffer();
             return {
                 version: 3,
                 file,
