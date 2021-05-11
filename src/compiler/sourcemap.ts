@@ -4,7 +4,11 @@ namespace ts {
         extendedDiagnostics?: boolean;
     }
 
-    export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
+    declare let TextDecoder: undefined | (new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string });
+    const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)("ascii");
+    let mappingsBuffer: Uint8Array;
+
+    export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
         const { enter, exit } = generatorOptions.extendedDiagnostics
             ? performance.createTimer("Source Map", "beforeSourcemap", "afterSourcemap")
             : performance.nullTimer;
@@ -17,15 +21,18 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
-        let mappings = "";
-        let mappingsBuffer = new Uint8Array(1024);
-        let mappingsBufferPos = 0;
+        mappingsBuffer ||= new Uint8Array(guessedInputLength + 1 >> 1);
+        let lastMappings: string | undefined;
+        let mappingsPos = 0;
         function setMapping(charCode: number) {
-            if (mappingsBufferPos >= mappingsBuffer.length) {
-                mappings += String.fromCharCode.apply(undefined, mappingsBuffer);
-                mappingsBufferPos = 0;
+            // resize to 1.5 * length
+            if (mappingsPos >= mappingsBuffer.length) {
+                const oldLength = mappingsBuffer.length + 1;
+                const replacementBuffer = new Uint8Array(oldLength + ((oldLength + 1) >> 1));
+                replacementBuffer.set(mappingsBuffer);
+                mappingsBuffer = replacementBuffer;
             }
-            mappingsBuffer[mappingsBufferPos++] = charCode;
+            mappingsBuffer[mappingsPos++] = charCode;
         }
 
         function base64VLQFormatEncode(inValue: number) {
@@ -297,16 +304,9 @@ namespace ts {
             exit();
         }
 
-        function flushMappings(): void {
-            if (mappingsBufferPos > 0) {
-                mappings += String.fromCharCode.apply(undefined, mappingsBuffer.subarray(0, mappingsBufferPos));
-                mappingsBufferPos = 0;
-            }
-        }
-
         function toJSON(): RawSourceMap {
             commitPendingMapping();
-            flushMappings();
+            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.subarray(0, mappingsPos)));
             return {
                 version: 3,
                 file,
