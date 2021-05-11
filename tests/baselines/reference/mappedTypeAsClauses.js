@@ -115,6 +115,21 @@ type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
 type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
 type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
 
+// Repro from #44019
+
+type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
+
+interface M {
+    a: boolean;
+    b: number;
+}
+
+function f(x: KeysExtendedBy<M, number>) {
+    return x;
+}
+
+f("a");  // Error, should allow only "b"
+
 
 //// [mappedTypeAsClauses.js]
 "use strict";
@@ -126,6 +141,10 @@ var e2 = "foo";
 var primitiveCar; // { name: string; seats: number; }
 var keys; //  "name" | "seats"
 var carKeys; // "name" | "seats"
+function f(x) {
+    return x;
+}
+f("a"); // Error, should allow only "b"
 
 
 //// [mappedTypeAsClauses.d.ts]
@@ -241,3 +260,11 @@ declare type Schema = {
 declare type Res1 = GetKey<Schema, Schema['root']['task']>;
 declare type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;
 declare type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;
+declare type KeysExtendedBy<T, U> = keyof {
+    [K in keyof T as U extends T[K] ? K : never]: T[K];
+};
+interface M {
+    a: boolean;
+    b: number;
+}
+declare function f(x: KeysExtendedBy<M, number>): "b";

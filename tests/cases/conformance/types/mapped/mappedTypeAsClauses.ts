@@ -116,3 +116,18 @@ type Schema = {
 type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
 type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
 type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
+
+// Repro from #44019
+
+type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
+
+interface M {
+    a: boolean;
+    b: number;
+}
+
+function f(x: KeysExtendedBy<M, number>) {
+    return x;
+}
+
+f("a");  // Error, should allow only "b"

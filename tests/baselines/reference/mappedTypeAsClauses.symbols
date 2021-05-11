@@ -369,3 +369,41 @@ type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
 >Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
 >Schema : Symbol(Schema, Decl(mappedTypeAsClauses.ts, 102, 2))
 
+// Repro from #44019
+
+type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
+>KeysExtendedBy : Symbol(KeysExtendedBy, Decl(mappedTypeAsClauses.ts, 114, 63))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 118, 20))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 118, 22))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 118, 37))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 118, 20))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 118, 22))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 118, 20))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 118, 37))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 118, 37))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 118, 20))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 118, 37))
+
+interface M {
+>M : Symbol(M, Decl(mappedTypeAsClauses.ts, 118, 90))
+
+    a: boolean;
+>a : Symbol(M.a, Decl(mappedTypeAsClauses.ts, 120, 13))
+
+    b: number;
+>b : Symbol(M.b, Decl(mappedTypeAsClauses.ts, 121, 15))
+}
+
+function f(x: KeysExtendedBy<M, number>) {
+>f : Symbol(f, Decl(mappedTypeAsClauses.ts, 123, 1))
+>x : Symbol(x, Decl(mappedTypeAsClauses.ts, 125, 11))
+>KeysExtendedBy : Symbol(KeysExtendedBy, Decl(mappedTypeAsClauses.ts, 114, 63))
+>M : Symbol(M, Decl(mappedTypeAsClauses.ts, 118, 90))
+
+    return x;
+>x : Symbol(x, Decl(mappedTypeAsClauses.ts, 125, 11))
+}
+
+f("a");  // Error, should allow only "b"
+>f : Symbol(f, Decl(mappedTypeAsClauses.ts, 123, 1))
+
