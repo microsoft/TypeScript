@@ -3963,8 +3963,6 @@ namespace ts {
         }
 
         function appendRaw(text: string) {
-            let lastLineStart = -1;
-
             const len = text.length;
             for (let pos = 0; pos < len; pos++) {
                 const ch = text.charCodeAt(pos);
@@ -3972,12 +3970,8 @@ namespace ts {
                 // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
                 if (ch !== CharacterCodes.carriageReturn && isLineBreak(ch)) {
                     ++lineCount;
-                    lastLineStart = totalChars;
+                    linePos = totalChars;
                 }
-            }
-
-            if (lastLineStart >= 0) {
-                linePos = lastLineStart;
             }
 
             lineStart = linePos === totalChars;
