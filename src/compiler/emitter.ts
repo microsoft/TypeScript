@@ -532,14 +532,12 @@ namespace ts {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
-            const guessedLength = sourceFile?.text.length ?? reduceLeft(sourceFiles, (acc, file) => acc + file.text.length, 0);
 
             let sourceMapGenerator: SourceMapGenerator | undefined;
             if (shouldEmitSourceMaps(mapOptions, sourceFileOrBundle)) {
                 sourceMapGenerator = createSourceMapGenerator(
                     host,
                     getBaseFileName(normalizeSlashes(jsFilePath)),
-                    guessedLength,
                     getSourceRoot(mapOptions),
                     getSourceMapDirectory(mapOptions, jsFilePath, sourceFile),
                     mapOptions);
