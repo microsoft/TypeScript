@@ -3932,32 +3932,66 @@ namespace ts {
 
     export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
+        const pendingCharCodes: number[] = [];
+        let lastChar: number;
         let indent: number;
         let lineStart: boolean;
         let lineCount: number;
         let linePos: number;
+        let totalChars: number = 0;
         let hasTrailingComment = false;
 
-        function updateLineCountAndPosFor(s: string) {
-            const lineStartsOfS = computeLineStarts(s);
-            if (lineStartsOfS.length > 1) {
-                lineCount = lineCount + lineStartsOfS.length - 1;
-                linePos = output.length - s.length + last(lineStartsOfS);
-                lineStart = (linePos - output.length) === 0;
+        const newLineCodes: number[] = [];
+        for (let i = 0; i < newLine.length; i++) {
+            newLineCodes.push(newLine.charCodeAt(i));
+        }
+
+        function appendCharCode(charCode: number) {
+            ++totalChars;
+            lastChar = charCode;
+            pendingCharCodes.push(charCode);
+            if (pendingCharCodes.length >= 1024) {
+                flushBuffer();
             }
-            else {
-                lineStart = false;
+        }
+
+        function flushBuffer() {
+            if (pendingCharCodes.length > 0) {
+                output += String.fromCharCode.apply(null, pendingCharCodes);
+                pendingCharCodes.length = 0;
             }
+        }
+
+        function appendRaw(text: string) {
+            let lastLineStart = -1;
+
+            const len = text.length;
+            for (let pos = 0; pos < len; pos++) {
+                const ch = text.charCodeAt(pos);
+                appendCharCode(ch);
+                // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
+                if (ch !== CharacterCodes.carriageReturn && isLineBreak(ch)) {
+                    ++lineCount;
+                    lastLineStart = totalChars;
+                }
+            }
+
+            if (lastLineStart >= 0) {
+                linePos = lastLineStart;
+            }
+
+            lineStart = linePos === totalChars;
         }
 
         function writeText(s: string) {
             if (s && s.length) {
                 if (lineStart) {
-                    s = getIndentString(indent) + s;
-                    lineStart = false;
+                    for (let i = 0; i < indent; i++) {
+                        appendCharCode(CharacterCodes.space);
+                    }
+                    // lineStart will be automatically cleared by the append
                 }
-                output += s;
-                updateLineCountAndPosFor(s);
+                appendRaw(s);
             }
         }
 
@@ -3978,12 +4012,14 @@ namespace ts {
             lineCount = 0;
             linePos = 0;
             hasTrailingComment = false;
+            pendingCharCodes.length = 0;
+            lastChar = 0;
+            totalChars = 0;
         }
 
         function rawWrite(s: string) {
             if (s !== undefined) {
-                output += s;
-                updateLineCountAndPosFor(s);
+                appendRaw(s);
                 hasTrailingComment = false;
             }
         }
@@ -3996,16 +4032,18 @@ namespace ts {
 
         function writeLine(force?: boolean) {
             if (!lineStart || force) {
-                output += newLine;
+                for (let i = 0, len = newLineCodes.length; i < len; i++) {
+                    appendCharCode(newLineCodes[i]);
+                }
                 lineCount++;
-                linePos = output.length;
+                linePos = totalChars;
                 lineStart = true;
                 hasTrailingComment = false;
             }
         }
 
         function getTextPosWithWriteLine() {
-            return lineStart ? output.length : (output.length + newLine.length);
+            return lineStart ? totalChars : (totalChars + newLineCodes.length);
         }
 
         reset();
@@ -4018,13 +4056,16 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             getIndent: () => indent,
-            getTextPos: () => output.length,
+            getTextPos: () => totalChars,
             getLine: () => lineCount,
-            getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
-            getText: () => output,
+            getColumn: () => lineStart ? indent * getIndentSize() : totalChars - linePos,
+            getText: () => {
+                flushBuffer();
+                return output;
+            },
             isAtStartOfLine: () => lineStart,
             hasTrailingComment: () => hasTrailingComment,
-            hasTrailingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
+            hasTrailingWhitespace: () => !!lastChar && isWhiteSpaceLike(lastChar),
             clear: reset,
             reportInaccessibleThisError: noop,
             reportPrivateInBaseOfClassExpression: noop,
