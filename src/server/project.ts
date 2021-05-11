@@ -412,7 +412,8 @@ namespace ts.server {
         }
 
         getScriptKind(fileName: string) {
-            const info = this.getOrCreateScriptInfoAndAttachToProject(fileName);
+            // Don't attach to the project if script kind is asked
+            const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
             return (info && info.scriptKind)!; // TODO: GH#18217
         }
 
