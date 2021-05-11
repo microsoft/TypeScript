@@ -18,8 +18,6 @@ namespace ts {
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
         const mappingCharCodes: number[] = [];
-        // We will create a string from the char code buffer whenever it exceeds this length
-        const mappingCommitThreshold = 1000;
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -213,6 +211,15 @@ namespace ts {
                 || lastNameIndex !== pendingNameIndex;
         }
 
+        function appendMappingCharCode(charCode: number) {
+            mappingCharCodes.push(charCode);
+            // String.fromCharCode accepts its arguments on the stack, so we have to chunk the input,
+            // otherwise we can get stack overflows for large source maps
+            if (mappingCharCodes.length >= 1024) {
+                flushMappingBuffer();
+            }
+        }
+
         function commitPendingMapping() {
             if (!hasPending || !shouldCommitMapping()) {
                 return;
@@ -223,9 +230,8 @@ namespace ts {
             // Line/Comma delimiters
             if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
-                // This loop can potentially overflow the stack on the char code conversion if it were a single operation
                 do {
-                    mappingCharCodes.push(CharacterCodes.semicolon); // ';'
+                    appendMappingCharCode(CharacterCodes.semicolon);
                     lastGeneratedLine++;
                 }
                 while (lastGeneratedLine < pendingGeneratedLine);
@@ -236,7 +242,7 @@ namespace ts {
                 Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
                 // Emit comma to separate the entry
                 if (hasLast) {
-                    mappingCharCodes.push(CharacterCodes.comma); // ','
+                    appendMappingCharCode(CharacterCodes.comma);
                 }
             }
 
@@ -264,22 +270,13 @@ namespace ts {
                 }
             }
 
-            if (mappings.length > mappingCommitThreshold) {
-                flushMappingBuffer();
-            }
-
             hasLast = true;
             exit();
         }
 
         function flushMappingBuffer(): void {
-            const len = mappingCharCodes.length;
-            if (len > 0) {
-                // If there are a very large number of skipped lines in the source mapping, this loop can iterate multiple times
-                // Otherwise it should always have 1 iteration
-                for (let i = 0; i < len; i += 1024) {
-                    mappings += String.fromCharCode.apply(undefined, mappingCharCodes.slice(i, i + 1024));
-                }
+            if (mappingCharCodes.length > 0) {
+                mappings += String.fromCharCode.apply(undefined, mappingCharCodes);
                 mappingCharCodes.length = 0;
             }
         }
@@ -319,7 +316,7 @@ namespace ts {
                     // There are still more digits to decode, set the msb (6th bit)
                     currentDigit = currentDigit | 32;
                 }
-                mappingCharCodes.push(base64FormatEncode(currentDigit));
+                appendMappingCharCode(base64FormatEncode(currentDigit));
             } while (inValue > 0);
         }
     }
