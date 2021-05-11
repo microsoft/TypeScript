@@ -4,8 +4,6 @@ namespace ts {
         extendedDiagnostics?: boolean;
     }
 
-    declare let TextDecoder: undefined | (new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string });
-    const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)();
     let mappingsBuffer: Uint8Array;
 
     export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
@@ -304,9 +302,17 @@ namespace ts {
             exit();
         }
 
+        function serializeMappings(len: number): string {
+            let mappings = "";
+            for (let i = 0; i < len; i += 1024) {
+                mappings += String.fromCharCode.apply(undefined, mappingsBuffer.subarray(i, Math.min(len, i + 1024)));
+            }
+            return mappings;
+        }
+
         function toJSON(): RawSourceMap {
             commitPendingMapping();
-            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.subarray(0, mappingsPos)));
+            const mappings = (lastMappings ??= serializeMappings(mappingsPos));
             return {
                 version: 3,
                 file,
