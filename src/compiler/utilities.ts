@@ -3962,19 +3962,38 @@ namespace ts {
             }
         }
 
-        function appendRaw(text: string) {
+        function appendRawSmall(text: string) {
             const len = text.length;
             for (let pos = 0; pos < len; pos++) {
                 const ch = text.charCodeAt(pos);
                 appendCharCode(ch);
                 // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
-                if (ch !== CharacterCodes.carriageReturn && isLineBreak(ch)) {
+                if (isLineBreak(ch) && ch !== CharacterCodes.carriageReturn) {
                     ++lineCount;
                     linePos = totalChars;
                 }
             }
 
             lineStart = linePos === totalChars;
+        }
+
+        function appendRawLarge(text: string) {
+            flushBuffer();
+
+            const len = text.length;
+            for (let pos = 0; pos < len; pos++) {
+                const ch = text.charCodeAt(pos);
+                ++totalChars;
+                lastChar = ch;
+                // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
+                if (isLineBreak(ch) && ch !== CharacterCodes.carriageReturn) {
+                    ++lineCount;
+                    linePos = totalChars;
+                }
+            }
+
+            lineStart = linePos === totalChars;
+            output += text;
         }
 
         function writeText(s: string) {
@@ -3985,7 +4004,11 @@ namespace ts {
                     }
                     // lineStart will be automatically cleared by the append
                 }
-                appendRaw(s);
+                if (s.length > 256) {
+                    appendRawLarge(s);
+                } else {
+                    appendRawSmall(s);
+                }
             }
         }
 
@@ -4013,7 +4036,11 @@ namespace ts {
 
         function rawWrite(s: string) {
             if (s !== undefined) {
-                appendRaw(s);
+                if (s.length > 256) {
+                    appendRawLarge(s);
+                } else {
+                    appendRawSmall(s);
+                }
                 hasTrailingComment = false;
             }
         }
