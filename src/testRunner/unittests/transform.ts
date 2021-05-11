@@ -553,6 +553,39 @@ module MyModule {
 
         });
 
+        // https://github.com/Microsoft/TypeScript/issues/44005
+        testBaseline("issue44005", () => {
+            return transpileModule(`
+focus
+// Doubles
+focus()
+// No trailing newline really breaks everything`, {
+                transformers: {
+                    before: [wrapInCommaList],
+                },
+                compilerOptions: {
+                    target: ScriptTarget.ES2015,
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                }
+            }).outputText;
+
+            function wrapInCommaList(context: TransformationContext) {
+                return (sourceFile: SourceFile): SourceFile => {
+                    return visitNode(sourceFile, rootTransform, isSourceFile);
+                };
+                function rootTransform<T extends Node>(node: T): Node {
+                    if (isIdentifier(node) || isCallExpression(node)) {
+                        return factory.createParenthesizedExpression(
+                            factory.createCommaListExpression([
+                                node
+                            ])
+                        );
+                    }
+                    return visitEachChild(node, rootTransform, context);
+                }
+            }
+        });
+
         testBaselineAndEvaluate("templateSpans", () => {
             return transpileModule("const x = String.raw`\n\nhello`; exports.stringLength = x.trim().length;", {
                 compilerOptions: {
