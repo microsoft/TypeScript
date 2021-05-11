@@ -653,6 +653,7 @@ namespace ts {
         rootFileNames: string[],
         newOptions: CompilerOptions,
         getSourceVersion: (path: Path, fileName: string) => string | undefined,
+        getScriptKind: ((path: Path, fileName: string) => ScriptKind) | undefined,
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: HasChangedAutomaticTypeDirectiveNames | undefined,
@@ -688,11 +689,17 @@ namespace ts {
 
         function sourceFileNotUptoDate(sourceFile: SourceFile) {
             return !sourceFileVersionUptoDate(sourceFile) ||
+                !sourceFileScriptKindUptoDate(sourceFile) ||
                 hasInvalidatedResolution(sourceFile.path);
         }
 
         function sourceFileVersionUptoDate(sourceFile: SourceFile) {
             return sourceFile.version === getSourceVersion(sourceFile.resolvedPath, sourceFile.fileName);
+        }
+
+        function sourceFileScriptKindUptoDate(sourceFile: SourceFile) {
+            return !getScriptKind ||
+                sourceFile.scriptKind === ensureScriptKind(sourceFile.fileName, getScriptKind(sourceFile.resolvedPath, sourceFile.fileName));
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
