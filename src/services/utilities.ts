@@ -1142,6 +1142,20 @@ namespace ts {
     }
 
     /**
+     * Returns the first token where position is in [start, end),
+     * excluding `JsxText` tokens containing only whitespace.
+     */
+    export function findFirstNonJsxWhitespaceToken(sourceFile: SourceFile, position: number): Node | undefined {
+        let tokenAtPosition = getTokenAtPosition(sourceFile, position);
+        while (isWhiteSpaceOnlyJsxText(tokenAtPosition)) {
+            const nextToken = findNextToken(tokenAtPosition, tokenAtPosition.parent, sourceFile);
+            if (!nextToken) return;
+            tokenAtPosition = nextToken;
+        }
+        return tokenAtPosition;
+    }
+
+    /**
      * The token on the left of the position is the token that strictly includes the position
      * or sits to the left of the cursor if it is on a boundary. For example
      *
@@ -2079,7 +2093,7 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: noop,
+            trackSymbol: () => false,
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -2226,8 +2240,9 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
-            if (symbol?.valueDeclaration) {
-                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
+            const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+            if (decl) {
+                parts.push(linkNamePart(link.name, decl));
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {
@@ -2604,6 +2619,7 @@ namespace ts {
         const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
             trackSymbol: (symbol, declaration, meaning) => {
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+                return !typeIsAccessible;
             },
             reportInaccessibleThisError: notAccessible,
             reportPrivateInBaseOfClassExpression: notAccessible,

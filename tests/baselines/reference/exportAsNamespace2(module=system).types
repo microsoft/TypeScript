@@ -9,7 +9,7 @@ export const b = 2;
 
 === tests/cases/conformance/es2020/modules/1.ts ===
 export * as ns from './0';
->ns : typeof ns
+>ns : typeof import("tests/cases/conformance/es2020/modules/0")
 
 ns.a;
 >ns.a : any

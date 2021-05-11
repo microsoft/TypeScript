@@ -1882,17 +1882,8 @@ namespace ts {
             return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
-        function isTsOrTsxFile(fileName: string): boolean {
-            const kind = getScriptKind(fileName, host);
-            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
-        }
-
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return [];
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -1905,10 +1896,6 @@ namespace ts {
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return { spans: [], endOfLineState: EndOfLineState.None };
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -2017,13 +2004,13 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+        function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             synchronizeHostData();
-            Debug.assert(scope.type === "file");
-            const sourceFile = getValidSourceFile(scope.fileName);
+            Debug.assert(args.type === "file");
+            const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {

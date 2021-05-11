@@ -2201,10 +2201,18 @@ namespace ts.server {
             }
         }
 
-        private organizeImports({ scope }: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
-            Debug.assert(scope.type === "file");
-            const { file, project } = this.getFileAndProject(scope.args);
-            const changes = project.getLanguageService().organizeImports({ type: "file", fileName: file }, this.getFormatOptions(file), this.getPreferences(file));
+        private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
+            Debug.assert(args.scope.type === "file");
+            const { file, project } = this.getFileAndProject(args.scope.args);
+            const changes = project.getLanguageService().organizeImports(
+                {
+                    fileName: file,
+                    skipDestructiveCodeActions: args.skipDestructiveCodeActions,
+                    type: "file",
+                },
+                this.getFormatOptions(file),
+                this.getPreferences(file)
+            );
             if (simplifiedResult) {
                 return this.mapTextChangesToCodeEdits(changes);
             }

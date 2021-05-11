@@ -21,8 +21,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,41): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(41,21): error TS2304: Cannot find name 'retValue'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
@@ -189,7 +189,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1005: 'try' expected.
                     console.log(e);
                     ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
                 }
                 finally {
     
@@ -197,7 +197,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     
                 console.log('Done');
                 ~~~~~~~
-!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
     
                 return 0;
     

@@ -921,9 +921,9 @@ namespace ts.FindAllReferences {
                 // When renaming at an export specifier, rename the export and not the thing being exported.
                 getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
             }
-            else if (node && node.kind === SyntaxKind.DefaultKeyword && symbol.escapedName === InternalSymbolName.Default) {
+            else if (node && node.kind === SyntaxKind.DefaultKeyword && symbol.escapedName === InternalSymbolName.Default && symbol.parent) {
                 addReference(node, symbol, state);
-                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.checkDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
+                searchForImportsOfExport(node, symbol, { exportingModuleSymbol: symbol.parent, exportKind: ExportKind.Default }, state);
             }
             else {
                 const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, options.use === FindReferencesUse.Rename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol] });
@@ -1929,6 +1929,8 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     if (isObjectLiteralMethod(searchSpaceNode)) {
+                        staticFlag &= getSyntacticModifierFlags(searchSpaceNode);
+                        searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning object literals
                         break;
                     }
                     // falls through
@@ -1970,7 +1972,8 @@ namespace ts.FindAllReferences {
                             return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.ClassDeclaration:
-                            // Make sure the container belongs to the same class
+                        case SyntaxKind.ObjectLiteralExpression:
+                            // Make sure the container belongs to the same class/object literals
                             // and has the appropriate static modifier from the original container.
                             return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                         case SyntaxKind.SourceFile:

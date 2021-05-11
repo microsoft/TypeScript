@@ -1700,5 +1700,13 @@ function [#|f|](x?: number): Promise<void> | number {
 }
 `);
 
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInGetters", `
+class Foo {
+    get [#|m|](): Promise<number> {
+        return Promise.resolve(1).then(n => n);
+    }
+}
+`);
+
     });
 }
