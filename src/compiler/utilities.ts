@@ -3986,7 +3986,7 @@ namespace ts {
         function writeText(s: string) {
             if (s && s.length) {
                 if (lineStart) {
-                    for (let i = 0; i < indent; i++) {
+                    for (let i = 0, totalIndent = indent * getIndentSize(); i < totalIndent; i++) {
                         appendCharCode(CharacterCodes.space);
                     }
                     // lineStart will be automatically cleared by the append
