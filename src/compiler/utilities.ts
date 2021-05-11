@@ -3964,13 +3964,29 @@ namespace ts {
 
         function appendRawSmall(text: string) {
             const len = text.length;
-            for (let pos = 0; pos < len; pos++) {
+            let pos = 0;
+            while (pos < len) {
                 const ch = text.charCodeAt(pos);
                 appendCharCode(ch);
-                // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
-                if (isLineBreak(ch) && ch !== CharacterCodes.carriageReturn) {
-                    ++lineCount;
-                    linePos = totalChars;
+                pos++;
+                switch (ch) {
+                    case CharacterCodes.carriageReturn:
+                        const nextChar = text.charCodeAt(pos);
+                        if (nextChar === CharacterCodes.lineFeed) {
+                            appendCharCode(nextChar);
+                            pos++;
+                        }
+                    // falls through
+                    case CharacterCodes.lineFeed:
+                        ++lineCount;
+                        linePos = totalChars;
+                        break;
+                    default:
+                        if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
+                            ++lineCount;
+                            linePos = totalChars;
+                        }
+                        break;
                 }
             }
 
@@ -3981,14 +3997,31 @@ namespace ts {
             flushBuffer();
 
             const len = text.length;
-            for (let pos = 0; pos < len; pos++) {
+            let pos = 0;
+            while (pos < len) {
                 const ch = text.charCodeAt(pos);
                 ++totalChars;
                 lastChar = ch;
-                // Ignore carriageReturn, since we mark the following lineFeed as the newline anyway
-                if (isLineBreak(ch) && ch !== CharacterCodes.carriageReturn) {
-                    ++lineCount;
-                    linePos = totalChars;
+                pos++;
+                switch (ch) {
+                    case CharacterCodes.carriageReturn:
+                        const nextChar = text.charCodeAt(pos);
+                        if (nextChar === CharacterCodes.lineFeed) {
+                            ++totalChars;
+                            lastChar = nextChar;
+                            pos++;
+                        }
+                    // falls through
+                    case CharacterCodes.lineFeed:
+                        ++lineCount;
+                        linePos = totalChars;
+                        break;
+                    default:
+                        if (ch > CharacterCodes.maxAsciiCharacter && isLineBreak(ch)) {
+                            ++lineCount;
+                            linePos = totalChars;
+                        }
+                        break;
                 }
             }
 
