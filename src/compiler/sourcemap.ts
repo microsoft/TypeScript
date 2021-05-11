@@ -5,7 +5,13 @@ namespace ts {
     }
 
     declare let TextDecoder: undefined | (new() => { decode(buffer: ArrayBuffer | ArrayBufferView): string });
-    const decoder = new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)("ascii");
+    const decoder = typeof Buffer === "undefined" ?
+        new (typeof TextDecoder !== "undefined" ? TextDecoder : require("util").TextDecoder)("ascii") :
+        undefined;
+    const decode: (buffer: ArrayBuffer) => string =
+        decoder
+            ? buffer => decoder.decode(buffer)
+            : buffer => (buffer as Buffer).toString("ascii");
     let mappingsBuffer: Uint8Array;
 
     export function createSourceMapGenerator(host: EmitHost, file: string, guessedInputLength: number, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
@@ -21,7 +27,7 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
-        mappingsBuffer ||= new Uint8Array(guessedInputLength + 1 >> 1);
+        mappingsBuffer ||= typeof Buffer === undefined ? new Uint8Array(guessedInputLength + 1 >> 1) : Buffer.alloc(guessedInputLength + 1 >> 1);
         let lastMappings: string | undefined;
         let mappingsPos = 0;
         function setMapping(charCode: number) {
@@ -306,7 +312,7 @@ namespace ts {
 
         function toJSON(): RawSourceMap {
             commitPendingMapping();
-            const mappings = (lastMappings ??= decoder.decode(mappingsBuffer.subarray(0, mappingsPos)));
+            const mappings = (lastMappings ??= decode(mappingsBuffer.subarray(0, mappingsPos)));
             return {
                 version: 3,
                 file,
