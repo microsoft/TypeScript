@@ -185,7 +185,7 @@
               "text": [
                 {
                   "text": "basePath",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -202,7 +202,7 @@
               "text": [
                 {
                   "text": "pattern",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -219,7 +219,7 @@
               "text": [
                 {
                   "text": "type",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -236,7 +236,7 @@
               "text": [
                 {
                   "text": "options",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

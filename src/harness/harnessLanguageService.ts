@@ -584,7 +584,7 @@ namespace Harness.LanguageService {
         getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
-        organizeImports(_scope: ts.OrganizeImportsScope, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
+        organizeImports(_args: ts.OrganizeImportsArgs, _formatOptions: ts.FormatCodeSettings): readonly ts.FileTextChanges[] {
             throw new Error("Not supported on the shim.");
         }
         getEditsForFileRename(): readonly ts.FileTextChanges[] {

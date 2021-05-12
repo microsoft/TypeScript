@@ -242,7 +242,7 @@ interface Symbol {
         fileNames: readonly string[];
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<BuilderState.FileInfo>;
-        options: CompilerOptions;
+        options: CompilerOptions | undefined;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
         semanticDiagnosticsPerFile?: readonly ProgramBuildInfoDiagnostic[];
@@ -251,7 +251,7 @@ interface Symbol {
     type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
         const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = fileInfo);
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = toBuilderStateFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
         const program: ProgramBuildInfo | undefined = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,

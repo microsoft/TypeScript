@@ -816,7 +816,7 @@ function f32<T, U>() {
 >T1 : T & U extends string ? boolean : number
 
     type T2 = Foo<T & U>;
->T2 : T & U extends string ? boolean : number
+>T2 : Foo<T & U>
 
     var z: T1;
 >z : T & U extends string ? boolean : number
@@ -829,16 +829,16 @@ function f33<T, U>() {
 >f33 : <T, U>() => void
 
     type T1 = Foo<T & U>;
->T1 : T & U extends string ? boolean : number
+>T1 : Foo<T & U>
 
     type T2 = Bar<T & U>;
->T2 : T & U extends string ? boolean : number
+>T2 : Bar<T & U>
 
     var z: T1;
->z : T & U extends string ? boolean : number
+>z : Foo<T & U>
 
     var z: T2;
->z : T & U extends string ? boolean : number
+>z : Foo<T & U>
 }
 
 // Repro from #21823

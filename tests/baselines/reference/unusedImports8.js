@@ -43,4 +43,4 @@ exports.__esModule = true;
 var file1_1 = require("./file1");
 var x = new file1_1.Calculator();
 x.handleChar();
-(0, file1_1.test)();
+file1_1.test();

@@ -50,7 +50,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(160,5): error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
     Type 'string' is not assignable to type 'ZeroOf<T>'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'T2'.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(263,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
   Type 'number | boolean' is not assignable to type 'T94<U>'.
     Type 'number' is not assignable to type 'T94<U>'.
@@ -392,7 +392,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         var z: T1;
         var z: T2;  // Error, T2 is distributive, T1 isn't
             ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'T2'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'.
 !!! related TS6203 tests/cases/conformance/types/conditional/conditionalTypes1.ts:262:9: 'z' was also declared here.
     }
     

@@ -275,7 +275,7 @@ namespace ts.refactor.extractSymbol {
         }
         const cursorRequest = length === 0 && invoked;
 
-        const startToken = getTokenAtPosition(sourceFile, span.start);
+        const startToken = findFirstNonJsxWhitespaceToken(sourceFile, span.start);
         const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
         /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
         refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the

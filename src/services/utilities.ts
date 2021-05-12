@@ -1142,6 +1142,20 @@ namespace ts {
     }
 
     /**
+     * Returns the first token where position is in [start, end),
+     * excluding `JsxText` tokens containing only whitespace.
+     */
+    export function findFirstNonJsxWhitespaceToken(sourceFile: SourceFile, position: number): Node | undefined {
+        let tokenAtPosition = getTokenAtPosition(sourceFile, position);
+        while (isWhiteSpaceOnlyJsxText(tokenAtPosition)) {
+            const nextToken = findNextToken(tokenAtPosition, tokenAtPosition.parent, sourceFile);
+            if (!nextToken) return;
+            tokenAtPosition = nextToken;
+        }
+        return tokenAtPosition;
+    }
+
+    /**
      * The token on the left of the position is the token that strictly includes the position
      * or sits to the left of the cursor if it is on a boundary. For example
      *
@@ -2173,6 +2187,14 @@ namespace ts {
         return displayPart(tokenToString(kind)!, SymbolDisplayPartKind.operator);
     }
 
+    export function parameterNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.parameterName);
+    }
+
+    export function propertyNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.propertyName);
+    }
+
     export function textOrKeywordPart(text: string) {
         const kind = stringToToken(text);
         return kind === undefined
@@ -2182,6 +2204,14 @@ namespace ts {
 
     export function textPart(text: string) {
         return displayPart(text, SymbolDisplayPartKind.text);
+    }
+
+    export function typeAliasNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.aliasName);
+    }
+
+    export function typeParameterNamePart(text: string) {
+        return displayPart(text, SymbolDisplayPartKind.typeParameterName);
     }
 
     export function linkTextPart(text: string) {
@@ -2210,8 +2240,9 @@ namespace ts {
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
-            if (symbol?.valueDeclaration) {
-                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
+            const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+            if (decl) {
+                parts.push(linkNamePart(link.name, decl));
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {

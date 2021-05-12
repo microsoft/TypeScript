@@ -326,8 +326,39 @@ namespace ts.GoToDefinition {
                 sourceFile,
                 FindAllReferences.getContextNode(declaration)
             ),
-            isLocal: !checker.isDeclarationVisible(declaration)
+            isLocal: !isDefinitionVisible(checker, declaration)
         };
+    }
+
+    function isDefinitionVisible(checker: TypeChecker, declaration: Declaration): boolean {
+        if (checker.isDeclarationVisible(declaration)) return true;
+        if (!declaration.parent) return false;
+
+        // Variable initializers are visible if variable is visible
+        if (hasInitializer(declaration.parent) && declaration.parent.initializer === declaration) return isDefinitionVisible(checker, declaration.parent as Declaration);
+
+        // Handle some exceptions here like arrow function, members of class and object literal expression which are technically not visible but we want the definition to be determined by its parent
+        switch (declaration.kind) {
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.MethodDeclaration:
+                // Private/protected properties/methods are not visible
+                if (hasEffectiveModifier(declaration, ModifierFlags.Private)) return false;
+            // Public properties/methods are visible if its parents are visible, so:
+            // falls through
+
+            case SyntaxKind.Constructor:
+            case SyntaxKind.PropertyAssignment:
+            case SyntaxKind.ShorthandPropertyAssignment:
+            case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.FunctionExpression:
+                return isDefinitionVisible(checker, declaration.parent as Declaration);
+            default:
+                return false;
+        }
     }
 
     function createDefinitionFromSignatureDeclaration(typeChecker: TypeChecker, decl: SignatureDeclaration): DefinitionInfo {

@@ -498,6 +498,7 @@ namespace ts.Completions {
             sourceDisplay,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
+            isImportStatementCompletion: originIsResolvedExport(origin) || undefined,
             data,
         };
     }
@@ -1509,7 +1510,8 @@ namespace ts.Completions {
         }
 
         function tryGetGlobalSymbols(): boolean {
-            const result: GlobalsSearch = tryGetObjectLikeCompletionSymbols()
+            const result: GlobalsSearch = tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols()
+                || tryGetObjectLikeCompletionSymbols()
                 || tryGetImportCompletionSymbols()
                 || tryGetImportOrExportClauseCompletionSymbols()
                 || tryGetLocalNamedExportCompletionSymbols()
@@ -1910,6 +1912,32 @@ namespace ts.Completions {
             return (isRegularExpressionLiteral(contextToken) || isStringTextContainingNode(contextToken)) && (
                 rangeContainsPositionExclusive(createTextRangeFromSpan(createTextSpanFromNode(contextToken)), position) ||
                 position === contextToken.end && (!!contextToken.isUnterminated || isRegularExpressionLiteral(contextToken)));
+        }
+
+        function tryGetObjectTypeLiteralInTypeArgumentCompletionSymbols(): GlobalsSearch | undefined {
+            const typeLiteralNode = tryGetTypeLiteralNode(contextToken);
+            if (!typeLiteralNode) return GlobalsSearch.Continue;
+
+            const intersectionTypeNode = isIntersectionTypeNode(typeLiteralNode.parent) ? typeLiteralNode.parent : undefined;
+            const containerTypeNode = intersectionTypeNode || typeLiteralNode;
+
+            const containerExpectedType = getConstraintOfTypeArgumentProperty(containerTypeNode, typeChecker);
+            if (!containerExpectedType) return GlobalsSearch.Continue;
+
+            const containerActualType = typeChecker.getTypeFromTypeNode(containerTypeNode);
+
+            const members = getPropertiesForCompletion(containerExpectedType, typeChecker);
+            const existingMembers = getPropertiesForCompletion(containerActualType, typeChecker);
+
+            const existingMemberEscapedNames: Set<__String> = new Set();
+            existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
+
+            symbols = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
+
+            completionKind = CompletionKind.ObjectPropertyDeclaration;
+            isNewIdentifierLocation = true;
+
+            return GlobalsSearch.Success;
         }
 
         /**
@@ -2332,7 +2360,7 @@ namespace ts.Completions {
                     return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
             }
 
-            // If the previous token is keyword correspoding to class member completion keyword
+            // If the previous token is keyword corresponding to class member completion keyword
             // there will be completion available here
             if (isClassMemberCompletionKeyword(keywordForNode(contextToken)) && isFromObjectTypeDeclaration(contextToken)) {
                 return false;
@@ -2370,12 +2398,45 @@ namespace ts.Completions {
                     return isPropertyDeclaration(contextToken.parent);
             }
 
+            // If we are inside a class declaration, and `constructor` is totally not present,
+            // but we request a completion manually at a whitespace...
+            const ancestorClassLike = findAncestor(contextToken.parent, isClassLike);
+            if (ancestorClassLike && contextToken === previousToken && isPreviousPropertyDeclarationTerminated(contextToken, position)) {
+                return false; // Don't block completions.
+            }
+
+            const ancestorPropertyDeclaraion = getAncestor(contextToken.parent, SyntaxKind.PropertyDeclaration);
+            // If we are inside a class declaration and typing `constructor` after property declaration...
+            if (ancestorPropertyDeclaraion
+                && contextToken !== previousToken
+                && isClassLike(previousToken.parent.parent)
+                // And the cursor is at the token...
+                && position <= previousToken.end) {
+                // If we are sure that the previous property declaration is terminated according to newline or semicolon...
+                if (isPreviousPropertyDeclarationTerminated(contextToken, previousToken.end)) {
+                    return false; // Don't block completions.
+                }
+                else if (contextToken.kind !== SyntaxKind.EqualsToken
+                    // Should not block: `class C { blah = c/**/ }`
+                    // But should block: `class C { blah = somewhat c/**/ }` and `class C { blah: SomeType c/**/ }`
+                    && (isInitializedProperty(ancestorPropertyDeclaraion as PropertyDeclaration)
+                    || hasType(ancestorPropertyDeclaraion))) {
+                    return true;
+                }
+            }
+
             return isDeclarationName(contextToken)
                 && !isShorthandPropertyAssignment(contextToken.parent)
                 && !isJsxAttribute(contextToken.parent)
                 // Don't block completions if we're in `class C /**/`, because we're *past* the end of the identifier and might want to complete `extends`.
                 // If `contextToken !== previousToken`, this is `class C ex/**/`.
                 && !(isClassLike(contextToken.parent) && (contextToken !== previousToken || position > previousToken.end));
+        }
+
+        function isPreviousPropertyDeclarationTerminated(contextToken: Node, position: number) {
+            return contextToken.kind !== SyntaxKind.EqualsToken &&
+                (contextToken.kind === SyntaxKind.SemicolonToken
+                || !positionsAreOnSameLine(contextToken.end, position, sourceFile));
         }
 
         function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
@@ -2831,6 +2892,13 @@ namespace ts.Completions {
 
         if (!contextToken) return undefined;
 
+        // class C { blah; constructor/**/ } and so on
+        if (location.kind === SyntaxKind.ConstructorKeyword
+            // class C { blah \n constructor/**/ }
+            || (isIdentifier(contextToken) && isPropertyDeclaration(contextToken.parent) && isClassLike(location))) {
+            return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
+        }
+
         switch (contextToken.kind) {
             case SyntaxKind.EqualsToken: // class c { public prop = | /* global completions */ }
                 return undefined;
@@ -2855,6 +2923,49 @@ namespace ts.Completions {
                 const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
                 return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
                     ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
+        }
+    }
+
+    function tryGetTypeLiteralNode(node: Node): TypeLiteralNode | undefined {
+        if (!node) return undefined;
+
+        const parent = node.parent;
+
+        switch (node.kind) {
+            case SyntaxKind.OpenBraceToken:
+                if (isTypeLiteralNode(parent)) {
+                    return parent;
+                }
+                break;
+            case SyntaxKind.SemicolonToken:
+            case SyntaxKind.CommaToken:
+            case SyntaxKind.Identifier:
+                if (parent.kind === SyntaxKind.PropertySignature && isTypeLiteralNode(parent.parent)) {
+                    return parent.parent;
+                }
+                break;
+        }
+
+        return undefined;
+    }
+
+    function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): Type | undefined {
+        if (!node) return undefined;
+
+        if (isTypeNode(node) && isTypeReferenceType(node.parent)) {
+            return checker.getTypeArgumentConstraint(node);
+        }
+
+        const t = getConstraintOfTypeArgumentProperty(node.parent, checker);
+        if (!t) return undefined;
+
+        switch (node.kind) {
+            case SyntaxKind.PropertySignature:
+                return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.TypeLiteral:
+            case SyntaxKind.UnionType:
+                return t;
         }
     }
 
@@ -2921,7 +3032,8 @@ namespace ts.Completions {
         if (type) {
             return type;
         }
-        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+        if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node === node.parent.left) {
+            // Object literal is assignment pattern: ({ | } = x)
             return typeChecker.getTypeAtLocation(node.parent);
         }
         return undefined;

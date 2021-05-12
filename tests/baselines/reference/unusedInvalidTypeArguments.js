@@ -91,7 +91,7 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 var unknown_1 = require("unknown");
-(0, unknown_1.foo)();
+unknown_1.foo();
 //// [new.js]
 "use strict";
 exports.__esModule = true;
