@@ -62,7 +62,9 @@ function Test3(this: { no: number }) {
 
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 26, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 25, 22))
 >this : Symbol(this, Decl(typeofThis.ts, 25, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 25, 22))
 }
 
 function Test4(this: { no: number } | undefined) {
@@ -72,7 +74,9 @@ function Test4(this: { no: number } | undefined) {
 
     let x: typeof this.no = 1;
 >x : Symbol(x, Decl(typeofThis.ts, 30, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 29, 22))
 >this : Symbol(this, Decl(typeofThis.ts, 29, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 29, 22))
 }
 
 class Test5 {
@@ -84,14 +88,11 @@ class Test5 {
     f = () => {
 >f : Symbol(Test5.f, Decl(typeofThis.ts, 34, 11))
 
+        // should not capture this.
         let x: typeof this.no = 1;
->x : Symbol(x, Decl(typeofThis.ts, 37, 11))
+>x : Symbol(x, Decl(typeofThis.ts, 38, 11))
 >this.no : Symbol(Test5.no, Decl(typeofThis.ts, 33, 13))
 >no : Symbol(Test5.no, Decl(typeofThis.ts, 33, 13))
-
-        let self: typeof this = this;
->self : Symbol(self, Decl(typeofThis.ts, 38, 11))
->this : Symbol(Test5, Decl(typeofThis.ts, 31, 1))
     }
 }
 
@@ -124,3 +125,88 @@ const Test8 = () => {
 >x : Symbol(x, Decl(typeofThis.ts, 55, 7))
 }
 
+class Test9 {
+>Test9 : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+
+    no = 0;
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+
+    this = 0;
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+
+    f() {
+>f : Symbol(Test9.f, Decl(typeofThis.ts, 60, 13))
+
+        if (this instanceof Test9D1) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 83, 1))
+
+            const d1: typeof this = this;
+>d1 : Symbol(d1, Decl(typeofThis.ts, 64, 17))
+
+            d1.f1();
+>d1.f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 85, 15))
+>d1 : Symbol(d1, Decl(typeofThis.ts, 64, 17))
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 85, 15))
+        }
+
+        if (this instanceof Test9D2) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 87, 1))
+
+            const d2: typeof this = this;
+>d2 : Symbol(d2, Decl(typeofThis.ts, 69, 17))
+
+            d2.f2();
+>d2.f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 89, 15))
+>d2 : Symbol(d2, Decl(typeofThis.ts, 69, 17))
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 89, 15))
+        }
+    }
+
+    g() {
+>g : Symbol(Test9.g, Decl(typeofThis.ts, 72, 5))
+
+        if (this.no === 1) {
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+
+            const no: typeof this.no = this.no;
+>no : Symbol(no, Decl(typeofThis.ts, 76, 17))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 58, 13))
+        }
+
+        if (this.this === 1) {
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+
+            const no: typeof this.this = this.this;
+>no : Symbol(no, Decl(typeofThis.ts, 80, 17))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 56, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 59, 11))
+        }
+    }
+}
+
+class Test9D1 {
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 83, 1))
+
+    f1() {}
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 85, 15))
+}
+
+class Test9D2 {
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 87, 1))
+
+    f2() {}
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 89, 15))
+}

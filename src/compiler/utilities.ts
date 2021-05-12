@@ -4329,6 +4329,12 @@ namespace ts {
         return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
     }
 
+    export function isThisInTypeQuery(node: Node): boolean {
+        return isThisIdentifier(node) &&
+            (node.parent.kind === SyntaxKind.TypeQuery ||
+            (node.parent.kind === SyntaxKind.QualifiedName && (node.parent as QualifiedName).left === node));
+    }
+
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }

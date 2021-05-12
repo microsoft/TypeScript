@@ -1,9 +1,9 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(23,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(27,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(31,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(23,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): error TS7041: The containing arrow function captures the global value of 'this'.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts (6 errors) ====
@@ -31,27 +31,23 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
     function Test2() {
         let x: typeof this.no = 1;
                       ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }
     
     function Test3(this: { no: number }) {
         let x: typeof this.no = 1;
-                      ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
     }
     
     function Test4(this: { no: number } | undefined) {
         let x: typeof this.no = 1;
-                      ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
     }
     
     class Test5 {
         no = 1;
     
         f = () => {
+            // should not capture this.
             let x: typeof this.no = 1;
-            let self: typeof this = this;
         }
     }
     
@@ -59,7 +55,9 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
         export let f = () => {
             let x: typeof this.no = 1;
                           ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+                          ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         }
     }
     
@@ -67,13 +65,49 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
         export let f = () => {
             let x: typeof this.no = 1;
                           ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+!!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+                          ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
         }
     }
     
     const Test8 = () => {
         let x: typeof this.no = 1;
                       ~~~~
-!!! error TS2526: A 'this' type is available only in a non-static member of a class or interface.
+!!! error TS7041: The containing arrow function captures the global value of 'this'.
     }
     
+    class Test9 {
+        no = 0;
+        this = 0;
+    
+        f() {
+            if (this instanceof Test9D1) {
+                const d1: typeof this = this;
+                d1.f1();
+            }
+    
+            if (this instanceof Test9D2) {
+                const d2: typeof this = this;
+                d2.f2();
+            }
+        }
+    
+        g() {
+            if (this.no === 1) {
+                const no: typeof this.no = this.no;
+            }
+    
+            if (this.this === 1) {
+                const no: typeof this.this = this.this;
+            }
+        }
+    }
+    
+    class Test9D1 {
+        f1() {}
+    }
+    
+    class Test9D2 {
+        f2() {}
+    }

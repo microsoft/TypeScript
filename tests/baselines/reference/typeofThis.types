@@ -77,10 +77,10 @@ function Test3(this: { no: number }) {
 >no : number
 
     let x: typeof this.no = 1;
->x : any
->this.no : any
+>x : number
+>this.no : number
 >this : { no: number; }
->no : any
+>no : number
 >1 : 1
 }
 
@@ -90,10 +90,10 @@ function Test4(this: { no: number } | undefined) {
 >no : number
 
     let x: typeof this.no = 1;
->x : any
->this.no : any
+>x : number
+>this.no : number
 >this : { no: number; }
->no : any
+>no : number
 >1 : 1
 }
 
@@ -106,19 +106,15 @@ class Test5 {
 
     f = () => {
 >f : () => void
->() => {        let x: typeof this.no = 1;        let self: typeof this = this;    } : () => void
+>() => {        // should not capture this.        let x: typeof this.no = 1;    } : () => void
 
+        // should not capture this.
         let x: typeof this.no = 1;
 >x : number
 >this.no : number
 >this : any
 >no : number
 >1 : 1
-
-        let self: typeof this = this;
->self : this
->this : any
->this : this
     }
 }
 
@@ -166,3 +162,104 @@ const Test8 = () => {
 >1 : 1
 }
 
+class Test9 {
+>Test9 : Test9
+
+    no = 0;
+>no : number
+>0 : 0
+
+    this = 0;
+>this : number
+>0 : 0
+
+    f() {
+>f : () => void
+
+        if (this instanceof Test9D1) {
+>this instanceof Test9D1 : boolean
+>this : this
+>Test9D1 : typeof Test9D1
+
+            const d1: typeof this = this;
+>d1 : this & Test9D1
+>this : any
+>this : this & Test9D1
+
+            d1.f1();
+>d1.f1() : void
+>d1.f1 : () => void
+>d1 : this & Test9D1
+>f1 : () => void
+        }
+
+        if (this instanceof Test9D2) {
+>this instanceof Test9D2 : boolean
+>this : this
+>Test9D2 : typeof Test9D2
+
+            const d2: typeof this = this;
+>d2 : this & Test9D2
+>this : any
+>this : this & Test9D2
+
+            d2.f2();
+>d2.f2() : void
+>d2.f2 : () => void
+>d2 : this & Test9D2
+>f2 : () => void
+        }
+    }
+
+    g() {
+>g : () => void
+
+        if (this.no === 1) {
+>this.no === 1 : boolean
+>this.no : number
+>this : this
+>no : number
+>1 : 1
+
+            const no: typeof this.no = this.no;
+>no : 1
+>this.no : 1
+>this : any
+>no : 1
+>this.no : 1
+>this : this
+>no : 1
+        }
+
+        if (this.this === 1) {
+>this.this === 1 : boolean
+>this.this : number
+>this : this
+>this : number
+>1 : 1
+
+            const no: typeof this.this = this.this;
+>no : 1
+>this.this : 1
+>this : any
+>this : 1
+>this.this : 1
+>this : this
+>this : 1
+        }
+    }
+}
+
+class Test9D1 {
+>Test9D1 : Test9D1
+
+    f1() {}
+>f1 : () => void
+}
+
+class Test9D2 {
+>Test9D2 : Test9D2
+
+    f2() {}
+>f2 : () => void
+}
