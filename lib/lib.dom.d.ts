@@ -5053,10 +5053,13 @@ interface DocumentFragment extends Node, NonElementParentNode, ParentNode {
     getElementById(elementId: string): HTMLElement | null;
 }
 
-declare var DocumentFragment: {
+interface DocumentFragmentConstructor
+{
     prototype: DocumentFragment;
     new(): DocumentFragment;
-};
+}
+
+declare var DocumentFragment: DocumentFragmentConstructor;
 
 interface DocumentOrShadowRoot {
     readonly activeElement: Element | null;
