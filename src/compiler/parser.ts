@@ -836,12 +836,6 @@ namespace ts {
             if (scriptKind === ScriptKind.JSON) {
                 const result = parseJsonText(fileName, sourceText, languageVersion, syntaxCursor, setParentNodes);
                 convertToObjectWorker(result, result.statements[0]?.expression, result.parseDiagnostics, /*returnValue*/ false, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
-                result.referencedFiles = emptyArray;
-                result.typeReferenceDirectives = emptyArray;
-                result.libReferenceDirectives = emptyArray;
-                result.amdDependencies = emptyArray;
-                result.hasNoDefaultLib = false;
-                result.pragmas = emptyMap as ReadonlyPragmaMap;
                 return result;
             }
 
