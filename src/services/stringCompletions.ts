@@ -553,8 +553,8 @@ namespace ts.Completions.StringCompletions {
             return undefined;
         }
 
-        const parsed = hasZeroOrOneAsteriskCharacter(pattern) ? tryParsePattern(pattern) : undefined;
-        if (!parsed) {
+        const parsed = tryParsePattern(pattern);
+        if (parsed === undefined || isString(parsed)) {
             return undefined;
         }
 

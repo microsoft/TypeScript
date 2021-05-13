@@ -96,9 +96,14 @@ namespace ts {
         };
     }
 
+    function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
+        return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
+    }
+
     interface ModuleResolutionState {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
+        compilerPathPatterns?: (string | Pattern)[];
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
         resultFromCache?: ResolvedModuleWithFailedLookupLocations;
@@ -961,7 +966,10 @@ namespace ts {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
             const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
+            if (!state.compilerPathPatterns) {
+                state.compilerPathPatterns = tryParsePatterns(paths);
+            }
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, state.compilerPathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -1400,7 +1408,8 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+            const paths = versionPaths.paths;
+            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, paths, tryParsePatterns(paths), loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
             if (result) {
                 return removeIgnoredPackageId(result.value);
             }
@@ -1536,7 +1545,8 @@ namespace ts {
                     trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.versionPaths.version, version, rest);
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, loader, !packageDirectoryExists, state);
+                const paths = packageInfo.versionPaths.paths;
+                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, paths, tryParsePatterns(paths), loader, !packageDirectoryExists, state);
                 if (fromPaths) {
                     return fromPaths.value;
                 }
@@ -1546,8 +1556,8 @@ namespace ts {
         return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
     }
 
-    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
-        const matchedPattern = matchPatternOrExact(getOwnKeys(paths), moduleName);
+    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: (string | Pattern)[], loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
+        const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
         if (matchedPattern) {
             const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
             const matchedPatternText = isString(matchedPattern) ? matchedPattern : patternText(matchedPattern);
