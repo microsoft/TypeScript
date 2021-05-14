@@ -316,7 +316,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/session.d.ts (used version)
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
-/user/username/projects/reexport/src/main/index.ts (computed .d.ts)
+/user/username/projects/reexport/src/main/index.ts (used version)
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
@@ -471,7 +471,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/reexport/out/pure/session.d.ts (used version)
 /user/username/projects/reexport/out/pure/index.d.ts (used version)
-/user/username/projects/reexport/src/main/index.ts (computed .d.ts)
+/user/username/projects/reexport/src/main/index.ts (used version)
 
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:

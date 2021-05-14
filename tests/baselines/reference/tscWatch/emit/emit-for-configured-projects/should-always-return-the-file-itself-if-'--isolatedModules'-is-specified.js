@@ -169,8 +169,8 @@ Semantic diagnostics in builder refreshed for::
 
 Shape signatures in builder refreshed for::
 /a/b/modulefile1.ts (computed .d.ts)
-/a/b/file1consumer2.ts (computed .d.ts)
-/a/b/file1consumer1.ts (computed .d.ts)
+/a/b/file1consumer2.ts (used version)
+/a/b/file1consumer1.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:

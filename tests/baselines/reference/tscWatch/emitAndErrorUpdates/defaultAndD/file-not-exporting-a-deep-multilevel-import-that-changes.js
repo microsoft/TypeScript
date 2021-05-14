@@ -351,8 +351,8 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/d.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -415,7 +415,7 @@ Output::
 >> Screen clear
 [[90m12:01:52 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:02:11 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:02:14 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -435,12 +435,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
-/user/username/projects/myproject/c.ts (computed .d.ts)
-/user/username/projects/myproject/d.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -484,3 +486,4 @@ export interface Coords {
 //// [/user/username/projects/myproject/b.d.ts] file written with same contents
 //// [/user/username/projects/myproject/c.d.ts] file written with same contents
 //// [/user/username/projects/myproject/d.d.ts] file written with same contents
+//// [/user/username/projects/myproject/e.d.ts] file written with same contents

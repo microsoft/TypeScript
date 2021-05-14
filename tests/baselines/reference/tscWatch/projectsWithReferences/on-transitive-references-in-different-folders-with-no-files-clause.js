@@ -982,7 +982,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a/index.d.ts (used version)
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
-/user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
+/user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
 /a/lib/lib.d.ts:

@@ -398,7 +398,7 @@ namespace ts {
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap, useFileVersionAsSignature: boolean = state.useFileVersionAsSignature) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -412,7 +412,7 @@ namespace ts {
 
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
-            if (!sourceFile.isDeclarationFile && !state.useFileVersionAsSignature) {
+            if (!sourceFile.isDeclarationFile && !useFileVersionAsSignature) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
