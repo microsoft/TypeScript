@@ -452,7 +452,9 @@ namespace ts {
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
-        return path.replace(backslashRegExp, directorySeparator);
+        return path.indexOf(altDirectorySeparator) === -1
+            ? path
+            : path.replace(backslashRegExp, directorySeparator);
     }
 
     /**
