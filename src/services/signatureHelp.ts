@@ -624,7 +624,6 @@ namespace ts.SignatureHelp {
     }
 
     function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-        const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
@@ -633,14 +632,16 @@ namespace ts.SignatureHelp {
             }
         });
         const lists = checker.getExpandedParameters(candidateSignature);
-        return lists.map(parameterList => {
-            return {
-                isVariadic: isVariadic && (lists.length === 1 || !!((parameterList[parameterList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter)),
-                parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
-                prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
-                suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
-            };
-        });
+        const isVariadic: (parameterList: readonly Symbol[]) => boolean =
+            !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
+            : lists.length === 1 ? _ => true
+            : pList => !!(pList.length && (pList[pList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        return lists.map(parameterList => ({
+            isVariadic: isVariadic(parameterList),
+            parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
+            prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
+            suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
+        }));
     }
 
     function createSignatureHelpParameterForParameter(parameter: Symbol, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
