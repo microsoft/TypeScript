@@ -6397,6 +6397,10 @@
         "category": "Message",
         "code": 95163
     },
+    "Can only convert named export": {
+        "category": "Message",
+        "code": 95164
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
