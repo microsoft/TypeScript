@@ -4226,7 +4226,7 @@ namespace ts {
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
         /* @internal */ createSignature(
-            declaration: SignatureDeclaration,
+            declaration: SignatureDeclaration | undefined,
             typeParameters: readonly TypeParameter[] | undefined,
             thisParameter: Symbol | undefined,
             parameters: readonly Symbol[],
