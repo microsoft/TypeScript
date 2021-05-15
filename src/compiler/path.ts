@@ -8,7 +8,6 @@ namespace ts {
     export const directorySeparator = "/";
     export const altDirectorySeparator = "\\";
     const urlSchemeSeparator = "://";
-    const backslashRegExp = /\\/g;
 
     //// Path Tests
 
@@ -452,7 +451,20 @@ namespace ts {
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
-        return path.replace(backslashRegExp, directorySeparator);
+        let lastSliceStart = 0;
+        let segments: string[] | undefined;
+        for (let i = 0; i < path.length; i++) {
+            const c = path.charCodeAt(i);
+            if (c === CharacterCodes.backslash) {
+                (segments ||= []).push(path.slice(lastSliceStart, i));
+                lastSliceStart = i + 1;
+            }
+        }
+        if (segments) {
+            segments.push(path.slice(lastSliceStart));
+            return segments.join(directorySeparator);
+        }
+        return path;
     }
 
     /**
