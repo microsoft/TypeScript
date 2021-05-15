@@ -2853,13 +2853,6 @@ namespace ts {
         return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
     }
 
-    function skipParenthesesUp(node: Node): Node {
-        while (node.kind === SyntaxKind.ParenthesizedExpression) {
-            node = node.parent;
-        }
-        return node;
-    }
-
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
     export function isDeleteTarget(node: Node): boolean {
         if (node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
@@ -5397,7 +5390,7 @@ namespace ts {
 
         function writeOrReadWrite(): AccessKind {
             // If grandparent is not an ExpressionStatement, this is used as an expression in addition to having a side effect.
-            return parent.parent && skipParenthesesUp(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
+            return parent.parent && walkUpParenthesizedExpressions(parent.parent).kind === SyntaxKind.ExpressionStatement ? AccessKind.Write : AccessKind.ReadWrite;
         }
     }
     function reverseAccessKind(a: AccessKind): AccessKind {
