@@ -5,10 +5,6 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
-            const { jsx } = context.program.getCompilerOptions();
-            if (jsx !== JsxEmit.React && jsx !== JsxEmit.ReactNative) {
-                return undefined;
-            }
             const { sourceFile, span } = context;
             const node = findNodeToFix(sourceFile, span.start);
             if (!node) return undefined;
