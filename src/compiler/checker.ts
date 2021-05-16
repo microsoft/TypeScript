@@ -180,15 +180,6 @@ namespace ts {
         IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
     }
 
-    const enum AccessFlags {
-        None = 0,
-        NoIndexSignatures = 1 << 0,
-        Writing = 1 << 1,
-        CacheSymbol = 1 << 2,
-        NoTupleBoundsCheck = 1 << 3,
-        ExpressionPosition = 1 << 4,
-    }
-
     const enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
@@ -8317,7 +8308,7 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     const indexType = getLiteralTypeFromPropertyName(name);
-                    const declaredType = getIndexedAccessType(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
+                    const declaredType = getIndexedAccessType(parentType, indexType, AccessFlags.ExpressionPosition, name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
             }
@@ -8337,8 +8328,8 @@ namespace ts {
                 }
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
-                    const accessFlags = hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0;
-                    const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, declaration.name, accessFlags | AccessFlags.ExpressionPosition) || errorType;
+                    const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0);
+                    const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, accessFlags, declaration.name) || errorType;
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
@@ -11400,14 +11391,14 @@ namespace ts {
         function getConstraintFromIndexedAccess(type: IndexedAccessType) {
             const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
             if (indexConstraint && indexConstraint !== type.indexType) {
-                const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.noUncheckedIndexedAccessCandidate);
+                const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.accessFlags);
                 if (indexedAccess) {
                     return indexedAccess;
                 }
             }
             const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
-                return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType, type.noUncheckedIndexedAccessCandidate);
+                return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType, type.accessFlags);
             }
             return undefined;
         }
@@ -11613,7 +11604,7 @@ namespace ts {
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
-                    const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (<IndexedAccessType>t).noUncheckedIndexedAccessCandidate);
+                    const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (<IndexedAccessType>t).accessFlags);
                     return baseIndexedAccess && getBaseConstraint(baseIndexedAccess);
                 }
                 if (t.flags & TypeFlags.Conditional) {
@@ -14554,13 +14545,13 @@ namespace ts {
             return result;
         }
 
-        function createIndexedAccessType(objectType: Type, indexType: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, shouldIncludeUndefined: boolean) {
+        function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
             const type = <IndexedAccessType>createType(TypeFlags.IndexedAccess);
             type.objectType = objectType;
             type.indexType = indexType;
+            type.accessFlags = accessFlags;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
-            type.noUncheckedIndexedAccessCandidate = shouldIncludeUndefined;
             return type;
         }
 
@@ -14613,14 +14604,14 @@ namespace ts {
             return true;
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags, noUncheckedIndexedAccessCandidate?: boolean, reportDeprecated?: boolean) {
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
 
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (reportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (accessFlags & AccessFlags.ReportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
@@ -14656,7 +14647,7 @@ namespace ts {
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, IndexKind.Number));
                     return mapType(objectType, t => {
                         const restType = getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType;
-                        return noUncheckedIndexedAccessCandidate ? getUnionType([restType, undefinedType]) : restType;
+                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
                     });
                 }
             }
@@ -14676,10 +14667,10 @@ namespace ts {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
-                        return noUncheckedIndexedAccessCandidate ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    return noUncheckedIndexedAccessCandidate ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -14704,7 +14695,7 @@ namespace ts {
                     if (objectType.symbol === globalThisSymbol && propName !== undefined && globalThisSymbol.exports!.has(propName) && (globalThisSymbol.exports!.get(propName)!.flags & SymbolFlags.BlockScoped)) {
                         error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
-                    else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !suppressNoImplicitAnyError) {
+                    else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
                         if (propName !== undefined && typeHasStaticProperty(propName, objectType)) {
                             const typeName = typeToString(objectType);
                             error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_to_access_the_static_member_2_instead, propName as string, typeName, typeName + "[" + getTextOfNode(accessExpression.argumentExpression) + "]");
@@ -14957,8 +14948,8 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate?: boolean, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], accessFlags = AccessFlags.None): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, noUncheckedIndexedAccessCandidate, accessNode, accessFlags, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessFlags, accessNode, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
         }
 
         function indexTypeLessThan(indexType: Type, limit: number) {
@@ -14974,20 +14965,18 @@ namespace ts {
             });
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate?: boolean, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
-
-            const shouldIncludeUndefined = noUncheckedIndexedAccessCandidate ||
-                (!!compilerOptions.noUncheckedIndexedAccess &&
-                (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition);
-
             // If the object type has a string index signature and no other members we know that the result will
             // always be the type of that index signature and we can simplify accordingly.
             if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                 indexType = stringType;
             }
+            // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
+            // an index signature have 'undefined' included in their type.
+            if (compilerOptions.noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
             // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
             // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
@@ -15001,10 +14990,11 @@ namespace ts {
                     return objectType;
                 }
                 // Defer the operation by creating an indexed access type.
-                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "") + getAliasId(aliasSymbol, aliasTypeArguments);
+                const persistentAccessFlags = accessFlags & AccessFlags.Persistent;
+                const id = objectType.id + "," + indexType.id + "," + persistentAccessFlags + getAliasId(aliasSymbol, aliasTypeArguments);
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
-                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, aliasSymbol, aliasTypeArguments, shouldIncludeUndefined));
+                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, persistentAccessFlags, aliasSymbol, aliasTypeArguments));
                 }
 
                 return type;
@@ -15017,7 +15007,7 @@ namespace ts {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, wasMissingProp, accessNode, accessFlags, shouldIncludeUndefined);
+                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, accessNode, accessFlags | (wasMissingProp ? AccessFlags.SuppressNoImplicitAnyError : 0));
                     if (propType) {
                         propTypes.push(propType);
                     }
@@ -15037,7 +15027,7 @@ namespace ts {
                     ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments)
                     : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
             }
-            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, /* supressNoImplicitAnyError */ false, accessNode, accessFlags | AccessFlags.CacheSymbol, shouldIncludeUndefined, /* reportDeprecated */ true);
+            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -15046,7 +15036,7 @@ namespace ts {
                 const objectType = getTypeFromTypeNode(node.objectType);
                 const indexType = getTypeFromTypeNode(node.indexType);
                 const potentialAlias = getAliasSymbolForTypeNode(node);
-                const resolved = getIndexedAccessType(objectType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
+                const resolved = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (<IndexedAccessType>resolved).objectType === objectType &&
                     (<IndexedAccessType>resolved).indexType === indexType ?
@@ -16275,7 +16265,7 @@ namespace ts {
             if (flags & TypeFlags.IndexedAccess) {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), (<IndexedAccessType>type).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
+                return getIndexedAccessType(instantiateType((<IndexedAccessType>type).objectType, mapper), instantiateType((<IndexedAccessType>type).indexType, mapper), (<IndexedAccessType>type).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper), aliasSymbol, aliasTypeArguments);
@@ -18466,7 +18456,7 @@ namespace ts {
                         const baseIndexType = getBaseConstraintOfType(indexType) || indexType;
                         if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseIndexType)) {
                             const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
-                            const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (<IndexedAccessType>target).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, accessFlags);
+                            const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags);
                             if (constraint) {
                                 if (reportErrors && originalErrorInfo) {
                                     // create a new chain for the constraint error
@@ -27943,8 +27933,8 @@ namespace ts {
             const effectiveIndexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType;
             const accessFlags = isAssignmentTarget(node) ?
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
-                AccessFlags.None;
-            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, accessFlags | AccessFlags.ExpressionPosition) || errorType;
+                AccessFlags.ExpressionPosition;
+            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
             return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
         }
 
@@ -31487,7 +31477,7 @@ namespace ts {
                         checkPropertyAccessibility(property, /*isSuper*/ false, /*writing*/ true, objectLiteralType, prop);
                     }
                 }
-                const elementType = getIndexedAccessType(objectLiteralType, exprType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
+                const elementType = getIndexedAccessType(objectLiteralType, exprType, AccessFlags.ExpressionPosition, name);
                 const type = getFlowTypeOfDestructuring(property, elementType);
                 return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
             }
@@ -31548,7 +31538,7 @@ namespace ts {
                         // We create a synthetic expression so that getIndexedAccessType doesn't get confused
                         // when the element is a SyntaxKind.ElementAccessExpression.
                         const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0);
-                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, createSyntheticExpression(element, indexType), accessFlags) || errorType;
+                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, accessFlags, createSyntheticExpression(element, indexType)) || errorType;
                         const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
                         const type = getFlowTypeOfDestructuring(element, assignedType);
                         return checkDestructuringAssignment(element, type, checkMode);
