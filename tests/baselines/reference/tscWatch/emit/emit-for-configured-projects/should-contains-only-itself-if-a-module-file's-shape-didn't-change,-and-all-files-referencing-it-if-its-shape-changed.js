@@ -198,7 +198,7 @@ Output::
 >> Screen clear
 [[90m12:00:52 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m46[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+[96ma/b/moduleFile1.ts[0m:[93m1[0m:[93m46[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
 
 [7m1[0m export var T: number;export function Foo() { console.log('hi'); };
 [7m [0m [91m                                             ~~~~~~~[0m

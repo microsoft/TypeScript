@@ -772,8 +772,10 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getEncodedSemanticClassifications(_fileName: string, _span: TextSpan, _format?: SemanticClassificationFormat): Classifications {
-            return notImplemented();
+        getEncodedSemanticClassifications(file: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
+            const request = this.processRequest<protocol.EncodedSemanticClassificationsRequest>(protocol.CommandTypes.EncodedSemanticClassificationsFull, { file, start: span.start, length: span.length, format });
+            const r = this.processResponse<protocol.EncodedSemanticClassificationsResponse>(request);
+            return r.body!;
         }
 
         private convertCallHierarchyItem(item: protocol.CallHierarchyItem): CallHierarchyItem {

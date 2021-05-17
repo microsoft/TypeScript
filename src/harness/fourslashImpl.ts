@@ -2746,6 +2746,12 @@ namespace FourSlash {
             // fs.writeFileSync(testfilePath, newfile);
         }
 
+        public verifyEncodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, expected: number) {
+            const actual = this.languageService.getEncodedSemanticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length), format);
+            if (actual.spans.length !== expected) {
+                this.raiseError(`encodedSemanticClassificationsLength failed - expected total spans to be ${expected} got ${actual.spans.length}`);
+            }
+        }
 
         public verifySemanticClassifications(format: ts.SemanticClassificationFormat, expected: { classificationType: string | number; text?: string }[]) {
             const actual = this.languageService.getSemanticClassifications(this.activeFile.fileName,
