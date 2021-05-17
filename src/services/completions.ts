@@ -187,7 +187,7 @@ namespace ts.Completions {
 
     function specificKeywordCompletionInfo(keywords: readonly SyntaxKind[]): CompletionInfo {
         return {
-            isGlobalCompletion: true,
+            isGlobalCompletion: false,
             isMemberCompletion: false,
             isNewIdentifierLocation: false,
             entries: keywords.map(k => ({
@@ -819,7 +819,7 @@ namespace ts.Completions {
                     case CompletionDataKind.JsDocParameterName:
                         return JsDoc.getJSDocParameterNameCompletionDetails(name);
                     case CompletionDataKind.Keywords:
-                        return request.keywords.some(k => tokenToString(k) === name) ? createSimpleDetails(name, ScriptElementKind.keyword, SymbolDisplayPartKind.keyword) : undefined;
+                        return request.keywords.indexOf(stringToToken(name)!) > -1 ? createSimpleDetails(name, ScriptElementKind.keyword, SymbolDisplayPartKind.keyword) : undefined;
                     default:
                         return Debug.assertNever(request);
                 }
