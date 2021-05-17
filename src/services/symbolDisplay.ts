@@ -174,7 +174,7 @@ namespace ts.SymbolDisplay {
             }
 
             let signature: Signature | undefined;
-            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
+            type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
             if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
                 const right = (<PropertyAccessExpression>location.parent).name;
@@ -197,13 +197,13 @@ namespace ts.SymbolDisplay {
             }
 
             if (callExpressionLike) {
-                signature = typeChecker.getResolvedSignature(callExpressionLike)!; // TODO: GH#18217
+                signature = typeChecker.getResolvedSignature(callExpressionLike); // TODO: GH#18217
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
                 const allSignatures = useConstructSignatures ? type.getConstructSignatures() : type.getCallSignatures();
 
-                if (!contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
+                if (signature && !contains(allSignatures, signature.target) && !contains(allSignatures, signature)) {
                     // Get the first signature if there is one -- allSignatures may contain
                     // either the original signature or its target, so check for either
                     signature = allSignatures.length ? allSignatures[0] : undefined;
@@ -278,7 +278,7 @@ namespace ts.SymbolDisplay {
                 if (locationIsSymbolDeclaration) {
                     const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
                     if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
-                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration)!; // TODO: GH#18217
+                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration); // TODO: GH#18217
                     }
                     else {
                         signature = allSignatures[0];
@@ -294,8 +294,9 @@ namespace ts.SymbolDisplay {
                         addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
                             !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
                     }
-
-                    addSignatureDisplayParts(signature, allSignatures);
+                    if (signature) {
+                        addSignatureDisplayParts(signature, allSignatures);
+                    }
                     hasAddedSymbolInfo = true;
                     hasMultipleSignatures = allSignatures.length > 1;
                 }
@@ -441,7 +442,7 @@ namespace ts.SymbolDisplay {
                     }
                     else {
                         documentationFromAlias = resolvedSymbol.getContextualDocumentationComment(resolvedNode, typeChecker);
-                        tagsFromAlias = resolvedSymbol.getJsDocTags();
+                        tagsFromAlias = resolvedSymbol.getJsDocTags(typeChecker);
                     }
                 }
             }
@@ -570,7 +571,7 @@ namespace ts.SymbolDisplay {
                     }
 
                     documentation = rhsSymbol.getDocumentationComment(typeChecker);
-                    tags = rhsSymbol.getJsDocTags();
+                    tags = rhsSymbol.getJsDocTags(typeChecker);
                     if (documentation.length > 0) {
                         break;
                     }
@@ -579,7 +580,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (tags.length === 0 && !hasMultipleSignatures) {
-            tags = symbol.getJsDocTags();
+            tags = symbol.getJsDocTags(typeChecker);
         }
 
         if (documentation.length === 0 && documentationFromAlias) {

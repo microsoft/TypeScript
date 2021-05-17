@@ -96,8 +96,16 @@ namespace ts {
         return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
     }
 
+    export function someType(type: Type, f: (t: Type) => boolean): boolean {
+        return type.flags & TypeFlags.Union ? some((<UnionType>type).types, f) : f(type);
+    }
+
     export function everyType(type: Type, f: (t: Type) => boolean): boolean {
         return type.flags & TypeFlags.Union ? every((<UnionType>type).types, f) : f(type);
+    }
+
+    export function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
+        return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
     }
 
     /**

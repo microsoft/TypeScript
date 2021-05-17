@@ -13,10 +13,16 @@ namespace ts {
             subScenario: "inferred type from transitive module",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src", "--verbose"],
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: changeBarParam,
-            }],
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParam,
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParamBack,
+                },
+            ],
         });
 
         verifyTscSerializedIncrementalEdits({
@@ -25,10 +31,16 @@ namespace ts {
             scenario: "inferredTypeFromTransitiveModule",
             commandLineArgs: ["--b", "/src", "--verbose"],
             modifyFs: changeToIsolatedModules,
-            incrementalScenarios: [{
-                buildKind: BuildKind.IncrementalDtsChange,
-                modifyFs: changeBarParam
-            }]
+            incrementalScenarios: [
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParam
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParamBack,
+                },
+            ]
         });
 
         verifyTscSerializedIncrementalEdits({
@@ -48,6 +60,14 @@ bar("hello");`);
                     modifyFs: changeBarParam
                 },
                 {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParamBack,
+                },
+                {
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: changeBarParam
+                },
+                {
                     subScenario: "Fix Error",
                     buildKind: BuildKind.IncrementalDtsChange,
                     modifyFs: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
@@ -62,5 +82,9 @@ bar("hello");`);
 
     function changeBarParam(fs: vfs.FileSystem) {
         replaceText(fs, "/src/bar.ts", "param: string", "");
+    }
+
+    function changeBarParamBack(fs: vfs.FileSystem) {
+        replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
     }
 }

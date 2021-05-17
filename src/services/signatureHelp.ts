@@ -574,7 +574,7 @@ namespace ts.SignatureHelp {
         const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
         const documentation = symbol.getDocumentationComment(checker);
-        const tags = symbol.getJsDocTags();
+        const tags = symbol.getJsDocTags(checker);
         const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
         return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
     }

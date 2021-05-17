@@ -83,10 +83,6 @@ namespace ts.codefix {
         return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
     }
 
-    function createModifiers(modifierFlags: ModifierFlags): ModifiersArray | undefined {
-        return modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
-    }
-
     function prepareModifierFlagsForAccessor(modifierFlags: ModifierFlags): ModifierFlags {
         modifierFlags &= ~ModifierFlags.Readonly; // avoid Readonly modifier because it will convert to get accessor
         modifierFlags &= ~ModifierFlags.Private;

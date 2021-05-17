@@ -65,6 +65,7 @@
         "codefixes/convertLiteralTypeToMappedType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
+        "codefixes/fixOverrideModifier.ts",
         "codefixes/fixNoPropertyAccessFromIndexSignature.ts",
         "codefixes/fixImplicitThis.ts",
         "codefixes/fixIncorrectNamedTupleSyntax.ts",

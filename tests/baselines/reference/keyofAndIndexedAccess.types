@@ -630,7 +630,7 @@ function f50<T>(k: keyof T, s: string) {
     const x2 = k as string;
 >x2 : string
 >k as string : string
->k : keyof T
+>k : string | number | symbol
 }
 
 function f51<T, K extends keyof T>(k: K, s: string) {
@@ -646,7 +646,7 @@ function f51<T, K extends keyof T>(k: K, s: string) {
     const x2 = k as string;
 >x2 : string
 >k as string : string
->k : K
+>k : string | number | symbol
 }
 
 function f52<T>(obj: { [x: string]: boolean }, k: Exclude<keyof T, symbol>, s: string, n: number) {

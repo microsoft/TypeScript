@@ -476,6 +476,88 @@ bar();
             });
         });
 
+        it("when the referenced projects have allowJs and emitDeclarationOnly", () => {
+            const compositeConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        allowJs: true,
+                        emitDeclarationOnly: true,
+                        outDir: "lib",
+                        rootDir: "src"
+                    },
+                    include: ["src"]
+                })
+            };
+            const compositePackageJson: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/package.json`,
+                content: JSON.stringify({
+                    name: "emit-composite",
+                    version: "1.0.0",
+                    main: "src/index.js",
+                    typings: "lib/index.d.ts"
+                })
+            };
+            const compositeIndex: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/src/index.js`,
+                content: `const testModule = require('./testModule');
+module.exports = {
+    ...testModule
+}`
+            };
+            const compositeTestModule: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/src/testModule.js`,
+                content: `/**
+ * @param {string} arg
+ */
+ const testCompositeFunction = (arg) => {
+}
+module.exports = {
+    testCompositeFunction
+}`
+            };
+            const consumerConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/consumer/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["src"],
+                    references: [{ path: "../emit-composite" }]
+                })
+            };
+            const consumerIndex: File = {
+                path: `${tscWatch.projectRoot}/packages/consumer/src/index.ts`,
+                content: `import { testCompositeFunction } from 'emit-composite';
+testCompositeFunction('why hello there');
+testCompositeFunction('why hello there', 42);`
+            };
+            const symlink: SymLink = {
+                path: `${tscWatch.projectRoot}/node_modules/emit-composite`,
+                symLink: `${tscWatch.projectRoot}/packages/emit-composite`
+            };
+            const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            openFilesForSession([consumerIndex], session);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            checkProjectActualFiles(
+                service.configuredProjects.get(consumerConfig.path)!,
+                [consumerIndex.path, libFile.path, consumerConfig.path, compositeIndex.path, compositeTestModule.path]
+            );
+            const secondArg = protocolTextSpanFromSubstring(consumerIndex.content, "42");
+            verifyGetErrRequest({
+                host,
+                session,
+                expected: [{
+                    file: consumerIndex,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(secondArg.start, secondArg.end, Diagnostics.Expected_0_arguments_but_got_1, ["1", "2"]),
+                    ],
+                    suggestion: []
+                }]
+            });
+        });
+
         it("when finding local reference doesnt load ancestor/sibling projects", () => {
             const solutionLocation = "/user/username/projects/solution";
             const solution: File = {
@@ -619,6 +701,305 @@ bar();
             assert.isFalse(solutionProject.isInitialLoadPending());
             checkProjectActualFiles(solutionProject, [solution.path]);
             checkProjectActualFiles(service.configuredProjects.get(servicesConfig.path)!, [servicesFile.path, servicesConfig.path, libFile.path, typesFile.path, programFile.path]);
+        });
+
+        describe("special handling of localness of the definitions for findAllRefs", () => {
+            function setup(definition: string, usage: string) {
+                const solutionLocation = "/user/username/projects/solution";
+                const solution: File = {
+                    path: `${solutionLocation}/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: [],
+                        references: [
+                            { path: "./api" },
+                            { path: "./app" },
+                        ]
+                    })
+                };
+                const apiConfig: File = {
+                    path: `${solutionLocation}/api/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "dist",
+                            rootDir: "src",
+                        },
+                        include: ["src"],
+                        references: [{ path: "../shared" }]
+                    })
+                };
+                const apiFile: File = {
+                    path: `${solutionLocation}/api/src/server.ts`,
+                    content: `import * as shared from "../../shared/dist";
+${usage}`
+                };
+                const appConfig: File = {
+                    path: `${solutionLocation}/app/tsconfig.json`,
+                    content: apiConfig.content
+                };
+                const appFile: File = {
+                    path: `${solutionLocation}/app/src/app.ts`,
+                    content: apiFile.content
+                };
+                const sharedConfig: File = {
+                    path: `${solutionLocation}/shared/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            composite: true,
+                            outDir: "dist",
+                            rootDir: "src",
+                        },
+                        include: ["src"]
+                    })
+                };
+                const sharedFile: File = {
+                    path: `${solutionLocation}/shared/src/index.ts`,
+                    content: definition
+                };
+                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const session = createSession(host);
+                const service = session.getProjectService();
+                service.openClientFile(apiFile.path);
+                verifyApiProjectLoadAndSolutionPending();
+                return { session, verifySolutionTreeLoaded, verifyApiAndSharedProjectLoadAndSolutionPending, apiFile, appFile, sharedFile };
+
+                function checkApiProject() {
+                    const apiProject = service.configuredProjects.get(apiConfig.path)!;
+                    checkProjectActualFiles(apiProject, [libFile.path, apiConfig.path, apiFile.path, sharedFile.path]);
+                }
+                function checkAppProject() {
+                    const appProject = service.configuredProjects.get(appConfig.path)!;
+                    checkProjectActualFiles(appProject, [libFile.path, appConfig.path, appFile.path, sharedFile.path]);
+                }
+                function checkSharedProject() {
+                    const sharedProject = service.configuredProjects.get(sharedConfig.path)!;
+                    checkProjectActualFiles(sharedProject, [libFile.path, sharedConfig.path, sharedFile.path]);
+                }
+                function checkSolutionLoadPending() {
+                    const solutionProject = service.configuredProjects.get(solution.path)!;
+                    assert.isFalse(solutionProject.isInitialLoadPending());
+                }
+                function checkSolutionLoadComplete() {
+                    const solutionProject = service.configuredProjects.get(solution.path)!;
+                    assert.isTrue(solutionProject.isInitialLoadPending());
+                }
+                function verifySolutionTreeLoaded() {
+                    checkNumberOfProjects(service, { configuredProjects: 4 });
+                    checkApiProject();
+                    checkAppProject();
+                    checkSharedProject();
+                    checkSolutionLoadPending();
+                }
+
+                function verifyApiProjectLoadAndSolutionPending() {
+                    checkNumberOfProjects(service, { configuredProjects: 2 });
+                    checkApiProject();
+                    checkSolutionLoadComplete();
+                }
+
+                function verifyApiAndSharedProjectLoadAndSolutionPending() {
+                    checkNumberOfProjects(service, { configuredProjects: 3 });
+                    checkApiProject();
+                    checkSharedProject();
+                    checkSolutionLoadComplete();
+                }
+            }
+
+            it("when using arrow function assignment", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const dog = () => { };`,
+                    `shared.dog();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "dog")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "dog",
+                            contextText: sharedFile.content,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "dog",
+                            isDefinition: false,
+                            lineText: "shared.dog();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "dog",
+                            isDefinition: false,
+                            lineText: "shared.dog();",
+                        })
+                    ],
+                    symbolName: "dog",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "dog").offset,
+                    symbolDisplayString: "const dog: () => void"
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using arrow function as object literal property", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = { bar: () => { } };`,
+                    `shared.foo.bar();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "bar")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "bar",
+                            contextText: `bar: () => { }`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        })
+                    ],
+                    symbolName: "bar",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "bar").offset,
+                    symbolDisplayString: "(property) bar: () => void"
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using object literal property", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = {  baz: "BAZ" };`,
+                    `shared.foo.baz;`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "baz")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "baz",
+                            contextText: `baz: "BAZ"`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "baz",
+                            isDefinition: false,
+                            lineText: "shared.foo.baz;",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "baz",
+                            isDefinition: false,
+                            lineText: "shared.foo.baz;",
+                        })
+                    ],
+                    symbolName: "baz",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "baz").offset,
+                    symbolDisplayString: `(property) baz: string`
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using method of class expression", () => {
+                const { session, apiFile, appFile, sharedFile, verifySolutionTreeLoaded } = setup(
+                    `export const foo = class { fly() {} };`,
+                    `const instance = new shared.foo();
+instance.fly();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "fly")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "fly",
+                            contextText: `fly() {}`,
+                            isDefinition: true,
+                            lineText: sharedFile.content,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "fly",
+                            isDefinition: false,
+                            lineText: "instance.fly();",
+                        }),
+                        makeReferenceItem({
+                            file: appFile,
+                            text: "fly",
+                            isDefinition: false,
+                            lineText: "instance.fly();",
+                        })
+                    ],
+                    symbolName: "fly",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "fly").offset,
+                    symbolDisplayString: `(method) foo.fly(): void`
+                });
+                verifySolutionTreeLoaded();
+            });
+
+            it("when using arrow function as object literal property is loaded through indirect assignment with original declaration local to project is treated as local", () => {
+                const { session, apiFile, sharedFile, verifyApiAndSharedProjectLoadAndSolutionPending } = setup(
+                    `const local = { bar: () => { } };
+export const foo = local;`,
+                    `shared.foo.bar();`
+                );
+
+                // Find all references
+                const response = session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, "bar")
+                }).response as protocol.ReferencesResponseBody;
+                assert.deepEqual(response, {
+                    refs: [
+                        makeReferenceItem({
+                            file: sharedFile,
+                            text: "bar",
+                            contextText: `bar: () => { }`,
+                            isDefinition: true,
+                            lineText: `const local = { bar: () => { } };`,
+                        }),
+                        makeReferenceItem({
+                            file: apiFile,
+                            text: "bar",
+                            isDefinition: false,
+                            lineText: "shared.foo.bar();",
+                        }),
+                    ],
+                    symbolName: "bar",
+                    symbolStartOffset: protocolLocationFromSubstring(apiFile.content, "bar").offset,
+                    symbolDisplayString: "(property) bar: () => void"
+                });
+                verifyApiAndSharedProjectLoadAndSolutionPending();
+            });
         });
 
         it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
@@ -1413,6 +1794,160 @@ bar;`
                         ]
                     });
                 });
+            });
+        });
+
+        describe("when new file is added to the referenced project", () => {
+            function setup(extendOptionsProject2?: CompilerOptions) {
+                const config1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true
+                        },
+                        exclude: ["temp"]
+                    })
+                };
+                const class1: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.ts`,
+                    content: `class class1 {}`
+                };
+                const class1Dts: File = {
+                    path: `${tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+                    content: `declare class class1 {}`
+                };
+                const config2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+                    content: JSON.stringify({
+                        compilerOptions: {
+                            module: "none",
+                            composite: true,
+                            ...(extendOptionsProject2 || {})
+                        },
+                        references: [
+                            { path: "../project1" }
+                        ]
+                    })
+                };
+                const class2: File = {
+                    path: `${tscWatch.projectRoot}/projects/project2/class2.ts`,
+                    content: `class class2 {}`
+                };
+                const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+                const session = createSession(host);
+                openFilesForSession([class2], session);
+                const service = session.getProjectService();
+                return { host, session, service, class1, class1Dts, class2, config1, config2 };
+            }
+
+            it("when referenced project is not open", () => {
+                const { host, service, class1, class2, config2 } = setup();
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is open", () => {
+                const { host, session, service, class1, class2, config1, config2 } = setup();
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1.path, config2.path, class3]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Add output from new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(0);
+            });
+
+            it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, service, class1Dts, class2, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+            });
+
+            it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
+                const { host, session, service, class1, class1Dts, class2, config1, config2 } = setup({ disableSourceOfProjectReferenceRedirect: true });
+                openFilesForSession([class1], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project1 = Debug.checkDefined(service.configuredProjects.get(config1.path));
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path]);
+                const project2 = Debug.checkDefined(service.configuredProjects.get(config2.path));
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+
+                // Add new class to referenced project
+                const class3 = `${tscWatch.projectRoot}/projects/project1/class3.ts`;
+                host.writeFile(class3, `class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(3);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Add output of new class to referenced project
+                const class3Dts = `${tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
+                // Add excluded file to referenced project
+                host.ensureFileOrFolder({ path: `${tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+                host.checkTimeoutQueueLengthAndRun(0);
+                // Delete output from new class to referenced project
+                host.deleteFile(class3Dts);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path]);
+                // Write back output of new class to referenced project
+                host.writeFile(class3Dts, `declare class class3 {}`);
+                host.checkTimeoutQueueLengthAndRun(2);
+                checkProjectActualFiles(project1, [libFile.path, class1.path, config1.path, class3]);
+                checkProjectActualFiles(project2, [class2.path, libFile.path, class1Dts.path, config2.path, class3Dts]);
             });
         });
 

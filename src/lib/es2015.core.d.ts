@@ -248,8 +248,8 @@ interface NumberConstructor {
 
     /**
      * Converts A string to an integer.
-     * @param s A string to convert into a number.
-     * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+     * @param string A string to convert into a number.
+     * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
      * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
      * All other strings are considered decimal.
      */
@@ -487,11 +487,13 @@ interface StringConstructor {
     fromCodePoint(...codePoints: number[]): string;
 
     /**
-     * String.raw is intended for use as a tag function of a Tagged Template String. When called
-     * as such the first argument will be a well formed template call site object and the rest
-     * parameter will contain the substitution values.
+     * String.raw is usually used as a tag function of a Tagged Template String. When called as
+     * such, the first argument will be a well formed template call site object and the rest
+     * parameter will contain the substitution values. It can also be called directly, for example,
+     * to interleave strings and values from your own tag function, and in this case the only thing
+     * it needs from the first argument is the raw property.
      * @param template A well-formed template string call site representation.
      * @param substitutions A set of substitution values.
      */
-    raw(template: TemplateStringsArray, ...substitutions: any[]): string;
+    raw(template: { raw: readonly string[] | ArrayLike<string>}, ...substitutions: any[]): string;
 }

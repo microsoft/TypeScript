@@ -100,8 +100,34 @@ export { C } from "./c";
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n","1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":1,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -110,32 +136,26 @@ export { C } from "./c";
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
       },
       "./b.ts": {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
       },
       "./a.ts": {
         "version": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
-        "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "-9690779495-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n"
       },
       "./index.ts": {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "affectsGlobalScope": false
+        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"
       }
     },
     "options": {
-      "incremental": true,
-      "target": 1,
-      "module": 1,
       "declaration": true,
       "emitDeclarationOnly": true,
-      "configFilePath": "./tsconfig.json"
+      "module": 1,
+      "target": 1
     },
     "referencedMap": {
       "./a.ts": [
@@ -148,9 +168,9 @@ export { C } from "./c";
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "exportedModulesMap": {
@@ -164,9 +184,9 @@ export { C } from "./c";
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -177,7 +197,8 @@ export { C } from "./c";
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1115
 }
 
 
@@ -232,8 +253,34 @@ export interface A {
 
 //// [/users/username/projects/project/index.d.ts] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n","1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"],"options":{"declaration":true,"emitDeclarationOnly":true,"module":1,"target":1},"fileIdsList":[[3],[2],[4],[2,3,4]],"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"exportedModulesMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,4,3,2,5]},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./c.ts",
+      "./b.ts",
+      "./a.ts",
+      "./index.ts"
+    ],
+    "fileNamesList": [
+      [
+        "./b.ts"
+      ],
+      [
+        "./c.ts"
+      ],
+      [
+        "./a.ts"
+      ],
+      [
+        "./c.ts",
+        "./b.ts",
+        "./a.ts"
+      ]
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -242,32 +289,26 @@ export interface A {
       },
       "./c.ts": {
         "version": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "-3358372745-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n"
       },
       "./b.ts": {
         "version": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "2102342013-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n"
       },
       "./a.ts": {
         "version": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
-        "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n",
-        "affectsGlobalScope": false
+        "signature": "-7623824316-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n"
       },
       "./index.ts": {
         "version": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n",
-        "affectsGlobalScope": false
+        "signature": "1286756397-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n"
       }
     },
     "options": {
-      "incremental": true,
-      "target": 1,
-      "module": 1,
       "declaration": true,
       "emitDeclarationOnly": true,
-      "configFilePath": "./tsconfig.json"
+      "module": 1,
+      "target": 1
     },
     "referencedMap": {
       "./a.ts": [
@@ -280,9 +321,9 @@ export interface A {
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "exportedModulesMap": {
@@ -296,9 +337,9 @@ export interface A {
         "./a.ts"
       ],
       "./index.ts": [
-        "./a.ts",
+        "./c.ts",
         "./b.ts",
-        "./c.ts"
+        "./a.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -309,6 +350,7 @@ export interface A {
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1130
 }
 

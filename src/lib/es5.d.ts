@@ -13,12 +13,12 @@ declare function eval(x: string): any;
 
 /**
  * Converts a string to an integer.
- * @param s A string to convert into a number.
- * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+ * @param string A string to convert into a number.
+ * @param radix A value between 2 and 36 that specifies the base of the number in `string`.
  * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
  * All other strings are considered decimal.
  */
-declare function parseInt(s: string, radix?: number): number;
+declare function parseInt(string: string, radix?: number): number;
 
 /**
  * Converts a string to a floating-point number.
@@ -177,14 +177,14 @@ interface ObjectConstructor {
      * @param p The property name.
      * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
      */
-    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty<T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): T;
 
     /**
      * Adds one or more properties to an object, and/or modifies attributes of existing properties.
      * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
      * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
      */
-    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
+    defineProperties<T>(o: T, properties: PropertyDescriptorMap & ThisType<any>): T;
 
     /**
      * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -1073,7 +1073,7 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1207,7 +1207,7 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1508,7 +1508,7 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type
@@ -1518,7 +1518,7 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase

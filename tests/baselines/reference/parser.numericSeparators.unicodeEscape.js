@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.unicodeEscape.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.unicodeEscape.ts] ////
 
 //// [1.ts]
 "\u{10_ffff}"

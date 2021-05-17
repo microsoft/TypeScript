@@ -743,7 +743,7 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
-                tracing?.stopTracing(ts.emptyArray);
+                tracing?.stopTracing();
                 process.exit(0);
             }
 
