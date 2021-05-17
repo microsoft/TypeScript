@@ -1364,6 +1364,26 @@
         "category": "Error",
         "code": 1433
     },
+    "'{0}' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+        "category": "Error",
+        "code": 1434
+    },
+    "'{0}' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+        "category": "Error",
+        "code": 1435
+    },
+    "'{0}' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+        "category": "Error",
+        "code": 1436
+    },
+    "'{0}' resolves to a type-only reference and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+        "category": "Error",
+        "code": 1437
+    },
+    "'{0}' resolves to a type-only reference and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 1438
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

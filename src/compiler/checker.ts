@@ -2166,15 +2166,23 @@ namespace ts {
                     const message = isExport
                         ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                         : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
-                    const relatedMessage = isExport
-                        ? Diagnostics._0_was_exported_here
-                        : Diagnostics._0_was_imported_here;
                     const unescapedName = unescapeLeadingUnderscores(name);
-                    addRelatedInfo(
+                    addTypeOnlyDeclarationRelatedInfo(
                         error(useSite, message, unescapedName),
-                        createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, unescapedName));
+                        typeOnlyDeclaration,
+                        unescapedName);
                 }
             }
+        }
+
+        function addTypeOnlyDeclarationRelatedInfo(diagnostic: Diagnostic, typeOnlyDeclaration: TypeOnlyCompatibleAliasDeclaration | undefined, unescapedName: string) {
+            if (!typeOnlyDeclaration) return diagnostic;
+            return addRelatedInfo(
+                diagnostic,
+                createDiagnosticForNode(
+                    typeOnlyDeclaration,
+                    typeOnlyDeclarationIsExport(typeOnlyDeclaration) ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
+                    unescapedName));
         }
 
         function getIsDeferredContext(location: Node, lastLocation: Node | undefined): boolean {
@@ -38072,13 +38080,57 @@ namespace ts {
                     error(node, message, symbolToString(symbol));
                 }
 
-                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
-                if (compilerOptions.isolatedModules
-                    && node.kind === SyntaxKind.ExportSpecifier
-                    && !node.parent.parent.isTypeOnly
-                    && !(target.flags & SymbolFlags.Value)
-                    && !(node.flags & NodeFlags.Ambient)) {
-                    error(node, Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type);
+                const isDeclaredTypeOnly = isTypeOnlyImportOrExportDeclaration(node);
+                if ((compilerOptions.isolatedModules || compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact)
+                    && !isDeclaredTypeOnly
+                    && !(node.flags & NodeFlags.Ambient)
+                    && (!(target.flags & SymbolFlags.Value) || getTypeOnlyAliasDeclaration(symbol))) {
+                    const isType = !(target.flags & SymbolFlags.Value);
+                    const typeOnlyAlias = getTypeOnlyAliasDeclaration(symbol);
+
+                    switch (node.kind) {
+                        case SyntaxKind.ImportClause:
+                        case SyntaxKind.ImportSpecifier:
+                        case SyntaxKind.ImportEqualsDeclaration: {
+                            if (compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact) {
+                                const message = isType
+                                    ? Diagnostics._0_is_a_type_and_must_be_imported_with_a_type_only_import_when_importsNotUsedAsValues_is_set_to_preserve_exact
+                                    : Diagnostics._0_resolves_to_a_type_only_reference_and_must_be_imported_with_a_type_only_import_when_importsNotUsedAsValues_is_set_to_preserve_exact;
+                                const name = idText(node.kind === SyntaxKind.ImportSpecifier ? node.propertyName || node.name : node.name!);
+                                addTypeOnlyDeclarationRelatedInfo(
+                                    error(node, message, name),
+                                    isType ? undefined : typeOnlyAlias,
+                                    name
+                                );
+                            }
+                            break;
+                        }
+                        case SyntaxKind.ExportSpecifier: {
+                            // Don't allow re-exporting an export that will be elided when `--isolatedModules` is set
+                            // or when `--importsNotUsedAsValues` is `preserve-exact`.
+                            if (compilerOptions.isolatedModules &&
+                                compilerOptions.importsNotUsedAsValues !== ImportsNotUsedAsValues.PreserveExact &&
+                                typeOnlyAlias && getSourceFileOfNode(typeOnlyAlias) === getSourceFileOfNode(node)) {
+                                // In `isolatedModules` alone, `import type { A } from './a'; export { A }` is allowed
+                                // because single-file analysis can determine that the export should be dropped.
+                                // `--importsNotUsedAsValues=preserv-exact` is stricter; it refuses to touch non-type-only
+                                // imports and exports, so `export { A }` is not allowed if 'A' is not emitted.
+                                return;
+                            }
+                            const message =
+                                compilerOptions.isolatedModules && isType ? Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type :
+                                compilerOptions.isolatedModules && !isType ? Diagnostics._0_resolves_to_a_type_only_reference_and_must_be_re_exported_with_a_type_only_re_export_when_isolatedModules_is_enabled :
+                                isType ? Diagnostics._0_is_a_type_and_must_be_re_exported_with_a_type_only_re_export_when_importsNotUsedAsValues_is_set_to_preserve_exact :
+                                Diagnostics._0_resolves_to_a_type_only_reference_and_must_be_re_exported_with_a_type_only_re_export_when_importsNotUsedAsValues_is_set_to_preserve_exact;
+                            const name = idText(node.propertyName || node.name);
+                            addTypeOnlyDeclarationRelatedInfo(
+                                error(node, message, name),
+                                isType ? undefined : typeOnlyAlias,
+                                name
+                            );
+                            return;
+                        }
+                    }
                 }
 
                 if (isImportSpecifier(node) && target.declarations?.every(d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated))) {

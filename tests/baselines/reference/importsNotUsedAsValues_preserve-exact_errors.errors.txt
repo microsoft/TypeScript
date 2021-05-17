@@ -1,0 +1,81 @@
+tests/cases/conformance/externalModules/typeOnly/c.ts(1,8): error TS1434: 'DefaultA' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/c.ts(2,10): error TS1434: 'A' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/c.ts(3,8): error TS1436: 'DefaultB' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/c.ts(4,10): error TS1436: 'B' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/d.ts(1,10): error TS1435: 'A' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/d.ts(2,10): error TS1437: 'B' resolves to a type-only reference and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,10): error TS1434: 'AA' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1436: 'BB' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/f.ts(3,10): error TS1435: 'A' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+tests/cases/conformance/externalModules/typeOnly/f.ts(3,13): error TS1437: 'B' resolves to a type-only reference and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+
+
+==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+    export type A = {};
+    export type { A as default };
+    
+==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
+    class B {};
+    export type { B, B as default };
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.ts (4 errors) ====
+    import DefaultA from "./a";
+           ~~~~~~~~
+!!! error TS1434: 'DefaultA' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+    import { A } from "./a";
+             ~
+!!! error TS1434: 'A' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+    import DefaultB from "./b";
+           ~~~~~~~~
+!!! error TS1436: 'DefaultB' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:18: 'DefaultB' was exported here.
+    import { B } from "./b";
+             ~
+!!! error TS1436: 'B' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'B' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts (0 errors) ====
+    import type DefaultA from "./a";
+    import type { A } from "./a";
+    import type DefaultB from "./b";
+    import type { B } from "./b";
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.ts (2 errors) ====
+    export { A as AA } from "./a";
+             ~~~~~~~
+!!! error TS1435: 'A' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+    export { B as BB } from "./b";
+             ~~~~~~~
+!!! error TS1437: 'B' resolves to a type-only reference and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'B' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.fixed.ts (0 errors) ====
+    export type { A as AA } from "./a";
+    export type { B as BB } from "./b";
+    
+==== tests/cases/conformance/externalModules/typeOnly/e.ts (2 errors) ====
+    import { AA, BB } from "./d";
+             ~~
+!!! error TS1434: 'AA' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+                 ~~
+!!! error TS1436: 'BB' resolves to a type-only reference and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+!!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'BB' was exported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts (0 errors) ====
+    import type { AA, BB } from "./d";
+    
+==== tests/cases/conformance/externalModules/typeOnly/f.ts (2 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export { A, B as BB };
+             ~
+!!! error TS1435: 'A' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+                ~~~~~~~
+!!! error TS1437: 'B' resolves to a type-only reference and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.
+!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/f.ts:2:15: 'B' was imported here.
+    
+==== tests/cases/conformance/externalModules/typeOnly/f.fixed.ts (0 errors) ====
+    import type { A } from "./a";
+    import type { B } from "./b";
+    export type { A, B as BB };
+    
