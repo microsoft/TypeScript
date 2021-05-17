@@ -5502,6 +5502,7 @@ namespace ts {
         ExpressionPosition = 1 << 5,
         ReportDeprecated = 1 << 6,
         SuppressNoImplicitAnyError = 1 << 7,
+        Contextual = 1 << 8,
         Persistent = IncludeUndefined,
     }
 

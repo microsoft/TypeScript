@@ -14609,6 +14609,9 @@ namespace ts {
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
 
             if (propName !== undefined) {
+                if (accessFlags & AccessFlags.Contextual) {
+                    return getTypeOfPropertyOfContextualType(objectType, propName) || anyType;
+                }
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessFlags & AccessFlags.ReportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
@@ -25176,7 +25179,10 @@ namespace ts {
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
-            return getTypeAtPosition(signature, argIndex);
+            const restIndex = signature.parameters.length - 1;
+            return signatureHasRestParameter(signature) && argIndex >= restIndex ?
+                getIndexedAccessType(getTypeOfSymbol(signature.parameters[restIndex]), getLiteralType(argIndex - restIndex), AccessFlags.Contextual) :
+                getTypeAtPosition(signature, argIndex);
         }
 
         function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
@@ -28291,7 +28297,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
+                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index), AccessFlags.Contextual);
                     const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
                     const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
                     types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
