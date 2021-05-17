@@ -489,6 +489,9 @@ namespace ts {
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined));
             case SyntaxKind.JSDocNameReference:
                 return visitNode(cbNode, (node as JSDocNameReference).name);
+            case SyntaxKind.JSDocInstanceReference:
+                return visitNode(cbNode, (node as JSDocInstanceReference).left) ||
+                    visitNode(cbNode, (node as JSDocInstanceReference).right);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -7305,7 +7308,19 @@ namespace ts {
             export function parseJSDocNameReference(): JSDocNameReference {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
-                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                const p2 = getNodePos();
+                let entityName: EntityName | JSDocInstanceReference = parseEntityName(/* allowReservedWords*/ false);
+                while (token() === SyntaxKind.PrivateIdentifier) {
+                    // the Right Way is to rescan this as # followed by an identifier, but I think
+                    // I want to hack around it and just make find-all-refs understand the chintzy jsdoc one
+                    // which will only work in jsdoc or whatever, meaning that this code can come afterward
+                    const node = parsePrivateIdentifier();
+                    // put an error here, like "did  you forget '.'? Did you mean just x.y, not x#y?"
+                    // TODO: According to jsdoc.app, you *can* chain these stupid things, for nested classes
+                    // class Consider { This = class { show() { } } } would be Consider#This#show
+                    // TODO: Need to visit them too
+                    entityName = finishNode(factory.createJSDocInstanceReference(entityName, node), p2)
+                }
                 if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
@@ -7760,9 +7775,19 @@ namespace ts {
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                    const name = tokenIsIdentifierOrKeyword(token())
+                    const p2 = getNodePos()
+                    let name: EntityName | JSDocInstanceReference | undefined = tokenIsIdentifierOrKeyword(token())
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
+                    // now optionally try to parse a private identifier I guess
+                    if (name && token() === SyntaxKind.PrivateIdentifier) {
+                        name = finishNode(factory.createJSDocInstanceReference(name, parsePrivateIdentifier()), p2)
+                        // TODO: This eats trailing whitespace?!
+                        // haha yes it calls nextToken for funsies pls don't do that
+                        // every caller of parsePrivateIdentifier checks the token itself, first, manually. This is just wrong, but that's what you get with external contributors.
+                        // (most callers should check an error result instead, and get an error logged)
+                        // ...I don't know how parseEntityName avoids it, actually
+                    }
                     const text = [];
                     while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                         text.push(scanner.getTokenText());

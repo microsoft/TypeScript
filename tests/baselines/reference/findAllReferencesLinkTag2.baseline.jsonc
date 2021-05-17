@@ -1,0 +1,323 @@
+// === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+// namespace NS {
+//     export class Consider {
+//         This = class {
+//             show() { }
+//         }
+//         [|m|]/*FIND ALL REFS*/() { }
+//     }
+//     /**
+//      * @see {Consider.prototype.[|m|]}
+//      * {@link Consider[|#m|]}
+//      * @see {Consider#This#show}
+//      * {@link Consider.This.show}
+//      * @see {NS.Consider#This#show}
+//      * {@link NS.Consider.This#show}
+//      * @see {NS.Consider#This.show}
+//      * @see {NS.Consider.This.show}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * @see {NS.Consider#This#show}
+//  * {@link NS.Consider.This#show}
+//  * @see {NS.Consider#This.show}
+//  * @see {NS.Consider.This.show}
+//  */
+// export function outerref() { }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+      "kind": "method",
+      "name": "(method) NS.Consider.m(): void",
+      "textSpan": {
+        "start": 107,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "NS",
+          "kind": "moduleName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "Consider",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "m",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 107,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 107,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "contextSpan": {
+          "start": 107,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 161,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 186,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllReferencesLinkTag2.ts ===
+// namespace NS {
+//     export class Consider {
+//         This = class {
+//             [|show|]/*FIND ALL REFS*/() { }
+//         }
+//         m() { }
+//     }
+//     /**
+//      * @see {Consider.prototype.m}
+//      * {@link Consider#m}
+//      * @see {Consider#This[|#show|]}
+//      * {@link Consider.This.[|show|]}
+//      * @see {NPR.Consider#This[|#show|]}
+//      * {@link NPR.Consider.This[|#show|]}
+//      * @see {NPR.Consider#This.show}
+//      * @see {NPR.Consider.This.[|show|]}
+//      */
+//     export function ref() { }
+// }
+// /**
+//  * @see {NPR.Consider#This[|#show|]}
+//  * {@link NPR.Consider.This[|#show|]}
+//  * @see {NPR.Consider#This.show}
+//  * @see {NPR.Consider.This.[|show|]}
+//  */
+// export function outerref() { }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+      "kind": "method",
+      "name": "(method) (Anonymous class).show(): void",
+      "textSpan": {
+        "start": 79,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(Anonymous class)",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "show",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 79,
+        "length": 10
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 79,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "contextSpan": {
+          "start": 79,
+          "length": 10
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 217,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 252,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 288,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 326,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 401,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 477,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 511,
+          "length": 5
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 578,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag2.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

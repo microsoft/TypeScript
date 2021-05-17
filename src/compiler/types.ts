@@ -362,6 +362,7 @@ namespace ts {
         // JSDoc nodes
         JSDocTypeExpression,
         JSDocNameReference,
+        JSDocInstanceReference, // C#p
         JSDocAllType, // The * type
         JSDocUnknownType, // The ? type
         JSDocNullableType,
@@ -3123,7 +3124,13 @@ namespace ts {
 
     export interface JSDocNameReference extends Node {
         readonly kind: SyntaxKind.JSDocNameReference;
-        readonly name: EntityName;
+        readonly name: EntityName | JSDocInstanceReference;
+    }
+
+    export interface JSDocInstanceReference extends Node {
+        readonly kind: SyntaxKind.JSDocInstanceReference;
+        readonly left: EntityName | JSDocInstanceReference;
+        readonly right: PrivateIdentifier;
     }
 
     export interface JSDocType extends TypeNode {
@@ -3189,7 +3196,7 @@ namespace ts {
 
     export interface JSDocLink extends Node {
         readonly kind: SyntaxKind.JSDocLink;
-        readonly name?: EntityName;
+        readonly name?: EntityName | JSDocInstanceReference;
         text: string;
     }
 
@@ -7266,10 +7273,12 @@ namespace ts {
         updateJSDocNamepathType(node: JSDocNamepathType, type: TypeNode): JSDocNamepathType;
         createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
-        createJSDocNameReference(name: EntityName): JSDocNameReference;
-        updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference;
-        createJSDocLink(name: EntityName | undefined, text: string): JSDocLink;
-        updateJSDocLink(node: JSDocLink, name: EntityName | undefined, text: string): JSDocLink;
+        createJSDocNameReference(name: EntityName | JSDocInstanceReference): JSDocNameReference;
+        updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocInstanceReference): JSDocNameReference;
+        createJSDocInstanceReference(left: EntityName | JSDocInstanceReference, right: PrivateIdentifier): JSDocInstanceReference;
+        updateJSDocInstanceReference(node: JSDocInstanceReference, left: EntityName | JSDocInstanceReference, right: PrivateIdentifier): JSDocInstanceReference;
+        createJSDocLink(name: EntityName | JSDocInstanceReference | undefined, text: string): JSDocLink;
+        updateJSDocLink(node: JSDocLink, name: EntityName | JSDocInstanceReference | undefined, text: string): JSDocLink;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;
         updateJSDocTypeLiteral(node: JSDocTypeLiteral, jsDocPropertyTags: readonly JSDocPropertyLikeTag[] | undefined, isArrayType: boolean | undefined): JSDocTypeLiteral;
         createJSDocSignature(typeParameters: readonly JSDocTemplateTag[] | undefined, parameters: readonly JSDocParameterTag[], type?: JSDocReturnTag): JSDocSignature;
