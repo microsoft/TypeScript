@@ -447,22 +447,23 @@ namespace ts {
 
     //// Path Normalization
 
+    const normalizeSlashesSegmentBuffer: string[] = [];
     /**
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
+        normalizeSlashesSegmentBuffer.length = 0;
         let lastSliceStart = 0;
-        let segments: string[] | undefined;
         for (let i = 0; i < path.length; i++) {
             const c = path.charCodeAt(i);
             if (c === CharacterCodes.backslash) {
-                (segments ||= []).push(path.slice(lastSliceStart, i));
+                normalizeSlashesSegmentBuffer.push(path.slice(lastSliceStart, i));
                 lastSliceStart = i + 1;
             }
         }
-        if (segments) {
-            segments.push(path.slice(lastSliceStart));
-            return segments.join(directorySeparator);
+        if (normalizeSlashesSegmentBuffer.length > 0) {
+            normalizeSlashesSegmentBuffer.push(path.slice(lastSliceStart));
+            return normalizeSlashesSegmentBuffer.join(directorySeparator);
         }
         return path;
     }
