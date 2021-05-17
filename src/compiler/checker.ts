@@ -36898,6 +36898,11 @@ namespace ts {
                     const someBaseTypeHasBothIndexers = forEach(getBaseTypes(<InterfaceType>type), base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
                     errorNode = someBaseTypeHasBothIndexers || !type.symbol.declarations ? undefined : type.symbol.declarations[0];
                 }
+                if (!errorNode) {
+                    // `getIndexDeclarationOfSymbol` does not return the declarations for static index signatures, since they
+                    // come from the __index symbol in the `exports` table of the symbol, and not the `members` table
+                    errorNode = getIndexInfoOfType(type, IndexKind.Number)?.declaration || getIndexInfoOfType(type, IndexKind.String)?.declaration;
+                }
             }
 
             if (errorNode && !isTypeAssignableTo(numberIndexType!, stringIndexType!)) { // TODO: GH#18217
