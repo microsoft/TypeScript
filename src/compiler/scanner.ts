@@ -2256,7 +2256,7 @@ namespace ts {
 
         function reScanPrivateIdentifier(): SyntaxKind {
             if (token === SyntaxKind.PrivateIdentifier) {
-                pos = tokenPos + 1
+                pos = tokenPos + 1;
                 return token = SyntaxKind.HashToken;
             }
             return token;

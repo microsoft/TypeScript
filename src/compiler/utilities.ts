@@ -1901,7 +1901,7 @@ namespace ts {
                 return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocInstanceReference(node.parent) || isJSXTagName(node);
             case SyntaxKind.JSDocInstanceReference:
                 while (isJSDocInstanceReference(node.parent)) {
-                    node = node.parent
+                    node = node.parent;
                 }
                 return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocInstanceReference(node.parent) || isJSXTagName(node);
             case SyntaxKind.Identifier:
@@ -4949,7 +4949,7 @@ namespace ts {
     export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocInstance(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
             || (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node)
-            || (isJSDocInstanceReference(node.parent) && node.parent.right === node)
+            || (isJSDocInstanceReference(node.parent) && node.parent.right === node);
     }
 
     export function isEmptyObjectLiteral(expression: Node): boolean {

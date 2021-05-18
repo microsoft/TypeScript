@@ -1793,7 +1793,7 @@ namespace ts {
         function parsePrivateIdentifier(): PrivateIdentifier {
             const pos = getNodePos();
             const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenText()));
-            nextToken()
+            nextToken();
             return finishNode(node, pos);
         }
 
@@ -7315,9 +7315,9 @@ namespace ts {
                 const p2 = getNodePos();
                 let entityName: EntityName | JSDocInstanceReference = parseEntityName(/* allowReservedWords*/ false);
                 while (token() === SyntaxKind.PrivateIdentifier) {
-                    reScanPrivateIdentifier() // rescan #id as # id
-                    nextTokenJSDoc() // then skip the #
-                    entityName = finishNode(factory.createJSDocInstanceReference(entityName, parseIdentifier()), p2)
+                    reScanPrivateIdentifier(); // rescan #id as # id
+                    nextTokenJSDoc(); // then skip the #
+                    entityName = finishNode(factory.createJSDocInstanceReference(entityName, parseIdentifier()), p2);
                 }
                 if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
@@ -7773,15 +7773,15 @@ namespace ts {
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                    const p2 = getNodePos()
+                    const p2 = getNodePos();
                     let name: EntityName | JSDocInstanceReference | undefined = tokenIsIdentifierOrKeyword(token())
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
                     if (name) {
                         while(token() === SyntaxKind.PrivateIdentifier) {
-                            reScanPrivateIdentifier() // rescan #id as # id
-                            nextTokenJSDoc() // then skip the #
-                            name = finishNode(factory.createJSDocInstanceReference(name, parseIdentifier()), p2)
+                            reScanPrivateIdentifier(); // rescan #id as # id
+                            nextTokenJSDoc(); // then skip the #
+                            name = finishNode(factory.createJSDocInstanceReference(name, parseIdentifier()), p2);
                         }
                     }
                     const text = [];

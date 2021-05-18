@@ -39138,48 +39138,47 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolOfNameOrPropertyAccessExpression(n2: EntityName | PrivateIdentifier | PropertyAccessExpression): Symbol | undefined {
-            if (isDeclarationName(n2)) {
-                return getSymbolOfNode(n2.parent);
+        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocInstanceReference): Symbol | undefined {
+            if (isDeclarationName(name)) {
+                return getSymbolOfNode(name.parent);
             }
 
-            if (isInJSFile(n2) &&
-                n2.parent.kind === SyntaxKind.PropertyAccessExpression &&
-                n2.parent === (n2.parent.parent as BinaryExpression).left) {
+            if (isInJSFile(name) &&
+                name.parent.kind === SyntaxKind.PropertyAccessExpression &&
+                name.parent === (name.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
-                if (!isPrivateIdentifier(n2)) {
-                    const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(n2);
+                if (!isPrivateIdentifier(name) && !isJSDocInstanceReference(name)) {
+                    const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                     if (specialPropertyAssignmentSymbol) {
                         return specialPropertyAssignmentSymbol;
                     }
                 }
             }
 
-            if (n2.parent.kind === SyntaxKind.ExportAssignment && isEntityNameExpression(n2)) {
+            if (name.parent.kind === SyntaxKind.ExportAssignment && isEntityNameExpression(name)) {
                 // Even an entity name expression that doesn't resolve as an entityname may still typecheck as a property access expression
-                const success = resolveEntityName(n2,
+                const success = resolveEntityName(name,
                     /*all meanings*/ SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*ignoreErrors*/ true);
                 if (success && success !== unknownSymbol) {
                     return success;
                 }
             }
-            else if (!isPropertyAccessExpression(n2) && !isPrivateIdentifier(n2) && isInRightSideOfImportOrExportAssignment(n2)) {
+            else if (isEntityName(name) && isInRightSideOfImportOrExportAssignment(name)) {
                 // Since we already checked for ExportAssignment, this really could only be an Import
-                const importEqualsDeclaration = getAncestor(n2, SyntaxKind.ImportEqualsDeclaration);
+                const importEqualsDeclaration = getAncestor(name, SyntaxKind.ImportEqualsDeclaration);
                 Debug.assert(importEqualsDeclaration !== undefined);
-                return getSymbolOfPartOfRightHandSideOfImportEquals(n2, /*dontResolveAlias*/ true);
+                return getSymbolOfPartOfRightHandSideOfImportEquals(name, /*dontResolveAlias*/ true);
             }
 
-            if (!isPropertyAccessExpression(n2) && !isPrivateIdentifier(n2)) {
-                const possibleImportNode = isImportTypeQualifierPart(n2);
+            if (isEntityName(name)) {
+                const possibleImportNode = isImportTypeQualifierPart(name);
                 if (possibleImportNode) {
                     getTypeFromTypeNode(possibleImportNode);
-                    const sym = getNodeLinks(n2).resolvedSymbol;
+                    const sym = getNodeLinks(name).resolvedSymbol;
                     return sym === unknownSymbol ? undefined : sym;
                 }
             }
 
-            let name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocInstanceReference = n2
             while (isRightSideOfQualifiedNameOrPropertyAccessOrJSDocInstance(name)) {
                 name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocInstanceReference;
             }
@@ -39222,9 +39221,9 @@ namespace ts {
                     return undefined;
                 }
 
-                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocInstanceReference))
+                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocInstanceReference));
                 const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
-                const dontResolveAlias = !isJSDoc // TODO: Maybe don't special-case jsdoc references I dunno
+                const dontResolveAlias = !isJSDoc; // TODO: Maybe don't special-case jsdoc references I dunno
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
@@ -39246,12 +39245,12 @@ namespace ts {
                     }
                     if (!links.resolvedSymbol && isJSDoc && isQualifiedName(name)) {
                         // resolve C.m as a type, namespace or value
-                        return miniResolve(name)
+                        return miniResolve(name);
                     }
                     return links.resolvedSymbol;
                 }
                 else if (isJSDocInstanceReference(name)) {
-                    return miniResolve(name)
+                    return miniResolve(name);
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>name)) {
@@ -39272,17 +39271,17 @@ namespace ts {
                 const s = resolveEntityName(name, SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
                 if (s || isIdentifier(name)) {
                     // can't recur on identifier, so just return undefined when they're not found
-                    return s
+                    return s;
                 }
             }
             // resolve left side, get its type, look it prototype and then look THAT up
-            const k = miniResolve(name.left)
+            const k = miniResolve(name.left);
             if (k) {
-                const proto = getPropertyOfType(getTypeOfSymbol(k), "prototype" as __String)
+                const proto = getPropertyOfType(getTypeOfSymbol(k), "prototype" as __String);
                 // resolve C.prototype.x or I.x if C.prototype isn't found
                 // TODO: Check SymbolFlags ahead of time instead of choosing based on whether prototype is there.
-                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(k)
-                return getPropertyOfType(t, name.right.escapedText)
+                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(k);
+                return getPropertyOfType(t, name.right.escapedText);
             }
         }
 
