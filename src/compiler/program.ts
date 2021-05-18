@@ -3296,7 +3296,7 @@ namespace ts {
             }
 
             if (options.importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact && getEmitModuleKind(options) < ModuleKind.ES2015) {
-                createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_importsNotUsedAsValues_may_only_be_set_to_preserve_exact_when_module_is_set_to_es2015_or_later);
+                createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_importsNotUsedAsValues_may_be_set_to_preserve_exact_only_when_module_is_set_to_es2015_or_later);
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files

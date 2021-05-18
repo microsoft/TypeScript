@@ -1,6 +1,6 @@
 /user.ts(2,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
 /user.ts(17,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
-/user.ts(25,10): error TS1438: 'CC' resolves to a type-only reference and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.
+/user.ts(25,10): error TS1438: 'CC' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.
 
 
 ==== /user.ts (3 errors) ====
@@ -34,7 +34,7 @@
     import { C as CC } from "./reExportValueAsTypeOnly";
     export { CC };
              ~~
-!!! error TS1438: 'CC' resolves to a type-only reference and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.
+!!! error TS1438: 'CC' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.
 !!! related TS1377 /reExportValueAsTypeOnly.ts:1:15: 'CC' was exported here.
     
 ==== /exportT.ts (0 errors) ====
