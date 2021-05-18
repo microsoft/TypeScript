@@ -39282,9 +39282,7 @@ namespace ts {
                 // resolve C.prototype.x or I.x if C.prototype isn't found
                 // TODO: Check SymbolFlags ahead of time instead of choosing based on whether prototype is there.
                 const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(k)
-                // TODO: re-escape I GUESS
-                const prop = isJSDocInstanceReference(name) ? unescapeLeadingUnderscores(name.right.escapedText).slice(1) as __String : name.right.escapedText
-                return getPropertyOfType(t, prop)
+                return getPropertyOfType(t, name.right.escapedText)
             }
         }
 

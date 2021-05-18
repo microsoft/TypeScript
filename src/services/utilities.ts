@@ -2246,7 +2246,7 @@ namespace ts {
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + link.text));
+                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
             }
         }
         parts.push(linkPart("}"));

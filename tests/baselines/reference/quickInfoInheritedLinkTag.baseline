@@ -76,7 +76,7 @@
               "kind": "link"
             },
             {
-              "text": "PerspectiveCamera#setFocalLength.setFocalLength()",
+              "text": "PerspectiveCamera#setFocalLength .setFocalLength()",
               "kind": "linkText"
             },
             {
@@ -92,7 +92,7 @@
               "kind": "link"
             },
             {
-              "text": "PerspectiveCamera#filmGauge.filmGauge",
+              "text": "PerspectiveCamera#filmGauge .filmGauge",
               "kind": "linkText"
             },
             {

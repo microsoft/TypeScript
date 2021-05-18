@@ -88,6 +88,8 @@ namespace ts {
         QuestionQuestionToken,
         /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
         BacktickToken,
+        /** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
+        HashToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -518,6 +520,7 @@ namespace ts {
         | SyntaxKind.ColonToken
         | SyntaxKind.AtToken
         | SyntaxKind.BacktickToken
+        | SyntaxKind.HashToken
         | SyntaxKind.EqualsToken
         | SyntaxKind.PlusEqualsToken
         | SyntaxKind.MinusEqualsToken
@@ -723,6 +726,7 @@ namespace ts {
         | SyntaxKind.DotToken
         | SyntaxKind.Identifier
         | SyntaxKind.BacktickToken
+        | SyntaxKind.HashToken
         | SyntaxKind.Unknown
         | KeywordSyntaxKind
         ;
@@ -3127,10 +3131,11 @@ namespace ts {
         readonly name: EntityName | JSDocInstanceReference;
     }
 
+    /** Class#method reference in JSDoc */
     export interface JSDocInstanceReference extends Node {
         readonly kind: SyntaxKind.JSDocInstanceReference;
         readonly left: EntityName | JSDocInstanceReference;
-        readonly right: PrivateIdentifier;
+        readonly right: Identifier;
     }
 
     export interface JSDocType extends TypeNode {
@@ -7275,8 +7280,8 @@ namespace ts {
         updateJSDocTypeExpression(node: JSDocTypeExpression, type: TypeNode): JSDocTypeExpression;
         createJSDocNameReference(name: EntityName | JSDocInstanceReference): JSDocNameReference;
         updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocInstanceReference): JSDocNameReference;
-        createJSDocInstanceReference(left: EntityName | JSDocInstanceReference, right: PrivateIdentifier): JSDocInstanceReference;
-        updateJSDocInstanceReference(node: JSDocInstanceReference, left: EntityName | JSDocInstanceReference, right: PrivateIdentifier): JSDocInstanceReference;
+        createJSDocInstanceReference(left: EntityName | JSDocInstanceReference, right: Identifier): JSDocInstanceReference;
+        updateJSDocInstanceReference(node: JSDocInstanceReference, left: EntityName | JSDocInstanceReference, right: Identifier): JSDocInstanceReference;
         createJSDocLink(name: EntityName | JSDocInstanceReference | undefined, text: string): JSDocLink;
         updateJSDocLink(node: JSDocLink, name: EntityName | JSDocInstanceReference | undefined, text: string): JSDocLink;
         createJSDocTypeLiteral(jsDocPropertyTags?: readonly JSDocPropertyLikeTag[], isArrayType?: boolean): JSDocTypeLiteral;

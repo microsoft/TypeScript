@@ -4407,7 +4407,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocInstanceReference(left: EntityName | JSDocInstanceReference, right:  PrivateIdentifier) {
+        function createJSDocInstanceReference(left: EntityName | JSDocInstanceReference, right: Identifier) {
             const node = createBaseNode<JSDocInstanceReference>(SyntaxKind.JSDocInstanceReference);
             node.left = left;
             node.right = right;
@@ -4418,7 +4418,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocInstanceReference(node: JSDocInstanceReference, left: EntityName | JSDocInstanceReference, right: PrivateIdentifier) {
+        function updateJSDocInstanceReference(node: JSDocInstanceReference, left: EntityName | JSDocInstanceReference, right: Identifier) {
             return node.left !== left
                 || node.right !== right
                 ? update(createJSDocInstanceReference(left, right), node)

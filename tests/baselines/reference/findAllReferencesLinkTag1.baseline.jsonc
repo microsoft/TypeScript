@@ -8,8 +8,8 @@
 //      * @see {m}
 //      * {@link C.[|m|]}
 //      * @see {C.[|m|]}
-//      * {@link C[|#m|]}
-//      * @see {C[|#m|]}
+//      * {@link C#[|m|]}
+//      * @see {C#[|m|]}
 //      * {@link C.prototype.[|m|]}
 //      * @see {C.prototype.[|m|]}
 //      */
@@ -164,8 +164,8 @@
       },
       {
         "textSpan": {
-          "start": 144,
-          "length": 2
+          "start": 145,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
@@ -173,8 +173,8 @@
       },
       {
         "textSpan": {
-          "start": 162,
-          "length": 2
+          "start": 163,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
@@ -223,8 +223,8 @@
 //      * @see {n}
 //      * {@link C.[|n|]}
 //      * @see {C.[|n|]}
-//      * {@link C[|#n|]}
-//      * @see {C[|#n|]}
+//      * {@link C#[|n|]}
+//      * @see {C#[|n|]}
 //      * {@link C.prototype.[|n|]}
 //      * @see {C.prototype.[|n|]}
 //      */
@@ -360,8 +360,8 @@
       },
       {
         "textSpan": {
-          "start": 336,
-          "length": 2
+          "start": 337,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
@@ -369,8 +369,8 @@
       },
       {
         "textSpan": {
-          "start": 354,
-          "length": 2
+          "start": 355,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
@@ -610,8 +610,8 @@
 //      * @see {a}
 //      * {@link I.[|a|]}
 //      * @see {I.[|a|]}
-//      * {@link I[|#a|]}
-//      * @see {I[|#a|]}
+//      * {@link I#[|a|]}
+//      * @see {I#[|a|]}
 //      */
 //     c()
 //     /**
@@ -732,8 +732,8 @@
       },
       {
         "textSpan": {
-          "start": 660,
-          "length": 2
+          "start": 661,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
@@ -741,8 +741,8 @@
       },
       {
         "textSpan": {
-          "start": 678,
-          "length": 2
+          "start": 679,
+          "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,

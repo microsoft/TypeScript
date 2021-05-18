@@ -13,16 +13,16 @@
 ////      * {@link Consider.This.show}
 ////      * @see {NPR.Consider#This#show}
 ////      * {@link NPR.Consider.This#show}
-////      * @see {NPR.Consider#This.show}
+////      * @see {NPR.Consider#This.show} # doesn't parse trailing .
 ////      * @see {NPR.Consider.This.show}
 ////      */
 ////     export function ref() { }
 //// }
 //// /**
-////  * @see {NPR.Consider#This#show}
+////  * {@link NPR.Consider#This#show hello hello}
 ////  * {@link NPR.Consider.This#show}
-////  * @see {NPR.Consider#This.show}
+////  * @see {NPR.Consider#This.show} # doesn't parse trailing .
 ////  * @see {NPR.Consider.This.show}
 ////  */
 //// export function outerref() { }
-verify.baselineFindAllReferences('2', '3', '4', '5')
+verify.baselineFindAllReferences('1', '2', '3', '4', '5')
