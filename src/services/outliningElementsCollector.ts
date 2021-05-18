@@ -170,7 +170,7 @@ namespace ts.OutliningElementsCollector {
                         return spanForNode(n.parent);
                     case SyntaxKind.TryStatement:
                         // Could be the try-block, or the finally-block.
-                        const tryStatement = <TryStatement>n.parent;
+                        const tryStatement = n.parent as TryStatement;
                         if (tryStatement.tryBlock === n) {
                             return spanForNode(n.parent);
                         }
@@ -204,21 +204,21 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
             case SyntaxKind.JsxElement:
-                return spanForJSXElement(<JsxElement>n);
+                return spanForJSXElement(n as JsxElement);
             case SyntaxKind.JsxFragment:
-                return spanForJSXFragment(<JsxFragment>n);
+                return spanForJSXFragment(n as JsxFragment);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+                return spanForJSXAttributes((n as JsxOpeningLikeElement).attributes);
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return spanForTemplateLiteral(<TemplateExpression | NoSubstitutionTemplateLiteral>n);
+                return spanForTemplateLiteral(n as TemplateExpression | NoSubstitutionTemplateLiteral);
             case SyntaxKind.ArrayBindingPattern:
                 return spanForNode(n, /*autoCollapse*/ false, /*useFullStart*/ !isBindingElement(n.parent), SyntaxKind.OpenBracketToken);
             case SyntaxKind.ArrowFunction:
-                return spanForArrowFunction(<ArrowFunction>n);
+                return spanForArrowFunction(n as ArrowFunction);
             case SyntaxKind.CallExpression:
-                return spanForCallExpression(<CallExpression>n);
+                return spanForCallExpression(n as CallExpression);
         }
 
         function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {

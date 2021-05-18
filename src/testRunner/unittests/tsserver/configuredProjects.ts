@@ -810,12 +810,12 @@ namespace ts.projectSystem {
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
             const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: "open",
                 arguments: { file: f1.path }
-            });
+            } as protocol.OpenRequest);
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1248,8 +1248,8 @@ foo();`
             // Since file1 refers to config file as the default project, it needs to be kept alive
             checkNumberOfProjects(projectService, { inferredProjects: 1, configuredProjects: 1 });
             const inferredProject = projectService.inferredProjects[0];
-            assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
-            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(<server.NormalizedPath>file1.path));
+            assert.isTrue(inferredProject.containsFile(file1.path as server.NormalizedPath));
+            assert.isFalse(projectService.configuredProjects.get(configFile.path)!.containsFile(file1.path as server.NormalizedPath));
         });
 
         it("should be able to handle @types if input file list is empty", () => {

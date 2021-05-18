@@ -237,8 +237,8 @@ namespace ts.SignatureHelp {
             return undefined;
         }
         else if (isTemplateHead(node) && parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-            const templateExpression = <TemplateExpression>parent;
-            const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+            const templateExpression = parent as TemplateExpression;
+            const tagExpression = templateExpression.parent as TaggedTemplateExpression;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
             const argumentIndex = isInsideTemplateLiteral(node, position, sourceFile) ? 0 : 1;
