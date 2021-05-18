@@ -394,7 +394,7 @@ namespace ts.JsDoc {
                 return { commentOwner };
 
             case SyntaxKind.VariableStatement: {
-                const varStatement = <VariableStatement>commentOwner;
+                const varStatement = commentOwner as VariableStatement;
                 const varDeclarations = varStatement.declarationList.declarations;
                 const host = varDeclarations.length === 1 && varDeclarations[0].initializer
                     ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
@@ -440,13 +440,13 @@ namespace ts.JsDoc {
 
     function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
-            rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            rightHandSide = (rightHandSide as ParenthesizedExpression).expression;
         }
 
         switch (rightHandSide.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return (<FunctionExpression>rightHandSide);
+                return (rightHandSide as FunctionExpression);
             case SyntaxKind.ClassExpression:
                 return find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
         }

@@ -15,7 +15,7 @@ interface Array<T> { length: number; [n: number]: T; }`
     };
 
     export const safeList = {
-        path: <Path>"/safeList.json",
+        path: "/safeList.json" as Path,
         content: JSON.stringify({
             commander: "commander",
             express: "express",
@@ -71,11 +71,11 @@ interface Array<T> { length: number; [n: number]: T; }`
 
     export type FileOrFolderOrSymLink = File | Folder | SymLink;
     export function isFile(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is File {
-        return isString((<File>fileOrFolderOrSymLink).content);
+        return isString((fileOrFolderOrSymLink as File).content);
     }
 
     export function isSymLink(fileOrFolderOrSymLink: FileOrFolderOrSymLink): fileOrFolderOrSymLink is SymLink {
-        return isString((<SymLink>fileOrFolderOrSymLink).symLink);
+        return isString((fileOrFolderOrSymLink as SymLink).symLink);
     }
 
     interface FSEntryBase {
@@ -100,15 +100,15 @@ interface Array<T> { length: number; [n: number]: T; }`
     type FSEntry = FsFile | FsFolder | FsSymLink;
 
     function isFsFolder(s: FSEntry | undefined): s is FsFolder {
-        return !!s && isArray((<FsFolder>s).entries);
+        return !!s && isArray((s as FsFolder).entries);
     }
 
     function isFsFile(s: FSEntry | undefined): s is FsFile {
-        return !!s && isString((<FsFile>s).content);
+        return !!s && isString((s as FsFile).content);
     }
 
     function isFsSymLink(s: FSEntry | undefined): s is FsSymLink {
-        return !!s && isString((<FsSymLink>s).symLink);
+        return !!s && isString((s as FsSymLink).symLink);
     }
 
     function invokeWatcherCallbacks<T>(callbacks: readonly T[] | undefined, invokeCallback: (cb: T) => void): void {

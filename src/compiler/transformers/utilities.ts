@@ -84,34 +84,34 @@ namespace ts {
                     // import x from "mod"
                     // import * as x from "mod"
                     // import { x, y } from "mod"
-                    externalImports.push(<ImportDeclaration>node);
-                    if (!hasImportStar && getImportNeedsImportStarHelper(<ImportDeclaration>node)) {
+                    externalImports.push(node as ImportDeclaration);
+                    if (!hasImportStar && getImportNeedsImportStarHelper(node as ImportDeclaration)) {
                         hasImportStar = true;
                     }
-                    if (!hasImportDefault && getImportNeedsImportDefaultHelper(<ImportDeclaration>node)) {
+                    if (!hasImportDefault && getImportNeedsImportDefaultHelper(node as ImportDeclaration)) {
                         hasImportDefault = true;
                     }
                     break;
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    if ((<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
+                    if ((node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference) {
                         // import x = require("mod")
-                        externalImports.push(<ImportEqualsDeclaration>node);
+                        externalImports.push(node as ImportEqualsDeclaration);
                     }
 
                     break;
 
                 case SyntaxKind.ExportDeclaration:
-                    if ((<ExportDeclaration>node).moduleSpecifier) {
-                        if (!(<ExportDeclaration>node).exportClause) {
+                    if ((node as ExportDeclaration).moduleSpecifier) {
+                        if (!(node as ExportDeclaration).exportClause) {
                             // export * from "mod"
-                            externalImports.push(<ExportDeclaration>node);
+                            externalImports.push(node as ExportDeclaration);
                             hasExportStarsToExportValues = true;
                         }
                         else {
                             // export * as ns from "mod"
                             // export { x, y } from "mod"
-                            externalImports.push(<ExportDeclaration>node);
+                            externalImports.push(node as ExportDeclaration);
                             if (isNamedExports((node as ExportDeclaration).exportClause!)) {
                                 addExportedNamesForExportDeclaration(node as ExportDeclaration);
                             }
@@ -134,15 +134,15 @@ namespace ts {
                     break;
 
                 case SyntaxKind.ExportAssignment:
-                    if ((<ExportAssignment>node).isExportEquals && !exportEquals) {
+                    if ((node as ExportAssignment).isExportEquals && !exportEquals) {
                         // export = x
-                        exportEquals = <ExportAssignment>node;
+                        exportEquals = node as ExportAssignment;
                     }
                     break;
 
                 case SyntaxKind.VariableStatement:
                     if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                        for (const decl of (<VariableStatement>node).declarationList.declarations) {
+                        for (const decl of (node as VariableStatement).declarationList.declarations) {
                             exportedNames = collectExportedVariableInfo(decl, uniqueExports, exportedNames);
                         }
                     }
@@ -153,13 +153,13 @@ namespace ts {
                         if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default function() { }
                             if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(<FunctionDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export function x() { }
-                            const name = (<FunctionDeclaration>node).name!;
+                            const name = (node as FunctionDeclaration).name!;
                             if (!uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -174,13 +174,13 @@ namespace ts {
                         if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                             // export default class { }
                             if (!hasExportDefault) {
-                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(<ClassDeclaration>node));
+                                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as ClassDeclaration));
                                 hasExportDefault = true;
                             }
                         }
                         else {
                             // export class x { }
-                            const name = (<ClassDeclaration>node).name;
+                            const name = (node as ClassDeclaration).name;
                             if (name && !uniqueExports.get(idText(name))) {
                                 multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                                 uniqueExports.set(idText(name), true);
@@ -362,7 +362,7 @@ namespace ts {
      */
     export function isInitializedProperty(member: ClassElement): member is PropertyDeclaration & { initializer: Expression; } {
         return member.kind === SyntaxKind.PropertyDeclaration
-            && (<PropertyDeclaration>member).initializer !== undefined;
+            && (member as PropertyDeclaration).initializer !== undefined;
     }
 
     /**

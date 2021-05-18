@@ -190,18 +190,18 @@ namespace ts {
                 return node.kind;
             }
 
-            if (node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.PlusToken) {
-                if ((<BinaryPlusExpression>node).cachedLiteralKind !== undefined) {
-                    return (<BinaryPlusExpression>node).cachedLiteralKind;
+            if (node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken) {
+                if ((node as BinaryPlusExpression).cachedLiteralKind !== undefined) {
+                    return (node as BinaryPlusExpression).cachedLiteralKind;
                 }
 
-                const leftKind = getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).left);
+                const leftKind = getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).left);
                 const literalKind = isLiteralKind(leftKind)
-                    && leftKind === getLiteralKindOfBinaryPlusOperand((<BinaryExpression>node).right)
+                    && leftKind === getLiteralKindOfBinaryPlusOperand((node as BinaryExpression).right)
                         ? leftKind
                         : SyntaxKind.Unknown;
 
-                (<BinaryPlusExpression>node).cachedLiteralKind = literalKind;
+                (node as BinaryPlusExpression).cachedLiteralKind = literalKind;
                 return literalKind;
             }
 
@@ -319,7 +319,7 @@ namespace ts {
             //
             const emittedExpression = skipPartiallyEmittedExpressions(expression);
             if (isLeftHandSideExpression(emittedExpression)
-                && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
+                && (emittedExpression.kind !== SyntaxKind.NewExpression || (emittedExpression as NewExpression).arguments)) {
                 // TODO(rbuckton): Verify whether this assertion holds.
                 return expression as LeftHandSideExpression;
             }

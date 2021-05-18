@@ -290,7 +290,7 @@ namespace ts.GoToDefinition {
                 return undefined;
             }
             const declarations = signatureDeclarations.filter(selectConstructors ? isConstructorDeclaration : isFunctionLike);
-            const declarationsWithBody = declarations.filter(d => !!(<FunctionLikeDeclaration>d).body);
+            const declarationsWithBody = declarations.filter(d => !!(d as FunctionLikeDeclaration).body);
 
             // declarations defined on the global scope can be defined on multiple files. Get all of them.
             return declarations.length

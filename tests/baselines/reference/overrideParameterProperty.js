@@ -26,6 +26,11 @@ class C3 extends Base {
   m(override p1: "hello") {}
 }
 
+class C4 extends Base {
+  constructor(public override p2: string) {
+    super();
+  }
+}
 
 //// [overrideParameterProperty.js]
 var __extends = (this && this.__extends) || (function () {
@@ -78,4 +83,13 @@ var C3 = /** @class */ (function (_super) {
     }
     C3.prototype.m = function (p1) { };
     return C3;
+}(Base));
+var C4 = /** @class */ (function (_super) {
+    __extends(C4, _super);
+    function C4(p2) {
+        var _this = _super.call(this) || this;
+        _this.p2 = p2;
+        return _this;
+    }
+    return C4;
 }(Base));
