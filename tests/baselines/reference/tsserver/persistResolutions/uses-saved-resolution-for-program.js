@@ -1414,27 +1414,24 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/external
 Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/externalThing.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Running: /user/username/projects/myproject/tsconfig.json
-Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/externalThing.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
-======== Resolving module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/externalThing.ts' exist - use it as a name resolution result.
-======== Module name 'externalThing' was successfully resolved to '/user/username/projects/myproject/src/externalThing.ts'. ========
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
 Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThingNotPresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
-Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/externalThing.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
 Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThingNotPresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 10 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-	Files (14)
+	Files (15)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/filePresent.ts
-	/user/username/projects/myproject/src/externalThing.ts
+	/user/username/projects/myproject/src/externalThing.d.ts
 	/user/username/projects/myproject/src/externalThingNotPresent.ts
 	/user/username/projects/myproject/src/anotherFileReusingResolution.ts
 	/user/username/projects/myproject/src/types.ts
@@ -1446,6 +1443,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	/user/username/projects/myproject/src/globalMain.ts
 	/user/username/projects/myproject/src/newFile.ts
 	/user/username/projects/myproject/src/main.ts
+	/user/username/projects/myproject/src/externalThing.ts
 
 
 	../../../../a/lib/lib.d.ts
@@ -1455,10 +1453,9 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	  Imported via "./filePresent" from file 'src/main.ts'
 	  Imported via "./filePresent" from file 'src/main.ts'
-	src/externalThing.ts
+	src/externalThing.d.ts
 	  Imported via "externalThing" from file 'src/anotherFileReusingResolution.ts'
 	  Imported via "externalThing" from file 'src/main.ts'
-	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/externalThingNotPresent.ts
 	  Imported via "externalThingNotPresent" from file 'src/anotherFileReusingResolution.ts'
 	  Imported via "externalThingNotPresent" from file 'src/main.ts'
@@ -1490,12 +1487,14 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 	src/main.ts
 	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+	src/externalThing.ts
+	  Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
 -----------------------------------------------
 Running: *ensureProjectForOpenFiles*
 Before ensureProjectForOpenFiles:
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-	Files (14)
+	Files (15)
 
 -----------------------------------------------
 Open files: 
@@ -1505,7 +1504,7 @@ Open files:
 		Projects: /user/username/projects/myproject/tsconfig.json
 After ensureProjectForOpenFiles:
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-	Files (14)
+	Files (15)
 
 -----------------------------------------------
 Open files: 
@@ -1531,8 +1530,8 @@ interface Array<T> { length: number; [n: number]: T; }
 {"fileName":"/user/username/projects/myproject/src/filePresent.ts","version":"11598859296-export function something() { return 10; }"}
 export function something() { return 10; }
 
-{"fileName":"/user/username/projects/myproject/src/externalThing.ts","version":"5618215488-export function externalThing1() { return 10; }"}
-export function externalThing1() { return 10; }
+{"fileName":"/user/username/projects/myproject/src/externalThing.d.ts","version":"5686005290-export function externalThing1(): number;"}
+export function externalThing1(): number;
 
 {"fileName":"/user/username/projects/myproject/src/externalThingNotPresent.ts","version":"5318862050-export function externalThing2() { return 20; }"}
 export function externalThing2() { return 20; }
@@ -1584,4 +1583,7 @@ import { something2 } from "./fileNotFound";
 something();
 import { externalThing1 } from "externalThing";
 import { externalThing2 } from "externalThingNotPresent";
+
+{"fileName":"/user/username/projects/myproject/src/externalThing.ts","version":"5618215488-export function externalThing1() { return 10; }"}
+export function externalThing1() { return 10; }
 

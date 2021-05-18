@@ -33,6 +33,7 @@ namespace ts {
         refCount?: number;
         // Files that have this resolution using
         files?: Path[];
+        skipWatchingFailedLookup?: true;
     }
 
     interface ResolutionWithResolvedFileName {
@@ -600,18 +601,24 @@ namespace ts {
         ) {
             if (resolution.refCount) {
                 resolution.refCount++;
-                Debug.assertDefined(resolution.files);
+                Debug.checkDefined(resolution.files);
             }
             else {
                 resolution.refCount = 1;
                 Debug.assert(length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
-                if (isExternalModuleNameRelative(name)) {
-                    watchFailedLookupLocationOfResolution(resolution);
+                const resolved = getResolutionWithResolvedFileName(resolution);
+                // Watch resolution only if not persisting resolutions or if its not resolved to a file
+                if (!resolutionHost.getCompilationSettings().persistResolutions || !resolved?.resolvedFileName) {
+                    if (isExternalModuleNameRelative(name)) {
+                        watchFailedLookupLocationOfResolution(resolution);
+                    }
+                    else {
+                        nonRelativeExternalModuleResolutions.add(name, resolution);
+                    }
                 }
                 else {
-                    nonRelativeExternalModuleResolutions.add(name, resolution);
+                    resolution.skipWatchingFailedLookup = true;
                 }
-                const resolved = getResolutionWithResolvedFileName(resolution);
                 if (resolved && resolved.resolvedFileName) {
                     resolvedFileToResolution.add(resolutionHost.toPath(resolved.resolvedFileName), resolution);
                 }
@@ -677,7 +684,7 @@ namespace ts {
             filePath: Path,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
         ) {
-            unorderedRemoveItem(Debug.assertDefined(resolution.files), filePath);
+            unorderedRemoveItem(Debug.checkDefined(resolution.files), filePath);
             resolution.refCount!--;
             if (resolution.refCount) {
                 return;
@@ -687,6 +694,7 @@ namespace ts {
                 resolvedFileToResolution.remove(resolutionHost.toPath(resolved.resolvedFileName), resolution);
             }
 
+            if (resolution.skipWatchingFailedLookup) return;
             if (!unorderedRemoveItem(resolutionsWithFailedLookups, resolution)) {
                 // If not watching failed lookups, it wont be there in resolutionsWithFailedLookups
                 return;
@@ -779,7 +787,7 @@ namespace ts {
             for (const resolution of resolutions) {
                 if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
                 resolution.isInvalidated = invalidated = true;
-                for (const containingFilePath of Debug.assertDefined(resolution.files)) {
+                for (const containingFilePath of Debug.checkDefined(resolution.files)) {
                     (filesWithInvalidatedResolutions || (filesWithInvalidatedResolutions = new Set())).add(containingFilePath);
                     // When its a file with inferred types resolution, invalidate type reference directive resolution
                     hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);

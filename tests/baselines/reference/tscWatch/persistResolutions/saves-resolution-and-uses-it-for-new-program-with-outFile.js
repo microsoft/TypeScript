@@ -9176,7 +9176,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/externalThing.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/externalThing.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
-Scheduling update
 [[90m12:03:30 AM[0m] File change detected. Starting incremental compilation...
 
 Reloading new file names and options
@@ -9185,19 +9184,16 @@ CreatingProgramWith::
   roots: ["/user/username/projects/myproject/src/anotherFileReusingResolution.ts","/user/username/projects/myproject/src/externalThing.ts","/user/username/projects/myproject/src/externalThingNotPresent.ts","/user/username/projects/myproject/src/filePresent.ts","/user/username/projects/myproject/src/fileWithRef.ts","/user/username/projects/myproject/src/globalAnotherFileWithSameReferenes.ts","/user/username/projects/myproject/src/globalFileNotFound.ts","/user/username/projects/myproject/src/globalFilePresent.ts","/user/username/projects/myproject/src/globalMain.ts","/user/username/projects/myproject/src/globalNewFile.ts","/user/username/projects/myproject/src/main.ts","/user/username/projects/myproject/src/newFile.ts","/user/username/projects/myproject/src/types.ts"]
   options: {"module":2,"composite":true,"persistResolutions":true,"traceResolution":true,"outFile":"/user/username/projects/myproject/outFile.js","project":"/user/username/projects/myproject","watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
-======== Resolving module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/externalThing.ts' exist - use it as a name resolution result.
-======== Module name 'externalThing' was successfully resolved to '/user/username/projects/myproject/src/externalThing.ts'. ========
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
 Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThingNotPresent.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/externalThing.ts 250 undefined Source file
 Reusing resolution of module './newFile' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/newFile.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
-Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was successfully resolved to '/user/username/projects/myproject/src/externalThing.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
 Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThingNotPresent.ts'.
-FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/externalThing.d.ts 250 undefined Source file
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
 [96msrc/anotherFileReusingResolution.ts[0m:[93m2[0m:[93m28[0m - [91merror[0m[90m TS2792: [0mCannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 
 [7m2[0m import { something2 } from "./fileNotFound";
@@ -9218,9 +9214,10 @@ Program structureReused: SafeModules
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/src/filePresent.ts
-/user/username/projects/myproject/src/externalThing.ts
+/user/username/projects/myproject/src/externalThing.d.ts
 /user/username/projects/myproject/src/externalThingNotPresent.ts
 /user/username/projects/myproject/src/anotherFileReusingResolution.ts
+/user/username/projects/myproject/src/externalThing.ts
 /user/username/projects/myproject/src/types.ts
 /user/username/projects/myproject/src/fileWithRef.ts
 /user/username/projects/myproject/src/globalFilePresent.ts
@@ -9240,6 +9237,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/src/anotherFileReusingResolution.ts","pollingInterval":250}
 /user/username/projects/myproject/src/filepresent.ts:
   {"fileName":"/user/username/projects/myproject/src/filePresent.ts","pollingInterval":250}
+/user/username/projects/myproject/src/externalthing.d.ts:
+  {"fileName":"/user/username/projects/myproject/src/externalThing.d.ts","pollingInterval":250}
 /user/username/projects/myproject/src/filewithref.ts:
   {"fileName":"/user/username/projects/myproject/src/fileWithRef.ts","pollingInterval":250}
 /user/username/projects/myproject/src/types.ts:
@@ -9284,13 +9283,6 @@ define("src/filePresent", ["require", "exports"], function (require, exports) {
     function something() { return 10; }
     exports.something = something;
 });
-define("src/externalThing", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.externalThing1 = void 0;
-    function externalThing1() { return 10; }
-    exports.externalThing1 = externalThing1;
-});
 define("src/externalThingNotPresent", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
@@ -9301,6 +9293,13 @@ define("src/externalThingNotPresent", ["require", "exports"], function (require,
 define("src/anotherFileReusingResolution", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+});
+define("src/externalThing", ["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
+    exports.externalThing1 = void 0;
+    function externalThing1() { return 10; }
+    exports.externalThing1 = externalThing1;
 });
 /// <reference path="./types.ts"/>
 function globalSomething() { return 10; }
@@ -9333,13 +9332,13 @@ define("src/main", ["require", "exports", "src/filePresent"], function (require,
 declare module "src/filePresent" {
     export function something(): number;
 }
-declare module "src/externalThing" {
-    export function externalThing1(): number;
-}
 declare module "src/externalThingNotPresent" {
     export function externalThing2(): number;
 }
 declare module "src/anotherFileReusingResolution" { }
+declare module "src/externalThing" {
+    export function externalThing1(): number;
+}
 interface SomeType {
 }
 declare function globalSomething(): number;
@@ -9354,7 +9353,7 @@ declare module "src/main" { }
 
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/externalThing.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/types.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":1824,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":658,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/externalThing.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"5618215488-export function externalThing1() { return 10; }","signature":false},{"version":"5318862050-export function externalThing2() { return 20; }","signature":false},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":false},{"version":"-12575322908-interface SomeType {}","signature":false,"affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":false},{"version":"-5627034801-function globalSomething() { return 10; }","signature":false,"affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":false,"affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":false,"affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":false,"affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":false,"affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":false}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"outFile":"./outFile.js","persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[6],[8,9],[8,9,11],[2,3,4,13]],"referencedMap":[[5,1],[7,2],[10,3],[12,4],[14,5]],"exportedModulesMap":[],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":15,"originalFileName":15,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0},{"kind":0,"index":3},{"kind":3,"file":14,"index":1},{"kind":3,"file":14,"index":2}]},{"fileName":16,"originalFileName":16,"path":3,"resolvedPath":3,"version":"5618215488-export function externalThing1() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":2},{"kind":0,"index":1},{"kind":3,"file":14,"index":4}]},{"fileName":17,"originalFileName":17,"path":4,"resolvedPath":4,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":3},{"kind":0,"index":2},{"kind":3,"file":14,"index":5}]},{"fileName":18,"originalFileName":18,"path":5,"resolvedPath":5,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":6,"originalFileName":6,"path":6,"resolvedPath":6,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":7,"index":0},{"kind":0,"index":12}]},{"fileName":19,"originalFileName":19,"path":7,"resolvedPath":7,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":20,"originalFileName":20,"path":8,"resolvedPath":8,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":0},{"kind":0,"index":7},{"kind":4,"file":12,"index":1}]},{"fileName":21,"originalFileName":21,"path":9,"resolvedPath":9,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":1},{"kind":0,"index":6},{"kind":4,"file":12,"index":2}]},{"fileName":22,"originalFileName":22,"path":10,"resolvedPath":10,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":23,"originalFileName":23,"path":11,"resolvedPath":11,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":9}]},{"fileName":24,"originalFileName":24,"path":12,"resolvedPath":12,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":8}]},{"fileName":25,"originalFileName":25,"path":13,"resolvedPath":13,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":14,"index":0},{"kind":0,"index":11}]},{"fileName":14,"originalFileName":14,"path":14,"resolvedPath":14,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":10}]}],"rootFileNames":[18,16,17,15,19,22,21,20,24,23,14,25,6],"resolutions":[{"resolvedModule":{"resolvedFileName":15,"extension":".ts"}},{"failedLookupLocations":[26,27,28,29,30]},{"resolvedModule":{"resolvedFileName":16,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":17,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":25,"extension":".ts"}}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./src/filePresent.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/externalThing.ts","./src/types.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/main.ts"],"js":{"sections":[{"pos":0,"end":1824,"kind":"text"}]},"dts":{"sections":[{"pos":0,"end":658,"kind":"text"}]}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/externalthing.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/externalThing.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.tsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":false,"affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":false},{"version":"5686005290-export function externalThing1(): number;","signature":false},{"version":"5318862050-export function externalThing2() { return 20; }","signature":false},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":false},{"version":"5618215488-export function externalThing1() { return 10; }","signature":false},{"version":"-12575322908-interface SomeType {}","signature":false,"affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":false},{"version":"-5627034801-function globalSomething() { return 10; }","signature":false,"affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":false,"affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":false,"affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":false,"affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":false,"affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":false},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":false}],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"outFile":"./outFile.js","persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[7],[9,10],[9,10,12],[2,3,4,14]],"referencedMap":[[5,1],[8,2],[11,3],[13,4],[15,5]],"exportedModulesMap":[],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":16,"originalFileName":16,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0},{"kind":0,"index":3},{"kind":3,"file":15,"index":1},{"kind":3,"file":15,"index":2}]},{"fileName":17,"originalFileName":17,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":5,"index":2},{"kind":3,"file":15,"index":4}]},{"fileName":18,"originalFileName":18,"path":4,"resolvedPath":4,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":3},{"kind":0,"index":2},{"kind":3,"file":15,"index":5}]},{"fileName":19,"originalFileName":19,"path":5,"resolvedPath":5,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":20,"originalFileName":20,"path":6,"resolvedPath":6,"version":"5618215488-export function externalThing1() { return 10; }","flags":0,"includeReasons":[{"kind":0,"index":1}]},{"fileName":7,"originalFileName":7,"path":7,"resolvedPath":7,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":8,"index":0},{"kind":0,"index":12}]},{"fileName":21,"originalFileName":21,"path":8,"resolvedPath":8,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":22,"originalFileName":22,"path":9,"resolvedPath":9,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":7},{"kind":4,"file":13,"index":1}]},{"fileName":23,"originalFileName":23,"path":10,"resolvedPath":10,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":1},{"kind":0,"index":6},{"kind":4,"file":13,"index":2}]},{"fileName":24,"originalFileName":24,"path":11,"resolvedPath":11,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":25,"originalFileName":25,"path":12,"resolvedPath":12,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":13,"index":0},{"kind":0,"index":9}]},{"fileName":26,"originalFileName":26,"path":13,"resolvedPath":13,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":8}]},{"fileName":27,"originalFileName":27,"path":14,"resolvedPath":14,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":15,"index":0},{"kind":0,"index":11}]},{"fileName":15,"originalFileName":15,"path":15,"resolvedPath":15,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":10}]}],"rootFileNames":[19,20,18,16,21,24,23,22,26,25,15,27,7],"resolutions":[{"resolvedModule":{"resolvedFileName":16,"extension":".ts"}},{"failedLookupLocations":[28,29,30,31,32]},{"resolvedModule":{"resolvedFileName":17,"extension":".d.ts"},"failedLookupLocations":[20,33]},{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":27,"extension":".ts"}}]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -9362,9 +9361,9 @@ declare module "src/main" { }
     "commonSourceDirectory": "./",
     "sourceFiles": [
       "./src/filePresent.ts",
-      "./src/externalThing.ts",
       "./src/externalThingNotPresent.ts",
       "./src/anotherFileReusingResolution.ts",
+      "./src/externalThing.ts",
       "./src/types.ts",
       "./src/fileWithRef.ts",
       "./src/globalFilePresent.ts",
@@ -9398,9 +9397,10 @@ declare module "src/main" { }
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
       "./src/filepresent.ts",
-      "./src/externalthing.ts",
+      "./src/externalthing.d.ts",
       "./src/externalthingnotpresent.ts",
       "./src/anotherfilereusingresolution.ts",
+      "./src/externalthing.ts",
       "./src/types.ts",
       "./src/filewithref.ts",
       "./src/globalfilepresent.ts",
@@ -9411,9 +9411,10 @@ declare module "src/main" { }
       "./src/newfile.ts",
       "./src/main.ts",
       "./src/filePresent.ts",
-      "./src/externalThing.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThingNotPresent.ts",
       "./src/anotherFileReusingResolution.ts",
+      "./src/externalThing.ts",
       "./src/fileWithRef.ts",
       "./src/globalFilePresent.ts",
       "./src/globalFileNotFound.ts",
@@ -9425,12 +9426,13 @@ declare module "src/main" { }
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
-      "./src/fileNotFound.jsx"
+      "./src/fileNotFound.jsx",
+      "./src/externalThing.tsx"
     ],
     "fileNamesList": [
       [
         "./src/filepresent.ts",
-        "./src/externalthing.ts",
+        "./src/externalthing.d.ts",
         "./src/externalthingnotpresent.ts"
       ],
       [
@@ -9447,7 +9449,7 @@ declare module "src/main" { }
       ],
       [
         "./src/filepresent.ts",
-        "./src/externalthing.ts",
+        "./src/externalthing.d.ts",
         "./src/externalthingnotpresent.ts",
         "./src/newfile.ts"
       ]
@@ -9460,14 +9462,17 @@ declare module "src/main" { }
       "./src/filepresent.ts": {
         "version": "11598859296-export function something() { return 10; }"
       },
-      "./src/externalthing.ts": {
-        "version": "5618215488-export function externalThing1() { return 10; }"
+      "./src/externalthing.d.ts": {
+        "version": "5686005290-export function externalThing1(): number;"
       },
       "./src/externalthingnotpresent.ts": {
         "version": "5318862050-export function externalThing2() { return 20; }"
       },
       "./src/anotherfilereusingresolution.ts": {
         "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";"
+      },
+      "./src/externalthing.ts": {
+        "version": "5618215488-export function externalThing1() { return 10; }"
       },
       "./src/types.ts": {
         "version": "-12575322908-interface SomeType {}",
@@ -9517,7 +9522,7 @@ declare module "src/main" { }
     "referencedMap": {
       "./src/anotherfilereusingresolution.ts": [
         "./src/filepresent.ts",
-        "./src/externalthing.ts",
+        "./src/externalthing.d.ts",
         "./src/externalthingnotpresent.ts"
       ],
       "./src/filewithref.ts": [
@@ -9534,7 +9539,7 @@ declare module "src/main" { }
       ],
       "./src/main.ts": [
         "./src/filepresent.ts",
-        "./src/externalthing.ts",
+        "./src/externalthing.d.ts",
         "./src/externalthingnotpresent.ts",
         "./src/newfile.ts"
       ]
@@ -9586,21 +9591,17 @@ declare module "src/main" { }
           ]
         },
         {
-          "fileName": "./src/externalThing.ts",
-          "originalFileName": "./src/externalThing.ts",
-          "path": "./src/externalthing.ts",
-          "resolvedPath": "./src/externalthing.ts",
-          "version": "5618215488-export function externalThing1() { return 10; }",
+          "fileName": "./src/externalThing.d.ts",
+          "originalFileName": "./src/externalThing.d.ts",
+          "path": "./src/externalthing.d.ts",
+          "resolvedPath": "./src/externalthing.d.ts",
+          "version": "5686005290-export function externalThing1(): number;",
           "flags": 0,
           "includeReasons": [
             {
               "kind": "Import",
               "file": "./src/anotherfilereusingresolution.ts",
               "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
             },
             {
               "kind": "Import",
@@ -9684,9 +9685,13 @@ declare module "src/main" { }
               "externalThing",
               {
                 "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.ts",
-                  "extension": ".ts"
-                }
+                  "resolvedFileName": "./src/externalThing.d.ts",
+                  "extension": ".d.ts"
+                },
+                "failedLookupLocations": [
+                  "./src/externalThing.ts",
+                  "./src/externalThing.tsx"
+                ]
               }
             ],
             [
@@ -9703,6 +9708,20 @@ declare module "src/main" { }
             {
               "kind": "RootFile",
               "index": 0
+            }
+          ]
+        },
+        {
+          "fileName": "./src/externalThing.ts",
+          "originalFileName": "./src/externalThing.ts",
+          "path": "./src/externalthing.ts",
+          "resolvedPath": "./src/externalthing.ts",
+          "version": "5618215488-export function externalThing1() { return 10; }",
+          "flags": 0,
+          "includeReasons": [
+            {
+              "kind": "RootFile",
+              "index": 1
             }
           ]
         },
@@ -9933,9 +9952,13 @@ declare module "src/main" { }
               "externalThing",
               {
                 "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.ts",
-                  "extension": ".ts"
-                }
+                  "resolvedFileName": "./src/externalThing.d.ts",
+                  "extension": ".d.ts"
+                },
+                "failedLookupLocations": [
+                  "./src/externalThing.ts",
+                  "./src/externalThing.tsx"
+                ]
               }
             ],
             [
@@ -9989,9 +10012,13 @@ declare module "src/main" { }
         },
         {
           "resolvedModule": {
-            "resolvedFileName": "./src/externalThing.ts",
-            "extension": ".ts"
-          }
+            "resolvedFileName": "./src/externalThing.d.ts",
+            "extension": ".d.ts"
+          },
+          "failedLookupLocations": [
+            "./src/externalThing.ts",
+            "./src/externalThing.tsx"
+          ]
         },
         {
           "resolvedModule": {
@@ -10009,7 +10036,7 @@ declare module "src/main" { }
     }
   },
   "version": "FakeTSVersion",
-  "size": 9281
+  "size": 9642
 }
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
@@ -10024,13 +10051,6 @@ define("src/filePresent", ["require", "exports"], function (require, exports) {
     function something() { return 10; }
     exports.something = something;
 });
-define("src/externalThing", ["require", "exports"], function (require, exports) {
-    "use strict";
-    exports.__esModule = true;
-    exports.externalThing1 = void 0;
-    function externalThing1() { return 10; }
-    exports.externalThing1 = externalThing1;
-});
 define("src/externalThingNotPresent", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
@@ -10041,6 +10061,13 @@ define("src/externalThingNotPresent", ["require", "exports"], function (require,
 define("src/anotherFileReusingResolution", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+});
+define("src/externalThing", ["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
+    exports.externalThing1 = void 0;
+    function externalThing1() { return 10; }
+    exports.externalThing1 = externalThing1;
 });
 /// <reference path="./types.ts"/>
 function globalSomething() { return 10; }
@@ -10076,13 +10103,13 @@ text: (0-658)
 declare module "src/filePresent" {
     export function something(): number;
 }
-declare module "src/externalThing" {
-    export function externalThing1(): number;
-}
 declare module "src/externalThingNotPresent" {
     export function externalThing2(): number;
 }
 declare module "src/anotherFileReusingResolution" { }
+declare module "src/externalThing" {
+    export function externalThing1(): number;
+}
 interface SomeType {
 }
 declare function globalSomething(): number;
