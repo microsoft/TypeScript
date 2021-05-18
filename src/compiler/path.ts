@@ -461,12 +461,15 @@ namespace ts {
      */
     export function reducePathComponents(components: readonly string[]) {
         if (!some(components)) return [];
-        const reduced = [components[0]];
+        let reduced: string[] | undefined;
         for (let i = 1; i < components.length; i++) {
             const component = components[i];
-            if (!component) continue;
-            if (component === ".") continue;
+            if (!component || component === ".") {
+                reduced = reduced ?? components.slice(0, i);
+                continue;
+            }
             if (component === "..") {
+                reduced = reduced ?? components.slice(0, i);
                 if (reduced.length > 1) {
                     if (reduced[reduced.length - 1] !== "..") {
                         reduced.pop();
@@ -475,9 +478,9 @@ namespace ts {
                 }
                 else if (reduced[0]) continue;
             }
-            reduced.push(component);
+            reduced?.push(component);
         }
-        return reduced;
+        return reduced ?? components as string[];
     }
 
     /**
