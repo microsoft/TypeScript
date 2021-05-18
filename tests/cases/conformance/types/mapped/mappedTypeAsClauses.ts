@@ -131,3 +131,22 @@ function f(x: KeysExtendedBy<M, number>) {
 }
 
 f("a");  // Error, should allow only "b"
+
+type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
+
+// Distributive, will be simplified
+
+type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
+type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
+type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
+type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
+type TS4<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+type TS5<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
+type TS6<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+type TS7<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
+
+// Non-distributive, won't be simplified
+
+type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
+type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
+type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
