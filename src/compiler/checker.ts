@@ -39223,13 +39223,12 @@ namespace ts {
 
                 const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocInstanceReference));
                 const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
-                const dontResolveAlias = !isJSDoc; // TODO: Maybe don't special-case jsdoc references I dunno
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
                         const symbol = getIntrinsicTagSymbol(<JsxOpeningLikeElement>name.parent);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    return resolveEntityName(name, meaning, /*ignoreErrors*/ false, dontResolveAlias, getHostSignatureFromJSDoc(name));
+                    return resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39244,13 +39243,12 @@ namespace ts {
                         checkQualifiedName(name, CheckMode.Normal);
                     }
                     if (!links.resolvedSymbol && isJSDoc && isQualifiedName(name)) {
-                        // resolve C.m as a type, namespace or value
-                        return miniResolve(name);
+                        return resolveJSDocInstanceReference(name);
                     }
                     return links.resolvedSymbol;
                 }
                 else if (isJSDocInstanceReference(name)) {
-                    return miniResolve(name);
+                    return resolveJSDocInstanceReference(name);
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>name)) {
@@ -39264,23 +39262,29 @@ namespace ts {
             return undefined;
         }
 
-        // resolve it as an instance member
-        function miniResolve(name: EntityName | JSDocInstanceReference): Symbol | undefined {
+        /**
+         * Recursively resolve entity names and jsdoc instance references:
+         * 1. K#m as K.prototype.m for a class (or other value) K
+         * 2. K.m as K.prototype.m
+         * 3. I.m as I.m for a type I, or any other I.m that fails to resolve in (1) or (2)
+         */
+        function resolveJSDocInstanceReference(name: EntityName | JSDocInstanceReference): Symbol | undefined {
             if (isEntityName(name)) {
-                // delegate to resolveEntityName
-                const s = resolveEntityName(name, SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
-                if (s || isIdentifier(name)) {
-                    // can't recur on identifier, so just return undefined when they're not found
-                    return s;
+                const symbol = resolveEntityName(
+                    name,
+                    SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value,
+                    /*ignoreErrors*/ false,
+                    /*dontResolveAlias*/ true,
+                    getHostSignatureFromJSDoc(name));
+                if (symbol || isIdentifier(name)) {
+                    // can't recur on identifier, so just return when it's undefined
+                    return symbol;
                 }
             }
-            // resolve left side, get its type, look it prototype and then look THAT up
-            const k = miniResolve(name.left);
-            if (k) {
-                const proto = getPropertyOfType(getTypeOfSymbol(k), "prototype" as __String);
-                // resolve C.prototype.x or I.x if C.prototype isn't found
-                // TODO: Check SymbolFlags ahead of time instead of choosing based on whether prototype is there.
-                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(k);
+            const left = resolveJSDocInstanceReference(name.left);
+            if (left) {
+                const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
+                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(left);
                 return getPropertyOfType(t, name.right.escapedText);
             }
         }
