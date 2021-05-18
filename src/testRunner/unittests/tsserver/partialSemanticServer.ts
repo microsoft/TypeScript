@@ -68,6 +68,7 @@ import { something } from "something";
                     hasAction: undefined,
                     insertText: undefined,
                     isPackageJsonImport: undefined,
+                    isImportStatementCompletion: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
                     source: undefined,

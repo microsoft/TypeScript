@@ -183,7 +183,7 @@ namespace project {
             }
 
             try {
-                testCase = <ProjectRunnerTestCase & ts.CompilerOptions>JSON.parse(testFileText!);
+                testCase = JSON.parse(testFileText!) as ProjectRunnerTestCase & ts.CompilerOptions;
             }
             catch (e) {
                 throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
@@ -444,7 +444,7 @@ namespace project {
                 const option = optionNameMap.get(name);
                 if (option) {
                     const optType = option.type;
-                    let value = <any>testCase[name];
+                    let value = testCase[name] as any;
                     if (!ts.isString(optType)) {
                         const key = value.toLowerCase();
                         const optTypeValue = optType.get(key);

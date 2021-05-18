@@ -1022,25 +1022,25 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f1, libFile, config]);
             const session = createSession(host, { logger });
-            session.executeCommandSeq(<protocol.OpenRequest>{
+            session.executeCommandSeq({
                 command: server.CommandNames.Open,
                 arguments: {
                     file: f1.path
                 }
-            });
-            session.executeCommandSeq(<protocol.CloseRequest>{
+            } as protocol.OpenRequest);
+            session.executeCommandSeq({
                 command: server.CommandNames.Close,
                 arguments: {
                     file: f1.path
                 }
-            });
-            session.executeCommandSeq(<protocol.GeterrRequest>{
+            } as protocol.CloseRequest);
+            session.executeCommandSeq({
                 command: server.CommandNames.Geterr,
                 arguments: {
                     delay: 0,
                     files: [f1.path]
                 }
-            });
+            } as protocol.GeterrRequest);
             assert.isFalse(hasErrorMsg());
         });
 

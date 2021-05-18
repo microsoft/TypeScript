@@ -114,9 +114,9 @@ namespace ts {
         function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {
             Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
             const expression = createAssignmentCallback
-                ? createAssignmentCallback(<Identifier>target, value, location)
+                ? createAssignmentCallback(target as Identifier, value, location)
                 : setTextRange(
-                    context.factory.createAssignment(visitNode(<Expression>target, visitor, isExpression), value),
+                    context.factory.createAssignment(visitNode(target as Expression, visitor, isExpression), value),
                     location
                 );
             expression.original = original;
@@ -410,7 +410,7 @@ namespace ts {
                         flattenContext.context.hoistVariableDeclaration(temp);
                     }
 
-                    restContainingElements = append(restContainingElements, <[Identifier, BindingOrAssignmentElement]>[temp, element]);
+                    restContainingElements = append(restContainingElements, [temp, element] as [Identifier, BindingOrAssignmentElement]);
                     bindingElements = append(bindingElements, flattenContext.createArrayBindingOrAssignmentElement(temp));
                 }
                 else {
@@ -518,7 +518,7 @@ namespace ts {
 
     function makeArrayBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isArrayBindingElement);
-        return factory.createArrayBindingPattern(<ArrayBindingElement[]>elements);
+        return factory.createArrayBindingPattern(elements as ArrayBindingElement[]);
     }
 
     function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
@@ -527,7 +527,7 @@ namespace ts {
 
     function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isBindingElement);
-        return factory.createObjectBindingPattern(<BindingElement[]>elements);
+        return factory.createObjectBindingPattern(elements as BindingElement[]);
     }
 
     function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {

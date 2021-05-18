@@ -420,6 +420,9 @@ namespace ts.codefix {
             const { importClause } = declaration;
             if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) return undefined;
             const { name, namedBindings } = importClause;
+            // A type-only import may not have both a default and named imports, so the only way a name can
+            // be added to an existing type-only import is adding a named import to existing named bindings.
+            if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) return undefined;
             return importKind === ImportKind.Default && !name || importKind === ImportKind.Named && (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports)
                 ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: importClause, importKind, moduleSpecifier: declaration.moduleSpecifier.text, canUseTypeOnlyImport }
                 : undefined;
