@@ -365,7 +365,7 @@ namespace Harness {
                 case "list":
                     return ts.parseListTypeOption(option, value, errors);
                 default:
-                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
+                    return ts.parseCustomTypeOption(option as ts.CommandLineOptionOfCustomType, value, errors);
             }
         }
 
@@ -1482,5 +1482,5 @@ namespace Harness {
         return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 100;
+    if (Error) (Error as any).stackTraceLimit = 100;
 }

@@ -52,7 +52,7 @@ namespace ts.codefix {
 
         if (isReadonly) {
             // readonly modifier only existed in classLikeDeclaration
-            const constructor = getFirstConstructorWithBody(<ClassLikeDeclaration>container);
+            const constructor = getFirstConstructorWithBody(container as ClassLikeDeclaration);
             if (constructor) {
                 updateReadonlyPropertyInitializerStatementConstructor(changeTracker, file, constructor, fieldName.text, originalName);
             }
@@ -79,7 +79,7 @@ namespace ts.codefix {
     }
 
     function createAccessorAccessExpression(fieldName: AcceptedNameType, isStatic: boolean, container: ContainerDeclaration) {
-        const leftHead = isStatic ? (<ClassLikeDeclaration>container).name! : factory.createThis(); // TODO: GH#18217
+        const leftHead = isStatic ? (container as ClassLikeDeclaration).name! : factory.createThis(); // TODO: GH#18217
         return isIdentifier(fieldName) ? factory.createPropertyAccessExpression(leftHead, fieldName) : factory.createElementAccessExpression(leftHead, factory.createStringLiteralFromNode(fieldName));
     }
 
@@ -135,7 +135,7 @@ namespace ts.codefix {
             isReadonly: hasEffectiveReadonlyModifier(declaration),
             type: getDeclarationType(declaration, program),
             container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
-            originalName: (<AcceptedNameType>declaration.name).text,
+            originalName: (declaration.name as AcceptedNameType).text,
             declaration,
             fieldName,
             accessorName,
@@ -214,7 +214,7 @@ namespace ts.codefix {
     }
 
     function insertAccessor(changeTracker: textChanges.ChangeTracker, file: SourceFile, accessor: AccessorDeclaration, declaration: AcceptedDeclaration, container: ContainerDeclaration) {
-        isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertNodeAtClassStart(file, <ClassLikeDeclaration>container, accessor) :
+        isParameterPropertyDeclaration(declaration, declaration.parent) ? changeTracker.insertNodeAtClassStart(file, container as ClassLikeDeclaration, accessor) :
             isPropertyAssignment(declaration) ? changeTracker.insertNodeAfterComma(file, declaration, accessor) :
             changeTracker.insertNodeAfter(file, declaration, accessor);
     }

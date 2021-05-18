@@ -330,7 +330,7 @@ namespace ts.formatting {
         }
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
-            if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
+            if (parent.kind === SyntaxKind.IfStatement && (parent as IfStatement).elseStatement === child) {
                 const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
                 Debug.assert(elseKeyword !== undefined);
 
@@ -415,13 +415,13 @@ namespace ts.formatting {
         function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
-                    return getList((<TypeReferenceNode>node).typeArguments);
+                    return getList((node as TypeReferenceNode).typeArguments);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return getList((<ObjectLiteralExpression>node).properties);
+                    return getList((node as ObjectLiteralExpression).properties);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getList((<ArrayLiteralExpression>node).elements);
+                    return getList((node as ArrayLiteralExpression).elements);
                 case SyntaxKind.TypeLiteral:
-                    return getList((<TypeLiteralNode>node).members);
+                    return getList((node as TypeLiteralNode).members);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -431,24 +431,24 @@ namespace ts.formatting {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
-                    return getList((<SignatureDeclaration>node).typeParameters) || getList((<SignatureDeclaration>node).parameters);
+                    return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTemplateTag:
-                    return getList((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node).typeParameters);
+                    return getList((node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters);
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
-                    return getList((<CallExpression>node).typeArguments) || getList((<CallExpression>node).arguments);
+                    return getList((node as CallExpression).typeArguments) || getList((node as CallExpression).arguments);
                 case SyntaxKind.VariableDeclarationList:
-                    return getList((<VariableDeclarationList>node).declarations);
+                    return getList((node as VariableDeclarationList).declarations);
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.NamedExports:
-                    return getList((<NamedImportsOrExports>node).elements);
+                    return getList((node as NamedImportsOrExports).elements);
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
-                    return getList((<ObjectBindingPattern | ArrayBindingPattern>node).elements);
+                    return getList((node as ObjectBindingPattern | ArrayBindingPattern).elements);
             }
 
             function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {
@@ -632,7 +632,7 @@ namespace ts.formatting {
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings!.kind !== SyntaxKind.NamedImports);
+                        (!!(child as ImportClause).namedBindings && (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxFragment:

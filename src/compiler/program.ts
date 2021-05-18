@@ -1281,7 +1281,7 @@ namespace ts {
             let result: ResolvedModuleFull[] | undefined;
             let reusedNames: string[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
-            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
+            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = {} as any;
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -2005,7 +2005,7 @@ namespace ts {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.MethodDeclaration:
-                            if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
+                            if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                                 return "skip";
                             }
@@ -2019,7 +2019,7 @@ namespace ts {
                         case SyntaxKind.ArrowFunction:
                         case SyntaxKind.VariableDeclaration:
                             // type annotation
-                            if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
+                            if ((parent as FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration).type === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2042,13 +2042,13 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         case SyntaxKind.ExportAssignment:
-                            if ((<ExportAssignment>node).isExportEquals) {
+                            if ((node as ExportAssignment).isExportEquals) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
                             break;
                         case SyntaxKind.HeritageClause:
-                            const heritageClause = <HeritageClause>node;
+                            const heritageClause = node as HeritageClause;
                             if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
                                 return "skip";
@@ -2098,7 +2098,7 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
                             // Check type parameters
-                            if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
+                            if (nodes === (parent as DeclarationWithTypeParameterChildren).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2113,8 +2113,8 @@ namespace ts {
                             break;
                         case SyntaxKind.PropertyDeclaration:
                             // Check modifiers of property declaration
-                            if (nodes === (<PropertyDeclaration>parent).modifiers) {
-                                for (const modifier of <NodeArray<Modifier>>nodes) {
+                            if (nodes === (parent as PropertyDeclaration).modifiers) {
+                                for (const modifier of nodes as NodeArray<Modifier>) {
                                     if (modifier.kind !== SyntaxKind.StaticKeyword) {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
@@ -2124,7 +2124,7 @@ namespace ts {
                             break;
                         case SyntaxKind.Parameter:
                             // Check modifiers of parameter declaration
-                            if (nodes === (<ParameterDeclaration>parent).modifiers) {
+                            if (nodes === (parent as ParameterDeclaration).modifiers) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2136,7 +2136,7 @@ namespace ts {
                         case SyntaxKind.JsxOpeningElement:
                         case SyntaxKind.TaggedTemplateExpression:
                             // Check type arguments
-                            if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
+                            if (nodes === (parent as NodeWithTypeArguments).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2348,7 +2348,7 @@ namespace ts {
                             // Relative external module names are not permitted
 
                             // NOTE: body of ambient module is always a module block, if it exists
-                            const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                            const body = (node as ModuleDeclaration).body as ModuleBlock;
                             if (body) {
                                 for (const statement of body.statements) {
                                     collectModuleReferences(statement, /*inAmbientModule*/ true);

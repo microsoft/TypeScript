@@ -521,29 +521,29 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([dtsFile, f2, config]);
                 const session = projectSystem.createSession(host);
-                session.executeCommand(<protocol.OpenRequest>{
+                session.executeCommand({
                     seq: 1,
                     type: "request",
                     command: "open",
                     arguments: { file: dtsFile.path }
-                });
+                } as protocol.OpenRequest);
                 const projectService = session.getProjectService();
                 checkNumberOfProjects(projectService, { configuredProjects: 1 });
                 const project = projectService.configuredProjects.get(config.path)!;
                 checkProjectRootFiles(project, [dtsFile.path, f2.path]);
-                session.executeCommand(<protocol.OpenRequest>{
+                session.executeCommand({
                     seq: 2,
                     type: "request",
                     command: "open",
                     arguments: { file: f2.path }
-                });
+                } as protocol.OpenRequest);
                 checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
-                const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                const { response } = session.executeCommand({
                     seq: 3,
                     type: "request",
                     command: "compileOnSaveAffectedFileList",
                     arguments: { file: dtsFile.path }
-                });
+                } as protocol.CompileOnSaveAffectedFileListRequest);
                 if (expectDTSEmit) {
                     assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
                     assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].fileNames.length, 2, "expected to affect 2 files");
@@ -553,12 +553,12 @@ namespace ts.projectSystem {
                 }
 
 
-                const { response: response2 } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                const { response: response2 } = session.executeCommand({
                     seq: 4,
                     type: "request",
                     command: "compileOnSaveAffectedFileList",
                     arguments: { file: f2.path }
-                });
+                } as protocol.CompileOnSaveAffectedFileListRequest);
                 assert.equal((response2 as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
             }
 
@@ -627,22 +627,22 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([f1, f2, config]);
                 const session = projectSystem.createSession(host);
-                session.executeCommand(<protocol.OpenRequest>{
+                session.executeCommand({
                     seq: 1,
                     type: "request",
                     command: "open",
                     arguments: { file: f1.path }
-                });
+                } as protocol.OpenRequest);
                 checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
-                const { response } = session.executeCommand(<protocol.CompileOnSaveAffectedFileListRequest>{
+                const { response } = session.executeCommand({
                     seq: 2,
                     type: "request",
                     command: "compileOnSaveAffectedFileList",
                     arguments: { file: f1.path }
-                });
-                assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response).length, 1, "expected output for 1 project");
-                assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].fileNames.length, 2, "expected output for 1 project");
-                assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
+                } as protocol.CompileOnSaveAffectedFileListRequest);
+                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output for 1 project");
+                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].fileNames.length, 2, "expected output for 1 project");
+                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
             }
 
             it("projectUsesOutFile should not be returned if not set", () => {

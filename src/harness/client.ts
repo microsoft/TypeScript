@@ -87,7 +87,7 @@ namespace ts.server {
 
             this.writeMessage(JSON.stringify(request));
 
-            return <T>request;
+            return request as T;
         }
 
         private processResponse<T extends protocol.Response>(request: protocol.Request, expectEmptyBody = false): T {
@@ -398,9 +398,9 @@ namespace ts.server {
             const sourceText = getSnapshotText(this.host.getScriptSnapshot(file)!);
             const fakeSourceFile = { fileName: file, text: sourceText } as SourceFile; // Warning! This is a huge lie!
 
-            return (<protocol.DiagnosticWithLinePosition[]>response.body).map((entry): DiagnosticWithLocation => {
+            return (response.body as protocol.DiagnosticWithLinePosition[]).map((entry): DiagnosticWithLocation => {
                 const category = firstDefined(Object.keys(DiagnosticCategory), id =>
-                    isString(id) && entry.category === id.toLowerCase() ? (<any>DiagnosticCategory)[id] : undefined);
+                    isString(id) && entry.category === id.toLowerCase() ? (DiagnosticCategory as any)[id] : undefined);
                 return {
                     file: fakeSourceFile,
                     start: entry.start,

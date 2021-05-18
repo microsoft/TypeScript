@@ -396,9 +396,9 @@ namespace ts.codefix {
 
     function getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
         if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
-            return <HasJSDoc>signature.parent;
+            return signature.parent as HasJSDoc;
         }
-        return <HasJSDoc>signature.parent.parent;
+        return signature.parent.parent as HasJSDoc;
     }
 
     function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
@@ -627,7 +627,7 @@ namespace ts.codefix {
 
         function calculateUsageOfNode(node: Expression, usage: Usage): void {
             while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-                node = <Expression>node.parent;
+                node = node.parent as Expression;
             }
 
             switch (node.parent.kind) {
@@ -638,36 +638,36 @@ namespace ts.codefix {
                     usage.isNumber = true;
                     break;
                 case SyntaxKind.PrefixUnaryExpression:
-                    inferTypeFromPrefixUnaryExpression(<PrefixUnaryExpression>node.parent, usage);
+                    inferTypeFromPrefixUnaryExpression(node.parent as PrefixUnaryExpression, usage);
                     break;
                 case SyntaxKind.BinaryExpression:
-                    inferTypeFromBinaryExpression(node, <BinaryExpression>node.parent, usage);
+                    inferTypeFromBinaryExpression(node, node.parent as BinaryExpression, usage);
                     break;
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                    inferTypeFromSwitchStatementLabel(<CaseOrDefaultClause>node.parent, usage);
+                    inferTypeFromSwitchStatementLabel(node.parent as CaseOrDefaultClause, usage);
                     break;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    if ((<CallExpression | NewExpression>node.parent).expression === node) {
-                        inferTypeFromCallExpression(<CallExpression | NewExpression>node.parent, usage);
+                    if ((node.parent as CallExpression | NewExpression).expression === node) {
+                        inferTypeFromCallExpression(node.parent as CallExpression | NewExpression, usage);
                     }
                     else {
                         inferTypeFromContextualType(node, usage);
                     }
                     break;
                 case SyntaxKind.PropertyAccessExpression:
-                    inferTypeFromPropertyAccessExpression(<PropertyAccessExpression>node.parent, usage);
+                    inferTypeFromPropertyAccessExpression(node.parent as PropertyAccessExpression, usage);
                     break;
                 case SyntaxKind.ElementAccessExpression:
-                    inferTypeFromPropertyElementExpression(<ElementAccessExpression>node.parent, node, usage);
+                    inferTypeFromPropertyElementExpression(node.parent as ElementAccessExpression, node, usage);
                     break;
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    inferTypeFromPropertyAssignment(<PropertyAssignment | ShorthandPropertyAssignment>node.parent, usage);
+                    inferTypeFromPropertyAssignment(node.parent as PropertyAssignment | ShorthandPropertyAssignment, usage);
                     break;
                 case SyntaxKind.PropertyDeclaration:
-                    inferTypeFromPropertyDeclaration(<PropertyDeclaration>node.parent, usage);
+                    inferTypeFromPropertyDeclaration(node.parent as PropertyDeclaration, usage);
                     break;
                 case SyntaxKind.VariableDeclaration: {
                     const { name, initializer } = node.parent as VariableDeclaration;
