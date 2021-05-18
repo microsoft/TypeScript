@@ -18,7 +18,7 @@ tests/cases/compiler/narrowingOfQualifiedNames.ts(38,29): error TS2532: Object i
             properties.foo; // type is { aaa: string; bbb: string; }
             for (const x of [1, 2, 3]) {
               properties.foo; // type is { aaa: string; bbb: string; }
-              type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+              type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
             }
         }
     }

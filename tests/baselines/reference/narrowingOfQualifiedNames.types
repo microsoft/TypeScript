@@ -45,7 +45,7 @@ function init(properties: IProperties) {
 >properties : IProperties
 >foo : { aaa: string; bbb: string; }
 
-          type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+          type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
 >FooOrUndefined : { aaa: string; bbb: string; }
 >properties.foo : { aaa: string; bbb: string; }
 >properties : IProperties

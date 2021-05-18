@@ -14,7 +14,7 @@ function init(properties: IProperties) {
         properties.foo; // type is { aaa: string; bbb: string; }
         for (const x of [1, 2, 3]) {
           properties.foo; // type is { aaa: string; bbb: string; }
-          type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+          type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
         }
     }
 }

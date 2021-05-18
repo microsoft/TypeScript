@@ -44,7 +44,7 @@ function init(properties: IProperties) {
 >properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
 >foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
 
-          type FooOrUndefined = typeof properties.foo; //type is { aaa: string; bbb: string; } | undefined
+          type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
 >FooOrUndefined : Symbol(FooOrUndefined, Decl(narrowingOfQualifiedNames.ts, 14, 25))
 >properties.foo : Symbol(IProperties.foo, Decl(narrowingOfQualifiedNames.ts, 2, 23))
 >properties : Symbol(properties, Decl(narrowingOfQualifiedNames.ts, 9, 14))
