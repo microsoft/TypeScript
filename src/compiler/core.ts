@@ -1773,9 +1773,27 @@ namespace ts {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
-        a = a.toUpperCase();
-        b = b.toUpperCase();
-        return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+        const aLength = a.length;
+        const bLength = b.length;
+        const maxLength = Math.min(aLength, bLength);
+        for (let i = 0; i < maxLength; i++) {
+            let cA = a.charCodeAt(i);
+            let cB = b.charCodeAt(i);
+
+            // Bail out, we can't handle encode non-ASCII capitalization rules.
+            if (cA > CharacterCodes.maxAsciiCharacter || cB > CharacterCodes.maxAsciiCharacter) {
+                a = a.toUpperCase();
+                b = b.toUpperCase();
+                return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+            }
+
+            if (CharacterCodes.a <= cA && cA <= CharacterCodes.z) cA -= CharacterCodes.a - CharacterCodes.A;
+            if (CharacterCodes.a <= cB && cB <= CharacterCodes.z) cB -= CharacterCodes.a - CharacterCodes.A;
+            if (cA !== cB) {
+                return Math.sign(cA - cB);
+            }
+        }
+        return aLength < bLength ? Comparison.LessThan : bLength < aLength ? Comparison.GreaterThan : Comparison.EqualTo;
     }
 
     /**
