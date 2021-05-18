@@ -4940,9 +4940,9 @@ namespace ts {
     }
 
     export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocInstance(node: Node) {
-        return (node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node)
-            || (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).name === node)
-            || (isJSDocInstanceReference(node.parent) && node.parent.right === node);
+        return isQualifiedName(node.parent) && node.parent.right === node
+            || isPropertyAccessExpression(node.parent) && node.parent.name === node
+            || isJSDocInstanceReference(node.parent) && node.parent.right === node;
     }
 
     export function isEmptyObjectLiteral(expression: Node): boolean {
