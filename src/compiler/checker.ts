@@ -8405,7 +8405,7 @@ namespace ts {
 
             const isProperty = isPropertyDeclaration(declaration) || isPropertySignature(declaration);
             const isOptional = includeOptionality && (
-                isProperty && !!(<PropertyDeclaration | PropertySignature>declaration).questionToken ||
+                isProperty && !!(declaration as PropertyDeclaration | PropertySignature).questionToken ||
                 isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
                 isOptionalJSDocPropertyLikeTag(declaration));
 
@@ -20348,7 +20348,7 @@ namespace ts {
         }
 
         function containsMissingType(type: Type) {
-            return strictOptionalProperties && (type === missingType || type.flags & TypeFlags.Union && containsType((<UnionType>type).types, missingType));
+            return strictOptionalProperties && (type === missingType || type.flags & TypeFlags.Union && containsType((type as UnionType).types, missingType));
         }
 
         /**
