@@ -125,7 +125,7 @@ namespace ts.server {
     // we want to ensure the value is maintained in the out since the file is
     // built using --preseveConstEnum.
     export type CommandNames = protocol.CommandTypes;
-    export const CommandNames = (<any>protocol).CommandTypes;
+    export const CommandNames = (protocol as any).CommandTypes;
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -226,7 +226,7 @@ namespace ts.server {
                     tracing?.instant(tracing.Phase.Session, "stepCanceled", { seq: this.requestId });
                 }
                 else {
-                    tracing?.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (<Error>e).message });
+                    tracing?.instant(tracing.Phase.Session, "stepError", { seq: this.requestId, message: (e as Error).message });
                     this.operationHost.logError(e, `delayed processing of request ${this.requestId}`);
                 }
             }
@@ -896,8 +896,8 @@ namespace ts.server {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
-                if ((<StackTraceError>err).stack) {
-                    msg += "\n" + indent((<StackTraceError>err).stack!);
+                if ((err as StackTraceError).stack) {
+                    msg += "\n" + indent((err as StackTraceError).stack!);
                 }
             }
 
@@ -1179,7 +1179,7 @@ namespace ts.server {
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: readonly Diagnostic[], scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+            return diagnostics.map(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
@@ -1191,7 +1191,7 @@ namespace ts.server {
                 reportsUnnecessary: d.reportsUnnecessary,
                 reportsDeprecated: d.reportsDeprecated,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation),
-            });
+            }) as protocol.DiagnosticWithLinePosition);
         }
 
         private getDiagnosticsWorker(
@@ -1316,7 +1316,7 @@ namespace ts.server {
             if (def.originalFileName) {
                 Debug.assert(def.originalTextSpan !== undefined, "originalTextSpan should be present if originalFileName is");
                 return {
-                    ...<any>def,
+                    ...def as any,
                     fileName: def.originalFileName,
                     textSpan: def.originalTextSpan,
                     targetFileName: def.fileName,
@@ -2138,7 +2138,7 @@ namespace ts.server {
         }
 
         private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
-            return (<protocol.FileLocationRequestArgs>locationOrSpan).line !== undefined;
+            return (locationOrSpan as protocol.FileLocationRequestArgs).line !== undefined;
         }
 
         private extractPositionOrRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): number | TextRange {
@@ -2823,12 +2823,12 @@ namespace ts.server {
                 return this.requiredResponse({ reloadFinished: true });
             },
             [CommandNames.Saveto]: (request: protocol.Request) => {
-                const savetoArgs = <protocol.SavetoRequestArgs>request.arguments;
+                const savetoArgs = request.arguments as protocol.SavetoRequestArgs;
                 this.saveToTmp(savetoArgs.file, savetoArgs.tmpfile);
                 return this.notRequired();
             },
             [CommandNames.Close]: (request: protocol.Request) => {
-                const closeArgs = <protocol.FileRequestArgs>request.arguments;
+                const closeArgs = request.arguments as protocol.FileRequestArgs;
                 this.closeClientFile(closeArgs.file);
                 return this.notRequired();
             },
@@ -3065,19 +3065,19 @@ namespace ts.server {
 
                 this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
                 perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (<Error>err).message });
+                tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
 
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,
                     request ? request.seq : 0,
                     /*success*/ false,
-                    "Error processing request. " + (<StackTraceError>err).message + "\n" + (<StackTraceError>err).stack);
+                    "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack);
             }
         }
 
         protected parseMessage(message: TMessage): protocol.Request {
-            return <protocol.Request>JSON.parse(message as any as string);
+            return JSON.parse(message as any as string) as protocol.Request;
         }
 
         protected toStringMessage(message: TMessage): string {

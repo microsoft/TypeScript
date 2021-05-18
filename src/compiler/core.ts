@@ -1429,7 +1429,7 @@ namespace ts {
         const result: any = {};
         for (const id in object) {
             if (hasOwnProperty.call(object, id)) {
-                result[id] = (<any>object)[id];
+                result[id] = (object as any)[id];
             }
         }
         return result;
@@ -1441,7 +1441,7 @@ namespace ts {
      * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
      */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
+        const result: T1 & T2 = {} as any;
         for (const id in second) {
             if (hasOwnProperty.call(second, id)) {
                 (result as any)[id] = (second as any)[id];

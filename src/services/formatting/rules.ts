@@ -440,7 +440,7 @@ namespace ts.formatting {
     function isBinaryOpContext(context: FormattingContext): boolean {
         switch (context.contextNode.kind) {
             case SyntaxKind.BinaryExpression:
-                return (<BinaryExpression>context.contextNode).operatorToken.kind !== SyntaxKind.CommaToken;
+                return (context.contextNode as BinaryExpression).operatorToken.kind !== SyntaxKind.CommaToken;
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.ConditionalType:
             case SyntaxKind.AsExpression:
@@ -796,7 +796,7 @@ namespace ts.formatting {
     }
 
     function isYieldOrYieldStarWithOperand(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.YieldExpression && (<YieldExpression>context.contextNode).expression !== undefined;
+        return context.contextNode.kind === SyntaxKind.YieldExpression && (context.contextNode as YieldExpression).expression !== undefined;
     }
 
     function isNonNullAssertionContext(context: FormattingContext): boolean {

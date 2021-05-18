@@ -531,7 +531,7 @@ namespace ts {
             // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
             // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
             const length = elements.length;
-            const array = <MutableNodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
+            const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = !!hasTrailingComma;
             aggregateChildrenFlags(array);
@@ -1896,13 +1896,13 @@ namespace ts {
 
         function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
             return node.types !== types
-                ? update(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
+                ? update(createUnionOrIntersectionTypeNode(node.kind, types) as T, node)
                 : node;
         }
 
         // @api
         function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
-            return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
+            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types) as UnionTypeNode;
         }
 
         // @api
@@ -1912,7 +1912,7 @@ namespace ts {
 
         // @api
         function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-            return <IntersectionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types);
+            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types) as IntersectionTypeNode;
         }
 
         // @api
@@ -2849,22 +2849,22 @@ namespace ts {
 
         // @api
         function createTemplateHead(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags) as TemplateHead;
         }
 
         // @api
         function createTemplateMiddle(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateMiddle>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText, templateFlags) as TemplateMiddle;
         }
 
         // @api
         function createTemplateTail(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateTail>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText, templateFlags) as TemplateTail;
         }
 
         // @api
         function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags) as NoSubstitutionTemplateLiteral;
         }
 
         // @api
@@ -5457,13 +5457,13 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return false;
                 case SyntaxKind.ArrayLiteralExpression:
-                    const elements = (<ArrayLiteralExpression>target).elements;
+                    const elements = (target as ArrayLiteralExpression).elements;
                     if (elements.length === 0) {
                         return false;
                     }
                     return true;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return (<ObjectLiteralExpression>target).properties.length > 0;
+                    return (target as ObjectLiteralExpression).properties.length > 0;
                 default:
                     return true;
             }
@@ -5481,7 +5481,7 @@ namespace ts {
                 thisArg = createThis();
                 target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
                     ? setTextRange(createIdentifier("_super"), callee)
-                    : <PrimaryExpression>callee;
+                    : callee as PrimaryExpression;
             }
             else if (getEmitFlags(callee) & EmitFlags.HelperName) {
                 thisArg = createVoidZero();
@@ -5746,7 +5746,7 @@ namespace ts {
          */
         function liftToBlock(nodes: readonly Node[]): Statement {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
-            return <Statement>singleOrUndefined(nodes) || createBlock(<readonly Statement[]>nodes);
+            return singleOrUndefined(nodes) as Statement || createBlock(nodes as readonly Statement[]);
         }
 
         function findSpanEnd<T>(array: readonly T[], test: (value: T) => boolean, start: number) {
