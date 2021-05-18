@@ -7,13 +7,16 @@ namespace ts.projectSystem {
                     import { something } from "./filePresent";
                     import { something as something1 } from "./filePresent";
                     import { something2 } from "./fileNotFound";
-                `,
+                    import { externalThing1 } from "externalThing";
+                    import { externalThing2 } from "externalThingNotPresent";`,
             };
             const anotherFileReusingResolution: File = {
                 path: `${tscWatch.projectRoot}/src/anotherFileReusingResolution.ts`,
                 content: Utils.dedent`
                     import { something } from "./filePresent";
-                    import { something2 } from "./fileNotFound";`,
+                    import { something2 } from "./fileNotFound";
+                    import { externalThing1 } from "externalThing";
+                    import { externalThing2 } from "externalThingNotPresent";`,
             };
             const filePresent: File = {
                 path: `${tscWatch.projectRoot}/src/filePresent.ts`,
@@ -47,6 +50,10 @@ namespace ts.projectSystem {
                 path: `${tscWatch.projectRoot}/src/globalFilePresent.ts`,
                 content: `function globalSomething() { return 10; }`,
             };
+            const externalThing: File = {
+                path: `${tscWatch.projectRoot}/src/externalThing.d.ts`,
+                content: `export function externalThing1(): number;`,
+            };
             const config: File = {
                 path: `${tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
@@ -61,7 +68,7 @@ namespace ts.projectSystem {
                 }),
             };
             const host = createServerHost(
-                [main, anotherFileReusingResolution, filePresent, fileWithRef, types, globalMain, globalAnotherFileWithSameReferenes, globalFilePresent, config, libFile],
+                [main, anotherFileReusingResolution, filePresent, fileWithRef, types, globalMain, globalAnotherFileWithSameReferenes, globalFilePresent, externalThing, config, libFile],
                 { currentDirectory: tscWatch.projectRoot, useCaseSensitiveFileNames: true }
             );
             return { host, main, globalMain, config };
@@ -199,6 +206,18 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);
 
+            session.logger.logs.push("Create external module file that could not be resolved");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Write .ts file that takes preference over resolved .d.ts file");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
             baselineTsserverLogs("persistResolutions", "uses saved resolution for program", session);
         });
 
@@ -303,6 +322,18 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);
 
+            session.logger.logs.push("Create external module file that could not be resolved");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Write .ts file that takes preference over resolved .d.ts file");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
             baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is not present", session);
         });
 
@@ -403,6 +434,18 @@ namespace ts.projectSystem {
 
             session.logger.logs.push("Delete file that could not be resolved");
             host.deleteFile(`${tscWatch.projectRoot}/src/fileNotFound.ts`);
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Create external module file that could not be resolved");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }");
+            host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+            host.runQueuedTimeoutCallbacks(); // Actual Update
+            appendProjectFileText(project, session);
+
+            session.logger.logs.push("Write .ts file that takes preference over resolved .d.ts file");
+            host.writeFile(`${tscWatch.projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }");
             host.runQueuedTimeoutCallbacks(); // Invalidate resolutions
             host.runQueuedTimeoutCallbacks(); // Actual Update
             appendProjectFileText(project, session);

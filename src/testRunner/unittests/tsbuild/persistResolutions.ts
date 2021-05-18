@@ -5,10 +5,14 @@ namespace ts {
                 "/src/project/src/main.ts": Utils.dedent`
                     import { something } from "./filePresent";
                     import { something as something1 } from "./filePresent";
-                    import { something2 } from "./fileNotFound";`,
+                    import { something2 } from "./fileNotFound";
+                    import { externalThing1 } from "externalThing";
+                    import { externalThing2 } from "externalThingNotPresent";`,
                 "/src/project/src/anotherFileReusingResolution.ts": Utils.dedent`
                     import { something } from "./filePresent";
-                    import { something2 } from "./fileNotFound";`,
+                    import { something2 } from "./fileNotFound";
+                    import { externalThing1 } from "externalThing";
+                    import { externalThing2 } from "externalThingNotPresent";`,
                 "/src/project/src/filePresent.ts": `export function something() { return 10; }`,
                 "/src/project/src/fileWithRef.ts": `/// <reference path="./types.ts"/>`,
                 "/src/project/src/types.ts": `interface SomeType {}`,
@@ -23,6 +27,7 @@ namespace ts {
                         function globalAnotherFileWithSameReferenes() { }
                     `,
                 "/src/project/src/globalFilePresent.ts": `function globalSomething() { return 10; }`,
+                "/src/project/src/externalThing.d.ts": `export function externalThing1(): number;`,
                 "/src/project/tsconfig.json": JSON.stringify({
                     compilerOptions: {
                         module: "amd",
@@ -119,7 +124,17 @@ namespace ts {
                 {
                     subScenario: "Delete file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
-                    modifyFs: sys => sys.unlinkSync(`/src/project/src/fileNotFound.ts`),
+                    modifyFs: fs => fs.unlinkSync(`/src/project/src/fileNotFound.ts`),
+                },
+                {
+                    subScenario: "Create external module file that could not be resolved",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync(`/src/project/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                },
+                {
+                    subScenario: "Write .ts file that takes preference over resolved .d.ts file",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync(`/src/project/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
                 },
             ],
             baselinePrograms: true,
@@ -209,7 +224,17 @@ namespace ts {
                 {
                     subScenario: "Delete file that could not be resolved",
                     buildKind: BuildKind.IncrementalDtsChange,
-                    modifyFs: sys => sys.unlinkSync(`/src/project/src/fileNotFound.ts`),
+                    modifyFs: fs => fs.unlinkSync(`/src/project/src/fileNotFound.ts`),
+                },
+                {
+                    subScenario: "Create external module file that could not be resolved",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync(`/src/project/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                },
+                {
+                    subScenario: "Write .ts file that takes preference over resolved .d.ts file",
+                    buildKind: BuildKind.IncrementalDtsChange,
+                    modifyFs: fs => fs.writeFileSync(`/src/project/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
                 },
             ],
             baselinePrograms: true,

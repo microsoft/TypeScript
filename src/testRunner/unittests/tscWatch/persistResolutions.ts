@@ -7,13 +7,17 @@ namespace ts.tscWatch {
                     content: Utils.dedent`
                         import { something } from "./filePresent";
                         import { something as something1 } from "./filePresent";
-                        import { something2 } from "./fileNotFound";`,
+                        import { something2 } from "./fileNotFound";
+                        import { externalThing1 } from "externalThing";
+                        import { externalThing2 } from "externalThingNotPresent";`,
                 },
                 {
                     path: `${projectRoot}/src/anotherFileReusingResolution.ts`,
                     content: Utils.dedent`
                         import { something } from "./filePresent";
-                        import { something2 } from "./fileNotFound";`,
+                        import { something2 } from "./fileNotFound";
+                        import { externalThing1 } from "externalThing";
+                        import { externalThing2 } from "externalThingNotPresent";`,
                 },
                 {
                     path: `${projectRoot}/src/filePresent.ts`,
@@ -46,6 +50,10 @@ namespace ts.tscWatch {
                 {
                     path: `${projectRoot}/src/globalFilePresent.ts`,
                     content: `function globalSomething() { return 10; }`,
+                },
+                {
+                    path: `${projectRoot}/src/externalThing.d.ts`,
+                    content: `export function externalThing1(): number;`,
                 },
                 {
                     path: `${projectRoot}/tsconfig.json`,
@@ -142,6 +150,22 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
                 },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -199,6 +223,22 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
                 },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -251,6 +291,22 @@ namespace ts.tscWatch {
                 {
                     caption: "Delete file that could not be resolved",
                     change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
@@ -314,6 +370,22 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
                 },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -371,6 +443,22 @@ namespace ts.tscWatch {
                         sys.runQueuedTimeoutCallbacks(); // Actual update
                     }
                 },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
             ]
         });
         verifyTscWatch({
@@ -423,6 +511,22 @@ namespace ts.tscWatch {
                 {
                     caption: "Delete file that could not be resolved",
                     change: sys => sys.deleteFile(`${projectRoot}/src/fileNotFound.ts`),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Create external module file that could not be resolved",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThingNotPresent.ts`, "export function externalThing2() { return 20; }"),
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
+                        sys.runQueuedTimeoutCallbacks(); // Actual update
+                    }
+                },
+                {
+                    caption: "Write .ts file that takes preference over resolved .d.ts file",
+                    change: sys => sys.writeFile(`${projectRoot}/src/externalThing.ts`, "export function externalThing1() { return 10; }"),
                     timeouts: sys => {
                         sys.runQueuedTimeoutCallbacks(); // Invalidate resolutions
                         sys.runQueuedTimeoutCallbacks(); // Actual update
