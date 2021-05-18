@@ -1793,7 +1793,7 @@ namespace ts {
                 return Math.sign(cA - cB);
             }
         }
-        return aLength < bLength ? Comparison.LessThan : bLength < aLength ? Comparison.GreaterThan : Comparison.EqualTo;
+        return Math.sign(aLength - bLength);
     }
 
     /**
