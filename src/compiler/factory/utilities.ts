@@ -351,7 +351,7 @@ namespace ts {
     }
 
     export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.CommaToken ||
             node.kind === SyntaxKind.CommaListExpression;
     }
 
@@ -594,7 +594,7 @@ namespace ts {
 
         if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
-            return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+            return getInitializerOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
         }
     }
 
@@ -635,7 +635,7 @@ namespace ts {
                     // `b.c` in `({ a: b.c = 1 } = ...)`
                     // `b[0]` in `({ a: b[0] } = ...)`
                     // `b[0]` in `({ a: b[0] = 1 } = ...)`
-                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.initializer);
+                    return getTargetOfBindingOrAssignmentElement(bindingElement.initializer as BindingOrAssignmentElement);
 
                 case SyntaxKind.ShorthandPropertyAssignment:
                     // `a` in `({ a } = ...)`
@@ -644,7 +644,7 @@ namespace ts {
 
                 case SyntaxKind.SpreadAssignment:
                     // `a` in `({ ...a } = ...)`
-                    return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+                    return getTargetOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
             }
 
             // no target
@@ -657,12 +657,12 @@ namespace ts {
             // `[a]` in `[[a] = 1] = ...`
             // `a.b` in `[a.b = 1] = ...`
             // `a[0]` in `[a[0] = 1] = ...`
-            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
+            return getTargetOfBindingOrAssignmentElement(bindingElement.left as BindingOrAssignmentElement);
         }
 
         if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
-            return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
+            return getTargetOfBindingOrAssignmentElement(bindingElement.expression as BindingOrAssignmentElement);
         }
 
         // `a` in `[a] = ...`
@@ -767,11 +767,11 @@ namespace ts {
             case SyntaxKind.ArrayLiteralExpression:
                 // `a` in `{a}`
                 // `a` in `[a]`
-                return <readonly BindingOrAssignmentElement[]>name.elements;
+                return name.elements as readonly BindingOrAssignmentElement[];
 
             case SyntaxKind.ObjectLiteralExpression:
                 // `a` in `{a}`
-                return <readonly BindingOrAssignmentElement[]>name.properties;
+                return name.properties as readonly BindingOrAssignmentElement[];
         }
     }
 

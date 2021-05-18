@@ -1073,7 +1073,7 @@ namespace ts.Completions {
                     if (!currentToken ||
                         (!isDeclarationName(currentToken) &&
                             (currentToken.parent.kind !== SyntaxKind.JSDocPropertyTag ||
-                                (<JSDocPropertyTag>currentToken.parent).name !== currentToken))) {
+                                (currentToken.parent as JSDocPropertyTag).name !== currentToken))) {
                         // Use as type location if inside tag's type expression
                         insideJsDocTagTypeExpression = isCurrentlyEditingNode(tag.typeExpression);
                     }
@@ -1283,7 +1283,7 @@ namespace ts.Completions {
             keywordFilters = KeywordCompletionFilters.None;
         }
         else if (isStartingCloseTag) {
-            const tagName = (<JsxElement>contextToken.parent.parent).openingElement.tagName;
+            const tagName = (contextToken.parent.parent as JsxElement).openingElement.tagName;
             const tagSymbol = typeChecker.getSymbolAtLocation(tagName);
             if (tagSymbol) {
                 symbols = [tagSymbol];
@@ -1362,7 +1362,7 @@ namespace ts.Completions {
                         // Extract module or enum members
                         const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                         Debug.assertEachIsDefined(exportedSymbols, "getExportsOfModule() should all be defined");
-                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? <ImportTypeNode>node : <PropertyAccessExpression>(node.parent), symbol.name);
+                        const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(isImportType ? node as ImportTypeNode : (node.parent as PropertyAccessExpression), symbol.name);
                         const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol, typeChecker);
                         const isValidAccess: (symbol: Symbol) => boolean =
                             isNamespaceName
@@ -1437,7 +1437,7 @@ namespace ts.Completions {
                 isNewIdentifierLocation = true;
             }
 
-            const propertyAccess = node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent;
+            const propertyAccess = node.kind === SyntaxKind.ImportType ? node as ImportTypeNode : node.parent as PropertyAccessExpression | QualifiedName;
             if (isUncheckedFile) {
                 // In javascript files, for union types, we don't just get the members that
                 // the individual types have in common, we also include all the members that
@@ -2023,10 +2023,10 @@ namespace ts.Completions {
                 let canGetType = hasInitializer(rootDeclaration) || hasType(rootDeclaration) || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
                 if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
                     if (isExpression(rootDeclaration.parent)) {
-                        canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
+                        canGetType = !!typeChecker.getContextualType(rootDeclaration.parent as Expression);
                     }
                     else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
-                        canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
+                        canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(rootDeclaration.parent.parent as Expression);
                     }
                 }
                 if (canGetType) {
@@ -2252,7 +2252,7 @@ namespace ts.Completions {
                                 const precedingToken = findPrecedingToken(contextToken.pos, sourceFile, /*startNode*/ undefined);
                                 if (!(parent as JsxOpeningLikeElement).typeArguments || (precedingToken && precedingToken.kind === SyntaxKind.SlashToken)) break;
                             }
-                            return <JsxOpeningLikeElement>parent;
+                            return parent as JsxOpeningLikeElement;
                         }
                         else if (parent.kind === SyntaxKind.JsxAttribute) {
                             // Currently we parse JsxOpeningLikeElement as:
@@ -2546,7 +2546,7 @@ namespace ts.Completions {
             const expression = declaration.expression;
             const symbol = typeChecker.getSymbolAtLocation(expression);
             const type = symbol && typeChecker.getTypeOfSymbolAtLocation(symbol, expression);
-            const properties = type && (<ObjectType>type).properties;
+            const properties = type && (type as ObjectType).properties;
             if (properties) {
                 properties.forEach(property => {
                     membersDeclaredBySpreadAssignment.add(property.name);
