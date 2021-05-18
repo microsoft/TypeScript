@@ -3935,12 +3935,12 @@ namespace ts {
             return typeCopy;
         }
 
-        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean) => T): T {
+        function forEachSymbolTableInScope<T>(enclosingDeclaration: Node | undefined, callback: (symbolTable: SymbolTable, ignoreQualification?: boolean, isLocalNameLookup?: boolean, scopeNode?: Node) => T): T {
             let result: T;
             for (let location = enclosingDeclaration; location; location = location.parent) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
+                    if (result = callback(location.locals, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true, location)) {
                         return result;
                     }
                 }
@@ -3955,7 +3955,7 @@ namespace ts {
                         // `sym` may not have exports if this module declaration is backed by the symbol for a `const` that's being rewritten
                         // into a namespace - in such cases, it's best to just let the namespace appear empty (the const members couldn't have referred
                         // to one another anyway)
-                        if (result = callback(sym?.exports || emptySymbols, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true)) {
+                        if (result = callback(sym?.exports || emptySymbols, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ true, location)) {
                             return result;
                         }
                         break;
@@ -3976,7 +3976,7 @@ namespace ts {
                                 (table || (table = createSymbolTable())).set(key, memberSymbol);
                             }
                         });
-                        if (table && (result = callback(table))) {
+                        if (table && (result = callback(table, /*ignoreQualification*/ undefined, /*isLocalNameLookup*/ false, location))) {
                             return result;
                         }
                         break;
@@ -3995,13 +3995,23 @@ namespace ts {
             if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
                 return undefined;
             }
+            const links = getSymbolLinks(symbol);
+            const cache = (links.accessibleChainCache ||= new Map());
+            // Go from enclosingDeclaration to the first scope we check, so the cache is keyed off the scope and thus shared more
+            const firstRelevantLocation = forEachSymbolTableInScope(enclosingDeclaration, (_, __, ___, node) => node);
+            const key = `${useOnlyExternalAliasing ? 0 : 1}|${firstRelevantLocation && getNodeId(firstRelevantLocation)}|${meaning}`;
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
 
             const id = getSymbolId(symbol);
             let visitedSymbolTables = visitedSymbolTablesMap.get(id);
             if (!visitedSymbolTables) {
                 visitedSymbolTablesMap.set(id, visitedSymbolTables = []);
             }
-            return forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+            const result = forEachSymbolTableInScope(enclosingDeclaration, getAccessibleSymbolChainFromSymbolTable);
+            cache.set(key, result);
+            return result;
 
             /**
              * @param {ignoreQualification} boolean Set when a symbol is being looked for through the exports of another symbol (meaning we have a route to qualify it already)
@@ -4479,7 +4489,7 @@ namespace ts {
                     enclosingDeclaration,
                     flags: flags || NodeBuilderFlags.None,
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
-                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
+                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: () => false, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
@@ -4492,16 +4502,48 @@ namespace ts {
                         getFileIncludeReasons: () => host.getFileIncludeReasons(),
                     } : undefined },
                     encounteredError: false,
+                    reportedDiagnostic: false,
                     visitedTypes: undefined,
                     symbolDepth: undefined,
                     inferTypeParameters: undefined,
                     approximateLength: 0
                 };
+                context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
                 const resultingNode = cb(context);
                 if (context.truncating && context.flags & NodeBuilderFlags.NoTruncation) {
                     context.tracker?.reportTruncationError?.();
                 }
                 return context.encounteredError ? undefined : resultingNode;
+            }
+
+            function wrapSymbolTrackerToReportForContext(context: NodeBuilderContext, tracker: SymbolTracker): SymbolTracker {
+                const oldTrackSymbol = tracker.trackSymbol;
+                return {
+                    ...tracker,
+                    reportCyclicStructureError: wrapReportedDiagnostic(tracker.reportCyclicStructureError),
+                    reportInaccessibleThisError: wrapReportedDiagnostic(tracker.reportInaccessibleThisError),
+                    reportInaccessibleUniqueSymbolError: wrapReportedDiagnostic(tracker.reportInaccessibleUniqueSymbolError),
+                    reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
+                    reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
+                    reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
+                    trackSymbol: oldTrackSymbol && ((...args) => {
+                        const result = oldTrackSymbol(...args);
+                        if (result) {
+                            context.reportedDiagnostic = true;
+                        }
+                        return result;
+                    }),
+                };
+
+                function wrapReportedDiagnostic<T extends (...args: any[]) => any>(method: T | undefined): T | undefined {
+                    if (!method) {
+                        return method;
+                    }
+                    return (((...args) => {
+                        context.reportedDiagnostic = true;
+                        return method(...args);
+                    }) as T);
+                }
             }
 
             function checkTruncationLength(context: NodeBuilderContext): boolean {
@@ -4830,7 +4872,7 @@ namespace ts {
                     }
                 }
 
-                function visitAndTransformType<T>(type: Type, transform: (type: Type) => T) {
+                function visitAndTransformType<T extends TypeNode>(type: Type, transform: (type: Type) => T) {
                     const typeId = type.id;
                     const isConstructorObject = getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class;
                     const id = getObjectFlags(type) & ObjectFlags.Reference && (type as TypeReference).node ? "N" + getNodeId((type as TypeReference).node!) :
@@ -4845,6 +4887,20 @@ namespace ts {
                         context.symbolDepth = new Map();
                     }
 
+                    const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
+                    const key = `${getTypeId(type)}|${context.flags}`;
+                    if (links) {
+                        links.serializedTypes ||= new Map();
+                    }
+                    const cachedResult = links?.serializedTypes?.get(key);
+                    if (cachedResult) {
+                        if (cachedResult.truncating) {
+                            context.truncating = true;
+                        }
+                        context.approximateLength += cachedResult.addedLength;
+                        return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
+                    }
+
                     let depth: number | undefined;
                     if (id) {
                         depth = context.symbolDepth!.get(id) || 0;
@@ -4854,12 +4910,28 @@ namespace ts {
                         context.symbolDepth!.set(id, depth + 1);
                     }
                     context.visitedTypes.add(typeId);
+                    const startLength = context.approximateLength;
                     const result = transform(type);
+                    const addedLength = context.approximateLength - startLength;
+                    if (!context.reportedDiagnostic && !context.encounteredError) {
+                        if (context.truncating) {
+                            (result as any).truncating = true;
+                        }
+                        (result as any).addedLength = addedLength;
+                        links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
+                    }
                     context.visitedTypes.delete(typeId);
                     if (id) {
                         context.symbolDepth!.set(id, depth!);
                     }
                     return result;
+
+                    function deepCloneOrReuseNode(node: Node): Node {
+                        if (!nodeIsSynthesized(node) && getParseTreeNode(node) === node) {
+                            return node;
+                        }
+                        return setTextRange(factory.cloneNode(visitEachChild(node, deepCloneOrReuseNode, nullTransformationContext)), node);
+                    }
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -5346,6 +5418,7 @@ namespace ts {
             function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
                 const suppressAny = context.flags & NodeBuilderFlags.SuppressAnyReturnType;
                 if (suppressAny) context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // suppress only toplevel `any`s
+                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
                 let typeParameters: TypeParameterDeclaration[] | undefined;
                 let typeArguments: TypeNode[] | undefined;
                 if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -5389,7 +5462,6 @@ namespace ts {
                     const flags = modifiersToFlags(modifiers);
                     modifiers = factory.createModifiersFromModifierFlags(flags | ModifierFlags.Abstract);
                 }
-                context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
 
                 const node =
                     kind === SyntaxKind.CallSignature ? factory.createCallSignature(typeParameters, parameters, returnTypeNode) :
@@ -5816,7 +5888,7 @@ namespace ts {
                 }
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
                     const rawtext = result.escapedText as string;
-                    let i = 0;
+                    let i = context.typeParameterNamesByTextNextNameCount?.get(rawtext) || 0;
                     let text = rawtext;
                     while (context.typeParameterNamesByText?.has(text) || typeParameterShadowsNameInScope(text as __String, context, type)) {
                         i++;
@@ -5825,8 +5897,11 @@ namespace ts {
                     if (text !== rawtext) {
                         result = factory.createIdentifier(text, result.typeArguments);
                     }
-                    (context.typeParameterNames || (context.typeParameterNames = new Map())).set(getTypeId(type), result);
-                    (context.typeParameterNamesByText || (context.typeParameterNamesByText = new Set())).add(result.escapedText as string);
+                    // avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
+                    // `i` we've used thus far, to save work later
+                    (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
+                    (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
+                    (context.typeParameterNamesByText ||= new Set()).add(rawtext);
                 }
                 return result;
             }
@@ -5987,6 +6062,7 @@ namespace ts {
                 if (initial.typeParameterSymbolList) {
                     initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
                 }
+                initial.tracker = wrapSymbolTrackerToReportForContext(initial, initial.tracker);
                 return initial;
             }
 
@@ -6278,11 +6354,13 @@ namespace ts {
                                 }
                             }
                             else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
-                                oldcontext.tracker.trackSymbol(sym, decl, meaning);
+                                return oldcontext.tracker.trackSymbol(sym, decl, meaning);
                             }
-                        }
-                    }
+                            return false;
+                        },
+                    },
                 };
+                context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
                 forEachEntry(symbolTable, (symbol, name) => {
                     const baseName = unescapeLeadingUnderscores(name);
                     void getInternalSymbolName(symbol, baseName); // Called to cache values into `usedSymbolNames` and `remappedSymbolNames`
@@ -6502,6 +6580,9 @@ namespace ts {
                         const oldContext = context;
                         context = cloneNodeBuilderContext(context);
                         const result = serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
+                        if (context.reportedDiagnostic) {
+                            oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
+                        }
                         context = oldContext;
                         return result;
                     }
@@ -7275,7 +7356,7 @@ namespace ts {
                         // a visibility error here (as they're not visible within any scope), but we want to hoist them
                         // into the containing scope anyway, so we want to skip the visibility checks.
                         const oldTrack = context.tracker.trackSymbol;
-                        context.tracker.trackSymbol = noop;
+                        context.tracker.trackSymbol = () => false;
                         if (isExportAssignmentCompatibleSymbolName) {
                             results.push(factory.createExportAssignment(
                                 /*decorators*/ undefined,
@@ -7731,6 +7812,7 @@ namespace ts {
 
             // State
             encounteredError: boolean;
+            reportedDiagnostic: boolean;
             visitedTypes: Set<number> | undefined;
             symbolDepth: ESMap<string, number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
@@ -7739,6 +7821,7 @@ namespace ts {
             typeParameterSymbolList?: Set<number>;
             typeParameterNames?: ESMap<TypeId, Identifier>;
             typeParameterNamesByText?: Set<string>;
+            typeParameterNamesByTextNextNameCount?: ESMap<string, number>;
             usedSymbolNames?: Set<string>;
             remappedSymbolNames?: ESMap<SymbolId, string>;
             reverseMappedStack?: ReverseMappedSymbol[];
@@ -24041,12 +24124,12 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, containsGenericType));
         }
 
-        function hasContextualTypeWithNoGenericTypes(node: Node) {
+        function hasNonBindingPatternContextualTypeWithNoGenericTypes(node: Node) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
-                getContextualType(node);
+                getContextualType(node, ContextFlags.SkipBindingPatterns);
             return contextualType && !someType(contextualType, containsGenericType);
         }
 
@@ -24060,7 +24143,7 @@ namespace ts {
             // 'string | undefined' to give control flow analysis the opportunity to narrow to type 'string'.
             const substituteConstraints = !(checkMode && checkMode & CheckMode.Inferential) &&
                 someType(type, isGenericTypeWithUnionConstraint) &&
-                (isConstraintPosition(reference) || hasContextualTypeWithNoGenericTypes(reference));
+                (isConstraintPosition(reference) || hasNonBindingPatternContextualTypeWithNoGenericTypes(reference));
             return substituteConstraints ? mapType(type, t => t.flags & TypeFlags.Instantiable ? getBaseConstraintOrType(t) : t) : type;
         }
 
@@ -41469,6 +41552,12 @@ namespace ts {
                     }
                     return false;
                 }
+            }
+
+            if (isForOfStatement(forInOrOfStatement) && !(forInOrOfStatement.flags & NodeFlags.AwaitContext) &&
+                isIdentifier(forInOrOfStatement.initializer) && forInOrOfStatement.initializer.escapedText === "async") {
+                grammarErrorOnNode(forInOrOfStatement.initializer, Diagnostics.The_left_hand_side_of_a_for_of_statement_may_not_be_async);
+                return false;
             }
 
             if (forInOrOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {

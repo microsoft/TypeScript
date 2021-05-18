@@ -18,7 +18,7 @@ namespace ts.codefix {
 
     export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
         return {
-            trackSymbol: noop,
+            trackSymbol: () => false,
             moduleResolverHost: getModuleSpecifierResolverHost(context.program, context.host),
         };
     }
