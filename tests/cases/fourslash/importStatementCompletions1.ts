@@ -73,3 +73,29 @@
     }
   });
 });
+
+// @Filename: /index13.ts
+//// import {} /*13*/
+
+// @Filename: /index14.ts
+//// import {} f/*14*/
+
+// @Filename: /index15.ts
+//// import * as foo /*15*/
+
+// @Filename: /index16.ts
+//// import * as foo f/*16*/
+
+[13, 14, 15, 16].forEach(marker => {
+  verify.completions({
+    marker: "" + marker,
+    exact: {
+      name: "from",
+      sortText: completion.SortText.GlobalsOrKeywords,
+    },
+    preferences: {
+      includeCompletionsForImportStatements: true,
+      includeInsertTextCompletions: true,
+    }
+  });
+});

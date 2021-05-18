@@ -728,7 +728,7 @@ namespace ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        const functionDeclaration = <FunctionLikeDeclaration>node;
+                        const functionDeclaration = node as FunctionLikeDeclaration;
                         const declarationName = getDeclarationName(functionDeclaration);
 
                         if (declarationName) {
@@ -739,7 +739,7 @@ namespace ts {
                             if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
                                 // Overwrite the last declaration if it was an overload
                                 // and this one is an implementation.
-                                if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
+                                if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
                                     declarations[declarations.length - 1] = functionDeclaration;
                                 }
                             }
@@ -764,7 +764,7 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
-                        addDeclaration(<Declaration>node);
+                        addDeclaration(node as Declaration);
                         forEachChild(node, visit);
                         break;
 
@@ -777,7 +777,7 @@ namespace ts {
 
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
-                        const decl = <VariableDeclaration>node;
+                        const decl = node as VariableDeclaration;
                         if (isBindingPattern(decl.name)) {
                             forEachChild(decl.name, visit);
                             break;
@@ -790,13 +790,13 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
-                        addDeclaration(<Declaration>node);
+                        addDeclaration(node as Declaration);
                         break;
 
                     case SyntaxKind.ExportDeclaration:
                         // Handle named exports case e.g.:
                         //    export {a, b as B} from "mod";
-                        const exportDeclaration = (<ExportDeclaration>node);
+                        const exportDeclaration = node as ExportDeclaration;
                         if (exportDeclaration.exportClause) {
                             if (isNamedExports(exportDeclaration.exportClause)) {
                                 forEach(exportDeclaration.exportClause.elements, visit);
@@ -808,7 +808,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.ImportDeclaration:
-                        const importClause = (<ImportDeclaration>node).importClause;
+                        const importClause = (node as ImportDeclaration).importClause;
                         if (importClause) {
                             // Handle default import case e.g.:
                             //    import d from "mod";
@@ -1849,9 +1849,9 @@ namespace ts {
                     // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                     // Then this name is name from dotted module
                     if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
-                        (<ModuleDeclaration>nodeForStartPos.parent.parent).body === nodeForStartPos.parent) {
+                        (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent) {
                         // Use parent module declarations name for start pos
-                        nodeForStartPos = (<ModuleDeclaration>nodeForStartPos.parent.parent).name;
+                        nodeForStartPos = (nodeForStartPos.parent.parent as ModuleDeclaration).name;
                     }
                     else {
                         // We have to use this name for start pos
@@ -2755,7 +2755,7 @@ namespace ts {
         return node &&
             node.parent &&
             node.parent.kind === SyntaxKind.ElementAccessExpression &&
-            (<ElementAccessExpression>node.parent).argumentExpression === node;
+            (node.parent as ElementAccessExpression).argumentExpression === node;
     }
 
     /// getDefaultLibraryFilePath

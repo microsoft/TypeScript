@@ -145,8 +145,10 @@ namespace ts {
                             symbolAccessibilityResult.errorSymbolName,
                             symbolAccessibilityResult.errorModuleName));
                     }
+                    return true;
                 }
             }
+            return false;
         }
 
         function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
@@ -156,9 +158,10 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            if (symbol.flags & SymbolFlags.TypeParameter) return;
-            handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+            if (symbol.flags & SymbolFlags.TypeParameter) return false;
+            const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+            return issuedDiagnostic;
         }
 
         function reportPrivateInBaseOfClassExpression(propertyName: string) {
