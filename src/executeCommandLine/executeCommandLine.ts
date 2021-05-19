@@ -24,7 +24,7 @@ namespace ts {
     }
 
     function getCountsMap() {
-        const counts = createMap<number>();
+        const counts = new Map<string, number>();
         counts.set("Library", 0);
         counts.set("Definitions", 0);
         counts.set("TypeScript", 0);
@@ -87,6 +87,230 @@ namespace ts {
 
     function printVersion(sys: System) {
         sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+    }
+
+    function bold(str: string) {
+        return `[1m${str}[22m`;
+    }
+
+    function blue(str: string) {
+        // pretty?formatColorAndReset(str, ForegroundColorEscapeSequences.Blue) : str;
+        return `[34m${str}[39m`;
+    }
+
+    function getDisplayNameTextOfOption(option: CommandLineOption) {
+        return `--${option.name}${option.shortName ? `, -${option.shortName}` : ""}`;
+    }
+
+    function generateOptionOutput(option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
+        let res: string[] = [];
+
+        // name and description
+        const name = getDisplayNameTextOfOption(option);
+
+        // value type and possiable value
+        const valueCandidates = getValueTypeAndPossiableValue(option);
+        const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
+        const terminalWidth = sys.getWidthOfTerminal();
+
+        // terminal does not have enough width
+        if (terminalWidth < leftAlignOfRight + 20) {
+            res.push(blue(name));
+            if (option.description) {
+                const description = getDiagnosticText(option.description);
+                res.push(description);
+            }
+            if (valueCandidates) {
+                res.push(`  ${valueCandidates.valueType}: ${valueCandidates.possiableValues}`);
+            }
+            if (defaultValueDescription) {
+                res.push(`  ${getDiagnosticText(Diagnostics.default_Colon)} ${defaultValueDescription}`);
+            }
+        }
+        else {
+            let description = "";
+            if (option.description) {
+                description = getDiagnosticText(option.description);
+            }
+            res = [...res, ...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, true), sys.newLine, sys.newLine];
+            if (valueCandidates) {
+                res = [...res, ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possiableValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
+            }
+            if (defaultValueDescription) {
+                res = [...res, ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
+            }
+            res.push(sys.newLine);
+        }
+        return res;
+
+        function getPrettyOutput(left: string, right: string, rightAlignOfLeft: number, leftAlignOfRight: number, terminalWidth: number, colorLeft: boolean) {
+            const res = [];
+            let isFirstLine = true;
+            let reaminRight = right;
+            const rightCharacterNumber = terminalWidth - leftAlignOfRight;
+            while (reaminRight.length !== 0) {
+                let curLeft = "";
+                if (isFirstLine) {
+                    curLeft = padLeft(left, rightAlignOfLeft);
+                    curLeft = padRight(curLeft, leftAlignOfRight);
+                    curLeft = colorLeft ? blue(curLeft) : curLeft;
+                }
+                else {
+                    curLeft = padLeft("", leftAlignOfRight);
+                }
+                const curRight = reaminRight.substr(0, rightCharacterNumber);
+                reaminRight = reaminRight.slice(rightCharacterNumber);
+                res.push(`${curLeft}${curRight}`);
+                isFirstLine = false;
+            }
+            return res;
+        }
+
+        function getValueTypeAndPossiableValue(option: CommandLineOption) {
+            // option.type might be "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>
+            // string -- any of: string
+            // number -- any of: number
+            // boolean -- any of: boolean
+            // object -- null
+            // list -- one or more: , content depends on `option.element.type`, the same as others
+            // ESMap<string, number | string> -- any of: key1, key2, ....
+            if (option.type === "object") {
+                return undefined;
+            }
+
+            return {
+                valueType: getValueType(option),
+                possiableValues: getPossiableValues(option)
+            };
+
+            function getValueType(option: CommandLineOption) {
+                let valueType: string;
+                switch (option.type) {
+                    case "list":
+                        valueType = getDiagnosticText(Diagnostics.one_or_more_Colon);
+                        break;
+                    default:
+                        valueType = getDiagnosticText(Diagnostics.any_of_Colon);
+                }
+                return valueType;
+            }
+
+            function getPossiableValues(option: CommandLineOption) {
+                let possiableValues: string;
+                switch (option.type) {
+                    case "string":
+                        possiableValues = "string";
+                        break;
+                    case "number":
+                        possiableValues = "number";
+                        break;
+                    case "boolean":
+                        possiableValues = "boolean";
+                        break;
+                    case "list":
+                        // TODO: check inifinate loop
+                        possiableValues = getPossiableValues(option.element);
+                        break;
+                    case "object":
+                        possiableValues = "";
+                        break;
+                    default:
+                        // ESMap<string, number | string>
+                        // TODO: Fix iterator and iterable type issue for TS.
+                        // @ts-ignore
+                        const keys = Array.from(option.type.keys());
+                        possiableValues = keys.join(", ");
+                }
+                return possiableValues;
+            }
+        }
+    }
+
+    function generateGroupOptionOutput(optionsList: readonly CommandLineOption[]) {
+        let maxLength = 0;
+        for (const option of optionsList) {
+            const curLength = getDisplayNameTextOfOption(option).length;
+            maxLength = maxLength > curLength ? maxLength : curLength;
+        }
+
+        // left part should be right align, right part should be left align
+
+        // assume 2 space between left margin and left part.
+        const rightAlignOfLeftPart = maxLength + 2;
+        // assume 2 space between left and right part
+        const leftAlignOfRightPart = rightAlignOfLeftPart + 2;
+        let res: string[] = [];
+        for (const option of optionsList) {
+            const tmp = generateOptionOutput(option, rightAlignOfLeftPart, leftAlignOfRightPart);
+            res = [...res, ...tmp];
+        }
+        return res;
+    }
+
+    function generateSectionOptionsOutput(sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
+        let res: string[] = [];
+        res.push(bold(sectionName) + sys.newLine + sys.newLine);
+        if (beforeOptionsDescription) {
+            res.push(beforeOptionsDescription + sys.newLine + sys.newLine);
+        }
+        if (!subCategory) {
+            res = [...res, ...generateGroupOptionOutput(options)];
+            if (afterOptionsDescription) {
+                res.push(afterOptionsDescription + sys.newLine + sys.newLine);
+            }
+            return res;
+        }
+        const categoryMap = new Map<string, CommandLineOption[]>();
+        for (const option of options) {
+            const curCategory = option.category ? getDiagnosticText(option.category) : "No category";
+            const optionsOfCurCategory = categoryMap.get(curCategory) ?? [];
+            optionsOfCurCategory.push(option);
+            categoryMap.set(curCategory, optionsOfCurCategory);
+        }
+        categoryMap.forEach((value, key) => {
+            res.push(`### ${key}${sys.newLine}${sys.newLine}`);
+            res = [...res, ...generateGroupOptionOutput(value)];
+        });
+        if (afterOptionsDescription) {
+            res.push(afterOptionsDescription + sys.newLine + sys.newLine);
+        }
+        return res;
+    }
+
+    function printEasyHelp(simpleOptions: readonly CommandLineOption[]) {
+        let output: string[] = [];
+        output.push(`tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}${sys.newLine}${sys.newLine}`);
+        output.push(bold("COMMON COMMANDS") + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc") + sys.newLine);
+        output.push("  " + "Compiles the current project (tsconfig.json in the working diirectory.)" + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc app.ts util.ts" + sys.newLine));
+        output.push("  " + "Ignoring tsconfig.json, compiles the specified files with default compiler options" + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc -b" + sys.newLine));
+        output.push("  " + "Build a composite project in the working directory." + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc --init" + sys.newLine));
+        output.push("  " + "Creates a tsconfig.json with the recommended settings in the working directory." + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc -p .path/to/tsconfig.json" + sys.newLine));
+        output.push("  " + "compiles the Typescript project located at the specified path" + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc --help --all" + sys.newLine));
+        output.push("  " + "An expanded version of this information, showing all possible compiler options" + sys.newLine + sys.newLine);
+        output.push("  " + blue("tsc --noEmit" + sys.newLine));
+        output.push("  " + blue("tsc --target esnext" + sys.newLine));
+        output.push("  " + "Compiles the current project, with additional settings." + sys.newLine + sys.newLine);
+        output = [...output, ...generateSectionOptionsOutput("COMMON COMPILER OPTIONS", simpleOptions, false, undefined, formatMessage(undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        for (const line of output) {
+            sys.write(line);
+        }
+    }
+
+    function printAllHelp(compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
+        let output: string[] = [];
+        output.push(`tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}${sys.newLine}${sys.newLine}`);
+        output = [...output, ...generateSectionOptionsOutput("ALL COMPILER OPTIONS", compilerOptions, true, undefined, formatMessage(undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        output = [...output, ...generateSectionOptionsOutput("WATCH OPTIONS", watchOptions, false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
+        output = [...output, ...generateSectionOptionsOutput("BUILD OPTIONS", buildOptions, false, formatMessage(undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+        for (const line of output) {
+            sys.write(line);
+        }
     }
 
     function printHelp(sys: System, optionsList: readonly CommandLineOption[], syntaxPrefix = "") {
@@ -232,8 +456,13 @@ namespace ts {
         }
 
         if (commandLine.options.help || commandLine.options.all) {
-            printVersion(sys);
-            printHelp(sys, getOptionsForHelp(commandLine));
+            if (!commandLine.options.all) {
+                printEasyHelp(getOptionsForHelp(commandLine));
+            }
+            else {
+                printAllHelp(getOptionsForHelp(commandLine), optionsForBuild, optionsForWatch);
+            }
+            // printHelp(sys, );
             return sys.exit(ExitStatus.Success);
         }
 

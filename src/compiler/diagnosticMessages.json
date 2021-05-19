@@ -5104,6 +5104,68 @@
         "code": 6802
     },
 
+    "any of:": {
+        "category": "Message",
+        "code": 6900
+    },
+    "one or more:": {
+        "category": "Message",
+        "code": 6901
+    },
+    "default:": {
+        "category": "Message",
+        "code": 6902
+    },
+    "module === \"system\" or esModuleInterop": {
+        "category": "Message",
+        "code": 6903
+    },
+    "`false`, unless `strict` is set": {
+        "category": "Message",
+        "code": 6904
+    },
+    "`false`, unless `composite` is set": {
+        "category": "Message",
+        "code": 6905
+    },
+    "`[\"node_modules\", \"bower_components\", \"jspm_packages\"]`, plus the value of `outDir` if one is specified.": {
+        "category": "Message",
+        "code": 6906
+    },
+    "`[]` if `files` is specified, otherwise `[\"**/*\"]`": {
+        "category": "Message",
+        "code": 6907
+    },
+    "`true` if `composite`, `false` otherwise": {
+        "category": "Message",
+        "code": 6908
+    },
+    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+        "category": "Message",
+        "code": 6909
+    },
+    "Computed from the list of input files": {
+        "category": "Message",
+        "code": 6910
+    },
+    "Platform specific": {
+        "category": "Message",
+        "code": 6911
+    },
+    "You can learn about all of the compiler options at {0}": {
+        "category": "Message",
+        "code": 6912
+    },
+    "Including --watch, -w will start watching the current project for the file changes. Once set, you can config watch mode with:": {
+        "category": "Message",
+        "code": 6913
+    },
+    "Using --build, -b will make tsc behave more like a build orchestrator than a compiler. This is used to trigger building composite projects which you can learn more about at {0}": {
+        "category": "Message",
+        "code": 6914
+    },
+
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
