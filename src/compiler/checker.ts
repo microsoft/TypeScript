@@ -14333,16 +14333,22 @@ namespace ts {
         }
 
         // Ordinarily we reduce a keyof M, where M is a mapped type { [P in K as N<P>]: X }, to simply N<K>. This however presumes
-        // that N distributes over union types, i.e. that N<A | B | C> is equivalent to N<A> | N<B> | N<C>. That presumption may not
-        // be true when N is a non-distributive conditional type or an instantiable type with a non-distributive conditional type as
-        // a constituent. In those cases, we cannot reduce keyof M and need to preserve it as is.
-        function maybeNonDistributiveNameType(type: Type | undefined): boolean {
-            return !!(type && (
-                type.flags & TypeFlags.Conditional && (!(type as ConditionalType).root.isDistributive || maybeNonDistributiveNameType((type as ConditionalType).checkType)) ||
-                type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, maybeNonDistributiveNameType) ||
-                type.flags & (TypeFlags.Index | TypeFlags.StringMapping) && maybeNonDistributiveNameType((type as IndexType | StringMappingType).type) ||
-                type.flags & TypeFlags.IndexedAccess && maybeNonDistributiveNameType((type as IndexedAccessType).indexType) ||
-                type.flags & TypeFlags.Substitution && maybeNonDistributiveNameType((type as SubstitutionType).substitute)));
+        // that N distributes over union types, i.e. that N<A | B | C> is equivalent to N<A> | N<B> | N<C>. Specifically, we only
+        // want to perform the reduction when the name type of a mapped type is distributive with respect to the type variable
+        // introduced by the 'in' clause of the mapped type. Note that non-generic types are considered to be distributive because
+        // they're the same type regardless of what's being distributed over.
+        function hasDistributiveNameType(mappedType: MappedType) {
+            const typeVariable = getTypeParameterFromMappedType(mappedType);
+            return isDistributive(getNameTypeFromMappedType(mappedType) || typeVariable);
+            function isDistributive(type: Type): boolean {
+                return type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.Never | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.NonPrimitive) ? true :
+                    type.flags & TypeFlags.Conditional ? (type as ConditionalType).root.isDistributive && (type as ConditionalType).checkType === typeVariable :
+                    type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) ? every((type as UnionOrIntersectionType | TemplateLiteralType).types, isDistributive) :
+                    type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
+                    type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).substitute) :
+                    type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
+                    false;
+            }
         }
 
         function getLiteralTypeFromPropertyName(name: PropertyName) {
@@ -14393,9 +14399,9 @@ namespace ts {
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             const includeOrigin = stringsOnly === keyofStringsOnly && !noIndexSignatures;
             type = getReducedType(type);
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
-                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && maybeNonDistributiveNameType(getNameTypeFromMappedType(type)) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
+                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
