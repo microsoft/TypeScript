@@ -552,10 +552,19 @@ namespace ts {
 
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
-        path = path.replace(/\/\.\//g, "/");
+        // Most paths don't require normalization
         if (!relativePathSegmentRegExp.test(path)) {
             return path;
         }
+        // Some paths only require cleanup of `/./`
+        const simplified = path.replace(/\/\.\//g, "/");
+        if (simplified !== path) {
+            path = simplified;
+            if (!relativePathSegmentRegExp.test(path)) {
+                return path;
+            }
+        }
+        // Other paths require full normalization
         const normalized = getPathFromPathComponents(reducePathComponents(getPathComponents(path)));
         return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
     }
