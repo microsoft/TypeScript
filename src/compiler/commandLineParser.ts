@@ -692,6 +692,7 @@ namespace ts {
             name: "useUnknownInCatchVariables",
             type: "boolean",
             affectsSemanticDiagnostics: true,
+            strictFlag: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
