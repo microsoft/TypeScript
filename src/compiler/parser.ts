@@ -1336,27 +1336,24 @@ namespace ts {
             return inContext(NodeFlags.AwaitContext);
         }
 
-        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
-            return parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
+        function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
+            parseErrorAt(scanner.getTokenPos(), scanner.getTextPos(), message, arg0);
         }
 
-        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
+        function parseErrorAtPosition(start: number, length: number, message: DiagnosticMessage, arg0?: any): void {
             // Don't report another error if it would just be at the same position as the last error.
             const lastError = lastOrUndefined(parseDiagnostics);
-            let result: DiagnosticWithDetachedLocation | undefined;
             if (!lastError || start !== lastError.start) {
-                result = createDetachedDiagnostic(fileName, start, length, message, arg0);
-                parseDiagnostics.push(result);
+                parseDiagnostics.push(createDetachedDiagnostic(fileName, start, length, message, arg0));
             }
 
             // Mark that we've encountered an error.  We'll set an appropriate bit on the next
             // node we finish so that it can't be reused incrementally.
             parseErrorBeforeNextFinishedNode = true;
-            return result;
         }
 
-        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): DiagnosticWithDetachedLocation | undefined {
-            return parseErrorAtPosition(start, end - start, message, arg0);
+        function parseErrorAt(start: number, end: number, message: DiagnosticMessage, arg0?: any): void {
+            parseErrorAtPosition(start, end - start, message, arg0);
         }
 
         function parseErrorAtRange(range: TextRange, message: DiagnosticMessage, arg0?: any): void {
@@ -1547,17 +1544,17 @@ namespace ts {
         }
 
         function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
-            if (token() === closeKind) {
-                nextToken();
-                return;
+            if (!parseExpected(closeKind)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
+                    );
+                }
+                return false;
             }
-            const lastError = parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(closeKind));
-            if (lastError) {
-                addRelatedInfo(
-                    lastError,
-                    createDetachedDiagnostic(fileName, openPosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(openKind), tokenToString(closeKind))
-                );
-            }
+            return true;
         }
 
         function parseOptional(t: SyntaxKind): boolean {
@@ -5523,7 +5520,15 @@ namespace ts {
             parseExpected(SyntaxKind.OpenBraceToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_1_to_match_the_0_token_here, tokenToString(SyntaxKind.OpenBraceToken), tokenToString(SyntaxKind.CloseBraceToken))
+                    );
+                }
+            }
             return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
         }
 
@@ -8010,9 +8015,13 @@ namespace ts {
                             hasChildren = true;
                             if (child.kind === SyntaxKind.JSDocTypeTag) {
                                 if (childTypeTag) {
-                                    const lastError = parseErrorAtCurrentToken(Diagnostics.A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags);
+                                    parseErrorAtCurrentToken(Diagnostics.A_JSDoc_typedef_comment_may_not_contain_multiple_type_tags);
+                                    const lastError = lastOrUndefined(parseDiagnostics);
                                     if (lastError) {
-                                        addRelatedInfo(lastError, createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here));
+                                        addRelatedInfo(
+                                            lastError,
+                                            createDetachedDiagnostic(fileName, 0, 0, Diagnostics.The_tag_was_first_specified_here)
+                                        );
                                     }
                                     break;
                                 }
