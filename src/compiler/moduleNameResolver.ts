@@ -96,14 +96,9 @@ namespace ts {
         };
     }
 
-    function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
-        return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
-    }
-
     interface ModuleResolutionState {
         host: ModuleResolutionHost;
         compilerOptions: CompilerOptions;
-        compilerPathPatterns?: (string | Pattern)[];
         traceEnabled: boolean;
         failedLookupLocations: Push<string>;
         resultFromCache?: ResolvedModuleWithFailedLookupLocations;
@@ -957,7 +952,7 @@ namespace ts {
     }
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
-        const { baseUrl, paths } = state.compilerOptions;
+        const { baseUrl, paths, configFile } = state.compilerOptions;
         if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
                 if (baseUrl) {
@@ -966,10 +961,14 @@ namespace ts {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
             const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-            if (!state.compilerPathPatterns) {
-                state.compilerPathPatterns = tryParsePatterns(paths);
+            let pathPatterns: readonly (string | Pattern)[] | undefined;
+            if (configFile?.configFileSpecs) {
+                pathPatterns = configFile.configFileSpecs.pathPatterns;
+                if (!pathPatterns) {
+                    configFile.configFileSpecs.pathPatterns = pathPatterns = tryParsePatterns(paths);
+                }
             }
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, state.compilerPathPatterns, loader, /*onlyRecordFailures*/ false, state);
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -1409,7 +1408,7 @@ namespace ts {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
             const paths = versionPaths.paths;
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, paths, tryParsePatterns(paths), loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, paths, /*pathPatterns*/ undefined, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
             if (result) {
                 return removeIgnoredPackageId(result.value);
             }
@@ -1546,7 +1545,7 @@ namespace ts {
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
                 const paths = packageInfo.versionPaths.paths;
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, paths, tryParsePatterns(paths), loader, !packageDirectoryExists, state);
+                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
                 if (fromPaths) {
                     return fromPaths.value;
                 }
@@ -1556,7 +1555,8 @@ namespace ts {
         return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
     }
 
-    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: (string | Pattern)[], loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
+    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: readonly (string | Pattern)[] | undefined, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
+        pathPatterns ||= tryParsePatterns(paths);
         const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
         if (matchedPattern) {
             const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);

@@ -6786,6 +6786,10 @@ namespace ts {
             };
     }
 
+    export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
+        return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
+    }
+
     export function positionIsSynthesized(pos: number): boolean {
         // This is a fast way of testing the following conditions:
         //  pos === undefined || pos === null || isNaN(pos) || pos < 0;

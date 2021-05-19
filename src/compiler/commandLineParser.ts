@@ -2533,6 +2533,7 @@ namespace ts {
                 validatedFilesSpec: filter(filesSpecs, isString),
                 validatedIncludeSpecs,
                 validatedExcludeSpecs,
+                pathPatterns: undefined, // Initialized on first use
             };
         }
 
