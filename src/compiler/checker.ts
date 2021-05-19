@@ -14341,16 +14341,13 @@ namespace ts {
             const typeVariable = getTypeParameterFromMappedType(mappedType);
             return isDistributive(getNameTypeFromMappedType(mappedType) || typeVariable);
             function isDistributive(type: Type): boolean {
-                return type.flags & TypeFlags.Conditional ? (type as ConditionalType).root.isDistributive && isDistributiveCheckType((type as ConditionalType).checkType) :
+                return type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.Never | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.NonPrimitive) ? true :
+                    type.flags & TypeFlags.Conditional ? (type as ConditionalType).root.isDistributive && (type as ConditionalType).checkType === typeVariable :
                     type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) ? every((type as UnionOrIntersectionType | TemplateLiteralType).types, isDistributive) :
                     type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
                     type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).substitute) :
                     type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
-                    true;
-            }
-            function isDistributiveCheckType(type: Type): boolean {
-                return !!(type.flags & TypeFlags.TypeParameter) && type === typeVariable ||
-                    !!(type.flags & TypeFlags.Conditional) && (type as ConditionalType).root.isDistributive && isDistributiveCheckType((type as ConditionalType).checkType);
+                    false;
             }
         }
 
