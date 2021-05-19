@@ -446,70 +446,97 @@ type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
 >Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 138, 23))
 
-type TS4<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
 >TS4 : Symbol(TS4, Decl(mappedTypeAsClauses.ts, 138, 78))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 139, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 139, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 139, 9))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 139, 23))
+>NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
 
-type TS5<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
->TS5 : Symbol(TS5, Decl(mappedTypeAsClauses.ts, 139, 94))
+type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+>TS5 : Symbol(TS5, Decl(mappedTypeAsClauses.ts, 139, 77))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 140, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 140, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 140, 9))
 >NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 140, 23))
 >NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 140, 23))
 
-type TS6<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 >TS6 : Symbol(TS6, Decl(mappedTypeAsClauses.ts, 140, 77))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 141, 9))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 141, 23))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 141, 11))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 141, 14))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 141, 29))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 141, 9))
->NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
->NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 129, 7))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 141, 23))
-
-type TS7<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
->TS7 : Symbol(TS7, Decl(mappedTypeAsClauses.ts, 141, 77))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 142, 9))
->U : Symbol(U, Decl(mappedTypeAsClauses.ts, 142, 11))
->V : Symbol(V, Decl(mappedTypeAsClauses.ts, 142, 14))
->K : Symbol(K, Decl(mappedTypeAsClauses.ts, 142, 29))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 142, 9))
->V : Symbol(V, Decl(mappedTypeAsClauses.ts, 142, 14))
->K : Symbol(K, Decl(mappedTypeAsClauses.ts, 142, 29))
->U : Symbol(U, Decl(mappedTypeAsClauses.ts, 142, 11))
->K : Symbol(K, Decl(mappedTypeAsClauses.ts, 142, 29))
+>V : Symbol(V, Decl(mappedTypeAsClauses.ts, 141, 14))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 141, 29))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 141, 11))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 141, 29))
 
 // Non-distributive, won't be simplified
 
 type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
->TN0 : Symbol(TN0, Decl(mappedTypeAsClauses.ts, 142, 87))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
+>TN0 : Symbol(TN0, Decl(mappedTypeAsClauses.ts, 141, 87))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 145, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 145, 23))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 145, 9))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 145, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 145, 23))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 145, 23))
 
 type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
->TN1 : Symbol(TN1, Decl(mappedTypeAsClauses.ts, 146, 82))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 147, 9))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 147, 23))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 147, 9))
->T : Symbol(T, Decl(mappedTypeAsClauses.ts, 147, 9))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 147, 23))
->P : Symbol(P, Decl(mappedTypeAsClauses.ts, 147, 23))
+>TN1 : Symbol(TN1, Decl(mappedTypeAsClauses.ts, 145, 82))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 146, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 146, 23))
 
 type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
->TN2 : Symbol(TN2, Decl(mappedTypeAsClauses.ts, 147, 82))
+>TN2 : Symbol(TN2, Decl(mappedTypeAsClauses.ts, 146, 82))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 147, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 147, 23))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 147, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 147, 23))
+
+type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+>TN3 : Symbol(TN3, Decl(mappedTypeAsClauses.ts, 147, 76))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 148, 9))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 148, 23))
 >T : Symbol(T, Decl(mappedTypeAsClauses.ts, 148, 9))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(mappedTypeAsClauses.ts, 148, 23))
+
+type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
+>TN4 : Symbol(TN4, Decl(mappedTypeAsClauses.ts, 148, 94))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 149, 9))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 149, 11))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 149, 26))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 149, 9))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 149, 26))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 149, 11))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 149, 9))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 149, 26))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 149, 9))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 149, 26))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 149, 26))
+
+type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
+>TN5 : Symbol(TN5, Decl(mappedTypeAsClauses.ts, 149, 107))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 150, 9))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 150, 11))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 150, 26))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 150, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 150, 51))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 150, 26))
+>T : Symbol(T, Decl(mappedTypeAsClauses.ts, 150, 9))
+>P : Symbol(P, Decl(mappedTypeAsClauses.ts, 150, 51))
+>U : Symbol(U, Decl(mappedTypeAsClauses.ts, 150, 11))
+>K : Symbol(K, Decl(mappedTypeAsClauses.ts, 150, 26))
 

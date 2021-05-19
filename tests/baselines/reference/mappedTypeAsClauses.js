@@ -138,16 +138,18 @@ type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
 type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
 type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
 type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
-type TS4<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
-type TS5<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
-type TS6<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
-type TS7<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
+type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
+type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
 
 // Non-distributive, won't be simplified
 
 type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
 type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
 type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
+type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
+type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
 
 
 //// [mappedTypeAsClauses.js]
@@ -305,15 +307,12 @@ declare type TS3<T> = keyof {
     [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string;
 };
 declare type TS4<T> = keyof {
-    [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string;
-};
-declare type TS5<T> = keyof {
     [P in keyof T as NameMap[P & keyof NameMap]]: string;
 };
-declare type TS6<T> = keyof {
+declare type TS5<T> = keyof {
     [P in keyof T & keyof NameMap as NameMap[P]]: string;
 };
-declare type TS7<T, U, V> = keyof {
+declare type TS6<T, U, V> = keyof {
     [K in keyof T as V & (K extends U ? K : never)]: string;
 };
 declare type TN0<T> = keyof {
@@ -324,4 +323,15 @@ declare type TN1<T> = keyof {
 };
 declare type TN2<T> = keyof {
     [P in keyof T as 'a' extends P ? 'x' : 'y']: string;
+};
+declare type TN3<T> = keyof {
+    [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string;
+};
+declare type TN4<T, U> = keyof {
+    [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string;
+};
+declare type TN5<T, U> = keyof {
+    [K in keyof T as keyof {
+        [P in K as T[P] extends U ? K : never]: true;
+    }]: string;
 };
