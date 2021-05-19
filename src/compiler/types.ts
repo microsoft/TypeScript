@@ -5491,17 +5491,28 @@ namespace ts {
         resolvedDefaultType?: Type;
     }
 
+    /* @internal */
+    export const enum AccessFlags {
+        None = 0,
+        IncludeUndefined = 1 << 0,
+        NoIndexSignatures = 1 << 1,
+        Writing = 1 << 2,
+        CacheSymbol = 1 << 3,
+        NoTupleBoundsCheck = 1 << 4,
+        ExpressionPosition = 1 << 5,
+        ReportDeprecated = 1 << 6,
+        SuppressNoImplicitAnyError = 1 << 7,
+        Contextual = 1 << 8,
+        Persistent = IncludeUndefined,
+    }
+
     // Indexed access types (TypeFlags.IndexedAccess)
     // Possible forms are T[xxx], xxx[T], or xxx[keyof T], where T is a type variable
     export interface IndexedAccessType extends InstantiableType {
         objectType: Type;
         indexType: Type;
-        /**
-         * @internal
-         * Indicates that --noUncheckedIndexedAccess may introduce 'undefined' into
-         * the resulting type, depending on how type variable constraints are resolved.
-         */
-        noUncheckedIndexedAccessCandidate: boolean;
+        /* @internal */
+        accessFlags: AccessFlags;  // Only includes AccessFlags.Persistent
         constraint?: Type;
         simplifiedForReading?: Type;
         simplifiedForWriting?: Type;
