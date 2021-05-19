@@ -254,7 +254,7 @@ namespace ts.server {
         /*@internal*/
         private changedFilesForExportMapCache: Set<Path> | undefined;
         /*@internal*/
-        private moduleSpecifierCache = createModuleSpecifierCache();
+        private moduleSpecifierCache = createModuleSpecifierCache(this);
         /*@internal*/
         private symlinks: SymlinkCache | undefined;
         /*@internal*/
@@ -1389,6 +1389,7 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                     this.resolutionCache.clear();
+                    this.moduleSpecifierCache.clear();
                 }
                 this.markAsDirty();
             }
@@ -1729,6 +1730,17 @@ namespace ts.server {
             return !!forEachEntry(
                 this.projectService.openFiles,
                 (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this);
+        }
+
+        /*@internal*/
+        watchNodeModulesDirectory(directoryPath: string, cb: DirectoryWatcherCallback) {
+            return this.projectService.watchFactory.watchDirectory(
+                directoryPath,
+                cb,
+                WatchDirectoryFlags.Recursive,
+                this.projectService.getWatchOptions(this),
+                WatchType.NodeModulesForClosedScriptInfo
+            );
         }
     }
 

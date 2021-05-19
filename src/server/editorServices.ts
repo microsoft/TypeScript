@@ -2945,7 +2945,13 @@ namespace ts.server {
                     this.logger.info("Format host information updated");
                 }
                 if (args.preferences) {
-                    const { lazyConfiguredProjectsFromExternalProject, includePackageJsonAutoImports } = this.hostConfiguration.preferences;
+                    const {
+                        lazyConfiguredProjectsFromExternalProject,
+                        includePackageJsonAutoImports,
+                        importModuleSpecifierEnding,
+                        importModuleSpecifierPreference,
+                    } = this.hostConfiguration.preferences;
+
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
                     if (lazyConfiguredProjectsFromExternalProject && !this.hostConfiguration.preferences.lazyConfiguredProjectsFromExternalProject) {
                         // Load configured projects for external projects that are pending reload
@@ -2959,6 +2965,11 @@ namespace ts.server {
                     }
                     if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
                         this.invalidateProjectPackageJson(/*packageJsonPath*/ undefined);
+                    }
+                    if (importModuleSpecifierEnding !== args.preferences.importModuleSpecifierEnding || importModuleSpecifierPreference !== args.preferences.importModuleSpecifierPreference) {
+                        this.configuredProjects.forEach(p => p.getModuleSpecifierCache().clear());
+                        this.inferredProjects.forEach(p => p.getModuleSpecifierCache().clear());
+                        this.externalProjects.forEach(p => p.getModuleSpecifierCache().clear());
                     }
                 }
                 if (args.extraFileExtensions) {

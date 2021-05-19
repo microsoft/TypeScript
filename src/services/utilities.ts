@@ -3273,23 +3273,61 @@ namespace ts {
         }
     }
 
-    export function createModuleSpecifierCache(): ModuleSpecifierCache {
-        let cache: ESMap<Path, boolean | readonly ModulePath[]> | undefined;
+    export interface ModuleSpecifierResolutionCacheHost {
+        watchNodeModulesDirectory(directoryPath: string, cb: DirectoryWatcherCallback): FileWatcher;
+    }
+
+    export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
+        let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
+        let cache: ESMap<Path, boolean | { modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[] }> | undefined;
         let importingFileName: Path | undefined;
         const wrapped: ModuleSpecifierCache = {
             get(fromFileName, toFileName) {
                 if (!cache || fromFileName !== importingFileName) return undefined;
                 return cache.get(toFileName);
             },
-            set(fromFileName, toFileName, moduleSpecifiers) {
+            set(fromFileName, toFileName, cached) {
                 if (cache && fromFileName !== importingFileName) {
-                    cache.clear();
+                    this.clear();
                 }
                 importingFileName = fromFileName;
-                (cache ||= new Map()).set(toFileName, moduleSpecifiers);
+                (cache ||= new Map()).set(toFileName, cached);
+
+                // If any module specifiers were generated based off paths in node_modules,
+                // a package.json file in that package was read and is an input to the cached.
+                // Instead of watching each individual package.json file, set up a wildcard
+                // directory watcher for any node_modules referenced and clear the cache when
+                // it sees any changes.
+                if (cached.moduleSpecifiers) {
+                    for (const p of cached.modulePaths) {
+                        if (p.isInNodeModules) {
+                            const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length);
+                            if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
+                                (containedNodeModulesWatchers ||= new Map()).set(
+                                    nodeModulesPath,
+                                    host.watchNodeModulesDirectory(nodeModulesPath, this.clear),
+                                );
+                            }
+                        }
+                    }
+                }
+            },
+            getModulePaths(fromFileName, toFileName) {
+                if (!cache || fromFileName !== importingFileName) return undefined;
+                const cached = cache.get(toFileName);
+                return typeof cached === "object" ? cached.modulePaths : cached;
+            },
+            setModulePaths(fromFileName, toFileName, modulePaths) {
+                if (cache && fromFileName !== importingFileName) {
+                    this.clear();
+                }
+                importingFileName = fromFileName;
+                (cache ||= new Map()).set(toFileName, typeof modulePaths === "boolean" ? modulePaths : { modulePaths });
             },
             clear() {
-                cache = undefined;
+                containedNodeModulesWatchers?.forEach(watcher => watcher.close());
+                cache?.clear();
+                containedNodeModulesWatchers?.clear();
                 importingFileName = undefined;
             },
             count() {
@@ -3311,7 +3349,7 @@ namespace ts {
         moduleSpecifierCache: ModuleSpecifierCache | undefined,
     ): boolean {
         if (from === to) return false;
-        const cachedResult = moduleSpecifierCache?.get(from.path, to.path);
+        const cachedResult = moduleSpecifierCache?.getModulePaths(from.path, to.path);
         if (cachedResult !== undefined) {
             return !!cachedResult;
         }
@@ -3334,7 +3372,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.set(from.path, to.path, isImportable);
+            moduleSpecifierCache?.setModulePaths(from.path, to.path, isImportable);
             return isImportable;
         }
 
