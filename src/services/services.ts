@@ -728,7 +728,7 @@ namespace ts {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        const functionDeclaration = <FunctionLikeDeclaration>node;
+                        const functionDeclaration = node as FunctionLikeDeclaration;
                         const declarationName = getDeclarationName(functionDeclaration);
 
                         if (declarationName) {
@@ -739,7 +739,7 @@ namespace ts {
                             if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
                                 // Overwrite the last declaration if it was an overload
                                 // and this one is an implementation.
-                                if (functionDeclaration.body && !(<FunctionLikeDeclaration>lastDeclaration).body) {
+                                if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
                                     declarations[declarations.length - 1] = functionDeclaration;
                                 }
                             }
@@ -764,7 +764,7 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.TypeLiteral:
-                        addDeclaration(<Declaration>node);
+                        addDeclaration(node as Declaration);
                         forEachChild(node, visit);
                         break;
 
@@ -777,7 +777,7 @@ namespace ts {
 
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement: {
-                        const decl = <VariableDeclaration>node;
+                        const decl = node as VariableDeclaration;
                         if (isBindingPattern(decl.name)) {
                             forEachChild(decl.name, visit);
                             break;
@@ -790,13 +790,13 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
-                        addDeclaration(<Declaration>node);
+                        addDeclaration(node as Declaration);
                         break;
 
                     case SyntaxKind.ExportDeclaration:
                         // Handle named exports case e.g.:
                         //    export {a, b as B} from "mod";
-                        const exportDeclaration = (<ExportDeclaration>node);
+                        const exportDeclaration = node as ExportDeclaration;
                         if (exportDeclaration.exportClause) {
                             if (isNamedExports(exportDeclaration.exportClause)) {
                                 forEach(exportDeclaration.exportClause.elements, visit);
@@ -808,7 +808,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.ImportDeclaration:
-                        const importClause = (<ImportDeclaration>node).importClause;
+                        const importClause = (node as ImportDeclaration).importClause;
                         if (importClause) {
                             // Handle default import case e.g.:
                             //    import d from "mod";
@@ -1444,7 +1444,7 @@ namespace ts {
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey, oldSourceFile.scriptKind);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
@@ -1493,9 +1493,13 @@ namespace ts {
                         // We do not support the scenario where a host can modify a registered
                         // file's script kind, i.e. in one project some file is treated as ".ts"
                         // and in another as ".js"
-                        Debug.assertEqual(hostFileInformation.scriptKind, oldSourceFile.scriptKind, "Registered script kind should match new script kind.");
-
-                        return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        if (hostFileInformation.scriptKind === oldSourceFile.scriptKind) {
+                            return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
+                        }
+                        else {
+                            // Release old source file and fall through to aquire new file with new script kind
+                            documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
+                        }
                     }
 
                     // We didn't already have the file.  Fall through and acquire it from the registry.
@@ -1531,7 +1535,7 @@ namespace ts {
                 // Use paths to ensure we are using correct key and paths as document registry could be created with different current directory than host
                 const key = documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions());
                 forEach(program.getSourceFiles(), f =>
-                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key));
+                    documentRegistry.releaseDocumentWithKey(f.resolvedPath, key, f.scriptKind));
                 program = undefined!; // TODO: GH#18217
             }
             host = undefined!;
@@ -1666,7 +1670,7 @@ namespace ts {
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return !isLabelName(node) && !isTagName(node);
+                    return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                     // Don't return quickInfo if inside the comment in `a/**/.b`
@@ -1845,9 +1849,9 @@ namespace ts {
                     // If parent of the module declaration which is parent of this node is module declaration and its body is the module declaration that this node is name of
                     // Then this name is name from dotted module
                     if (nodeForStartPos.parent.parent.kind === SyntaxKind.ModuleDeclaration &&
-                        (<ModuleDeclaration>nodeForStartPos.parent.parent).body === nodeForStartPos.parent) {
+                        (nodeForStartPos.parent.parent as ModuleDeclaration).body === nodeForStartPos.parent) {
                         // Use parent module declarations name for start pos
-                        nodeForStartPos = (<ModuleDeclaration>nodeForStartPos.parent.parent).name;
+                        nodeForStartPos = (nodeForStartPos.parent.parent as ModuleDeclaration).name;
                     }
                     else {
                         // We have to use this name for start pos
@@ -1878,17 +1882,8 @@ namespace ts {
             return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
-        function isTsOrTsxFile(fileName: string): boolean {
-            const kind = getScriptKind(fileName, host);
-            return kind === ScriptKind.TS || kind === ScriptKind.TSX;
-        }
-
         function getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         function getSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[] {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return [];
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -1901,10 +1896,6 @@ namespace ts {
         }
 
         function getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications {
-            if (!isTsOrTsxFile(fileName)) {
-                // do not run semantic classification on non-ts-or-tsx files
-                return { spans: [], endOfLineState: EndOfLineState.None };
-            }
             synchronizeHostData();
 
             const responseFormat = format || SemanticClassificationFormat.Original;
@@ -2013,13 +2004,13 @@ namespace ts {
             return codefix.getAllFixes({ fixId, sourceFile, program, host, cancellationToken, formatContext, preferences });
         }
 
-        function organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
+        function organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
             synchronizeHostData();
-            Debug.assert(scope.type === "file");
-            const sourceFile = getValidSourceFile(scope.fileName);
+            Debug.assert(args.type === "file");
+            const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {
@@ -2764,7 +2755,7 @@ namespace ts {
         return node &&
             node.parent &&
             node.parent.kind === SyntaxKind.ElementAccessExpression &&
-            (<ElementAccessExpression>node.parent).argumentExpression === node;
+            (node.parent as ElementAccessExpression).argumentExpression === node;
     }
 
     /// getDefaultLibraryFilePath

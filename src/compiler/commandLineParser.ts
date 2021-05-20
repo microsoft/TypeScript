@@ -306,10 +306,8 @@ namespace ts {
         description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
-        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -1107,6 +1105,12 @@ namespace ts {
     ];
 
     /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsWithoutBuild,
+    ];
+
+    /* @internal */
     export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1126,9 +1130,7 @@ namespace ts {
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
-    /* @internal */
-    export const buildOpts: CommandLineOption[] = [
-        ...commonOptionsWithBuild,
+    const commandOptionsOnlyBuild: CommandLineOption[]  = [
         {
             name: "verbose",
             shortName: "v",
@@ -1156,6 +1158,12 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean"
         }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsOnlyBuild,
     ];
 
     /* @internal */
@@ -1217,8 +1225,13 @@ namespace ts {
 
     /* @internal */
     export function getOptionsNameMap(): OptionsNameMap {
-        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
+        return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
     }
+
+    const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+        getOptionsNameMap: getBuildOptionsNameMap
+    };
 
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
@@ -1274,7 +1287,7 @@ namespace ts {
             case "string":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
-                return mapDefined(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors));
+                return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
         }
     }
 
@@ -1299,6 +1312,10 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
+        if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
+            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
+        }
+
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ?
             createDiagnostics(diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
@@ -1449,7 +1466,7 @@ namespace ts {
                         break;
                     // If not a primitive, the possible types are specified in what is effectively a map of options.
                     default:
-                        options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                        options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
                         i++;
                         break;
                 }
@@ -1464,6 +1481,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: compilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1505,7 +1523,13 @@ namespace ts {
         return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
 
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        getOptionsNameMap
+    };
+
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: buildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
@@ -1546,7 +1570,7 @@ namespace ts {
     /* @internal */
     export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
         const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return <string>diagnostic.messageText;
+        return diagnostic.messageText as string;
     }
 
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
@@ -1630,7 +1654,7 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ fileName, parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
     }
 
     /*@internal*/
@@ -1937,9 +1961,9 @@ namespace ts {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
                     reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string"));
-                    const text = (<StringLiteral>valueExpression).text;
+                    const text = (valueExpression as StringLiteral).text;
                     if (option && !isString(option.type)) {
-                        const customOption = <CommandLineOptionOfCustomType>option;
+                        const customOption = option as CommandLineOptionOfCustomType;
                         // Validate custom option type
                         if (!customOption.type.has(text.toLowerCase())) {
                             errors.push(
@@ -1955,18 +1979,18 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(Number((<NumericLiteral>valueExpression).text));
+                    return validateValue(Number((valueExpression as NumericLiteral).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
-                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                    if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
+                    return validateValue(-Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
-                    const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
+                    const objectLiteralExpression = valueExpression as ObjectLiteralExpression;
 
                     // Currently having element option declaration in the tsconfig with type "object"
                     // determines if it needs onSetValidOptionKeyValueInParent callback or not
@@ -1975,7 +1999,7 @@ namespace ts {
                     // vs what we set in the json
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
-                        const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
+                        const { elementOptions, extraKeyDiagnostics, name: optionName } = option as TsConfigOnlyOption;
                         return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
                             elementOptions, extraKeyDiagnostics, optionName));
                     }
@@ -1988,8 +2012,8 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
                     return validateValue(convertArrayLiteralExpressionToJson(
-                        (<ArrayLiteralExpression>valueExpression).elements,
-                        option && (<CommandLineOptionOfListType>option).element));
+                        (valueExpression as ArrayLiteralExpression).elements,
+                        option && (option as CommandLineOptionOfListType).element));
             }
 
             // Not in expected format
@@ -2148,7 +2172,7 @@ namespace ts {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
-            return (<CommandLineOptionOfCustomType>optionDefinition).type;
+            return (optionDefinition as CommandLineOptionOfCustomType).type;
         }
     }
 
@@ -2187,7 +2211,7 @@ namespace ts {
                 if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
                     continue;
                 }
-                const value = <CompilerOptionsValue>options[name];
+                const value = options[name] as CompilerOptionsValue;
                 const optionDefinition = optionsNameMap.get(name.toLowerCase());
                 if (optionDefinition) {
                     const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
@@ -2758,7 +2782,7 @@ namespace ts {
                     case "extends":
                         const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
-                            <string>value,
+                            value as string,
                             host,
                             newBase,
                             errors,
@@ -2948,10 +2972,10 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
+                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
             }
             else if (!isString(optType)) {
-                return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
+                return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
             }
             const validatedValue = validateJsonOptionValue(opt, value, errors);
             return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
@@ -2966,7 +2990,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
             }
             return value;
         }

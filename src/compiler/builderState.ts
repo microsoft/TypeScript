@@ -74,7 +74,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
-            affectsGlobalScope: boolean;
+            affectsGlobalScope: boolean | undefined;
         }
         /**
          * Referenced files with values for the keys as referenced file's path to be true
@@ -235,7 +235,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined });
             }
 
             return {

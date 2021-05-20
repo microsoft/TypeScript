@@ -140,7 +140,7 @@
           "text": [
             {
               "text": "x",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",
@@ -157,7 +157,7 @@
           "text": [
             {
               "text": "y",
-              "kind": "text"
+              "kind": "parameterName"
             },
             {
               "text": " ",

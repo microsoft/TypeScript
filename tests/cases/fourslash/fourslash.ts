@@ -286,8 +286,8 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string }): void;
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string, unverified?: boolean }): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }>): void;
         goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][]): void;
@@ -358,6 +358,8 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
+        /** Prefer semanticClassificationsAre for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -796,7 +798,14 @@ declare namespace completion {
         SuggestedClassMembers = "4",
         GlobalsOrKeywords = "5",
         AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7"
+        JavascriptIdentifiers = "7",
+        DeprecatedLocalDeclarationPriority = "8",
+        DeprecatedLocationPriority = "9",
+        DeprecatedOptionalMember = "10",
+        DeprecatedMemberDeclaredBySpreadAssignment = "11",
+        DeprecatedSuggestedClassMembers = "12",
+        DeprecatedGlobalsOrKeywords = "13",
+        DeprecatedAutoImportSuggestions = "14"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

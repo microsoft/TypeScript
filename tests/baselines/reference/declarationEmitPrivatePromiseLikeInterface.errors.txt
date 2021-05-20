@@ -1,0 +1,42 @@
+tests/cases/compiler/Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+tests/cases/compiler/Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+tests/cases/compiler/Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+
+
+==== tests/cases/compiler/http-client.ts (0 errors) ====
+    type TPromise<ResolveType, RejectType = any> = Omit<Promise<ResolveType>, "then" | "catch"> & {
+        then<TResult1 = ResolveType, TResult2 = never>(
+            onfulfilled?: ((value: ResolveType) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+            onrejected?: ((reason: RejectType) => TResult2 | PromiseLike<TResult2>) | undefined | null,
+        ): TPromise<TResult1 | TResult2, RejectType>;
+        catch<TResult = never>(
+            onrejected?: ((reason: RejectType) => TResult | PromiseLike<TResult>) | undefined | null,
+        ): TPromise<ResolveType | TResult, RejectType>;
+    };
+    
+    export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
+        data: D;
+        error: E;
+    }
+    
+    export class HttpClient<SecurityDataType = unknown> {
+        public request = <T = any, E = any>(): TPromise<HttpResponse<T, E>> => {
+            return '' as any;
+        };
+    }
+==== tests/cases/compiler/Api.ts (3 errors) ====
+    import { HttpClient } from "./http-client";
+    
+    export class Api<SecurityDataType = unknown> {
+        constructor(private http: HttpClient<SecurityDataType>) { }
+    
+        abc1 = () => this.http.request();
+        ~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        abc2 = () => this.http.request();
+        ~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+        abc3 = () => this.http.request();
+        ~~~~
+!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
+    }
