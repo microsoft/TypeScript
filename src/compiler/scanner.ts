@@ -1610,7 +1610,7 @@ namespace ts {
                 if (pos >= end) {
                     return token = SyntaxKind.EndOfFileToken;
                 }
-                let ch = codePointAt(text, pos);
+                const ch = codePointAt(text, pos);
 
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
