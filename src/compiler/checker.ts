@@ -18561,9 +18561,10 @@ namespace ts {
                     }
 
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-                    let localResult: Ternary | undefined;
-                    if (skipTrue || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
-                        if (!skipFalse) {
+                    const expanding = isDeeplyNestedType(target, targetStack, targetDepth);
+                    let localResult: Ternary | undefined = expanding ? Ternary.Maybe : undefined;
+                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
+                        if (!skipFalse && !expanding) {
                             localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), /*reportErrors*/ false);
                         }
                     }
@@ -18640,27 +18641,32 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
-                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
-                        // and Y1 is related to Y2.
-                        const sourceParams = (source as ConditionalType).root.inferTypeParameters;
-                        let sourceExtends = (source as ConditionalType).extendsType;
-                        let mapper: TypeMapper | undefined;
-                        if (sourceParams) {
-                            // If the source has infer type parameters, we instantiate them in the context of the target
-                            const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
-                            inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                            sourceExtends = instantiateType(sourceExtends, ctx.mapper);
-                            mapper = ctx.mapper;
-                        }
-                        if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
-                            (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType))) {
-                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), reportErrors);
+                        // If one of the conditionals under comparison seems to be infinitely expanding, stop comparing it - back out, try
+                        // the constraint, and failing that, give up trying to relate the two. This is the only way we can handle recursive conditional
+                        // types, which might expand forever.
+                        if (!isDeeplyNestedType(source, sourceStack, sourceDepth) && !isDeeplyNestedType(target, targetStack, targetDepth)) {
+                            // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                            // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                            // and Y1 is related to Y2.
+                            const sourceParams = (source as ConditionalType).root.inferTypeParameters;
+                            let sourceExtends = (source as ConditionalType).extendsType;
+                            let mapper: TypeMapper | undefined;
+                            if (sourceParams) {
+                                // If the source has infer type parameters, we instantiate them in the context of the target
+                                const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
+                                inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                                sourceExtends = instantiateType(sourceExtends, ctx.mapper);
+                                mapper = ctx.mapper;
                             }
-                            if (result) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
+                            if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
+                                (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType))) {
+                                if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), reportErrors)) {
+                                    result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), reportErrors);
+                                }
+                                if (result) {
+                                    resetErrorInfo(saveErrorInfo);
+                                    return result;
+                                }
                             }
                         }
                     }
