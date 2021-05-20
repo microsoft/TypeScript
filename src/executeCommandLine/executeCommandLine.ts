@@ -155,7 +155,7 @@ namespace ts {
         return res;
 
         function isAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
-            if(valueCandidates?.possiableValues === "boolean" && (defaultValueDescription === "false" || defaultValueDescription === "undefined" || defaultValueDescription === "n/a")){
+            if(valueCandidates?.possiableValues === "boolean" && (defaultValueDescription === undefined|| defaultValueDescription === "false" || defaultValueDescription === "undefined" || defaultValueDescription === "n/a")){
                 return false;
             }
             return true;

@@ -1100,7 +1100,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_report_errors_on_unused_labels,
-            defaultValueDescription: "undefiend"
+            defaultValueDescription: "undefined"
         },
         {
             name: "allowUnreachableCode",
