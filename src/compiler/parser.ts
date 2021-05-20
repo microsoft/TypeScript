@@ -1430,8 +1430,8 @@ namespace ts {
             return currentToken = scanner.reScanLessThanToken();
         }
 
-        function reScanPrivateIdentifier(): SyntaxKind {
-            return currentToken = scanner.reScanPrivateIdentifier();
+        function reScanHashToken(): SyntaxKind {
+            return currentToken = scanner.reScanHashToken();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -7315,7 +7315,7 @@ namespace ts {
                 const p2 = getNodePos();
                 let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
                 while (token() === SyntaxKind.PrivateIdentifier) {
-                    reScanPrivateIdentifier(); // rescan #id as # id
+                    reScanHashToken(); // rescan #id as # id
                     nextTokenJSDoc(); // then skip the #
                     entityName = finishNode(factory.createJSDocMemberName(entityName, parseIdentifier()), p2);
                 }
@@ -7778,8 +7778,8 @@ namespace ts {
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
                     if (name) {
-                        while(token() === SyntaxKind.PrivateIdentifier) {
-                            reScanPrivateIdentifier(); // rescan #id as # id
+                        while (token() === SyntaxKind.PrivateIdentifier) {
+                            reScanHashToken(); // rescan #id as # id
                             nextTokenJSDoc(); // then skip the #
                             name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
                         }

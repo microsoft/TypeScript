@@ -42,7 +42,7 @@ namespace ts {
         reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
-        reScanPrivateIdentifier(): SyntaxKind;
+        reScanHashToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
@@ -983,7 +983,7 @@ namespace ts {
             reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
-            reScanPrivateIdentifier,
+            reScanHashToken,
             reScanQuestionToken,
             reScanInvalidIdentifier,
             scanJsxToken,
@@ -2254,7 +2254,7 @@ namespace ts {
             return token;
         }
 
-        function reScanPrivateIdentifier(): SyntaxKind {
+        function reScanHashToken(): SyntaxKind {
             if (token === SyntaxKind.PrivateIdentifier) {
                 pos = tokenPos + 1;
                 return token = SyntaxKind.HashToken;
