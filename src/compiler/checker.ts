@@ -39225,7 +39225,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocInstanceReference): Symbol | undefined {
+        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocMemberName): Symbol | undefined {
             if (isDeclarationName(name)) {
                 return getSymbolOfNode(name.parent);
             }
@@ -39234,7 +39234,7 @@ namespace ts {
                 name.parent.kind === SyntaxKind.PropertyAccessExpression &&
                 name.parent === (name.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
-                if (!isPrivateIdentifier(name) && !isJSDocInstanceReference(name)) {
+                if (!isPrivateIdentifier(name) && !isJSDocMemberName(name)) {
                     const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                     if (specialPropertyAssignmentSymbol) {
                         return specialPropertyAssignmentSymbol;
@@ -39266,8 +39266,8 @@ namespace ts {
                 }
             }
 
-            while (isRightSideOfQualifiedNameOrPropertyAccessOrJSDocInstance(name)) {
-                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocInstanceReference;
+            while (isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(name)) {
+                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocMemberName;
             }
 
             if (isHeritageClauseElementIdentifier(name)) {
@@ -39308,7 +39308,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocInstanceReference));
+                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocMemberName));
                 const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
@@ -39330,12 +39330,12 @@ namespace ts {
                         checkQualifiedName(name, CheckMode.Normal);
                     }
                     if (!links.resolvedSymbol && isJSDoc && isQualifiedName(name)) {
-                        return resolveJSDocInstanceReference(name);
+                        return resolveJSDocMemberName(name);
                     }
                     return links.resolvedSymbol;
                 }
-                else if (isJSDocInstanceReference(name)) {
-                    return resolveJSDocInstanceReference(name);
+                else if (isJSDocMemberName(name)) {
+                    return resolveJSDocMemberName(name);
                 }
             }
             else if (isTypeReferenceIdentifier(name as EntityName)) {
@@ -39355,7 +39355,7 @@ namespace ts {
          * 2. K.m as K.prototype.m
          * 3. I.m as I.m for a type I, or any other I.m that fails to resolve in (1) or (2)
          */
-        function resolveJSDocInstanceReference(name: EntityName | JSDocInstanceReference): Symbol | undefined {
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName): Symbol | undefined {
             if (isEntityName(name)) {
                 const symbol = resolveEntityName(
                     name,
@@ -39368,7 +39368,7 @@ namespace ts {
                     return symbol;
                 }
             }
-            const left = resolveJSDocInstanceReference(name.left);
+            const left = resolveJSDocMemberName(name.left);
             if (left) {
                 const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
                 const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(left);

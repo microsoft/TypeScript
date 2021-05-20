@@ -770,8 +770,8 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocNameReference;
     }
 
-    export function isJSDocInstanceReference(node: Node): node is JSDocInstanceReference {
-        return node.kind === SyntaxKind.JSDocInstanceReference;
+    export function isJSDocMemberName(node: Node): node is JSDocMemberName {
+        return node.kind === SyntaxKind.JSDocMemberName;
     }
 
     export function isJSDocLink(node: Node): node is JSDocLink {

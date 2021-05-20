@@ -489,9 +489,9 @@ namespace ts {
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined));
             case SyntaxKind.JSDocNameReference:
                 return visitNode(cbNode, (node as JSDocNameReference).name);
-            case SyntaxKind.JSDocInstanceReference:
-                return visitNode(cbNode, (node as JSDocInstanceReference).left) ||
-                    visitNode(cbNode, (node as JSDocInstanceReference).right);
+            case SyntaxKind.JSDocMemberName:
+                return visitNode(cbNode, (node as JSDocMemberName).left) ||
+                    visitNode(cbNode, (node as JSDocMemberName).right);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -7313,11 +7313,11 @@ namespace ts {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const p2 = getNodePos();
-                let entityName: EntityName | JSDocInstanceReference = parseEntityName(/* allowReservedWords*/ false);
+                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
                 while (token() === SyntaxKind.PrivateIdentifier) {
                     reScanPrivateIdentifier(); // rescan #id as # id
                     nextTokenJSDoc(); // then skip the #
-                    entityName = finishNode(factory.createJSDocInstanceReference(entityName, parseIdentifier()), p2);
+                    entityName = finishNode(factory.createJSDocMemberName(entityName, parseIdentifier()), p2);
                 }
                 if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
@@ -7774,14 +7774,14 @@ namespace ts {
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
                     const p2 = getNodePos();
-                    let name: EntityName | JSDocInstanceReference | undefined = tokenIsIdentifierOrKeyword(token())
+                    let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
                     if (name) {
                         while(token() === SyntaxKind.PrivateIdentifier) {
                             reScanPrivateIdentifier(); // rescan #id as # id
                             nextTokenJSDoc(); // then skip the #
-                            name = finishNode(factory.createJSDocInstanceReference(name, parseIdentifier()), p2);
+                            name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
                         }
                     }
                     const text = [];
