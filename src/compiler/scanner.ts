@@ -1610,7 +1610,7 @@ namespace ts {
                 if (pos >= end) {
                     return token = SyntaxKind.EndOfFileToken;
                 }
-                let ch = codePointAt(text, pos);
+                const ch = codePointAt(text, pos);
 
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && pos === 0 && isShebangTrivia(text, pos)) {
@@ -2044,18 +2044,7 @@ namespace ts {
                             return token = SyntaxKind.Unknown;
                         }
                         pos++;
-                        if (isIdentifierStart(ch = text.charCodeAt(pos), languageVersion)) {
-                            pos++;
-                            while (pos < end && isIdentifierPart(ch = text.charCodeAt(pos), languageVersion)) pos++;
-                            tokenValue = text.substring(tokenPos, pos);
-                            if (ch === CharacterCodes.backslash) {
-                                tokenValue += scanIdentifierParts();
-                            }
-                        }
-                        else {
-                            tokenValue = "#";
-                            error(Diagnostics.Invalid_character);
-                        }
+                        scanIdentifier(codePointAt(text, pos), languageVersion);
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
                         const identifierKind = scanIdentifier(ch, languageVersion);
