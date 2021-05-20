@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts(6,7): error TS2741: Property '#something' is missing in type 'A2' but required in type 'C'.
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts(6,7): error TS2741: Property '#something' is missing in type 'A1' but required in type 'C'.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts (1 errors) ====
@@ -9,6 +9,6 @@ tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts(6,7
     class C { #something: number }
     const c: C = a;
           ~
-!!! error TS2741: Property '#something' is missing in type 'A2' but required in type 'C'.
+!!! error TS2741: Property '#something' is missing in type 'A1' but required in type 'C'.
 !!! related TS2728 tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts:5:11: '#something' is declared here.
     

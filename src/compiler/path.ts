@@ -564,7 +564,7 @@ namespace ts {
         const nonCanonicalizedPath = isRootedDiskPath(fileName)
             ? normalizePath(fileName)
             : getNormalizedAbsolutePath(fileName, basePath);
-        return <Path>getCanonicalFileName(nonCanonicalizedPath);
+        return getCanonicalFileName(nonCanonicalizedPath) as Path;
     }
 
     export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
@@ -658,7 +658,7 @@ namespace ts {
     //// Path Comparisons
 
     // check path for these segments: '', '.'. '..'
-    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
+    const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
 
     function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
         if (a === b) return Comparison.EqualTo;

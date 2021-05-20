@@ -554,11 +554,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments = false): number {
+    export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boolean, stopAtComments?: boolean, inJSDoc?: boolean): number {
         if (positionIsSynthesized(pos)) {
             return pos;
         }
 
+        let canConsumeStar = false;
         // Keep in sync with couldStartTrivia
         while (true) {
             const ch = text.charCodeAt(pos);
@@ -573,6 +574,7 @@ namespace ts {
                     if (stopAfterLineBreak) {
                         return pos;
                     }
+                    canConsumeStar = !!inJSDoc;
                     continue;
                 case CharacterCodes.tab:
                 case CharacterCodes.verticalTab:
@@ -592,6 +594,7 @@ namespace ts {
                             }
                             pos++;
                         }
+                        canConsumeStar = false;
                         continue;
                     }
                     if (text.charCodeAt(pos + 1) === CharacterCodes.asterisk) {
@@ -603,6 +606,7 @@ namespace ts {
                             }
                             pos++;
                         }
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
@@ -613,6 +617,7 @@ namespace ts {
                 case CharacterCodes.greaterThan:
                     if (isConflictMarkerTrivia(text, pos)) {
                         pos = scanConflictMarkerTrivia(text, pos);
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
@@ -620,6 +625,15 @@ namespace ts {
                 case CharacterCodes.hash:
                     if (pos === 0 && isShebangTrivia(text, pos)) {
                         pos = scanShebangTrivia(text, pos);
+                        canConsumeStar = false;
+                        continue;
+                    }
+                    break;
+
+                case CharacterCodes.asterisk:
+                    if (canConsumeStar) {
+                        pos++;
+                        canConsumeStar = false;
                         continue;
                     }
                     break;
