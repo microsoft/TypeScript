@@ -557,7 +557,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Import_emit_helpers_from_tslib,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
         {
             name: "importsNotUsedAsValues",
@@ -577,7 +577,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Provide_full_support_for_iterables_in_for_of_spread_and_destructuring_when_targeting_ES5_or_ES3,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
         {
             name: "isolatedModules",
@@ -820,7 +820,7 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Enables_emit_interoperability_between_CommonJS_and_ES_Modules_via_creation_of_namespace_objects_for_all_imports_Implies_allowSyntheticDefaultImports,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
         {
             name: "preserveSymlinks",
@@ -869,7 +869,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
 
         // Experimental
@@ -1133,7 +1133,7 @@ namespace ts {
             affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
         {
             name: "maxNodeModuleJsDepth",
@@ -1149,7 +1149,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
-            defaultValueDescription: "fasle"
+            defaultValueDescription: "false"
         },
         {
             name: "useDefineForClassFields",
