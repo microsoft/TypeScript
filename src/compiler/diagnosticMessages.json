@@ -887,6 +887,10 @@
         "category": "Error",
         "code": 1266
     },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

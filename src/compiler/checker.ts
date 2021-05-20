@@ -33344,6 +33344,10 @@ namespace ts {
             if (isPrivateIdentifier(node.name) && hasStaticModifier(node) && node.initializer && languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) {
                 error(node.initializer, Diagnostics.Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_not_specified_with_a_target_of_esnext_Consider_adding_the_useDefineForClassFields_flag);
             }
+            // property signatures already report "initializer not allowed in ambient context" elsewhere
+            if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.PropertyDeclaration && node.initializer) {
+                error(node, Diagnostics.Property_0_cannot_have_an_initializer_because_it_is_marked_abstract, declarationNameToString(node.name));
+            }
         }
 
         function checkPropertySignature(node: PropertySignature) {
@@ -33360,8 +33364,7 @@ namespace ts {
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionOrMethodDeclaration(node);
 
-            // Abstract methods cannot have an implementation.
-            // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
+            // method signatures already report "implementation not allowed in ambient context" elsewhere
             if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.MethodDeclaration && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
