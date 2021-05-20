@@ -260,6 +260,10 @@ namespace ts {
             const tmp = generateOptionOutput(option, rightAlignOfLeftPart, leftAlignOfRightPart);
             res = [...res, ...tmp];
         }
+        // make sure always a blank line in the end.
+        if (res[res.length - 2] !== sys.newLine) {
+            res.push(sys.newLine);
+        }
         return res;
     }
 
