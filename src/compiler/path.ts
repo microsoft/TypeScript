@@ -658,7 +658,7 @@ namespace ts {
     //// Path Comparisons
 
     // check path for these segments: '', '.'. '..'
-    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
+    const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
 
     function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
         if (a === b) return Comparison.EqualTo;
