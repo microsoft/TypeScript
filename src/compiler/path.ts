@@ -556,8 +556,8 @@ namespace ts {
         if (!relativePathSegmentRegExp.test(path)) {
             return path;
         }
-        // Some paths only require cleanup of `/./`
-        const simplified = path.replace(/\/\.\//g, "/");
+        // Some paths only require cleanup of `/./` or leading `./`
+        const simplified = path.replace(/\/\.\//g, "/").replace(/^\.\//, "");
         if (simplified !== path) {
             path = simplified;
             if (!relativePathSegmentRegExp.test(path)) {
