@@ -283,12 +283,12 @@ namespace ts {
     /**
      * Test for whether a single line comment's text contains a directive.
      */
-    const commentDirectiveRegExSingleLine = /^\s*\/\/\/?\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)/;
 
     /**
      * Test for whether a multi-line comment's last line contains a directive.
      */
-    const commentDirectiveRegExMultiLine = /^\s*(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
 
     function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
         // Bail out quickly if it couldn't possibly be in the map.
@@ -2193,7 +2193,7 @@ namespace ts {
             commentDirectiveRegEx: RegExp,
             lineStart: number,
         ) {
-            const type = getDirectiveFromComment(text, commentDirectiveRegEx);
+            const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
             if (type === undefined) {
                 return commentDirectives;
             }

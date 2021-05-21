@@ -2035,11 +2035,22 @@ namespace ts {
      * Takes a string like "jquery-min.4.2.3" and returns "jquery"
      */
     export function removeMinAndVersionNumbers(fileName: string) {
-        // Match a "." or "-" followed by a version number or 'min' at the end of the name
-        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+        // We used to use the regex /[.-]((min)|(\d+(\.\d+)*))$/ and would just .replace it twice.
+        // Unfortunately, that regex has O(n^2) performance because v8 doesn't match from the end of the string.
+        // Instead, we now split the input on the . and - characters, and drop the trailing segements
+        // which match the /^[.-](min|\d+)$/ pattern, which should be O(n). (This technically allows more `.min` repetitions than before, but that's fine)
 
-        // The "min" or version may both be present, in either order, so try applying the above twice.
-        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+        // Match a "." or "-" followed by a version number or 'min' at the end of the name
+        const trailingMinOrVersion = /^[.-](min|\d+)$/;
+
+        // Split on . and -, then remove all trailing segments that match
+        const parts = fileName.split(/(?=[.-])/g);
+        let end = parts.length - 1;
+        while (parts.length > 1 && end >= 0) {
+            if (!trailingMinOrVersion.test(parts[end])) break;
+            end--;
+        }
+        return parts.slice(0, end + 1).join("");
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */

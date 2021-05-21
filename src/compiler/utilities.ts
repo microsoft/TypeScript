@@ -414,10 +414,10 @@ namespace ts {
             commentPos + 2 < commentEnd &&
             text.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
             const textSubStr = text.substring(commentPos, commentEnd);
-            return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ||
-                textSubStr.match(fullTripleSlashReferenceTypeReferenceDirectiveRegEx) ||
-                textSubStr.match(defaultLibReferenceRegEx) ?
+            return fullTripleSlashReferencePathRegEx.test(textSubStr) ||
+                fullTripleSlashAMDReferencePathRegEx.test(textSubStr) ||
+                fullTripleSlashReferenceTypeReferenceDirectiveRegEx.test(textSubStr) ||
+                defaultLibReferenceRegEx.test(textSubStr) ?
                 true : false;
         }
         return false;
@@ -517,10 +517,44 @@ namespace ts {
 
         if (isJSDocTypeExpressionOrChild(node)) {
             // strip space + asterisk at line start
-            text = text.replace(/(^|\r?\n|\r)\s*\*\s*/g, "$1");
+            text = text.split(/\r\n|\n|\r/).map(l => trimStringStart(l.replace(/^\s*\*/, ""))).join("\n");
         }
 
         return text;
+    }
+
+    /**
+     * Removes the leading and trailing white space and line terminator characters from a string.
+     */
+    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(s.replace(/^\s+/g, ""));
+
+    /**
+     * Returns a copy with trailing whitespace removed.
+     */
+    export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
+
+
+    /**
+     * Returns a copy with leading whitespace removed.
+     */
+     export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
+
+    const isWhitespaceRegex = /\s/;
+
+    /**
+     * https://jsbench.me/gjkoxld4au/1
+     * The simple regex for this, /\s+$/g is O(n^2) in v8.
+     * The native .trimEnd method is by far best, but since that's technically ES2019,
+     * we provide a (still much faster than the simple regex) fallback.
+     */
+    function trimEndImpl(s: string) {
+        let end = s.length - 1;
+        while (end >= 0) {
+            // re.test is measurably faster than str.match - probably because there's no result object allocation
+            if (!isWhitespaceRegex.test(s.charAt(end))) break;
+            end--;
+        }
+        return s.slice(0, end + 1);
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -1224,10 +1258,10 @@ namespace ts {
             text.charCodeAt(comment.pos + 3) !== CharacterCodes.slash);
     }
 
-    export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)('|")(.+?)\2.*?\/>/;
-    export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)('|")(.+?)\2.*?\/>/;
-    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/;
+    export const fullTripleSlashReferencePathRegEx = /^(\/\/\/\s*<reference\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+    const fullTripleSlashReferenceTypeReferenceDirectiveRegEx = /^(\/\/\/\s*<reference\s+types\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+    export const fullTripleSlashAMDReferencePathRegEx = /^(\/\/\/\s*<amd-dependency\s+path\s*=\s*)(('[^']*')|("[^"]*")).*?\/>/;
+    const defaultLibReferenceRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)(('[^']*')|("[^"]*"))\s*\/>/;
 
     export function isPartOfTypeNode(node: Node): boolean {
         if (SyntaxKind.FirstTypeNode <= node.kind && node.kind <= SyntaxKind.LastTypeNode) {
@@ -4623,7 +4657,7 @@ namespace ts {
 
     function writeTrimmedCurrentLine(text: string, commentEnd: number, writer: EmitTextWriter, newLine: string, pos: number, nextLineStart: number) {
         const end = Math.min(commentEnd, nextLineStart - 1);
-        const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
+        const currentLineText = trimString(text.substring(pos, end));
         if (currentLineText) {
             // trimmed forward and ending spaces text
             writer.writeComment(currentLineText);
