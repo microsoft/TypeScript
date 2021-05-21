@@ -489,6 +489,9 @@ namespace ts {
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined));
             case SyntaxKind.JSDocNameReference:
                 return visitNode(cbNode, (node as JSDocNameReference).name);
+            case SyntaxKind.JSDocMemberName:
+                return visitNode(cbNode, (node as JSDocMemberName).left) ||
+                    visitNode(cbNode, (node as JSDocMemberName).right);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
@@ -1422,6 +1425,10 @@ namespace ts {
 
         function reScanLessThanToken(): SyntaxKind {
             return currentToken = scanner.reScanLessThanToken();
+        }
+
+        function reScanHashToken(): SyntaxKind {
+            return currentToken = scanner.reScanHashToken();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -7338,7 +7345,13 @@ namespace ts {
             export function parseJSDocNameReference(): JSDocNameReference {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
-                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                const p2 = getNodePos();
+                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+                while (token() === SyntaxKind.PrivateIdentifier) {
+                    reScanHashToken(); // rescan #id as # id
+                    nextTokenJSDoc(); // then skip the #
+                    entityName = finishNode(factory.createJSDocMemberName(entityName, parseIdentifier()), p2);
+                }
                 if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
@@ -7793,9 +7806,17 @@ namespace ts {
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                    const name = tokenIsIdentifierOrKeyword(token())
+                    const p2 = getNodePos();
+                    let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
+                    if (name) {
+                        while (token() === SyntaxKind.PrivateIdentifier) {
+                            reScanHashToken(); // rescan #id as # id
+                            nextTokenJSDoc(); // then skip the #
+                            name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
+                        }
+                    }
                     const text = [];
                     while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                         text.push(scanner.getTokenText());

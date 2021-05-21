@@ -39156,16 +39156,6 @@ namespace ts {
             return node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function getJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): JSDocNameReference | undefined {
-            while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = node.parent as QualifiedName;
-            }
-            while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = node.parent as PropertyAccessExpression;
-            }
-            return isJSDocNameReference(node.parent) ? node.parent : undefined;
-        }
-
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {
             let result: T | undefined;
 
@@ -39240,7 +39230,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression): Symbol | undefined {
+        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocMemberName): Symbol | undefined {
             if (isDeclarationName(name)) {
                 return getSymbolOfNode(name.parent);
             }
@@ -39249,7 +39239,7 @@ namespace ts {
                 name.parent.kind === SyntaxKind.PropertyAccessExpression &&
                 name.parent === (name.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
-                if (!isPrivateIdentifier(name)) {
+                if (!isPrivateIdentifier(name) && !isJSDocMemberName(name)) {
                     const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                     if (specialPropertyAssignmentSymbol) {
                         return specialPropertyAssignmentSymbol;
@@ -39265,14 +39255,14 @@ namespace ts {
                     return success;
                 }
             }
-            else if (!isPropertyAccessExpression(name) && !isPrivateIdentifier(name) && isInRightSideOfImportOrExportAssignment(name)) {
+            else if (isEntityName(name) && isInRightSideOfImportOrExportAssignment(name)) {
                 // Since we already checked for ExportAssignment, this really could only be an Import
                 const importEqualsDeclaration = getAncestor(name, SyntaxKind.ImportEqualsDeclaration);
                 Debug.assert(importEqualsDeclaration !== undefined);
                 return getSymbolOfPartOfRightHandSideOfImportEquals(name, /*dontResolveAlias*/ true);
             }
 
-            if (!isPropertyAccessExpression(name) && !isPrivateIdentifier(name)) {
+            if (isEntityName(name)) {
                 const possibleImportNode = isImportTypeQualifierPart(name);
                 if (possibleImportNode) {
                     getTypeFromTypeNode(possibleImportNode);
@@ -39281,8 +39271,8 @@ namespace ts {
                 }
             }
 
-            while (isRightSideOfQualifiedNameOrPropertyAccess(name)) {
-                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression;
+            while (isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(name)) {
+                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocMemberName;
             }
 
             if (isHeritageClauseElementIdentifier(name)) {
@@ -39323,12 +39313,14 @@ namespace ts {
                     return undefined;
                 }
 
+                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocMemberName));
+                const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
                         const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    return resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                    return resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39342,45 +39334,51 @@ namespace ts {
                     else {
                         checkQualifiedName(name, CheckMode.Normal);
                     }
+                    if (!links.resolvedSymbol && isJSDoc && isQualifiedName(name)) {
+                        return resolveJSDocMemberName(name);
+                    }
                     return links.resolvedSymbol;
+                }
+                else if (isJSDocMemberName(name)) {
+                    return resolveJSDocMemberName(name);
                 }
             }
             else if (isTypeReferenceIdentifier(name as EntityName)) {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
-
-            const jsdocReference = getJSDocEntryNameReference(name);
-            if (jsdocReference || isJSDocLink(name.parent)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, getHostSignatureFromJSDoc(name));
-                if (symbol) {
-                    return symbol;
-                }
-                else if (isQualifiedName(name) && isIdentifier(name.left)) {
-                    // resolve C.m as a static member first
-                    const links = getNodeLinks(name);
-                    if (links.resolvedSymbol) {
-                        return links.resolvedSymbol;
-                    }
-                    checkQualifiedName(name, CheckMode.Normal);
-                    if (links.resolvedSymbol) {
-                        return links.resolvedSymbol;
-                    }
-
-                    // then resolve it as an instance member
-                    const s = resolveEntityName(name.left, meaning, /*ignoreErrors*/ false);
-                    if (s) {
-                        const t = getDeclaredTypeOfSymbol(s);
-                        return getPropertyOfType(t, name.right.escapedText);
-                    }
-                }
-            }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
 
             return undefined;
+        }
+
+        /**
+         * Recursively resolve entity names and jsdoc instance references:
+         * 1. K#m as K.prototype.m for a class (or other value) K
+         * 2. K.m as K.prototype.m
+         * 3. I.m as I.m for a type I, or any other I.m that fails to resolve in (1) or (2)
+         */
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName): Symbol | undefined {
+            if (isEntityName(name)) {
+                const symbol = resolveEntityName(
+                    name,
+                    SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value,
+                    /*ignoreErrors*/ false,
+                    /*dontResolveAlias*/ true,
+                    getHostSignatureFromJSDoc(name));
+                if (symbol || isIdentifier(name)) {
+                    // can't recur on identifier, so just return when it's undefined
+                    return symbol;
+                }
+            }
+            const left = resolveJSDocMemberName(name.left);
+            if (left) {
+                const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
+                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(left);
+                return getPropertyOfType(t, name.right.escapedText);
+            }
         }
 
         function getSymbolAtLocation(node: Node, ignoreErrors?: boolean): Symbol | undefined {

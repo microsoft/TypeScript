@@ -42,6 +42,7 @@ namespace ts {
         reScanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(allowMultilineJsxText?: boolean): JsxTokenSyntaxKind;
         reScanLessThanToken(): SyntaxKind;
+        reScanHashToken(): SyntaxKind;
         reScanQuestionToken(): SyntaxKind;
         reScanInvalidIdentifier(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
@@ -220,7 +221,8 @@ namespace ts {
         "&&=": SyntaxKind.AmpersandAmpersandEqualsToken,
         "??=": SyntaxKind.QuestionQuestionEqualsToken,
         "@": SyntaxKind.AtToken,
-        "`": SyntaxKind.BacktickToken
+        "#": SyntaxKind.HashToken,
+        "`": SyntaxKind.BacktickToken,
     }));
 
     /*
@@ -981,6 +983,7 @@ namespace ts {
             reScanJsxAttributeValue,
             reScanJsxToken,
             reScanLessThanToken,
+            reScanHashToken,
             reScanQuestionToken,
             reScanInvalidIdentifier,
             scanJsxToken,
@@ -2240,6 +2243,14 @@ namespace ts {
             return token;
         }
 
+        function reScanHashToken(): SyntaxKind {
+            if (token === SyntaxKind.PrivateIdentifier) {
+                pos = tokenPos + 1;
+                return token = SyntaxKind.HashToken;
+            }
+            return token;
+        }
+
         function reScanQuestionToken(): SyntaxKind {
             Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
             pos = tokenPos + 1;
@@ -2426,6 +2437,8 @@ namespace ts {
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
                     return token = SyntaxKind.BacktickToken;
+                case CharacterCodes.hash:
+                    return token = SyntaxKind.HashToken;
                 case CharacterCodes.backslash:
                     pos--;
                     const extendedCookedChar = peekExtendedUnicodeEscape();

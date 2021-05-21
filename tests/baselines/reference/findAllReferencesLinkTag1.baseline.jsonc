@@ -8,10 +8,10 @@
 //      * @see {m}
 //      * {@link C.[|m|]}
 //      * @see {C.[|m|]}
-//      * {@link C#m}
-//      * @see {C#m}
-//      * {@link C.prototype.m}
-//      * @see {C.prototype.m}
+//      * {@link C#[|m|]}
+//      * @see {C#[|m|]}
+//      * {@link C.prototype.[|m|]}
+//      * @see {C.prototype.[|m|]}
 //      */
 //     p() { }
 //     /**
@@ -42,6 +42,8 @@
 //      * @see {a}
 //      * {@link I.a}
 //      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
 //      */
 //     c()
 //     /**
@@ -159,6 +161,42 @@
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
         "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 145,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 163,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 192,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 220,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       }
     ]
   }
@@ -185,10 +223,10 @@
 //      * @see {n}
 //      * {@link C.[|n|]}
 //      * @see {C.[|n|]}
-//      * {@link C#n}
-//      * @see {C#n}
-//      * {@link C.prototype.n}
-//      * @see {C.prototype.n}
+//      * {@link C#[|n|]}
+//      * @see {C#[|n|]}
+//      * {@link C.prototype.[|n|]}
+//      * @see {C.prototype.[|n|]}
 //      */
 //     q() { }
 //     /**
@@ -208,6 +246,8 @@
 //      * @see {a}
 //      * {@link I.a}
 //      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
 //      */
 //     c()
 //     /**
@@ -317,6 +357,42 @@
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
         "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 337,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 355,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 384,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 412,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       }
     ]
   }
@@ -366,6 +442,8 @@
 //      * @see {a}
 //      * {@link I.a}
 //      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
 //      */
 //     c()
 //     /**
@@ -532,6 +610,8 @@
 //      * @see {a}
 //      * {@link I.[|a|]}
 //      * @see {I.[|a|]}
+//      * {@link I#[|a|]}
+//      * @see {I#[|a|]}
 //      */
 //     c()
 //     /**
@@ -649,6 +729,24 @@
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "isWriteAccess": false,
         "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 661,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 679,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       }
     ]
   }
@@ -698,6 +796,8 @@
 //      * @see {a}
 //      * {@link I.a}
 //      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
 //      */
 //     c()
 //     /**
@@ -792,7 +892,7 @@
       },
       {
         "textSpan": {
-          "start": 718,
+          "start": 755,
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
@@ -801,7 +901,7 @@
       },
       {
         "textSpan": {
-          "start": 736,
+          "start": 773,
           "length": 1
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
@@ -856,6 +956,8 @@
 //      * @see {a}
 //      * {@link I.a}
 //      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
 //      */
 //     c()
 //     /**
@@ -884,7 +986,7 @@
       "kind": "local function",
       "name": "(local function) r2(): void",
       "textSpan": {
-        "start": 879,
+        "start": 916,
         "length": 2
       },
       "displayParts": [
@@ -930,14 +1032,14 @@
         }
       ],
       "contextSpan": {
-        "start": 870,
+        "start": 907,
         "length": 17
       }
     },
     "references": [
       {
         "textSpan": {
-          "start": 793,
+          "start": 830,
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
@@ -946,7 +1048,7 @@
       },
       {
         "textSpan": {
-          "start": 837,
+          "start": 874,
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
@@ -955,16 +1057,424 @@
       },
       {
         "textSpan": {
-          "start": 879,
+          "start": 916,
           "length": 2
         },
         "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
         "contextSpan": {
-          "start": 870,
+          "start": 907,
           "length": 17
         },
         "isWriteAccess": true,
         "isDefinition": true
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// class [|C|]/*FIND ALL REFS*/ {
+//     m() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link [|C|].m}
+//      * @see {[|C|].m}
+//      * {@link [|C|]#m}
+//      * @see {[|C|]#m}
+//      * {@link [|C|].prototype.m}
+//      * @see {[|C|].prototype.m}
+//      */
+//     p() { }
+//     /**
+//      * {@link n}
+//      * @see {n}
+//      * {@link [|C|].n}
+//      * @see {[|C|].n}
+//      * {@link [|C|]#n}
+//      * @see {[|C|]#n}
+//      * {@link [|C|].prototype.n}
+//      * @see {[|C|].prototype.n}
+//      */
+//     q() { }
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link [|C|].s}
+//      * @see {[|C|].s}
+//      */
+//     r() { }
+// }
+// 
+// interface I {
+//     a()
+//     b: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+//      * {@link I.a}
+//      * @see {I.a}
+//      * {@link I#a}
+//      * @see {I#a}
+//      */
+//     c()
+//     /**
+//      * {@link b}
+//      * @see {b}
+//      * {@link I.b}
+//      * @see {I.b}
+//      */
+//     d()
+// }
+// 
+// function nestor() {
+//     /** {@link r2} */
+//     function ref() { }
+//     /** @see {r2} */
+//     function d3() { }
+//     function r2() { }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+      "kind": "class",
+      "name": "class C",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 534
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 534
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 106,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 124,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 143,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 161,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 180,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 208,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 298,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 316,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 335,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 353,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 372,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 400,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 490,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 508,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllReferencesLinkTag1.ts ===
+// class C {
+//     m() { }
+//     n = 1
+//     static s() { }
+//     /**
+//      * {@link m}
+//      * @see {m}
+//      * {@link C.m}
+//      * @see {C.m}
+//      * {@link C#m}
+//      * @see {C#m}
+//      * {@link C.prototype.m}
+//      * @see {C.prototype.m}
+//      */
+//     p() { }
+//     /**
+//      * {@link n}
+//      * @see {n}
+//      * {@link C.n}
+//      * @see {C.n}
+//      * {@link C#n}
+//      * @see {C#n}
+//      * {@link C.prototype.n}
+//      * @see {C.prototype.n}
+//      */
+//     q() { }
+//     /**
+//      * {@link s}
+//      * @see {s}
+//      * {@link C.s}
+//      * @see {C.s}
+//      */
+//     r() { }
+// }
+// 
+// interface [|I|]/*FIND ALL REFS*/ {
+//     a()
+//     b: 1
+//     /**
+//      * {@link a}
+//      * @see {a}
+//      * {@link [|I|].a}
+//      * @see {[|I|].a}
+//      * {@link [|I|]#a}
+//      * @see {[|I|]#a}
+//      */
+//     c()
+//     /**
+//      * {@link b}
+//      * @see {b}
+//      * {@link [|I|].b}
+//      * @see {[|I|].b}
+//      */
+//     d()
+// }
+// 
+// function nestor() {
+//     /** {@link r2} */
+//     function ref() { }
+//     /** @see {r2} */
+//     function d3() { }
+//     function r2() { }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+      "kind": "interface",
+      "name": "interface I",
+      "textSpan": {
+        "start": 546,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "interface",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "interfaceName"
+        }
+      ],
+      "contextSpan": {
+        "start": 536,
+        "length": 257
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 546,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "contextSpan": {
+          "start": 536,
+          "length": 257
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 622,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 640,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 659,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 677,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 753,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 771,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       }
     ]
   }

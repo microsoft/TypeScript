@@ -345,6 +345,8 @@ namespace ts {
             updateJSDocSeeTag,
             createJSDocNameReference,
             updateJSDocNameReference,
+            createJSDocMemberName,
+            updateJSDocMemberName,
             createJSDocLink,
             updateJSDocLink,
             // lazily load factory members for JSDoc tags with similar structure
@@ -4391,21 +4393,40 @@ namespace ts {
         }
 
         // @api
-        function createJSDocNameReference(name: EntityName): JSDocNameReference {
+        function createJSDocNameReference(name: EntityName | JSDocMemberName): JSDocNameReference {
             const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
             node.name = name;
             return node;
         }
 
         // @api
-        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
+        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference {
             return node.name !== name
                 ? update(createJSDocNameReference(name), node)
                 : node;
         }
 
         // @api
-        function createJSDocLink(name: EntityName | undefined, text: string): JSDocLink {
+        function createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier) {
+            const node = createBaseNode<JSDocMemberName>(SyntaxKind.JSDocMemberName);
+            node.left = left;
+            node.right = right;
+            node.transformFlags |=
+                propagateChildFlags(node.left) |
+                propagateChildFlags(node.right);
+            return node;
+        }
+
+        // @api
+        function updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier) {
+            return node.left !== left
+                || node.right !== right
+                ? update(createJSDocMemberName(left, right), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
             const node = createBaseNode<JSDocLink>(SyntaxKind.JSDocLink);
             node.name = name;
             node.text = text;
@@ -4413,7 +4434,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocLink(node: JSDocLink, name: EntityName | undefined, text: string): JSDocLink {
+        function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
             return node.name !== name
                 ? update(createJSDocLink(name, text), node)
                 : node;

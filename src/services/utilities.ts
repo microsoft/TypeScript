@@ -105,7 +105,7 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
-        else if (isEntityName(node) && (isJSDocNameReference(node.parent) || isJSDocLink(node.parent))) {
+        else if (isEntityName(node) && findAncestor(node, or(isJSDocNameReference, isJSDocLink, isJSDocMemberName))) {
             return SemanticMeaning.All;
         }
         else if (isTypeReference(node)) {
@@ -2218,7 +2218,7 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
         return {
             text: getTextOfNode(name),
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
@@ -2246,7 +2246,7 @@ namespace ts {
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + link.text));
+                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
             }
         }
         parts.push(linkPart("}"));
