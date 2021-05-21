@@ -1603,7 +1603,7 @@ namespace ts {
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
                     case SyntaxKind.JSDocNamepathType:
                         return;
-                    case SyntaxKind.JSDocComment:
+                    case SyntaxKind.JSDoc:
                         return emitJSDoc(node as JSDoc);
                     case SyntaxKind.JSDocTypeLiteral:
                         return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
@@ -3785,7 +3785,7 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: string | NodeArray<JSDocText | JSDocLink> | undefined) {
+        function emitJSDocComment(comment: string | NodeArray<JSDocComment> | undefined) {
             const text = getTextOfJSDocComment(comment);
             if (text) {
                 writeSpace();

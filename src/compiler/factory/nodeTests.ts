@@ -778,6 +778,14 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocLink;
     }
 
+    export function isJSDocLinkCode(node: Node): node is JSDocLinkCode {
+        return node.kind === SyntaxKind.JSDocLinkCode;
+    }
+
+    export function isJSDocLinkPlain(node: Node): node is JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLinkPlain;
+    }
+
     export function isJSDocAllType(node: Node): node is JSDocAllType {
         return node.kind === SyntaxKind.JSDocAllType;
     }
@@ -811,7 +819,7 @@ namespace ts {
     }
 
     export function isJSDoc(node: Node): node is JSDoc {
-        return node.kind === SyntaxKind.JSDocComment;
+        return node.kind === SyntaxKind.JSDoc;
     }
 
     export function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral {

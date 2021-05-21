@@ -1898,14 +1898,14 @@ namespace ts {
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
             case SyntaxKind.JSDocMemberName:
                 while (isJSDocMemberName(node.parent)) {
                     node = node.parent;
                 }
-                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
             case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node)) {
+                if (node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node)) {
                     return true;
                 }
                 // falls through
@@ -4427,7 +4427,7 @@ namespace ts {
 
     /** template tags are only available when a typedef isn't already using them */
     function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
-        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDocComment && tag.parent.tags!.some(isJSDocTypeAlias));
+        return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && tag.parent.tags!.some(isJSDocTypeAlias));
     }
 
     /**
