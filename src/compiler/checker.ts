@@ -39322,7 +39322,7 @@ namespace ts {
                     }
                     const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
                     if (!result && isJSDoc) {
-                        const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration, isObjectLiteralExpression, isTypeLiteralNode));
+                        const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration));
                         if (container) {
                             return resolveJSDocMemberName(name, getSymbolOfNode(container));
                         }
