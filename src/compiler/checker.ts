@@ -21955,6 +21955,9 @@ namespace ts {
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.ParenthesizedExpression:
                     return getFlowCacheKey((node as NonNullExpression | ParenthesizedExpression).expression, declaredType, initialType, flowContainer);
+                case SyntaxKind.QualifiedName:
+                    const left = getFlowCacheKey((node as QualifiedName).left, declaredType, initialType, flowContainer);
+                    return left && left + "." + (node as QualifiedName).right.escapedText;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(node as AccessExpression);
