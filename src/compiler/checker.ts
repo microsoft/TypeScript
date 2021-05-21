@@ -39320,7 +39320,14 @@ namespace ts {
                         const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    return resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
+                    const result = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
+                    if (!result && isJSDoc) {
+                        const container = findAncestor(name, or(isClassLike, isInterfaceDeclaration, isObjectLiteralExpression, isTypeLiteralNode));
+                        if (container) {
+                            return resolveJSDocMemberName(name, getSymbolOfNode(container));
+                        }
+                    }
+                    return result;
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39359,25 +39366,27 @@ namespace ts {
          * 1. K#m as K.prototype.m for a class (or other value) K
          * 2. K.m as K.prototype.m
          * 3. I.m as I.m for a type I, or any other I.m that fails to resolve in (1) or (2)
+         *
+         * For unqualified names, a container K may be provided as a second argument.
          */
-        function resolveJSDocMemberName(name: EntityName | JSDocMemberName): Symbol | undefined {
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName, container?: Symbol): Symbol | undefined {
             if (isEntityName(name)) {
-                const symbol = resolveEntityName(
-                    name,
-                    SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value,
-                    /*ignoreErrors*/ false,
-                    /*dontResolveAlias*/ true,
-                    getHostSignatureFromJSDoc(name));
-                if (symbol || isIdentifier(name)) {
-                    // can't recur on identifier, so just return when it's undefined
+                // resolve static values first
+                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
+                let symbol = resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true, getHostSignatureFromJSDoc(name));
+                if (!symbol && isIdentifier(name) && container) {
+                    symbol = getMergedSymbol(getSymbol(getExportsOfSymbol(container), name.escapedText, meaning));
+                }
+                if (symbol) {
                     return symbol;
                 }
             }
-            const left = resolveJSDocMemberName(name.left);
+            const left = isIdentifier(name) ? container : resolveJSDocMemberName(name.left);
+            const right = isIdentifier(name) ? name.escapedText : name.right.escapedText;
             if (left) {
                 const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
                 const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(left);
-                return getPropertyOfType(t, name.right.escapedText);
+                return getPropertyOfType(t, right);
             }
         }
 
