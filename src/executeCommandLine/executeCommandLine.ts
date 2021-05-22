@@ -98,6 +98,14 @@ namespace ts {
         return `[34m${str}[39m`;
     }
 
+    function blueBackground(str: string) {
+        return `[44m${str}[49m`;
+    }
+
+    function white(str: string) {
+        return `[37m${str}[39m`;
+    }
+
     function getDisplayNameTextOfOption(option: CommandLineOption) {
         return `--${option.name}${option.shortName ? `, -${option.shortName}` : ""}`;
     }
@@ -297,9 +305,8 @@ namespace ts {
         return res;
     }
 
-    function printEasyHelp(simpleOptions: readonly CommandLineOption[]) {
-        let output: string[] = [];
-        output.push(`tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}${sys.newLine}${sys.newLine}`);
+    function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
+        let output: string[] = [...getHelpHeader(sys)];
         output.push(bold("COMMON COMMANDS") + sys.newLine + sys.newLine);
         output.push("  " + blue("tsc") + sys.newLine);
         output.push("  " + "Compiles the current project (tsconfig.json in the working diirectory.)" + sys.newLine + sys.newLine);
@@ -322,9 +329,8 @@ namespace ts {
         }
     }
 
-    function printAllHelp(compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
-        let output: string[] = [];
-        output.push(`tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}${sys.newLine}${sys.newLine}`);
+    function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
+        let output: string[] = [...getHelpHeader(sys)];
         output = [...output, ...generateSectionOptionsOutput("ALL COMPILER OPTIONS", compilerOptions, true, undefined, formatMessage(undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
         output = [...output, ...generateSectionOptionsOutput("WATCH OPTIONS", watchOptions, false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
         output = [...output, ...generateSectionOptionsOutput("BUILD OPTIONS", buildOptions, false, formatMessage(undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
@@ -333,111 +339,43 @@ namespace ts {
         }
     }
 
-    function printHelp(sys: System, optionsList: readonly CommandLineOption[], syntaxPrefix = "") {
-        const output: string[] = [];
-
-        // We want to align our "syntax" and "examples" commands to a certain margin.
-        const syntaxLength = getDiagnosticText(Diagnostics.Syntax_Colon_0, "").length;
-        const examplesLength = getDiagnosticText(Diagnostics.Examples_Colon_0, "").length;
-        let marginLength = Math.max(syntaxLength, examplesLength);
-
-        // Build up the syntactic skeleton.
-        let syntax = makePadding(marginLength - syntaxLength);
-        syntax += `tsc ${syntaxPrefix}[${getDiagnosticText(Diagnostics.options)}] [${getDiagnosticText(Diagnostics.file)}...]`;
-
-        output.push(getDiagnosticText(Diagnostics.Syntax_Colon_0, syntax));
-        output.push(sys.newLine + sys.newLine);
-
-        // Build up the list of examples.
-        const padding = makePadding(marginLength);
-        output.push(getDiagnosticText(Diagnostics.Examples_Colon_0, makePadding(marginLength - examplesLength) + "tsc hello.ts") + sys.newLine);
-        output.push(padding + "tsc --outFile file.js file.ts" + sys.newLine);
-        output.push(padding + "tsc @args.txt" + sys.newLine);
-        output.push(padding + "tsc --build tsconfig.json" + sys.newLine);
-        output.push(sys.newLine);
-
-        output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
-
-        // We want our descriptions to align at the same column in our output,
-        // so we keep track of the longest option usage string.
-        marginLength = 0;
-        const usageColumn: string[] = []; // Things like "-d, --declaration" go in here.
-        const descriptionColumn: string[] = [];
-
-        const optionsDescriptionMap = new Map<string, string[]>();  // Map between option.description and list of option.type if it is a kind
-
-        for (const option of optionsList) {
-            // If an option lacks a description,
-            // it is not officially supported.
-            if (!option.description) {
-                continue;
-            }
-
-            let usageText = " ";
-            if (option.shortName) {
-                usageText += "-" + option.shortName;
-                usageText += getParamType(option);
-                usageText += ", ";
-            }
-
-            usageText += "--" + option.name;
-            usageText += getParamType(option);
-
-            usageColumn.push(usageText);
-            let description: string;
-
-            if (option.name === "lib") {
-                description = getDiagnosticText(option.description);
-                const element = (option as CommandLineOptionOfListType).element;
-                const typeMap = element.type as ESMap<string, number | string>;
-                optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
-            }
-            else {
-                description = getDiagnosticText(option.description);
-            }
-
-            descriptionColumn.push(description);
-
-            // Set the new margin for the description column if necessary.
-            marginLength = Math.max(usageText.length, marginLength);
-        }
-
-        // Special case that can't fit in the loop.
-        const usageText = " @<" + getDiagnosticText(Diagnostics.file) + ">";
-        usageColumn.push(usageText);
-        descriptionColumn.push(getDiagnosticText(Diagnostics.Insert_command_line_options_and_files_from_a_file));
-        marginLength = Math.max(usageText.length, marginLength);
-
-        // Print out each row, aligning all the descriptions on the same column.
-        for (let i = 0; i < usageColumn.length; i++) {
-            const usage = usageColumn[i];
-            const description = descriptionColumn[i];
-            const kindsList = optionsDescriptionMap.get(description);
-            output.push(usage + makePadding(marginLength - usage.length + 2) + description + sys.newLine);
-
-            if (kindsList) {
-                output.push(makePadding(marginLength + 4));
-                for (const kind of kindsList) {
-                    output.push(kind + " ");
-                }
-                output.push(sys.newLine);
-            }
-        }
-
+    function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
+        let output: string[] = [...getHelpHeader(sys)];
+        output = [...output, ...generateSectionOptionsOutput("BUILD OPTIONS", buildOptions, false, formatMessage(undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }
-        return;
+    }
 
-        function getParamType(option: CommandLineOption) {
-            if (option.paramType !== undefined) {
-                return " " + getDiagnosticText(option.paramType);
-            }
-            return "";
+    function getHelpHeader(sys: System) {
+        const header: string[] = [];
+        const tscexplaination = `tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}`;
+        const terminalWidth = sys.getWidthOfTerminal();
+        const tsIconLength = 5;
+
+        const tsIconFirstLine = blueBackground(padLeft("", tsIconLength));
+        const tsIconSecondLine = blueBackground(white(padLeft("TS ", tsIconLength)));
+        // If we have enough space, print TS icon.
+        if (terminalWidth >= tscexplaination.length + tsIconLength) {
+            // right align of the icon is 120 at most.
+            const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
+            const leftAlign = rightAlign - tsIconLength;
+            header.push(padRight(tscexplaination, leftAlign) + tsIconFirstLine + sys.newLine);
+            header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
         }
+        else {
+            header.push(tscexplaination + sys.newLine);
+            header.push(sys.newLine);
+        }
+        return header;
+    }
 
-        function makePadding(paddingLength: number): string {
-            return Array(paddingLength + 1).join(" ");
+    function printHelp(sys: System, commandLine: ParsedCommandLine) {
+        if (!commandLine.options.all) {
+            printEasyHelp(sys, getOptionsForHelp(commandLine));
+        }
+        else {
+            printAllHelp(sys, getOptionsForHelp(commandLine), optionsForBuild, optionsForWatch);
         }
     }
 
@@ -476,13 +414,7 @@ namespace ts {
         }
 
         if (commandLine.options.help || commandLine.options.all) {
-            if (!commandLine.options.all) {
-                printEasyHelp(getOptionsForHelp(commandLine));
-            }
-            else {
-                printAllHelp(getOptionsForHelp(commandLine), optionsForBuild, optionsForWatch);
-            }
-            // printHelp(sys, );
+            printHelp(sys, commandLine);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -524,7 +456,7 @@ namespace ts {
             }
             else {
                 printVersion(sys);
-                printHelp(sys, getOptionsForHelp(commandLine));
+                printHelp(sys, commandLine);
             }
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
@@ -712,13 +644,13 @@ namespace ts {
 
         if (buildOptions.help) {
             printVersion(sys);
-            printHelp(sys, buildOpts, "--build ");
+            printBuildHelp(sys, buildOpts);
             return sys.exit(ExitStatus.Success);
         }
 
         if (projects.length === 0) {
             printVersion(sys);
-            printHelp(sys, buildOpts, "--build ");
+            printBuildHelp(sys, buildOpts);
             return sys.exit(ExitStatus.Success);
         }
 
