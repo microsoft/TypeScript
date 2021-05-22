@@ -103,13 +103,19 @@ namespace ts {
     }
 
     function generateOptionOutput(option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
+        interface ValueCandidate{
+            // "one or more" or "any of"
+            valueType: string;
+            possiableValues: string;
+        }
+
         let res: string[] = [];
 
         // name and description
         const name = getDisplayNameTextOfOption(option);
 
         // value type and possiable value
-        const valueCandidates = getValueTypeAndPossiableValue(option);
+        const valueCandidates = getValueCandidate(option);
         const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
         const terminalWidth = sys.getWidthOfTerminal();
 
@@ -120,11 +126,14 @@ namespace ts {
                 const description = getDiagnosticText(option.description);
                 res.push(description);
             }
-            if (valueCandidates) {
-                res.push(`  ${valueCandidates.valueType}: ${valueCandidates.possiableValues}`);
-            }
-            if (defaultValueDescription) {
-                res.push(`  ${getDiagnosticText(Diagnostics.default_Colon)} ${defaultValueDescription}`);
+            if (isAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+                if (valueCandidates) {
+                    res.push(`  ${valueCandidates.valueType}: ${valueCandidates.possiableValues}`);
+                }
+                if (defaultValueDescription) {
+                    res.push(`  ${getDiagnosticText(Diagnostics.default_Colon)} ${defaultValueDescription}`);
+                }
+                res.push(sys.newLine);
             }
         }
         else {
@@ -132,16 +141,25 @@ namespace ts {
             if (option.description) {
                 description = getDiagnosticText(option.description);
             }
-            res = [...res, ...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, true), sys.newLine, sys.newLine];
-            if (valueCandidates) {
-                res = [...res, ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possiableValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
+            res = [...res, ...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, true), sys.newLine];
+            if (isAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+                if (valueCandidates) {
+                    res = [...res, sys.newLine, ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possiableValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
+                }
+                if (defaultValueDescription) {
+                    res = [...res, sys.newLine, ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
+                }
+                res.push(sys.newLine);
             }
-            if (defaultValueDescription) {
-                res = [...res, ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, false), sys.newLine];
-            }
-            res.push(sys.newLine);
         }
         return res;
+
+        function isAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
+            if(valueCandidates?.possiableValues === "boolean" && (defaultValueDescription === undefined|| defaultValueDescription === "false" || defaultValueDescription === "undefined" || defaultValueDescription === "n/a")){
+                return false;
+            }
+            return true;
+        }
 
         function getPrettyOutput(left: string, right: string, rightAlignOfLeft: number, leftAlignOfRight: number, terminalWidth: number, colorLeft: boolean) {
             const res = [];
@@ -166,7 +184,7 @@ namespace ts {
             return res;
         }
 
-        function getValueTypeAndPossiableValue(option: CommandLineOption) {
+        function getValueCandidate(option: CommandLineOption): ValueCandidate | undefined {
             // option.type might be "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>
             // string -- any of: string
             // number -- any of: number
@@ -216,9 +234,7 @@ namespace ts {
                         break;
                     default:
                         // ESMap<string, number | string>
-                        // TODO: Fix iterator and iterable type issue for TS.
-                        // @ts-ignore
-                        const keys = Array.from(option.type.keys());
+                        const keys = arrayFrom(option.type.keys());
                         possiableValues = keys.join(", ");
                 }
                 return possiableValues;
@@ -243,6 +259,10 @@ namespace ts {
         for (const option of optionsList) {
             const tmp = generateOptionOutput(option, rightAlignOfLeftPart, leftAlignOfRightPart);
             res = [...res, ...tmp];
+        }
+        // make sure always a blank line in the end.
+        if (res[res.length - 2] !== sys.newLine) {
+            res.push(sys.newLine);
         }
         return res;
     }
