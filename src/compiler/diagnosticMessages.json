@@ -3733,6 +3733,10 @@
         "category": "Error",
         "code": 4116
     },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4117
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
