@@ -1176,6 +1176,7 @@ namespace ts {
                 name: "plugin",
                 type: "object"
             },
+            category: Diagnostics.Basic_Options,
             description: Diagnostics.List_of_language_service_plugins
         },
     ];
