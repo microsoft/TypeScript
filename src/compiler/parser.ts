@@ -7827,7 +7827,7 @@ namespace ts {
                     }
                     const create = linkType === "link" ? factory.createJSDocLink
                         : linkType === "linkcode" ? factory.createJSDocLinkCode
-                        : factory.createJSDocLinkPlain
+                        : factory.createJSDocLinkPlain;
                     return finishNode(create(name, text.join("")), start, scanner.getTextPos());
                 }
 
