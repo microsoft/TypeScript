@@ -20320,14 +20320,17 @@ namespace ts {
         }
 
         function getGlobalNonNullableTypeInstantiation(type: Type) {
+            // First reduce away any constituents that are assignable to 'undefined' or 'null'. This not only eliminates
+            // 'undefined' and 'null', but also higher-order types such as a type parameter 'U extends undefined | null'
+            // that isn't eliminated by a NonNullable<T> instantiation.
+            const reducedType = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
             if (!deferredGlobalNonNullableTypeAlias) {
                 deferredGlobalNonNullableTypeAlias = getGlobalSymbol("NonNullable" as __String, SymbolFlags.TypeAlias, /*diagnostic*/ undefined) || unknownSymbol;
             }
-            // Use NonNullable global type alias if available to improve quick info/declaration emit
-            if (deferredGlobalNonNullableTypeAlias !== unknownSymbol) {
-                return getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [type]);
-            }
-            return getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull); // Type alias unavailable, fall back to non-higher-order behavior
+            // If the NonNullable<T> type is available, return an instantiation. Otherwise just return the reduced type.
+            return deferredGlobalNonNullableTypeAlias !== unknownSymbol ?
+                getTypeAliasInstantiation(deferredGlobalNonNullableTypeAlias, [reducedType]) :
+                reducedType;
         }
 
         function getNonNullableType(type: Type): Type {
