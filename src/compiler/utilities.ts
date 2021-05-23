@@ -962,7 +962,7 @@ namespace ts {
         }
     }
 
-    export function entityNameToString(name: EntityNameOrEntityNameExpression | JsxTagNameExpression | PrivateIdentifier): string {
+    export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDocMemberName | JsxTagNameExpression | PrivateIdentifier): string {
         switch (name.kind) {
             case SyntaxKind.ThisKeyword:
                 return "this";
@@ -978,6 +978,8 @@ namespace ts {
                 else {
                     return Debug.assertNever(name.name);
                 }
+            case SyntaxKind.JSDocMemberName:
+                return entityNameToString(name.left) + entityNameToString(name.right);
             default:
                 return Debug.assertNever(name);
         }
@@ -1896,9 +1898,14 @@ namespace ts {
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
                     node = node.parent;
                 }
-                return node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node);
+                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+            case SyntaxKind.JSDocMemberName:
+                while (isJSDocMemberName(node.parent)) {
+                    node = node.parent;
+                }
+                return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
             case SyntaxKind.Identifier:
-                if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
+                if (node.parent.kind === SyntaxKind.TypeQuery || isJSDocLink(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node)) {
                     return true;
                 }
                 // falls through
@@ -4930,6 +4937,12 @@ namespace ts {
     export function isRightSideOfQualifiedNameOrPropertyAccess(node: Node) {
         return (node.parent.kind === SyntaxKind.QualifiedName && (node.parent as QualifiedName).right === node) ||
             (node.parent.kind === SyntaxKind.PropertyAccessExpression && (node.parent as PropertyAccessExpression).name === node);
+    }
+
+    export function isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(node: Node) {
+        return isQualifiedName(node.parent) && node.parent.right === node
+            || isPropertyAccessExpression(node.parent) && node.parent.name === node
+            || isJSDocMemberName(node.parent) && node.parent.right === node;
     }
 
     export function isEmptyObjectLiteral(expression: Node): boolean {

@@ -452,6 +452,11 @@ namespace ts {
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
+        const index = path.indexOf("\\");
+        if (index === -1) {
+            return path;
+        }
+        backslashRegExp.lastIndex = index; // prime regex with known position
         return path.replace(backslashRegExp, directorySeparator);
     }
 
@@ -658,7 +663,7 @@ namespace ts {
     //// Path Comparisons
 
     // check path for these segments: '', '.'. '..'
-    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
+    const relativePathSegmentRegExp = /(?:\/\/)|(?:^|\/)\.\.?(?:$|\/)/;
 
     function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
         if (a === b) return Comparison.EqualTo;

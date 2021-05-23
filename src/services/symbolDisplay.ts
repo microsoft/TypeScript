@@ -100,10 +100,6 @@ namespace ts.SymbolDisplay {
         return ScriptElementKind.unknown;
     }
 
-    function isDeprecatedDeclaration(decl: Declaration) {
-        return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
-    }
-
     function getNormalizedSymbolModifiers(symbol: Symbol) {
         if (symbol.declarations && symbol.declarations.length) {
             const [declaration, ...declarations] = symbol.declarations;

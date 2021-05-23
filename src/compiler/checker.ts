@@ -180,15 +180,6 @@ namespace ts {
         IsForSignatureHelp = 1 << 4,    // Call resolution for purposes of signature help
     }
 
-    const enum AccessFlags {
-        None = 0,
-        NoIndexSignatures = 1 << 0,
-        Writing = 1 << 1,
-        CacheSymbol = 1 << 2,
-        NoTupleBoundsCheck = 1 << 3,
-        ExpressionPosition = 1 << 4,
-    }
-
     const enum SignatureCheckMode {
         BivariantCallback = 1 << 0,
         StrictCallback    = 1 << 1,
@@ -8317,7 +8308,7 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || declaration.name as Identifier;
                     const indexType = getLiteralTypeFromPropertyName(name);
-                    const declaredType = getIndexedAccessType(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
+                    const declaredType = getIndexedAccessType(parentType, indexType, AccessFlags.ExpressionPosition, name);
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
             }
@@ -8337,8 +8328,8 @@ namespace ts {
                 }
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
-                    const accessFlags = hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0;
-                    const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, declaration.name, accessFlags | AccessFlags.ExpressionPosition) || errorType;
+                    const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(declaration) ? AccessFlags.NoTupleBoundsCheck : 0);
+                    const declaredType = getIndexedAccessTypeOrUndefined(parentType, indexType, accessFlags, declaration.name) || errorType;
                     type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
@@ -11400,14 +11391,14 @@ namespace ts {
         function getConstraintFromIndexedAccess(type: IndexedAccessType) {
             const indexConstraint = getSimplifiedTypeOrConstraint(type.indexType);
             if (indexConstraint && indexConstraint !== type.indexType) {
-                const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.noUncheckedIndexedAccessCandidate);
+                const indexedAccess = getIndexedAccessTypeOrUndefined(type.objectType, indexConstraint, type.accessFlags);
                 if (indexedAccess) {
                     return indexedAccess;
                 }
             }
             const objectConstraint = getSimplifiedTypeOrConstraint(type.objectType);
             if (objectConstraint && objectConstraint !== type.objectType) {
-                return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType, type.noUncheckedIndexedAccessCandidate);
+                return getIndexedAccessTypeOrUndefined(objectConstraint, type.indexType, type.accessFlags);
             }
             return undefined;
         }
@@ -11613,7 +11604,7 @@ namespace ts {
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((t as IndexedAccessType).objectType);
                     const baseIndexType = getBaseConstraint((t as IndexedAccessType).indexType);
-                    const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).noUncheckedIndexedAccessCandidate);
+                    const baseIndexedAccess = baseObjectType && baseIndexType && getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (t as IndexedAccessType).accessFlags);
                     return baseIndexedAccess && getBaseConstraint(baseIndexedAccess);
                 }
                 if (t.flags & TypeFlags.Conditional) {
@@ -14333,16 +14324,22 @@ namespace ts {
         }
 
         // Ordinarily we reduce a keyof M, where M is a mapped type { [P in K as N<P>]: X }, to simply N<K>. This however presumes
-        // that N distributes over union types, i.e. that N<A | B | C> is equivalent to N<A> | N<B> | N<C>. That presumption may not
-        // be true when N is a non-distributive conditional type or an instantiable type with a non-distributive conditional type as
-        // a constituent. In those cases, we cannot reduce keyof M and need to preserve it as is.
-        function maybeNonDistributiveNameType(type: Type | undefined): boolean {
-            return !!(type && (
-                type.flags & TypeFlags.Conditional && (!(type as ConditionalType).root.isDistributive || maybeNonDistributiveNameType((type as ConditionalType).checkType)) ||
-                type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) && some((type as UnionOrIntersectionType | TemplateLiteralType).types, maybeNonDistributiveNameType) ||
-                type.flags & (TypeFlags.Index | TypeFlags.StringMapping) && maybeNonDistributiveNameType((type as IndexType | StringMappingType).type) ||
-                type.flags & TypeFlags.IndexedAccess && maybeNonDistributiveNameType((type as IndexedAccessType).indexType) ||
-                type.flags & TypeFlags.Substitution && maybeNonDistributiveNameType((type as SubstitutionType).substitute)));
+        // that N distributes over union types, i.e. that N<A | B | C> is equivalent to N<A> | N<B> | N<C>. Specifically, we only
+        // want to perform the reduction when the name type of a mapped type is distributive with respect to the type variable
+        // introduced by the 'in' clause of the mapped type. Note that non-generic types are considered to be distributive because
+        // they're the same type regardless of what's being distributed over.
+        function hasDistributiveNameType(mappedType: MappedType) {
+            const typeVariable = getTypeParameterFromMappedType(mappedType);
+            return isDistributive(getNameTypeFromMappedType(mappedType) || typeVariable);
+            function isDistributive(type: Type): boolean {
+                return type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Primitive | TypeFlags.Never | TypeFlags.TypeParameter | TypeFlags.Object | TypeFlags.NonPrimitive) ? true :
+                    type.flags & TypeFlags.Conditional ? (type as ConditionalType).root.isDistributive && (type as ConditionalType).checkType === typeVariable :
+                    type.flags & (TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral) ? every((type as UnionOrIntersectionType | TemplateLiteralType).types, isDistributive) :
+                    type.flags & TypeFlags.IndexedAccess ? isDistributive((type as IndexedAccessType).objectType) && isDistributive((type as IndexedAccessType).indexType) :
+                    type.flags & TypeFlags.Substitution ? isDistributive((type as SubstitutionType).substitute) :
+                    type.flags & TypeFlags.StringMapping ? isDistributive((type as StringMappingType).type) :
+                    false;
+            }
         }
 
         function getLiteralTypeFromPropertyName(name: PropertyName) {
@@ -14393,9 +14390,9 @@ namespace ts {
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
             const includeOrigin = stringsOnly === keyofStringsOnly && !noIndexSignatures;
             type = getReducedType(type);
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
-                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && maybeNonDistributiveNameType(getNameTypeFromMappedType(type)) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
+                type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
@@ -14554,13 +14551,13 @@ namespace ts {
             return result;
         }
 
-        function createIndexedAccessType(objectType: Type, indexType: Type, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined, shouldIncludeUndefined: boolean) {
+        function createIndexedAccessType(objectType: Type, indexType: Type, accessFlags: AccessFlags, aliasSymbol: Symbol | undefined, aliasTypeArguments: readonly Type[] | undefined) {
             const type = createType(TypeFlags.IndexedAccess) as IndexedAccessType;
             type.objectType = objectType;
             type.indexType = indexType;
+            type.accessFlags = accessFlags;
             type.aliasSymbol = aliasSymbol;
             type.aliasTypeArguments = aliasTypeArguments;
-            type.noUncheckedIndexedAccessCandidate = shouldIncludeUndefined;
             return type;
         }
 
@@ -14613,14 +14610,17 @@ namespace ts {
             return true;
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, suppressNoImplicitAnyError: boolean, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags, noUncheckedIndexedAccessCandidate?: boolean, reportDeprecated?: boolean) {
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, fullIndexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = accessNode && isPrivateIdentifier(accessNode) ? undefined : getPropertyNameFromIndex(indexType, accessNode);
 
             if (propName !== undefined) {
+                if (accessFlags & AccessFlags.Contextual) {
+                    return getTypeOfPropertyOfContextualType(objectType, propName) || anyType;
+                }
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
-                    if (reportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
+                    if (accessFlags & AccessFlags.ReportDeprecated && accessNode && prop.declarations && getDeclarationNodeFlagsFromSymbol(prop) & NodeFlags.Deprecated && isUncalledFunctionReference(accessNode, prop)) {
                         const deprecatedNode = accessExpression?.argumentExpression ?? (isIndexedAccessTypeNode(accessNode) ? accessNode.indexType : accessNode);
                         addDeprecatedSuggestion(deprecatedNode, prop.declarations, propName as string);
                     }
@@ -14656,7 +14656,7 @@ namespace ts {
                     errorIfWritingToReadonlyIndex(getIndexInfoOfType(objectType, IndexKind.Number));
                     return mapType(objectType, t => {
                         const restType = getRestTypeOfTupleType(t as TupleTypeReference) || undefinedType;
-                        return noUncheckedIndexedAccessCandidate ? getUnionType([restType, undefinedType]) : restType;
+                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([restType, undefinedType]) : restType;
                     });
                 }
             }
@@ -14676,10 +14676,10 @@ namespace ts {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
-                        return noUncheckedIndexedAccessCandidate ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                        return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                     }
                     errorIfWritingToReadonlyIndex(indexInfo);
-                    return noUncheckedIndexedAccessCandidate ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
+                    return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -14704,7 +14704,7 @@ namespace ts {
                     if (objectType.symbol === globalThisSymbol && propName !== undefined && globalThisSymbol.exports!.has(propName) && (globalThisSymbol.exports!.get(propName)!.flags & SymbolFlags.BlockScoped)) {
                         error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
-                    else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !suppressNoImplicitAnyError) {
+                    else if (noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors && !(accessFlags & AccessFlags.SuppressNoImplicitAnyError)) {
                         if (propName !== undefined && typeHasStaticProperty(propName, objectType)) {
                             const typeName = typeToString(objectType);
                             error(accessExpression, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_to_access_the_static_member_2_instead, propName as string, typeName, typeName + "[" + getTextOfNode(accessExpression.argumentExpression) + "]");
@@ -14957,8 +14957,8 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate?: boolean, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], accessFlags = AccessFlags.None): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, noUncheckedIndexedAccessCandidate, accessNode, accessFlags, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessFlags, accessNode, aliasSymbol, aliasTypeArguments) || (accessNode ? errorType : unknownType);
         }
 
         function indexTypeLessThan(indexType: Type, limit: number) {
@@ -14974,20 +14974,18 @@ namespace ts {
             });
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, noUncheckedIndexedAccessCandidate?: boolean, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessFlags = AccessFlags.None, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
-
-            const shouldIncludeUndefined = noUncheckedIndexedAccessCandidate ||
-                (!!compilerOptions.noUncheckedIndexedAccess &&
-                (accessFlags & (AccessFlags.Writing | AccessFlags.ExpressionPosition)) === AccessFlags.ExpressionPosition);
-
             // If the object type has a string index signature and no other members we know that the result will
             // always be the type of that index signature and we can simplify accordingly.
             if (isStringIndexSignatureOnlyType(objectType) && !(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                 indexType = stringType;
             }
+            // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
+            // an index signature have 'undefined' included in their type.
+            if (compilerOptions.noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
             // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
             // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
             // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
@@ -15001,10 +14999,11 @@ namespace ts {
                     return objectType;
                 }
                 // Defer the operation by creating an indexed access type.
-                const id = objectType.id + "," + indexType.id + (shouldIncludeUndefined ? "?" : "") + getAliasId(aliasSymbol, aliasTypeArguments);
+                const persistentAccessFlags = accessFlags & AccessFlags.Persistent;
+                const id = objectType.id + "," + indexType.id + "," + persistentAccessFlags + getAliasId(aliasSymbol, aliasTypeArguments);
                 let type = indexedAccessTypes.get(id);
                 if (!type) {
-                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, aliasSymbol, aliasTypeArguments, shouldIncludeUndefined));
+                    indexedAccessTypes.set(id, type = createIndexedAccessType(objectType, indexType, persistentAccessFlags, aliasSymbol, aliasTypeArguments));
                 }
 
                 return type;
@@ -15017,7 +15016,7 @@ namespace ts {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
                 for (const t of (indexType as UnionType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, wasMissingProp, accessNode, accessFlags, shouldIncludeUndefined);
+                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, indexType, accessNode, accessFlags | (wasMissingProp ? AccessFlags.SuppressNoImplicitAnyError : 0));
                     if (propType) {
                         propTypes.push(propType);
                     }
@@ -15037,7 +15036,7 @@ namespace ts {
                     ? getIntersectionType(propTypes, aliasSymbol, aliasTypeArguments)
                     : getUnionType(propTypes, UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
             }
-            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, /* supressNoImplicitAnyError */ false, accessNode, accessFlags | AccessFlags.CacheSymbol, shouldIncludeUndefined, /* reportDeprecated */ true);
+            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol | AccessFlags.ReportDeprecated);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -15046,7 +15045,7 @@ namespace ts {
                 const objectType = getTypeFromTypeNode(node.objectType);
                 const indexType = getTypeFromTypeNode(node.indexType);
                 const potentialAlias = getAliasSymbolForTypeNode(node);
-                const resolved = getIndexedAccessType(objectType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
+                const resolved = getIndexedAccessType(objectType, indexType, AccessFlags.None, node, potentialAlias, getTypeArgumentsForAliasSymbol(potentialAlias));
                 links.resolvedType = resolved.flags & TypeFlags.IndexedAccess &&
                     (resolved as IndexedAccessType).objectType === objectType &&
                     (resolved as IndexedAccessType).indexType === indexType ?
@@ -16275,7 +16274,7 @@ namespace ts {
             if (flags & TypeFlags.IndexedAccess) {
                 const newAliasSymbol = aliasSymbol || type.aliasSymbol;
                 const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
-                return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
+                return getIndexedAccessType(instantiateType((type as IndexedAccessType).objectType, mapper), instantiateType((type as IndexedAccessType).indexType, mapper), (type as IndexedAccessType).accessFlags, /*accessNode*/ undefined, newAliasSymbol, newAliasTypeArguments);
             }
             if (flags & TypeFlags.Conditional) {
                 return getConditionalTypeInstantiation(type as ConditionalType, combineTypeMappers((type as ConditionalType).mapper, mapper), aliasSymbol, aliasTypeArguments);
@@ -18466,7 +18465,7 @@ namespace ts {
                         const baseIndexType = getBaseConstraintOfType(indexType) || indexType;
                         if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseIndexType)) {
                             const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
-                            const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, (target as IndexedAccessType).noUncheckedIndexedAccessCandidate, /*accessNode*/ undefined, accessFlags);
+                            const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, accessFlags);
                             if (constraint) {
                                 if (reportErrors && originalErrorInfo) {
                                     // create a new chain for the constraint error
@@ -21956,6 +21955,9 @@ namespace ts {
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.ParenthesizedExpression:
                     return getFlowCacheKey((node as NonNullExpression | ParenthesizedExpression).expression, declaredType, initialType, flowContainer);
+                case SyntaxKind.QualifiedName:
+                    const left = getFlowCacheKey((node as QualifiedName).left, declaredType, initialType, flowContainer);
+                    return left && left + "." + (node as QualifiedName).right.escapedText;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(node as AccessExpression);
@@ -25186,7 +25188,10 @@ namespace ts {
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
-            return getTypeAtPosition(signature, argIndex);
+            const restIndex = signature.parameters.length - 1;
+            return signatureHasRestParameter(signature) && argIndex >= restIndex ?
+                getIndexedAccessType(getTypeOfSymbol(signature.parameters[restIndex]), getLiteralType(argIndex - restIndex), AccessFlags.Contextual) :
+                getTypeAtPosition(signature, argIndex);
         }
 
         function getContextualTypeForSubstitutionExpression(template: TemplateExpression, substitutionExpression: Expression) {
@@ -27943,8 +27948,8 @@ namespace ts {
             const effectiveIndexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType;
             const accessFlags = isAssignmentTarget(node) ?
                 AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
-                AccessFlags.None;
-            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, /*noUncheckedIndexedAccessCandidate*/ undefined, node, accessFlags | AccessFlags.ExpressionPosition) || errorType;
+                AccessFlags.ExpressionPosition;
+            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
             return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
         }
 
@@ -28301,7 +28306,7 @@ namespace ts {
                     }
                 }
                 else {
-                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
+                    const contextualType = getIndexedAccessType(restType, getLiteralType(i - index), AccessFlags.Contextual);
                     const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
                     const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
                     types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
@@ -31487,7 +31492,7 @@ namespace ts {
                         checkPropertyAccessibility(property, /*isSuper*/ false, /*writing*/ true, objectLiteralType, prop);
                     }
                 }
-                const elementType = getIndexedAccessType(objectLiteralType, exprType, /*noUncheckedIndexedAccessCandidate*/ undefined, name, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, AccessFlags.ExpressionPosition);
+                const elementType = getIndexedAccessType(objectLiteralType, exprType, AccessFlags.ExpressionPosition, name);
                 const type = getFlowTypeOfDestructuring(property, elementType);
                 return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
             }
@@ -31548,7 +31553,7 @@ namespace ts {
                         // We create a synthetic expression so that getIndexedAccessType doesn't get confused
                         // when the element is a SyntaxKind.ElementAccessExpression.
                         const accessFlags = AccessFlags.ExpressionPosition | (hasDefaultValue(element) ? AccessFlags.NoTupleBoundsCheck : 0);
-                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, /*noUncheckedIndexedAccessCandidate*/ undefined, createSyntheticExpression(element, indexType), accessFlags) || errorType;
+                        const elementType = getIndexedAccessTypeOrUndefined(sourceType, indexType, accessFlags, createSyntheticExpression(element, indexType)) || errorType;
                         const assignedType = hasDefaultValue(element) ? getTypeWithFacts(elementType, TypeFacts.NEUndefined) : elementType;
                         const type = getFlowTypeOfDestructuring(element, assignedType);
                         return checkDestructuringAssignment(element, type, checkMode);
@@ -33342,6 +33347,10 @@ namespace ts {
             if (isPrivateIdentifier(node.name) && hasStaticModifier(node) && node.initializer && languageVersion === ScriptTarget.ESNext && !compilerOptions.useDefineForClassFields) {
                 error(node.initializer, Diagnostics.Static_fields_with_private_names_can_t_have_initializers_when_the_useDefineForClassFields_flag_is_not_specified_with_a_target_of_esnext_Consider_adding_the_useDefineForClassFields_flag);
             }
+            // property signatures already report "initializer not allowed in ambient context" elsewhere
+            if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.PropertyDeclaration && node.initializer) {
+                error(node, Diagnostics.Property_0_cannot_have_an_initializer_because_it_is_marked_abstract, declarationNameToString(node.name));
+            }
         }
 
         function checkPropertySignature(node: PropertySignature) {
@@ -33358,8 +33367,7 @@ namespace ts {
             // Grammar checking for modifiers is done inside the function checkGrammarFunctionLikeDeclaration
             checkFunctionOrMethodDeclaration(node);
 
-            // Abstract methods cannot have an implementation.
-            // Extra checks are to avoid reporting multiple errors relating to the "abstractness" of the node.
+            // method signatures already report "implementation not allowed in ambient context" elsewhere
             if (hasSyntacticModifier(node, ModifierFlags.Abstract) && node.kind === SyntaxKind.MethodDeclaration && node.body) {
                 error(node, Diagnostics.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract, declarationNameToString(node.name));
             }
@@ -39151,16 +39159,6 @@ namespace ts {
             return node.parent.kind === SyntaxKind.ExpressionWithTypeArguments;
         }
 
-        function getJSDocEntryNameReference(node: Identifier | PrivateIdentifier | PropertyAccessExpression | QualifiedName): JSDocNameReference | undefined {
-            while (node.parent.kind === SyntaxKind.QualifiedName) {
-                node = node.parent as QualifiedName;
-            }
-            while (node.parent.kind === SyntaxKind.PropertyAccessExpression) {
-                node = node.parent as PropertyAccessExpression;
-            }
-            return isJSDocNameReference(node.parent) ? node.parent : undefined;
-        }
-
         function forEachEnclosingClass<T>(node: Node, callback: (node: Node) => T | undefined): T | undefined {
             let result: T | undefined;
 
@@ -39235,7 +39233,7 @@ namespace ts {
             return undefined;
         }
 
-        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression): Symbol | undefined {
+        function getSymbolOfNameOrPropertyAccessExpression(name: EntityName | PrivateIdentifier | PropertyAccessExpression | JSDocMemberName): Symbol | undefined {
             if (isDeclarationName(name)) {
                 return getSymbolOfNode(name.parent);
             }
@@ -39244,7 +39242,7 @@ namespace ts {
                 name.parent.kind === SyntaxKind.PropertyAccessExpression &&
                 name.parent === (name.parent.parent as BinaryExpression).left) {
                 // Check if this is a special property assignment
-                if (!isPrivateIdentifier(name)) {
+                if (!isPrivateIdentifier(name) && !isJSDocMemberName(name)) {
                     const specialPropertyAssignmentSymbol = getSpecialPropertyAssignmentSymbolFromEntityName(name);
                     if (specialPropertyAssignmentSymbol) {
                         return specialPropertyAssignmentSymbol;
@@ -39260,14 +39258,14 @@ namespace ts {
                     return success;
                 }
             }
-            else if (!isPropertyAccessExpression(name) && !isPrivateIdentifier(name) && isInRightSideOfImportOrExportAssignment(name)) {
+            else if (isEntityName(name) && isInRightSideOfImportOrExportAssignment(name)) {
                 // Since we already checked for ExportAssignment, this really could only be an Import
                 const importEqualsDeclaration = getAncestor(name, SyntaxKind.ImportEqualsDeclaration);
                 Debug.assert(importEqualsDeclaration !== undefined);
                 return getSymbolOfPartOfRightHandSideOfImportEquals(name, /*dontResolveAlias*/ true);
             }
 
-            if (!isPropertyAccessExpression(name) && !isPrivateIdentifier(name)) {
+            if (isEntityName(name)) {
                 const possibleImportNode = isImportTypeQualifierPart(name);
                 if (possibleImportNode) {
                     getTypeFromTypeNode(possibleImportNode);
@@ -39276,8 +39274,8 @@ namespace ts {
                 }
             }
 
-            while (isRightSideOfQualifiedNameOrPropertyAccess(name)) {
-                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression;
+            while (isRightSideOfQualifiedNameOrPropertyAccessOrJSDocMemberName(name)) {
+                name = name.parent as QualifiedName | PropertyAccessEntityNameExpression | JSDocMemberName;
             }
 
             if (isHeritageClauseElementIdentifier(name)) {
@@ -39318,12 +39316,14 @@ namespace ts {
                     return undefined;
                 }
 
+                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocMemberName));
+                const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {
                         const symbol = getIntrinsicTagSymbol(name.parent as JsxOpeningLikeElement);
                         return symbol === unknownSymbol ? undefined : symbol;
                     }
-                    return resolveEntityName(name, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                    return resolveEntityName(name, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ !isJSDoc, getHostSignatureFromJSDoc(name));
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
@@ -39337,45 +39337,51 @@ namespace ts {
                     else {
                         checkQualifiedName(name, CheckMode.Normal);
                     }
+                    if (!links.resolvedSymbol && isJSDoc && isQualifiedName(name)) {
+                        return resolveJSDocMemberName(name);
+                    }
                     return links.resolvedSymbol;
+                }
+                else if (isJSDocMemberName(name)) {
+                    return resolveJSDocMemberName(name);
                 }
             }
             else if (isTypeReferenceIdentifier(name as EntityName)) {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
-
-            const jsdocReference = getJSDocEntryNameReference(name);
-            if (jsdocReference || isJSDocLink(name.parent)) {
-                const meaning = SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value;
-                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ false, getHostSignatureFromJSDoc(name));
-                if (symbol) {
-                    return symbol;
-                }
-                else if (isQualifiedName(name) && isIdentifier(name.left)) {
-                    // resolve C.m as a static member first
-                    const links = getNodeLinks(name);
-                    if (links.resolvedSymbol) {
-                        return links.resolvedSymbol;
-                    }
-                    checkQualifiedName(name, CheckMode.Normal);
-                    if (links.resolvedSymbol) {
-                        return links.resolvedSymbol;
-                    }
-
-                    // then resolve it as an instance member
-                    const s = resolveEntityName(name.left, meaning, /*ignoreErrors*/ false);
-                    if (s) {
-                        const t = getDeclaredTypeOfSymbol(s);
-                        return getPropertyOfType(t, name.right.escapedText);
-                    }
-                }
-            }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
 
             return undefined;
+        }
+
+        /**
+         * Recursively resolve entity names and jsdoc instance references:
+         * 1. K#m as K.prototype.m for a class (or other value) K
+         * 2. K.m as K.prototype.m
+         * 3. I.m as I.m for a type I, or any other I.m that fails to resolve in (1) or (2)
+         */
+        function resolveJSDocMemberName(name: EntityName | JSDocMemberName): Symbol | undefined {
+            if (isEntityName(name)) {
+                const symbol = resolveEntityName(
+                    name,
+                    SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value,
+                    /*ignoreErrors*/ false,
+                    /*dontResolveAlias*/ true,
+                    getHostSignatureFromJSDoc(name));
+                if (symbol || isIdentifier(name)) {
+                    // can't recur on identifier, so just return when it's undefined
+                    return symbol;
+                }
+            }
+            const left = resolveJSDocMemberName(name.left);
+            if (left) {
+                const proto = left.flags & SymbolFlags.Value && getPropertyOfType(getTypeOfSymbol(left), "prototype" as __String);
+                const t = proto ? getTypeOfSymbol(proto) : getDeclaredTypeOfSymbol(left);
+                return getPropertyOfType(t, name.right.escapedText);
+            }
         }
 
         function getSymbolAtLocation(node: Node, ignoreErrors?: boolean): Symbol | undefined {

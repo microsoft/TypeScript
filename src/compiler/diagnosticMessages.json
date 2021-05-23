@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '{1}' to match the '{0}' token here.": {
+    "The parser expected to find a '}' to match the '{' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -886,6 +886,10 @@
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266
+    },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
     },
 
     "'with' statements are not allowed in an async function block.": {
