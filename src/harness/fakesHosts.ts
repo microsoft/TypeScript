@@ -32,6 +32,10 @@ namespace fakes {
             this._env = env;
         }
 
+        getWidthOfTerminal(): number {
+            return 0;
+        }
+
         // Pretty output
         writeOutputIsTTY() {
             return true;

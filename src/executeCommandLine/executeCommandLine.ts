@@ -90,20 +90,19 @@ namespace ts {
     }
 
     function bold(str: string) {
-        return `[1m${str}[22m`;
+        return `\x1b[1m${str}\x1b[22m`;
     }
 
     function blue(str: string) {
-        // pretty?formatColorAndReset(str, ForegroundColorEscapeSequences.Blue) : str;
-        return `[34m${str}[39m`;
+        return `\x1b[34m${str}\x1b[39m`;
     }
 
     function blueBackground(str: string) {
-        return `[44m${str}[49m`;
+        return `\x1b[44m${str}\x1b[49m`;
     }
 
     function white(str: string) {
-        return `[37m${str}[39m`;
+        return `\x1b[37m${str}\x1b[39m`;
     }
 
     function getDisplayNameTextOfOption(option: CommandLineOption) {

@@ -1026,6 +1026,10 @@ interface Array<T> { length: number; [n: number]: T; }`
             this.modifyFile(path, this.readFile(path) + content, options);
         }
 
+        getWidthOfTerminal(): number {
+            return 0;
+        }
+
         write(message: string) {
             this.output.push(message);
         }

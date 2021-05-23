@@ -313,7 +313,7 @@ namespace ts {
         paramType: Diagnostics.VERSION,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Basic_Options,
-        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
+        description: Diagnostics.Specify_ECMAScript_target_version,
         defaultValueDescription: "ES3"
     };
 
@@ -397,7 +397,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_none_commonjs_amd_system_umd_es2015_es2020_or_ESNext,
+            description: Diagnostics.Specify_module_code_generation,
         },
         {
             name: "lib",

@@ -7,6 +7,7 @@ namespace ts.server {
         args: [],
         newLine: "\n",
         useCaseSensitiveFileNames: true,
+        getWidthOfTerminal: () => 0,
         write(s): void { lastWrittenToHost = s; },
         readFile: returnUndefined,
         writeFile: noop,
