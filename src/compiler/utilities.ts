@@ -3939,8 +3939,9 @@ namespace ts {
         let hasTrailingComment = false;
 
         function updateLineCountAndPosFor(s: string) {
-            const lineStartsOfS = computeLineStarts(s);
-            if (lineStartsOfS.length > 1) {
+            // Most arguments don't contain one of JS's four linebreak characters
+            if (/[\r\n\u2028\u2029]/.test(s)) {
+                const lineStartsOfS = computeLineStarts(s);
                 lineCount = lineCount + lineStartsOfS.length - 1;
                 linePos = output.length - s.length + last(lineStartsOfS);
                 lineStart = (linePos - output.length) === 0;
