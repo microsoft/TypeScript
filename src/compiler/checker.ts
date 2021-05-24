@@ -12605,6 +12605,11 @@ namespace ts {
             return indexSymbol && getIndexDeclarationOfIndexSymbol(indexSymbol, kind);
         }
 
+        function getIndexDeclarationOfSymbolTable(symbolTable: SymbolTable | undefined, kind: IndexKind): IndexSignatureDeclaration | undefined {
+            const indexSymbol = symbolTable && getIndexSymbolFromSymbolTable(symbolTable);
+            return indexSymbol && getIndexDeclarationOfIndexSymbol(indexSymbol, kind);
+        }
+
         function getIndexDeclarationOfIndexSymbol(indexSymbol: Symbol, kind: IndexKind): IndexSignatureDeclaration | undefined {
             const syntaxKind = kind === IndexKind.Number ? SyntaxKind.NumberKeyword : SyntaxKind.StringKeyword;
             if (indexSymbol?.declarations) {
@@ -36868,15 +36873,16 @@ namespace ts {
             }
         }
 
-        function checkIndexConstraints(type: Type) {
-            const declaredNumberIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.Number);
-            const declaredStringIndexer = getIndexDeclarationOfSymbol(type.symbol, IndexKind.String);
+        function checkIndexConstraints(type: Type, isStatic?: boolean) {
+            const declaredNumberIndexer = getIndexDeclarationOfSymbolTable(isStatic ? type.symbol?.exports : type.symbol?.members, IndexKind.Number);
+            const declaredStringIndexer = getIndexDeclarationOfSymbolTable(isStatic ? type.symbol?.exports : type.symbol?.members, IndexKind.String);
 
             const stringIndexType = getIndexTypeOfType(type, IndexKind.String);
             const numberIndexType = getIndexTypeOfType(type, IndexKind.Number);
 
             if (stringIndexType || numberIndexType) {
                 forEach(getPropertiesOfObjectType(type), prop => {
+                    if (isStatic && prop.flags & SymbolFlags.Prototype) return;
                     const propType = getTypeOfSymbol(prop);
                     checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
                     checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
@@ -36905,11 +36911,6 @@ namespace ts {
                 if (!errorNode && (getObjectFlags(type) & ObjectFlags.Interface)) {
                     const someBaseTypeHasBothIndexers = forEach(getBaseTypes(type as InterfaceType), base => getIndexTypeOfType(base, IndexKind.String) && getIndexTypeOfType(base, IndexKind.Number));
                     errorNode = someBaseTypeHasBothIndexers || !type.symbol.declarations ? undefined : type.symbol.declarations[0];
-                }
-                if (!errorNode) {
-                    // `getIndexDeclarationOfSymbol` does not return the declarations for static index signatures, since they
-                    // come from the __index symbol in the `exports` table of the symbol, and not the `members` table
-                    errorNode = getIndexInfoOfType(type, IndexKind.Number)?.declaration || getIndexInfoOfType(type, IndexKind.String)?.declaration;
                 }
             }
 
@@ -37260,7 +37261,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
-                checkIndexConstraints(staticType);
+                checkIndexConstraints(staticType, /*isStatic*/ true);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
             }
