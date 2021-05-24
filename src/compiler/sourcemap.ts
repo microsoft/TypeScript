@@ -17,6 +17,7 @@ namespace ts {
 
         const names: string[] = [];
         let nameToNameIndexMap: ESMap<string, number> | undefined;
+        const mappingCharCodes: number[] = [];
         let mappings = "";
 
         // Last recorded and encoded mappings
@@ -210,6 +211,15 @@ namespace ts {
                 || lastNameIndex !== pendingNameIndex;
         }
 
+        function appendMappingCharCode(charCode: number) {
+            mappingCharCodes.push(charCode);
+            // String.fromCharCode accepts its arguments on the stack, so we have to chunk the input,
+            // otherwise we can get stack overflows for large source maps
+            if (mappingCharCodes.length >= 1024) {
+                flushMappingBuffer();
+            }
+        }
+
         function commitPendingMapping() {
             if (!hasPending || !shouldCommitMapping()) {
                 return;
@@ -221,40 +231,41 @@ namespace ts {
             if (lastGeneratedLine < pendingGeneratedLine) {
                 // Emit line delimiters
                 do {
-                    mappings += ";";
+                    appendMappingCharCode(CharacterCodes.semicolon);
                     lastGeneratedLine++;
-                    lastGeneratedCharacter = 0;
                 }
                 while (lastGeneratedLine < pendingGeneratedLine);
+                // Only need to set this once
+                lastGeneratedCharacter = 0;
             }
             else {
                 Debug.assertEqual(lastGeneratedLine, pendingGeneratedLine, "generatedLine cannot backtrack");
                 // Emit comma to separate the entry
                 if (hasLast) {
-                    mappings += ",";
+                    appendMappingCharCode(CharacterCodes.comma);
                 }
             }
 
             // 1. Relative generated character
-            mappings += base64VLQFormatEncode(pendingGeneratedCharacter - lastGeneratedCharacter);
+            appendBase64VLQ(pendingGeneratedCharacter - lastGeneratedCharacter);
             lastGeneratedCharacter = pendingGeneratedCharacter;
 
             if (hasPendingSource) {
                 // 2. Relative sourceIndex
-                mappings += base64VLQFormatEncode(pendingSourceIndex - lastSourceIndex);
+                appendBase64VLQ(pendingSourceIndex - lastSourceIndex);
                 lastSourceIndex = pendingSourceIndex;
 
                 // 3. Relative source line
-                mappings += base64VLQFormatEncode(pendingSourceLine - lastSourceLine);
+                appendBase64VLQ(pendingSourceLine - lastSourceLine);
                 lastSourceLine = pendingSourceLine;
 
                 // 4. Relative source character
-                mappings += base64VLQFormatEncode(pendingSourceCharacter - lastSourceCharacter);
+                appendBase64VLQ(pendingSourceCharacter - lastSourceCharacter);
                 lastSourceCharacter = pendingSourceCharacter;
 
                 if (hasPendingName) {
                     // 5. Relative nameIndex
-                    mappings += base64VLQFormatEncode(pendingNameIndex - lastNameIndex);
+                    appendBase64VLQ(pendingNameIndex - lastNameIndex);
                     lastNameIndex = pendingNameIndex;
                 }
             }
@@ -263,8 +274,16 @@ namespace ts {
             exit();
         }
 
+        function flushMappingBuffer(): void {
+            if (mappingCharCodes.length > 0) {
+                mappings += String.fromCharCode.apply(undefined, mappingCharCodes);
+                mappingCharCodes.length = 0;
+            }
+        }
+
         function toJSON(): RawSourceMap {
             commitPendingMapping();
+            flushMappingBuffer();
             return {
                 version: 3,
                 file,
@@ -274,6 +293,31 @@ namespace ts {
                 mappings,
                 sourcesContent,
             };
+        }
+
+        function appendBase64VLQ(inValue: number): void {
+            // Add a new least significant bit that has the sign of the value.
+            // if negative number the least significant bit that gets added to the number has value 1
+            // else least significant bit value that gets added is 0
+            // eg. -1 changes to binary : 01 [1] => 3
+            //     +1 changes to binary : 01 [0] => 2
+            if (inValue < 0) {
+                inValue = ((-inValue) << 1) + 1;
+            }
+            else {
+                inValue = inValue << 1;
+            }
+
+            // Encode 5 bits at a time starting from least significant bits
+            do {
+                let currentDigit = inValue & 31; // 11111
+                inValue = inValue >> 5;
+                if (inValue > 0) {
+                    // There are still more digits to decode, set the msb (6th bit)
+                    currentDigit = currentDigit | 32;
+                }
+                appendMappingCharCode(base64FormatEncode(currentDigit));
+            } while (inValue > 0);
         }
     }
 
@@ -542,34 +586,6 @@ namespace ts {
             ch === CharacterCodes.plus ? 62 :
             ch === CharacterCodes.slash ? 63 :
             -1;
-    }
-
-    function base64VLQFormatEncode(inValue: number) {
-        // Add a new least significant bit that has the sign of the value.
-        // if negative number the least significant bit that gets added to the number has value 1
-        // else least significant bit value that gets added is 0
-        // eg. -1 changes to binary : 01 [1] => 3
-        //     +1 changes to binary : 01 [0] => 2
-        if (inValue < 0) {
-            inValue = ((-inValue) << 1) + 1;
-        }
-        else {
-            inValue = inValue << 1;
-        }
-
-        // Encode 5 bits at a time starting from least significant bits
-        let encodedStr = "";
-        do {
-            let currentDigit = inValue & 31; // 11111
-            inValue = inValue >> 5;
-            if (inValue > 0) {
-                // There are still more digits to decode, set the msb (6th bit)
-                currentDigit = currentDigit | 32;
-            }
-            encodedStr = encodedStr + String.fromCharCode(base64FormatEncode(currentDigit));
-        } while (inValue > 0);
-
-        return encodedStr;
     }
 
     interface MappedPosition {

@@ -637,11 +637,11 @@ namespace ts.projectSystem {
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
                 const service = createProjectService(host);
                 setupConfigureHost(service, configureHost);
-                service.openExternalProject(<protocol.ExternalProject>{
+                service.openExternalProject({
                     projectFileName: `${tscWatch.projectRoot}/project.csproj`,
                     rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
                     options: { excludeDirectories: ["node_modules"] }
-                });
+                } as protocol.ExternalProject);
                 service.openClientFile(main.path);
                 return host;
             }
@@ -675,11 +675,11 @@ namespace ts.projectSystem {
                 const files = [libFile, main, bar, foo];
                 const host = createServerHost(files, { currentDirectory: tscWatch.projectRoot });
                 const service = createProjectService(host);
-                service.openExternalProject(<protocol.ExternalProject>{
+                service.openExternalProject({
                     projectFileName: `${tscWatch.projectRoot}/project.csproj`,
                     rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
                     options: { excludeDirectories: ["**/../*"] }
-                });
+                } as protocol.ExternalProject);
                 service.openClientFile(main.path);
                 const project = service.externalProjects[0];
                 assert.deepEqual(project.getAllProjectErrors(), [

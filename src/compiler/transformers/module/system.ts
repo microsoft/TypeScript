@@ -569,16 +569,16 @@ namespace ts {
         function sourceElementVisitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    return visitImportDeclaration(<ImportDeclaration>node);
+                    return visitImportDeclaration(node as ImportDeclaration);
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
 
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    return visitExportDeclaration(node as ExportDeclaration);
 
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node as ExportAssignment);
 
                 default:
                     return nestedElementVisitor(node);
@@ -885,7 +885,7 @@ namespace ts {
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
                 const isExportedDeclaration = hasSyntacticModifier(node.original!, ModifierFlags.Export);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original, isExportedDeclaration);
+                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement, isExportedDeclaration);
             }
 
             return node;
@@ -1156,61 +1156,61 @@ namespace ts {
         function nestedElementVisitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.VariableStatement:
-                    return visitVariableStatement(<VariableStatement>node);
+                    return visitVariableStatement(node as VariableStatement);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.ClassDeclaration:
-                    return visitClassDeclaration(<ClassDeclaration>node);
+                    return visitClassDeclaration(node as ClassDeclaration);
 
                 case SyntaxKind.ForStatement:
-                    return visitForStatement(<ForStatement>node);
+                    return visitForStatement(node as ForStatement);
 
                 case SyntaxKind.ForInStatement:
-                    return visitForInStatement(<ForInStatement>node);
+                    return visitForInStatement(node as ForInStatement);
 
                 case SyntaxKind.ForOfStatement:
-                    return visitForOfStatement(<ForOfStatement>node);
+                    return visitForOfStatement(node as ForOfStatement);
 
                 case SyntaxKind.DoStatement:
-                    return visitDoStatement(<DoStatement>node);
+                    return visitDoStatement(node as DoStatement);
 
                 case SyntaxKind.WhileStatement:
-                    return visitWhileStatement(<WhileStatement>node);
+                    return visitWhileStatement(node as WhileStatement);
 
                 case SyntaxKind.LabeledStatement:
-                    return visitLabeledStatement(<LabeledStatement>node);
+                    return visitLabeledStatement(node as LabeledStatement);
 
                 case SyntaxKind.WithStatement:
-                    return visitWithStatement(<WithStatement>node);
+                    return visitWithStatement(node as WithStatement);
 
                 case SyntaxKind.SwitchStatement:
-                    return visitSwitchStatement(<SwitchStatement>node);
+                    return visitSwitchStatement(node as SwitchStatement);
 
                 case SyntaxKind.CaseBlock:
-                    return visitCaseBlock(<CaseBlock>node);
+                    return visitCaseBlock(node as CaseBlock);
 
                 case SyntaxKind.CaseClause:
-                    return visitCaseClause(<CaseClause>node);
+                    return visitCaseClause(node as CaseClause);
 
                 case SyntaxKind.DefaultClause:
-                    return visitDefaultClause(<DefaultClause>node);
+                    return visitDefaultClause(node as DefaultClause);
 
                 case SyntaxKind.TryStatement:
-                    return visitTryStatement(<TryStatement>node);
+                    return visitTryStatement(node as TryStatement);
 
                 case SyntaxKind.CatchClause:
-                    return visitCatchClause(<CatchClause>node);
+                    return visitCatchClause(node as CatchClause);
 
                 case SyntaxKind.Block:
-                    return visitBlock(<Block>node);
+                    return visitBlock(node as Block);
 
                 case SyntaxKind.MergeDeclarationMarker:
-                    return visitMergeDeclarationMarker(<MergeDeclarationMarker>node);
+                    return visitMergeDeclarationMarker(node as MergeDeclarationMarker);
 
                 case SyntaxKind.EndOfDeclarationMarker:
-                    return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
+                    return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
 
                 default:
                     return destructuringAndImportCallVisitor(node);
@@ -1593,7 +1593,7 @@ namespace ts {
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
                 const id = getOriginalNodeId(node);
-                currentSourceFile = <SourceFile>node;
+                currentSourceFile = node as SourceFile;
                 moduleInfo = moduleInfoMap[id];
                 exportFunction = exportFunctionsMap[id];
                 noSubstitution = noSubstitutionMap[id];
@@ -1633,7 +1633,7 @@ namespace ts {
             }
 
             if (hint === EmitHint.Expression) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
             else if (hint === EmitHint.Unspecified) {
                 return substituteUnspecified(node);
@@ -1650,7 +1650,7 @@ namespace ts {
         function substituteUnspecified(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    return substituteShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                    return substituteShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
             }
             return node;
         }
@@ -1702,14 +1702,14 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return substituteExpressionIdentifier(<Identifier>node);
+                    return substituteExpressionIdentifier(node as Identifier);
                 case SyntaxKind.BinaryExpression:
-                    return substituteBinaryExpression(<BinaryExpression>node);
+                    return substituteBinaryExpression(node as BinaryExpression);
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
-                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
+                    return substituteUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression);
                 case SyntaxKind.MetaProperty:
-                    return substituteMetaProperty(<MetaProperty>node);
+                    return substituteMetaProperty(node as MetaProperty);
             }
 
             return node;

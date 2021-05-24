@@ -23,12 +23,12 @@ namespace ts.projectSystem {
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
             const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
-            session.executeCommand(<protocol.OpenRequest>{
+            session.executeCommand({
                 seq: 0,
                 type: "request",
                 command: "open",
                 arguments: { file: f1.path }
-            });
+            } as protocol.OpenRequest);
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);

@@ -355,3 +355,36 @@ function get<K extends keyof A>(key: K, obj: A): number {
 
 };
 
+// Repro from #44093
+
+class EventEmitter<ET> {
+>EventEmitter : EventEmitter<ET>
+
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+>off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
+>args : [K, number] | [unknown, string]
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+>once : <ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET) => void
+>emittingObject : T
+>eventName : keyof ET
+
+    emittingObject.off(eventName, 0);
+>emittingObject.off(eventName, 0) : void
+>emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>emittingObject : T
+>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>eventName : keyof ET
+>0 : 0
+
+    emittingObject.off(eventName as typeof eventName, 0);
+>emittingObject.off(eventName as typeof eventName, 0) : void
+>emittingObject.off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>emittingObject : T
+>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
+>eventName as typeof eventName : keyof ET
+>eventName : keyof ET
+>eventName : keyof ET
+>0 : 0
+}
+
