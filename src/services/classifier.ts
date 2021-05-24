@@ -806,7 +806,8 @@ namespace ts {
 
         function tryClassifyTripleSlashComment(start: number, width: number): boolean {
             const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
-            const attributeRegex = /(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+            // Require a leading whitespace character (the parser already does) to prevent terrible backtracking performance
+            const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
 
             const text = sourceFile.text.substr(start, width);
             const match = tripleSlashXMLCommentRegEx.exec(text);
@@ -842,30 +843,30 @@ namespace ts {
                     break;
                 }
 
-                const newAttrPos = pos + attrMatch.index;
+                const newAttrPos = pos + attrMatch.index + attrMatch[1].length; // whitespace
                 if (newAttrPos > attrPos) {
                     pushCommentRange(attrPos, newAttrPos - attrPos);
                     attrPos = newAttrPos;
                 }
 
-                pushClassification(attrPos, attrMatch[1].length, ClassificationType.jsxAttribute); // attribute name
-                attrPos += attrMatch[1].length;
+                pushClassification(attrPos, attrMatch[2].length, ClassificationType.jsxAttribute); // attribute name
+                attrPos += attrMatch[2].length;
 
-                if (attrMatch[2].length) {
-                    pushCommentRange(attrPos, attrMatch[2].length); // whitespace
-                    attrPos += attrMatch[2].length;
+                if (attrMatch[3].length) {
+                    pushCommentRange(attrPos, attrMatch[3].length); // whitespace
+                    attrPos += attrMatch[3].length;
                 }
 
-                pushClassification(attrPos, attrMatch[3].length, ClassificationType.operator); // =
-                attrPos += attrMatch[3].length;
+                pushClassification(attrPos, attrMatch[4].length, ClassificationType.operator); // =
+                attrPos += attrMatch[4].length;
 
-                if (attrMatch[4].length) {
-                    pushCommentRange(attrPos, attrMatch[4].length); // whitespace
-                    attrPos += attrMatch[4].length;
+                if (attrMatch[5].length) {
+                    pushCommentRange(attrPos, attrMatch[5].length); // whitespace
+                    attrPos += attrMatch[5].length;
                 }
 
-                pushClassification(attrPos, attrMatch[5].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
-                attrPos += attrMatch[5].length;
+                pushClassification(attrPos, attrMatch[6].length, ClassificationType.jsxAttributeStringLiteralValue); // attribute value
+                attrPos += attrMatch[6].length;
             }
 
             pos += match[4].length;
