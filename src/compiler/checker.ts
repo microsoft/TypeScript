@@ -39316,7 +39316,7 @@ namespace ts {
                     return undefined;
                 }
 
-                const isJSDoc = findAncestor(name, or(isJSDocLink, isJSDocNameReference, isJSDocMemberName));
+                const isJSDoc = findAncestor(name, or(isJSDocLinkLike, isJSDocNameReference, isJSDocMemberName));
                 const meaning = isJSDoc ? SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Value : SymbolFlags.Value;
                 if (name.kind === SyntaxKind.Identifier) {
                     if (isJSXTagName(name) && isJsxIntrinsicIdentifier(name)) {

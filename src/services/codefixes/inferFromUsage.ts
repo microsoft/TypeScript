@@ -282,6 +282,7 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -380,7 +381,7 @@ namespace ts.codefix {
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as (JSDocText | JSDocLink)[];
+        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);
