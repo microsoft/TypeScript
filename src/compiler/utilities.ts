@@ -539,8 +539,6 @@ namespace ts {
      */
      export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
 
-    const isWhitespaceRegex = /\s/;
-
     /**
      * https://jsbench.me/gjkoxld4au/1
      * The simple regex for this, /\s+$/g is O(n^2) in v8.
@@ -550,8 +548,7 @@ namespace ts {
     function trimEndImpl(s: string) {
         let end = s.length - 1;
         while (end >= 0) {
-            // re.test is measurably faster than str.match - probably because there's no result object allocation
-            if (!isWhitespaceRegex.test(s.charAt(end))) break;
+            if (!isWhiteSpaceLike(s.charCodeAt(end))) break;
             end--;
         }
         return s.slice(0, end + 1);
