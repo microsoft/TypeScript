@@ -3190,8 +3190,11 @@ namespace ts {
         // in bad backtracking (and we don't care which is matched - just that some /.. segment
         // comes after some **/ segment).
         const wildcardIndex = startsWith(s, "**/") ? 0 : s.indexOf("/**/");
+        if (wildcardIndex === -1) {
+            return false;
+        }
         const lastDotIndex = endsWith(s, "/..") ? s.length : s.lastIndexOf("/../");
-        return wildcardIndex !== -1 && lastDotIndex > wildcardIndex;
+        return lastDotIndex > wildcardIndex;
     }
 
     /* @internal */
@@ -3314,7 +3317,7 @@ namespace ts {
             // characters could match any of the central patterns, resulting in bad backtracking.
             const questionWildcardIndex = spec.indexOf("?");
             const starWildcardIndex = spec.indexOf("*");
-            const lastDirectorySeperatorIndex = spec.lastIndexOf("\/");
+            const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
             return {
                 key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
                 flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)

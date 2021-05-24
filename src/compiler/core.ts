@@ -2037,20 +2037,49 @@ namespace ts {
     export function removeMinAndVersionNumbers(fileName: string) {
         // We used to use the regex /[.-]((min)|(\d+(\.\d+)*))$/ and would just .replace it twice.
         // Unfortunately, that regex has O(n^2) performance because v8 doesn't match from the end of the string.
-        // Instead, we now split the input on the . and - characters, and drop the trailing segements
-        // which match the /^[.-](min|\d+)$/ pattern, which should be O(n). (This technically allows more `.min` repetitions than before, but that's fine)
+        // Instead, we now essentially scan the filename (backwards) ourselves.
 
-        // Match a "." or "-" followed by a version number or 'min' at the end of the name
-        const trailingMinOrVersion = /^[.-](min|\d+)$/;
+        let end: number = fileName.length;
 
-        // Split on . and -, then remove all trailing segments that match
-        const parts = fileName.split(/(?=[.-])/g);
-        let end = parts.length - 1;
-        while (parts.length > 1 && end >= 0) {
-            if (!trailingMinOrVersion.test(parts[end])) break;
-            end--;
+        for (let pos = end - 1; pos > 0; pos--) {
+            let ch: number = fileName.charCodeAt(pos);
+            if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
+                // Match a \d+ segment
+                do {
+                    --pos;
+                    ch = fileName.charCodeAt(pos);
+                } while (pos > 0 && ch >= CharacterCodes._0 && ch <= CharacterCodes._9);
+            }
+            else if (pos > 4 && (ch === CharacterCodes.n || ch === CharacterCodes.N)) {
+                // Looking for "min" or "min"
+                // Already matched the 'n'
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.i && ch !== CharacterCodes.I) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.m && ch !== CharacterCodes.M) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+            }
+            else {
+                // This character is not part of either suffix pattern
+                break;
+            }
+
+            if (ch !== CharacterCodes.minus && ch !== CharacterCodes.dot) {
+                break;
+            }
+
+            end = pos;
         }
-        return parts.slice(0, end + 1).join("");
+
+        // end might be fileName.length, in which case this should internally no-op
+        return end === fileName.length ? fileName : fileName.slice(0, end);
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */

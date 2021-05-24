@@ -9063,7 +9063,7 @@ namespace ts {
         if (namedArgRegExCache.has(name)) {
             return namedArgRegExCache.get(name)!;
         }
-        const result = new RegExp(`(\\s${name}\\s*=\\s*)(('([^']*)')|("([^"]*)"))`, "im");
+        const result = new RegExp(`(\\s${name}\\s*=\\s*)(?:(?:'([^']*)')|(?:"([^"]*)"))`, "im");
         namedArgRegExCache.set(name, result);
         return result;
     }
@@ -9087,7 +9087,7 @@ namespace ts {
                         return; // Missing required argument, don't parse
                     }
                     else if (matchResult) {
-                        const value = matchResult[4] || matchResult[6];
+                        const value = matchResult[2] || matchResult[3];
                         if (arg.captureSpan) {
                             const startPos = range.pos + matchResult.index + matchResult[1].length + 1;
                             argument[arg.name] = {

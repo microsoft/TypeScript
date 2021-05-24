@@ -517,7 +517,7 @@ namespace ts {
 
         if (isJSDocTypeExpressionOrChild(node)) {
             // strip space + asterisk at line start
-            text = text.split(/\r\n|\n|\r/).map(l => trimStringStart(l.replace(/^\s*\*/, ""))).join("\n");
+            text = text.split(/\r\n|\n|\r/).map(line => trimStringStart(line.replace(/^\s*\*/, ""))).join("\n");
         }
 
         return text;
@@ -526,7 +526,7 @@ namespace ts {
     /**
      * Removes the leading and trailing white space and line terminator characters from a string.
      */
-    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(s.replace(/^\s+/g, ""));
+    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
 
     /**
      * Returns a copy with trailing whitespace removed.
