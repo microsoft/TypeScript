@@ -69,7 +69,6 @@ import {
     ComputedPropertyName,
     computeLineAndCharacterOfPosition,
     computeLineOfPosition,
-    computeLineStarts,
     concatenate,
     ConditionalExpression,
     ConstructorDeclaration,
@@ -6012,7 +6011,10 @@ export function createTextWriter(newLine: string): EmitTextWriter {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
     // See: https://github.com/microsoft/TypeScript/issues/52924
     /* eslint-disable no-var */
-    var output: string;
+    var outputBeforeFragments: string;
+    var fragments: string[] = [];
+    let length: number; // combined length of outputBeforeFragments and all fragments
+
     var indent: number;
     var lineStart: boolean;
     var lineCount: number;
@@ -6020,26 +6022,52 @@ export function createTextWriter(newLine: string): EmitTextWriter {
     var hasTrailingComment = false;
     /* eslint-enable no-var */
 
-    function updateLineCountAndPosFor(s: string) {
-        const lineStartsOfS = computeLineStarts(s);
-        if (lineStartsOfS.length > 1) {
-            lineCount = lineCount + lineStartsOfS.length - 1;
-            linePos = output.length - s.length + last(lineStartsOfS);
-            lineStart = (linePos - output.length) === 0;
+    function appendAndUpdateLineCountAndPos(s: string, indentString = ""): void {
+        if (indentString) {
+            fragments.push(indentString);
+            length += indentString.length;
+        }
+
+        let lastLinePos = 0;
+        for (let pos = 0; pos < s.length;) {
+            const ch = s.charCodeAt(pos);
+            pos++;
+
+            if (isLineBreak(ch)) {
+                if (ch === CharacterCodes.carriageReturn && s.charCodeAt(pos) === CharacterCodes.lineFeed) {
+                    pos++;
+                }
+                lineCount++;
+                lastLinePos = pos;
+            }
+        }
+
+        fragments.push(s);
+        length += s.length;
+
+        // Use line breaks as a heuristic for when to flush lineFragments
+        if (lastLinePos > 0) {
+            consumeFragments();
+            linePos = length - s.length + lastLinePos;
+            lineStart = length === linePos;
         }
         else {
             lineStart = false;
         }
     }
 
+    function consumeFragments() {
+        if (fragments.length) {
+            // NB: no effect on `length`
+            outputBeforeFragments += fragments.join("");
+            fragments.length = 0;
+        }
+        Debug.assert(length === outputBeforeFragments.length);
+    }
+
     function writeText(s: string) {
         if (s && s.length) {
-            if (lineStart) {
-                s = getIndentString(indent) + s;
-                lineStart = false;
-            }
-            output += s;
-            updateLineCountAndPosFor(s);
+            appendAndUpdateLineCountAndPos(s, lineStart ? getIndentString(indent) : "");
         }
     }
 
@@ -6054,7 +6082,9 @@ export function createTextWriter(newLine: string): EmitTextWriter {
     }
 
     function reset(): void {
-        output = "";
+        outputBeforeFragments = "";
+        fragments.length = 0;
+        length = 0;
         indent = 0;
         lineStart = true;
         lineCount = 0;
@@ -6064,8 +6094,7 @@ export function createTextWriter(newLine: string): EmitTextWriter {
 
     function rawWrite(s: string) {
         if (s !== undefined) {
-            output += s;
-            updateLineCountAndPosFor(s);
+            appendAndUpdateLineCountAndPos(s);
             hasTrailingComment = false;
         }
     }
@@ -6078,16 +6107,36 @@ export function createTextWriter(newLine: string): EmitTextWriter {
 
     function writeLine(force?: boolean) {
         if (!lineStart || force) {
-            output += newLine;
+            // We can't just call appendAndUpdateLineCountAndPos because `newLine` might not actually
+            // contain a newline character (e.g. during testing).
+            if (newLine) {
+                fragments.push(newLine);
+                length += newLine.length;
+            }
+            consumeFragments();
+            linePos = length;
             lineCount++;
-            linePos = output.length;
             lineStart = true;
             hasTrailingComment = false;
         }
     }
 
     function getTextPosWithWriteLine() {
-        return lineStart ? output.length : (output.length + newLine.length);
+        return lineStart ? length : (length + newLine.length);
+    }
+
+    function hasTrailingWhitespace() {
+        if (!length) {
+            return false;
+        }
+
+        const lastFragment = lastOrUndefined(fragments) || outputBeforeFragments;
+        return isWhiteSpaceLike(lastFragment.charCodeAt(lastFragment.length - 1));
+    }
+
+    function getText() {
+        consumeFragments();
+        return outputBeforeFragments;
     }
 
     reset();
@@ -6104,13 +6153,13 @@ export function createTextWriter(newLine: string): EmitTextWriter {
             indent--;
         },
         getIndent: () => indent,
-        getTextPos: () => output.length,
+        getTextPos: () => length,
         getLine: () => lineCount,
-        getColumn: () => lineStart ? indent * getIndentSize() : output.length - linePos,
-        getText: () => output,
+        getColumn: () => lineStart ? indent * getIndentSize() : length - linePos,
+        getText,
         isAtStartOfLine: () => lineStart,
         hasTrailingComment: () => hasTrailingComment,
-        hasTrailingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
+        hasTrailingWhitespace,
         clear: reset,
         writeKeyword: write,
         writeOperator: write,
