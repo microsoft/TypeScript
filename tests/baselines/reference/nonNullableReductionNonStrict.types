@@ -1,4 +1,4 @@
-=== tests/cases/compiler/nonNullableReduction.ts ===
+=== tests/cases/compiler/nonNullableReductionNonStrict.ts ===
 // Repros from #43425
 
 type Transform1<T> = ((value: string) => T) | (string extends T ? undefined : never);
@@ -16,35 +16,35 @@ function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
 >f2 : Transform2<T>
 
     f1?.("hello");
->f1?.("hello") : T | undefined
->f1 : ((value: string) => T) | undefined
+>f1?.("hello") : T
+>f1 : (value: string) => T
 >"hello" : "hello"
 
     f2?.("hello");
->f2?.("hello") : T | undefined
->f2 : ((value: string) => T) | ((value: string) => T) | undefined
+>f2?.("hello") : T
+>f2 : ((value: string) => T) | ((value: string) => T)
 >"hello" : "hello"
 }
 
 function f1<T>(x: T | (string extends T ? null | undefined : never)) {
 >f1 : <T>(x: T | (string extends T ? null | undefined : never)) => void
->x : T | (string extends T ? null | undefined : never)
+>x : T | (string extends T ? null : never)
 >null : null
 
     let z = x!;  // NonNullable<T>
->z : NonNullable<T>
->x! : NonNullable<T>
->x : T | (string extends T ? null | undefined : never)
+>z : T | (string extends T ? null : never)
+>x! : T | (string extends T ? null : never)
+>x : T | (string extends T ? null : never)
 }
 
 function f2<T, U extends null | undefined>(x: T | U) {
->f2 : <T, U extends null | undefined>(x: T | U) => void
+>f2 : <T, U extends null>(x: T | U) => void
 >null : null
 >x : T | U
 
     let z = x!;  // NonNullable<T>
->z : NonNullable<T>
->x! : NonNullable<T>
+>z : T | U
+>x! : T | U
 >x : T | U
 }
 
