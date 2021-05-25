@@ -294,10 +294,12 @@ namespace ts.moduleSpecifiers {
             const result = forEach(targets, p => !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
-        const links = host.getSymlinkCache
-            ? host.getSymlinkCache()
-            : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
+        const links = host.getSymlinkCache?.() || discoverProbableSymlinks(
+            host.getSourceFiles(),
+            host.getResolvedTypeReferenceDirectives ? arrayFrom(host.getResolvedTypeReferenceDirectives?.().values()) : emptyArray,
+            getCanonicalFileName,
+            cwd);
         const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
         const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
         const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {

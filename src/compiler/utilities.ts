@@ -6227,18 +6227,19 @@ namespace ts {
         };
     }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
+    export function discoverProbableSymlinks(files: readonly SourceFile[], typeReferenceDirectives: readonly (ResolvedTypeReferenceDirective | undefined)[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
         const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatMap(files, sf => {
-            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
-                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
-            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
-                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
+        const symlinksFromFiles: readonly (ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined)[] = flatMap(files, sf => {
+            return sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
+                res?.originalPath ? res : undefined));
         });
 
-        for (const [resolvedPath, originalPath] of symlinks) {
-            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+        const resolutions = symlinksFromFiles.concat(typeReferenceDirectives);
+        for (const resolution of resolutions) {
+            if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) continue;
+            const { resolvedFileName, originalPath } = resolution;
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,

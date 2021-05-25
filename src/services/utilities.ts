@@ -1847,6 +1847,7 @@ namespace ts {
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
             getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,
+            getResolvedTypeReferenceDirectives: program.getResolvedTypeReferenceDirectives,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
             getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),

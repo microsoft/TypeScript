@@ -6559,7 +6559,7 @@ namespace ts {
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
-        /*@internal*/getSymlinkCache?(): SymlinkCache;
+        /*@internal*/getSymlinkCache?(): SymlinkCache | undefined;
 
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
@@ -8132,7 +8132,8 @@ namespace ts {
         directoryExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
         realpath?(path: string): string;
-        getSymlinkCache?(): SymlinkCache;
+        getSymlinkCache?(): SymlinkCache | undefined;
+        getResolvedTypeReferenceDirectives?(): ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined>;
         getModuleSpecifierCache?(): ModuleSpecifierCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
         getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;

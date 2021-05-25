@@ -351,10 +351,14 @@ namespace ts.server {
             return this.projectService.typingsCache;
         }
 
-        /*@internal*/
-        getSymlinkCache(): SymlinkCache {
-            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
-                this.program?.getSourceFiles() || emptyArray,
+        /**
+         * @internal
+         * Returns undefined prior to program creation.
+         */
+        getSymlinkCache(): SymlinkCache | undefined {
+            return this.symlinks || this.program && (this.symlinks = discoverProbableSymlinks(
+                this.program.getSourceFiles() || emptyArray,
+                arrayFrom(this.program.getResolvedTypeReferenceDirectives().values()),
                 this.getCanonicalFileName,
                 this.getCurrentDirectory()));
         }
@@ -1902,7 +1906,7 @@ namespace ts.server {
                     moduleResolutionHost));
 
                 const program = hostProject.getCurrentProgram()!;
-                const symlinkCache = hostProject.getSymlinkCache();
+                const symlinkCache = hostProject.getSymlinkCache()!; // Guaranteed to be set when program is set
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
                     const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;

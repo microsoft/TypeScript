@@ -1650,6 +1650,7 @@ namespace ts {
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
                 getResolvedProjectReferenceToRedirect,
+                getResolvedTypeReferenceDirectives: program.getResolvedTypeReferenceDirectives,
                 getProjectReferenceRedirect,
                 isSourceOfProjectReferenceRedirect,
                 getSymlinkCache,
@@ -3660,11 +3661,9 @@ namespace ts {
         }
 
         function getSymlinkCache(): SymlinkCache {
-            if (host.getSymlinkCache) {
-                return host.getSymlinkCache();
-            }
-            return symlinks || (symlinks = discoverProbableSymlinks(
+            return host.getSymlinkCache?.() || (symlinks ||= discoverProbableSymlinks(
                 files,
+                arrayFrom(resolvedTypeReferenceDirectives.values()),
                 getCanonicalFileName,
                 host.getCurrentDirectory()));
         }

@@ -4485,6 +4485,7 @@ namespace ts {
                         getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
                         getSymlinkCache: maybeBind(host, host.getSymlinkCache),
+                        getResolvedTypeReferenceDirectives: maybeBind(host, host.getResolvedTypeReferenceDirectives),
                         useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
                         redirectTargetsMap: host.redirectTargetsMap,
                         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
