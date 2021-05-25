@@ -1762,7 +1762,7 @@ namespace ts.Completions {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
-                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences)
+                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences) || {}
                         : { moduleSpecifier: undefined, exportInfo: find(info, isImportableExportInfo) };
                     if (!exportInfo) return;
                     const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);

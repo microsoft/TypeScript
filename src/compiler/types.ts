@@ -8137,6 +8137,7 @@ namespace ts {
         getModuleSpecifierCache?(): ModuleSpecifierCache;
         getGlobalTypingsCacheLocation?(): string | undefined;
         getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
+        preferFailureToResultsWithIgnoredPaths?(): boolean;
 
         getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;

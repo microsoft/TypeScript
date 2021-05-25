@@ -163,7 +163,16 @@ namespace ts.moduleSpecifiers {
 
         return pathsSpecifiers?.length ? pathsSpecifiers :
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
-            Debug.checkDefined(relativeSpecifiers);
+            fallback();
+
+        // Unless 'preferFailureToResultsWithIgnoredPaths' is set, we *must* generate a relative path fallback.
+        // (The declaration emitter must write something, but auto-imports may exclude bad suggestions.)
+        function fallback() {
+            if (host.preferFailureToResultsWithIgnoredPaths?.()) {
+                return relativeSpecifiers || emptyArray;
+            }
+            return Debug.checkDefined(relativeSpecifiers);
+        }
     }
 
     interface Info {
@@ -286,7 +295,7 @@ namespace ts.moduleSpecifiers {
         const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
-        let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
+        let shouldFilterIgnoredPaths = host.preferFailureToResultsWithIgnoredPaths?.() || !every(targets, containsIgnoredPath);
 
         if (!preferSymlinks) {
             // Symlinks inside ignored paths are already filtered out of the symlink cache,
