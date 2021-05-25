@@ -9,7 +9,10 @@
 
 verify.completions({
     marker: "",
-    includes: [
-      { name: "foo", kind: "function", kindModifiers: "declare" }
-    ]
+    includes: [{
+        name: "foo",
+        kind: "function",
+        kindModifiers: "declare",
+        sortText: completion.SortText.LocationPriority
+    }]
 });

@@ -16,6 +16,18 @@ console.log(𝑀 + 𝑚); // 9
 >𝑀 : 5
 >𝑚 : 4
 
+class K {
+>K : K
+
+    #𝑚 = 4;
+>#𝑚 : number
+>4 : 4
+
+    #𝑀 = 5;
+>#𝑀 : number
+>5 : 5
+}
+
 // lower 8 bits look like 'a'
 const ၡ = 6;
 >ၡ : 6

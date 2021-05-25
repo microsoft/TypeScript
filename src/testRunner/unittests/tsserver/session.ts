@@ -164,14 +164,14 @@ namespace ts.server {
                 session.onMessage(JSON.stringify(setOptionsRequest));
                 assert.deepEqual(
                     session.getProjectService().getCompilerOptionsForInferredProjects(),
-                    <CompilerOptions>{
+                    {
                         module: ModuleKind.System,
                         target: ScriptTarget.ES5,
                         jsx: JsxEmit.React,
                         newLine: NewLineKind.LineFeed,
                         moduleResolution: ModuleResolutionKind.NodeJs,
                         allowNonTsExtensions: true // injected by tsserver
-                    });
+                    } as CompilerOptions);
             });
 
             it("Status request gives ts.version", () => {
@@ -328,7 +328,7 @@ namespace ts.server {
 
                 session.onMessage(JSON.stringify(req));
 
-                expect(lastSent).to.deep.equal(<protocol.ConfigureResponse>{
+                expect(lastSent).to.deep.equal({
                     command: CommandNames.Configure,
                     type: "response",
                     success: true,
@@ -336,7 +336,7 @@ namespace ts.server {
                     seq: 0,
                     body: undefined,
                     performanceData: undefined,
-                });
+                } as protocol.ConfigureResponse);
             });
         });
 
@@ -631,7 +631,7 @@ namespace ts.server {
 
             handle(msg: protocol.Message): void {
                 if (msg.type === "response") {
-                    const response = <protocol.Response>msg;
+                    const response = msg as protocol.Response;
                     const handler = this.callbacks[response.request_seq];
                     if (handler) {
                         handler(response);
@@ -639,7 +639,7 @@ namespace ts.server {
                     }
                 }
                 else if (msg.type === "event") {
-                    const event = <protocol.Event>msg;
+                    const event = msg as protocol.Event;
                     this.emit(event.event, event.body);
                 }
             }

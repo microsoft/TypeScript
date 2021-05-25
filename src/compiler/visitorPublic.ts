@@ -41,7 +41,7 @@ namespace ts {
         }
 
         Debug.assertNode(visitedNode, test);
-        return <T>visitedNode;
+        return visitedNode as T;
     }
 
     /**
@@ -119,12 +119,12 @@ namespace ts {
                     if (isArray(visited)) {
                         for (const visitedNode of visited) {
                             void Debug.assertNode(visitedNode, test);
-                            updated.push(<T>visitedNode);
+                            updated.push(visitedNode as T);
                         }
                     }
                     else {
                         void Debug.assertNode(visited, test);
-                        updated.push(<T>visited);
+                        updated.push(visited as T);
                     }
                 }
             }
