@@ -961,13 +961,7 @@ namespace ts {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
             const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-            let pathPatterns: readonly (string | Pattern)[] | undefined;
-            if (configFile?.configFileSpecs) {
-                pathPatterns = configFile.configFileSpecs.pathPatterns;
-                if (!pathPatterns) {
-                    configFile.configFileSpecs.pathPatterns = pathPatterns = tryParsePatterns(paths);
-                }
-            }
+            const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ||= tryParsePatterns(paths) : undefined;
             return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
     }
