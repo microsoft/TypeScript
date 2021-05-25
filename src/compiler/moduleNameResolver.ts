@@ -1407,8 +1407,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
-            const paths = versionPaths.paths;
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, paths, /*pathPatterns*/ undefined, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, /*pathPatterns*/ undefined, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
             if (result) {
                 return removeIgnoredPackageId(result.value);
             }
@@ -1544,8 +1543,7 @@ namespace ts {
                     trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.versionPaths.version, version, rest);
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-                const paths = packageInfo.versionPaths.paths;
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
+                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
                 if (fromPaths) {
                     return fromPaths.value;
                 }
