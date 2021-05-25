@@ -87,6 +87,7 @@ namespace ts {
         sourceFileToPackageName: ESMap<Path, string>;
         projectReferences: readonly ProjectReference[] | undefined;
         resolvedProjectReferences: readonly (ResolvedProjectReferenceOfProgramFromBuildInfo | undefined)[] | undefined;
+        automaticTypeDirectiveNames: string[] | undefined;
         resolvedTypeReferenceDirectives: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
         fileProcessingDiagnostics: FilePreprocessingDiagnostic[] | undefined;
     }
@@ -351,6 +352,7 @@ namespace ts {
             projectReferences: state.program.getProjectReferences(),
             resolvedProjectReferences: state.program.getResolvedProjectReferences()?.map(toResolvedProjectReferenceOfProgramFromBuildInfo),
             resolvedTypeReferenceDirectives: state.program.getResolvedTypeReferenceDirectives(),
+            automaticTypeDirectiveNames: state.program.getAutomaticTypeDirectiveNames(),
             fileProcessingDiagnostics: state.program.getFileProcessingDiagnostics(),
         };
 
@@ -918,6 +920,7 @@ namespace ts {
         filesByName: readonly PersistedProgramFileByNameEntry[] | undefined;
         projectReferences: readonly PersistedProgramProjectReference[] | undefined;
         resolvedProjectReferences: readonly (PersistedProgramResolvedProjectReference | undefined)[] | undefined;
+        automaticTypeDirectiveNames: string[] | undefined;
         resolvedTypeReferenceDirectives: readonly PersistedProgramResolutionEntry[] | undefined;
         fileProcessingDiagnostics: readonly PersistedProgramFilePreprocessingDiagnostic[] | undefined;
         resolutions: readonly PersistedProgramResolution[] | undefined;
@@ -1030,6 +1033,7 @@ namespace ts {
                 projectReferences: program.getProjectReferences()?.map(toPersistedProgramProjectReference),
                 resolvedProjectReferences: program.getResolvedProjectReferences()?.map(toPersistedProgramResolvedProjectReference),
                 resolvedTypeReferenceDirectives: toPersistedProgramResolutionMap(program.getResolvedTypeReferenceDirectives()),
+                automaticTypeDirectiveNames: program.getAutomaticTypeDirectiveNames()?.length ? program.getAutomaticTypeDirectiveNames() : undefined,
                 fileProcessingDiagnostics: mapToReadonlyArrayOrUndefined(program.getFileProcessingDiagnostics(), toPersistedProgramFilePreprocessingDiagnostic),
                 resolutions: mapToReadonlyArrayOrUndefined(resolutions, toPersistedProgramResolution),
             };
@@ -1745,6 +1749,7 @@ namespace ts {
             sourceFileToPackageName,
             projectReferences: program.peristedProgram.projectReferences?.map(toProjectReference),
             resolvedProjectReferences: program.peristedProgram.resolvedProjectReferences?.map(toResolvedProjectReference),
+            automaticTypeDirectiveNames: program.peristedProgram.automaticTypeDirectiveNames,
             resolvedTypeReferenceDirectives: toResolutionMap(program.peristedProgram.resolvedTypeReferenceDirectives) || new Map(),
             fileProcessingDiagnostics: map(program.peristedProgram.fileProcessingDiagnostics, toFileProcessingDiagnostic),
         };
@@ -1863,6 +1868,7 @@ namespace ts {
             },
             getProjectReferences: () => persistedProgramState.projectReferences,
             getResolvedProjectReferences: () => persistedProgramState.resolvedProjectReferences,
+            getAutomaticTypeDirectiveNames: () => persistedProgramState.automaticTypeDirectiveNames,
             getMissingFilePaths: () => missingFilePaths ||= getMissingFilePaths(persistedProgramState.filesByName),
             getFileIncludeReasons: () => persistedProgramState.fileIncludeReasons,
             getResolvedTypeReferenceDirectives: () => persistedProgramState.resolvedTypeReferenceDirectives,

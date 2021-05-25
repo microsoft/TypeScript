@@ -847,6 +847,7 @@ namespace ts {
         const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
+        let automaticTypeDirectiveNames: string[] | undefined;
         let resolvedTypeReferenceDirectives = new Map<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         let fileProcessingDiagnostics: FilePreprocessingDiagnostic[] | undefined;
 
@@ -1023,16 +1024,16 @@ namespace ts {
             tracing?.pop();
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
-            const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
+            automaticTypeDirectiveNames ||= rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
 
-            if (typeReferences.length) {
-                tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: typeReferences.length });
+            if (automaticTypeDirectiveNames.length) {
+                tracing?.push(tracing.Phase.Program, "processTypeReferences", { count: automaticTypeDirectiveNames.length });
                 // This containingFilename needs to match with the one used in managed-side
                 const containingDirectory = options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory();
                 const containingFilename = combinePaths(containingDirectory, inferredTypesContainingFile);
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
-                for (let i = 0; i < typeReferences.length; i++) {
-                    processTypeReferenceDirective(typeReferences[i], resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: typeReferences[i], packageId: resolutions[i]?.resolvedTypeReferenceDirective?.packageId });
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(automaticTypeDirectiveNames, containingFilename);
+                for (let i = 0; i < automaticTypeDirectiveNames.length; i++) {
+                    processTypeReferenceDirective(automaticTypeDirectiveNames[i], resolutions[i], { kind: FileIncludeKind.AutomaticTypeDirectiveFile, typeReference: automaticTypeDirectiveNames[i], packageId: resolutions[i]?.resolvedTypeReferenceDirective?.packageId });
                 }
                 tracing?.pop();
             }
@@ -1136,6 +1137,7 @@ namespace ts {
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
+            getAutomaticTypeDirectiveNames: () => automaticTypeDirectiveNames!,
             isSourceFileFromExternalLibrary,
             isSourceFileFromExternalLibraryPath,
             isSourceFileDefaultLibrary,
@@ -1675,8 +1677,19 @@ namespace ts {
                 return structureIsReused;
             }
 
-            if (changesAffectingProgramStructure(oldProgram.getCompilerOptions(), options) || host.hasChangedAutomaticTypeDirectiveNames?.()) {
+            if (changesAffectingProgramStructure(oldProgram.getCompilerOptions(), options)) {
                 return StructureIsReused.SafeModules;
+            }
+
+            if (host.hasChangedAutomaticTypeDirectiveNames) {
+                if (host.hasChangedAutomaticTypeDirectiveNames()) return StructureIsReused.SafeModules;
+            }
+            else {
+                // See if auto type reference directives have changed
+                automaticTypeDirectiveNames = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
+                if (!arrayIsEqualTo(automaticTypeDirectiveNames, oldProgram.getAutomaticTypeDirectiveNames() || emptyArray)) {
+                    return StructureIsReused.SafeModules;
+                }
             }
 
             // update fileName -> file mapping
@@ -1721,6 +1734,7 @@ namespace ts {
             fileReasons = oldProgram.getFileIncludeReasons();
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+            automaticTypeDirectiveNames = oldProgram.getAutomaticTypeDirectiveNames() || emptyArray;
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;

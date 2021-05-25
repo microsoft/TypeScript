@@ -3937,6 +3937,7 @@ namespace ts {
 
         /* @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostic[] | undefined;
         /* @internal */ getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+        /* @internal */ getAutomaticTypeDirectiveNames(): string[];
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         /* @internal */ isSourceFileFromExternalLibraryPath(path: Path): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
@@ -4040,6 +4041,7 @@ namespace ts {
         getMissingFilePaths(): readonly Path[];
         getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
         getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+        getAutomaticTypeDirectiveNames(): string[] | undefined;
         getFilesByNameMap(): ReadonlyESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
         isSourceFileFromExternalLibraryPath(path: Path): boolean;
         getFileProcessingDiagnostics(): FilePreprocessingDiagnostic[] | undefined;

@@ -2,8 +2,8 @@ namespace ts.PersistentResolutionsTests {
     describe("unittests:: tsc:: persistResolutions::", () => {
         const cleanResolutionsWithProject = cleanResolutions("--p");
         const cleanResolutionsAgainWithProject = cleanResolutionsAgain("--p");
-        const installNewTypeWithProject = installNewType("Install another type and it is not picked by program");
-        const deleteExistingTypeWithProject = deleteExistingType("Delete existing type and this will trigger new program so above new type becomes part of program");
+        const installNewTypeWithProject = installNewType("Install another type");
+        const deleteExistingTypeWithProject = deleteExistingType("Delete existing type");
 
         verifyTscSerializedIncrementalEdits({
             scenario: "persistResolutions",
