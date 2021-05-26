@@ -1929,10 +1929,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        static readonly compilerOptionsOverrides = {
+        static readonly compilerOptionsOverrides: CompilerOptions = {
             diagnostics: false,
             skipLibCheck: true,
             sourceMap: false,
+            types: ts.emptyArray,
+            lib: ts.emptyArray,
+            noLib: true,
         };
 
         /*@internal*/
@@ -1941,7 +1944,7 @@ namespace ts.server {
                 return undefined;
             }
 
-            const compilerOptions: CompilerOptions = {
+            const compilerOptions = {
                 ...hostProject.getCompilerOptions(),
                 ...this.compilerOptionsOverrides,
             };
