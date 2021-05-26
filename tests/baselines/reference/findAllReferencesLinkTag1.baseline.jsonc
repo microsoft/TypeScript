@@ -4,8 +4,8 @@
 //     n = 1
 //     static s() { }
 //     /**
-//      * {@link m}
-//      * @see {m}
+//      * {@link [|m|]}
+//      * @see {[|m|]}
 //      * {@link C.[|m|]}
 //      * @see {C.[|m|]}
 //      * {@link C#[|m|]}
@@ -146,6 +146,24 @@
       },
       {
         "textSpan": {
+          "start": 73,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 89,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
           "start": 108,
           "length": 1
         },
@@ -219,8 +237,8 @@
 //      */
 //     p() { }
 //     /**
-//      * {@link n}
-//      * @see {n}
+//      * {@link [|n|]}
+//      * @see {[|n|]}
 //      * {@link C.[|n|]}
 //      * @see {C.[|n|]}
 //      * {@link C#[|n|]}
@@ -342,6 +360,24 @@
       },
       {
         "textSpan": {
+          "start": 265,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 281,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
           "start": 300,
           "length": 1
         },
@@ -426,8 +462,8 @@
 //      */
 //     q() { }
 //     /**
-//      * {@link s}
-//      * @see {s}
+//      * {@link [|s|]}
+//      * @see {[|s|]}
 //      * {@link C.[|s|]}
 //      * @see {C.[|s|]}
 //      */
@@ -546,6 +582,24 @@
       },
       {
         "textSpan": {
+          "start": 457,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 473,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
           "start": 492,
           "length": 1
         },
@@ -606,8 +660,8 @@
 //     [|a|]/*FIND ALL REFS*/()
 //     b: 1
 //     /**
-//      * {@link a}
-//      * @see {a}
+//      * {@link [|a|]}
+//      * @see {[|a|]}
 //      * {@link I.[|a|]}
 //      * @see {I.[|a|]}
 //      * {@link I#[|a|]}
@@ -714,6 +768,24 @@
       },
       {
         "textSpan": {
+          "start": 589,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 605,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
           "start": 624,
           "length": 1
         },
@@ -801,8 +873,8 @@
 //      */
 //     c()
 //     /**
-//      * {@link b}
-//      * @see {b}
+//      * {@link [|b|]}
+//      * @see {[|b|]}
 //      * {@link I.[|b|]}
 //      * @see {I.[|b|]}
 //      */
@@ -889,6 +961,24 @@
         },
         "isWriteAccess": false,
         "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 720,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 736,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesLinkTag1.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
       },
       {
         "textSpan": {
