@@ -34,7 +34,7 @@ namespace ts {
             const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
             return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
                 if (!sourceFilesSet.has(fileName)) {
-                    if (!program.redirectTargetsMap.has(fileName)) {
+                    if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), createGetCanonicalFileName(program.useCaseSensitiveFileNames())))) {
                         return undefined;
                     }
                     const redirectTarget = program.getSourceFile(fileName);

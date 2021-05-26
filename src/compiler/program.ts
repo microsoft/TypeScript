@@ -887,7 +887,7 @@ namespace ts {
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
         let sourceFileToPackageName = new Map<string, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
-        let redirectTargetsMap = createMultiMap<string>();
+        let redirectTargetsMap = createMultiMap<Path, string>();
 
         /**
          * map with
