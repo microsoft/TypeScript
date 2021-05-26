@@ -262,7 +262,7 @@ namespace ts {
         it("fails if change affects type references", () => {
             const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
             const program2 = updateProgram(program1, ["a.ts"], { types: ["b"] }, noop);
-            assert.equal(program2.structureIsReused, StructureIsReused.Not);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("succeeds if change doesn't affect type references", () => {
