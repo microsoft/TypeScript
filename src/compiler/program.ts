@@ -1916,11 +1916,16 @@ namespace ts {
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
-                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-                const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
-
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX || sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX
+                    || sourceFile.scriptKind === ScriptKind.External || sourceFile.scriptKind === ScriptKind.Deferred);
+                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+                if (!isCheckJs && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX)) {
+                    // TODO: It can just be checkDiagnostics srsly
+                    // TODO: Recheck user tests and random compilation to see how much this adds
+                    bindDiagnostics = bindDiagnostics.filter(d => d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code) // MORE TO COME
+                    checkDiagnostics = checkDiagnostics.filter(d => d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code)
+                }
                 return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }

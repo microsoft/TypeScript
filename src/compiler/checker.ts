@@ -2057,9 +2057,21 @@ namespace ts {
                         let suggestion: Symbol | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
-                            const isGlobalScopeAugmentationDeclaration = suggestion && suggestion.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
+                            const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                             if (isGlobalScopeAugmentationDeclaration) {
                                 suggestion = undefined;
+                            }
+                            // (1) when allowjs is on but checkjs is not, for JS[X] files that don't have either ts-check OR ts-nocheck
+                            // skip suggestions when the suggestion comes from a global scope
+                            // This will prevent it from always showing up
+                            const file = getSourceFileOfNode(lastLocation)
+                            const suggestionFile = getSourceFileOfNode(suggestion?.valueDeclaration)
+                            if (file && suggestionFile) {
+                                const isCheckJs = isCheckJsEnabledForFile(file, compilerOptions)
+                                const isTsNoCheck = !!file.checkJsDirective && file.checkJsDirective.enabled === false
+                                if (!isCheckJs && !isTsNoCheck && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX) && isGlobalSourceFile(suggestionFile) && file !== suggestionFile) {
+                                    suggestion = undefined
+                                }
                             }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
@@ -14570,22 +14582,33 @@ namespace ts {
          * Should all count as literals and not print errors on access or assignment of possibly existing properties.
          * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
          */
-        function isJSLiteralType(type: Type): boolean {
+        function isJSLiteralType(type: Type, reference?: Node): boolean {
             if (noImplicitAny) {
                 return false; // Flag is meaningless under `noImplicitAny` mode
             }
+            // TODO: Move this check outside isJSLiteralType; it doesn't make sense here
+            const file = getSourceFileOfNode(reference)
+            if (file) {
+                const isCheckJs = isCheckJsEnabledForFile(file, compilerOptions)
+                const isTsNoCheck = !!file.checkJsDirective && file.checkJsDirective.enabled === false
+                if (!isCheckJs && !isTsNoCheck && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
+                    const parentFile = forEach(type.symbol?.declarations, getSourceFileOfNode)
+                    return file !== parentFile || !!reference && isPropertyAccessExpression(reference) && reference.expression.kind === SyntaxKind.ThisKeyword
+                }
+            }
+
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
-                return every((type as UnionType).types, isJSLiteralType);
+                return every((type as UnionType).types, t => isJSLiteralType(t, reference));
             }
             if (type.flags & TypeFlags.Intersection) {
-                return some((type as IntersectionType).types, isJSLiteralType);
+                return some((type as IntersectionType).types, t => isJSLiteralType(t, reference));
             }
             if (type.flags & TypeFlags.Instantiable) {
                 const constraint = getResolvedBaseConstraint(type);
-                return constraint !== type && isJSLiteralType(constraint);
+                return constraint !== type && isJSLiteralType(constraint, reference);
             }
             return false;
         }
@@ -14684,7 +14707,7 @@ namespace ts {
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
                 }
-                if (isJSLiteralType(objectType)) {
+                if (isJSLiteralType(objectType, accessNode)) {
                     return anyType;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
@@ -14755,7 +14778,7 @@ namespace ts {
                     return undefined;
                 }
             }
-            if (isJSLiteralType(objectType)) {
+            if (isJSLiteralType(objectType, accessNode)) {
                 return anyType;
             }
             if (accessNode) {
@@ -27419,7 +27442,7 @@ namespace ts {
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
-                    if (isJSLiteralType(leftType)) {
+                    if (isJSLiteralType(leftType, node)) {
                         return anyType;
                     }
                     if (leftType.symbol === globalThisSymbol) {
