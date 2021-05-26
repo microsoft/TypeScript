@@ -151,7 +151,7 @@ namespace ts.Completions.StringCompletions {
                 }
             }
             case SyntaxKind.PropertyAssignment:
-                if (isObjectLiteralExpression(parent.parent) && (<PropertyAssignment>parent).name === node) {
+                if (isObjectLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
                     // Get quoted name of properties of the object literal expression
                     // i.e. interface ConfigFiles {
                     //          'jspm:dev': string

@@ -129,3 +129,13 @@ function get<K extends keyof A>(key: K, obj: A): number {
     }
     return 0;
 };
+
+// Repro from #44093
+
+class EventEmitter<ET> {
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+    emittingObject.off(eventName, 0);
+    emittingObject.off(eventName as typeof eventName, 0);
+}

@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '{1}' to match the '{0}' token here.": {
+    "The parser expected to find a '}' to match the '{' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -318,6 +318,10 @@
     "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
         "code": 1105
+    },
+    "The left-hand side of a 'for...of' statement may not be 'async'.": {
+        "category": "Error",
+        "code": 1106
     },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
@@ -743,7 +747,7 @@
         "category": "Error",
         "code": 1230
     },
-    "An export assignment can only be used in a module.": {
+    "An export assignment must be at the top level of a file or module declaration.": {
         "category": "Error",
         "code": 1231
     },
@@ -847,6 +851,10 @@
         "category": "Error",
         "code": 1257
     },
+    "A default export must be at the top level of a file or module declaration.": {
+        "category": "Error",
+        "code": 1258
+    },
     "Module '{0}' can only be default-imported using the '{1}' flag": {
         "category": "Error",
         "code": 1259
@@ -878,6 +886,10 @@
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266
+    },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1192,7 +1204,7 @@
         "category": "Message",
         "code": 1390
     },
-    "The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.": {
+    "The 'bundledPackageName' option must be provided when using outFile and node module resolution with declaration emit.": {
         "category": "Error",
         "code": 1391
     },
@@ -2378,7 +2390,7 @@
         "category": "Error",
         "code": 2549
     },
-    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the `lib` compiler option to '{2}' or later.": {
+    "Property '{0}' does not exist on type '{1}'. Do you need to change your target library? Try changing the 'lib' compiler option to '{2}' or later.": {
         "category": "Error",
         "code": 2550
     },
@@ -2402,13 +2414,9 @@
         "category": "Error",
         "code": 2555
     },
-    "Expected {0} arguments, but got {1} or more.": {
+    "A spread argument must either have a tuple type or be passed to a rest parameter.": {
         "category": "Error",
         "code": 2556
-    },
-    "Expected at least {0} arguments, but got {1} or more.": {
-        "category": "Error",
-        "code": 2557
     },
     "Expected {0} type arguments, but got {1}.": {
         "category": "Error",
@@ -2498,15 +2506,15 @@
         "category": "Error",
         "code": 2582
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to '{1}' or later.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to '{1}' or later.": {
         "category": "Error",
         "code": 2583
     },
-    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.": {
         "category": "Error",
         "code": 2584
     },
-    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.": {
         "category": "Error",
         "code": 2585
     },
@@ -2530,15 +2538,15 @@
         "category": "Error",
         "code": 2590
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2591
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery` and then add 'jquery' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2592
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i --save-dev @types/jest` or `npm i --save-dev @types/mocha` and then add 'jest' or 'mocha' to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2593
     },
@@ -2880,7 +2888,7 @@
         "category": "Error",
         "code": 2696
     },
-    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2697
     },
@@ -2912,7 +2920,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -2936,11 +2944,11 @@
         "category": "Error",
         "code": 2710
     },
-    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -3733,13 +3741,17 @@
         "category": "Error",
         "code": 4114
     },
-    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+    "This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.": {
         "category": "Error",
         "code": 4115
     },
     "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4116
+    },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4117
     },
 
     "The current host does not support the '{0}' option.": {
@@ -3878,7 +3890,7 @@
         "category": "Error",
         "code": 5073
     },
-    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
+    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option '--tsBuildInfoFile' is specified.": {
         "category": "Error",
         "code": 5074
     },
@@ -3930,7 +3942,7 @@
         "category": "Error",
         "code": 5086
     },
-    "A labeled tuple element is declared as rest with a `...` before the name, rather than before the type.": {
+    "A labeled tuple element is declared as rest with a '...' before the name, rather than before the type.": {
         "category": "Error",
         "code": 5087
     },
@@ -4861,9 +4873,25 @@
         "category": "Message",
         "code": 6237
     },
-    "Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react": {
+    "Specify the module specifier to be used to import the 'jsx' and 'jsxs' factory functions from. eg, react": {
         "category": "Error",
         "code": 6238
+    },
+    "File '{0}' exists according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6239
+    },
+    "File '{0}' does not exist according to earlier cached lookups.": {
+        "category": "Message",
+        "code": 6240
+    },
+    "Resolution for type reference directive '{0}' was found in cache from location '{1}'.": {
+        "category": "Message",
+        "code": 6241
+    },
+    "======== Resolving type reference directive '{0}', containing file '{1}'. ========": {
+        "category": "Message",
+        "code": 6242
     },
 
     "Projects to reference": {
@@ -5057,6 +5085,10 @@
         "code": 6387,
         "reportsDeprecated": true
     },
+    "Project '{0}' is being forcibly rebuilt": {
+        "category": "Message",
+        "code": 6388
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -5226,7 +5258,7 @@
         "category": "Error",
         "code": 7039
     },
-    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}`": {
+    "If the '{0}' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/{1}'": {
         "category": "Error",
         "code": 7040
     },
@@ -5387,7 +5419,7 @@
         "category": "Error",
         "code": 8024
     },
-    "Class declarations cannot have more than one `@augments` or `@extends` tag.": {
+    "Class declarations cannot have more than one '@augments' or '@extends' tag.": {
         "category": "Error",
         "code": 8025
     },
@@ -6384,6 +6416,10 @@
     "Remove all unnecessary 'override' modifiers": {
         "category": "Message",
         "code": 95163
+    },
+    "Can only convert named export": {
+        "category": "Message",
+        "code": 95164
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

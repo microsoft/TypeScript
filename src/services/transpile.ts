@@ -117,8 +117,8 @@ namespace ts {
     /*@internal*/
     export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
-        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
-            typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));
+        commandLineOptionsStringToEnum = commandLineOptionsStringToEnum ||
+            filter(optionDeclarations, o => typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number")) as CommandLineOptionOfCustomType[];
 
         options = cloneCompilerOptions(options);
 

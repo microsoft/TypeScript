@@ -249,7 +249,7 @@ namespace ts {
         if (d && d.kind === SyntaxKind.TypeParameter) {
             for (let current: Node = d; current; current = current.parent) {
                 if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
-                    return <Declaration>current;
+                    return current as Declaration;
                 }
             }
         }
@@ -619,7 +619,7 @@ namespace ts {
     export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/
@@ -901,9 +901,10 @@ namespace ts {
     }
 
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink>) {
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
         return typeof comment === "string" ? comment
             : comment?.map(c =>
+                // TODO: Other kinds here
                 c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
     }
 
@@ -1005,7 +1006,7 @@ namespace ts {
     }
 
     export function isNullishCoalesce(node: Node) {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isConstTypeReference(node: Node) {
@@ -1535,8 +1536,8 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
                 return true;
             case SyntaxKind.PrefixUnaryExpression:
-                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
-                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+                return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
+                    (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
             default:
                 return false;
         }
@@ -1593,7 +1594,7 @@ namespace ts {
             case SyntaxKind.WhileStatement:
                 return true;
             case SyntaxKind.LabeledStatement:
-                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+                return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
         }
 
         return false;
@@ -1876,7 +1877,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
-            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocLinkLike(node)
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)
             || isJSDocSignature(node);
@@ -1969,5 +1970,8 @@ namespace ts {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    }
     // #endregion
 }

@@ -3,7 +3,7 @@ declare var x: [number, string] | [number, string, string];
 >x : Symbol(x, Decl(sliceResultCast.ts, 0, 11))
 
 x.slice(1) as readonly string[];
->x.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>x.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(sliceResultCast.ts, 0, 11))
->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
+>slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

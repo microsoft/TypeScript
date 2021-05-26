@@ -1433,7 +1433,7 @@ namespace ts {
         const result: any = {};
         for (const id in object) {
             if (hasOwnProperty.call(object, id)) {
-                result[id] = (<any>object)[id];
+                result[id] = (object as any)[id];
             }
         }
         return result;
@@ -1445,7 +1445,7 @@ namespace ts {
      * NOTE: This means that if a property exists in both `first` and `second`, the property in `first` will be chosen.
      */
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
-        const result: T1 & T2 = <any>{};
+        const result: T1 & T2 = {} as any;
         for (const id in second) {
             if (hasOwnProperty.call(second, id)) {
                 (result as any)[id] = (second as any)[id];
@@ -2039,11 +2039,51 @@ namespace ts {
      * Takes a string like "jquery-min.4.2.3" and returns "jquery"
      */
     export function removeMinAndVersionNumbers(fileName: string) {
-        // Match a "." or "-" followed by a version number or 'min' at the end of the name
-        const trailingMinOrVersion = /[.-]((min)|(\d+(\.\d+)*))$/;
+        // We used to use the regex /[.-]((min)|(\d+(\.\d+)*))$/ and would just .replace it twice.
+        // Unfortunately, that regex has O(n^2) performance because v8 doesn't match from the end of the string.
+        // Instead, we now essentially scan the filename (backwards) ourselves.
 
-        // The "min" or version may both be present, in either order, so try applying the above twice.
-        return fileName.replace(trailingMinOrVersion, "").replace(trailingMinOrVersion, "");
+        let end: number = fileName.length;
+
+        for (let pos = end - 1; pos > 0; pos--) {
+            let ch: number = fileName.charCodeAt(pos);
+            if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
+                // Match a \d+ segment
+                do {
+                    --pos;
+                    ch = fileName.charCodeAt(pos);
+                } while (pos > 0 && ch >= CharacterCodes._0 && ch <= CharacterCodes._9);
+            }
+            else if (pos > 4 && (ch === CharacterCodes.n || ch === CharacterCodes.N)) {
+                // Looking for "min" or "min"
+                // Already matched the 'n'
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.i && ch !== CharacterCodes.I) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+                if (ch !== CharacterCodes.m && ch !== CharacterCodes.M) {
+                    break;
+                }
+                --pos;
+                ch = fileName.charCodeAt(pos);
+            }
+            else {
+                // This character is not part of either suffix pattern
+                break;
+            }
+
+            if (ch !== CharacterCodes.minus && ch !== CharacterCodes.dot) {
+                break;
+            }
+
+            end = pos;
+        }
+
+        // end might be fileName.length, in which case this should internally no-op
+        return end === fileName.length ? fileName : fileName.slice(0, end);
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */

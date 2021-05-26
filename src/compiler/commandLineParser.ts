@@ -1287,7 +1287,7 @@ namespace ts {
             case "string":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
-                return mapDefined(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors));
+                return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
         }
     }
 
@@ -1466,7 +1466,7 @@ namespace ts {
                         break;
                     // If not a primitive, the possible types are specified in what is effectively a map of options.
                     default:
-                        options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                        options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
                         i++;
                         break;
                 }
@@ -1570,7 +1570,7 @@ namespace ts {
     /* @internal */
     export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
         const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return <string>diagnostic.messageText;
+        return diagnostic.messageText as string;
     }
 
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
@@ -1654,7 +1654,7 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ fileName, parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
     }
 
     /*@internal*/
@@ -1961,9 +1961,9 @@ namespace ts {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
                     reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string"));
-                    const text = (<StringLiteral>valueExpression).text;
+                    const text = (valueExpression as StringLiteral).text;
                     if (option && !isString(option.type)) {
-                        const customOption = <CommandLineOptionOfCustomType>option;
+                        const customOption = option as CommandLineOptionOfCustomType;
                         // Validate custom option type
                         if (!customOption.type.has(text.toLowerCase())) {
                             errors.push(
@@ -1979,18 +1979,18 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(Number((<NumericLiteral>valueExpression).text));
+                    return validateValue(Number((valueExpression as NumericLiteral).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
-                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                    if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
+                    return validateValue(-Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
-                    const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
+                    const objectLiteralExpression = valueExpression as ObjectLiteralExpression;
 
                     // Currently having element option declaration in the tsconfig with type "object"
                     // determines if it needs onSetValidOptionKeyValueInParent callback or not
@@ -1999,7 +1999,7 @@ namespace ts {
                     // vs what we set in the json
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
-                        const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
+                        const { elementOptions, extraKeyDiagnostics, name: optionName } = option as TsConfigOnlyOption;
                         return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
                             elementOptions, extraKeyDiagnostics, optionName));
                     }
@@ -2012,8 +2012,8 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
                     return validateValue(convertArrayLiteralExpressionToJson(
-                        (<ArrayLiteralExpression>valueExpression).elements,
-                        option && (<CommandLineOptionOfListType>option).element));
+                        (valueExpression as ArrayLiteralExpression).elements,
+                        option && (option as CommandLineOptionOfListType).element));
             }
 
             // Not in expected format
@@ -2172,7 +2172,7 @@ namespace ts {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
-            return (<CommandLineOptionOfCustomType>optionDefinition).type;
+            return (optionDefinition as CommandLineOptionOfCustomType).type;
         }
     }
 
@@ -2211,7 +2211,7 @@ namespace ts {
                 if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
                     continue;
                 }
-                const value = <CompilerOptionsValue>options[name];
+                const value = options[name] as CompilerOptionsValue;
                 const optionDefinition = optionsNameMap.get(name.toLowerCase());
                 if (optionDefinition) {
                     const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
@@ -2782,7 +2782,7 @@ namespace ts {
                     case "extends":
                         const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
-                            <string>value,
+                            value as string,
                             host,
                             newBase,
                             errors,
@@ -2972,10 +2972,10 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
+                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
             }
             else if (!isString(optType)) {
-                return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
+                return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
             }
             const validatedValue = validateJsonOptionValue(opt, value, errors);
             return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
@@ -2990,7 +2990,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -3034,10 +3034,6 @@ namespace ts {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 
-    function trimString(s: string) {
-        return typeof s.trim === "function" ? s.trim() : s.replace(/^[\s]+|[\s]+$/g, "");
-    }
-
     /**
      * Tests for a path that ends in a recursive directory wildcard.
      * Matches **, \**, **\, and \**\, but not a**b.
@@ -3050,36 +3046,6 @@ namespace ts {
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
-
-    /**
-     * Tests for a path where .. appears after a recursive directory wildcard.
-     * Matches **\..\*, **\a\..\*, and **\.., but not ..\**\*
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  (^|\/)      # matches either the beginning of the string or a directory separator.
-     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
-     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
-     *  \.\.        # matches a parent directory path component ".."
-     *  ($|\/)      # matches either the end of the string or a directory separator.
-     */
-    const invalidDotDotAfterRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/;
-
-    /**
-     * Tests for a path containing a wildcard character in a directory component of the path.
-     * Matches \*\, \?\, and \a*b\, but not \a\ or \a\*.
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  \/          # matches a directory separator.
-     *  [^/]*?      # matches any number of characters excluding directory separators (non-greedy).
-     *  [*?]        # matches either a wildcard character (* or ?)
-     *  [^/]*       # matches any number of characters excluding directory separators (greedy).
-     *  \/          # matches a directory separator.
-     */
-    const watchRecursivePattern = /\/[^/]*?[*?][^/]*\//;
 
     /**
      * Matches the portion of a wildcard path that does not contain wildcards.
@@ -3217,6 +3183,20 @@ namespace ts {
         return matchesExcludeWorker(pathToCheck, validatedExcludeSpecs, useCaseSensitiveFileNames, currentDirectory, basePath);
     }
 
+    function invalidDotDotAfterRecursiveWildcard(s: string) {
+        // We used to use the regex /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/ to check for this case, but
+        // in v8, that has polynomial performance because the recursive wildcard match - **/ -
+        // can be matched in many arbitrary positions when multiple are present, resulting
+        // in bad backtracking (and we don't care which is matched - just that some /.. segment
+        // comes after some **/ segment).
+        const wildcardIndex = startsWith(s, "**/") ? 0 : s.indexOf("/**/");
+        if (wildcardIndex === -1) {
+            return false;
+        }
+        const lastDotIndex = endsWith(s, "/..") ? s.length : s.lastIndexOf("/../");
+        return lastDotIndex > wildcardIndex;
+    }
+
     /* @internal */
     export function matchesExclude(
         pathToCheck: string,
@@ -3226,7 +3206,7 @@ namespace ts {
     ) {
         return matchesExcludeWorker(
             pathToCheck,
-            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcardPattern.test(spec)),
+            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcard(spec)),
             useCaseSensitiveFileNames,
             currentDirectory
         );
@@ -3268,7 +3248,7 @@ namespace ts {
         if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
-        else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
+        else if (invalidDotDotAfterRecursiveWildcard(spec)) {
             return [Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
     }
@@ -3331,9 +3311,18 @@ namespace ts {
     function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string, flags: WatchDirectoryFlags } | undefined {
         const match = wildcardDirectoryPattern.exec(spec);
         if (match) {
+            // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
+            // less algorithmically complex (roughly O(3n) worst-case) than the regex we used to use,
+            // \/[^/]*?[*?][^/]*\/ which was polynominal in v8, since arbitrary sequences of wildcard
+            // characters could match any of the central patterns, resulting in bad backtracking.
+            const questionWildcardIndex = spec.indexOf("?");
+            const starWildcardIndex = spec.indexOf("*");
+            const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
             return {
                 key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
-                flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
+                flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
+                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
+                    ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
         if (isImplicitGlob(spec)) {

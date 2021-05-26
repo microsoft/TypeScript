@@ -43,4 +43,4 @@ exports.aliased = require("./data1");
 "use strict";
 exports.__esModule = true;
 var _1 = require("./");
-(0, _1.register)("ok");
+_1.register("ok");

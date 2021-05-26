@@ -1,0 +1,259 @@
+=== tests/cases/compiler/narrowingOfQualifiedNames.ts ===
+// Repro from #43411
+
+interface IProperties {
+    foo?: {
+>foo : { aaa: string; bbb: string; } | undefined
+
+        aaa: string
+>aaa : string
+
+        bbb: string
+>bbb : string
+    }
+}
+
+function init(properties: IProperties) {
+>init : (properties: IProperties) => void
+>properties : IProperties
+
+    if (properties.foo) {
+>properties.foo : { aaa: string; bbb: string; } | undefined
+>properties : IProperties
+>foo : { aaa: string; bbb: string; } | undefined
+
+        type FooOK = typeof properties.foo;
+>FooOK : { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+        properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+        for (const x of [1, 2, 3]) {
+>x : number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+          properties.foo; // type is { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+
+          type FooOrUndefined = typeof properties.foo; // type should be { aaa: string; bbb: string; }
+>FooOrUndefined : { aaa: string; bbb: string; }
+>properties.foo : { aaa: string; bbb: string; }
+>properties : IProperties
+>foo : { aaa: string; bbb: string; }
+        }
+    }
+}
+
+interface DeepOptional {
+    a?: {
+>a : { b?: { c?: string | undefined; } | undefined; } | undefined
+
+        b?: {
+>b : { c?: string | undefined; } | undefined
+
+            c?: string
+>c : string | undefined
+        }
+    }
+}
+
+function init2(foo: DeepOptional) {
+>init2 : (foo: DeepOptional) => void
+>foo : DeepOptional
+
+    if (foo.a) {
+>foo.a : { b?: { c?: string | undefined; } | undefined; } | undefined
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; } | undefined
+
+        type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+        type B = typeof foo.a.b;
+>B : { c?: string | undefined; } | undefined
+>foo.a.b : { c?: string | undefined; } | undefined
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; } | undefined
+
+        type C = typeof foo.a.b.c;
+>C : string | undefined
+>foo.a.b.c : string | undefined
+>foo.a.b : { c?: string | undefined; } | undefined
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; } | undefined
+>c : string | undefined
+
+        for(const _ of [1]) {
+>_ : number
+>[1] : number[]
+>1 : 1
+
+            type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+            type B = typeof foo.a.b;
+>B : { c?: string | undefined; } | undefined
+>foo.a.b : { c?: string | undefined; } | undefined
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; } | undefined
+
+            type C = typeof foo.a.b.c;
+>C : string | undefined
+>foo.a.b.c : string | undefined
+>foo.a.b : { c?: string | undefined; } | undefined
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; } | undefined
+>c : string | undefined
+
+            if (foo.a.b) {
+>foo.a.b : { c?: string | undefined; } | undefined
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; } | undefined
+
+                type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+                type B = typeof foo.a.b;
+>B : { c?: string | undefined; }
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+
+                type C = typeof foo.a.b.c;
+>C : string | undefined
+>foo.a.b.c : string | undefined
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+>c : string | undefined
+
+                for(const _ of [1]) {
+>_ : number
+>[1] : number[]
+>1 : 1
+
+                    type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+                    type B = typeof foo.a.b;
+>B : { c?: string | undefined; }
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+
+                    type C = typeof foo.a.b.c;
+>C : string | undefined
+>foo.a.b.c : string | undefined
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+>c : string | undefined
+
+                    if (foo.a.b.c) {
+>foo.a.b.c : string | undefined
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+>c : string | undefined
+
+                        type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+                        type B = typeof foo.a.b;
+>B : { c?: string | undefined; }
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+
+                        type C = typeof foo.a.b.c;
+>C : string
+>foo.a.b.c : string
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+>c : string
+
+                        for(const _ of [1]) {
+>_ : number
+>[1] : number[]
+>1 : 1
+
+                            type A = typeof foo.a;
+>A : { b?: { c?: string | undefined; } | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+
+                            type B = typeof foo.a.b;
+>B : { c?: string | undefined; }
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+
+                            type C = typeof foo.a.b.c;
+>C : string
+>foo.a.b.c : string
+>foo.a.b : { c?: string | undefined; }
+>foo.a : { b?: { c?: string | undefined; } | undefined; }
+>foo : DeepOptional
+>a : { b?: { c?: string | undefined; } | undefined; }
+>b : { c?: string | undefined; }
+>c : string
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
