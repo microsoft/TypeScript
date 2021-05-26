@@ -1929,6 +1929,13 @@ namespace ts.server {
         }
 
         /*@internal*/
+        static readonly compilerOptionsOverrides = {
+            diagnostics: false,
+            skipLibCheck: true,
+            sourceMap: false,
+        };
+
+        /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
             if (dependencySelection === PackageJsonAutoImportPreference.Off) {
                 return undefined;
@@ -1936,12 +1943,7 @@ namespace ts.server {
 
             const compilerOptions: CompilerOptions = {
                 ...hostProject.getCompilerOptions(),
-                noLib: true,
-                diagnostics: false,
-                skipLibCheck: true,
-                types: ts.emptyArray,
-                lib: ts.emptyArray,
-                sourceMap: false,
+                ...this.compilerOptionsOverrides,
             };
 
             const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);
