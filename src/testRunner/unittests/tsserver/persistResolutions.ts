@@ -1,4 +1,52 @@
 namespace ts.projectSystem {
+    interface SetupHostOutput {
+        host: TestServerHost;
+        openFiles: readonly File[];
+        config: File;
+    }
+
+    function setupHostWithSavedResolutions<T extends SetupHostOutput>(setupHost: () => T): T {
+        const result = setupHost();
+        const exit = result.host.exit;
+        result.host.exit = noop;
+        fakes.withTemporaryPatchingForBuildinfoReadWrite(result.host, sys => executeCommandLine(sys, noop, ["--b", result.config.path]));
+        result.host.clearOutput();
+        result.host.exit = exit;
+        return result;
+    }
+
+    function setupHostWithClearedResolutions<T extends SetupHostOutput>(setupHost: () => T): T {
+        const result = setupHost();
+        const exit = result.host.exit;
+        result.host.exit = noop;
+        fakes.withTemporaryPatchingForBuildinfoReadWrite(result.host, sys => {
+            executeCommandLine(sys, noop, ["--b", result.config.path]);
+            executeCommandLine(sys, noop, ["--b", result.config.path, "--cleanPersistedProgram"]);
+        });
+        result.host.clearOutput();
+        result.host.exit = exit;
+        return result;
+    }
+
+    function setup<T extends SetupHostOutput>({ host, openFiles, config }: T) {
+        fakes.patchHostForBuildInfoReadWrite(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+        openFilesForSession(openFiles, session);
+        const project = session.getProjectService().configuredProjects.get(config.path)!;
+        return { session, project };
+    }
+
+    function persistResolutions(file: File) {
+        const content = JSON.parse(file.content);
+        content.compilerOptions = {
+            ...content.compilerOptions || {},
+            persistResolutions: false,
+            traceResolution: true,
+        };
+        file.content = JSON.stringify(content, /*replacer*/ undefined, 4);
+        return file;
+    }
+
     describe("unittests:: tsserver:: persistResolutions", () => {
         function setupHost() {
             const { main, anotherFileReusingResolution, filePresent, fileWithRef, types, globalMain, globalAnotherFileWithSameReferenes, globalFilePresent, externalThing, someType, config } = tscWatch.PersistentResolutionsTests.getFiles();
@@ -6,38 +54,7 @@ namespace ts.projectSystem {
                 [main, anotherFileReusingResolution, filePresent, fileWithRef, types, globalMain, globalAnotherFileWithSameReferenes, globalFilePresent, externalThing, someType, config, libFile],
                 { currentDirectory: tscWatch.projectRoot, useCaseSensitiveFileNames: true }
             );
-            return { host, main, globalMain, config };
-        }
-
-        function setupHostWithSavedResolutions() {
-            const result = setupHost();
-            const exit = result.host.exit;
-            result.host.exit = noop;
-            fakes.withTemporaryPatchingForBuildinfoReadWrite(result.host, sys => executeCommandLine(sys, noop, ["--p", "."]));
-            result.host.exit = exit;
-            result.host.clearOutput();
-            return result;
-        }
-
-        function setupHostWithClearedResolutions() {
-            const result = setupHost();
-            const exit = result.host.exit;
-            result.host.exit = noop;
-            fakes.withTemporaryPatchingForBuildinfoReadWrite(result.host, sys => {
-                executeCommandLine(sys, noop, ["--p", "."]);
-                executeCommandLine(sys, noop, ["--p", ".", "--cleanPersistedProgram"]);
-            });
-            result.host.exit = exit;
-            result.host.clearOutput();
-            return result;
-        }
-
-        function setup({ host, main, globalMain, config }: ReturnType<typeof setupHost>) {
-            fakes.patchHostForBuildInfoReadWrite(host);
-            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
-            openFilesForSession([main, globalMain], session);
-            const project = session.getProjectService().configuredProjects.get(config.path)!;
-            return { session, project };
+            return { host, main, globalMain, config, openFiles: [main, globalMain] };
         }
 
         function modifyGlobalMain(session: TestSession, project: server.ConfiguredProject, globalMain: File) {
@@ -190,7 +207,7 @@ namespace ts.projectSystem {
         }
 
         it("uses saved resolution for program", () => {
-            const result = setupHostWithSavedResolutions();
+            const result = setupHostWithSavedResolutions(setupHost);
             const { project, session } = setup(result);
             const { host, main, globalMain } = result;
             appendProjectFileText(project, session);
@@ -236,7 +253,7 @@ namespace ts.projectSystem {
         });
 
         it("creates new resolutions for program if tsbuildinfo is present but program is not persisted", () => {
-            const result = setupHostWithClearedResolutions();
+            const result = setupHostWithClearedResolutions(setupHost);
             const { project, session } = setup(result);
             const { host, main, globalMain } = result;
             appendProjectFileText(project, session);
@@ -256,6 +273,119 @@ namespace ts.projectSystem {
             deleteExistingType(host, session, project);
 
             baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is present but program is not persisted", session);
+        });
+    });
+
+    describe("unittests:: tsserver:: persistResolutions on sample project", () => {
+        function setupHost() {
+            const coreConfig = persistResolutions(TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json"));
+            const coreIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/index.ts");
+            const coreAnotherModule = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/anotherModule.ts");
+            const coreSomeDecl = TestFSWithWatch.getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
+            const logicConfig = persistResolutions(TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/tsconfig.json"));
+            const logicIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/index.ts");
+            const testsConfig = persistResolutions(TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json"));
+            const testsIndex = TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts");
+            const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
+            return { host, config: testsConfig, openFiles: [testsIndex] };
+        }
+
+
+        it("uses saved resolution for program", () => {
+            const result = setupHostWithSavedResolutions(setupHost);
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "uses saved resolution for program with sample project", session);
+        });
+
+        it("creates new resolutions for program if tsbuildinfo is not present", () => {
+            const result = setupHost();
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is not present with sample project", session);
+        });
+
+        it("creates new resolutions for program if tsbuildinfo is present but program is not persisted", () => {
+            const result = setupHostWithClearedResolutions(setupHost);
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is present but program is not persisted with sample project", session);
+        });
+    });
+
+    describe("unittests:: tsserver:: persistResolutions on project where d.ts file contains fewer modules than original file", () => {
+        function setupHost() {
+            const coreConfig: File = {
+                path: `${tscWatch.projectRoot}/core/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { composite: true, persistResolutions: false, traceResolution: true } })
+            };
+            const coreIndex: File = {
+                path: `${tscWatch.projectRoot}/core/index.ts`,
+                content: `export function bar() { return 10; }`
+            };
+            const coreMyClass: File = {
+                path: `${tscWatch.projectRoot}/core/myClass.ts`,
+                content: `export class myClass { }`
+            };
+            const coreAnotherClass: File = {
+                path: `${tscWatch.projectRoot}/core/anotherClass.ts`,
+                content: `export class anotherClass { }`
+            };
+            const logicConfig: File = {
+                path: `${tscWatch.projectRoot}/logic/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { composite: true, persistResolutions: false, traceResolution: true },
+                    references: [{ path: "../core" }]
+                })
+            };
+            const logicIndex: File = {
+                path: `${tscWatch.projectRoot}/logic/index.ts`,
+                content: `import { myClass } from "../core/myClass";
+import { bar } from "../core";
+import { anotherClass } from "../core/anotherClass";
+export function returnMyClass() {
+    bar();
+    return new myClass();
+}
+export function returnAnotherClass() {
+    return new anotherClass();
+}`
+            };
+            const testsConfig: File = {
+                path: `${tscWatch.projectRoot}/tests/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { composite: true, persistResolutions: false, traceResolution: true },
+                    references: [{ path: "../logic" }]
+                })
+            };
+            const testsIndex: File = {
+                path: `${tscWatch.projectRoot}/tests/index.ts`,
+                content: `import { returnMyClass } from "../logic";
+returnMyClass();`
+            };
+            const host = createServerHost([libFile, coreConfig, coreIndex, coreMyClass, coreAnotherClass, logicConfig, logicIndex, testsConfig, testsIndex]);
+            return { host, config: testsConfig, openFiles: [testsIndex] };
+        }
+
+        it("uses saved resolution for program", () => {
+            const result = setupHostWithSavedResolutions(setupHost);
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "uses saved resolution for program with project where dts file contains fewer modules than original file", session);
+        });
+
+        it("creates new resolutions for program if tsbuildinfo is not present", () => {
+            const result = setupHost();
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is not present with project where dts file contains fewer modules than original file", session);
+        });
+
+        it("creates new resolutions for program if tsbuildinfo is present but program is not persisted", () => {
+            const result = setupHostWithClearedResolutions(setupHost);
+            const { project, session } = setup(result);
+            appendProjectFileText(project, session);
+            baselineTsserverLogs("persistResolutions", "creates new resolutions for program if tsbuildinfo is present but program is not persisted with project where dts file contains fewer modules than original file", session);
         });
     });
 }
