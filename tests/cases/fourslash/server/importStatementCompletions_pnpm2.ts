@@ -18,6 +18,7 @@
 
 goTo.marker("");
 verify.completions({
+  isNewIdentifierLocation: true,
   marker: "",
   exact: [],
   preferences: {

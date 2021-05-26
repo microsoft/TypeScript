@@ -200,9 +200,9 @@ namespace ts.server {
             const response = this.processResponse<protocol.CompletionInfoResponse>(request);
 
             return {
-                isGlobalCompletion: false,
-                isMemberCompletion: false,
-                isNewIdentifierLocation: false,
+                isGlobalCompletion: response.body!.isGlobalCompletion,
+                isMemberCompletion: response.body!.isMemberCompletion,
+                isNewIdentifierLocation: response.body!.isNewIdentifierLocation,
                 entries: response.body!.entries.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
                         const res: CompletionEntry = { ...entry, data: entry.data as any, replacementSpan: this.decodeSpan(entry.replacementSpan, fileName) };
