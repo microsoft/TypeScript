@@ -815,8 +815,8 @@ namespace ts {
                     nodeVisitor(node.expression, visitor, isExpression));
 
             case SyntaxKind.DoExpression:
-                return factory.updateDoExpression(<DoExpression>node, (<DoExpression>node).async,
-                    nodeVisitor((<DoExpression>node).block, visitor, isBlock));
+                return factory.updateDoExpression(node as DoExpression, (node as DoExpression).async,
+                    nodeVisitor((node as DoExpression).block, visitor, isBlock));
 
             case SyntaxKind.SpreadElement:
                 Debug.type<SpreadElement>(node);

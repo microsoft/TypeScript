@@ -32474,13 +32474,13 @@ namespace ts {
                         case SyntaxKind.DefaultClause:
                         case SyntaxKind.CaseClause:
                         case SyntaxKind.Block:
-                            return isEmpty((<DefaultClause | CaseClause | Block>node).statements, labelSet);
+                            return isEmpty((node as DefaultClause | CaseClause | Block).statements, labelSet);
                         case SyntaxKind.BreakStatement: {
-                            const label = (<BreakStatement>node).label;
+                            const label = (node as BreakStatement).label;
                             return labelSet.includes(label?.escapedText);
                         }
                         case SyntaxKind.LabeledStatement: {
-                            const n = <LabeledStatement>node;
+                            const n = node as LabeledStatement;
                             const label = n.label?.escapedText;
                             return isEmpty(n.statement, [...labelSet, label]);
                         }
@@ -32504,12 +32504,12 @@ namespace ts {
                         case SyntaxKind.Block:
                         case SyntaxKind.CaseClause:
                         case SyntaxKind.DefaultClause:
-                            return isBreak((<Block | CaseClause | DefaultClause>node).statements, labelSet);
+                            return isBreak((node as Block | CaseClause | DefaultClause).statements, labelSet);
                         case SyntaxKind.BreakStatement: {
-                            const label = (<BreakStatement>node).label;
+                            const label = (node as BreakStatement).label;
                             return labelSet.includes(label?.escapedText);
                         }
-                        case SyntaxKind.LabeledStatement: return isBreak((<LabeledStatement>node).statement, labelSet);
+                        case SyntaxKind.LabeledStatement: return isBreak((node as LabeledStatement).statement, labelSet);
                         default: return false;
                     }
                 }

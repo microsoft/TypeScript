@@ -1421,7 +1421,7 @@ namespace ts {
                     // as local types. Regardless, skip them to avoid the work.
                     return;
                 case SyntaxKind.DoExpression:
-                    if ((<DoExpression>node).async) return;
+                    if ((node as DoExpression).async) return;
                     // falls through
                 default:
                     if (isFunctionLike(node)) {
