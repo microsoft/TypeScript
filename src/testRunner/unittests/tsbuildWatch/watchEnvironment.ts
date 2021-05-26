@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    describe("unittests:: tsbuild:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
+    describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
         describe("when watchFile can create multiple watchers per file", () => {
             verifyWatchFileOnMultipleProjects(/*singleWatchPerFile*/ false);
         });
