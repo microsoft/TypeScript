@@ -1594,6 +1594,7 @@ namespace ts.Completions {
 
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
+            isNewIdentifierLocation = true;
             collectAutoImports(/*resolveModuleSpecifiers*/ true);
             return GlobalsSearch.Success;
         }
