@@ -1288,7 +1288,15 @@ namespace ts {
                     const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
-                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
+                            trace(host,
+                                oldResolvedModule.packageId ?
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2,
+                                moduleName,
+                                getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                                oldResolvedModule.resolvedFileName,
+                                oldResolvedModule.packageId && packageIdToString(oldResolvedModule.packageId)
+                            );
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
