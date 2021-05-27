@@ -304,12 +304,7 @@ namespace ts.moduleSpecifiers {
             if (result) return result;
         }
 
-        const links = host.getSymlinkCache?.() || discoverProbableSymlinks(
-            host.getSourceFiles(),
-            host.getResolvedTypeReferenceDirectives ? arrayFrom(host.getResolvedTypeReferenceDirectives?.().values()) : emptyArray,
-            getCanonicalFileName,
-            cwd);
-        const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
+        const symlinkedDirectories = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
         const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
         const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
             const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));

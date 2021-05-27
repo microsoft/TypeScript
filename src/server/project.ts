@@ -355,12 +355,16 @@ namespace ts.server {
          * @internal
          * Returns undefined prior to program creation.
          */
-        getSymlinkCache(): SymlinkCache | undefined {
-            return this.symlinks || this.program && (this.symlinks = discoverProbableSymlinks(
-                this.program.getSourceFiles() || emptyArray,
-                arrayFrom(this.program.getResolvedTypeReferenceDirectives().values()),
-                this.getCanonicalFileName,
-                this.getCurrentDirectory()));
+        getSymlinkCache(): SymlinkCache {
+            if (!this.symlinks) {
+                this.symlinks = createSymlinkCache(this.getCurrentDirectory(), this.getCanonicalFileName);
+            }
+            if (this.program && !this.symlinks.hasProcessedResolutions()) {
+                this.symlinks.setSymlinksFromResolutions(
+                    this.program.getSourceFiles(),
+                    this.program.getResolvedTypeReferenceDirectives());
+            }
+            return this.symlinks;
         }
 
         // Method of LanguageServiceHost

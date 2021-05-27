@@ -277,7 +277,7 @@ namespace ts {
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache | undefined;
+        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.

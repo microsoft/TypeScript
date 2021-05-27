@@ -4482,10 +4482,8 @@ namespace ts {
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
                     tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: () => false, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
                         getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
-                        getSourceFiles: () => host.getSourceFiles(),
                         getCurrentDirectory: () => host.getCurrentDirectory(),
                         getSymlinkCache: maybeBind(host, host.getSymlinkCache),
-                        getResolvedTypeReferenceDirectives: maybeBind(host, host.getResolvedTypeReferenceDirectives),
                         useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
                         redirectTargetsMap: host.redirectTargetsMap,
                         getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),

@@ -54,7 +54,7 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects.get(appTsconfigJson.path)!;
             assert.deepEqual(
                 project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as Path),
-                { real: "/packages/dep", realPath: "/packages/dep" as Path }
+                { real: "/packages/dep/", realPath: "/packages/dep/" as Path }
             );
         });
     });
