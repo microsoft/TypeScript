@@ -1907,7 +1907,7 @@ namespace ts.server {
                     moduleResolutionHost));
 
                 const program = hostProject.getCurrentProgram()!;
-                const symlinkCache = hostProject.getSymlinkCache()!; // Guaranteed to be set when program is set
+                const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
                     const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;
