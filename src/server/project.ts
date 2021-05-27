@@ -1753,18 +1753,11 @@ namespace ts.server {
         });
     }
 
-    function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
-        let nextId = 1;
-        return () => nameFactory(nextId++);
-    }
-
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
      * the file and its imports/references are put into an InferredProject.
      */
     export class InferredProject extends Project {
-        private static readonly newName = createProjectNameFactoryWithCounter(makeInferredProjectName);
-
         private _isJsInferredProject = false;
 
         toggleJsInferredProject(isJsInferredProject: boolean) {
@@ -1807,7 +1800,7 @@ namespace ts.server {
             currentDirectory: string | undefined,
             pluginConfigOverrides: ESMap<string, any> | undefined,
             typeAcquisition: TypeAcquisition | undefined) {
-            super(InferredProject.newName(),
+            super(projectService.newInferredProjectName(),
                 ProjectKind.Inferred,
                 projectService,
                 documentRegistry,
@@ -1874,8 +1867,6 @@ namespace ts.server {
     }
 
     export class AutoImportProviderProject extends Project {
-        private static readonly newName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
-
         /*@internal*/
         private static readonly maxDependencies = 10;
 
@@ -1966,7 +1957,7 @@ namespace ts.server {
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
         ) {
-            super(AutoImportProviderProject.newName(),
+            super(hostProject.projectService.newAutoImportProviderProjectName(),
                 ProjectKind.AutoImportProvider,
                 hostProject.projectService,
                 documentRegistry,
