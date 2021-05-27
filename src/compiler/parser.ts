@@ -1555,7 +1555,10 @@ namespace ts {
             return false;
         }
 
-        function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind, openPosition: number) {
+        function parseExpectedMatchingBrackets(openKind: SyntaxKind, closeKind: SyntaxKind,  openParsed: boolean, openPosition: number) {
+            if (!openParsed) {
+                return parseExpected(closeKind);
+            }
             if (token() === closeKind) {
                 nextToken();
                 return;
@@ -5499,10 +5502,10 @@ namespace ts {
         function parseArrayLiteralExpression(): ArrayLiteralExpression {
             const pos = getNodePos();
             const openBracketPosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenBracketToken);
+            const openBracketParsed = parseExpected(SyntaxKind.OpenBracketToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseArgumentOrArrayLiteralElement);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketPosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken, openBracketParsed, openBracketPosition);
             return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
         }
 
@@ -5568,10 +5571,10 @@ namespace ts {
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
             const pos = getNodePos();
             const openBracePosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenBraceToken);
+            const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken);
             const multiLine = scanner.hasPrecedingLineBreak();
             const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralElement, /*considerSemicolonAsDelimiter*/ true);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
             return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
         }
 
@@ -5654,10 +5657,11 @@ namespace ts {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const openBracePosition = scanner.getTokenPos();
-            if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
+            const openBraceParsed = parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage)
+            if (openBraceParsed || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
                 const statements = parseList(ParsingContext.BlockStatements, parseStatement);
-                parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBracePosition);
+                parseExpectedMatchingBrackets(SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, openBraceParsed, openBracePosition);
                 const result = withJSDoc(finishNode(factory.createBlock(statements, multiLine), pos), hasJSDoc);
                 if (token() === SyntaxKind.EqualsToken) {
                     parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
@@ -5714,9 +5718,9 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.IfKeyword);
             const openParenPosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenParenToken);
+            const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition)
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
             return withJSDoc(finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
@@ -5729,9 +5733,9 @@ namespace ts {
             const statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
             const openParenPosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenParenToken);
+            const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition)
 
             // From: https://mail.mozilla.org/pipermail/es-discuss/2011-August/016188.html
             // 157 min --- All allen at wirfs-brock.com CONF --- "do{;}while(false)false" prohibited in
@@ -5746,9 +5750,9 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WhileKeyword);
             const openParenPosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenParenToken);
+            const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
             const statement = parseStatement();
             return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
         }
@@ -5825,9 +5829,9 @@ namespace ts {
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WithKeyword);
             const openParenPosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenParenToken);
+            const openParenParsed = parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
-            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenPosition);
+            parseExpectedMatchingBrackets(SyntaxKind.OpenParenToken, SyntaxKind.CloseParenToken, openParenParsed, openParenPosition);
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
             return withJSDoc(finishNode(factory.createWithStatement(expression, statement), pos), hasJSDoc);
         }
