@@ -351,10 +351,7 @@ namespace ts.server {
             return this.projectService.typingsCache;
         }
 
-        /**
-         * @internal
-         * Returns undefined prior to program creation.
-         */
+        /*@internal*/
         getSymlinkCache(): SymlinkCache {
             if (!this.symlinks) {
                 this.symlinks = createSymlinkCache(this.getCurrentDirectory(), this.getCanonicalFileName);
