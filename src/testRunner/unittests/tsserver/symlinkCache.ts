@@ -15,7 +15,7 @@ namespace ts.projectSystem {
 
     const appSrcIndexTs: File = {
         path: "/packages/app/src/index.ts",
-        content: `import "dep";`
+        content: `import "dep/does/not/exist";`
     };
 
     const depPackageJson: File = {
@@ -43,10 +43,9 @@ namespace ts.projectSystem {
     };
 
     const link: SymLink = {
-        path: "/packages/dep",
-        symLink: "/packages/app/node_modules/dep",
+        path: "/packages/app/node_modules/dep",
+        symLink: "../../dep",
     };
-
 
     describe("unittests:: tsserver:: symlinkCache", () => {
         it("contains symlinks discovered by project references resolution after program creation", () => {
@@ -54,8 +53,8 @@ namespace ts.projectSystem {
             openFilesForSession([appSrcIndexTs], session);
             const project = projectService.configuredProjects.get(appTsconfigJson.path)!;
             assert.deepEqual(
-                project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.symLink as Path),
-                { real: link.path, realPath: link.path as Path }
+                project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as Path),
+                { real: "/packages/dep", realPath: "/packages/dep" as Path }
             );
         });
     });
