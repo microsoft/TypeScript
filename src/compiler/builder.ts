@@ -547,13 +547,11 @@ namespace ts {
         const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(affectedFile.resolvedPath) &&
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
@@ -567,7 +565,7 @@ namespace ts {
      * Iterate on files referencing referencedPath
      */
     function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void) {
-        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
+        forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
             referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath, seenFileAndExportsOfFile, fn)
         );
     }
@@ -575,9 +573,9 @@ namespace ts {
     /**
      * fn on file and iterate on anything that exports this file
      */
-    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void): boolean {
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void) {
         if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) {
-            return false;
+            return;
         }
 
         fn(state, filePath);
@@ -585,26 +583,22 @@ namespace ts {
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(filePath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(filePath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // Remove diagnostics of files that import this file (without going to exports of referencing files)
-        // Note: always false, since fn returns void
-        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
+
+        forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
             referencesInFile.has(filePath) &&
             !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
             fn(state, referencingFilePath) // Dont add to seen since this is not yet done with the export removal
