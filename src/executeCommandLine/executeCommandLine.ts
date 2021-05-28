@@ -110,59 +110,68 @@ namespace ts {
     }
 
     function generateOptionOutput(option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
-        interface ValueCandidate{
+        interface ValueCandidate {
             // "one or more" or "any of"
             valueType: string;
-            possiableValues: string;
+            possibleValues: string;
         }
 
-        let res: string[] = [];
+        const text: string[] = [];
 
         // name and description
         const name = getDisplayNameTextOfOption(option);
 
-        // value type and possiable value
+        // value type and possible value
         const valueCandidates = getValueCandidate(option);
         const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
         const terminalWidth = sys.getWidthOfTerminal();
 
         // terminal does not have enough width
         if (terminalWidth < leftAlignOfRight + 20) {
-            res.push(blue(name));
+            text.push(blue(name), ": ");
             if (option.description) {
                 const description = getDiagnosticText(option.description);
-                res.push(description);
+                text.push(description);
             }
-            if (isAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+            text.push(sys.newLine);
+            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
                 if (valueCandidates) {
-                    res.push(`  ${valueCandidates.valueType}: ${valueCandidates.possiableValues}`);
+                    const leftPad = Math.max(name.length + 1 - valueCandidates.valueType.length, 2);
+                    text.push(padLeft("", leftPad), `${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
                 }
                 if (defaultValueDescription) {
-                    res.push(`  ${getDiagnosticText(Diagnostics.default_Colon)} ${defaultValueDescription}`);
+                    if(valueCandidates) text.push(sys.newLine);
+                    const diagType = getDiagnosticText(Diagnostics.default_Colon);
+                    const leftPad = Math.max(name.length + 1 - diagType.length, 2);
+                    text.push(padLeft("", leftPad), `${diagType} ${defaultValueDescription}`);
                 }
-                res.push(sys.newLine);
+
+                text.push(sys.newLine);
             }
+            text.push(sys.newLine);
         }
         else {
             let description = "";
             if (option.description) {
                 description = getDiagnosticText(option.description);
             }
-            res = [...res, ...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine];
-            if (isAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+            text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
+            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
                 if (valueCandidates) {
-                    res = [...res, sys.newLine, ...getPrettyOutput(valueCandidates.valueType, valueCandidates.possiableValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine];
+                    text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
                 }
                 if (defaultValueDescription) {
-                    res = [...res, sys.newLine, ...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine];
+                    text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
                 }
-                res.push(sys.newLine);
+                text.push(sys.newLine);
             }
         }
-        return res;
+        return text;
 
-        function isAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
-            if(valueCandidates?.possiableValues === "boolean" && (defaultValueDescription === undefined|| defaultValueDescription === "false" || defaultValueDescription === "undefined" || defaultValueDescription === "n/a")){
+        function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
+            const ignoreValues = ["string"];
+            const ignoredDescriptions = [undefined, "false", "n/a"];
+            if (contains(ignoreValues, valueCandidates?.possibleValues) && contains(ignoredDescriptions, defaultValueDescription)) {
                 return false;
             }
             return true;
@@ -205,46 +214,43 @@ namespace ts {
 
             return {
                 valueType: getValueType(option),
-                possiableValues: getPossiableValues(option)
+                possibleValues: getPossibleValues(option)
             };
 
             function getValueType(option: CommandLineOption) {
-                let valueType: string;
-                switch (option.type) {
-                    case "list":
-                        valueType = getDiagnosticText(Diagnostics.one_or_more_Colon);
-                        break;
-                    default:
-                        valueType = getDiagnosticText(Diagnostics.any_of_Colon);
-                }
-                return valueType;
-            }
-
-            function getPossiableValues(option: CommandLineOption) {
-                let possiableValues: string;
                 switch (option.type) {
                     case "string":
-                        possiableValues = "string";
-                        break;
                     case "number":
-                        possiableValues = "number";
-                        break;
                     case "boolean":
-                        possiableValues = "boolean";
+                        return getDiagnosticText(Diagnostics.type_Colon);
+                    case "list":
+                        return getDiagnosticText(Diagnostics.one_or_more_Colon);
+                    default:
+                        return getDiagnosticText(Diagnostics.one_of_Colon);
+                }
+            }
+
+            function getPossibleValues(option: CommandLineOption) {
+                let possibleValues: string;
+                switch (option.type) {
+                    case "string":
+                    case "number":
+                    case "boolean":
+                        possibleValues = option.type;
                         break;
                     case "list":
-                        // TODO: check inifinate loop
-                        possiableValues = getPossiableValues(option.element);
+                        // TODO: check infinite loop
+                        possibleValues = getPossibleValues(option.element);
                         break;
                     case "object":
-                        possiableValues = "";
+                        possibleValues = "";
                         break;
                     default:
                         // ESMap<string, number | string>
                         const keys = arrayFrom(option.type.keys());
-                        possiableValues = keys.join(", ");
+                        possibleValues = keys.join(", ");
                 }
-                return possiableValues;
+                return possibleValues;
             }
         }
     }
@@ -262,16 +268,16 @@ namespace ts {
         const rightAlignOfLeftPart = maxLength + 2;
         // assume 2 space between left and right part
         const leftAlignOfRightPart = rightAlignOfLeftPart + 2;
-        let res: string[] = [];
+        let lines: string[] = [];
         for (const option of optionsList) {
             const tmp = generateOptionOutput(option, rightAlignOfLeftPart, leftAlignOfRightPart);
-            res = [...res, ...tmp];
+            lines = [...lines, ...tmp];
         }
         // make sure always a blank line in the end.
-        if (res[res.length - 2] !== sys.newLine) {
-            res.push(sys.newLine);
+        if (lines[lines.length - 2] !== sys.newLine) {
+            lines.push(sys.newLine);
         }
-        return res;
+        return lines;
     }
 
     function generateSectionOptionsOutput(sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {

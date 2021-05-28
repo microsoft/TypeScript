@@ -192,7 +192,6 @@ namespace ts {
         {
             name: "preserveWatchOutput",
             type: "boolean",
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
             defaultValueDescription: "n/a"
@@ -362,6 +361,7 @@ namespace ts {
         {
             name: "showConfig",
             type: "boolean",
+            showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             isCommandLineOnly: true,
             description: Diagnostics.Print_the_final_configuration_instead_of_building
@@ -622,7 +622,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_checking_of_function_types,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -631,7 +630,6 @@ namespace ts {
             name: "strictBindCallApply",
             type: "boolean",
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_bind_call_and_apply_methods_on_functions,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -641,7 +639,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -661,7 +658,6 @@ namespace ts {
             type: "boolean",
             affectsSourceFile: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Strict_Type_Checking_Options,
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -672,7 +668,6 @@ namespace ts {
             name: "noUnusedLocals",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_locals,
             defaultValueDescription: "false"
@@ -681,7 +676,6 @@ namespace ts {
             name: "noUnusedParameters",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_on_unused_parameters,
             defaultValueDescription: "false"
@@ -690,7 +684,6 @@ namespace ts {
             name: "noImplicitReturns",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value,
             defaultValueDescription: "false"
@@ -700,7 +693,6 @@ namespace ts {
             type: "boolean",
             affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement,
             defaultValueDescription: "false"
@@ -709,7 +701,6 @@ namespace ts {
             name: "noUncheckedIndexedAccess",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
@@ -717,14 +708,12 @@ namespace ts {
             name: "noImplicitOverride",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Additional_Checks,
             description: Diagnostics.Require_undeclared_properties_from_index_signatures_to_use_element_accesses,
             defaultValueDescription: "false"
