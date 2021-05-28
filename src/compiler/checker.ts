@@ -2062,7 +2062,7 @@ namespace ts {
                                 suggestion = undefined;
                             }
                             if (originalLocation && isBadUncheckedJSSuggestion(lastLocation, /*parent*/ undefined, suggestion?.valueDeclaration ? [suggestion.valueDeclaration] : [])) {
-                                suggestion = undefined
+                                suggestion = undefined;
                             }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
@@ -27423,7 +27423,7 @@ namespace ts {
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
-                    const isBadJSSuggestion = isBadUncheckedJSSuggestion(node, leftType.symbol, leftType.symbol?.declarations)
+                    const isBadJSSuggestion = isBadUncheckedJSSuggestion(node, leftType.symbol, leftType.symbol?.declarations);
                     if (isBadJSSuggestion === undefined ? isJSLiteralType(leftType) : isBadJSSuggestion) {
                         return anyType;
                     }
@@ -27476,12 +27476,12 @@ namespace ts {
          * TODO: Should probably only pass one declaration
          */
         function isBadUncheckedJSSuggestion(node: Node | undefined, parent: Symbol | undefined, declarations: Node[] | undefined): boolean | undefined {
-            const file = getSourceFileOfNode(node)
+            const file = getSourceFileOfNode(node);
             if (file) {
                 if (compilerOptions.checkJs === undefined && !file.checkJsDirective && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
-                    const parentFile = forEach(declarations, getSourceFileOfNode)
+                    const parentFile = forEach(declarations, getSourceFileOfNode);
                     return file !== parentFile && !!parentFile && isGlobalSourceFile(parentFile)
-                        || !!(parent && parent.flags & SymbolFlags.Class)
+                        || !!(parent && parent.flags & SymbolFlags.Class);
                 }
             }
         }
