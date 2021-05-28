@@ -180,9 +180,11 @@ namespace ts {
         function getPrettyOutput(left: string, right: string, rightAlignOfLeft: number, leftAlignOfRight: number, terminalWidth: number, colorLeft: boolean) {
             const res = [];
             let isFirstLine = true;
-            let reaminRight = right;
+            let remainRight = right;
             const rightCharacterNumber = terminalWidth - leftAlignOfRight;
-            while (reaminRight.length !== 0) {
+            while (remainRight.length > 0) {
+                // @ts-ignore
+                console.log(remainRight.length);
                 let curLeft = "";
                 if (isFirstLine) {
                     curLeft = padLeft(left, rightAlignOfLeft);
@@ -192,8 +194,9 @@ namespace ts {
                 else {
                     curLeft = padLeft("", leftAlignOfRight);
                 }
-                const curRight = reaminRight.substr(0, rightCharacterNumber);
-                reaminRight = reaminRight.slice(rightCharacterNumber);
+
+                const curRight = remainRight.substr(0, rightCharacterNumber);
+                remainRight = remainRight.slice(rightCharacterNumber);
                 res.push(`${curLeft}${curRight}`);
                 isFirstLine = false;
             }
