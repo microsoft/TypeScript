@@ -4043,13 +4043,13 @@
         "category": "Error",
         "code": 6064
     },
+    "Enables experimental support for ES7 decorators.": {
+        "category": "Message",
+        "code": 6065
+    },
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
-    },
-    "Enables experimental support for ES7 async functions.": {
-        "category": "Message",
-        "code": 6068
     },
     "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
