@@ -1,5 +1,3 @@
 {
-    "compilerOptions": {
-        "pretty": true
-    }
+    "compilerOptions": {}
 }

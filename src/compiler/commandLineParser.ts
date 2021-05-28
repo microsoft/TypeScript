@@ -277,6 +277,7 @@ namespace ts {
             name: "locale",
             type: "string",
             category: Diagnostics.Command_line_Options,
+            isCommandLineOnly: true,
             description: Diagnostics.The_locale_used_when_displaying_messages_to_the_user_e_g_en_us
         },
     ];
@@ -2220,7 +2221,7 @@ namespace ts {
             if (hasProperty(options, name)) {
                 // tsconfig only options cannot be specified via command line,
                 // so we can assume that only types that can appear here string | number | boolean
-                if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
+                if (optionsNameMap.has(name) && (optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options || optionsNameMap.get(name)!.category === Diagnostics.Output_Formatting)) {
                     continue;
                 }
                 const value = options[name] as CompilerOptionsValue;
