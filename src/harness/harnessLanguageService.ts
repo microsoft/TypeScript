@@ -86,7 +86,7 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
-            const oldShim = <ScriptSnapshot>oldScript;
+            const oldShim = oldScript as ScriptSnapshot;
             return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
         }
     }

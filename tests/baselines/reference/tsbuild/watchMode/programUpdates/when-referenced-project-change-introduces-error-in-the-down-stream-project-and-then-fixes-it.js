@@ -149,7 +149,7 @@ export {};
 "use strict";
 exports.__esModule = true;
 var library_1 = require("../Library/library");
-(0, library_1.createSomeObject)().message;
+library_1.createSomeObject().message;
 
 
 

@@ -84,7 +84,7 @@ exports.Foo = Foo;
 exports.__esModule = true;
 exports.y = void 0;
 var f1_1 = require("./f1");
-exports.y = (0, f1_1.Foo)();
+exports.y = f1_1.Foo();
 
 
 //// [/a/b/f3.js]

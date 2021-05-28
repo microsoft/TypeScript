@@ -15,7 +15,7 @@
         "category": "Error",
         "code": 1006
     },
-    "The parser expected to find a '{1}' to match the '{0}' token here.": {
+    "The parser expected to find a '}' to match the '{' token here.": {
         "category": "Error",
         "code": 1007
     },
@@ -318,6 +318,10 @@
     "A 'break' statement can only be used within an enclosing iteration or switch statement.": {
         "category": "Error",
         "code": 1105
+    },
+    "The left-hand side of a 'for...of' statement may not be 'async'.": {
+        "category": "Error",
+        "code": 1106
     },
     "Jump target cannot cross function boundary.": {
         "category": "Error",
@@ -882,6 +886,10 @@
     "An optional element cannot follow a rest element.": {
         "category": "Error",
         "code": 1266
+    },
+    "Property '{0}' cannot have an initializer because it is marked abstract.": {
+        "category": "Error",
+        "code": 1267
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -3717,13 +3725,17 @@
         "category": "Error",
         "code": 4114
     },
-    "This parameter property must be rewritten as a property declaration with an 'override' modifier because it overrides a member in base class '{0}'.": {
+    "This parameter property must have an 'override' modifier because it overrides a member in base class '{0}'.": {
         "category": "Error",
         "code": 4115
     },
     "This member must have an 'override' modifier because it overrides an abstract method that is declared in the base class '{0}'.": {
         "category": "Error",
         "code": 4116
+    },
+    "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4117
     },
 
     "The current host does not support the '{0}' option.": {
@@ -6388,6 +6400,10 @@
     "Remove all unnecessary 'override' modifiers": {
         "category": "Message",
         "code": 95163
+    },
+    "Can only convert named export": {
+        "category": "Message",
+        "code": 95164
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
