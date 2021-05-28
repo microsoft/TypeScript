@@ -84,7 +84,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
-        session?: Session;
+        session?: Session<unknown>;
         config: any;
     }
 
@@ -2392,7 +2392,7 @@ namespace ts.server {
             projectFilePath?: string,
             pluginConfigOverrides?: ESMap<string, any>,
             watchOptions?: WatchOptions,
-            session?: Session) {
+            session?: Session<unknown>) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
