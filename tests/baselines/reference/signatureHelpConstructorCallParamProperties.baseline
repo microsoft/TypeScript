@@ -1,0 +1,117 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpConstructorCallParamProperties.ts",
+      "position": 179,
+      "name": ""
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "Circle",
+              "kind": "className"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Circle",
+              "kind": "className"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "radius",
+              "documentation": [
+                {
+                  "text": "The radius of the circle.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "radius",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Initialize a circle.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "radius",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "The radius of the circle.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 179,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  }
+]

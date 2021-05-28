@@ -169,8 +169,8 @@ namespace ts {
     /**
      * Create the state so that we can iterate on changedFiles/affected files
      */
-    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderProgramState>): BuilderProgramState {
-        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
+    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
+        const state = BuilderState.create(newProgram, getCanonicalFileName, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
         state.compilerOptions = compilerOptions;
@@ -438,7 +438,22 @@ namespace ts {
                     removeSemanticDiagnosticsOf(state, f.resolvedPath)
                 );
             }
+            // When a change affects the global scope, all files are considered to be affected without updating their signature
+            // That means when affected file is handled, its signature can be out of date
+            // To avoid this, ensure that we update the signature for any affected file in this scenario.
+            BuilderState.updateShapeSignature(
+                state,
+                Debug.checkDefined(state.program),
+                affectedFile,
+                Debug.checkDefined(state.currentAffectedFilesSignatures),
+                cancellationToken,
+                computeHash,
+                state.currentAffectedFilesExportedModulesMap
+            );
             return;
+        }
+        else {
+            Debug.assert(state.hasCalledUpdateShapeSignature.has(affectedFile.resolvedPath) || state.currentAffectedFilesSignatures?.has(affectedFile.resolvedPath), `Signature not updated for affected file: ${affectedFile.fileName}`);
         }
 
         if (!state.compilerOptions.assumeChangesOnlyAffectDirectDependencies) {
@@ -690,13 +705,31 @@ namespace ts {
         return filterSemanticDiagnotics(diagnostics, state.compilerOptions);
     }
 
-    export type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-    export type ProgramBuilderInfoFilePendingEmit = [string, BuilderFileEmit];
+    export type ProgramBuildInfoFileId = number & { __programBuildInfoFileIdBrand: any };
+    export type ProgramBuildInfoFileIdListId = number & { __programBuildInfoFileIdListIdBrand: any };
+    export type ProgramBuildInfoDiagnostic = ProgramBuildInfoFileId | [fileId: ProgramBuildInfoFileId, diagnostics: readonly ReusableDiagnostic[]];
+    export type ProgramBuilderInfoFilePendingEmit = [fileId: ProgramBuildInfoFileId, emitKind: BuilderFileEmit];
+    export type ProgramBuildInfoReferencedMap = [fileId: ProgramBuildInfoFileId, fileIdListId: ProgramBuildInfoFileIdListId][];
+    export type ProgramBuildInfoBuilderStateFileInfo = Omit<BuilderState.FileInfo, "signature"> & {
+        /**
+         * Signature is
+         * - undefined if FileInfo.version === FileInfo.signature
+         * - false if FileInfo has signature as undefined (not calculated)
+         * - string actual signature
+         */
+        signature: string | false | undefined;
+    };
+    /**
+     * ProgramBuildInfoFileInfo is string if FileInfo.version === FileInfo.signature && !FileInfo.affectsGlobalScope otherwise encoded FileInfo
+     */
+    export type ProgramBuildInfoFileInfo = string | ProgramBuildInfoBuilderStateFileInfo;
     export interface ProgramBuildInfo {
-        fileInfos: MapLike<BuilderState.FileInfo>;
-        options: CompilerOptions;
-        referencedMap?: MapLike<string[]>;
-        exportedModulesMap?: MapLike<string[]>;
+        fileNames: readonly string[];
+        fileInfos: readonly ProgramBuildInfoFileInfo[];
+        options: CompilerOptions | undefined;
+        fileIdsList?: readonly (readonly ProgramBuildInfoFileId[])[];
+        referencedMap?: ProgramBuildInfoReferencedMap;
+        exportedModulesMap?: ProgramBuildInfoReferencedMap;
         semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
         affectedFilesPendingEmit?: ProgramBuilderInfoFilePendingEmit[];
     }
@@ -708,66 +741,83 @@ namespace ts {
         if (outFile(state.compilerOptions)) return undefined;
         const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
-        const fileInfos: MapLike<BuilderState.FileInfo> = {};
-        state.fileInfos.forEach((value, key) => {
+        const fileNames: string[] = [];
+        const fileNameToFileId = new Map<string, ProgramBuildInfoFileId>();
+        let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
+        let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
+        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBuildInfoFileInfo => {
+            // Ensure fileId
+            const fileId = toFileId(key);
+            Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
-            fileInfos[relativeToBuildInfo(key)] = signature === undefined ? value : { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope };
+            const actualSignature = signature ?? value.signature;
+            return value.version === actualSignature ?
+                value.affectsGlobalScope ?
+                    { version: value.version, signature: undefined, affectsGlobalScope: true } :
+                    value.version :
+                actualSignature !== undefined ?
+                    signature === undefined ?
+                        value :
+                        { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope } :
+                    { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope };
         });
 
-        const result: ProgramBuildInfo = {
-            fileInfos,
-            options: convertToReusableCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath)
-        };
+        let referencedMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.referencedMap) {
-            const referencedMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive)) {
-                referencedMap[relativeToBuildInfo(key)] = arrayFrom(state.referencedMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
-            result.referencedMap = referencedMap;
+            referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
+                toFileId(key),
+                toFileIdListId(state.referencedMap!.get(key)!)
+            ]);
         }
 
+        let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.exportedModulesMap) {
-            const exportedModulesMap: MapLike<string[]> = {};
-            for (const key of arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive)) {
+            exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
                 const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
                 // Not in temporary cache, use existing value
-                if (newValue === undefined) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(state.exportedModulesMap.get(key)!.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
+                if (newValue === undefined) return [toFileId(key), toFileIdListId(state.exportedModulesMap!.get(key)!)];
                 // Value in cache and has updated value map, use that
-                else if (newValue) exportedModulesMap[relativeToBuildInfo(key)] = arrayFrom(newValue.keys(), relativeToBuildInfo).sort(compareStringsCaseSensitive);
-            }
-            result.exportedModulesMap = exportedModulesMap;
+                else if (newValue) return [toFileId(key), toFileIdListId(newValue)];
+            });
         }
 
+        let semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
         if (state.semanticDiagnosticsPerFile) {
-            const semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] = [];
             for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
                 const value = state.semanticDiagnosticsPerFile.get(key)!;
-                semanticDiagnosticsPerFile.push(
+                (semanticDiagnosticsPerFile ||= []).push(
                     value.length ?
                         [
-                            relativeToBuildInfo(key),
+                            toFileId(key),
                             state.hasReusableDiagnostic ?
                                 value as readonly ReusableDiagnostic[] :
                                 convertToReusableDiagnostics(value as readonly Diagnostic[], relativeToBuildInfo)
                         ] :
-                        relativeToBuildInfo(key)
+                        toFileId(key)
                 );
             }
-            result.semanticDiagnosticsPerFile = semanticDiagnosticsPerFile;
         }
 
+        let affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] | undefined;
         if (state.affectedFilesPendingEmit) {
-            const affectedFilesPendingEmit: ProgramBuilderInfoFilePendingEmit[] = [];
             const seenFiles = new Set<Path>();
             for (const path of state.affectedFilesPendingEmit.slice(state.affectedFilesPendingEmitIndex).sort(compareStringsCaseSensitive)) {
                 if (tryAddToSet(seenFiles, path)) {
-                    affectedFilesPendingEmit.push([relativeToBuildInfo(path), state.affectedFilesPendingEmitKind!.get(path)!]);
+                    (affectedFilesPendingEmit ||= []).push([toFileId(path), state.affectedFilesPendingEmitKind!.get(path)!]);
                 }
             }
-            result.affectedFilesPendingEmit = affectedFilesPendingEmit;
         }
 
-        return result;
+        return {
+            fileNames,
+            fileInfos,
+            options: convertToProgramBuildInfoCompilerOptions(state.compilerOptions, relativeToBuildInfoEnsuringAbsolutePath),
+            fileIdsList,
+            referencedMap,
+            exportedModulesMap,
+            semanticDiagnosticsPerFile,
+            affectedFilesPendingEmit,
+        };
 
         function relativeToBuildInfoEnsuringAbsolutePath(path: string) {
             return relativeToBuildInfo(getNormalizedAbsolutePath(path, currentDirectory));
@@ -776,23 +826,41 @@ namespace ts {
         function relativeToBuildInfo(path: string) {
             return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
         }
+
+        function toFileId(path: Path): ProgramBuildInfoFileId {
+            let fileId = fileNameToFileId.get(path);
+            if (fileId === undefined) {
+                fileNames.push(relativeToBuildInfo(path));
+                fileNameToFileId.set(path, fileId = fileNames.length as ProgramBuildInfoFileId);
+            }
+            return fileId;
+        }
+
+        function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
+            const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
+            const key = fileIds.join();
+            let fileIdListId = fileNamesToFileIdListId?.get(key);
+            if (fileIdListId === undefined) {
+                (fileIdsList ||= []).push(fileIds);
+                (fileNamesToFileIdListId ||= new Map()).set(key, fileIdListId = fileIdsList.length as ProgramBuildInfoFileIdListId);
+            }
+            return fileIdListId;
+        }
     }
 
-    function convertToReusableCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
-        const result: CompilerOptions = {};
+    function convertToProgramBuildInfoCompilerOptions(options: CompilerOptions, relativeToBuildInfo: (path: string) => string) {
+        let result: CompilerOptions | undefined;
         const { optionsNameMap } = getOptionsNameMap();
 
-        for (const name in options) {
-            if (hasProperty(options, name)) {
-                result[name] = convertToReusableCompilerOptionValue(
-                    optionsNameMap.get(name.toLowerCase()),
+        for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
+            const optionInfo = optionsNameMap.get(name.toLowerCase());
+            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics || name === "skipLibCheck" || name === "skipDefaultLibCheck") {
+                (result ||= {})[name] = convertToReusableCompilerOptionValue(
+                    optionInfo,
                     options[name] as CompilerOptionsValue,
                     relativeToBuildInfo
                 );
             }
-        }
-        if (result.configFilePath) {
-            result.configFilePath = relativeToBuildInfo(result.configFilePath);
         }
         return result;
     }
@@ -901,7 +969,7 @@ namespace ts {
          * Computing hash to for signature verification
          */
         const computeHash = maybeBind(host, host.createHash);
-        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState, host.disableUseFileVersionAsSignature);
         let backupState: BuilderProgramState | undefined;
         newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state, getCanonicalFileName);
 
@@ -910,8 +978,9 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const builderProgram = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
-        builderProgram.getState = () => state;
+        const getState = () => state;
+        const builderProgram = createRedirectedBuilderProgram(getState, configFileParsingDiagnostics);
+        builderProgram.getState = getState;
         builderProgram.backupState = () => {
             Debug.assert(backupState === undefined);
             backupState = cloneBuilderProgramState(state);
@@ -1167,39 +1236,31 @@ namespace ts {
         }
     }
 
-    function getMapOfReferencedSet(mapLike: MapLike<readonly string[]> | undefined, toPath: (path: string) => Path): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
-        if (!mapLike) return undefined;
-        const map = new Map<Path, BuilderState.ReferencedSet>();
-        // Copies keys/values from template. Note that for..in will not throw if
-        // template is undefined, and instead will just exit the loop.
-        for (const key in mapLike) {
-            if (hasProperty(mapLike, key)) {
-                map.set(toPath(key), new Set(mapLike[key].map(toPath)));
-            }
-        }
-        return map;
+    export function toBuilderStateFileInfo(fileInfo: ProgramBuildInfoFileInfo): BuilderState.FileInfo {
+        return isString(fileInfo) ?
+            { version: fileInfo, signature: fileInfo, affectsGlobalScope: undefined } :
+            isString(fileInfo.signature) ?
+                fileInfo as BuilderState.FileInfo :
+                { version: fileInfo.version, signature: fileInfo.signature === false ? undefined : fileInfo.version, affectsGlobalScope: fileInfo.affectsGlobalScope };
     }
 
     export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo, buildInfoPath: string, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram {
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
+        const filePaths = program.fileNames.map(toPath);
+        const filePathsSetList = program.fileIdsList?.map(fileIds => new Set(fileIds.map(toFilePath)));
         const fileInfos = new Map<Path, BuilderState.FileInfo>();
-        for (const key in program.fileInfos) {
-            if (hasProperty(program.fileInfos, key)) {
-                fileInfos.set(toPath(key), program.fileInfos[key]);
-            }
-        }
-
+        program.fileInfos.forEach((fileInfo, index) => fileInfos.set(toFilePath(index + 1 as ProgramBuildInfoFileId), toBuilderStateFileInfo(fileInfo)));
         const state: ReusableBuilderProgramState = {
             fileInfos,
-            compilerOptions: convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath),
-            referencedMap: getMapOfReferencedSet(program.referencedMap, toPath),
-            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap, toPath),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toPath(isString(value) ? value : value[0]), value => isString(value) ? emptyArray : value[1]),
+            compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
+            referencedMap: toMapOfReferencedSet(program.referencedMap),
+            exportedModulesMap: toMapOfReferencedSet(program.exportedModulesMap),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
-            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toPath(value[0])),
-            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toPath(value[0]), value => value[1]),
+            affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
+            affectedFilesPendingEmitKind: program.affectedFilesPendingEmit && arrayToMap(program.affectedFilesPendingEmit, value => toFilePath(value[0]), value => value[1]),
             affectedFilesPendingEmitIndex: program.affectedFilesPendingEmit && 0,
         };
         return {
@@ -1234,17 +1295,29 @@ namespace ts {
         function toAbsolutePath(path: string) {
             return getNormalizedAbsolutePath(path, buildInfoDirectory);
         }
+
+        function toFilePath(fileId: ProgramBuildInfoFileId) {
+            return filePaths[fileId - 1];
+        }
+
+        function toFilePathsSet(fileIdsListId: ProgramBuildInfoFileIdListId) {
+            return filePathsSetList![fileIdsListId - 1];
+        }
+
+        function toMapOfReferencedSet(referenceMap: ProgramBuildInfoReferencedMap | undefined): ReadonlyESMap<Path, BuilderState.ReferencedSet> | undefined {
+            return referenceMap && arrayToMap(referenceMap, value => toFilePath(value[0]), value => toFilePathsSet(value[1]));
+        }
     }
 
-    export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
+    export function createRedirectedBuilderProgram(getState: () => { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: readonly Diagnostic[]): BuilderProgram {
         return {
             getState: notImplemented,
             backupState: noop,
             restoreState: noop,
             getProgram,
-            getProgramOrUndefined: () => state.program,
-            releaseProgram: () => state.program = undefined,
-            getCompilerOptions: () => state.compilerOptions,
+            getProgramOrUndefined: () => getState().program,
+            releaseProgram: () => getState().program = undefined,
+            getCompilerOptions: () => getState().compilerOptions,
             getSourceFile: fileName => getProgram().getSourceFile(fileName),
             getSourceFiles: () => getProgram().getSourceFiles(),
             getOptionsDiagnostics: cancellationToken => getProgram().getOptionsDiagnostics(cancellationToken),
@@ -1261,7 +1334,7 @@ namespace ts {
         };
 
         function getProgram() {
-            return Debug.checkDefined(state.program);
+            return Debug.checkDefined(getState().program);
         }
     }
 }

@@ -28,6 +28,7 @@ namespace ts {
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
         ["es2020", "lib.es2020.d.ts"],
+        ["es2021", "lib.es2021.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -67,14 +68,17 @@ namespace ts {
         ["es2020.string", "lib.es2020.string.d.ts"],
         ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["es2020.intl", "lib.es2020.intl.d.ts"],
+        ["es2021.promise", "lib.es2021.promise.d.ts"],
+        ["es2021.string", "lib.es2021.string.d.ts"],
+        ["es2021.weakref", "lib.es2021.weakref.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-        ["esnext.string", "lib.esnext.string.d.ts"],
-        ["esnext.promise", "lib.esnext.promise.d.ts"],
-        ["esnext.weakref", "lib.esnext.weakref.d.ts"]
+        ["esnext.string", "lib.es2021.string.d.ts"],
+        ["esnext.promise", "lib.es2021.promise.d.ts"],
+        ["esnext.weakref", "lib.es2021.weakref.d.ts"]
     ];
 
     /**
@@ -101,11 +105,12 @@ namespace ts {
                 fixedpollinginterval: WatchFileKind.FixedPollingInterval,
                 prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
                 dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchFileKind.FixedChunkSizePolling,
                 usefsevents: WatchFileKind.UseFsEvents,
                 usefseventsonparentdirectory: WatchFileKind.UseFsEventsOnParentDirectory,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_UseFsEvents_UseFsEventsOnParentDirectory,
+            description: Diagnostics.Specify_strategy_for_watching_file_Colon_FixedPollingInterval_default_PriorityPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling_UseFsEvents_UseFsEventsOnParentDirectory,
         },
         {
             name: "watchDirectory",
@@ -113,9 +118,10 @@ namespace ts {
                 usefsevents: WatchDirectoryKind.UseFsEvents,
                 fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
                 dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
+                fixedchunksizepolling: WatchDirectoryKind.FixedChunkSizePolling,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling,
+            description: Diagnostics.Specify_strategy_for_watching_directory_on_platforms_that_don_t_support_recursive_watching_natively_Colon_UseFsEvents_default_FixedPollingInterval_DynamicPriorityPolling_FixedChunkSizePolling,
         },
         {
             name: "fallbackPolling",
@@ -123,9 +129,10 @@ namespace ts {
                 fixedinterval: PollingWatchKind.FixedInterval,
                 priorityinterval: PollingWatchKind.PriorityInterval,
                 dynamicpriority: PollingWatchKind.DynamicPriority,
+                fixedchunksize: PollingWatchKind.FixedChunkSize,
             })),
             category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority,
+            description: Diagnostics.Specify_strategy_for_creating_a_polling_watch_when_it_fails_to_create_using_file_system_events_Colon_FixedInterval_default_PriorityInterval_DynamicPriority_FixedChunkSize,
         },
         {
             name: "synchronousWatchDirectory",
@@ -287,6 +294,7 @@ namespace ts {
             es2018: ScriptTarget.ES2018,
             es2019: ScriptTarget.ES2019,
             es2020: ScriptTarget.ES2020,
+            es2021: ScriptTarget.ES2021,
             esnext: ScriptTarget.ESNext,
         })),
         affectsSourceFile: true,
@@ -295,13 +303,11 @@ namespace ts {
         paramType: Diagnostics.VERSION,
         showInSimplifiedHelpView: true,
         category: Diagnostics.Basic_Options,
-        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_or_ESNEXT,
+        description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_ES2020_ES2021_or_ESNEXT,
     };
 
-    /* @internal */
-    export const optionDeclarations: CommandLineOption[] = [
+    const commandOptionsWithoutBuild: CommandLineOption[] = [
         // CommandLine only options
-        ...commonOptionsWithBuild,
         {
             name: "all",
             type: "boolean",
@@ -389,7 +395,7 @@ namespace ts {
                 name: "lib",
                 type: libMap
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation,
@@ -668,6 +674,14 @@ namespace ts {
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
         {
+            name: "noImplicitOverride",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            showInSimplifiedHelpView: false,
+            category: Diagnostics.Additional_Checks,
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
+        },
+        {
             name: "noPropertyAccessFromIndexSignature",
             type: "boolean",
             showInSimplifiedHelpView: false,
@@ -741,7 +755,7 @@ namespace ts {
                 name: "types",
                 type: "string"
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation,
@@ -914,7 +928,7 @@ namespace ts {
         {
             name: "noLib",
             type: "boolean",
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts,
             // We are not returning a sourceFile for lib file when asked by the program,
@@ -941,7 +955,7 @@ namespace ts {
         {
             name: "disableSizeLimit",
             type: "boolean",
-            affectsSourceFile: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects
         },
@@ -1091,6 +1105,12 @@ namespace ts {
     ];
 
     /* @internal */
+    export const optionDeclarations: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsWithoutBuild,
+    ];
+
+    /* @internal */
     export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1107,12 +1127,14 @@ namespace ts {
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
 
     /* @internal */
+    export const optionsAffectingProgramStructure: readonly CommandLineOption[] =
+        optionDeclarations.filter(option => !!option.affectsProgramStructure);
+
+    /* @internal */
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         hasProperty(option, "transpileOptionValue"));
 
-    /* @internal */
-    export const buildOpts: CommandLineOption[] = [
-        ...commonOptionsWithBuild,
+    const commandOptionsOnlyBuild: CommandLineOption[]  = [
         {
             name: "verbose",
             shortName: "v",
@@ -1140,6 +1162,12 @@ namespace ts {
             description: Diagnostics.Delete_the_outputs_of_all_projects,
             type: "boolean"
         }
+    ];
+
+    /* @internal */
+    export const buildOpts: CommandLineOption[] = [
+        ...commonOptionsWithBuild,
+        ...commandOptionsOnlyBuild,
     ];
 
     /* @internal */
@@ -1201,8 +1229,13 @@ namespace ts {
 
     /* @internal */
     export function getOptionsNameMap(): OptionsNameMap {
-        return optionsNameMapCache || (optionsNameMapCache = createOptionNameMap(optionDeclarations));
+        return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
     }
+
+    const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_only_be_used_with_build,
+        getOptionsNameMap: getBuildOptionsNameMap
+    };
 
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
@@ -1258,7 +1291,7 @@ namespace ts {
             case "string":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
-                return mapDefined(values, v => parseCustomTypeOption(<CommandLineOptionOfCustomType>opt.element, v, errors));
+                return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
         }
     }
 
@@ -1283,6 +1316,10 @@ namespace ts {
         createDiagnostics: (message: DiagnosticMessage, arg0: string, arg1?: string) => Diagnostic,
         unknownOptionErrorText?: string
     ) {
+        if (diagnostics.alternateMode?.getOptionsNameMap().optionsNameMap.has(unknownOption.toLowerCase())) {
+            return createDiagnostics(diagnostics.alternateMode.diagnostic, unknownOption);
+        }
+
         const possibleOption = getSpellingSuggestion(unknownOption, diagnostics.optionDeclarations, getOptionName);
         return possibleOption ?
             createDiagnostics(diagnostics.unknownDidYouMeanDiagnostic, unknownOptionErrorText || unknownOption, possibleOption.name) :
@@ -1433,7 +1470,7 @@ namespace ts {
                         break;
                     // If not a primitive, the possible types are specified in what is effectively a map of options.
                     default:
-                        options[opt.name] = parseCustomTypeOption(<CommandLineOptionOfCustomType>opt, args[i], errors);
+                        options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
                         i++;
                         break;
                 }
@@ -1448,6 +1485,7 @@ namespace ts {
 
     /*@internal*/
     export const compilerOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: compilerOptionsAlternateMode,
         getOptionsNameMap,
         optionDeclarations,
         unknownOptionDiagnostic: Diagnostics.Unknown_compiler_option_0,
@@ -1489,7 +1527,13 @@ namespace ts {
         return buildOptionsNameMapCache || (buildOptionsNameMapCache = createOptionNameMap(buildOpts));
     }
 
+    const buildOptionsAlternateMode: AlternateModeDiagnostics = {
+        diagnostic: Diagnostics.Compiler_option_0_may_not_be_used_with_build,
+        getOptionsNameMap
+    };
+
     const buildOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
+        alternateMode: buildOptionsAlternateMode,
         getOptionsNameMap: getBuildOptionsNameMap,
         optionDeclarations: buildOpts,
         unknownOptionDiagnostic: Diagnostics.Unknown_build_option_0,
@@ -1530,7 +1574,7 @@ namespace ts {
     /* @internal */
     export function getDiagnosticText(_message: DiagnosticMessage, ..._args: any[]): string {
         const diagnostic = createCompilerDiagnostic.apply(undefined, arguments);
-        return <string>diagnostic.messageText;
+        return diagnostic.messageText as string;
     }
 
     export type DiagnosticReporter = (diagnostic: Diagnostic) => void;
@@ -1556,7 +1600,7 @@ namespace ts {
      */
     export function getParsedCommandLineOfConfigFile(
         configFileName: string,
-        optionsToExtend: CompilerOptions,
+        optionsToExtend: CompilerOptions | undefined,
         host: ParseConfigFileHost,
         extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
         watchOptionsToExtend?: WatchOptions,
@@ -1614,7 +1658,7 @@ namespace ts {
      */
     export function readJsonConfigFile(fileName: string, readFile: (path: string) => string | undefined): TsConfigSourceFile {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
-        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : <TsConfigSourceFile>{ fileName, parseDiagnostics: [textOrDiagnostic] };
+        return isString(textOrDiagnostic) ? parseJsonText(fileName, textOrDiagnostic) : { fileName, parseDiagnostics: [textOrDiagnostic] } as TsConfigSourceFile;
     }
 
     /*@internal*/
@@ -1921,9 +1965,9 @@ namespace ts {
                         errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
                     reportInvalidOptionValue(option && (isString(option.type) && option.type !== "string"));
-                    const text = (<StringLiteral>valueExpression).text;
+                    const text = (valueExpression as StringLiteral).text;
                     if (option && !isString(option.type)) {
-                        const customOption = <CommandLineOptionOfCustomType>option;
+                        const customOption = option as CommandLineOptionOfCustomType;
                         // Validate custom option type
                         if (!customOption.type.has(text.toLowerCase())) {
                             errors.push(
@@ -1939,18 +1983,18 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(Number((<NumericLiteral>valueExpression).text));
+                    return validateValue(Number((valueExpression as NumericLiteral).text));
 
                 case SyntaxKind.PrefixUnaryExpression:
-                    if ((<PrefixUnaryExpression>valueExpression).operator !== SyntaxKind.MinusToken || (<PrefixUnaryExpression>valueExpression).operand.kind !== SyntaxKind.NumericLiteral) {
+                    if ((valueExpression as PrefixUnaryExpression).operator !== SyntaxKind.MinusToken || (valueExpression as PrefixUnaryExpression).operand.kind !== SyntaxKind.NumericLiteral) {
                         break; // not valid JSON syntax
                     }
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return validateValue(-Number((<NumericLiteral>(<PrefixUnaryExpression>valueExpression).operand).text));
+                    return validateValue(-Number(((valueExpression as PrefixUnaryExpression).operand as NumericLiteral).text));
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
-                    const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
+                    const objectLiteralExpression = valueExpression as ObjectLiteralExpression;
 
                     // Currently having element option declaration in the tsconfig with type "object"
                     // determines if it needs onSetValidOptionKeyValueInParent callback or not
@@ -1959,7 +2003,7 @@ namespace ts {
                     // vs what we set in the json
                     // If need arises, we can modify this interface and callbacks as needed
                     if (option) {
-                        const { elementOptions, extraKeyDiagnostics, name: optionName } = <TsConfigOnlyOption>option;
+                        const { elementOptions, extraKeyDiagnostics, name: optionName } = option as TsConfigOnlyOption;
                         return validateValue(convertObjectLiteralExpressionToJson(objectLiteralExpression,
                             elementOptions, extraKeyDiagnostics, optionName));
                     }
@@ -1972,8 +2016,8 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
                     return validateValue(convertArrayLiteralExpressionToJson(
-                        (<ArrayLiteralExpression>valueExpression).elements,
-                        option && (<CommandLineOptionOfListType>option).element));
+                        (valueExpression as ArrayLiteralExpression).elements,
+                        option && (option as CommandLineOptionOfListType).element));
             }
 
             // Not in expected format
@@ -2132,7 +2176,7 @@ namespace ts {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
-            return (<CommandLineOptionOfCustomType>optionDefinition).type;
+            return (optionDefinition as CommandLineOptionOfCustomType).type;
         }
     }
 
@@ -2171,7 +2215,7 @@ namespace ts {
                 if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
                     continue;
                 }
-                const value = <CompilerOptionsValue>options[name];
+                const value = options[name] as CompilerOptionsValue;
                 const optionDefinition = optionsNameMap.get(name.toLowerCase());
                 if (optionDefinition) {
                     const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
@@ -2493,6 +2537,7 @@ namespace ts {
                 validatedFilesSpec: filter(filesSpecs, isString),
                 validatedIncludeSpecs,
                 validatedExcludeSpecs,
+                pathPatterns: undefined, // Initialized on first use
             };
         }
 
@@ -2742,7 +2787,7 @@ namespace ts {
                     case "extends":
                         const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
                         extendedConfigPath = getExtendsConfigPath(
-                            <string>value,
+                            value as string,
                             host,
                             newBase,
                             errors,
@@ -2932,10 +2977,10 @@ namespace ts {
         if (isCompilerOptionsValue(opt, value)) {
             const optType = opt.type;
             if (optType === "list" && isArray(value)) {
-                return convertJsonOptionOfListType(<CommandLineOptionOfListType>opt, value, basePath, errors);
+                return convertJsonOptionOfListType(opt as CommandLineOptionOfListType, value, basePath, errors);
             }
             else if (!isString(optType)) {
-                return convertJsonOptionOfCustomType(<CommandLineOptionOfCustomType>opt, <string>value, errors);
+                return convertJsonOptionOfCustomType(opt as CommandLineOptionOfCustomType, value as string, errors);
             }
             const validatedValue = validateJsonOptionValue(opt, value, errors);
             return isNullOrUndefined(validatedValue) ? validatedValue : normalizeNonListOptionValue(opt, basePath, validatedValue);
@@ -2950,7 +2995,7 @@ namespace ts {
         if (option.type === "list") {
             const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
-                return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
+                return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v) as CompilerOptionsValue;
             }
             return value;
         }
@@ -2994,10 +3039,6 @@ namespace ts {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 
-    function trimString(s: string) {
-        return typeof s.trim === "function" ? s.trim() : s.replace(/^[\s]+|[\s]+$/g, "");
-    }
-
     /**
      * Tests for a path that ends in a recursive directory wildcard.
      * Matches **, \**, **\, and \**\, but not a**b.
@@ -3010,36 +3051,6 @@ namespace ts {
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
-
-    /**
-     * Tests for a path where .. appears after a recursive directory wildcard.
-     * Matches **\..\*, **\a\..\*, and **\.., but not ..\**\*
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  (^|\/)      # matches either the beginning of the string or a directory separator.
-     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
-     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
-     *  \.\.        # matches a parent directory path component ".."
-     *  ($|\/)      # matches either the end of the string or a directory separator.
-     */
-    const invalidDotDotAfterRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/;
-
-    /**
-     * Tests for a path containing a wildcard character in a directory component of the path.
-     * Matches \*\, \?\, and \a*b\, but not \a\ or \a\*.
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  \/          # matches a directory separator.
-     *  [^/]*?      # matches any number of characters excluding directory separators (non-greedy).
-     *  [*?]        # matches either a wildcard character (* or ?)
-     *  [^/]*       # matches any number of characters excluding directory separators (greedy).
-     *  \/          # matches a directory separator.
-     */
-    const watchRecursivePattern = /\/[^/]*?[*?][^/]*\//;
 
     /**
      * Matches the portion of a wildcard path that does not contain wildcards.
@@ -3177,6 +3188,20 @@ namespace ts {
         return matchesExcludeWorker(pathToCheck, validatedExcludeSpecs, useCaseSensitiveFileNames, currentDirectory, basePath);
     }
 
+    function invalidDotDotAfterRecursiveWildcard(s: string) {
+        // We used to use the regex /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/ to check for this case, but
+        // in v8, that has polynomial performance because the recursive wildcard match - **/ -
+        // can be matched in many arbitrary positions when multiple are present, resulting
+        // in bad backtracking (and we don't care which is matched - just that some /.. segment
+        // comes after some **/ segment).
+        const wildcardIndex = startsWith(s, "**/") ? 0 : s.indexOf("/**/");
+        if (wildcardIndex === -1) {
+            return false;
+        }
+        const lastDotIndex = endsWith(s, "/..") ? s.length : s.lastIndexOf("/../");
+        return lastDotIndex > wildcardIndex;
+    }
+
     /* @internal */
     export function matchesExclude(
         pathToCheck: string,
@@ -3186,7 +3211,7 @@ namespace ts {
     ) {
         return matchesExcludeWorker(
             pathToCheck,
-            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcardPattern.test(spec)),
+            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcard(spec)),
             useCaseSensitiveFileNames,
             currentDirectory
         );
@@ -3228,7 +3253,7 @@ namespace ts {
         if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
-        else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
+        else if (invalidDotDotAfterRecursiveWildcard(spec)) {
             return [Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
     }
@@ -3291,9 +3316,18 @@ namespace ts {
     function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string, flags: WatchDirectoryFlags } | undefined {
         const match = wildcardDirectoryPattern.exec(spec);
         if (match) {
+            // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
+            // less algorithmically complex (roughly O(3n) worst-case) than the regex we used to use,
+            // \/[^/]*?[*?][^/]*\/ which was polynominal in v8, since arbitrary sequences of wildcard
+            // characters could match any of the central patterns, resulting in bad backtracking.
+            const questionWildcardIndex = spec.indexOf("?");
+            const starWildcardIndex = spec.indexOf("*");
+            const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
             return {
                 key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
-                flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
+                flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
+                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
+                    ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
         if (isImplicitGlob(spec)) {

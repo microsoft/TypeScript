@@ -16,7 +16,7 @@ namespace ts.codefix {
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
         const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
-        if (!ctorSymbol || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
+        if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
             // Bad input
             return undefined;
         }
@@ -46,7 +46,7 @@ namespace ts.codefix {
             // all instance members are stored in the "member" array of symbol
             if (symbol.members) {
                 symbol.members.forEach((member, key) => {
-                    if (key === "constructor") {
+                    if (key === "constructor" && member.valueDeclaration) {
                         // fn.prototype.constructor = fn
                         changes.delete(sourceFile, member.valueDeclaration.parent);
                         return;
@@ -61,7 +61,7 @@ namespace ts.codefix {
             // all static members are stored in the "exports" array of symbol
             if (symbol.exports) {
                 symbol.exports.forEach(member => {
-                    if (member.name === "prototype") {
+                    if (member.name === "prototype" && member.declarations) {
                         const firstDeclaration = member.declarations[0];
                         // only one "x.prototype = { ... }" will pass
                         if (member.declarations.length === 1 &&

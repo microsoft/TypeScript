@@ -276,11 +276,11 @@ namespace ts.codefix {
             const binaryExpression = token.parent.parent as BinaryExpression;
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
-            typeNode = checker.typeToTypeNode(widenedType, classDeclaration, /*flags*/ undefined);
+            typeNode = checker.typeToTypeNode(widenedType, classDeclaration, NodeBuilderFlags.NoTruncation);
         }
         else {
             const contextualType = checker.getContextualType(token.parent as Expression);
-            typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined) : undefined;
+            typeNode = contextualType ? checker.typeToTypeNode(contextualType, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.NoTruncation) : undefined;
         }
         return typeNode || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
@@ -402,7 +402,7 @@ namespace ts.codefix {
 
     function addFunctionDeclaration(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: FunctionInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
-        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, info.token, info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
+        const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
     }
 }

@@ -145,8 +145,10 @@ namespace ts {
                             symbolAccessibilityResult.errorSymbolName,
                             symbolAccessibilityResult.errorModuleName));
                     }
+                    return true;
                 }
             }
+            return false;
         }
 
         function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
@@ -156,9 +158,10 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            if (symbol.flags & SymbolFlags.TypeParameter) return;
-            handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+            if (symbol.flags & SymbolFlags.TypeParameter) return false;
+            const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+            return issuedDiagnostic;
         }
 
         function reportPrivateInBaseOfClassExpression(propertyName: string) {
@@ -206,13 +209,15 @@ namespace ts {
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-            const primaryDeclaration = find(parentSymbol.declarations, d => getSourceFileOfNode(d) === containingFile)!;
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile)!;
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-            for (const augmentations of augmentingDeclarations) {
-                context.addDiagnostic(addRelatedInfo(
-                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
-                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
-                ));
+            if (augmentingDeclarations) {
+                for (const augmentations of augmentingDeclarations) {
+                    context.addDiagnostic(addRelatedInfo(
+                        createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                        createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
+                    ));
+                }
             }
         }
 
@@ -370,9 +375,7 @@ namespace ts {
 
                     if (declFileName) {
                         const specifier = moduleSpecifiers.getModuleSpecifier(
-                            // We pathify the baseUrl since we pathify the other paths here, so we can still easily check if the other paths are within the baseUrl
-                            // TODO: Should we _always_ be pathifying the baseUrl as we read it in?
-                            { ...options, baseUrl: options.baseUrl && toPath(options.baseUrl, host.getCurrentDirectory(), host.getCanonicalFileName) },
+                            options,
                             currentSourceFile,
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
@@ -569,6 +572,16 @@ namespace ts {
                     return false;
             }
             return false;
+        }
+
+        // If the ExpandoFunctionDeclaration have multiple overloads, then we only need to emit properties for the last one.
+        function shouldEmitFunctionProperties(input: FunctionDeclaration) {
+            if (input.body) {
+                return true;
+            }
+
+            const overloadSignatures = input.symbol.declarations?.filter(decl => isFunctionDeclaration(decl) && !decl.body);
+            return !overloadSignatures || overloadSignatures.indexOf(input) === overloadSignatures.length - 1;
         }
 
         function getBindingNameVisible(elem: BindingElement | VariableDeclaration | OmittedExpression): boolean {
@@ -1191,7 +1204,7 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
-                    if (clean && resolver.isExpandoFunctionDeclaration(input)) {
+                    if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
                         const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
@@ -1200,7 +1213,7 @@ namespace ts {
                         fakespace.symbol = props[0].parent!;
                         const exportMappings: [Identifier, string][] = [];
                         let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
+                            if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
@@ -1538,7 +1551,7 @@ namespace ts {
         }
 
         function ensureModifierFlags(node: Node): ModifierFlags {
-            let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async); // No async modifiers in declaration files
+            let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async | ModifierFlags.Override); // No async and override modifiers in declaration files
             let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
             const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
             if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {
