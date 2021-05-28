@@ -263,7 +263,7 @@ namespace ts.server {
         /*@internal*/
         protected typeAcquisition: TypeAcquisition | undefined;
 
-        private session: Session | undefined;
+        private session: Session<unknown> | undefined;
 
         /*@internal*/
         constructor(
@@ -278,7 +278,7 @@ namespace ts.server {
             protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
-            session: Session | undefined,
+            session: Session<unknown> | undefined,
         ) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
@@ -1813,7 +1813,7 @@ namespace ts.server {
             currentDirectory: string | undefined,
             pluginConfigOverrides: ESMap<string, any> | undefined,
             typeAcquisition: TypeAcquisition | undefined,
-            session: Session | undefined) {
+            session: Session<unknown> | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -2110,7 +2110,7 @@ namespace ts.server {
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
             cachedDirectoryStructureHost: CachedDirectoryStructureHost,
-            session: Session | undefined) {
+            session: Session<unknown> | undefined) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,

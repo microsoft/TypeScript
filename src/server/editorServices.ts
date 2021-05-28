@@ -783,7 +783,7 @@ namespace ts.server {
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
-        private session: Session | undefined;
+        private session: Session<unknown> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;
