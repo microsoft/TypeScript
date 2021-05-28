@@ -1,0 +1,15 @@
+=== tests/cases/compiler/stringRawType.ts ===
+String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2);
+>String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2) : string
+>String.raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
+>String : StringConstructor
+>raw : (template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]) => string
+>{ raw: ["foo", "bar", "baz"] } : { raw: string[]; }
+>raw : string[]
+>["foo", "bar", "baz"] : string[]
+>"foo" : "foo"
+>"bar" : "bar"
+>"baz" : "baz"
+>1 : 1
+>2 : 2
+

@@ -144,8 +144,8 @@ namespace ts {
 
             if (option.name === "lib") {
                 description = getDiagnosticText(option.description);
-                const element = (<CommandLineOptionOfListType>option).element;
-                const typeMap = <ESMap<string, number | string>>element.type;
+                const element = (option as CommandLineOptionOfListType).element;
+                const typeMap = element.type as ESMap<string, number | string>;
                 optionsDescriptionMap.set(description, arrayFrom(typeMap.keys()).map(key => `'${key}'`));
             }
             else {
