@@ -84,6 +84,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        session?: Session;
         config: any;
     }
 
@@ -262,6 +263,8 @@ namespace ts.server {
         /*@internal*/
         protected typeAcquisition: TypeAcquisition | undefined;
 
+        private session: Session | undefined;
+
         /*@internal*/
         constructor(
             /*@internal*/ readonly projectName: string,
@@ -275,10 +278,12 @@ namespace ts.server {
             protected watchOptions: WatchOptions | undefined,
             directoryStructureHost: DirectoryStructureHost,
             currentDirectory: string | undefined,
+            session: Session | undefined,
         ) {
             this.directoryStructureHost = directoryStructureHost;
             this.currentDirectory = this.projectService.getNormalizedAbsolutePath(currentDirectory || "");
             this.getCanonicalFileName = this.projectService.toCanonicalFileName;
+            this.session = session;
 
             this.cancellationToken = new ThrottledCancellationToken(this.projectService.cancellationToken, this.projectService.throttleWaitMilliseconds);
             if (!this.compilerOptions) {
@@ -1603,7 +1608,8 @@ namespace ts.server {
                     project: this,
                     languageService: this.languageService,
                     languageServiceHost: this,
-                    serverHost: this.projectService.host
+                    serverHost: this.projectService.host,
+                    session: this.session
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
@@ -1806,7 +1812,8 @@ namespace ts.server {
             projectRootPath: NormalizedPath | undefined,
             currentDirectory: string | undefined,
             pluginConfigOverrides: ESMap<string, any> | undefined,
-            typeAcquisition: TypeAcquisition | undefined) {
+            typeAcquisition: TypeAcquisition | undefined,
+            session: Session | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -1818,7 +1825,8 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 watchOptions,
                 projectService.host,
-                currentDirectory);
+                currentDirectory,
+                session);
             this.typeAcquisition = typeAcquisition;
             this.projectRootPath = projectRootPath && projectService.toCanonicalFileName(projectRootPath);
             if (!projectRootPath && !projectService.useSingleInferredProject) {
@@ -1971,7 +1979,8 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 hostProject.getWatchOptions(),
                 hostProject.projectService.host,
-                hostProject.currentDirectory);
+                hostProject.currentDirectory,
+                /*session*/ undefined);
 
             this.rootFileNames = initialRootNames;
             this.useSourceOfProjectReferenceRedirect = maybeBind(this.hostProject, this.hostProject.useSourceOfProjectReferenceRedirect);
@@ -2100,7 +2109,8 @@ namespace ts.server {
             readonly canonicalConfigFilePath: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: DocumentRegistry,
-            cachedDirectoryStructureHost: CachedDirectoryStructureHost) {
+            cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+            session: Session | undefined) {
             super(configFileName,
                 ProjectKind.Configured,
                 projectService,
@@ -2112,6 +2122,7 @@ namespace ts.server {
                 /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName),
+                session
             );
         }
 
@@ -2380,7 +2391,8 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean,
             projectFilePath?: string,
             pluginConfigOverrides?: ESMap<string, any>,
-            watchOptions?: WatchOptions) {
+            watchOptions?: WatchOptions,
+            session?: Session) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -2391,7 +2403,8 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 watchOptions,
                 projectService.host,
-                getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+                getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)),
+                session);
             this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
