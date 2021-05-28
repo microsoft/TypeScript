@@ -61,3 +61,14 @@ class C3 extends Base {
 >p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 24, 4))
 }
 
+class C4 extends Base {
+>C4 : Symbol(C4, Decl(overrideParameterProperty.ts, 25, 1))
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  constructor(public override p2: string) {
+>p2 : Symbol(C4.p2, Decl(overrideParameterProperty.ts, 28, 14))
+
+    super();
+>super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+  }
+}

@@ -1,0 +1,280 @@
+=== tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts ===
+class NumClass<T extends number> {
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+
+    private value!: T;
+>value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+
+    public get(): T {
+>get : Symbol(NumClass.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 15))
+
+        return this.value;
+>this.value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+>this : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+>value : Symbol(NumClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 34))
+    }
+    public numExclusive() { }
+>numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+}
+
+class StrClass<T extends string> {
+>StrClass : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+
+    private value!: T;
+>value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+
+    public get(): T {
+>get : Symbol(StrClass.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 15))
+
+        return this.value;
+>this.value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+>this : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+>value : Symbol(StrClass.value, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 8, 34))
+    }
+    public strExclusive() { }
+>strExclusive : Symbol(StrClass.strExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 12, 5))
+}
+
+const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
+>isNumClass : Symbol(isNumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 5))
+>Item : Symbol(Item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 20))
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+>StrClass : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+
+        item: Item
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 71))
+>Item : Symbol(Item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 20))
+
+    ): item is Extract<Item, NumClass<any>> => {
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 71))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Item : Symbol(Item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 20))
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+
+        return (item instanceof NumClass);
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 71))
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+    }
+
+/**
+ * An example with one dimensional dictionary. Everything worked ok here, even in prior
+ * versions.
+ */
+class SimpleStore<Entries extends { [index: string]: NumClass<number> | StrClass<string> }> {
+>SimpleStore : Symbol(SimpleStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 20, 5))
+>Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+>index : Symbol(index, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 37))
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+>StrClass : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+
+    private entries = { } as Entries;
+>entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+>Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+
+    public get<EntryId extends keyof Entries>(entryId: EntryId): Entries[EntryId] {
+>get : Symbol(SimpleStore.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 27, 37))
+>EntryId : Symbol(EntryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 15))
+>Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+>entryId : Symbol(entryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 46))
+>EntryId : Symbol(EntryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 15))
+>Entries : Symbol(Entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 18))
+>EntryId : Symbol(EntryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 15))
+
+        let entry = this.entries[entryId];
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+>this.entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+>this : Symbol(SimpleStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 20, 5))
+>entries : Symbol(SimpleStore.entries, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 26, 93))
+>entryId : Symbol(entryId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 29, 46))
+
+        entry.numExclusive(); // error - expected.
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+
+        if (isNumClass(entry)) {
+>isNumClass : Symbol(isNumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 5))
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+
+            entry.numExclusive(); // works
+>entry.numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+>numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+
+            return entry;
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+        }
+
+        return entry; // type is Entries[EntryId] - all fine
+>entry : Symbol(entry, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 30, 11))
+    }
+}
+
+type Slice = {
+>Slice : Symbol(Slice, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 41, 1))
+
+    [index: string]: NumClass<number> | StrClass<string>
+>index : Symbol(index, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 44, 5))
+>NumClass : Symbol(NumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 0, 0))
+>StrClass : Symbol(StrClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 6, 1))
+}
+
+/**
+ * A an example with 2-dimensional dictionary.
+ * 
+ * In v4.1 the `isNumClass` type guard doesn't work at all.
+ * In v4.2 or later, `isNumClass` type guard leaks outside its
+ * scope.
+ */
+class ComplexStore<Slices extends { [index: string]: Slice }> {
+>ComplexStore : Symbol(ComplexStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 45, 1))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>index : Symbol(index, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 37))
+>Slice : Symbol(Slice, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 41, 1))
+
+    private slices = { } as Slices;
+>slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+
+    public get<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
+>get : Symbol(ComplexStore.get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 55, 35))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 15))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 44))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 15))
+
+        sliceId: SliceId, sliceKey: SliceKey
+>sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 85))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 15))
+>sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 58, 25))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 44))
+
+    ): Slices[SliceId][SliceKey] {
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 15))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 44))
+
+        let item = this.slices[sliceId][sliceKey];
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+>this.slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+>this : Symbol(ComplexStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 45, 1))
+>slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+>sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 57, 85))
+>sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 58, 25))
+
+        if (isNumClass(item)) {
+>isNumClass : Symbol(isNumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 5))
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+
+            item.numExclusive(); // works only since version 4.2
+>item.numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+>numExclusive : Symbol(NumClass.numExclusive, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 4, 5))
+        }
+
+        item.get();
+>item.get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22), Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22), Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+
+        // unfortunately, doesn't work completely.
+        // it seems like item's predicated type leaks outside the bracket...
+        
+        return item; // type is Extract ...
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 60, 11))
+    }
+
+    public get2<SliceId extends keyof Slices, SliceKey extends keyof Slices[SliceId]>(
+>get2 : Symbol(ComplexStore.get2, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 72, 5))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 16))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 45))
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 16))
+
+        sliceId: SliceId, sliceKey: SliceKey
+>sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 86))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 16))
+>sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 75, 25))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 45))
+
+    ): Slices[SliceId][SliceKey] {
+>Slices : Symbol(Slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 19))
+>SliceId : Symbol(SliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 16))
+>SliceKey : Symbol(SliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 45))
+
+        let item = this.slices[sliceId][sliceKey];
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+>this.slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+>this : Symbol(ComplexStore, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 45, 1))
+>slices : Symbol(ComplexStore.slices, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 54, 63))
+>sliceId : Symbol(sliceId, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 74, 86))
+>sliceKey : Symbol(sliceKey, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 75, 25))
+
+        if (isNumClass(item)) {
+>isNumClass : Symbol(isNumClass, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 16, 5))
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+
+            return item;
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+        }
+        // it seems like the compiler asumes the above condition is always
+        // truthy
+
+        item.get();
+>item.get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22), Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+>get : Symbol(get, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 1, 22), Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 9, 22))
+
+        return item; // type is never
+>item : Symbol(item, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 77, 11))
+    }
+}
+
+// from the compiler itself
+interface BuilderProgram {
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+
+    getProgram(): Program;
+>getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+}
+interface Program {
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+
+    state: any;
+>state : Symbol(Program.state, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 95, 19))
+}
+declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
+>isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 60))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 60))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 34))
+
+export function listFiles<T extends BuilderProgram>(program: Program | T) {
+>listFiles : Symbol(listFiles, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 98, 96))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 26))
+>BuilderProgram : Symbol(BuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 89, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>T : Symbol(T, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 26))
+
+    const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
+>x : Symbol(x, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 100, 9))
+>Program : Symbol(Program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 94, 1))
+>isBuilderProgram : Symbol(isBuilderProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 97, 1))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>program.getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+>getProgram : Symbol(BuilderProgram.getProgram, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 92, 26))
+>program : Symbol(program, Decl(quickinfoTypeAtReturnPositionsInaccurate.ts, 99, 52))
+}

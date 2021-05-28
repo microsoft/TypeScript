@@ -27,7 +27,7 @@ namespace ts.projectSystem {
     }
 
     export const customTypesMap = {
-        path: <Path>"/typesMap.json",
+        path: "/typesMap.json" as Path,
         content: `{
             "typesMap": {
                 "jquery": {
@@ -311,7 +311,7 @@ namespace ts.projectSystem {
             this.seq++;
             request.seq = this.seq;
             request.type = "request";
-            return this.executeCommand(<T>request);
+            return this.executeCommand(request as T);
         }
 
         public event<T extends object>(body: T, eventName: string) {

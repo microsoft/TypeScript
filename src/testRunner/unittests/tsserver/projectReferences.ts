@@ -476,6 +476,88 @@ bar();
             });
         });
 
+        it("when the referenced projects have allowJs and emitDeclarationOnly", () => {
+            const compositeConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        allowJs: true,
+                        emitDeclarationOnly: true,
+                        outDir: "lib",
+                        rootDir: "src"
+                    },
+                    include: ["src"]
+                })
+            };
+            const compositePackageJson: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/package.json`,
+                content: JSON.stringify({
+                    name: "emit-composite",
+                    version: "1.0.0",
+                    main: "src/index.js",
+                    typings: "lib/index.d.ts"
+                })
+            };
+            const compositeIndex: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/src/index.js`,
+                content: `const testModule = require('./testModule');
+module.exports = {
+    ...testModule
+}`
+            };
+            const compositeTestModule: File = {
+                path: `${tscWatch.projectRoot}/packages/emit-composite/src/testModule.js`,
+                content: `/**
+ * @param {string} arg
+ */
+ const testCompositeFunction = (arg) => {
+}
+module.exports = {
+    testCompositeFunction
+}`
+            };
+            const consumerConfig: File = {
+                path: `${tscWatch.projectRoot}/packages/consumer/tsconfig.json`,
+                content: JSON.stringify({
+                    include: ["src"],
+                    references: [{ path: "../emit-composite" }]
+                })
+            };
+            const consumerIndex: File = {
+                path: `${tscWatch.projectRoot}/packages/consumer/src/index.ts`,
+                content: `import { testCompositeFunction } from 'emit-composite';
+testCompositeFunction('why hello there');
+testCompositeFunction('why hello there', 42);`
+            };
+            const symlink: SymLink = {
+                path: `${tscWatch.projectRoot}/node_modules/emit-composite`,
+                symLink: `${tscWatch.projectRoot}/packages/emit-composite`
+            };
+            const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            openFilesForSession([consumerIndex], session);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            checkProjectActualFiles(
+                service.configuredProjects.get(consumerConfig.path)!,
+                [consumerIndex.path, libFile.path, consumerConfig.path, compositeIndex.path, compositeTestModule.path]
+            );
+            const secondArg = protocolTextSpanFromSubstring(consumerIndex.content, "42");
+            verifyGetErrRequest({
+                host,
+                session,
+                expected: [{
+                    file: consumerIndex,
+                    syntax: [],
+                    semantic: [
+                        createDiagnostic(secondArg.start, secondArg.end, Diagnostics.Expected_0_arguments_but_got_1, ["1", "2"]),
+                    ],
+                    suggestion: []
+                }]
+            });
+        });
+
         it("when finding local reference doesnt load ancestor/sibling projects", () => {
             const solutionLocation = "/user/username/projects/solution";
             const solution: File = {

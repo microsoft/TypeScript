@@ -94,7 +94,7 @@ namespace Harness {
     export let globalTimeout: number;
     function handleTestConfig() {
         if (testConfigContent !== "") {
-            const testConfig = <TestConfig>JSON.parse(testConfigContent);
+            const testConfig = JSON.parse(testConfigContent) as TestConfig;
             if (testConfig.light) {
                 setLightMode(true);
             }
@@ -122,11 +122,11 @@ namespace Harness {
             }
 
             if (testConfig.stackTraceLimit === "full") {
-                (<any>Error).stackTraceLimit = Infinity;
+                (Error as any).stackTraceLimit = Infinity;
                 stackTraceLimit = testConfig.stackTraceLimit;
             }
             else if ((+testConfig.stackTraceLimit! | 0) > 0) {
-                (<any>Error).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
+                (Error as any).stackTraceLimit = +testConfig.stackTraceLimit! | 0;
                 stackTraceLimit = +testConfig.stackTraceLimit! | 0;
             }
             if (testConfig.listenForWork) {

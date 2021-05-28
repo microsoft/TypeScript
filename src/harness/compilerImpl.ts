@@ -254,7 +254,11 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const preProgram = ts.length(rootFiles) < 100 ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
+        // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
+        // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
+        const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
+
+        const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host) : undefined;
         const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);

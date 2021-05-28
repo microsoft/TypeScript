@@ -24,7 +24,7 @@ exports.A = void 0;
 const tslib_1 = require("tslib");
 let A = class A {
 };
-A = (0, tslib_1.__decorate)([
+A = tslib_1.__decorate([
     dec
 ], A);
 exports.A = A;

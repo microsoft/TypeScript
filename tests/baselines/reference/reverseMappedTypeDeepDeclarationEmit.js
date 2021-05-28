@@ -41,8 +41,8 @@ exports.test = {
         }
     }
 };
-exports.validatorFunc = (0, exports.ObjValidator)(exports.test);
-exports.outputExample = (0, exports.validatorFunc)({
+exports.validatorFunc = exports.ObjValidator(exports.test);
+exports.outputExample = exports.validatorFunc({
     Test: {
         Test1: {
             Test2: "hi"

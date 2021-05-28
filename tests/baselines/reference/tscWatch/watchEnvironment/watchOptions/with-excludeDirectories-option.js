@@ -81,7 +81,7 @@ exitCode:: ExitStatus.undefined
 "use strict";
 exports.__esModule = true;
 var bar_1 = require("bar");
-(0, bar_1.foo)();
+bar_1.foo();
 
 
 
