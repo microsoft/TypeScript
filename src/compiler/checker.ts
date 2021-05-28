@@ -16023,8 +16023,7 @@ namespace ts {
         }
 
         function maybeTypeParameterReference(node: Node) {
-            return !(node.kind === SyntaxKind.QualifiedName ||
-                node.parent.kind === SyntaxKind.TypeReference && (node.parent as TypeReferenceNode).typeArguments && node === (node.parent as TypeReferenceNode).typeName ||
+            return !(node.parent.kind === SyntaxKind.TypeReference && (node.parent as TypeReferenceNode).typeArguments && node === (node.parent as TypeReferenceNode).typeName ||
                 node.parent.kind === SyntaxKind.ImportType && (node.parent as ImportTypeNode).typeArguments && node === (node.parent as ImportTypeNode).qualifier);
         }
 
@@ -16053,7 +16052,10 @@ namespace ts {
                         return true;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
-                        return (!(node as FunctionLikeDeclaration).type && !!(node as FunctionLikeDeclaration).body) || !!forEachChild(node, containsReference);
+                        return !(node as FunctionLikeDeclaration).type && !!(node as FunctionLikeDeclaration).body ||
+                            some((node as FunctionLikeDeclaration).typeParameters, containsReference) ||
+                            some((node as FunctionLikeDeclaration).parameters, containsReference) ||
+                            !!(node as FunctionLikeDeclaration).type && containsReference((node as FunctionLikeDeclaration).type!);
                 }
                 return !!forEachChild(node, containsReference);
             }
