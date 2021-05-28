@@ -1,26 +1,24 @@
-=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+=== tests/cases/conformance/salsa/spellingNocheckJS2.js ===
 export var inModule = 1
 >inModule : number
 >1 : 1
 
 inmodule.toFixed()
->inmodule.toFixed() : any
->inmodule.toFixed : any
+>inmodule.toFixed() : error
+>inmodule.toFixed : error
 >inmodule : any
 >toFixed : any
 
 function f() {
 >f : () => void
 
-    var locals = 2 + true
->locals : any
->2 + true : any
+    var locals = 2
+>locals : number
 >2 : 2
->true : true
 
     locale.toFixed()
->locale.toFixed() : any
->locale.toFixed : any
+>locale.toFixed() : error
+>locale.toFixed : error
 >locale : any
 >toFixed : any
 }
@@ -36,7 +34,7 @@ class Classe {
 
         // no error on 'this' references
         return this.none
->this.none : any
+>this.none : error
 >this : this
 >none : any
     }
@@ -50,7 +48,7 @@ class Derivee extends Classe {
 
         // no error on 'super' references
         return super.none
->super.none : any
+>super.none : error
 >super : Classe
 >none : any
     }
@@ -90,17 +88,17 @@ other.puuuce // OK, from another file
 >puuuce : any
 
 new Date().getGMTDate() // OK, from another file
->new Date().getGMTDate() : any
->new Date().getGMTDate : any
+>new Date().getGMTDate() : error
+>new Date().getGMTDate : error
 >new Date() : Date
 >Date : DateConstructor
 >getGMTDate : any
 
 // No suggestions for globals from other files
 const atoc = setIntegral(() => console.log('ok'), 500)
->atoc : any
->setIntegral(() => console.log('ok'), 500) : any
->setIntegral : any
+>atoc : error
+>setIntegral(() => console.log('ok'), 500) : error
+>setIntegral : error
 >() => console.log('ok') : () => void
 >console.log('ok') : void
 >console.log : (...data: any[]) => void
@@ -110,13 +108,13 @@ const atoc = setIntegral(() => console.log('ok'), 500)
 >500 : 500
 
 AudioBuffin // etc
->AudioBuffin : any
+>AudioBuffin : error
 
 Jimmy
 >Jimmy : number
 
 Jon
->Jon : any
+>Jon : error
 
 === tests/cases/conformance/salsa/other.js ===
 var Jimmy = 1
@@ -128,7 +126,7 @@ var John = 2
 >2 : 2
 
 Jon // error, it's from the same file
->Jon : any
+>Jon : error
 
 var other = {
 >other : { puuce: number; }

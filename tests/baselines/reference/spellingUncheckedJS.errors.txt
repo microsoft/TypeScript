@@ -12,7 +12,7 @@ tests/cases/conformance/salsa/spellingUncheckedJS.js(27,8): error TS2551: Proper
 !!! error TS2552: Cannot find name 'inmodule'. Did you mean 'inModule'?
     
     function f() {
-        var locals = 2
+        var locals = 2 + true
         locale.toFixed()
         ~~~~~~
 !!! error TS2552: Cannot find name 'locale'. Did you mean 'locals'?

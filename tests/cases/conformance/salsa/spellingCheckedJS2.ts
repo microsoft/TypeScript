@@ -1,11 +1,12 @@
 // @noEmit: true
 // @allowJs: true
-// @filename: spellingUncheckedJS.js
+// @checkJs: true
+// @filename: spellingCheckedJS2.js
 export var inModule = 1
 inmodule.toFixed()
 
 function f() {
-    var locals = 2 + true
+    var locals = 2
     locale.toFixed()
 }
 class Classe {

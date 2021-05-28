@@ -1,59 +1,59 @@
-=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+=== tests/cases/conformance/salsa/spellingCheckedJS2.js ===
 export var inModule = 1
->inModule : Symbol(inModule, Decl(spellingUncheckedJS.js, 0, 10))
+>inModule : Symbol(inModule, Decl(spellingCheckedJS2.js, 0, 10))
 
 inmodule.toFixed()
 
 function f() {
->f : Symbol(f, Decl(spellingUncheckedJS.js, 1, 18))
+>f : Symbol(f, Decl(spellingCheckedJS2.js, 1, 18))
 
-    var locals = 2 + true
->locals : Symbol(locals, Decl(spellingUncheckedJS.js, 4, 7))
+    var locals = 2
+>locals : Symbol(locals, Decl(spellingCheckedJS2.js, 4, 7))
 
     locale.toFixed()
 }
 class Classe {
->Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 6, 1))
+>Classe : Symbol(Classe, Decl(spellingCheckedJS2.js, 6, 1))
 
     non = 'oui'
->non : Symbol(Classe.non, Decl(spellingUncheckedJS.js, 7, 14))
+>non : Symbol(Classe.non, Decl(spellingCheckedJS2.js, 7, 14))
 
     methode() {
->methode : Symbol(Classe.methode, Decl(spellingUncheckedJS.js, 8, 15))
+>methode : Symbol(Classe.methode, Decl(spellingCheckedJS2.js, 8, 15))
 
         // no error on 'this' references
         return this.none
->this : Symbol(Classe, Decl(spellingUncheckedJS.js, 6, 1))
+>this : Symbol(Classe, Decl(spellingCheckedJS2.js, 6, 1))
     }
 }
 class Derivee extends Classe {
->Derivee : Symbol(Derivee, Decl(spellingUncheckedJS.js, 13, 1))
->Classe : Symbol(Classe, Decl(spellingUncheckedJS.js, 6, 1))
+>Derivee : Symbol(Derivee, Decl(spellingCheckedJS2.js, 13, 1))
+>Classe : Symbol(Classe, Decl(spellingCheckedJS2.js, 6, 1))
 
     methode() {
->methode : Symbol(Derivee.methode, Decl(spellingUncheckedJS.js, 14, 30))
+>methode : Symbol(Derivee.methode, Decl(spellingCheckedJS2.js, 14, 30))
 
         // no error on 'super' references
         return super.none
->super : Symbol(Classe, Decl(spellingUncheckedJS.js, 6, 1))
+>super : Symbol(Classe, Decl(spellingCheckedJS2.js, 6, 1))
     }
 }
 
 
 var object = {
->object : Symbol(object, Decl(spellingUncheckedJS.js, 22, 3), Decl(spellingUncheckedJS.js, 25, 15), Decl(spellingUncheckedJS.js, 26, 18))
+>object : Symbol(object, Decl(spellingCheckedJS2.js, 22, 3), Decl(spellingCheckedJS2.js, 25, 15), Decl(spellingCheckedJS2.js, 26, 18))
 
     spaaace: 3
->spaaace : Symbol(spaaace, Decl(spellingUncheckedJS.js, 22, 14))
+>spaaace : Symbol(spaaace, Decl(spellingCheckedJS2.js, 22, 14))
 }
 object.spaaaace // error on read
->object : Symbol(object, Decl(spellingUncheckedJS.js, 22, 3), Decl(spellingUncheckedJS.js, 25, 15), Decl(spellingUncheckedJS.js, 26, 18))
+>object : Symbol(object, Decl(spellingCheckedJS2.js, 22, 3), Decl(spellingCheckedJS2.js, 25, 15), Decl(spellingCheckedJS2.js, 26, 18))
 
 object.spaace = 12 // error on write
->object : Symbol(object, Decl(spellingUncheckedJS.js, 22, 3), Decl(spellingUncheckedJS.js, 25, 15), Decl(spellingUncheckedJS.js, 26, 18))
+>object : Symbol(object, Decl(spellingCheckedJS2.js, 22, 3), Decl(spellingCheckedJS2.js, 25, 15), Decl(spellingCheckedJS2.js, 26, 18))
 
 object.fresh = 12 // OK
->object : Symbol(object, Decl(spellingUncheckedJS.js, 22, 3), Decl(spellingUncheckedJS.js, 25, 15), Decl(spellingUncheckedJS.js, 26, 18))
+>object : Symbol(object, Decl(spellingCheckedJS2.js, 22, 3), Decl(spellingCheckedJS2.js, 25, 15), Decl(spellingCheckedJS2.js, 26, 18))
 
 other.puuuce // OK, from another file
 >other : Symbol(other, Decl(other.js, 3, 3))
@@ -63,7 +63,7 @@ new Date().getGMTDate() // OK, from another file
 
 // No suggestions for globals from other files
 const atoc = setIntegral(() => console.log('ok'), 500)
->atoc : Symbol(atoc, Decl(spellingUncheckedJS.js, 32, 5))
+>atoc : Symbol(atoc, Decl(spellingCheckedJS2.js, 32, 5))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

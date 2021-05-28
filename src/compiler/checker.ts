@@ -2061,17 +2061,8 @@ namespace ts {
                             if (isGlobalScopeAugmentationDeclaration) {
                                 suggestion = undefined;
                             }
-                            // (1) when allowjs is on but checkjs is not, for JS[X] files that don't have either ts-check OR ts-nocheck
-                            // skip suggestions when the suggestion comes from a global scope
-                            // This will prevent it from always showing up
-                            const file = getSourceFileOfNode(lastLocation)
-                            const suggestionFile = getSourceFileOfNode(suggestion?.valueDeclaration)
-                            if (file && suggestionFile) {
-                                const isCheckJs = isCheckJsEnabledForFile(file, compilerOptions)
-                                const isTsNoCheck = !!file.checkJsDirective && file.checkJsDirective.enabled === false
-                                if (!isCheckJs && !isTsNoCheck && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX) && isGlobalSourceFile(suggestionFile) && file !== suggestionFile) {
-                                    suggestion = undefined
-                                }
+                            if (originalLocation && isBadUncheckedJSSuggestion(lastLocation, /*parent*/ undefined, suggestion?.valueDeclaration ? [suggestion.valueDeclaration] : [])) {
+                                suggestion = undefined
                             }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
@@ -14582,33 +14573,23 @@ namespace ts {
          * Should all count as literals and not print errors on access or assignment of possibly existing properties.
          * This mirrors the behavior of the index signature propagation, to which this behaves similarly (but doesn't affect assignability or inference).
          */
-        function isJSLiteralType(type: Type, reference?: Node): boolean {
+        function isJSLiteralType(type: Type): boolean {
             if (noImplicitAny) {
                 return false; // Flag is meaningless under `noImplicitAny` mode
-            }
-            // TODO: Move this check outside isJSLiteralType; it doesn't make sense here
-            const file = getSourceFileOfNode(reference)
-            if (file) {
-                const isCheckJs = isCheckJsEnabledForFile(file, compilerOptions)
-                const isTsNoCheck = !!file.checkJsDirective && file.checkJsDirective.enabled === false
-                if (!isCheckJs && !isTsNoCheck && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
-                    const parentFile = forEach(type.symbol?.declarations, getSourceFileOfNode)
-                    return file !== parentFile || !!reference && isPropertyAccessExpression(reference) && reference.expression.kind === SyntaxKind.ThisKeyword
-                }
             }
 
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
             if (type.flags & TypeFlags.Union) {
-                return every((type as UnionType).types, t => isJSLiteralType(t, reference));
+                return every((type as UnionType).types, isJSLiteralType);
             }
             if (type.flags & TypeFlags.Intersection) {
-                return some((type as IntersectionType).types, t => isJSLiteralType(t, reference));
+                return some((type as IntersectionType).types, isJSLiteralType);
             }
             if (type.flags & TypeFlags.Instantiable) {
                 const constraint = getResolvedBaseConstraint(type);
-                return constraint !== type && isJSLiteralType(constraint, reference);
+                return constraint !== type && isJSLiteralType(constraint);
             }
             return false;
         }
@@ -14707,7 +14688,7 @@ namespace ts {
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
                 }
-                if (isJSLiteralType(objectType, accessNode)) {
+                if (isJSLiteralType(objectType)) {
                     return anyType;
                 }
                 if (accessExpression && !isConstEnumObjectType(objectType)) {
@@ -14778,7 +14759,7 @@ namespace ts {
                     return undefined;
                 }
             }
-            if (isJSLiteralType(objectType, accessNode)) {
+            if (isJSLiteralType(objectType)) {
                 return anyType;
             }
             if (accessNode) {
@@ -27442,7 +27423,8 @@ namespace ts {
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
-                    if (isJSLiteralType(leftType, node)) {
+                    const isBadJSSuggestion = isBadUncheckedJSSuggestion(node, leftType.symbol, leftType.symbol?.declarations)
+                    if (isBadJSSuggestion === undefined ? isJSLiteralType(leftType) : isBadJSSuggestion) {
                         return anyType;
                     }
                     if (leftType.symbol === globalThisSymbol) {
@@ -27486,6 +27468,22 @@ namespace ts {
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
+        }
+
+        /**
+         * Only applies to unchecked JS files without checkJS, // @ts-check or // @ts-nocheck
+         * @returns undefined when not applicable, true for bad suggestions, false for good ones
+         * TODO: Should probably only pass one declaration
+         */
+        function isBadUncheckedJSSuggestion(node: Node | undefined, parent: Symbol | undefined, declarations: Node[] | undefined): boolean | undefined {
+            const file = getSourceFileOfNode(node)
+            if (file) {
+                if (compilerOptions.checkJs === undefined && !file.checkJsDirective && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
+                    const parentFile = forEach(declarations, getSourceFileOfNode)
+                    return file !== parentFile && !!parentFile && isGlobalSourceFile(parentFile)
+                        || !!(parent && parent.flags & SymbolFlags.Class)
+                }
+            }
         }
 
         function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node, checkMode: CheckMode | undefined) {

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+=== tests/cases/conformance/salsa/spellingCheckedJS2.js ===
 export var inModule = 1
 >inModule : number
 >1 : 1
@@ -12,11 +12,9 @@ inmodule.toFixed()
 function f() {
 >f : () => void
 
-    var locals = 2 + true
->locals : any
->2 + true : any
+    var locals = 2
+>locals : number
 >2 : 2
->true : true
 
     locale.toFixed()
 >locale.toFixed() : any

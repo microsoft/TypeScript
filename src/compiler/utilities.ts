@@ -6779,7 +6779,7 @@ namespace ts {
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
         return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
     }
-
+    // TODO: Callers of this function in services are probably what *actually* need to change
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
         return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
