@@ -27,5 +27,5 @@ register("ok");
 export * from "./register";
 export * from "./data1";
 export * as aliased from "./data1";
->aliased : typeof aliased
+>aliased : typeof import("tests/cases/compiler/data1")
 

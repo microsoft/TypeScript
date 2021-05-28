@@ -201,16 +201,16 @@ namespace ts.formatting {
         switch (parent.kind) {
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.InterfaceDeclaration:
-                return rangeContainsRange((<InterfaceDeclaration>parent).members, node);
+                return rangeContainsRange((parent as InterfaceDeclaration).members, node);
             case SyntaxKind.ModuleDeclaration:
-                const body = (<ModuleDeclaration>parent).body;
+                const body = (parent as ModuleDeclaration).body;
                 return !!body && body.kind === SyntaxKind.ModuleBlock && rangeContainsRange(body.statements, node);
             case SyntaxKind.SourceFile:
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return rangeContainsRange((<Block>parent).statements, node);
+                return rangeContainsRange((parent as Block).statements, node);
             case SyntaxKind.CatchClause:
-                return rangeContainsRange((<CatchClause>parent).block.statements, node);
+                return rangeContainsRange((parent as CatchClause).block.statements, node);
         }
 
         return false;
@@ -531,14 +531,14 @@ namespace ts.formatting {
                 case SyntaxKind.GetAccessor: return SyntaxKind.GetKeyword;
                 case SyntaxKind.SetAccessor: return SyntaxKind.SetKeyword;
                 case SyntaxKind.MethodDeclaration:
-                    if ((<MethodDeclaration>node).asteriskToken) {
+                    if ((node as MethodDeclaration).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
                     }
                     // falls through
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    const name = getNameOfDeclaration(<Declaration>node);
+                    const name = getNameOfDeclaration(node as Declaration);
                     if (name) {
                         return name.kind;
                     }
@@ -1277,24 +1277,24 @@ namespace ts.formatting {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.ArrowFunction:
-                if ((<FunctionDeclaration>node).typeParameters === list) {
+                if ((node as FunctionDeclaration).typeParameters === list) {
                     return SyntaxKind.LessThanToken;
                 }
-                else if ((<FunctionDeclaration>node).parameters === list) {
+                else if ((node as FunctionDeclaration).parameters === list) {
                     return SyntaxKind.OpenParenToken;
                 }
                 break;
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if ((<CallExpression>node).typeArguments === list) {
+                if ((node as CallExpression).typeArguments === list) {
                     return SyntaxKind.LessThanToken;
                 }
-                else if ((<CallExpression>node).arguments === list) {
+                else if ((node as CallExpression).arguments === list) {
                     return SyntaxKind.OpenParenToken;
                 }
                 break;
             case SyntaxKind.TypeReference:
-                if ((<TypeReferenceNode>node).typeArguments === list) {
+                if ((node as TypeReferenceNode).typeArguments === list) {
                     return SyntaxKind.LessThanToken;
                 }
                 break;

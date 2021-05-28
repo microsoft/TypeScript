@@ -152,7 +152,7 @@ exports.bar = void 0;
 var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
-(0, bar_2.default)("hello");
+bar_2.default("hello");
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]
@@ -715,7 +715,7 @@ exports.bar = void 0;
 var bar_1 = require("./bar");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return bar_1.default; } });
 var bar_2 = require("./bar");
-(0, bar_2.default)();
+bar_2.default();
 
 
 //// [/src/obj/tsconfig.tsbuildinfo]

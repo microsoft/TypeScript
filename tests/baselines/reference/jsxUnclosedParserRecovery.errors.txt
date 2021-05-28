@@ -1,0 +1,273 @@
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(12,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(16,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(19,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(20,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(24,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(27,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(28,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(32,1): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(35,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(36,1): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(39,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(43,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(43,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(49,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(49,6): error TS2749: 'diddy' refers to a value, but is being used as a type here. Did you mean 'typeof diddy'?
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(49,11): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(54,6): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(54,6): error TS2749: 'diddy' refers to a value, but is being used as a type here. Did you mean 'typeof diddy'?
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(54,11): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(58,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(59,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(64,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(68,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(69,5): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(74,5): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(78,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(79,5): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(83,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(88,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(88,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(95,5): error TS2304: Cannot find name 'Cranky'.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(96,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(101,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(104,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(106,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(111,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(114,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(116,1): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(120,5): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(124,12): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(125,5): error TS1005: '>' expected.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(129,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(134,6): error TS17008: JSX element 'diddy' has no corresponding closing tag.
+tests/cases/conformance/jsx/jsxParserRecovery.tsx(134,12): error TS2558: Expected 0 type arguments, but got 1.
+
+
+==== tests/cases/conformance/jsx/jsxParserRecovery.tsx (44 errors) ====
+    // should have no errors here; all these functions should parse and resolve
+    noName(); noClose(); noCloseTypeArg(); noCloseAttrs(); noCloseTypeArgAttrs(); noCloseBracket(); noCloseBracketTypeArgAttrs(); noSelfclose(); noSelfcloseTypeArgAttrs();
+    noNameTrailingTag(); noCloseTrailingTag(); noCloseTypeArgTrailingTag(); noCloseAttrsTrailingTag(); noCloseTypeArgAttrsTrailingTag(); noCloseBracketTrailingTag(); noCloseBracketTypeArgAttrsTrailingTag(); // noSelfcloseTrailingTag(); noSelfcloseTypeArgAttrsTrailingTag();
+    noNameTrailingText(); noCloseTrailingText(); noCloseTypeArgTrailingText(); noCloseAttrsTrailingText(); noCloseTypeArgAttrsTrailingText(); noCloseBracketTrailingText(); noCloseBracketTypeArgAttrsTrailingText(); // noSelfcloseTrailingText(); noSelfcloseTypeArgAttrsTrailingText();
+    
+    function diddy() {
+        return null;
+    }
+    
+    var donkey = <div>
+        <
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noName() { }
+    var donkey = <div>
+        <diddy
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noClose() { }
+    var donkey = <div>
+        <diddy<boolean>
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseTypeArg() { }
+    var donkey = <div>
+        <diddy bananas="please"
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseAttrs() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseTypeArgAttrs() { }
+    var donkey = <div>
+        <diddy/
+    </div>;
+    ~~
+!!! error TS1005: '>' expected.
+    function noCloseBracket() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"/
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    </div>;
+    ~~
+!!! error TS1005: '>' expected.
+    function noCloseBracketTypeArgAttrs() { }
+    var donkey = <div>
+        <diddy>
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+    </div>;
+    function noSelfclose() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please">
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+    </div>;
+    function noSelfcloseTypeArgAttrs() { }
+    
+    var donkey = <div>
+        <
+        <diddy/>
+        ~
+!!! error TS1003: Identifier expected.
+         ~~~~~
+!!! error TS2749: 'diddy' refers to a value, but is being used as a type here. Did you mean 'typeof diddy'?
+              ~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noNameTrailingTag() { }
+    var donkey = <div>
+        <diddy
+        <diddy/>
+         ~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+         ~~~~~
+!!! error TS2749: 'diddy' refers to a value, but is being used as a type here. Did you mean 'typeof diddy'?
+              ~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noCloseTrailingTag() { }
+    var donkey = <div>
+        <diddy<boolean>
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        <diddy/>
+        ~
+!!! error TS1003: Identifier expected.
+    </div>;
+    function noCloseTypeArgTrailingTag() { }
+    var donkey = <div>
+        <diddy bananas="please"
+        <diddy/>
+        ~
+!!! error TS1003: Identifier expected.
+    </div>;
+    function noCloseAttrsTrailingTag() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        <diddy/>
+        ~
+!!! error TS1003: Identifier expected.
+    </div>;
+    function noCloseTypeArgAttrsTrailingTag() { }
+    var donkey = <div>
+        <diddy/
+        <diddy/>
+        ~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noCloseBracketTrailingTag() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"/
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        <diddy/>
+        ~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noCloseBracketTypeArgAttrsTrailingTag() { }
+    var donkey = <div>
+        <diddy>
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+        <diddy/>
+    </div>;
+    function noSelfcloseTrailingTag() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please">
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        <diddy/>
+    </div>;
+    function noSelfcloseTypeArgAttrsTrailingTag() { }
+    
+    var donkey = <div>
+        <
+        Cranky Wrinkly Funky
+        ~~~~~~
+!!! error TS2304: Cannot find name 'Cranky'.
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noNameTrailingText() { }
+    var donkey = <div>
+        <diddy
+        Cranky Wrinkly Funky
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseTrailingText() { }
+    var donkey = <div>
+        <diddy<boolean>
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        Cranky Wrinkly Funky
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseTypeArgTrailingText() { }
+    var donkey = <div>
+        <diddy bananas="please"
+        Cranky Wrinkly Funky
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseAttrsTrailingText() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        Cranky Wrinkly Funky
+    </div>;
+    ~~
+!!! error TS1003: Identifier expected.
+    function noCloseTypeArgAttrsTrailingText() { }
+    var donkey = <div>
+        <diddy/
+        Cranky Wrinkly Funky
+        ~~~~~~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noCloseBracketTrailingText() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please"/
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        Cranky Wrinkly Funky
+        ~~~~~~
+!!! error TS1005: '>' expected.
+    </div>;
+    function noCloseBracketTypeArgAttrsTrailingText() { }
+    var donkey = <div>
+        <diddy>
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+        Cranky Wrinkly Funky
+    </div>;
+    function noSelfcloseTrailingText() { }
+    var donkey = <div>
+        <diddy<boolean> bananas="please">
+         ~~~~~
+!!! error TS17008: JSX element 'diddy' has no corresponding closing tag.
+               ~~~~~~~
+!!! error TS2558: Expected 0 type arguments, but got 1.
+        Cranky Wrinkly Funky
+    </div>;
+    function noSelfcloseTypeArgAttrsTrailingText() { }
+    

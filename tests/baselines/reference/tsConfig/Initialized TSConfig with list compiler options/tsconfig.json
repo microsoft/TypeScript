@@ -18,7 +18,7 @@
     // "emitDecoratorMetadata": true,                    /* Enables experimental support for emitting type metadata for decorators. */
     // "jsxFactory": "",                                 /* Specify the JSX factory function to use when targeting 'react' JSX emit, e.g. 'React.createElement' or 'h'. */
     // "jsxFragmentFactory": "",                         /* Specify the JSX fragment factory function to use when targeting 'react' JSX emit with 'jsxFactory' compiler option is specified, e.g. 'Fragment'. */
-    // "jsxImportSource": "",                            /* Specify the module specifier to be used to import the `jsx` and `jsxs` factory functions from. eg, react */
+    // "jsxImportSource": "",                            /* Specify the module specifier to be used to import the 'jsx' and 'jsxs' factory functions from. eg, react */
     // "reactNamespace": "",                             /* [Deprecated] Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit */
     // "noLib": true,                                    /* Do not include the default library file (lib.d.ts). */
     // "useDefineForClassFields": true,                  /* Emit class fields with Define instead of Set. */

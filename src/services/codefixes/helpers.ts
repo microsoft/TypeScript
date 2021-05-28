@@ -18,7 +18,7 @@ namespace ts.codefix {
 
     export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
         return {
-            trackSymbol: noop,
+            trackSymbol: () => false,
             moduleResolverHost: getModuleSpecifierResolverHost(context.program, context.host),
         };
     }
@@ -165,7 +165,7 @@ namespace ts.codefix {
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
-        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context));
+        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as MethodDeclaration;
         if (!signatureDeclaration) {
             return undefined;
         }

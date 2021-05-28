@@ -173,7 +173,7 @@ export declare function getPoint(): PointWrapper;
 "use strict";
 exports.__esModule = true;
 var c_1 = require("./c");
-(0, c_1.getPoint)().c.x;
+c_1.getPoint().c.x;
 
 
 //// [/user/username/projects/myproject/d.d.ts]
