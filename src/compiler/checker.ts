@@ -330,7 +330,7 @@ namespace ts {
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let currentNode: Node | undefined;
-        // used in analysis of do-expression
+        // used in noImplicitReturns analysis of do-expression
         let requiresStatementType = false;
         function startRequireStatementTypeContext<T>(f: (currentRequiresStatementType: boolean) => T): T {
             if (!compilerOptions.noImplicitReturns) return f(/* neverCheck */ false);
@@ -32381,6 +32381,7 @@ namespace ts {
         }
 
         function checkDoExpression(node: DoExpression): Type {
+            // TODO (in spec): it's a syntax error for this is contained in a loop head and contains a break or continue which would break or continue the loop.
             // grammar check
             checkEndsInIterationOrBareIfOrDeclaration(node.block.statements, [], /** isLast */ true);
 
@@ -32398,7 +32399,7 @@ namespace ts {
         }
 
         type LabelSet = readonly (__String | undefined)[];
-        // https://bakkot.github.io/do-expressions-v2/#sec-endsiniterationordeclaration
+        // https://tc39.es/proposal-do-expressions/ commit=3ef6d463b8163cbf222846b40d17178cca36e9e1
         function checkEndsInIterationOrBareIfOrDeclaration(node: undefined | Node | readonly Statement[], labelSet: LabelSet, isLast: boolean): boolean {
             if (!node) return false;
             if (isArray(node)) {
@@ -32411,15 +32412,23 @@ namespace ts {
                 return checkEndsInIterationOrBareIfOrDeclaration(statementListItem, labelSet, isLast);
             }
             else {
-                if (isDeclaration(node) || isVariableStatement(node) || isIterationStatement(node, /** lookInLabeledStatements */ false) || (isLabeledStatement(node) && isFunctionDeclaration(node.statement))) {
+                if (isDeclaration(node) || isVariableStatement(node) || (isLabeledStatement(node) && isFunctionDeclaration(node.statement))) {
                     if (isLast) grammarErrorOnNode(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
                     return isLast;
                 }
-                // Not mentioned in the spec
+                else if (isIterationStatement(node, /* lookInLabeledStatements */ false)) {
+                    if (isLast || isBreak(node.statement, labelSet)) {
+                        grammarErrorOnNode(node, Diagnostics.Declaration_or_iteration_cannot_present_at_end_of_the_do_expression);
+                        return true;
+                    }
+                    return checkEndsInIterationOrBareIfOrDeclaration(node.statement, labelSet, isLast);
+                }
+                // Not mentioned in the spec https://github.com/tc39/proposal-do-expressions/issues/68
                 else if (isBlock(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.statements, labelSet, isLast);
                 else if (isIfStatement(node)) {
                     if (!node.elseStatement) {
                         if (isLast) grammarErrorOnNode(node, Diagnostics.The_last_if_statement_in_the_do_expression_must_have_an_else_branch);
+                        // not returning here, need to check recursively.
                     }
                     const left = checkEndsInIterationOrBareIfOrDeclaration(node.thenStatement, labelSet, isLast);
                     const right = checkEndsInIterationOrBareIfOrDeclaration(node.elseStatement, labelSet, isLast);
@@ -32432,17 +32441,20 @@ namespace ts {
                 }
                 else if (isSwitchStatement(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.caseBlock, labelSet, isLast);
                 else if (isCaseBlock(node)) {
+                    // In spec, CaseClauses[opt] DefaultClause CaseClauses[opt]
+                    // and CaseClauses are exactly the same thing.
                     const newLabelSet = isLast ? [...labelSet, undefined] : labelSet.filter(nonNullable);
-                    let result = false;
-                    forEachRight(node.clauses, clause => {
-                        if (isEmpty(clause, [])) return;
-                        if (checkEndsInIterationOrBareIfOrDeclaration(clause, newLabelSet, isLast)) {
-                            result = true;
-                            return;
+                    for (const clause of [...node.clauses].reverse()) {
+                        if (!isEmpty(clause, [])) {
+                            if (checkEndsInIterationOrBareIfOrDeclaration(clause, newLabelSet, isLast)) {
+                                // TODO: emit diagnostic
+                                return true;
+                            }
+                            // The spec of this section modifies isLast. Not rewriting those steps.
+                            isLast = isBreak(clause, newLabelSet);
                         }
-                        isLast = isBreak(clause, newLabelSet);
-                    });
-                    return result;
+                    }
+                    return false;
                 }
                 else if (isCaseClause(node) || isDefaultClause(node)) {
                     if (!node.statements) return false;
@@ -32450,12 +32462,12 @@ namespace ts {
                 }
                 else if (isTryStatement(node)) {
                     const left = checkEndsInIterationOrBareIfOrDeclaration(node.tryBlock, labelSet, isLast);
-                    const right = checkEndsInIterationOrBareIfOrDeclaration(node.catchClause, labelSet, isLast);
+                    const right = checkEndsInIterationOrBareIfOrDeclaration(node.catchClause?.block, labelSet, isLast);
                     return left || right;
                 }
                 return false;
             }
-            // https://bakkot.github.io/do-expressions-v2/#sec-isempty
+            // https://tc39.es/proposal-do-expressions/#sec-isempty
             function isEmpty(node: undefined | Node | readonly Statement[], labelSet: LabelSet): boolean {
                 if (!node) return true;
                 if (isArray(node)) {
@@ -32488,7 +32500,7 @@ namespace ts {
                     }
                 }
             }
-            // https://bakkot.github.io/do-expressions-v2/#sec-isbreak
+            // https://tc39.es/proposal-do-expressions/#sec-isbreak
             function isBreak(node: undefined | Node | readonly Statement[], labelSet: LabelSet): boolean {
                 if (!node) return false;
                 if (isArray(node)) {
@@ -32496,8 +32508,8 @@ namespace ts {
                     const statementList = node.slice(0, -1);
                     const statementListItem = last(node);
                     if (isBreak(statementList, labelSet)) return true;
-                    if (!isEmpty(statementListItem, [])) return false;
-                    return isBreak(statementList, labelSet);
+                    if (!isEmpty(statementList, [])) return false;
+                    return isBreak(statementListItem, labelSet);
                 }
                 else {
                     switch (node.kind) {
