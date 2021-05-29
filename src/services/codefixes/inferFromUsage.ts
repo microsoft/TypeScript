@@ -930,7 +930,19 @@ namespace ts.codefix {
                     low: t => !!(getObjectFlags(t) & ObjectFlags.Anonymous)
                 }];
             let good = removeLowPriorityInferences(inferences, priorities);
-            const anons = good.filter(i => getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+
+            const anons = [];
+            const displayParts: string[] = [];
+            // filter same displayPart type
+            for (const item of good) {
+                const isAnonymousType = getObjectFlags(item) & ObjectFlags.Anonymous;
+                const displayPart = item.checker.typeToString(item);
+                if (isAnonymousType && displayParts.indexOf(displayPart) === -1) {
+                    anons.push(item as AnonymousType);
+                    displayParts.push(displayPart);
+                }
+            }
+
             if (anons.length) {
                 good = good.filter(i => !(getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(combineAnonymousTypes(anons));
