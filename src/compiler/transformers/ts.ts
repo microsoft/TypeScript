@@ -162,7 +162,7 @@ namespace ts {
                 case SyntaxKind.CaseBlock:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.Block:
-                    currentLexicalScope = <SourceFile | CaseBlock | ModuleBlock | Block>node;
+                    currentLexicalScope = node as SourceFile | CaseBlock | ModuleBlock | Block;
                     currentNameScope = undefined;
                     currentScopeFirstDeclarationsOfName = undefined;
                     break;
@@ -233,7 +233,7 @@ namespace ts {
                 case SyntaxKind.ImportEqualsDeclaration:
                 case SyntaxKind.ExportAssignment:
                 case SyntaxKind.ExportDeclaration:
-                    return visitElidableStatement(<ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration>node);
+                    return visitElidableStatement(node as ImportDeclaration | ImportEqualsDeclaration | ExportAssignment | ExportDeclaration);
                 default:
                     return visitorWorker(node);
             }
@@ -286,7 +286,7 @@ namespace ts {
                 node.kind === SyntaxKind.ImportDeclaration ||
                 node.kind === SyntaxKind.ImportClause ||
                 (node.kind === SyntaxKind.ImportEqualsDeclaration &&
-                 (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
+                 (node as ImportEqualsDeclaration).moduleReference.kind === SyntaxKind.ExternalModuleReference)) {
                 // do not emit ES6 imports and exports since they are illegal inside a namespace
                 return undefined;
             }
@@ -425,7 +425,7 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.Constructor:
-                    return visitConstructor(<ConstructorDeclaration>node);
+                    return visitConstructor(node as ConstructorDeclaration);
 
                 case SyntaxKind.InterfaceDeclaration:
                     // TypeScript interfaces are elided, but some comments may be preserved.
@@ -441,7 +441,7 @@ namespace ts {
                     // - parameter property assignments in the constructor
                     // - index signatures
                     // - method overload signatures
-                    return visitClassDeclaration(<ClassDeclaration>node);
+                    return visitClassDeclaration(node as ClassDeclaration);
 
                 case SyntaxKind.ClassExpression:
                     // This may be a class expression with TypeScript syntax extensions.
@@ -452,43 +452,43 @@ namespace ts {
                     // - parameter property assignments in the constructor
                     // - index signatures
                     // - method overload signatures
-                    return visitClassExpression(<ClassExpression>node);
+                    return visitClassExpression(node as ClassExpression);
 
                 case SyntaxKind.HeritageClause:
                     // This may be a heritage clause with TypeScript syntax extensions.
                     //
                     // TypeScript heritage clause extensions include:
                     // - `implements` clause
-                    return visitHeritageClause(<HeritageClause>node);
+                    return visitHeritageClause(node as HeritageClause);
 
                 case SyntaxKind.ExpressionWithTypeArguments:
                     // TypeScript supports type arguments on an expression in an `extends` heritage clause.
-                    return visitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
+                    return visitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
 
                 case SyntaxKind.MethodDeclaration:
                     // TypeScript method declarations may have decorators, modifiers
                     // or type annotations.
-                    return visitMethodDeclaration(<MethodDeclaration>node);
+                    return visitMethodDeclaration(node as MethodDeclaration);
 
                 case SyntaxKind.GetAccessor:
                     // Get Accessors can have TypeScript modifiers, decorators, and type annotations.
-                    return visitGetAccessor(<GetAccessorDeclaration>node);
+                    return visitGetAccessor(node as GetAccessorDeclaration);
 
                 case SyntaxKind.SetAccessor:
                     // Set Accessors can have TypeScript modifiers and type annotations.
-                    return visitSetAccessor(<SetAccessorDeclaration>node);
+                    return visitSetAccessor(node as SetAccessorDeclaration);
 
                 case SyntaxKind.FunctionDeclaration:
                     // Typescript function declarations can have modifiers, decorators, and type annotations.
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.FunctionExpression:
                     // TypeScript function expressions can have modifiers and type annotations.
-                    return visitFunctionExpression(<FunctionExpression>node);
+                    return visitFunctionExpression(node as FunctionExpression);
 
                 case SyntaxKind.ArrowFunction:
                     // TypeScript arrow functions can have modifiers and type annotations.
-                    return visitArrowFunction(<ArrowFunction>node);
+                    return visitArrowFunction(node as ArrowFunction);
 
                 case SyntaxKind.Parameter:
                     // This may be a parameter declaration with TypeScript syntax extensions.
@@ -499,55 +499,55 @@ namespace ts {
                     // - the question mark (?) token for optional parameters
                     // - type annotations
                     // - this parameters
-                    return visitParameter(<ParameterDeclaration>node);
+                    return visitParameter(node as ParameterDeclaration);
 
                 case SyntaxKind.ParenthesizedExpression:
                     // ParenthesizedExpressions are TypeScript if their expression is a
                     // TypeAssertion or AsExpression
-                    return visitParenthesizedExpression(<ParenthesizedExpression>node);
+                    return visitParenthesizedExpression(node as ParenthesizedExpression);
 
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     // TypeScript type assertions are removed, but their subtrees are preserved.
-                    return visitAssertionExpression(<AssertionExpression>node);
+                    return visitAssertionExpression(node as AssertionExpression);
 
                 case SyntaxKind.CallExpression:
-                    return visitCallExpression(<CallExpression>node);
+                    return visitCallExpression(node as CallExpression);
 
                 case SyntaxKind.NewExpression:
-                    return visitNewExpression(<NewExpression>node);
+                    return visitNewExpression(node as NewExpression);
 
                 case SyntaxKind.TaggedTemplateExpression:
-                    return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
 
                 case SyntaxKind.NonNullExpression:
                     // TypeScript non-null expressions are removed, but their subtrees are preserved.
-                    return visitNonNullExpression(<NonNullExpression>node);
+                    return visitNonNullExpression(node as NonNullExpression);
 
                 case SyntaxKind.EnumDeclaration:
                     // TypeScript enum declarations do not exist in ES6 and must be rewritten.
-                    return visitEnumDeclaration(<EnumDeclaration>node);
+                    return visitEnumDeclaration(node as EnumDeclaration);
 
                 case SyntaxKind.VariableStatement:
                     // TypeScript namespace exports for variable statements must be transformed.
-                    return visitVariableStatement(<VariableStatement>node);
+                    return visitVariableStatement(node as VariableStatement);
 
                 case SyntaxKind.VariableDeclaration:
-                    return visitVariableDeclaration(<VariableDeclaration>node);
+                    return visitVariableDeclaration(node as VariableDeclaration);
 
                 case SyntaxKind.ModuleDeclaration:
                     // TypeScript namespace declarations must be transformed.
-                    return visitModuleDeclaration(<ModuleDeclaration>node);
+                    return visitModuleDeclaration(node as ModuleDeclaration);
 
                 case SyntaxKind.ImportEqualsDeclaration:
                     // TypeScript namespace or external module import.
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                    return visitJsxSelfClosingElement(node as JsxSelfClosingElement);
 
                 case SyntaxKind.JsxOpeningElement:
-                    return visitJsxJsxOpeningElement(<JsxOpeningElement>node);
+                    return visitJsxJsxOpeningElement(node as JsxOpeningElement);
 
                 default:
                     // node contains some other TypeScript syntax
@@ -1032,13 +1032,13 @@ namespace ts {
             switch (member.kind) {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return getAllDecoratorsOfAccessors(node, <AccessorDeclaration>member);
+                    return getAllDecoratorsOfAccessors(node, member as AccessorDeclaration);
 
                 case SyntaxKind.MethodDeclaration:
-                    return getAllDecoratorsOfMethod(<MethodDeclaration>member);
+                    return getAllDecoratorsOfMethod(member as MethodDeclaration);
 
                 case SyntaxKind.PropertyDeclaration:
-                    return getAllDecoratorsOfProperty(<PropertyDeclaration>member);
+                    return getAllDecoratorsOfProperty(member as PropertyDeclaration);
 
                 default:
                     return undefined;
@@ -1378,7 +1378,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
-                    return getFirstConstructorWithBody(<ClassLikeDeclaration>node) !== undefined;
+                    return getFirstConstructorWithBody(node as ClassLikeDeclaration) !== undefined;
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
@@ -1405,7 +1405,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    return serializeTypeNode((<PropertyDeclaration | ParameterDeclaration | GetAccessorDeclaration>node).type);
+                    return serializeTypeNode((node as PropertyDeclaration | ParameterDeclaration | GetAccessorDeclaration).type);
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.GetAccessor:
                     return serializeTypeNode(getAccessorTypeNode(node as AccessorDeclaration));
@@ -1454,7 +1454,7 @@ namespace ts {
 
         function getParametersOfDecoratedDeclaration(node: SignatureDeclaration, container: ClassLikeDeclaration) {
             if (container && node.kind === SyntaxKind.GetAccessor) {
-                const { setAccessor } = getAllAccessorDeclarations(container.members, <AccessorDeclaration>node);
+                const { setAccessor } = getAllAccessorDeclarations(container.members, node as AccessorDeclaration);
                 if (setAccessor) {
                     return setAccessor.parameters;
                 }
@@ -1508,7 +1508,7 @@ namespace ts {
                     return factory.createVoidZero();
 
                 case SyntaxKind.ParenthesizedType:
-                    return serializeTypeNode((<ParenthesizedTypeNode>node).type);
+                    return serializeTypeNode((node as ParenthesizedTypeNode).type);
 
                 case SyntaxKind.FunctionType:
                 case SyntaxKind.ConstructorType:
@@ -1529,7 +1529,7 @@ namespace ts {
                     return factory.createIdentifier("Object");
 
                 case SyntaxKind.LiteralType:
-                    switch ((<LiteralTypeNode>node).literal.kind) {
+                    switch ((node as LiteralTypeNode).literal.kind) {
                         case SyntaxKind.StringLiteral:
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return factory.createIdentifier("String");
@@ -1549,7 +1549,7 @@ namespace ts {
                             return factory.createVoidZero();
 
                         default:
-                            return Debug.failBadSyntaxKind((<LiteralTypeNode>node).literal);
+                            return Debug.failBadSyntaxKind((node as LiteralTypeNode).literal);
                     }
 
                 case SyntaxKind.NumberKeyword:
@@ -1564,18 +1564,18 @@ namespace ts {
                         : factory.createIdentifier("Symbol");
 
                 case SyntaxKind.TypeReference:
-                    return serializeTypeReferenceNode(<TypeReferenceNode>node);
+                    return serializeTypeReferenceNode(node as TypeReferenceNode);
 
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    return serializeTypeList((<UnionOrIntersectionTypeNode>node).types);
+                    return serializeTypeList((node as UnionOrIntersectionTypeNode).types);
 
                 case SyntaxKind.ConditionalType:
-                    return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
+                    return serializeTypeList([(node as ConditionalTypeNode).trueType, (node as ConditionalTypeNode).falseType]);
 
                 case SyntaxKind.TypeOperator:
-                    if ((<TypeOperatorNode>node).operator === SyntaxKind.ReadonlyKeyword) {
-                        return serializeTypeNode((<TypeOperatorNode>node).type);
+                    if ((node as TypeOperatorNode).operator === SyntaxKind.ReadonlyKeyword) {
+                        return serializeTypeNode((node as TypeOperatorNode).type);
                     }
                     break;
 
@@ -1600,7 +1600,7 @@ namespace ts {
                 case SyntaxKind.JSDocNullableType:
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocOptionalType:
-                    return serializeTypeNode((<JSDocNullableType | JSDocNonNullableType | JSDocOptionalType>node).type);
+                    return serializeTypeNode((node as JSDocNullableType | JSDocNonNullableType | JSDocOptionalType).type);
                 default:
                     return Debug.failBadSyntaxKind(node);
             }
@@ -2734,12 +2734,12 @@ namespace ts {
             let blockLocation: TextRange | undefined;
             if (node.body) {
                 if (node.body.kind === SyntaxKind.ModuleBlock) {
-                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((<ModuleBlock>body).statements, namespaceElementVisitor, isStatement)));
+                    saveStateAndInvoke(node.body, body => addRange(statements, visitNodes((body as ModuleBlock).statements, namespaceElementVisitor, isStatement)));
                     statementsLocation = node.body.statements;
                     blockLocation = node.body;
                 }
                 else {
-                    const result = visitModuleDeclaration(<ModuleDeclaration>node.body);
+                    const result = visitModuleDeclaration(node.body as ModuleDeclaration);
                     if (result) {
                         if (isArray(result)) {
                             addRange(statements, result);
@@ -2749,7 +2749,7 @@ namespace ts {
                         }
                     }
 
-                    const moduleBlock = <ModuleBlock>getInnerMostModuleDeclarationFromDottedModule(node)!.body;
+                    const moduleBlock = getInnerMostModuleDeclarationFromDottedModule(node)!.body as ModuleBlock;
                     statementsLocation = moveRangePos(moduleBlock.statements, -1);
                 }
             }
@@ -2796,8 +2796,8 @@ namespace ts {
 
         function getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration: ModuleDeclaration): ModuleDeclaration | undefined {
             if (moduleDeclaration.body!.kind === SyntaxKind.ModuleDeclaration) {
-                const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(<ModuleDeclaration>moduleDeclaration.body);
-                return recursiveInnerModule || <ModuleDeclaration>moduleDeclaration.body;
+                const recursiveInnerModule = getInnerMostModuleDeclarationFromDottedModule(moduleDeclaration.body as ModuleDeclaration);
+                return recursiveInnerModule || moduleDeclaration.body as ModuleDeclaration;
             }
         }
 
@@ -3002,7 +3002,7 @@ namespace ts {
                 return undefined;
             }
 
-            const moduleReference = createExpressionFromEntityName(factory, <EntityName>node.moduleReference);
+            const moduleReference = createExpressionFromEntityName(factory, node.moduleReference as EntityName);
             setEmitFlags(moduleReference, EmitFlags.NoComments | EmitFlags.NoNestedComments);
 
             if (isNamedExternalModuleExport(node) || !isExportOfNamespace(node)) {
@@ -3241,7 +3241,7 @@ namespace ts {
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
             if (hint === EmitHint.Expression) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
             else if (isShorthandPropertyAssignment(node)) {
                 return substituteShorthandPropertyAssignment(node);
@@ -3270,11 +3270,11 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return substituteExpressionIdentifier(<Identifier>node);
+                    return substituteExpressionIdentifier(node as Identifier);
                 case SyntaxKind.PropertyAccessExpression:
-                    return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
+                    return substitutePropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
-                    return substituteElementAccessExpression(<ElementAccessExpression>node);
+                    return substituteElementAccessExpression(node as ElementAccessExpression);
             }
 
             return node;

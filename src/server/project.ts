@@ -1573,7 +1573,7 @@ namespace ts.server {
             let errorLogs: string[] | undefined;
             const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
-                <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError));
+                Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
                 const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
                 if (configurationOverride) {
@@ -1901,15 +1901,19 @@ namespace ts.server {
                     compilerOptions,
                     moduleResolutionHost));
 
+                const program = hostProject.getCurrentProgram()!;
+                const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
-                    const { resolvedFileName } = resolution.resolvedTypeReferenceDirective;
-                    const fileName = moduleResolutionHost.realpath?.(resolvedFileName) || resolvedFileName;
-                    if (!hostProject.getCurrentProgram()!.getSourceFile(fileName) && !hostProject.getCurrentProgram()!.getSourceFile(resolvedFileName)) {
-                        rootNames = append(rootNames, fileName);
+                    const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;
+                    if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
+                        rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
                         if (dependencySelection === PackageJsonAutoImportPreference.Auto && rootNames.length > this.maxDependencies) {
                             return ts.emptyArray;
+                        }
+                        if (originalPath) {
+                            symlinkCache.setSymlinkedDirectoryFromSymlinkedFile(originalPath, resolvedFileName);
                         }
                     }
                 }
@@ -1925,19 +1929,24 @@ namespace ts.server {
         }
 
         /*@internal*/
+        static readonly compilerOptionsOverrides: CompilerOptions = {
+            diagnostics: false,
+            skipLibCheck: true,
+            sourceMap: false,
+            types: ts.emptyArray,
+            lib: ts.emptyArray,
+            noLib: true,
+        };
+
+        /*@internal*/
         static create(dependencySelection: PackageJsonAutoImportPreference, hostProject: Project, moduleResolutionHost: ModuleResolutionHost, documentRegistry: DocumentRegistry): AutoImportProviderProject | undefined {
             if (dependencySelection === PackageJsonAutoImportPreference.Off) {
                 return undefined;
             }
 
-            const compilerOptions: CompilerOptions = {
+            const compilerOptions = {
                 ...hostProject.getCompilerOptions(),
-                noLib: true,
-                diagnostics: false,
-                skipLibCheck: true,
-                types: ts.emptyArray,
-                lib: ts.emptyArray,
-                sourceMap: false,
+                ...this.compilerOptionsOverrides,
             };
 
             const rootNames = this.getRootFileNames(dependencySelection, hostProject, moduleResolutionHost, compilerOptions);

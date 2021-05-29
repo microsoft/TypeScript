@@ -753,26 +753,26 @@ declare module '@custom/plugin' {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             const projectName = projectService.inferredProjects[0].getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName: projectName }
-            }).response as readonly protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diags.length === 0);
 
-            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+            session.executeCommand({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsForInferredProjects,
                 seq: 3,
                 arguments: { options: { module: ModuleKind.CommonJS } }
-            });
-            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            } as server.protocol.SetCompilerOptionsForInferredProjectsRequest);
+            const diagsAfterUpdate = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName: projectName }
-            }).response as readonly protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
 
@@ -786,23 +786,23 @@ declare module '@custom/plugin' {
             const projectService = session.getProjectService();
             const projectFileName = "/a/b/project.csproj";
             const externalFiles = toExternalFiles([f1.path]);
-            projectService.openExternalProject(<protocol.ExternalProject>{
+            projectService.openExternalProject({
                 projectFileName,
                 rootFiles: externalFiles,
                 options: {}
-            });
+            } as protocol.ExternalProject);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 2,
                 arguments: { projectFileName }
-            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diags.length === 0);
 
-            session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
+            session.executeCommand({
                 type: "request",
                 command: server.CommandNames.OpenExternalProject,
                 seq: 3,
@@ -811,13 +811,13 @@ declare module '@custom/plugin' {
                     rootFiles: externalFiles,
                     options: { module: ModuleKind.CommonJS }
                 }
-            });
-            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            } as server.protocol.OpenExternalProjectRequest);
+            const diagsAfterUpdate = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.CompilerOptionsDiagnosticsFull,
                 seq: 4,
                 arguments: { projectFileName }
-            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
@@ -852,23 +852,23 @@ declare module '@custom/plugin' {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const projectName = configuredProjectAt(projectService, 0).getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+            const diags = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.SemanticDiagnosticsSyncRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diags.length === 3);
 
             configFile.content = configFileContentWithoutCommentLine;
             host.writeFile(configFile.path, configFile.content);
 
-            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+            const diagsAfterEdit = session.executeCommand({
                 type: "request",
                 command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
                 arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
-            }).response as readonly server.protocol.DiagnosticWithLinePosition[];
+            } as server.protocol.SemanticDiagnosticsSyncRequest).response as readonly server.protocol.DiagnosticWithLinePosition[];
             assert.isTrue(diagsAfterEdit.length === 3);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);

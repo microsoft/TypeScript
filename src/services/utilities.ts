@@ -60,7 +60,7 @@ namespace ts {
                 return SemanticMeaning.Value | SemanticMeaning.Type;
 
             case SyntaxKind.ModuleDeclaration:
-                if (isAmbientModule(<ModuleDeclaration>node)) {
+                if (isAmbientModule(node as ModuleDeclaration)) {
                     return SemanticMeaning.Namespace | SemanticMeaning.Value;
                 }
                 else if (getModuleInstanceState(node as ModuleDeclaration) === ModuleInstanceState.Instantiated) {
@@ -105,7 +105,7 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
-        else if (isEntityName(node) && (isJSDocNameReference(node.parent) || isJSDocLink(node.parent))) {
+        else if (isEntityName(node) && findAncestor(node, or(isJSDocNameReference, isJSDocLinkLike, isJSDocMemberName))) {
             return SemanticMeaning.All;
         }
         else if (isTypeReference(node)) {
@@ -154,7 +154,7 @@ namespace ts {
                 root = root.parent;
             }
 
-            isLastClause = (<QualifiedName>root).right === node;
+            isLastClause = (root as QualifiedName).right === node;
         }
 
         return root.parent.kind === SyntaxKind.TypeReference && !isLastClause;
@@ -168,13 +168,13 @@ namespace ts {
                 root = root.parent;
             }
 
-            isLastClause = (<PropertyAccessExpression>root).name === node;
+            isLastClause = (root as PropertyAccessExpression).name === node;
         }
 
         if (!isLastClause && root.parent.kind === SyntaxKind.ExpressionWithTypeArguments && root.parent.parent.kind === SyntaxKind.HeritageClause) {
             const decl = root.parent.parent.parent;
-            return (decl.kind === SyntaxKind.ClassDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ImplementsKeyword) ||
-                (decl.kind === SyntaxKind.InterfaceDeclaration && (<HeritageClause>root.parent.parent).token === SyntaxKind.ExtendsKeyword);
+            return (decl.kind === SyntaxKind.ClassDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ImplementsKeyword) ||
+                (decl.kind === SyntaxKind.InterfaceDeclaration && (root.parent.parent as HeritageClause).token === SyntaxKind.ExtendsKeyword);
         }
 
         return false;
@@ -198,7 +198,7 @@ namespace ts {
             case SyntaxKind.ImportType:
                 return !(node.parent as ImportTypeNode).isTypeOf;
             case SyntaxKind.ExpressionWithTypeArguments:
-                return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(node.parent as ExpressionWithTypeArguments);
         }
 
         return false;
@@ -258,8 +258,8 @@ namespace ts {
 
     export function getTargetLabel(referenceNode: Node, labelName: string): Identifier | undefined {
         while (referenceNode) {
-            if (referenceNode.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>referenceNode).label.escapedText === labelName) {
-                return (<LabeledStatement>referenceNode).label;
+            if (referenceNode.kind === SyntaxKind.LabeledStatement && (referenceNode as LabeledStatement).label.escapedText === labelName) {
+                return (referenceNode as LabeledStatement).label;
             }
             referenceNode = referenceNode.parent;
         }
@@ -321,9 +321,9 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.ModuleDeclaration:
-                return getNameOfDeclaration(<Declaration>node.parent) === node;
+                return getNameOfDeclaration(node.parent as Declaration) === node;
             case SyntaxKind.ElementAccessExpression:
-                return (<ElementAccessExpression>node.parent).argumentExpression === node;
+                return (node.parent as ElementAccessExpression).argumentExpression === node;
             case SyntaxKind.ComputedPropertyName:
                 return true;
             case SyntaxKind.LiteralType:
@@ -363,7 +363,7 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ModuleDeclaration:
-                    return <Declaration>node;
+                    return node as Declaration;
             }
         }
     }
@@ -371,7 +371,7 @@ namespace ts {
     export function getNodeKind(node: Node): ScriptElementKind {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
-                return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
+                return isExternalModule(node as SourceFile) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
             case SyntaxKind.ModuleDeclaration:
                 return ScriptElementKind.moduleElement;
             case SyntaxKind.ClassDeclaration:
@@ -384,9 +384,9 @@ namespace ts {
                 return ScriptElementKind.typeElement;
             case SyntaxKind.EnumDeclaration: return ScriptElementKind.enumElement;
             case SyntaxKind.VariableDeclaration:
-                return getKindOfVariableDeclaration(<VariableDeclaration>node);
+                return getKindOfVariableDeclaration(node as VariableDeclaration);
             case SyntaxKind.BindingElement:
-                return getKindOfVariableDeclaration(<VariableDeclaration>getRootDeclaration(node));
+                return getKindOfVariableDeclaration(getRootDeclaration(node) as VariableDeclaration);
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -555,9 +555,9 @@ namespace ts {
             case SyntaxKind.NamedExports:
                 return nodeEndsWith(n, SyntaxKind.CloseBraceToken, sourceFile);
             case SyntaxKind.CatchClause:
-                return isCompletedNode((<CatchClause>n).block, sourceFile);
+                return isCompletedNode((n as CatchClause).block, sourceFile);
             case SyntaxKind.NewExpression:
-                if (!(<NewExpression>n).arguments) {
+                if (!(n as NewExpression).arguments) {
                     return true;
                 }
             // falls through
@@ -569,7 +569,7 @@ namespace ts {
 
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
-                return isCompletedNode((<SignatureDeclaration>n).type, sourceFile);
+                return isCompletedNode((n as SignatureDeclaration).type, sourceFile);
 
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
@@ -581,12 +581,12 @@ namespace ts {
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.CallSignature:
             case SyntaxKind.ArrowFunction:
-                if ((<FunctionLikeDeclaration>n).body) {
-                    return isCompletedNode((<FunctionLikeDeclaration>n).body, sourceFile);
+                if ((n as FunctionLikeDeclaration).body) {
+                    return isCompletedNode((n as FunctionLikeDeclaration).body, sourceFile);
                 }
 
-                if ((<FunctionLikeDeclaration>n).type) {
-                    return isCompletedNode((<FunctionLikeDeclaration>n).type, sourceFile);
+                if ((n as FunctionLikeDeclaration).type) {
+                    return isCompletedNode((n as FunctionLikeDeclaration).type, sourceFile);
                 }
 
                 // Even though type parameters can be unclosed, we can get away with
@@ -594,16 +594,16 @@ namespace ts {
                 return hasChildOfKind(n, SyntaxKind.CloseParenToken, sourceFile);
 
             case SyntaxKind.ModuleDeclaration:
-                return !!(<ModuleDeclaration>n).body && isCompletedNode((<ModuleDeclaration>n).body, sourceFile);
+                return !!(n as ModuleDeclaration).body && isCompletedNode((n as ModuleDeclaration).body, sourceFile);
 
             case SyntaxKind.IfStatement:
-                if ((<IfStatement>n).elseStatement) {
-                    return isCompletedNode((<IfStatement>n).elseStatement, sourceFile);
+                if ((n as IfStatement).elseStatement) {
+                    return isCompletedNode((n as IfStatement).elseStatement, sourceFile);
                 }
-                return isCompletedNode((<IfStatement>n).thenStatement, sourceFile);
+                return isCompletedNode((n as IfStatement).thenStatement, sourceFile);
 
             case SyntaxKind.ExpressionStatement:
-                return isCompletedNode((<ExpressionStatement>n).expression, sourceFile) ||
+                return isCompletedNode((n as ExpressionStatement).expression, sourceFile) ||
                     hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
@@ -614,8 +614,8 @@ namespace ts {
                 return nodeEndsWith(n, SyntaxKind.CloseBracketToken, sourceFile);
 
             case SyntaxKind.IndexSignature:
-                if ((<IndexSignatureDeclaration>n).type) {
-                    return isCompletedNode((<IndexSignatureDeclaration>n).type, sourceFile);
+                if ((n as IndexSignatureDeclaration).type) {
+                    return isCompletedNode((n as IndexSignatureDeclaration).type, sourceFile);
                 }
 
                 return hasChildOfKind(n, SyntaxKind.CloseBracketToken, sourceFile);
@@ -629,15 +629,15 @@ namespace ts {
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
             case SyntaxKind.WhileStatement:
-                return isCompletedNode((<IterationStatement>n).statement, sourceFile);
+                return isCompletedNode((n as IterationStatement).statement, sourceFile);
             case SyntaxKind.DoStatement:
                 // rough approximation: if DoStatement has While keyword - then if node is completed is checking the presence of ')';
                 return hasChildOfKind(n, SyntaxKind.WhileKeyword, sourceFile)
                     ? nodeEndsWith(n, SyntaxKind.CloseParenToken, sourceFile)
-                    : isCompletedNode((<DoStatement>n).statement, sourceFile);
+                    : isCompletedNode((n as DoStatement).statement, sourceFile);
 
             case SyntaxKind.TypeQuery:
-                return isCompletedNode((<TypeQueryNode>n).exprName, sourceFile);
+                return isCompletedNode((n as TypeQueryNode).exprName, sourceFile);
 
             case SyntaxKind.TypeOfExpression:
             case SyntaxKind.DeleteExpression:
@@ -648,23 +648,23 @@ namespace ts {
                 return isCompletedNode(unaryWordExpression.expression, sourceFile);
 
             case SyntaxKind.TaggedTemplateExpression:
-                return isCompletedNode((<TaggedTemplateExpression>n).template, sourceFile);
+                return isCompletedNode((n as TaggedTemplateExpression).template, sourceFile);
             case SyntaxKind.TemplateExpression:
-                const lastSpan = lastOrUndefined((<TemplateExpression>n).templateSpans);
+                const lastSpan = lastOrUndefined((n as TemplateExpression).templateSpans);
                 return isCompletedNode(lastSpan, sourceFile);
             case SyntaxKind.TemplateSpan:
-                return nodeIsPresent((<TemplateSpan>n).literal);
+                return nodeIsPresent((n as TemplateSpan).literal);
 
             case SyntaxKind.ExportDeclaration:
             case SyntaxKind.ImportDeclaration:
-                return nodeIsPresent((<ExportDeclaration | ImportDeclaration>n).moduleSpecifier);
+                return nodeIsPresent((n as ExportDeclaration | ImportDeclaration).moduleSpecifier);
 
             case SyntaxKind.PrefixUnaryExpression:
-                return isCompletedNode((<PrefixUnaryExpression>n).operand, sourceFile);
+                return isCompletedNode((n as PrefixUnaryExpression).operand, sourceFile);
             case SyntaxKind.BinaryExpression:
-                return isCompletedNode((<BinaryExpression>n).right, sourceFile);
+                return isCompletedNode((n as BinaryExpression).right, sourceFile);
             case SyntaxKind.ConditionalExpression:
-                return isCompletedNode((<ConditionalExpression>n).whenFalse, sourceFile);
+                return isCompletedNode((n as ConditionalExpression).whenFalse, sourceFile);
 
             default:
                 return true;
@@ -1307,7 +1307,7 @@ namespace ts {
             }
 
             if (position === end) {
-                return !!(<LiteralExpression>previousToken).isUnterminated;
+                return !!(previousToken as LiteralExpression).isUnterminated;
             }
         }
 
@@ -1623,11 +1623,11 @@ namespace ts {
 
     export function getTypeArgumentOrTypeParameterList(node: Node): NodeArray<Node> | undefined {
         if (node.kind === SyntaxKind.TypeReference || node.kind === SyntaxKind.CallExpression) {
-            return (<CallExpression>node).typeArguments;
+            return (node as CallExpression).typeArguments;
         }
 
         if (isFunctionLike(node) || node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.InterfaceDeclaration) {
-            return (<FunctionLikeDeclaration>node).typeParameters;
+            return (node as FunctionLikeDeclaration).typeParameters;
         }
 
         return undefined;
@@ -1678,15 +1678,15 @@ namespace ts {
             // [a,b,c] from:
             // [a, b, c] = someExpression;
             if (node.parent.kind === SyntaxKind.BinaryExpression &&
-                (<BinaryExpression>node.parent).left === node &&
-                (<BinaryExpression>node.parent).operatorToken.kind === SyntaxKind.EqualsToken) {
+                (node.parent as BinaryExpression).left === node &&
+                (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
                 return true;
             }
 
             // [a, b, c] from:
             // for([a, b, c] of expression)
             if (node.parent.kind === SyntaxKind.ForOfStatement &&
-                (<ForOfStatement>node.parent).initializer === node) {
+                (node.parent as ForOfStatement).initializer === node) {
                 return true;
             }
 
@@ -1721,7 +1721,7 @@ namespace ts {
         switch (contextToken.kind) {
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return createTextSpanFromStringLiteralLikeContent(<StringLiteralLike>contextToken);
+                return createTextSpanFromStringLiteralLikeContent(contextToken as StringLiteralLike);
             default:
                 return createTextSpanFromNode(contextToken);
         }
@@ -2093,7 +2093,7 @@ namespace ts {
             increaseIndent: () => { indent++; },
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
-            trackSymbol: noop,
+            trackSymbol: () => false,
             reportInaccessibleThisError: noop,
             reportInaccessibleUniqueSymbolError: noop,
             reportPrivateInBaseOfClassExpression: noop,
@@ -2218,7 +2218,7 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.linkText);
     }
 
-    export function linkNamePart(name: EntityName, target: Declaration): JSDocLinkDisplayPart {
+    export function linkNamePart(name: EntityName | JSDocMemberName, target: Declaration): JSDocLinkDisplayPart {
         return {
             text: getTextOfNode(name),
             kind: SymbolDisplayPartKind[SymbolDisplayPartKind.linkName],
@@ -2233,19 +2233,23 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.link);
     }
 
-    export function buildLinkParts(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart[] {
-        const parts = [linkPart("{@link ")];
+    export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain, checker?: TypeChecker): SymbolDisplayPart[] {
+        const prefix = isJSDocLink(link) ? "link"
+            : isJSDocLinkCode(link) ? "linkcode"
+            : "linkplain";
+        const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
             if (link.text) {parts.push(linkTextPart(link.text));}
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
-            if (symbol?.valueDeclaration) {
-                parts.push(linkNamePart(link.name, symbol.valueDeclaration));
+            const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
+            if (decl) {
+                parts.push(linkNamePart(link.name, decl));
                 if (link.text) {parts.push(linkTextPart(link.text));}
             }
             else {
-                parts.push(linkTextPart(getTextOfNode(link.name) + link.text));
+                parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
             }
         }
         parts.push(linkPart("}"));
@@ -2618,6 +2622,7 @@ namespace ts {
         const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
             trackSymbol: (symbol, declaration, meaning) => {
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+                return !typeIsAccessible;
             },
             reportInaccessibleThisError: notAccessible,
             reportPrivateInBaseOfClassExpression: notAccessible,
@@ -3350,6 +3355,10 @@ namespace ts {
         return toNodeModulesParent === undefined
             || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
             || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
+    }
+
+    export function isDeprecatedDeclaration(decl: Declaration) {
+        return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
     }
 
     // #endregion
