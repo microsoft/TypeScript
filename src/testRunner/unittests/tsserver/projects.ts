@@ -7,34 +7,21 @@ namespace ts.projectSystem {
                     let x = y`
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1], session);
-            const projectService = session.getProjectService();
 
-            checkNumberOfInferredProjects(projectService, 1);
-            const project = projectService.inferredProjects[0];
-            checkProjectRootFiles(project, [file1.path]);
-            checkProjectActualFiles(project, [file1.path, libFile.path]);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
 
             // Two errors: CommonFile2 not found and cannot find name y
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_name_0, errorTextArguments: ["y"] },
-                { diagnosticMessage: Diagnostics.File_0_not_found, errorTextArguments: [commonFile2.path] }
-            ]);
+            session.executeCommand(getErrRequest);
 
             host.writeFile(commonFile2.path, commonFile2.content);
             host.runQueuedTimeoutCallbacks();
-            checkNumberOfInferredProjects(projectService, 1);
-            assert.strictEqual(projectService.inferredProjects[0], project, "Inferred project should be same");
-            checkProjectRootFiles(project, [file1.path]);
-            checkProjectActualFiles(project, [file1.path, libFile.path, commonFile2.path]);
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("projects", "handles the missing files added with tripleslash ref", session);
         });
 
         it("should create new inferred projects for files excluded from a configured project", () => {

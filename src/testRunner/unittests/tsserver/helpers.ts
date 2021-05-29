@@ -710,24 +710,6 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface ErrorInformation {
-        diagnosticMessage: DiagnosticMessage;
-        errorTextArguments?: string[];
-    }
-
-    function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
-        return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
-    }
-
-    export function verifyDiagnostics(actual: readonly server.protocol.Diagnostic[], expected: readonly ErrorInformation[]) {
-        const expectedErrors = expected.map(getProtocolDiagnosticMessage);
-        assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
-    }
-
-    export function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
-        verifyDiagnostics(actual, []);
-    }
-
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
         isWriteAccess?: boolean;

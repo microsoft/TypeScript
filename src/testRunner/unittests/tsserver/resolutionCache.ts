@@ -103,16 +103,13 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
             host.writeFile(moduleFile.path, moduleFile.content);
             host.runQueuedTimeoutCallbacks();
@@ -125,8 +122,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
 
             // Recheck
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "should remove the module not found error", session);
         });
 
         it("npm install @types works", () => {
@@ -254,24 +251,19 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
-            assert.equal(diags.length, 1);
+            session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
@@ -284,8 +276,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.runQueuedTimeoutCallbacks();
 
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
         });
 
         it("should restore the states for configured projects", () => {
@@ -302,28 +294,24 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
         });
 
         it("should property handle missing config files", () => {
