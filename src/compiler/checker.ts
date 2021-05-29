@@ -330,14 +330,19 @@ namespace ts {
         let instantiationCount = 0;
         let instantiationDepth = 0;
         let currentNode: Node | undefined;
-        // used in noImplicitReturns analysis of do-expression
-        let requiresStatementType = false;
-        function startRequireStatementTypeContext<T>(f: (currentRequiresStatementType: boolean) => T): T {
+
+        // this flag is use in completion value analysis.
+        // when completion value analysis is enabled, it means we expect a "not all code paths return a value" report.
+        // when an expression produces voidType, it should also be treated as no "not all code paths return a value",
+        // because it's highly like a mistake of the following code:
+        // const val = do { console.log() } // val is voidType.
+        let enableCompletionValueAnalysis = false;
+        function withCompletionValueAnalysisContext<T>(f: (enableCompletionValueAnalysisBefore: boolean) => T): T {
             if (!compilerOptions.noImplicitReturns) return f(/* neverCheck */ false);
-            const old = requiresStatementType;
-            requiresStatementType = false;
+            const old = enableCompletionValueAnalysis;
+            enableCompletionValueAnalysis = false;
             const val = f(old);
-            requiresStatementType = old;
+            enableCompletionValueAnalysis = old;
             return val;
         }
 
@@ -32385,17 +32390,12 @@ namespace ts {
             // grammar check
             checkEndsInIterationOrBareIfOrDeclaration(node.block.statements, [], /** isLast */ true);
 
-            const type = startRequireStatementTypeContext(() => {
-                requiresStatementType = true;
-                return checkBlock(node.block);
+            const type = withCompletionValueAnalysisContext(() => {
+                enableCompletionValueAnalysis = true;
+                return checkBlock(node.block) || voidType;
             });
             if (node.async) return createPromiseType(type);
             return type;
-        }
-
-        function isVoidLikeType(type: Type | undefined | void) {
-            if (!type) return true;
-            return type === voidType;
         }
 
         type LabelSet = readonly (__String | undefined)[];
@@ -35365,26 +35365,24 @@ namespace ts {
             return decl.kind === SyntaxKind.ImportClause ? decl : decl.kind === SyntaxKind.NamespaceImport ? decl.parent : decl.parent.parent;
         }
 
-        function checkBlock(node: Block): Type {
+        function checkBlock(node: Block): Type | undefined {
             // Grammar checking for SyntaxKind.Block
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
             // eslint-disable-next-line no-undef-init
-            const types: (Type | void)[] = [];
+            let types: (Type | void)[] = [];
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
                 forEach(node.statements, checkSourceElement);
                 flowAnalysisDisabled = saveFlowAnalysisDisabled;
             }
             else {
-                startRequireStatementTypeContext(currentLast => {
-                    forEach(node.statements, node => {
-                        types.push(checkSourceElementWithType(node));
-                    });
-                    if (currentLast) {
+                withCompletionValueAnalysisContext(requireCompletionValue => {
+                    types = node.statements.map(checkSourceElementWithType);
+                    if (requireCompletionValue) {
                         const lastType = findLastIndex(types, nonNullable);
-                        requiresStatementType = true;
+                        enableCompletionValueAnalysis = true;
                         // check again with requiresStatementType on
                         if (lastType !== -1) checkSourceElement(node.statements[lastType]);
                     }
@@ -35394,7 +35392,9 @@ namespace ts {
                 registerForUnusedIdentifiersCheck(node);
             }
             // TODO: combine with break/continue analysis
-            return findLast(types, nonNullable) || voidType;
+            // should not return voidType if findLast has no result.
+            // see the completion value of "{1;} {}"
+            return findLast(types, nonNullable);
         }
 
         function checkCollisionWithArgumentsInGeneratedCode(node: SignatureDeclaration) {
@@ -35819,8 +35819,9 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const type = checkExpression(node.expression);
-            if (requiresStatementType && isVoidLikeType(type)) {
-                // there is no meaning to use do expreesion and return a void type. mark it as a warning.
+            if (enableCompletionValueAnalysis && type === voidType) {
+                // when in the context of completion value is collected, it is highly likely an mistake
+                // e.g. do { console.log(1) }
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
             return type;
@@ -35838,8 +35839,10 @@ namespace ts {
             }
 
             const type2 = checkSourceElementWithType(node.elseStatement);
-            if (requiresStatementType) {
-                if (isVoidLikeType(type1) || isVoidLikeType(type2) && node.elseStatement) error(node, Diagnostics.Not_all_code_paths_return_a_value);
+            if (enableCompletionValueAnalysis) {
+                if (!type1) error(node.thenStatement, Diagnostics.Not_all_code_paths_return_a_value);
+                if (!node.elseStatement) error(node, Diagnostics.Not_all_code_paths_return_a_value);
+                if (node.elseStatement && !type2) error(node.elseStatement, Diagnostics.Not_all_code_paths_return_a_value);
             }
             return getUnionType([type1 || voidType, type2 || voidType], UnionReduction.Subtype);
         }
@@ -36866,6 +36869,8 @@ namespace ts {
             if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
+            // complete a CompletionRecord<"continue" | "break", T>
+            // so it does not contribute to the analysis of CompletionRecord<"normal", T>
             return neverType;
         }
 
@@ -36988,14 +36993,15 @@ namespace ts {
                         checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 }
-                let caseType: Type | void = voidType;
+                // eslint-disable-next-line no-undef-init
+                let caseType: Type | void = undefined;
                 for (const statement of clause.statements) {
                     caseType = checkSourceElementWithType(statement) || caseType;
                 }
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
-                if (requiresStatementType && isVoidLikeType(caseType)) {
+                if (enableCompletionValueAnalysis && clause.statements.length && !caseType) {
                     error(clause, Diagnostics.Not_all_code_paths_return_a_value);
                 }
                 return caseType;
@@ -37003,7 +37009,7 @@ namespace ts {
             if (node.caseBlock.locals) {
                 registerForUnusedIdentifiersCheck(node.caseBlock);
             }
-            if (requiresStatementType && node.caseBlock.clauses.length === 0) {
+            if (enableCompletionValueAnalysis && node.caseBlock.clauses.length === 0) {
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
             if (types.length === 0) return voidType;
@@ -37048,7 +37054,7 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const types = [checkBlock(node.tryBlock)];
-            if (requiresStatementType && isVoidLikeType(types[0])) {
+            if (enableCompletionValueAnalysis && !types[0]) {
                 error(node.tryBlock, Diagnostics.Not_all_code_paths_return_a_value);
             }
             const catchClause = node.catchClause;
@@ -37081,9 +37087,13 @@ namespace ts {
 
                 const catchType = checkBlock(catchClause.block);
                 types.push(catchType);
-                if (requiresStatementType && isVoidLikeType(catchType)) {
+                if (enableCompletionValueAnalysis && !catchType) {
                     error(catchClause.block, Diagnostics.Not_all_code_paths_return_a_value);
                 }
+            }
+            else if (enableCompletionValueAnalysis) {
+                // try { 1; } finally { }
+                error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
 
             if (node.finallyBlock) {
@@ -38913,7 +38923,9 @@ namespace ts {
                 case SyntaxKind.BreakStatement:
                     return checkBreakOrContinueStatement(node as BreakOrContinueStatement);
                 case SyntaxKind.ReturnStatement:
-                    return checkReturnStatement(node as ReturnStatement);
+                    // return statement complete a CompletionRecord<"return", T>
+                    // so it does not contribute to the analysis of CompletionRecord<"normal", T>
+                    return (checkReturnStatement(node as ReturnStatement), neverType);
                 case SyntaxKind.WithStatement:
                     return checkWithStatement(node as WithStatement);
                 case SyntaxKind.SwitchStatement:
