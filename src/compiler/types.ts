@@ -1439,7 +1439,7 @@ namespace ts {
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase, ControlFlowChangesInExpressionMark {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
 
         readonly asteriskToken?: AsteriskToken;
@@ -1448,6 +1448,7 @@ namespace ts {
         readonly body?: Block | Expression;
         /* @internal */ endFlowNode?: FlowNode;
         /* @internal */ returnFlowNode?: FlowNode;
+        /* @internal */ _controlFlowInExpr?: ControlFlowChangesInExpression;
     }
 
     export type FunctionLikeDeclaration =
@@ -2220,10 +2221,11 @@ namespace ts {
         readonly templateSpans: NodeArray<TemplateSpan>;
     }
 
-    export interface DoExpression extends PrimaryExpression, ControlFlowChangesInExpressionMark {
+    export interface DoExpression extends PrimaryExpression {
         readonly async: boolean
         readonly kind: SyntaxKind.DoExpression;
         readonly block: Block;
+        /* @internal */ _controlFlowInExpr?: ControlFlowChangesInExpression;
     }
     /** @internal */
     export const enum ControlFlowChangesInExpression {
@@ -2708,8 +2710,9 @@ namespace ts {
         readonly elseStatement?: Statement;
     }
 
-    export interface IterationStatement extends Statement, ControlFlowChangesInExpressionMark {
+    export interface IterationStatement extends Statement {
         readonly statement: Statement;
+        /* @internal */ _controlFlowInExpr?: ControlFlowChangesInExpression;
     }
 
     export interface DoStatement extends IterationStatement {
@@ -2778,11 +2781,12 @@ namespace ts {
         readonly statement: Statement;
     }
 
-    export interface SwitchStatement extends Statement, ControlFlowChangesInExpressionMark {
+    export interface SwitchStatement extends Statement {
         readonly kind: SyntaxKind.SwitchStatement;
         readonly expression: Expression;
         readonly caseBlock: CaseBlock;
         possiblyExhaustive?: boolean; // initialized by binding
+        /* @internal */ _controlFlowInExpr?: ControlFlowChangesInExpression;
     }
 
     export interface CaseBlock extends Node {
@@ -2811,10 +2815,11 @@ namespace ts {
         | DefaultClause
         ;
 
-    export interface LabeledStatement extends Statement, ControlFlowChangesInExpressionMark {
+    export interface LabeledStatement extends Statement {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
+        /* @internal */ _controlFlowInExpr?: ControlFlowChangesInExpression;
     }
 
     export interface ThrowStatement extends Statement {
@@ -6676,15 +6681,6 @@ namespace ts {
 
         // Masks
         // - Additional bitmasks
-    }
-
-    /* @internal */
-    export interface ControlFlowChangesInExpressionMark {
-        /**
-         * @internal
-         * Indicates the body of this Node should be replaced by a try-catch to make control flow changes in expression position possible
-         */
-        _controlFlowInExpr?: ControlFlowChangesInExpression
     }
 
     export interface SourceMapRange extends TextRange {

@@ -672,7 +672,7 @@ namespace ts {
                                 return text;
                             }
                         },
-                        __debugControlFlowChangesInExpression: { get(this: Node) { return formatControlFlowChangesInExpression((this as Node & ControlFlowChangesInExpressionMark)._controlFlowInExpr); } }
+                        __debugControlFlowChangesInExpression: { get(this: Node) { return formatControlFlowChangesInExpression((this as any)._controlFlowInExpr); } }
                     });
                 }
             }

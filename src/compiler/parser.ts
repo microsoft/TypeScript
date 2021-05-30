@@ -855,7 +855,7 @@ namespace ts {
                 currentLabel = oldLabel;
             };
         }
-        function setControlFlowChangeFlag(node: ControlFlowChangesInExpressionMark) {
+        function setControlFlowChangeFlag(node: { _controlFlowInExpr?: ControlFlowChangesInExpression }) {
             const result = controlFlowChangesInExpression & ControlFlowChangesInExpression.HasControlFlowChange;
             if (result) node._controlFlowInExpr = result;
         }

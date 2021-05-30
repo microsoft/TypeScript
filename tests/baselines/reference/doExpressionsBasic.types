@@ -54,8 +54,8 @@ const c = do {
 >2 : 2
 }
 const d = do {
->d : 1
->do {    try { 1; } finally { 2 }} : 1
+>d : void | 1
+>do {    try { 1; } finally { 2 }} : void | 1
 
     try { 1; } finally { 2 }
 >1 : 1

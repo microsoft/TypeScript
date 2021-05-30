@@ -12,9 +12,10 @@ tests/cases/compiler/doExpressionsError.ts(16,10): error TS1434: Declaration or 
 tests/cases/compiler/doExpressionsError.ts(17,10): error TS1434: Declaration or iteration cannot present at end of the do expression
 tests/cases/compiler/doExpressionsError.ts(24,10): error TS1436: A var declaration cannot be used within a do expression unless the target is ESNext.
 tests/cases/compiler/doExpressionsError.ts(44,9): error TS1437: The last if statement in the do expression must have an else branch.
+tests/cases/compiler/doExpressionsError.ts(44,9): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/doExpressionsError.ts (14 errors) ====
+==== tests/cases/compiler/doExpressionsError.ts (15 errors) ====
     // No iteration / declaration at the end
     
     ;[
@@ -87,6 +88,8 @@ tests/cases/compiler/doExpressionsError.ts(44,9): error TS1437: The last if stat
             if (true) true;
             ~~~~~~~~~~~~~~~
 !!! error TS1437: The last if statement in the do expression must have an else branch.
+            ~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
         }
     ]
     

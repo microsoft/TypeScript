@@ -37001,8 +37001,9 @@ namespace ts {
                 if (compilerOptions.noFallthroughCasesInSwitch && clause.fallthroughFlowNode && isReachableFlowNode(clause.fallthroughFlowNode)) {
                     error(clause, Diagnostics.Fallthrough_case_in_switch);
                 }
-                if (enableCompletionValueAnalysis && clause.statements.length && !caseType) {
-                    error(clause, Diagnostics.Not_all_code_paths_return_a_value);
+                if (!caseType && clause.statements.length) {
+                    if (enableCompletionValueAnalysis) error(clause, Diagnostics.Not_all_code_paths_return_a_value);
+                    caseType = voidType;
                 }
                 return caseType;
             }).filter(nonNullable);
@@ -37054,8 +37055,9 @@ namespace ts {
             checkGrammarStatementInAmbientContext(node);
 
             const types = [checkBlock(node.tryBlock)];
-            if (enableCompletionValueAnalysis && !types[0]) {
-                error(node.tryBlock, Diagnostics.Not_all_code_paths_return_a_value);
+            if (!types[0]) {
+                if (enableCompletionValueAnalysis) error(node.tryBlock, Diagnostics.Not_all_code_paths_return_a_value);
+                types[0] = voidType;
             }
             const catchClause = node.catchClause;
             if (catchClause) {
@@ -37085,15 +37087,17 @@ namespace ts {
                     }
                 }
 
-                const catchType = checkBlock(catchClause.block);
-                types.push(catchType);
-                if (enableCompletionValueAnalysis && !catchType) {
-                    error(catchClause.block, Diagnostics.Not_all_code_paths_return_a_value);
+                let catchType = checkBlock(catchClause.block);
+                if (!catchType) {
+                    if (enableCompletionValueAnalysis) error(catchClause.block, Diagnostics.Not_all_code_paths_return_a_value);
+                    catchType = voidType;
                 }
+                types.push(catchType);
             }
-            else if (enableCompletionValueAnalysis) {
+            else {
                 // try { 1; } finally { }
-                error(node, Diagnostics.Not_all_code_paths_return_a_value);
+                if (enableCompletionValueAnalysis) error(node, Diagnostics.Not_all_code_paths_return_a_value);
+                types.push(voidType);
             }
 
             if (node.finallyBlock) {
