@@ -141,7 +141,7 @@ namespace ts.refactor {
         const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
         const namespaceNameConflicts = toConvert.elements.some(element =>
             FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id =>
-                !!checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true)) || false);
+                !!checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true) && checker.getSymbolAtLocation(element.name) !== checker.getSymbolAtLocation(id)) || false);
         const namespaceImportName = namespaceNameConflicts ? getUniqueName(preferredName, sourceFile) : preferredName;
 
         const neededNamedImports: ImportSpecifier[] = [];
