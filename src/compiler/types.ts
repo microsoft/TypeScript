@@ -1439,7 +1439,7 @@ namespace ts {
      * - MethodDeclaration
      * - AccessorDeclaration
      */
-    export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
+    export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase, ControlFlowChangesInExpressionMark {
         _functionLikeDeclarationBrand: any;
 
         readonly asteriskToken?: AsteriskToken;
@@ -2220,10 +2220,22 @@ namespace ts {
         readonly templateSpans: NodeArray<TemplateSpan>;
     }
 
-    export interface DoExpression extends PrimaryExpression {
+    export interface DoExpression extends PrimaryExpression, ControlFlowChangesInExpressionMark {
         readonly async: boolean
         readonly kind: SyntaxKind.DoExpression;
         readonly block: Block;
+    }
+    /** @internal */
+    export const enum ControlFlowChangesInExpression {
+        None = 0,
+        HasReturn = 1 << 0,
+        HasContinue = 1 << 1,
+        HasBreak = 1 << 2,
+        AllowReturn = 1 << 3,
+        AllowContinue = 1 << 4,
+        AllowBreak = 1 << 5,
+        InExpressionContext = 1 << 6,
+        HasControlFlowChange = HasReturn | HasContinue | HasBreak,
     }
 
     export type TemplateLiteral =
@@ -2696,7 +2708,7 @@ namespace ts {
         readonly elseStatement?: Statement;
     }
 
-    export interface IterationStatement extends Statement {
+    export interface IterationStatement extends Statement, ControlFlowChangesInExpressionMark {
         readonly statement: Statement;
     }
 
@@ -2766,7 +2778,7 @@ namespace ts {
         readonly statement: Statement;
     }
 
-    export interface SwitchStatement extends Statement {
+    export interface SwitchStatement extends Statement, ControlFlowChangesInExpressionMark {
         readonly kind: SyntaxKind.SwitchStatement;
         readonly expression: Expression;
         readonly caseBlock: CaseBlock;
@@ -2799,7 +2811,7 @@ namespace ts {
         | DefaultClause
         ;
 
-    export interface LabeledStatement extends Statement {
+    export interface LabeledStatement extends Statement, ControlFlowChangesInExpressionMark {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
@@ -6664,6 +6676,15 @@ namespace ts {
 
         // Masks
         // - Additional bitmasks
+    }
+
+    /* @internal */
+    export interface ControlFlowChangesInExpressionMark {
+        /**
+         * @internal
+         * Indicates the body of this Node should be replaced by a try-catch to make control flow changes in expression position possible
+         */
+        _controlFlowInExpr?: ControlFlowChangesInExpression
     }
 
     export interface SourceMapRange extends TextRange {

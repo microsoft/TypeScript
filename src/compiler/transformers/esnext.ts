@@ -20,7 +20,6 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.DoExpression:
                     return transformDoExpression(node as DoExpression);
-                // falls through
                 default:
                     return visitEachChild(node, visitor, context);
             }

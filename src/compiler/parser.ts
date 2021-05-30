@@ -838,6 +838,25 @@ namespace ts {
         // attached to the EOF token.
         let parseErrorBeforeNextFinishedNode = false;
 
+        // for do expression
+        let controlFlowChangesInExpression = ControlFlowChangesInExpression.None;
+        function startFunctionBoundaryOfControlFlow() {
+            const old = controlFlowChangesInExpression;
+            controlFlowChangesInExpression = ControlFlowChangesInExpression.AllowReturn;
+            return () => controlFlowChangesInExpression = old;
+        }
+        function setControlFlowChangeFlag(node: ControlFlowChangesInExpressionMark) {
+            const result = controlFlowChangesInExpression & ControlFlowChangesInExpression.HasControlFlowChange;
+            if (result) node._controlFlowInExpr = result;
+        }
+        function addControlFlowChangeFlag(flag: ControlFlowChangesInExpression) {
+            const oldHas = controlFlowChangesInExpression & flag;
+            controlFlowChangesInExpression |= flag;
+            return () => {
+                if (!oldHas) controlFlowChangesInExpression &= ~flag;
+            };
+        }
+
         export function parseSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, syntaxCursor: IncrementalParser.SyntaxCursor | undefined, setParentNodes = false, scriptKind?: ScriptKind): SourceFile {
             scriptKind = ensureScriptKind(fileName, scriptKind);
             if (scriptKind === ScriptKind.JSON) {
@@ -1453,6 +1472,7 @@ namespace ts {
             const saveToken = currentToken;
             const saveParseDiagnosticsLength = parseDiagnostics.length;
             const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
+            const saveControlFlowChangesInExpression = controlFlowChangesInExpression;
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restoring of these flags happens naturally through the recursive
@@ -1473,6 +1493,7 @@ namespace ts {
             // then unconditionally restore us to where we were.
             if (!result || speculationKind !== SpeculationKind.TryParse) {
                 currentToken = saveToken;
+                controlFlowChangesInExpression = saveControlFlowChangesInExpression;
                 if (speculationKind !== SpeculationKind.Reparse) {
                     parseDiagnostics.length = saveParseDiagnosticsLength;
                 }
@@ -2641,9 +2662,18 @@ namespace ts {
             const pos = getNodePos();
             if (isAsync) parseExpectedToken(SyntaxKind.AsyncKeyword);
             parseExpectedToken(SyntaxKind.DoKeyword);
-            const createDo = () => finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
-            if (isAsync) return doOutsideOfContext(NodeFlags.YieldContext, () => doInAwaitContext(createDo));
-            return createDo();
+            // Async Do Expression, ~Yield, +Await, ~Return, ~Continue, ~Break
+            if (isAsync) {
+                return doOutsideOfContext(NodeFlags.YieldContext, () => doInAwaitContext(() => {
+                    return finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+                }));
+            }
+            // Sync Do Expression, ?Yield, ?Await, ?Return, ?Continue, ?Break
+            const restoreFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.InExpressionContext);
+            const doExpr = finishNode(factory.createDoExpression(isAsync, parseBlock(/* ignoreMissingOpenBrace */ false)), pos);
+            setControlFlowChangeFlag(doExpr);
+            restoreFlag();
+            return doExpr;
         }
 
         function parseTemplateType(): TemplateLiteralTypeNode {
@@ -4114,6 +4144,7 @@ namespace ts {
 
         function parseSimpleArrowFunctionExpression(pos: number, identifier: Identifier, asyncModifier?: NodeArray<Modifier> | undefined): ArrowFunction {
             Debug.assert(token() === SyntaxKind.EqualsGreaterThanToken, "parseSimpleArrowFunctionExpression should only have been called if we had a =>");
+            const restoreControlFlowChangeContext = startFunctionBoundaryOfControlFlow();
             const parameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
@@ -4129,6 +4160,8 @@ namespace ts {
             const equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken);
             const body = parseArrowFunctionExpressionBody(/*isAsync*/ !!asyncModifier);
             const node = factory.createArrowFunction(asyncModifier, /*typeParameters*/ undefined, parameters, /*type*/ undefined, equalsGreaterThanToken, body);
+            setControlFlowChangeFlag(node);
+            restoreControlFlowChangeContext();
             return addJSDocComment(finishNode(node, pos));
         }
 
@@ -4341,6 +4374,7 @@ namespace ts {
 
         function parseParenthesizedArrowFunctionExpression(allowAmbiguity: boolean): ArrowFunction | undefined {
             const pos = getNodePos();
+            const restoreControlFlowChangeContext = startFunctionBoundaryOfControlFlow();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiersForArrowFunction();
             const isAsync = some(modifiers, isAsyncModifier) ? SignatureFlags.Await : SignatureFlags.None;
@@ -4356,6 +4390,7 @@ namespace ts {
             let parameters: NodeArray<ParameterDeclaration>;
             if (!parseExpected(SyntaxKind.OpenParenToken)) {
                 if (!allowAmbiguity) {
+                    restoreControlFlowChangeContext();
                     return undefined;
                 }
                 parameters = createMissingList<ParameterDeclaration>();
@@ -4363,12 +4398,14 @@ namespace ts {
             else {
                 parameters = parseParametersWorker(isAsync);
                 if (!parseExpected(SyntaxKind.CloseParenToken) && !allowAmbiguity) {
+                    restoreControlFlowChangeContext();
                     return undefined;
                 }
             }
 
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             if (type && !allowAmbiguity && typeHasArrowFunctionBlockingParseError(type)) {
+                restoreControlFlowChangeContext();
                 return undefined;
             }
 
@@ -4383,8 +4420,9 @@ namespace ts {
             // So we need just a bit of lookahead to ensure that it can only be a signature.
             const hasJSDocFunctionType = type && isJSDocFunctionType(type);
             if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
+                restoreControlFlowChangeContext();
                 // Returning undefined here will cause our caller to rewind to where we started from.
-                    return undefined;
+                return undefined;
             }
 
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
@@ -4396,6 +4434,8 @@ namespace ts {
                 : parseIdentifier();
 
             const node = factory.createArrowFunction(modifiers, typeParameters, parameters, type, equalsGreaterThanToken, body);
+            setControlFlowChangeFlag(node);
+            restoreControlFlowChangeContext();
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5591,6 +5631,7 @@ namespace ts {
             // FunctionExpression:
             //      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
             const saveDecoratorContext = inDecoratorContext();
+            const restoreControlFlowChangeContext = startFunctionBoundaryOfControlFlow();
             if (saveDecoratorContext) {
                 setDecoratorContext(/*val*/ false);
             }
@@ -5618,6 +5659,8 @@ namespace ts {
             }
 
             const node = factory.createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+            setControlFlowChangeFlag(node);
+            restoreControlFlowChangeContext();
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5740,6 +5783,8 @@ namespace ts {
 
         function parseDoStatement(): DoStatement {
             const pos = getNodePos();
+            const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
+            const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.DoKeyword);
             const statement = parseStatement();
@@ -5753,22 +5798,34 @@ namespace ts {
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             parseOptional(SyntaxKind.SemicolonToken);
-            return withJSDoc(finishNode(factory.createDoStatement(statement, expression), pos), hasJSDoc);
+            const node = finishNode(factory.createDoStatement(statement, expression), pos);
+            setControlFlowChangeFlag(node);
+            restoreContinueFlag();
+            restoreBreakFlag();
+            return withJSDoc(node, hasJSDoc);
         }
 
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
+            const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
+            const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const statement = parseStatement();
-            return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
+            const node = finishNode(factory.createWhileStatement(expression, statement), pos);
+            setControlFlowChangeFlag(node);
+            restoreContinueFlag();
+            restoreBreakFlag();
+            return withJSDoc(node, hasJSDoc);
         }
 
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
+            const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
+            const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ForKeyword);
             const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
@@ -5807,7 +5864,9 @@ namespace ts {
                 parseExpected(SyntaxKind.CloseParenToken);
                 node = factory.createForStatement(initializer, condition, incrementor, parseStatement());
             }
-
+            setControlFlowChangeFlag(node);
+            restoreContinueFlag();
+            restoreBreakFlag();
             return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
         }
 
@@ -5822,6 +5881,14 @@ namespace ts {
             const node = kind === SyntaxKind.BreakStatement
                 ? factory.createBreakStatement(label)
                 : factory.createContinueStatement(label);
+            if (controlFlowChangesInExpression & ControlFlowChangesInExpression.InExpressionContext) {
+                if (kind === SyntaxKind.BreakStatement) {
+                    if (controlFlowChangesInExpression & ControlFlowChangesInExpression.AllowBreak) controlFlowChangesInExpression |= ControlFlowChangesInExpression.HasBreak;
+                }
+                else if (controlFlowChangesInExpression & ControlFlowChangesInExpression.AllowContinue) {
+                    controlFlowChangesInExpression |= ControlFlowChangesInExpression.HasContinue;
+                }
+            }
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -5831,6 +5898,9 @@ namespace ts {
             parseExpected(SyntaxKind.ReturnKeyword);
             const expression = canParseSemicolon() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
+            if (controlFlowChangesInExpression & (ControlFlowChangesInExpression.InExpressionContext | ControlFlowChangesInExpression.AllowReturn)) {
+                controlFlowChangesInExpression |= ControlFlowChangesInExpression.HasReturn;
+            }
             return withJSDoc(finishNode(factory.createReturnStatement(expression), pos), hasJSDoc);
         }
 
@@ -5876,13 +5946,17 @@ namespace ts {
 
         function parseSwitchStatement(): SwitchStatement {
             const pos = getNodePos();
+            const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const caseBlock = parseCaseBlock();
-            return withJSDoc(finishNode(factory.createSwitchStatement(expression, caseBlock), pos), hasJSDoc);
+            const node = finishNode(factory.createSwitchStatement(expression, caseBlock), pos);
+            setControlFlowChangeFlag(node);
+            restoreBreakFlag();
+            return withJSDoc(node, hasJSDoc);
         }
 
         function parseThrowStatement(): ThrowStatement {
@@ -5963,7 +6037,10 @@ namespace ts {
             const hasParen = token() === SyntaxKind.OpenParenToken;
             const expression = allowInAnd(parseExpression);
             if (ts.isIdentifier(expression) && parseOptional(SyntaxKind.ColonToken)) {
+                const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
                 node = factory.createLabeledStatement(expression, parseStatement());
+                setControlFlowChangeFlag(node);
+                restoreBreakFlag();
             }
             else {
                 parseSemicolon();
@@ -6476,6 +6553,8 @@ namespace ts {
 
         function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
             const savedAwaitContext = inAwaitContext();
+            // No return, continue or break can across function boundary
+            const restoreControlFlowChangeContext = startFunctionBoundaryOfControlFlow();
             const modifierFlags = modifiersToFlags(modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6490,6 +6569,8 @@ namespace ts {
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             setAwaitContext(savedAwaitContext);
             const node = factory.createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body);
+            setControlFlowChangeFlag(node);
+            restoreControlFlowChangeContext();
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6818,6 +6899,9 @@ namespace ts {
 
         function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
             const savedAwaitContext = inAwaitContext();
+            // No break, return, continue can across a class
+            const savedControlFlowChanges = controlFlowChangesInExpression;
+            controlFlowChangesInExpression = ControlFlowChangesInExpression.None;
             parseExpected(SyntaxKind.ClassKeyword);
             // We don't parse the name here in await context, instead we will report a grammar error in the checker.
             const name = parseNameOfClassDeclarationOrExpression();
@@ -6836,6 +6920,7 @@ namespace ts {
                 members = createMissingList<ClassElement>();
             }
             setAwaitContext(savedAwaitContext);
+            controlFlowChangesInExpression = savedControlFlowChanges;
             const node = kind === SyntaxKind.ClassDeclaration
                 ? factory.createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members)
                 : factory.createClassExpression(decorators, modifiers, name, typeParameters, heritageClauses, members);
