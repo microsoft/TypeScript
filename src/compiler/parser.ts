@@ -845,11 +845,14 @@ namespace ts {
         function startFunctionBoundaryOfControlFlow() {
             const old = controlFlowChangesInExpression;
             const oldLabels = labelSet;
+            const oldLabel = currentLabel;
             controlFlowChangesInExpression = ControlFlowChangesInExpression.AllowReturn;
             labelSet = [];
+            currentLabel = undefined;
             return () => {
                 controlFlowChangesInExpression = old;
                 labelSet = oldLabels;
+                currentLabel = oldLabel;
             };
         }
         function setControlFlowChangeFlag(node: ControlFlowChangesInExpressionMark) {
