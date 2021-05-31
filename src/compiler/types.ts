@@ -4114,8 +4114,8 @@ namespace ts {
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
         /* @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
-        /* @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
+        /* @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -4240,7 +4240,7 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
-        /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
+        /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
         /* @internal */ createSignature(
             declaration: SignatureDeclaration | undefined,
             typeParameters: readonly TypeParameter[] | undefined,
@@ -4252,7 +4252,7 @@ namespace ts {
             flags: SignatureFlags
         ): Signature;
         /* @internal */ createSymbol(flags: SymbolFlags, name: __String): TransientSymbol;
-        /* @internal */ createIndexInfo(type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
+        /* @internal */ createIndexInfo(keyType: Type, type: Type, isReadonly: boolean, declaration?: SignatureDeclaration): IndexInfo;
         /* @internal */ isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         /* @internal */ tryFindAmbientModule(moduleName: string): Symbol | undefined;
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
@@ -5267,8 +5267,7 @@ namespace ts {
         /* @internal */ properties?: Symbol[];             // Properties
         /* @internal */ callSignatures?: readonly Signature[];      // Call signatures of type
         /* @internal */ constructSignatures?: readonly Signature[]; // Construct signatures of type
-        /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
-        /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
+        /* @internal */ indexInfos?: readonly IndexInfo[];  // Index signatures
         /* @internal */ objectTypeWithoutAbstractConstructSignatures?: ObjectType;
     }
 
@@ -5293,8 +5292,7 @@ namespace ts {
         declaredProperties: Symbol[];                   // Declared members
         declaredCallSignatures: Signature[];            // Declared call signatures
         declaredConstructSignatures: Signature[];       // Declared construct signatures
-        declaredStringIndexInfo?: IndexInfo; // Declared string indexing info
-        declaredNumberIndexInfo?: IndexInfo; // Declared numeric indexing info
+        declaredIndexInfos: IndexInfo[];                // Declared index signatures
     }
 
     /**
@@ -5452,6 +5450,7 @@ namespace ts {
         properties: Symbol[];             // Properties
         callSignatures: readonly Signature[];      // Call signatures of type
         constructSignatures: readonly Signature[]; // Construct signatures of type
+        indexInfos: readonly IndexInfo[];  // Index signatures
     }
 
     /* @internal */
@@ -5688,6 +5687,7 @@ namespace ts {
     }
 
     export interface IndexInfo {
+        keyType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
