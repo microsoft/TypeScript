@@ -394,7 +394,7 @@ namespace ts.server {
         config?: ParsedConfig;
     }
 
-    export interface ProjectServiceOptions {
+    export interface ProjectServiceOptions<TMessage = string> {
         host: ServerHost;
         logger: Logger;
         cancellationToken: HostCancellationToken;
@@ -411,7 +411,7 @@ namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
-        session: Session<unknown> | undefined;
+        session: Session<TMessage> | undefined;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -783,12 +783,14 @@ namespace ts.server {
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
-        private session: Session<unknown> | undefined;
+
+        /*@internal*/
+        readonly session: Session<unknown> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;
 
-        constructor(opts: ProjectServiceOptions) {
+        constructor(opts: ProjectServiceOptions<unknown>) {
             this.host = opts.host;
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
@@ -2072,8 +2074,7 @@ namespace ts.server {
                 canonicalConfigFilePath,
                 this,
                 this.documentRegistry,
-                configFileExistenceInfo.config.cachedDirectoryStructureHost,
-                this.session);
+                configFileExistenceInfo.config.cachedDirectoryStructureHost);
             this.configuredProjects.set(canonicalConfigFilePath, project);
             this.createConfigFileWatcherForParsedConfig(configFileName, canonicalConfigFilePath, project);
             return project;
@@ -2522,7 +2523,7 @@ namespace ts.server {
                 typeAcquisition = this.typeAcquisitionForInferredProjects;
             }
             watchOptionsAndErrors = watchOptionsAndErrors || undefined;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition, this.session);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, watchOptionsAndErrors?.watchOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides, typeAcquisition);
             project.setProjectErrors(watchOptionsAndErrors?.errors);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
