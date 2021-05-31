@@ -11999,16 +11999,16 @@ namespace ts {
             return info1 ? info2 ? [info1, info2] : [info1] : info2 ? [info2] : emptyArray;
         }
 
-        function getImplicitIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined {
+        function getImplicitIndexTypeOfType(type: Type, keyType: Type): Type | undefined {
             if (isObjectTypeWithInferableIndex(type)) {
                 const propTypes: Type[] = [];
                 for (const prop of getPropertiesOfType(type)) {
-                    if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
+                    if (keyType === stringType || isNumericLiteralName(prop.escapedName)) {
                         const propType = getTypeOfSymbol(prop);
                         propTypes.push(prop.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType);
                     }
                 }
-                if (kind === IndexKind.String) {
+                if (keyType === stringType) {
                     append(propTypes, getIndexTypeOfType(type, numberType));
                 }
                 if (propTypes.length) {
@@ -21669,7 +21669,7 @@ namespace ts {
                 const targetStringIndexType = getIndexTypeOfType(target, stringType);
                 if (targetStringIndexType) {
                     const sourceIndexType = getIndexTypeOfType(source, stringType) ||
-                        getImplicitIndexTypeOfType(source, IndexKind.String);
+                        getImplicitIndexTypeOfType(source, stringType);
                     if (sourceIndexType) {
                         inferWithPriority(sourceIndexType, targetStringIndexType, priority);
                     }
@@ -21678,7 +21678,7 @@ namespace ts {
                 if (targetNumberIndexType) {
                     const sourceIndexType = getIndexTypeOfType(source, numberType) ||
                         getIndexTypeOfType(source, stringType) ||
-                        getImplicitIndexTypeOfType(source, IndexKind.Number);
+                        getImplicitIndexTypeOfType(source, numberType);
                     if (sourceIndexType) {
                         inferWithPriority(sourceIndexType, targetNumberIndexType, priority);
                     }
