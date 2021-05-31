@@ -1,0 +1,18 @@
+=== tests/cases/compiler/privateNameWeakMapCollision.ts ===
+function test() {
+>test : () => void
+
+    let WeakMap;
+>WeakMap : any
+
+    let WeakSet;
+>WeakSet : any
+
+    class C {
+>C : C
+
+        #x;
+>#x : any
+    }
+}
+

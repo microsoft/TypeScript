@@ -1,0 +1,33 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const j = require("./obj.json");
+>j : Symbol(j, Decl(index.js, 0, 5))
+>require : Symbol(require)
+>"./obj.json" : Symbol("tests/cases/conformance/jsdoc/declarations/obj", Decl(obj.json, 0, 0))
+
+module.exports = j;
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(export=, Decl(index.js, 0, 32))
+>exports : Symbol(export=, Decl(index.js, 0, 32))
+>j : Symbol(j, Decl(index.js, 0, 5))
+
+=== tests/cases/conformance/jsdoc/declarations/obj.json ===
+{
+    "x": 12,
+>"x" : Symbol("x", Decl(obj.json, 0, 1))
+
+    "y": 12,
+>"y" : Symbol("y", Decl(obj.json, 1, 12))
+
+    "obj": {
+>"obj" : Symbol("obj", Decl(obj.json, 2, 12))
+
+        "items": [{"x": 12}, {"x": 12, "y": 12}, {"x": 0}, {"x": -1, "err": true}]
+>"items" : Symbol("items", Decl(obj.json, 3, 12))
+>"x" : Symbol("x", Decl(obj.json, 4, 19))
+>"x" : Symbol("x", Decl(obj.json, 4, 30))
+>"y" : Symbol("y", Decl(obj.json, 4, 38))
+>"x" : Symbol("x", Decl(obj.json, 4, 50))
+>"x" : Symbol("x", Decl(obj.json, 4, 60))
+>"err" : Symbol("err", Decl(obj.json, 4, 68))
+    }
+}

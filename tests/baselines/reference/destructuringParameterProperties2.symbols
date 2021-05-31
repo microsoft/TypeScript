@@ -57,9 +57,15 @@ var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
 >x_a : Symbol(x_a, Decl(destructuringParameterProperties2.ts, 21, 5))
 >x_b : Symbol(x_b, Decl(destructuringParameterProperties2.ts, 21, 9))
 >x_c : Symbol(x_c, Decl(destructuringParameterProperties2.ts, 21, 14))
+>x.getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
 >x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getA : Symbol(C1.getA, Decl(destructuringParameterProperties2.ts, 5, 5))
+>x.getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
 >x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getB : Symbol(C1.getB, Decl(destructuringParameterProperties2.ts, 9, 5))
+>x.getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
 >x : Symbol(x, Decl(destructuringParameterProperties2.ts, 20, 3))
+>getC : Symbol(C1.getC, Decl(destructuringParameterProperties2.ts, 13, 5))
 
 var y = new C1(10, [0, "", true]);
 >y : Symbol(y, Decl(destructuringParameterProperties2.ts, 23, 3))

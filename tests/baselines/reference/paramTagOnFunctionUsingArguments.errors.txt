@@ -1,5 +1,5 @@
 tests/cases/conformance/jsdoc/a.js(2,20): error TS8029: JSDoc '@param' tag has name 'first', but there is no parameter with that name. It would match 'arguments' if it had an array type.
-tests/cases/conformance/jsdoc/a.js(19,9): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/a.js(19,9): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/conformance/jsdoc/decls.d.ts (0 errors) ====
@@ -27,5 +27,5 @@ tests/cases/conformance/jsdoc/a.js(19,9): error TS2345: Argument of type '1' is 
     
     correct(1,2,3) // oh no
             ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     

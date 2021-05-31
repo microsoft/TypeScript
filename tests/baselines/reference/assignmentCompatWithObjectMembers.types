@@ -177,13 +177,13 @@ module ObjectTypes {
 >t2 : T2
 
     var a: { foo: typeof a; }
->a : { foo: any; }
->foo : { foo: any; }
+>a : { foo: typeof a; }
+>foo : { foo: typeof a; }
 >a : { foo: any; }
 
     var b: { foo: typeof b; }
->b : { foo: any; }
->foo : { foo: any; }
+>b : { foo: typeof b; }
+>foo : { foo: typeof b; }
 >b : { foo: any; }
 
     var a2 = { foo: a2 };

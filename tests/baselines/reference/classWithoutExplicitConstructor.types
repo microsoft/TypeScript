@@ -17,8 +17,8 @@ var c = new C();
 >C : typeof C
 
 var c2 = new C(null); // error
->c2 : any
->new C(null) : any
+>c2 : C
+>new C(null) : C
 >C : typeof C
 >null : null
 
@@ -40,8 +40,8 @@ var d = new D();
 >D : typeof D
 
 var d2 = new D(null); // error
->d2 : any
->new D(null) : any
+>d2 : D<Date>
+>new D(null) : D<Date>
 >D : typeof D
 >null : null
 

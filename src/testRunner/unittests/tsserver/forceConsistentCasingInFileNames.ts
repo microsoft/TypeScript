@@ -41,5 +41,126 @@ namespace ts.projectSystem {
             const diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
             assert.deepEqual(diagnostics, []);
         });
+
+        it("works when renaming file with different casing", () => {
+            const loggerFile: File = {
+                path: `${tscWatch.projectRoot}/Logger.ts`,
+                content: `export class logger { }`
+            };
+            const anotherFile: File = {
+                path: `${tscWatch.projectRoot}/another.ts`,
+                content: `import { logger } from "./Logger"; new logger();`
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                })
+            };
+
+            const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true });
+            openFilesForSession([{ file: loggerFile, projectRootPath: tscWatch.projectRoot }], session);
+            const service = session.getProjectService();
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
+            verifyGetErrRequestNoErrors({ session, host, files: [loggerFile] });
+
+            const newLoggerPath = loggerFile.path.toLowerCase();
+            host.renameFile(loggerFile.path, newLoggerPath);
+            closeFilesForSession([loggerFile], session);
+            openFilesForSession([{ file: newLoggerPath, content: loggerFile.content, projectRootPath: tscWatch.projectRoot }], session);
+
+            // Apply edits for rename
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: anotherFile.path,
+                        textChanges: [{
+                            newText: "./logger",
+                            ...protocolTextSpanFromSubstring(
+                                anotherFile.content,
+                                "./Logger"
+                            )
+                        }]
+                    }]
+                }
+            });
+
+            // Check errors in both files
+            verifyGetErrRequestNoErrors({ session, host, files: [newLoggerPath, anotherFile] });
+        });
+
+        it("when changing module name with different casing", () => {
+            const loggerFile: File = {
+                path: `${tscWatch.projectRoot}/Logger.ts`,
+                content: `export class logger { }`
+            };
+            const anotherFile: File = {
+                path: `${tscWatch.projectRoot}/another.ts`,
+                content: `import { logger } from "./Logger"; new logger();`
+            };
+            const tsconfig: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: { forceConsistentCasingInFileNames: true }
+                })
+            };
+
+            const host = createServerHost([loggerFile, anotherFile, tsconfig, libFile, tsconfig]);
+            const session = createSession(host, { canUseEvents: true });
+            openFilesForSession([{ file: anotherFile, projectRootPath: tscWatch.projectRoot }], session);
+            const service = session.getProjectService();
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const project = service.configuredProjects.get(tsconfig.path)!;
+            checkProjectActualFiles(project, [loggerFile.path, anotherFile.path, libFile.path, tsconfig.path]);
+            verifyGetErrRequestNoErrors({ session, host, files: [anotherFile] });
+
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: anotherFile.path,
+                        textChanges: [{
+                            newText: "./logger",
+                            ...protocolTextSpanFromSubstring(
+                                anotherFile.content,
+                                "./Logger"
+                            )
+                        }]
+                    }]
+                }
+            });
+
+            const location = protocolTextSpanFromSubstring(anotherFile.content, `"./Logger"`);
+            // Check errors in both files
+            verifyGetErrRequest({
+                host,
+                session,
+                expected: [{
+                    file: anotherFile.path,
+                    syntax: [],
+                    semantic: [createDiagnostic(
+                        location.start,
+                        location.end,
+                        {
+                            message: Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
+                            args: [loggerFile.path.toLowerCase(), loggerFile.path],
+                            next: [{
+                                message: Diagnostics.The_file_is_in_the_program_because_Colon,
+                                next: [
+                                    { message: Diagnostics.Matched_by_include_pattern_0_in_1, args: ["**/*", tsconfig.path] },
+                                    { message: Diagnostics.Imported_via_0_from_file_1, args: [`"./logger"`, anotherFile.path] }
+                                ]
+                            }]
+                        }
+                    )],
+                    suggestion: []
+                }]
+            });
+        });
     });
 }

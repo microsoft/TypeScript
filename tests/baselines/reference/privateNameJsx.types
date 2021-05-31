@@ -1,0 +1,22 @@
+=== tests/cases/compiler/privateNameJsx.tsx ===
+class Test {
+>Test : Test
+
+    #prop = () => <div />;
+>#prop : () => any
+>() => <div /> : () => any
+><div /> : any
+>div : any
+
+    render() {
+>render : () => any
+
+        return <this.#prop />;
+><this.#prop /> : any
+>this.#prop : any
+>this : this
+> : any
+    }
+}
+
+

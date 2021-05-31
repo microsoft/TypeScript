@@ -1,0 +1,16 @@
+=== tests/cases/compiler/noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts ===
+const cat = 12;
+>cat : Symbol(cat, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 0, 5))
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 0, 15), Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 2, 13))
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 0, 15), Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 2, 13))
+
+declare namespace Foo {
+>Foo : Symbol(Foo, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 0, 15), Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 2, 13))
+
+    export { cat };
+>cat : Symbol(cat, Decl(noCircularDefinitionOnExportOfPrivateInMergedNamespace.ts, 4, 12))
+}

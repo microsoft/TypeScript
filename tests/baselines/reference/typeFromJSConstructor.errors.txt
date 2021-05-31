@@ -1,12 +1,13 @@
 tests/cases/conformance/salsa/a.js(10,5): error TS7008: Member 'twices' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(14,5): error TS2322: Type '"hi"' is not assignable to type 'number'.
-tests/cases/conformance/salsa/a.js(21,5): error TS2322: Type 'false' is not assignable to type 'number'.
-tests/cases/conformance/salsa/a.js(24,5): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
-tests/cases/conformance/salsa/a.js(25,5): error TS2322: Type 'false' is not assignable to type 'string | undefined'.
+tests/cases/conformance/salsa/a.js(14,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(17,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/salsa/a.js(21,5): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/salsa/a.js(24,5): error TS2322: Type 'null' is not assignable to type 'string'.
+tests/cases/conformance/salsa/a.js(25,5): error TS2322: Type 'boolean' is not assignable to type 'string'.
 tests/cases/conformance/salsa/a.js(26,5): error TS2531: Object is possibly 'null'.
 
 
-==== tests/cases/conformance/salsa/a.js (6 errors) ====
+==== tests/cases/conformance/salsa/a.js (7 errors) ====
     function Installer () {
         // arg: number
         this.arg = 0
@@ -24,24 +25,26 @@ tests/cases/conformance/salsa/a.js(26,5): error TS2531: Object is possibly 'null
     Installer.prototype.first = function () {
         this.arg = 'hi' // error
         ~~~~~~~~
-!!! error TS2322: Type '"hi"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         this.unknown = 'hi' // ok
         this.newProperty = 1 // ok: number | boolean
         this.twice = undefined // ok
+        ~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
         this.twice = 'hi' // ok
     }
     Installer.prototype.second = function () {
         this.arg = false // error
         ~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
         this.unknown = false // ok
         this.newProperty = false // ok
         this.twice = null // error
         ~~~~~~~~~~
-!!! error TS2322: Type 'null' is not assignable to type 'string | undefined'.
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
         this.twice = false // error
         ~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'string | undefined'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
         this.twices.push(1) // error: Object is possibly null
         ~~~~~~~~~~~
 !!! error TS2531: Object is possibly 'null'.

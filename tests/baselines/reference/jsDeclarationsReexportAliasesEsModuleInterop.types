@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+class Foo {}
+>Foo : Foo
+
+module.exports = Foo;
+>module.exports = Foo : typeof Foo
+>module.exports : typeof Foo
+>module : { exports: typeof Foo; }
+>exports : typeof Foo
+>Foo : typeof Foo
+
+=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+import {default as Fooa} from "./cls";
+>default : typeof Fooa
+>Fooa : typeof Fooa
+
+export const x = new Fooa();
+>x : Fooa
+>new Fooa() : Fooa
+>Fooa : typeof Fooa
+
+export {default as Foob} from "./cls";
+>default : typeof Fooa
+>Foob : typeof Fooa
+

@@ -1,0 +1,95 @@
+=== tests/cases/conformance/salsa/usage.js ===
+const x = require("./lateBoundAssignmentDeclarationSupport4.js");
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport4.js") : typeof x
+>require : any
+>"./lateBoundAssignmentDeclarationSupport4.js" : "./lateBoundAssignmentDeclarationSupport4.js"
+
+const inst =  new x.F();
+>inst : x.F
+>new x.F() : x.F
+>x.F : typeof x.F
+>x : typeof x
+>F : typeof x.F
+
+const y = inst["my-fake-sym"];
+>y : any
+>inst["my-fake-sym"] : any
+>inst : x.F
+>"my-fake-sym" : "my-fake-sym"
+
+const z = inst[x.S];
+>z : any
+>inst[x.S] : any
+>inst : x.F
+>x.S : unique symbol
+>x : typeof x
+>S : unique symbol
+
+=== tests/cases/conformance/salsa/lateBoundAssignmentDeclarationSupport4.js ===
+// currently unsupported
+const _sym = Symbol();
+>_sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+const _str = "my-fake-sym";
+>_str : "my-fake-sym"
+>"my-fake-sym" : "my-fake-sym"
+
+function F() {
+>F : typeof F
+}
+F.prototype[_sym] = "ok";
+>F.prototype[_sym] = "ok" : "ok"
+>F.prototype[_sym] : any
+>F.prototype : any
+>F : typeof F
+>prototype : any
+>_sym : unique symbol
+>"ok" : "ok"
+
+F.prototype[_str] = "ok";
+>F.prototype[_str] = "ok" : "ok"
+>F.prototype[_str] : any
+>F.prototype : any
+>F : typeof F
+>prototype : any
+>_str : "my-fake-sym"
+>"ok" : "ok"
+
+const inst =  new F();
+>inst : F
+>new F() : F
+>F : typeof F
+
+const _y = inst[_str];
+>_y : any
+>inst[_str] : any
+>inst : F
+>_str : "my-fake-sym"
+
+const _z = inst[_sym];
+>_z : any
+>inst[_sym] : any
+>inst : F
+>_sym : unique symbol
+
+module.exports.F = F;
+>module.exports.F = F : typeof F
+>module.exports.F : typeof F
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>F : typeof F
+>F : typeof F
+
+module.exports.S = _sym;
+>module.exports.S = _sym : unique symbol
+>module.exports.S : unique symbol
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>S : unique symbol
+>_sym : unique symbol
+

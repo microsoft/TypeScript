@@ -1,0 +1,30 @@
+=== tests/cases/compiler/a.js ===
+class Foo {
+>Foo : Foo
+
+    async a() {
+>a : () => Promise<void>
+
+        await Promise.resolve(1);
+>await Promise.resolve(1) : number
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>1 : 1
+    }
+
+    b = async () => {
+>b : () => Promise<void>
+>async () => {        await Promise.resolve(1);    } : () => Promise<void>
+
+        await Promise.resolve(1);
+>await Promise.resolve(1) : number
+>Promise.resolve(1) : Promise<number>
+>Promise.resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>Promise : PromiseConstructor
+>resolve : { (): Promise<void>; <T>(value: T | PromiseLike<T>): Promise<T>; }
+>1 : 1
+    }
+}
+

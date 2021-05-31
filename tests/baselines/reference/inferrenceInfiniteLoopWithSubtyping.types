@@ -1,0 +1,74 @@
+=== tests/cases/compiler/graphql-compose.d.ts ===
+export type ObjMapReadOnly<T> = Readonly<{ [key: string]: Readonly<T> }>;
+>ObjMapReadOnly : Readonly<{ [key: string]: Readonly<T>; }>
+>key : string
+
+export type Thunk<T> = (() => T) | T;
+>Thunk : Thunk<T>
+
+export type ComposeOutputTypeDefinition = Readonly<ObjectTypeComposer<any, any> | EnumTypeComposer>;
+>ComposeOutputTypeDefinition : ComposeOutputTypeDefinition
+
+export class EnumTypeComposer {
+>EnumTypeComposer : EnumTypeComposer
+
+  public setFields(fields: { [name: string]: { [key: string]: any } }): this;
+>setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
+>fields : { [name: string]: { [key: string]: any; }; }
+>name : string
+>key : string
+}
+
+export class ObjectTypeComposer<TSource, TContext> {
+>ObjectTypeComposer : ObjectTypeComposer<TSource, TContext>
+
+  public setFields(fields: ObjMapReadOnly<Resolver>): this;
+>setFields : (fields: ObjMapReadOnly<Resolver>) => this
+>fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
+
+  public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
+>addResolver : <TResolverSource>(opts: {    type?: Thunk<ComposeOutputTypeDefinition>;}) => this
+>opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
+>type : Thunk<ComposeOutputTypeDefinition>
+}
+
+export class Resolver {
+>Resolver : Resolver
+
+  public wrapArgs<NewContext>(
+>wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
+
+    cb: () => {
+>cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
+
+      [argName: string]: Thunk<Readonly<EnumTypeComposer>>;
+>argName : string
+    }
+  ): void;
+
+  public wrapType(cb: () => ComposeOutputTypeDefinition): void;
+>wrapType : (cb: () => ComposeOutputTypeDefinition) => void
+>cb : () => ComposeOutputTypeDefinition
+}
+
+
+=== tests/cases/compiler/app.ts ===
+import { ObjectTypeComposer } from './graphql-compose';
+>ObjectTypeComposer : typeof ObjectTypeComposer
+
+declare const User: ObjectTypeComposer<any, any>;
+>User : ObjectTypeComposer<any, any>
+
+User.addResolver({
+>User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
+>User.addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>User : ObjectTypeComposer<any, any>
+>addResolver : <TResolverSource>(opts: { type?: import("tests/cases/compiler/graphql-compose").Thunk<import("tests/cases/compiler/graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
+
+  type: User, // `User as any` fix the problem
+>type : ObjectTypeComposer<any, any>
+>User : ObjectTypeComposer<any, any>
+
+});
+

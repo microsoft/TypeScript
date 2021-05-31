@@ -20,7 +20,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(120,9): error TS2322: Type
   Type 'unknown' is not assignable to type 'object'.
 tests/cases/conformance/types/unknown/unknownType1.ts(128,5): error TS2322: Type 'number[]' is not assignable to type '{ [x: string]: unknown; }'.
   Index signature is missing in type 'number[]'.
-tests/cases/conformance/types/unknown/unknownType1.ts(129,5): error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
+tests/cases/conformance/types/unknown/unknownType1.ts(129,5): error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
 tests/cases/conformance/types/unknown/unknownType1.ts(143,29): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/unknown/unknownType1.ts(144,29): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/unknown/unknownType1.ts(150,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -204,7 +204,7 @@ tests/cases/conformance/types/unknown/unknownType1.ts(181,5): error TS2322: Type
 !!! error TS2322:   Index signature is missing in type 'number[]'.
         x = 123;  // Error
         ~
-!!! error TS2322: Type '123' is not assignable to type '{ [x: string]: unknown; }'.
+!!! error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
     }
     
     // Locals of type unknown always considered initialized

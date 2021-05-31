@@ -1,0 +1,15 @@
+tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty4.ts(6,9): error TS2611: 'sound' is defined as a property in class 'Animal', but is overridden here in 'Lion' as an accessor.
+
+
+==== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty4.ts (1 errors) ====
+    declare class Animal {
+        sound: string;
+    }
+    class Lion extends Animal {
+        _sound = 'roar'
+        get sound(): string { return this._sound }
+            ~~~~~
+!!! error TS2611: 'sound' is defined as a property in class 'Animal', but is overridden here in 'Lion' as an accessor.
+        set sound(val: string) { this._sound = val }
+    }
+    

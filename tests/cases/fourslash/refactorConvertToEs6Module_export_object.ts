@@ -22,6 +22,5 @@ verify.codeFix({
 export function f() { }
 export function g() { }
 export function h() { }
-export class C {
-}`,
+export class C { }`,
 });

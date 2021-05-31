@@ -1,0 +1,12 @@
+=== tests/cases/compiler/spellingSuggestionGlobal3.ts ===
+const global = { x: true }
+>global : { x: boolean; }
+>{ x: true } : { x: boolean; }
+>x : boolean
+>true : true
+
+globals.x // should suggest `global` (GH#42209)
+>globals.x : any
+>globals : any
+>x : any
+

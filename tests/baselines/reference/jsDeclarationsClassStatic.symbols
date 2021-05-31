@@ -1,0 +1,49 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+class Handler {
+>Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
+
+	static get OPTIONS() {
+>OPTIONS : Symbol(Handler.OPTIONS, Decl(source.js, 0, 15))
+
+		return 1;
+	}
+
+	process() {
+>process : Symbol(Handler.process, Decl(source.js, 3, 2))
+	}
+}
+Handler.statische = function() { }
+>Handler.statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
+>Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
+>statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
+
+const Strings = {
+>Strings : Symbol(Strings, Decl(source.js, 9, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(source.js, 9, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(source.js, 10, 11))
+}
+
+module.exports = Handler;
+>module.exports : Symbol(module.exports, Decl(source.js, 0, 0))
+>module : Symbol(export=, Decl(source.js, 12, 1))
+>exports : Symbol(export=, Decl(source.js, 12, 1))
+>Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
+
+module.exports.Strings = Strings
+>module.exports.Strings : Symbol(Strings, Decl(source.js, 14, 25))
+>module.exports : Symbol(Strings, Decl(source.js, 14, 25))
+>module : Symbol(module, Decl(source.js, 12, 1))
+>exports : Symbol(module.exports, Decl(source.js, 0, 0))
+>Strings : Symbol(Strings, Decl(source.js, 14, 25))
+>Strings : Symbol(Strings, Decl(source.js, 9, 5))
+
+/**
+ * @typedef {Object} HandlerOptions
+ * @property {String} name
+ * Should be able to export a type alias at the same time.
+ */
+

@@ -7,6 +7,7 @@
         "tsc.ts"
     ],
     "references": [
-        { "path": "../compiler", "prepend": true }
+        { "path": "../compiler", "prepend": true },
+        { "path": "../executeCommandLine", "prepend": true }
     ]
 }

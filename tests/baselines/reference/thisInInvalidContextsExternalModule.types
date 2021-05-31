@@ -72,7 +72,7 @@ genericFunc<this>(undefined);  // Should be an error
 
 class ErrClass3 extends this {
 >ErrClass3 : ErrClass3
->this : typeof globalThis
+>this : undefined
 
 }
 

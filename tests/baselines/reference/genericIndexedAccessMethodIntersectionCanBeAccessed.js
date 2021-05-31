@@ -23,9 +23,11 @@ export const createService = <T>(
 //// [genericIndexedAccessMethodIntersectionCanBeAccessed.js]
 "use strict";
 exports.__esModule = true;
-exports.createService = function (ServiceCtr) {
+exports.createService = void 0;
+var createService = function (ServiceCtr) {
     Object.keys(ServiceCtr).forEach(function (key) {
         var method = (ServiceCtr)[key];
         var __$daemonMode = method.__$daemonMode, __$action = method.__$action, id = method.id;
     });
 };
+exports.createService = createService;

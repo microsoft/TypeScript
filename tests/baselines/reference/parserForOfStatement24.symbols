@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement24.ts ===
+var async;
+>async : Symbol(async, Decl(parserForOfStatement24.ts, 0, 3))
+
+for ((async) of [1, 2]);
+>async : Symbol(async, Decl(parserForOfStatement24.ts, 0, 3))
+

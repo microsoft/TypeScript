@@ -68,8 +68,8 @@ typ\u{0065} notok = 0; // not ok
 export {};
 
 const a = {def\u0061ult: 12}; // OK, `default` not in keyword position
->a : { def\u0061ult: number; }
->{def\u0061ult: 12} : { def\u0061ult: number; }
+>a : { default: number; }
+>{def\u0061ult: 12} : { default: number; }
 >def\u0061ult : number
 >12 : 12
 

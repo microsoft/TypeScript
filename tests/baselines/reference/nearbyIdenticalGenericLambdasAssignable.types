@@ -45,15 +45,15 @@ type TL = <T>() => { v: T };
 >v : T
 
 declare function accA(x: TA): void;
->accA : (x: <T>() => { v: T; }) => void
+>accA : (x: TA) => void
 >x : <T>() => { v: T; }
 
 declare function accB(x: TB): void;
->accB : (x: <T>() => { v: T; }) => void
+>accB : (x: TB) => void
 >x : <T>() => { v: T; }
 
 declare function accC(x: TC): void;
->accC : (x: <T>() => { v: T; }) => void
+>accC : (x: TC) => void
 >x : <T>() => { v: T; }
 
 declare function accL(x: TL): void;

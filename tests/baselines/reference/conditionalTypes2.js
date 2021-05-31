@@ -195,6 +195,55 @@ type Hmm<T, U extends T> = U extends T ? { [K in keyof U]: number } : never;
 type What = Hmm<{}, { a: string }>
 const w: What = { a: 4 };
 
+// Repro from #33568
+
+declare function save(_response: IRootResponse<string>): void;
+
+exportCommand(save);
+
+declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
+
+interface IExportCallback<TResponse> {
+	(response: IRootResponse<TResponse>): void;
+}
+
+type IRootResponse<TResponse> =
+	TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
+
+interface IRecord {
+	readonly Id: string;
+}
+
+declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
+	sendRecord(): void;
+};
+
+declare type IResponse<T> = {
+	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
+};
+
+declare type GetPropertyNamesOfType<T, RestrictToType> = {
+	[PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never
+}[Extract<keyof T, string>];
+
+declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<
+	T,
+	GetPropertyNamesOfType<Required<T>, RestrictToType>
+>;
+
+// Repro from #33568
+
+declare function ff(x: Foo3<string>): void;
+declare function gg<T>(f: (x: Foo3<T>) => void): void;
+type Foo3<T> = T extends number ? { n: T } : { x: T };
+gg(ff);
+
+// Repro from #41613
+
+type Wat<K extends string> = { x: { y: 0, z: 1 } } extends { x: { [P in K]: 0 } } ? true : false;
+ 
+type Huh = Wat<"y">;  // true
+
 
 //// [conditionalTypes2.js]
 "use strict";
@@ -272,6 +321,8 @@ function foo(value) {
     }
 }
 var w = { a: 4 };
+exportCommand(save);
+gg(ff);
 
 
 //// [conditionalTypes2.d.ts]
@@ -406,3 +457,40 @@ declare type What = Hmm<{}, {
     a: string;
 }>;
 declare const w: What;
+declare function save(_response: IRootResponse<string>): void;
+declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
+interface IExportCallback<TResponse> {
+    (response: IRootResponse<TResponse>): void;
+}
+declare type IRootResponse<TResponse> = TResponse extends IRecord ? IRecordResponse<TResponse> : IResponse<TResponse>;
+interface IRecord {
+    readonly Id: string;
+}
+declare type IRecordResponse<T extends IRecord> = IResponse<T> & {
+    sendRecord(): void;
+};
+declare type IResponse<T> = {
+    sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
+};
+declare type GetPropertyNamesOfType<T, RestrictToType> = {
+    [PropertyName in Extract<keyof T, string>]: T[PropertyName] extends RestrictToType ? PropertyName : never;
+}[Extract<keyof T, string>];
+declare type GetAllPropertiesOfType<T, RestrictToType> = Pick<T, GetPropertyNamesOfType<Required<T>, RestrictToType>>;
+declare function ff(x: Foo3<string>): void;
+declare function gg<T>(f: (x: Foo3<T>) => void): void;
+declare type Foo3<T> = T extends number ? {
+    n: T;
+} : {
+    x: T;
+};
+declare type Wat<K extends string> = {
+    x: {
+        y: 0;
+        z: 1;
+    };
+} extends {
+    x: {
+        [P in K]: 0;
+    };
+} ? true : false;
+declare type Huh = Wat<"y">;

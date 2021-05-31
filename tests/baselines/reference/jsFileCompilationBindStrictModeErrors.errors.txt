@@ -2,7 +2,7 @@ tests/cases/compiler/a.js(5,5): error TS1117: An object literal cannot have mult
 tests/cases/compiler/a.js(5,5): error TS2300: Duplicate identifier 'a'.
 tests/cases/compiler/a.js(7,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 tests/cases/compiler/a.js(8,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
-tests/cases/compiler/a.js(8,8): error TS2703: The operand of a delete operator must be a property reference.
+tests/cases/compiler/a.js(8,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 tests/cases/compiler/a.js(10,10): error TS1100: Invalid use of 'eval' in strict mode.
 tests/cases/compiler/a.js(12,10): error TS1100: Invalid use of 'arguments' in strict mode.
 tests/cases/compiler/a.js(15,1): error TS1101: 'with' statements are not allowed in strict mode.
@@ -33,7 +33,7 @@ tests/cases/compiler/d.js(2,11): error TS1005: ',' expected.
            ~
 !!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
            ~
-!!! error TS2703: The operand of a delete operator must be a property reference.
+!!! error TS2703: The operand of a 'delete' operator must be a property reference.
     try {
     } catch (eval) { // error
              ~~~~

@@ -1,0 +1,59 @@
+=== tests/cases/compiler/recursiveFieldSetting.ts ===
+// #32721
+
+class Recursive1 {
+>Recursive1 : Recursive1
+
+    constructor(private readonly parent?: Recursive1) {}
+>parent : Recursive1
+
+    private depth: number = this.parent ? this.parent.depth + 1 : 0;
+>depth : number
+>this.parent ? this.parent.depth + 1 : 0 : number
+>this.parent : Recursive1
+>this : this
+>parent : Recursive1
+>this.parent.depth + 1 : number
+>this.parent.depth : number
+>this.parent : Recursive1
+>this : this
+>parent : Recursive1
+>depth : number
+>1 : 1
+>0 : 0
+}
+
+class Recursive2 {
+>Recursive2 : Recursive2
+
+    parent!: Recursive2;
+>parent : Recursive2
+
+    depth: number = this.parent.depth;
+>depth : number
+>this.parent.depth : number
+>this.parent : Recursive2
+>this : this
+>parent : Recursive2
+>depth : number
+}
+
+class Recursive3 {
+>Recursive3 : Recursive3
+
+    parent!: Recursive3;
+>parent : Recursive3
+
+    depth: number = this.parent.alpha;
+>depth : number
+>this.parent.alpha : number
+>this.parent : Recursive3
+>this : this
+>parent : Recursive3
+>alpha : number
+
+    alpha = 0;
+>alpha : number
+>0 : 0
+}
+

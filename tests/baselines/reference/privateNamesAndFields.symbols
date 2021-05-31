@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndFields.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesAndFields.ts, 0, 0))
+
+    #foo: number;
+>#foo : Symbol(A.#foo, Decl(privateNamesAndFields.ts, 0, 9))
+
+    constructor () {
+        this.#foo = 3;
+>this.#foo : Symbol(A.#foo, Decl(privateNamesAndFields.ts, 0, 9))
+>this : Symbol(A, Decl(privateNamesAndFields.ts, 0, 0))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(privateNamesAndFields.ts, 5, 1))
+>A : Symbol(A, Decl(privateNamesAndFields.ts, 0, 0))
+
+    #foo: string;
+>#foo : Symbol(B.#foo, Decl(privateNamesAndFields.ts, 7, 19))
+
+    constructor () {
+        super();
+>super : Symbol(A, Decl(privateNamesAndFields.ts, 0, 0))
+
+        this.#foo = "some string";
+>this.#foo : Symbol(B.#foo, Decl(privateNamesAndFields.ts, 7, 19))
+>this : Symbol(B, Decl(privateNamesAndFields.ts, 5, 1))
+    }
+}
+

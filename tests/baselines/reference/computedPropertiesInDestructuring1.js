@@ -38,15 +38,15 @@ let [{[foo.toExponential()]: bar7}] = [{bar: "bar"}];
 
 
 //// [computedPropertiesInDestructuring1.js]
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
 // destructuring in variable declarations
 var foo = "bar";
-var _g = foo, bar = { bar: "bar" }[_g];
+var _o = { bar: "bar" }, _p = foo, bar = _o[_p];
 var bar2 = { bar: "bar" }["bar"];
 var foo2 = function () { return "bar"; };
-var _h = foo2(), bar3 = { bar: "bar" }[_h];
-var _j = foo, bar4 = [{ bar: "bar" }][0][_j];
-var _k = foo2(), bar5 = [{ bar: "bar" }][0][_k];
+var _q = { bar: "bar" }, _r = foo2(), bar3 = _q[_r];
+var _s = [{ bar: "bar" }], _t = foo, bar4 = _s[0][_t];
+var _u = [{ bar: "bar" }], _v = foo2(), bar5 = _u[0][_v];
 function f1(_a) {
     var x = _a["bar"];
 }
@@ -63,13 +63,13 @@ function f5(_a) {
     var _b = foo2(), x = _a[0][_b];
 }
 // report errors on type errors in computed properties used in destructuring
-var _l = foo(), bar6 = [{ bar: "bar" }][0][_l];
-var _m = foo.toExponential(), bar7 = [{ bar: "bar" }][0][_m];
+var _w = [{ bar: "bar" }], _x = foo(), bar6 = _w[0][_x];
+var _y = [{ bar: "bar" }], _z = foo.toExponential(), bar7 = _y[0][_z];
 // destructuring assignment
-(_a = foo, bar = { bar: "bar" }[_a]);
+(_a = { bar: "bar" }, _b = foo, bar = _a[_b]);
 (bar2 = { bar: "bar" }["bar"]);
-(_b = foo2(), bar3 = { bar: "bar" }[_b]);
-_c = foo, bar4 = [{ bar: "bar" }][0][_c];
-_d = foo2(), bar5 = [{ bar: "bar" }][0][_d];
-_e = foo(), bar4 = [{ bar: "bar" }][0][_e];
-_f = (1 + {}), bar4 = [{ bar: "bar" }][0][_f];
+(_c = { bar: "bar" }, _d = foo2(), bar3 = _c[_d]);
+_e = [{ bar: "bar" }], _f = foo, bar4 = _e[0][_f];
+_g = [{ bar: "bar" }], _h = foo2(), bar5 = _g[0][_h];
+_j = [{ bar: "bar" }], _k = foo(), bar4 = _j[0][_k];
+_l = [{ bar: "bar" }], _m = (1 + {}), bar4 = _l[0][_m];

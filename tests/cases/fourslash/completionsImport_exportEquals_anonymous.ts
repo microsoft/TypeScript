@@ -18,6 +18,7 @@ const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = {
     sourceDisplay: "./foo-bar",
     text: "(property) export=: 0",
     kind: "property",
+    kindModifiers: "export",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
 };
@@ -27,12 +28,20 @@ verify.completions(
         exact: [
             completion.globalThisEntry,
             completion.undefinedVarEntry,
-            exportEntry,
             ...completion.statementKeywordsWithTypes
         ],
         preferences
     },
-    { marker: "1", includes: exportEntry, preferences }
+    {
+        marker: "1",
+        exact: [
+            completion.globalThisEntry,
+            completion.undefinedVarEntry,
+            exportEntry,
+            ...completion.statementKeywordsWithTypes
+        ],
+        preferences
+    }
 );
 verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",

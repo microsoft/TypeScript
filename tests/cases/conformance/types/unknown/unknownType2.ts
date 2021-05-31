@@ -222,3 +222,40 @@ function switchResponseWrong(x: unknown): SomeResponse {
     // Arguably this should be never.
     type End = isTrue<isUnknown<typeof x>>
 }
+
+// Repro from #33483
+
+function f2(x: unknown): string | undefined {
+  if (x !== undefined && typeof x !== 'string') {
+    throw new Error();
+  }
+  return x;
+}
+
+function notNotEquals(u: unknown)  {
+    if (u !== NumberEnum) { }
+    else {
+        const o: object = u;
+    }
+
+    if (u !== NumberEnum.A) { }
+    else {
+        const a: NumberEnum.A = u;
+    }
+    
+
+    if (u !== NumberEnum.A && u !== NumberEnum.B && u !== StringEnum.A) { }
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+    }
+
+    // equivalent to
+    if (!(u === NumberEnum.A || u === NumberEnum.B || u === StringEnum.A)) { }
+    else {
+        const aOrB: NumberEnum.A | NumberEnum.B | StringEnum.A  = u;
+    }
+}
+
+
+
+

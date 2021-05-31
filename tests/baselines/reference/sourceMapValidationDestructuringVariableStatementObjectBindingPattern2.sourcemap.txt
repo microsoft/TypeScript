@@ -11,44 +11,98 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 >>>var x = { x: 20 }.x;
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^
-4 >                   ^
-5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^^
+8 >             ^^
+9 >               ^^
+10>                 ^^
+11>                   ^
+12>                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >var {
 2 >
 3 >    x
-4 >                   } = { x: 20 };
+4 >     } = 
+5 >        { 
+6 >          x
+7 >           : 
+8 >             20
+9 >                }
+10>                 
+11>                   } = { x: 20 };
 1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
-3 >Emitted(1, 20) Source(1, 7) + SourceIndex(0)
-4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+3 >Emitted(1, 6) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 9) Source(1, 11) + SourceIndex(0)
+5 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
+6 >Emitted(1, 12) Source(1, 14) + SourceIndex(0)
+7 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
+9 >Emitted(1, 18) Source(1, 20) + SourceIndex(0)
+10>Emitted(1, 20) Source(1, 7) + SourceIndex(0)
+11>Emitted(1, 21) Source(1, 21) + SourceIndex(0)
 ---
 >>>var _a = { a: 30, b: 40 }, a = _a.a, b = _a.b;
 1->
 2 >^^^^
-3 >    ^^^^^^^^^^^^^^^^^^^^^
-4 >                         ^^
-5 >                           ^^^^^^^^
-6 >                                   ^^
-7 >                                     ^^^^^^^^
-8 >                                             ^
-9 >                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^^
+5 >           ^
+6 >            ^^
+7 >              ^^
+8 >                ^^
+9 >                  ^
+10>                   ^^
+11>                     ^^
+12>                       ^^
+13>                         ^^
+14>                           ^
+15>                            ^^^^^^^
+16>                                   ^^
+17>                                     ^
+18>                                      ^^^^^^^
+19>                                             ^
+20>                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >var 
 2 >
-3 >    { a, b } = { a: 30, b: 40 }
-4 >                         
-5 >                           a
-6 >                                   , 
-7 >                                     b } = { a: 30, b: 40 }
-8 >                                             ;
+3 >    { a, b } = 
+4 >         { 
+5 >           a
+6 >            : 
+7 >              30
+8 >                , 
+9 >                  b
+10>                   : 
+11>                     40
+12>                        }
+13>                         
+14>                           a
+15>                            
+16>                                   , 
+17>                                     b
+18>                                       } = { a: 30, b: 40 }
+19>                                             ;
 1->Emitted(2, 1) Source(2, 5) + SourceIndex(0)
 2 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-3 >Emitted(2, 26) Source(2, 32) + SourceIndex(0)
-4 >Emitted(2, 28) Source(2, 7) + SourceIndex(0)
-5 >Emitted(2, 36) Source(2, 8) + SourceIndex(0)
-6 >Emitted(2, 38) Source(2, 10) + SourceIndex(0)
-7 >Emitted(2, 46) Source(2, 32) + SourceIndex(0)
-8 >Emitted(2, 47) Source(2, 33) + SourceIndex(0)
+3 >Emitted(2, 10) Source(2, 16) + SourceIndex(0)
+4 >Emitted(2, 12) Source(2, 18) + SourceIndex(0)
+5 >Emitted(2, 13) Source(2, 19) + SourceIndex(0)
+6 >Emitted(2, 15) Source(2, 21) + SourceIndex(0)
+7 >Emitted(2, 17) Source(2, 23) + SourceIndex(0)
+8 >Emitted(2, 19) Source(2, 25) + SourceIndex(0)
+9 >Emitted(2, 20) Source(2, 26) + SourceIndex(0)
+10>Emitted(2, 22) Source(2, 28) + SourceIndex(0)
+11>Emitted(2, 24) Source(2, 30) + SourceIndex(0)
+12>Emitted(2, 26) Source(2, 32) + SourceIndex(0)
+13>Emitted(2, 28) Source(2, 7) + SourceIndex(0)
+14>Emitted(2, 29) Source(2, 8) + SourceIndex(0)
+15>Emitted(2, 36) Source(2, 8) + SourceIndex(0)
+16>Emitted(2, 38) Source(2, 10) + SourceIndex(0)
+17>Emitted(2, 39) Source(2, 11) + SourceIndex(0)
+18>Emitted(2, 46) Source(2, 32) + SourceIndex(0)
+19>Emitted(2, 47) Source(2, 33) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern2.js.map

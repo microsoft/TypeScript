@@ -5,9 +5,9 @@
  * @param {string} [s]
  */
 var x = function foo(n, s) {}
->x : (n?: number, s?: string) => void
->function foo(n, s) {} : (n?: number, s?: string) => void
->foo : (n?: number, s?: string) => void
+>x : (n?: number | undefined, s?: string) => void
+>function foo(n, s) {} : (n?: number | undefined, s?: string) => void
+>foo : (n?: number | undefined, s?: string) => void
 >n : number
 >s : string
 

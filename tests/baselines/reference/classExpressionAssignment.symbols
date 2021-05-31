@@ -1,0 +1,13 @@
+=== tests/cases/compiler/classExpressionAssignment.ts ===
+interface A {
+>A : Symbol(A, Decl(classExpressionAssignment.ts, 0, 0), Decl(classExpressionAssignment.ts, 5, 5))
+
+  prop: string;
+>prop : Symbol(A.prop, Decl(classExpressionAssignment.ts, 0, 13))
+}
+
+// This is invalid
+const A: {new(): A} = class {}
+>A : Symbol(A, Decl(classExpressionAssignment.ts, 0, 0), Decl(classExpressionAssignment.ts, 5, 5))
+>A : Symbol(A, Decl(classExpressionAssignment.ts, 0, 0), Decl(classExpressionAssignment.ts, 5, 5))
+

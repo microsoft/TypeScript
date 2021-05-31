@@ -1,0 +1,16 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsNonIdentifierInferredNames.jsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 1, 6))
+
+const dynPropName = "data-dyn";
+>dynPropName : Symbol(dynPropName, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 2, 5))
+
+export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
+>ExampleFunctionalComponent : Symbol(ExampleFunctionalComponent, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 3, 12))
+>dataTestId : Symbol(dataTestId, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 3, 44))
+>dynPropName : Symbol(dynPropName, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 2, 5))
+>dynProp : Symbol(dynProp, Decl(jsDeclarationsNonIdentifierInferredNames.jsx, 3, 71))
+
+    <>Hello</>
+);

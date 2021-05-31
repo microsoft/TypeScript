@@ -7,8 +7,8 @@ export interface Things<P, T> {
 >t : T
 }
 export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
->make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
->x : new () => CTor & { props: P; }
+>make : <P, CTor>(x: {    new (): CTor & {        props: P;    };}) => Things<P, CTor>
+>x : new () => CTor & {    props: P;}
 >props : P
 
     return null as any;

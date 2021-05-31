@@ -10,7 +10,7 @@ module E {
 const enum E1 {
     // illegal case
     // forward reference to the element of the same enum
-    X = Y, 
+    X = Y,
     // forward reference to the element of the same enum
     Y = E1.Z,
     Y1 = E1["Z"]
@@ -23,6 +23,7 @@ const enum E2 {
 var y0 = E2[1]
 var name = "A";
 var y1 = E2[name];
+var y2 = E2[`${name}`];
 
 var x = E2;
 var y = [E2];

@@ -39,6 +39,7 @@ new multiM.d();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.multiM = void 0;
     /** this is multi declare module*/
     var multiM;
     (function (multiM) {
@@ -74,6 +75,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.multiM = void 0;
     /** this is multi module 3 comment*/
     var multiM;
     (function (multiM) {

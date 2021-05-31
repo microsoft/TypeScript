@@ -1,0 +1,32 @@
+tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts(3,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }'.
+  The types of 'a.b.c.d.e.f().g' are incompatible between these types.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts(15,1): error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
+  The types of '(new a.b.c.d.e.f()).g' are incompatible between these types.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/deeplyNestedAssignabilityErrorsCombined.ts (2 errors) ====
+    let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
+    let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
+    x = y;
+    ~
+!!! error TS2322: Type '{ a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }'.
+!!! error TS2322:   The types of 'a.b.c.d.e.f().g' are incompatible between these types.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    class Ctor1 {
+        g = "ok"
+    }
+    
+    class Ctor2 {
+        g = 12;
+    }
+    
+    let x2 = { a: { b: { c: { d: { e: { f: Ctor1 } } } } } };
+    let y2 = { a: { b: { c: { d: { e: { f: Ctor2 } } } } } };
+    x2 = y2;
+    ~~
+!!! error TS2322: Type '{ a: { b: { c: { d: { e: { f: typeof Ctor2; }; }; }; }; }; }' is not assignable to type '{ a: { b: { c: { d: { e: { f: typeof Ctor1; }; }; }; }; }; }'.
+!!! error TS2322:   The types of '(new a.b.c.d.e.f()).g' are incompatible between these types.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.

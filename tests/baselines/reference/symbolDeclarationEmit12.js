@@ -16,7 +16,7 @@ module M {
 var M;
 (function (M) {
     class C {
-        [Symbol.toPrimitive](x) { }
+        [(Symbol.iterator, Symbol.toPrimitive)](x) { }
         [Symbol.isConcatSpreadable]() {
             return undefined;
         }
@@ -35,8 +35,8 @@ declare module M {
         [Symbol.iterator]: I;
         [Symbol.toPrimitive](x: I): void;
         [Symbol.isConcatSpreadable](): I;
-        readonly [Symbol.toPrimitive]: any;
-        [Symbol.toPrimitive]: I;
+        get [Symbol.toPrimitive](): any;
+        set [Symbol.toPrimitive](x: I);
     }
     export {};
 }

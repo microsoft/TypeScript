@@ -30,6 +30,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 exports.__esModule = true;
+exports.asdf = void 0;
 var children = props.children, // here!
 _a = props.active, // here!
 rest = __rest(props, ["children", "active"]);

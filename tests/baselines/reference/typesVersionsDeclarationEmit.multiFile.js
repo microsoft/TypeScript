@@ -37,6 +37,7 @@ export const vb = fb();
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.vb = exports.va = void 0;
 const ext_1 = require("ext");
 const other_1 = require("ext/other");
 exports.va = ext_1.fa();

@@ -103,12 +103,15 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>    var nameA = _a.name;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^
-3 >                       ^->
+2 >        ^^^^^
+3 >             ^^^^^^^^^^
+4 >                       ^->
 1->
-2 >        name: nameA
-1->Emitted(4, 9) Source(11, 17) + SourceIndex(0)
-2 >Emitted(4, 24) Source(11, 28) + SourceIndex(0)
+2 >        nameA
+3 >             
+1->Emitted(4, 9) Source(11, 23) + SourceIndex(0)
+2 >Emitted(4, 14) Source(11, 28) + SourceIndex(0)
+3 >Emitted(4, 24) Source(11, 28) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1->^^^^
@@ -168,17 +171,23 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>    var nameB = _a.name, skillB = _a.skill;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^^^^^^^
+4 >                       ^^
+5 >                         ^^^^^^
+6 >                               ^^^^^^^^^^^
 1->
-2 >        name: nameB
-3 >                       , 
-4 >                         skill: skillB
-1->Emitted(8, 9) Source(14, 17) + SourceIndex(0)
-2 >Emitted(8, 24) Source(14, 28) + SourceIndex(0)
-3 >Emitted(8, 26) Source(14, 30) + SourceIndex(0)
-4 >Emitted(8, 43) Source(14, 43) + SourceIndex(0)
+2 >        nameB
+3 >             
+4 >                       , skill: 
+5 >                         skillB
+6 >                               
+1->Emitted(8, 9) Source(14, 23) + SourceIndex(0)
+2 >Emitted(8, 14) Source(14, 28) + SourceIndex(0)
+3 >Emitted(8, 24) Source(14, 28) + SourceIndex(0)
+4 >Emitted(8, 26) Source(14, 37) + SourceIndex(0)
+5 >Emitted(8, 32) Source(14, 43) + SourceIndex(0)
+6 >Emitted(8, 43) Source(14, 43) + SourceIndex(0)
 ---
 >>>    console.log(nameB);
 1 >^^^^
@@ -238,12 +247,15 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPattern.ts
 ---
 >>>    var name = _a.name;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^
-3 >                      ^->
+2 >        ^^^^
+3 >            ^^^^^^^^^^
+4 >                      ^->
 1->
 2 >        name
+3 >            
 1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
-2 >Emitted(12, 23) Source(17, 21) + SourceIndex(0)
+2 >Emitted(12, 13) Source(17, 21) + SourceIndex(0)
+3 >Emitted(12, 23) Source(17, 21) + SourceIndex(0)
 ---
 >>>    console.log(name);
 1->^^^^

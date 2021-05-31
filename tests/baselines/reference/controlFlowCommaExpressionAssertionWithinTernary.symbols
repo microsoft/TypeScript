@@ -1,0 +1,24 @@
+=== tests/cases/compiler/controlFlowCommaExpressionAssertionWithinTernary.ts ===
+declare function assert(value: any): asserts value;
+>assert : Symbol(assert, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 0))
+>value : Symbol(value, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 24))
+>value : Symbol(value, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 24))
+
+function foo2(param: number | null | undefined): number | null {
+>foo2 : Symbol(foo2, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 51))
+>param : Symbol(param, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 2, 14))
+
+    const val = param !== undefined;
+>val : Symbol(val, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 3, 9))
+>param : Symbol(param, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 2, 14))
+>undefined : Symbol(undefined)
+
+    return val ? (assert(param !== undefined), param) : null;
+>val : Symbol(val, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 3, 9))
+>assert : Symbol(assert, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 0, 0))
+>param : Symbol(param, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 2, 14))
+>undefined : Symbol(undefined)
+>param : Symbol(param, Decl(controlFlowCommaExpressionAssertionWithinTernary.ts, 2, 14))
+
+    // ^^^^^ Still typed as number | null | undefined
+}

@@ -1,0 +1,52 @@
+=== tests/cases/compiler/jsxDeclarationsWithEsModuleInteropNoCrash.jsx ===
+/// <reference path="react16.d.ts" />
+import PropTypes from 'prop-types';
+>PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
+
+import React from 'react';
+>React : Symbol(React, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 2, 6))
+
+const propTypes = {
+>propTypes : Symbol(propTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 4, 5))
+
+  bar: PropTypes.bool,
+>bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 4, 19))
+>PropTypes.bool : Symbol(PropTypes.bool, Decl(react16.d.ts, 62, 16))
+>PropTypes : Symbol(PropTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 1, 6))
+>bool : Symbol(PropTypes.bool, Decl(react16.d.ts, 62, 16))
+
+};
+
+const defaultProps = {
+>defaultProps : Symbol(defaultProps, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 8, 5))
+
+  bar: false,
+>bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 8, 22))
+
+};
+
+function Foo({ bar }) {
+>Foo : Symbol(Foo, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 10, 2), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+>bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
+
+  return <div>{bar}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>bar : Symbol(bar, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 12, 14))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+Foo.propTypes = propTypes;
+>Foo.propTypes : Symbol(Foo.propTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1))
+>Foo : Symbol(Foo, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 10, 2), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+>propTypes : Symbol(Foo.propTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1))
+>propTypes : Symbol(propTypes, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 4, 5))
+
+Foo.defaultProps = defaultProps;
+>Foo.defaultProps : Symbol(Foo.defaultProps, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+>Foo : Symbol(Foo, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 10, 2), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+>defaultProps : Symbol(Foo.defaultProps, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+>defaultProps : Symbol(defaultProps, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 8, 5))
+
+export default Foo;
+>Foo : Symbol(Foo, Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 10, 2), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 14, 1), Decl(jsxDeclarationsWithEsModuleInteropNoCrash.jsx, 16, 26))
+

@@ -1,0 +1,628 @@
+=== tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts ===
+function f1(x: 1 | 2): string {
+>f1 : Symbol(f1, Decl(exhaustiveSwitchStatements1.ts, 0, 0))
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 0, 12))
+
+    if (!!true) {
+        switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 0, 12))
+
+            case 1: return 'a';
+            case 2: return 'b';
+        }
+        x;  // Unreachable
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 0, 12))
+    }
+    else {
+        throw 0;
+    }
+}
+
+function f2(x: 1 | 2) {
+>f2 : Symbol(f2, Decl(exhaustiveSwitchStatements1.ts, 11, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 13, 12))
+
+    let z: number;
+>z : Symbol(z, Decl(exhaustiveSwitchStatements1.ts, 14, 7))
+
+    switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 13, 12))
+
+        case 1: z = 10; break;
+>z : Symbol(z, Decl(exhaustiveSwitchStatements1.ts, 14, 7))
+
+        case 2: z = 20; break;
+>z : Symbol(z, Decl(exhaustiveSwitchStatements1.ts, 14, 7))
+    }
+    z;  // Definitely assigned
+>z : Symbol(z, Decl(exhaustiveSwitchStatements1.ts, 14, 7))
+}
+
+function f3(x: 1 | 2) {
+>f3 : Symbol(f3, Decl(exhaustiveSwitchStatements1.ts, 20, 1))
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 22, 12))
+
+    switch (x) {
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 22, 12))
+
+        case 1: return 10;
+        case 2: return 20;
+        // Default considered reachable to allow defensive coding
+        default: throw new Error("Bad input");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+// Repro from #11572
+
+enum E { A, B }
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+>A : Symbol(E.A, Decl(exhaustiveSwitchStatements1.ts, 33, 8))
+>B : Symbol(E.B, Decl(exhaustiveSwitchStatements1.ts, 33, 11))
+
+function f(e: E): number {
+>f : Symbol(f, Decl(exhaustiveSwitchStatements1.ts, 33, 15))
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 35, 11))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+
+    switch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 35, 11))
+
+        case E.A: return 0
+>E.A : Symbol(E.A, Decl(exhaustiveSwitchStatements1.ts, 33, 8))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+>A : Symbol(E.A, Decl(exhaustiveSwitchStatements1.ts, 33, 8))
+
+        case E.B: return 1
+>E.B : Symbol(E.B, Decl(exhaustiveSwitchStatements1.ts, 33, 11))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+>B : Symbol(E.B, Decl(exhaustiveSwitchStatements1.ts, 33, 11))
+    }
+}
+
+function g(e: E): number {
+>g : Symbol(g, Decl(exhaustiveSwitchStatements1.ts, 40, 1))
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 42, 11))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+
+    if (!true)
+        return -1
+    else
+        switch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 42, 11))
+
+            case E.A: return 0
+>E.A : Symbol(E.A, Decl(exhaustiveSwitchStatements1.ts, 33, 8))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+>A : Symbol(E.A, Decl(exhaustiveSwitchStatements1.ts, 33, 8))
+
+            case E.B: return 1
+>E.B : Symbol(E.B, Decl(exhaustiveSwitchStatements1.ts, 33, 11))
+>E : Symbol(E, Decl(exhaustiveSwitchStatements1.ts, 29, 1))
+>B : Symbol(E.B, Decl(exhaustiveSwitchStatements1.ts, 33, 11))
+        }
+}
+
+// Repro from #12668
+
+interface Square { kind: "square"; size: number; }
+>Square : Symbol(Square, Decl(exhaustiveSwitchStatements1.ts, 50, 1))
+>kind : Symbol(Square.kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18))
+>size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+
+interface Rectangle { kind: "rectangle"; width: number; height: number; }
+>Rectangle : Symbol(Rectangle, Decl(exhaustiveSwitchStatements1.ts, 54, 50))
+>kind : Symbol(Rectangle.kind, Decl(exhaustiveSwitchStatements1.ts, 56, 21))
+>width : Symbol(Rectangle.width, Decl(exhaustiveSwitchStatements1.ts, 56, 40))
+>height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
+
+interface Circle { kind: "circle"; radius: number; }
+>Circle : Symbol(Circle, Decl(exhaustiveSwitchStatements1.ts, 56, 73))
+>kind : Symbol(Circle.kind, Decl(exhaustiveSwitchStatements1.ts, 58, 18))
+>radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+
+interface Triangle { kind: "triangle"; side: number; }
+>Triangle : Symbol(Triangle, Decl(exhaustiveSwitchStatements1.ts, 58, 52))
+>kind : Symbol(Triangle.kind, Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+
+type Shape = Square | Rectangle | Circle | Triangle;
+>Shape : Symbol(Shape, Decl(exhaustiveSwitchStatements1.ts, 60, 54))
+>Square : Symbol(Square, Decl(exhaustiveSwitchStatements1.ts, 50, 1))
+>Rectangle : Symbol(Rectangle, Decl(exhaustiveSwitchStatements1.ts, 54, 50))
+>Circle : Symbol(Circle, Decl(exhaustiveSwitchStatements1.ts, 56, 73))
+>Triangle : Symbol(Triangle, Decl(exhaustiveSwitchStatements1.ts, 58, 52))
+
+function area(s: Shape): number {
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 62, 52))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>Shape : Symbol(Shape, Decl(exhaustiveSwitchStatements1.ts, 60, 54))
+
+    let area;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+
+    switch (s.kind) {
+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+
+        case "square": area = s.size * s.size; break;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+>s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+
+        case "rectangle": area = s.width * s.height; break;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+>s.width : Symbol(Rectangle.width, Decl(exhaustiveSwitchStatements1.ts, 56, 40))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>width : Symbol(Rectangle.width, Decl(exhaustiveSwitchStatements1.ts, 56, 40))
+>s.height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
+
+        case "circle": area = Math.PI * s.radius * s.radius; break;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+
+        case "triangle": area = Math.sqrt(3) / 4 * s.side * s.side; break;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 64, 14))
+>side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+    }
+    return area;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 65, 7))
+}
+
+function areaWrapped(s: Shape): number {
+>areaWrapped : Symbol(areaWrapped, Decl(exhaustiveSwitchStatements1.ts, 73, 1))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>Shape : Symbol(Shape, Decl(exhaustiveSwitchStatements1.ts, 60, 54))
+
+    let area;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 76, 7))
+
+    area = (() => {
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 76, 7))
+
+        switch (s.kind) {
+>s.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 54, 18), Decl(exhaustiveSwitchStatements1.ts, 56, 21), Decl(exhaustiveSwitchStatements1.ts, 58, 18), Decl(exhaustiveSwitchStatements1.ts, 60, 20))
+
+            case "square": return s.size * s.size;
+>s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s.size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>size : Symbol(Square.size, Decl(exhaustiveSwitchStatements1.ts, 54, 34))
+
+            case "rectangle": return s.width * s.height;
+>s.width : Symbol(Rectangle.width, Decl(exhaustiveSwitchStatements1.ts, 56, 40))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>width : Symbol(Rectangle.width, Decl(exhaustiveSwitchStatements1.ts, 56, 40))
+>s.height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>height : Symbol(Rectangle.height, Decl(exhaustiveSwitchStatements1.ts, 56, 55))
+
+            case "circle": return Math.PI * s.radius * s.radius;
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s.radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>radius : Symbol(Circle.radius, Decl(exhaustiveSwitchStatements1.ts, 58, 34))
+
+            case "triangle": return Math.sqrt(3) / 4 * s.side * s.side;
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s.side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 75, 21))
+>side : Symbol(Triangle.side, Decl(exhaustiveSwitchStatements1.ts, 60, 38))
+        }
+    })();
+    return area;
+>area : Symbol(area, Decl(exhaustiveSwitchStatements1.ts, 76, 7))
+}
+
+// Repro from #13241
+
+enum MyEnum {
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+
+	A,
+>A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+
+	B
+>B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+}
+
+function thisGivesError(e: MyEnum): string {
+>thisGivesError : Symbol(thisGivesError, Decl(exhaustiveSwitchStatements1.ts, 93, 1))
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 95, 24))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+
+	let s: string;
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 96, 4))
+
+	switch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 95, 24))
+
+		case MyEnum.A: s = "it was A"; break;
+>MyEnum.A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 96, 4))
+
+		case MyEnum.B: s = "it was B"; break;
+>MyEnum.B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 96, 4))
+	}
+	return s;
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 96, 4))
+}
+
+function good1(e: MyEnum): string {
+>good1 : Symbol(good1, Decl(exhaustiveSwitchStatements1.ts, 102, 1))
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 104, 15))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+
+	let s: string;
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 105, 4))
+
+	switch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 104, 15))
+
+		case MyEnum.A: s = "it was A"; break;
+>MyEnum.A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 105, 4))
+
+		case MyEnum.B: s = "it was B"; break;
+>MyEnum.B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 105, 4))
+
+		default: s = "it was something else"; break;
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 105, 4))
+	}
+	return s;
+>s : Symbol(s, Decl(exhaustiveSwitchStatements1.ts, 105, 4))
+}
+
+function good2(e: MyEnum): string {
+>good2 : Symbol(good2, Decl(exhaustiveSwitchStatements1.ts, 112, 1))
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 114, 15))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+
+	switch (e) {
+>e : Symbol(e, Decl(exhaustiveSwitchStatements1.ts, 114, 15))
+
+		case MyEnum.A: return "it was A";
+>MyEnum.A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>A : Symbol(MyEnum.A, Decl(exhaustiveSwitchStatements1.ts, 90, 13))
+
+		case MyEnum.B: return "it was B";
+>MyEnum.B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+>MyEnum : Symbol(MyEnum, Decl(exhaustiveSwitchStatements1.ts, 86, 1))
+>B : Symbol(MyEnum.B, Decl(exhaustiveSwitchStatements1.ts, 91, 3))
+	}
+}
+
+// Repro from #18362
+
+enum Level {
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+
+  One,
+>One : Symbol(Level.One, Decl(exhaustiveSwitchStatements1.ts, 123, 12))
+
+  Two,
+>Two : Symbol(Level.Two, Decl(exhaustiveSwitchStatements1.ts, 124, 6))
+}
+
+const doSomethingWithLevel = (level: Level) => {
+>doSomethingWithLevel : Symbol(doSomethingWithLevel, Decl(exhaustiveSwitchStatements1.ts, 128, 5))
+>level : Symbol(level, Decl(exhaustiveSwitchStatements1.ts, 128, 30))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+
+  let next: Level;
+>next : Symbol(next, Decl(exhaustiveSwitchStatements1.ts, 129, 5))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+
+  switch (level) {
+>level : Symbol(level, Decl(exhaustiveSwitchStatements1.ts, 128, 30))
+
+    case Level.One:
+>Level.One : Symbol(Level.One, Decl(exhaustiveSwitchStatements1.ts, 123, 12))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+>One : Symbol(Level.One, Decl(exhaustiveSwitchStatements1.ts, 123, 12))
+
+      next = Level.Two;
+>next : Symbol(next, Decl(exhaustiveSwitchStatements1.ts, 129, 5))
+>Level.Two : Symbol(Level.Two, Decl(exhaustiveSwitchStatements1.ts, 124, 6))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+>Two : Symbol(Level.Two, Decl(exhaustiveSwitchStatements1.ts, 124, 6))
+
+      break;
+    case Level.Two:
+>Level.Two : Symbol(Level.Two, Decl(exhaustiveSwitchStatements1.ts, 124, 6))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+>Two : Symbol(Level.Two, Decl(exhaustiveSwitchStatements1.ts, 124, 6))
+
+      next = Level.One;
+>next : Symbol(next, Decl(exhaustiveSwitchStatements1.ts, 129, 5))
+>Level.One : Symbol(Level.One, Decl(exhaustiveSwitchStatements1.ts, 123, 12))
+>Level : Symbol(Level, Decl(exhaustiveSwitchStatements1.ts, 119, 1))
+>One : Symbol(Level.One, Decl(exhaustiveSwitchStatements1.ts, 123, 12))
+
+      break;
+  }
+  return next;
+>next : Symbol(next, Decl(exhaustiveSwitchStatements1.ts, 129, 5))
+
+};
+
+// Repro from #20409
+
+interface Square2 {
+>Square2 : Symbol(Square2, Decl(exhaustiveSwitchStatements1.ts, 139, 2))
+
+    kind: "square";
+>kind : Symbol(Square2.kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19))
+
+    size: number;
+>size : Symbol(Square2.size, Decl(exhaustiveSwitchStatements1.ts, 144, 19))
+}
+
+interface Circle2 {
+>Circle2 : Symbol(Circle2, Decl(exhaustiveSwitchStatements1.ts, 146, 1))
+
+    kind: "circle";
+>kind : Symbol(Circle2.kind, Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+
+    radius: number;
+>radius : Symbol(Circle2.radius, Decl(exhaustiveSwitchStatements1.ts, 149, 19))
+}
+
+type Shape2 = Square2 | Circle2;
+>Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
+>Square2 : Symbol(Square2, Decl(exhaustiveSwitchStatements1.ts, 139, 2))
+>Circle2 : Symbol(Circle2, Decl(exhaustiveSwitchStatements1.ts, 146, 1))
+
+function withDefault(s1: Shape2, s2: Shape2): string {
+>withDefault : Symbol(withDefault, Decl(exhaustiveSwitchStatements1.ts, 153, 32))
+>s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 155, 21))
+>Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
+>s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 155, 32))
+>Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
+
+    switch (s1.kind) {
+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 155, 21))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+
+        case "square":
+            return "1";
+        case "circle":
+            switch (s2.kind) {
+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 155, 32))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+
+                case "square":
+                    return "2";
+                case "circle":
+                    return "3";
+                default:
+                    return "never";
+            }
+    }
+}
+
+function withoutDefault(s1: Shape2, s2: Shape2): string {
+>withoutDefault : Symbol(withoutDefault, Decl(exhaustiveSwitchStatements1.ts, 169, 1))
+>s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 171, 24))
+>Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
+>s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 171, 35))
+>Shape2 : Symbol(Shape2, Decl(exhaustiveSwitchStatements1.ts, 151, 1))
+
+    switch (s1.kind) {
+>s1.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s1 : Symbol(s1, Decl(exhaustiveSwitchStatements1.ts, 171, 24))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+
+        case "square":
+            return "1";
+        case "circle":
+            switch (s2.kind) {
+>s2.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+>s2 : Symbol(s2, Decl(exhaustiveSwitchStatements1.ts, 171, 35))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 143, 19), Decl(exhaustiveSwitchStatements1.ts, 148, 19))
+
+                case "square":
+                    return "2";
+                case "circle":
+                    return "3";
+            }
+    }
+}
+
+// Repro from #20823
+
+function test4(value: 1 | 2) {
+>test4 : Symbol(test4, Decl(exhaustiveSwitchStatements1.ts, 183, 1))
+>value : Symbol(value, Decl(exhaustiveSwitchStatements1.ts, 187, 15))
+
+    let x: string;
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 188, 7))
+
+    switch (value) {
+>value : Symbol(value, Decl(exhaustiveSwitchStatements1.ts, 187, 15))
+
+        case 1: x = "one"; break;
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 188, 7))
+
+        case 2: x = "two"; break;
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 188, 7))
+    }
+    return x;
+>x : Symbol(x, Decl(exhaustiveSwitchStatements1.ts, 188, 7))
+}
+
+// Repro from #34661
+
+enum Animal { DOG, CAT }
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+
+declare const zoo: { animal: Animal } | undefined;
+>zoo : Symbol(zoo, Decl(exhaustiveSwitchStatements1.ts, 200, 13))
+>animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+
+function expression(): Animal {
+>expression : Symbol(expression, Decl(exhaustiveSwitchStatements1.ts, 200, 50))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+
+    switch (zoo?.animal ?? Animal.DOG) {
+>zoo?.animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>zoo : Symbol(zoo, Decl(exhaustiveSwitchStatements1.ts, 200, 13))
+>animal : Symbol(animal, Decl(exhaustiveSwitchStatements1.ts, 200, 20))
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+
+        case Animal.DOG: return Animal.DOG
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal.DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>DOG : Symbol(Animal.DOG, Decl(exhaustiveSwitchStatements1.ts, 198, 13))
+
+        case Animal.CAT: return Animal.CAT
+>Animal.CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal.CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+>Animal : Symbol(Animal, Decl(exhaustiveSwitchStatements1.ts, 194, 1))
+>CAT : Symbol(Animal.CAT, Decl(exhaustiveSwitchStatements1.ts, 198, 18))
+    }
+}
+
+// Repro from #34840
+
+function foo() {
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 207, 1))
+
+    const foo: number | undefined = 0;
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 212, 9))
+
+    while (true) {
+        const stats = foo;
+>stats : Symbol(stats, Decl(exhaustiveSwitchStatements1.ts, 214, 13))
+>foo : Symbol(foo, Decl(exhaustiveSwitchStatements1.ts, 212, 9))
+
+        switch (stats) {
+>stats : Symbol(stats, Decl(exhaustiveSwitchStatements1.ts, 214, 13))
+
+            case 1: break;
+            case 2: break;
+        }
+    }
+}
+
+// Repro from #35070
+
+type O = {
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+
+    a: number,
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 224, 10))
+
+    b: number
+>b : Symbol(b, Decl(exhaustiveSwitchStatements1.ts, 225, 14))
+
+};
+type K = keyof O | 'c';
+>K : Symbol(K, Decl(exhaustiveSwitchStatements1.ts, 227, 2))
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+
+function ff(o: O, k: K) {
+>ff : Symbol(ff, Decl(exhaustiveSwitchStatements1.ts, 228, 23))
+>o : Symbol(o, Decl(exhaustiveSwitchStatements1.ts, 229, 12))
+>O : Symbol(O, Decl(exhaustiveSwitchStatements1.ts, 220, 1))
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+>K : Symbol(K, Decl(exhaustiveSwitchStatements1.ts, 227, 2))
+
+    switch(k) {
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+
+        case 'c':
+            k = 'a';
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+    }
+    k === 'c';  // Error
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+
+    return o[k];
+>o : Symbol(o, Decl(exhaustiveSwitchStatements1.ts, 229, 12))
+>k : Symbol(k, Decl(exhaustiveSwitchStatements1.ts, 229, 17))
+}
+
+// Repro from #35431
+type A = { kind: "abc" } | { kind: "def" };
+>A : Symbol(A, Decl(exhaustiveSwitchStatements1.ts, 236, 1))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+
+function f35431(a: A) {
+>f35431 : Symbol(f35431, Decl(exhaustiveSwitchStatements1.ts, 239, 43))
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+>A : Symbol(A, Decl(exhaustiveSwitchStatements1.ts, 236, 1))
+
+  switch (a.kind) {
+>a.kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+>kind : Symbol(kind, Decl(exhaustiveSwitchStatements1.ts, 239, 10), Decl(exhaustiveSwitchStatements1.ts, 239, 28))
+
+    case "abc":
+    case "def": return;
+    default:
+      a!.kind; // Error expected
+>a : Symbol(a, Decl(exhaustiveSwitchStatements1.ts, 241, 16))
+  }
+}

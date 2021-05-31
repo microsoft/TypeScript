@@ -1,0 +1,40 @@
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(3,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(4,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(5,12): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(6,12): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(7,9): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(8,9): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(9,16): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts(10,16): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts (8 errors) ====
+    class A {
+        constructor() {}
+        #field = 123;
+        ~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        #method() {}
+        ~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        static #sField = "hello world";
+               ~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        static #sMethod() {}
+               ~~~~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        get #acc() { return ""; }
+            ~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        set #acc(x: string) {}
+            ~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        static get #sAcc() { return 0; }
+                   ~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+        static set #sAcc(x: number) {}
+                   ~~~~~
+!!! error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+    }
+    
+    

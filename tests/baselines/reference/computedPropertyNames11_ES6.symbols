@@ -54,6 +54,7 @@ var v = {
 
     set [`hello bye`](v) { },
 >[`hello bye`] : Symbol([`hello bye`], Decl(computedPropertyNames11_ES6.ts, 12, 36))
+>`hello bye` : Symbol([`hello bye`], Decl(computedPropertyNames11_ES6.ts, 12, 36))
 >v : Symbol(v, Decl(computedPropertyNames11_ES6.ts, 13, 22))
 
     get [`hello ${a} bye`]() { return 0; }

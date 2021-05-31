@@ -1,0 +1,52 @@
+=== tests/cases/conformance/externalModules/typeOnly/types.ts ===
+export interface I {}
+>I : Symbol(I, Decl(types.ts, 0, 0))
+
+export class C {}
+>C : Symbol(C, Decl(types.ts, 0, 21))
+
+=== tests/cases/conformance/externalModules/typeOnly/ns.ts ===
+import type * as types from './types';
+>types : Symbol(types, Decl(ns.ts, 0, 11))
+
+export { types };
+>types : Symbol(types, Decl(ns.ts, 1, 8))
+
+=== tests/cases/conformance/externalModules/typeOnly/index.ts ===
+import { types } from './ns';
+>types : Symbol(types, Decl(index.ts, 0, 8))
+
+import type { C, I } from './types';
+>C : Symbol(C, Decl(index.ts, 1, 13))
+>I : Symbol(I, Decl(index.ts, 1, 16))
+
+interface Q extends C {}
+>Q : Symbol(Q, Decl(index.ts, 1, 36))
+>C : Symbol(C, Decl(index.ts, 1, 13))
+
+interface R extends I {}
+>R : Symbol(R, Decl(index.ts, 3, 24))
+>I : Symbol(I, Decl(index.ts, 1, 16))
+
+interface S extends types.C {}
+>S : Symbol(S, Decl(index.ts, 4, 24))
+>types.C : Symbol(types.C, Decl(types.ts, 0, 21))
+>types : Symbol(types, Decl(index.ts, 0, 8))
+>C : Symbol(types.C, Decl(types.ts, 0, 21))
+
+interface T extends types.I {}
+>T : Symbol(T, Decl(index.ts, 5, 30))
+>types.I : Symbol(types.I, Decl(types.ts, 0, 0))
+>types : Symbol(types, Decl(index.ts, 0, 8))
+>I : Symbol(types.I, Decl(types.ts, 0, 0))
+
+class U extends C {} // Error
+>U : Symbol(U, Decl(index.ts, 6, 30))
+>C : Symbol(C, Decl(index.ts, 1, 13))
+
+class V extends types.C {} // Error
+>V : Symbol(V, Decl(index.ts, 8, 20))
+>types.C : Symbol(types.C, Decl(types.ts, 0, 21))
+>types : Symbol(types, Decl(index.ts, 0, 8))
+>C : Symbol(types.C, Decl(types.ts, 0, 21))
+

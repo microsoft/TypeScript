@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+module.exports = class {
+>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/declarations/index"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("tests/cases/conformance/jsdoc/declarations/index")
+
+    /**
+     * @param {number} p
+     */
+    constructor(p) {
+>p : number
+
+        this.t = 12 + p;
+>this.t = 12 + p : number
+>this.t : any
+>this : this
+>t : any
+>12 + p : number
+>12 : 12
+>p : number
+    }
+}

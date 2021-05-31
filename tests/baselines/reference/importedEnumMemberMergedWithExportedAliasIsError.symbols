@@ -1,0 +1,22 @@
+=== tests/cases/compiler/enum.ts ===
+export enum Enum {
+>Enum : Symbol(Enum, Decl(enum.ts, 0, 0))
+
+    A,
+>A : Symbol(Enum.A, Decl(enum.ts, 0, 18))
+
+    B
+>B : Symbol(Enum.B, Decl(enum.ts, 1, 6))
+}
+=== tests/cases/compiler/alias.ts ===
+import {Enum} from "./enum";
+>Enum : Symbol(Enum, Decl(alias.ts, 0, 8))
+
+import EnumA = Enum.A;
+>EnumA : Symbol(EnumA, Decl(alias.ts, 0, 28), Decl(alias.ts, 2, 22))
+>Enum : Symbol(Enum, Decl(alias.ts, 0, 8))
+>A : Symbol(Enum.A, Decl(enum.ts, 0, 18))
+
+export type EnumA = [string] | [string, number];
+>EnumA : Symbol(EnumA, Decl(alias.ts, 2, 22))
+

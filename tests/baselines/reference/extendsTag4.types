@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/foo.js ===
+/**
+ * @constructor
+ */
+class A {
+>A : A
+
+    constructor() {}
+}
+
+/**
+ * @extends {A}
+ */
+

@@ -122,7 +122,7 @@ x.commonMethodDifferentParameterType; // No error - property exists
 >commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
->x.commonMethodDifferentParameterType(strOrNum) : any
+>x.commonMethodDifferentParameterType(strOrNum) : string | number
 >x.commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
 >x : I1<number> | I2<number>
 >commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)

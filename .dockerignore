@@ -29,6 +29,7 @@ scripts/processDiagnosticMessages.js
 scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
+scripts/configureLanguageServiceBuild.js
 scripts/*.js.map
 scripts/typings/
 coverage/
@@ -42,7 +43,6 @@ yarn-error.log
 .parallelperf.*
 .failed-tests
 TEST-results.xml
-package-lock.json
 tests
 .vscode
 .git

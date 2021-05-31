@@ -1,0 +1,17 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts ===
+await x;
+
+const arr = [Promise.resolve()];
+>arr : Symbol(arr, Decl(topLevelAwaitNonModule.ts, 2, 5))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+for await (const item of arr) {
+>item : Symbol(item, Decl(topLevelAwaitNonModule.ts, 4, 16))
+>arr : Symbol(arr, Decl(topLevelAwaitNonModule.ts, 2, 5))
+
+  item;
+>item : Symbol(item, Decl(topLevelAwaitNonModule.ts, 4, 16))
+}
+

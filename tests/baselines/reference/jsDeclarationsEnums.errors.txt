@@ -1,0 +1,101 @@
+tests/cases/conformance/jsdoc/declarations/index.js(4,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(6,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(10,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(14,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(18,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(22,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(24,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(30,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(35,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(41,19): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(47,13): error TS8006: 'enum' declarations can only be used in TypeScript files.
+tests/cases/conformance/jsdoc/declarations/index.js(55,19): error TS8006: 'enum' declarations can only be used in TypeScript files.
+
+
+==== tests/cases/conformance/jsdoc/declarations/index.js (12 errors) ====
+    // Pretty much all of this should be an error, (since enums are forbidden in js),
+    // but we should be able to synthesize declarations from the symbols regardless
+    
+    export enum A {}
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+    
+    export enum B {
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        Member
+    }
+    
+    enum C {}
+         ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+    
+    export { C };
+    
+    enum DD {}
+         ~~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+    
+    export { DD as D };
+    
+    export enum E {}
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+    export { E as EE };
+    
+    export { F as FF };
+    export enum F {}
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+    
+    export enum G {
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        A = 1,
+        B,
+        C
+    }
+    
+    export enum H {
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        A = "a",
+        B = "b"
+    }
+    
+    export enum I {
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        A = "a",
+        B = 0,
+        C
+    }
+    
+    export const enum J {
+                      ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        A = 1,
+        B,
+        C
+    }
+    
+    export enum K {
+                ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        None   = 0,
+        A = 1 << 0,
+        B = 1 << 1,
+        C = 1 << 2,
+        Mask = A | B | C,
+    }
+    
+    export const enum L {
+                      ~
+!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
+        None   = 0,
+        A = 1 << 0,
+        B = 1 << 1,
+        C = 1 << 2,
+        Mask = A | B | C,
+    }
+    

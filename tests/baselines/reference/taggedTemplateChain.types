@@ -1,0 +1,15 @@
+=== tests/cases/conformance/expressions/optionalChaining/taggedTemplateChain/taggedTemplateChain.ts ===
+declare let a: any;
+>a : any
+
+a?.`b`;
+>a?.`b` : any
+>a : any
+>`b` : "b"
+
+a?.`b${1}c`;
+>a?.`b${1}c` : any
+>a : any
+>`b${1}c` : string
+>1 : 1
+

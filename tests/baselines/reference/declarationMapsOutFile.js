@@ -23,6 +23,7 @@ export { c, Foo };
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
+    exports.Foo = void 0;
     var Foo = /** @class */ (function () {
         function Foo() {
         }
@@ -39,6 +40,7 @@ define("a", ["require", "exports"], function (require, exports) {
 define("index", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
+    exports.Foo = exports.c = exports.x = void 0;
     exports.Foo = a_1.Foo;
     var c = new a_1.Foo();
     exports.c = c;

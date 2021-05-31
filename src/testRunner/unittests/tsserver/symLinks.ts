@@ -149,37 +149,19 @@ new C();`
             const filesInProjectWithResolvedModule = [...filesInProjectWithUnresolvedModule, recongnizerTextDistTypingFile.path];
 
             function verifyErrors(session: TestSession, semanticErrors: protocol.Diagnostic[]) {
-                session.clearMessages();
-                const expectedSequenceId = session.getNextSeq();
-                session.executeCommandSeq<protocol.GeterrRequest>({
-                    command: server.CommandNames.Geterr,
-                    arguments: {
-                        delay: 0,
-                        files: [recognizersDateTimeSrcFile.path],
-                    }
+                verifyGetErrRequest({
+                    session,
+                    host: session.testhost,
+                    expected: [{
+                        file: recognizersDateTimeSrcFile,
+                        syntax: [],
+                        semantic: semanticErrors,
+                        suggestion: []
+                    }]
                 });
-
-                const host = session.host;
-                host.checkTimeoutQueueLengthAndRun(1);
-
-                checkErrorMessage(session, "syntaxDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: [] });
-                session.clearMessages();
-
-                host.runQueuedImmediateCallbacks(1);
-
-                checkErrorMessage(session, "semanticDiag", { file: recognizersDateTimeSrcFile.path, diagnostics: semanticErrors });
-                session.clearMessages();
-
-                host.runQueuedImmediateCallbacks(1);
-
-                checkErrorMessage(session, "suggestionDiag", {
-                    file: recognizersDateTimeSrcFile.path,
-                    diagnostics: [],
-                });
-                checkCompleteEvent(session, 2, expectedSequenceId);
             }
 
-            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: ReadonlyMap<number>, nonRecursiveDirectories: string[]) {
+            function verifyWatchedFilesAndDirectories(host: TestServerHost, files: string[], recursiveDirectories: ReadonlyESMap<string, number>, nonRecursiveDirectories: string[]) {
                 checkWatchedFilesDetailed(host, files.filter(f => f !== recognizersDateTimeSrcFile.path), 1);
                 checkWatchedDirectoriesDetailed(host, nonRecursiveDirectories, 1, /*recursive*/ false);
                 checkWatchedDirectoriesDetailed(host, recursiveDirectories, /*recursive*/ true);
@@ -200,15 +182,13 @@ new C();`
             function verifyModuleResolution(withPathMapping: boolean) {
                 describe(withPathMapping ? "when tsconfig file contains path mapping" : "when tsconfig does not contain path mapping", () => {
                     const filesWithSources = [libFile, recognizersDateTimeSrcFile, withPathMapping ? recognizerDateTimeTsconfigWithPathMapping : recognizerDateTimeTsconfigWithoutPathMapping, recognizerTextSrcFile, recongnizerTextPackageJson];
-                    const filesWithNodeModulesSetup = [...filesWithSources, nodeModulesRecorgnizersText];
-                    const filesAfterCompilation = [...filesWithNodeModulesSetup, recongnizerTextDistTypingFile];
 
                     const watchedDirectoriesWithResolvedModule = arrayToMap(getTypeRootsFromLocation(recognizersDateTime), k => k, () => 1);
                     watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/src`, withPathMapping ? 1 : 2); // wild card + failed lookups
                     if (!withPathMapping) {
                         watchedDirectoriesWithResolvedModule.set(`${recognizersDateTime}/node_modules`, 1); // failed lookups
                     }
-                    const watchedDirectoriesWithUnresolvedModule = cloneMap(watchedDirectoriesWithResolvedModule);
+                    const watchedDirectoriesWithUnresolvedModule = new Map(watchedDirectoriesWithResolvedModule);
                     watchedDirectoriesWithUnresolvedModule.set(`${recognizersDateTime}/src`, 2); // wild card + failed lookups
                     [`${recognizersDateTime}/node_modules`, ...(withPathMapping ? [recognizersText] : emptyArray), ...getNodeModuleDirectories(packages)].forEach(d => {
                         watchedDirectoriesWithUnresolvedModule.set(d, 1);
@@ -219,7 +199,7 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithResolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
+                        verifyWatchedFilesAndDirectories(session.testhost, filesInProjectWithResolvedModule, watchedDirectoriesWithResolvedModule, nonRecursiveWatchedDirectories);
                         verifyErrors(session, []);
                     }
 
@@ -227,10 +207,10 @@ new C();`
                         const projectService = session.getProjectService();
                         const project = projectService.configuredProjects.get(recognizerDateTimeTsconfigPath)!;
                         checkProjectActualFiles(project, filesInProjectWithUnresolvedModule);
-                        verifyWatchedFilesAndDirectories(session.host, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
+                        verifyWatchedFilesAndDirectories(session.testhost, filesInProjectWithUnresolvedModule, watchedDirectoriesWithUnresolvedModule, nonRecursiveWatchedDirectories);
                         const startOffset = recognizersDateTimeSrcFile.content.indexOf('"') + 1;
                         verifyErrors(session, [
-                            createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0, [moduleName])
+                            createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + moduleNameInFile.length }, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, [moduleName])
                         ]);
                     }
 
@@ -239,19 +219,22 @@ new C();`
                         const session = createSessionAndOpenFile(host);
                         verifyProjectWithUnresolvedModule(session);
 
-                        host.reloadFS(filesAfterCompilation);
-                        host.runQueuedTimeoutCallbacks();
+                        host.ensureFileOrFolder(nodeModulesRecorgnizersText);
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyProjectWithResolvedModule(session);
                     });
 
                     it("when project has node_modules setup but doesnt have modules in typings folder and then recompiles", () => {
-                        const host = createServerHost(filesWithNodeModulesSetup);
+                        const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText]);
                         const session = createSessionAndOpenFile(host);
                         verifyProjectWithUnresolvedModule(session);
 
-                        host.reloadFS(filesAfterCompilation);
-                        host.runQueuedTimeoutCallbacks();
+                        host.writeFile(recongnizerTextDistTypingFile.path, recongnizerTextDistTypingFile.content);
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         if (withPathMapping) {
                             verifyProjectWithResolvedModule(session);
@@ -263,18 +246,20 @@ new C();`
                     });
 
                     it("when project recompiles after deleting generated folders", () => {
-                        const host = createServerHost(filesAfterCompilation);
+                        const host = createServerHost([...filesWithSources, nodeModulesRecorgnizersText, recongnizerTextDistTypingFile]);
                         const session = createSessionAndOpenFile(host);
 
                         verifyProjectWithResolvedModule(session);
 
                         host.deleteFolder(recognizersTextDist, /*recursive*/ true);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         verifyProjectWithUnresolvedModule(session);
 
                         host.ensureFileOrFolder(recongnizerTextDistTypingFile);
-                        host.runQueuedTimeoutCallbacks();
+                        host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
+                        host.runQueuedTimeoutCallbacks(); // Actual update
 
                         if (withPathMapping) {
                             verifyProjectWithResolvedModule(session);

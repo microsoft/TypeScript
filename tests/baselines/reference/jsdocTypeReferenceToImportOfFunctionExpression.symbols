@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsdoc/MC.js ===
+const MW = require("./MW");
+>MW : Symbol(MW, Decl(MC.js, 0, 5))
+>require : Symbol(require)
+>"./MW" : Symbol("tests/cases/conformance/jsdoc/MW", Decl(MW.js, 0, 0))
+
+/** @typedef {number} Meyerhauser */
+
+/** @class */
+module.exports = function MC() {
+>module.exports : Symbol(module.exports, Decl(MC.js, 0, 0))
+>module : Symbol(export=, Decl(MC.js, 0, 27))
+>exports : Symbol(export=, Decl(MC.js, 0, 27))
+>MC : Symbol(MC, Decl(MC.js, 5, 16))
+
+    /** @type {any} */
+    var x = {}
+>x : Symbol(x, Decl(MC.js, 7, 7))
+
+    return new MW(x);
+>MW : Symbol(MW, Decl(MC.js, 0, 5))
+>x : Symbol(x, Decl(MC.js, 7, 7))
+
+};
+
+=== tests/cases/conformance/jsdoc/MW.js ===
+/** @typedef {import("./MC")} MC */
+
+class MW {
+>MW : Symbol(MW, Decl(MW.js, 0, 0))
+
+  /**
+   * @param {MC} compiler the compiler
+   */
+  constructor(compiler) {
+>compiler : Symbol(compiler, Decl(MW.js, 6, 14))
+
+    this.compiler = compiler;
+>this.compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
+>this : Symbol(MW, Decl(MW.js, 0, 0))
+>compiler : Symbol(MW.compiler, Decl(MW.js, 6, 25))
+>compiler : Symbol(compiler, Decl(MW.js, 6, 14))
+  }
+}
+
+module.exports = MW;
+>module.exports : Symbol(module.exports, Decl(MW.js, 0, 0))
+>module : Symbol(export=, Decl(MW.js, 9, 1))
+>exports : Symbol(export=, Decl(MW.js, 9, 1))
+>MW : Symbol(MW, Decl(MW.js, 0, 0))
+

@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameBadSuper.ts ===
+class B {};
+>B : Symbol(B, Decl(privateNameBadSuper.ts, 0, 0))
+
+class A extends B {
+>A : Symbol(A, Decl(privateNameBadSuper.ts, 0, 11))
+>B : Symbol(B, Decl(privateNameBadSuper.ts, 0, 0))
+
+    #x;
+>#x : Symbol(A.#x, Decl(privateNameBadSuper.ts, 1, 19))
+
+    constructor() {
+        void 0; // Error: 'super' call must  come first
+        super();
+>super : Symbol(B, Decl(privateNameBadSuper.ts, 0, 0))
+    }
+}

@@ -5,7 +5,7 @@ var a: string, b: number;
 
 [...{ 0: a = "", b }] = ["", 1];
 >[...{ 0: a = "", b }] = ["", 1] : (string | number)[]
->[...{ 0: a = "", b }] : undefined[]
+>[...{ 0: a = "", b }] : unknown[]
 >...{ 0: a = "", b } : any
 >{ 0: a = "", b } : { 0?: string; b: number; }
 >0 : string

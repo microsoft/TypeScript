@@ -1,0 +1,93 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiers.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesIncompatibleModifiers.ts, 0, 0))
+
+    public #foo = 3;         // Error
+>#foo : Symbol(A.#foo, Decl(privateNamesIncompatibleModifiers.ts, 0, 9))
+
+    private #bar = 3;        // Error
+>#bar : Symbol(A.#bar, Decl(privateNamesIncompatibleModifiers.ts, 1, 20))
+
+    protected #baz = 3;      // Error
+>#baz : Symbol(A.#baz, Decl(privateNamesIncompatibleModifiers.ts, 2, 21))
+
+    readonly #qux = 3;       // OK
+>#qux : Symbol(A.#qux, Decl(privateNamesIncompatibleModifiers.ts, 3, 23))
+
+    declare #what: number;   // Error
+>#what : Symbol(A.#what, Decl(privateNamesIncompatibleModifiers.ts, 4, 22))
+
+    public #fooMethod() { return  3; }         // Error
+>#fooMethod : Symbol(A.#fooMethod, Decl(privateNamesIncompatibleModifiers.ts, 5, 26))
+
+    private #barMethod() { return  3; }        // Error
+>#barMethod : Symbol(A.#barMethod, Decl(privateNamesIncompatibleModifiers.ts, 7, 38))
+
+    protected #bazMethod() { return  3; }      // Error
+>#bazMethod : Symbol(A.#bazMethod, Decl(privateNamesIncompatibleModifiers.ts, 8, 39))
+
+    readonly #quxMethod() { return  3; }       // Error
+>#quxMethod : Symbol(A.#quxMethod, Decl(privateNamesIncompatibleModifiers.ts, 9, 41))
+
+    declare #whatMethod()                      // Error
+>#whatMethod : Symbol(A.#whatMethod, Decl(privateNamesIncompatibleModifiers.ts, 10, 40))
+
+    async #asyncMethod() { return 1; }         //OK
+>#asyncMethod : Symbol(A.#asyncMethod, Decl(privateNamesIncompatibleModifiers.ts, 11, 25))
+
+    *#genMethod() { return 1; }                //OK
+>#genMethod : Symbol(A.#genMethod, Decl(privateNamesIncompatibleModifiers.ts, 12, 38))
+
+    async *#asyncGenMethod() { return 1; }     //OK
+>#asyncGenMethod : Symbol(A.#asyncGenMethod, Decl(privateNamesIncompatibleModifiers.ts, 13, 31))
+
+    public get #fooProp() { return  3; }         // Error
+>#fooProp : Symbol(A.#fooProp, Decl(privateNamesIncompatibleModifiers.ts, 14, 42), Decl(privateNamesIncompatibleModifiers.ts, 16, 40))
+
+    public set #fooProp(value: number) {  }      // Error
+>#fooProp : Symbol(A.#fooProp, Decl(privateNamesIncompatibleModifiers.ts, 14, 42), Decl(privateNamesIncompatibleModifiers.ts, 16, 40))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 17, 24))
+
+    private get #barProp() { return  3; }        // Error
+>#barProp : Symbol(A.#barProp, Decl(privateNamesIncompatibleModifiers.ts, 17, 43), Decl(privateNamesIncompatibleModifiers.ts, 18, 41))
+
+    private set #barProp(value: number) {  }     // Error
+>#barProp : Symbol(A.#barProp, Decl(privateNamesIncompatibleModifiers.ts, 17, 43), Decl(privateNamesIncompatibleModifiers.ts, 18, 41))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 19, 25))
+
+    protected get #bazProp() { return  3; }      // Error
+>#bazProp : Symbol(A.#bazProp, Decl(privateNamesIncompatibleModifiers.ts, 19, 44), Decl(privateNamesIncompatibleModifiers.ts, 20, 43))
+
+    protected set #bazProp(value: number) {  }   // Error
+>#bazProp : Symbol(A.#bazProp, Decl(privateNamesIncompatibleModifiers.ts, 19, 44), Decl(privateNamesIncompatibleModifiers.ts, 20, 43))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 21, 27))
+
+    readonly get #quxProp() { return  3; }       // Error
+>#quxProp : Symbol(A.#quxProp, Decl(privateNamesIncompatibleModifiers.ts, 21, 46), Decl(privateNamesIncompatibleModifiers.ts, 22, 42))
+
+    readonly set #quxProp(value: number) {  }    // Error
+>#quxProp : Symbol(A.#quxProp, Decl(privateNamesIncompatibleModifiers.ts, 21, 46), Decl(privateNamesIncompatibleModifiers.ts, 22, 42))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 23, 26))
+
+    declare get #whatProp()                      // Error
+>#whatProp : Symbol(A.#whatProp, Decl(privateNamesIncompatibleModifiers.ts, 23, 45), Decl(privateNamesIncompatibleModifiers.ts, 24, 27))
+
+    declare set #whatProp(value: number)         // Error
+>#whatProp : Symbol(A.#whatProp, Decl(privateNamesIncompatibleModifiers.ts, 23, 45), Decl(privateNamesIncompatibleModifiers.ts, 24, 27))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 25, 26))
+
+    async get #asyncProp() { return 1; }         // Error
+>#asyncProp : Symbol(A.#asyncProp, Decl(privateNamesIncompatibleModifiers.ts, 25, 40), Decl(privateNamesIncompatibleModifiers.ts, 26, 40))
+
+    async set #asyncProp(value: number) { }      // Error
+>#asyncProp : Symbol(A.#asyncProp, Decl(privateNamesIncompatibleModifiers.ts, 25, 40), Decl(privateNamesIncompatibleModifiers.ts, 26, 40))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiers.ts, 27, 25))
+}
+
+abstract class B {
+>B : Symbol(B, Decl(privateNamesIncompatibleModifiers.ts, 28, 1))
+
+    abstract #quux = 3;      // Error
+>#quux : Symbol(B.#quux, Decl(privateNamesIncompatibleModifiers.ts, 30, 18))
+}
+

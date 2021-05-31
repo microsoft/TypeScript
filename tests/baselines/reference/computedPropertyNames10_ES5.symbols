@@ -50,6 +50,7 @@ var v = {
 
     [`hello bye`]() { },
 >[`hello bye`] : Symbol([`hello bye`], Decl(computedPropertyNames10_ES5.ts, 12, 22))
+>`hello bye` : Symbol([`hello bye`], Decl(computedPropertyNames10_ES5.ts, 12, 22))
 
     [`hello ${a} bye`]() { }
 >[`hello ${a} bye`] : Symbol([`hello ${a} bye`], Decl(computedPropertyNames10_ES5.ts, 13, 24))

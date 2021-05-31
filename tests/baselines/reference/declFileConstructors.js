@@ -99,6 +99,7 @@ class GlobalConstructorWithParameterInitializer {
 //// [declFileConstructors_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ConstructorWithParameterInitializer = exports.ConstructorWithOptionalParameterProperty = exports.ConstructorWithPrivateParameterProperty = exports.ConstructorWithPublicParameterProperty = exports.ConstructorWithOverloads = exports.ConstructorWithRestParamters = exports.ConstructorWithParameters = exports.SimpleConstructor = void 0;
 var SimpleConstructor = /** @class */ (function () {
     /** This comment should appear for foo*/
     function SimpleConstructor() {

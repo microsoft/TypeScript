@@ -1,11 +1,11 @@
 //// [promiseTypeInference.ts]
-declare class Promise<T> {
-    then<U>(success?: (value: T) => Promise<U>): Promise<U>;
+declare class CPromise<T> {
+    then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 }
 interface IPromise<T> {
     then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 }
-declare function load(name: string): Promise<string>;
+declare function load(name: string): CPromise<string>;
 declare function convert(s: string): IPromise<number>;
 
 var $$x = load("something").then(s => convert(s));

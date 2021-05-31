@@ -1,0 +1,89 @@
+=== tests/cases/compiler/inferenceOptionalPropertiesToIndexSignatures.ts ===
+declare function foo<T>(obj: { [x: string]: T }): T;
+>foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 21))
+>obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 24))
+>x : Symbol(x, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 32))
+>T : Symbol(T, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 21))
+>T : Symbol(T, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 21))
+
+declare const x1: { a: string, b: number };
+>x1 : Symbol(x1, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 2, 13))
+>a : Symbol(a, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 2, 19))
+>b : Symbol(b, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 2, 30))
+
+declare const x2: { a: string, b: number | undefined };
+>x2 : Symbol(x2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 3, 13))
+>a : Symbol(a, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 3, 19))
+>b : Symbol(b, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 3, 30))
+
+declare const x3: { a: string, b?: number };
+>x3 : Symbol(x3, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 4, 13))
+>a : Symbol(a, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 4, 19))
+>b : Symbol(b, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 4, 30))
+
+declare const x4: { a: string, b?: number | undefined };
+>x4 : Symbol(x4, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 5, 13))
+>a : Symbol(a, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 5, 19))
+>b : Symbol(b, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 5, 30))
+
+let a1 = foo(x1);  // string | number
+>a1 : Symbol(a1, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 7, 3))
+>foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
+>x1 : Symbol(x1, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 2, 13))
+
+let a2 = foo(x2);  // string | number | undefined
+>a2 : Symbol(a2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 8, 3))
+>foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
+>x2 : Symbol(x2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 3, 13))
+
+let a3 = foo(x3);  // string | number
+>a3 : Symbol(a3, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 9, 3))
+>foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
+>x3 : Symbol(x3, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 4, 13))
+
+let a4 = foo(x4);  // string | number
+>a4 : Symbol(a4, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 10, 3))
+>foo : Symbol(foo, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 0, 0))
+>x4 : Symbol(x4, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 5, 13))
+
+// Repro from #43045
+
+const param2 = Math.random() < 0.5 ? 'value2' : null;
+>param2 : Symbol(param2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 14, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const obj = {
+>obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 5))
+
+    param1: 'value1',
+>param1 : Symbol(param1, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 13))
+
+    ...(param2 ? {param2} : {})
+>param2 : Symbol(param2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 14, 5))
+>param2 : Symbol(param2, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 18, 18))
+
+};
+
+const query = Object.entries(obj).map(
+>query : Symbol(query, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 21, 5))
+>Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Object.entries(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>obj : Symbol(obj, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 16, 5))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+
+    ([k, v]) => `${k}=${encodeURIComponent(v)}`
+>k : Symbol(k, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 6))
+>v : Symbol(v, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 8))
+>k : Symbol(k, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 6))
+>encodeURIComponent : Symbol(encodeURIComponent, Decl(lib.es5.d.ts, --, --))
+>v : Symbol(v, Decl(inferenceOptionalPropertiesToIndexSignatures.ts, 22, 8))
+
+).join('&');
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+

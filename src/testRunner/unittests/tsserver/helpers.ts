@@ -27,7 +27,7 @@ namespace ts.projectSystem {
     }
 
     export const customTypesMap = {
-        path: <Path>"/typesMap.json",
+        path: "/typesMap.json" as Path,
         content: `{
             "typesMap": {
                 "jquery": {
@@ -101,7 +101,7 @@ namespace ts.projectSystem {
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
             installTypingHost: server.ServerHost,
-            readonly typesRegistry = createMap<MapLike<string>>(),
+            readonly typesRegistry = new Map<string, MapLike<string>>(),
             log?: TI.Log) {
             super(installTypingHost, globalTypingsCacheLocation, TestFSWithWatch.safeList.path, customTypesMap.path, throttleLimit, log);
         }
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
         return JSON.stringify({ dependencies });
     }
 
-    export function createTypesRegistry(...list: string[]): Map<MapLike<string>> {
+    export function createTypesRegistry(...list: string[]): ESMap<string, MapLike<string>> {
         const versionMap = {
             "latest": "1.3.0",
             "ts2.0": "1.0.0",
@@ -177,7 +177,7 @@ namespace ts.projectSystem {
             "ts2.6": "1.3.0",
             "ts2.7": "1.3.0"
         };
-        const map = createMap<MapLike<string>>();
+        const map = new Map<string, MapLike<string>>();
         for (const l of list) {
             map.set(l, versionMap);
         }
@@ -204,6 +204,7 @@ namespace ts.projectSystem {
         category: DiagnosticCategory;
         code: number;
         reportsUnnecessary?: {};
+        reportsDeprecated?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];
     }
@@ -241,7 +242,7 @@ namespace ts.projectSystem {
                 }
                 return true;
             });
-            return Debug.assertDefined(eventData);
+            return Debug.checkDefined(eventData);
         }
 
         hasZeroEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]) {
@@ -276,7 +277,7 @@ namespace ts.projectSystem {
                 configFileName: "tsconfig.json",
                 projectType: "configured",
                 languageServiceEnabled: true,
-                version,
+                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
                 ...partial,
             });
         }
@@ -292,7 +293,7 @@ namespace ts.projectSystem {
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host!: TestServerHost;
+        public testhost: TestServerHost = this.host as TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -310,7 +311,7 @@ namespace ts.projectSystem {
             this.seq++;
             request.seq = this.seq;
             request.type = "request";
-            return this.executeCommand(<T>request);
+            return this.executeCommand(request as T);
         }
 
         public event<T extends object>(body: T, eventName: string) {
@@ -320,7 +321,7 @@ namespace ts.projectSystem {
 
         public clearMessages() {
             clear(this.events);
-            this.host.clearOutput();
+            this.testhost.clearOutput();
         }
     }
 
@@ -382,17 +383,9 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface CreateProjectServiceParameters {
-        cancellationToken?: HostCancellationToken;
-        logger?: server.Logger;
-        useSingleInferredProject?: boolean;
-        typingsInstaller?: server.ITypingsInstaller;
-        eventHandler?: server.ProjectServiceEventHandler;
-    }
-
     export class TestProjectService extends server.ProjectService {
         constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, eventHandler: server.ProjectServiceEventHandler, opts: Partial<server.ProjectServiceOptions> = {}) {
+            typingsInstaller: server.ITypingsInstaller, opts: Partial<server.ProjectServiceOptions> = {}) {
             super({
                 host,
                 logger,
@@ -401,7 +394,6 @@ namespace ts.projectSystem {
                 useInferredProjectPerProjectRoot: false,
                 typingsInstaller,
                 typesMapLocation: customTypesMap.path,
-                eventHandler,
                 ...opts
             });
         }
@@ -410,11 +402,12 @@ namespace ts.projectSystem {
             checkNumberOfProjects(this, count);
         }
     }
-    export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
-        const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || createHasErrorMessageLogger().logger;
-        const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
-        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
+
+    export function createProjectService(host: server.ServerHost, options?: Partial<server.ProjectServiceOptions>) {
+        const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
+        const logger = options?.logger || createHasErrorMessageLogger().logger;
+        const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
+        return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
@@ -447,12 +440,19 @@ namespace ts.projectSystem {
         return iterResult.value;
     }
 
+    export function checkOrphanScriptInfos(service: server.ProjectService, expectedFiles: readonly string[]) {
+        checkArray("Orphan ScriptInfos:", arrayFrom(mapDefinedIterator(
+            service.filenameToScriptInfo.values(),
+            v => v.containingProjects.length === 0 ? v.fileName : undefined
+        )), expectedFiles);
+    }
+
     export function checkProjectActualFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
     }
 
     export function checkProjectRootFiles(project: server.Project, expectedFiles: readonly string[]) {
-        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+        checkArray(`${server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
@@ -491,17 +491,17 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
-    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[]) {
-        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: readonly string[], additionInfo?: string) {
+        checkArray(`ScriptInfos files: ${additionInfo || ""}`, arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
     }
 
-    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-        const start = str.indexOf(substring);
+    export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
         return protocolToLocation(str)(start);
     }
 
-    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+    export function protocolToLocation(text: string): (pos: number) => protocol.Location {
         const lineStarts = computeLineStarts(text);
         return pos => {
             const x = computeLineAndCharacterOfPosition(lineStarts, pos);
@@ -587,8 +587,8 @@ namespace ts.projectSystem {
         return createTextSpan(start, substring.length);
     }
 
-    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
     }
 
     export interface SpanFromSubstringOptions {
@@ -664,7 +664,7 @@ namespace ts.projectSystem {
         session.executeCommand(makeSessionRequest(command, args));
     }
 
-    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string })[], session: server.Session): void {
+    export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: server.Session): void {
         for (const file of files) {
             session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
                 "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line no-in-operator
@@ -699,8 +699,39 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
     }
 
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: readonly string[] = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    interface DiagnosticChainText {
+        message: DiagnosticMessage;
+        args?: readonly string[];
+        next?: DiagnosticChainText[];
+    }
+
+    function isDiagnosticMessage(diagnostic: DiagnosticMessage | DiagnosticChainText): diagnostic is DiagnosticMessage {
+        return !!diagnostic && isString((diagnostic as DiagnosticMessage).message);
+    }
+    function getTextForDiagnostic(diag: DiagnosticMessage | DiagnosticChainText | undefined, args?: readonly string[], indent = 0) {
+        if (diag === undefined) return "";
+        if (isDiagnosticMessage(diag)) return formatStringFromArgs(diag.message, args || emptyArray);
+        let result = "";
+        if (indent) {
+            result += "\n";
+
+            for (let i = 0; i < indent; i++) {
+                result += "  ";
+            }
+        }
+        result += formatStringFromArgs(diag.message.message, diag.args || emptyArray);
+        indent++;
+        if (diag.next) {
+            for (const kid of diag.next) {
+                result += getTextForDiagnostic(kid, /*args*/ undefined, indent);
+            }
+        }
+        return result;
+    }
+
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage | DiagnosticChainText, args?: readonly string[], category?: string, reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
+        const diag = isDiagnosticMessage(message) ? message : message.message;
+        return { start, end, text: getTextForDiagnostic(message, args), code: diag.code, category: category || diagnosticCategoryName(diag), reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
     }
 
     export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
@@ -716,13 +747,76 @@ namespace ts.projectSystem {
             assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
         }
     }
+    export function projectLoadingStartEvent(projectName: string, reason: string, seq?: number): protocol.ProjectLoadingStartEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingStartEvent,
+            body: { projectName, reason }
+        };
+    }
+
+    export function projectLoadingFinishEvent(projectName: string, seq?: number): protocol.ProjectLoadingFinishEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ProjectLoadingFinishEvent,
+            body: { projectName }
+        };
+    }
+
+    export function projectInfoTelemetryEvent(seq?: number): protocol.TelemetryEvent {
+        return telemetryEvent(server.ProjectInfoTelemetryEvent, "", seq);
+    }
+
+    function telemetryEvent(telemetryEventName: string, payload: any, seq?: number): protocol.TelemetryEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: "telemetry",
+            body: {
+                telemetryEventName,
+                payload
+            }
+        };
+    }
+
+    export function configFileDiagEvent(triggerFile: string, configFile: string, diagnostics: protocol.DiagnosticWithFileName[], seq?: number): protocol.ConfigFileDiagnosticEvent {
+        return {
+            seq: seq || 0,
+            type: "event",
+            event: server.ConfigFileDiagEvent,
+            body: {
+                triggerFile,
+                configFile,
+                diagnostics
+            }
+        };
+    }
+
+    export function checkEvents(session: TestSession, expectedEvents: protocol.Event[]) {
+        const events = session.events;
+        assert.equal(events.length, expectedEvents.length, `Actual:: ${JSON.stringify(session.events, /*replacer*/ undefined, " ")}`);
+        expectedEvents.forEach((expectedEvent, index) => {
+            if (expectedEvent.event === "telemetry") {
+                // Ignore payload
+                const { body, ...actual } = events[index] as protocol.TelemetryEvent;
+                const { body: expectedBody, ...expected } = expectedEvent as protocol.TelemetryEvent;
+                assert.deepEqual(actual, expected, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+                assert.equal(body.telemetryEventName, expectedBody.telemetryEventName, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+            }
+            else {
+                checkNthEvent(session, expectedEvent, index, index === expectedEvents.length);
+            }
+        });
+    }
 
     export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;
         assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
-        const outputs = session.host.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+        const outputs = session.testhost.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
 
         if (isMostRecent) {
             assert.strictEqual(events.length, index + 1, JSON.stringify(events));
@@ -732,15 +826,231 @@ namespace ts.projectSystem {
 
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
+        isWriteAccess?: boolean;
         lineText: string;
     }
 
-    export function makeReferenceItem({ isDefinition, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+    export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanWithContextFromSubstring(rest),
             isDefinition,
-            isWriteAccess: isDefinition,
+            isWriteAccess: isWriteAccess === undefined ? isDefinition : isWriteAccess,
             lineText,
         };
+    }
+
+    export interface GetErrDiagnostics {
+        file: string | File;
+        syntax?: protocol.Diagnostic[];
+        semantic?: protocol.Diagnostic[];
+        suggestion?: protocol.Diagnostic[];
+    }
+    export interface VerifyGetErrRequestBase {
+        session: TestSession;
+        host: TestServerHost;
+        onErrEvent?: () => void;
+        existingTimeouts?: number;
+    }
+    export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
+        expected: readonly GetErrDiagnostics[];
+    }
+    export function verifyGetErrRequest(request: VerifyGetErrRequest) {
+        const { session, expected } = request;
+        session.clearMessages();
+        const expectedSequenceId = session.getNextSeq();
+        session.executeCommandSeq<protocol.GeterrRequest>({
+            command: protocol.CommandTypes.Geterr,
+            arguments: {
+                delay: 0,
+                files: expected.map(f => filePath(f.file))
+            }
+        });
+        checkAllErrors({ ...request, expectedSequenceId });
+    }
+
+    export interface VerifyGetErrRequestNoErrors extends VerifyGetErrRequestBase {
+        files: readonly (string | File)[];
+    }
+    export function verifyGetErrRequestNoErrors(request: VerifyGetErrRequestNoErrors) {
+        verifyGetErrRequest({
+            ...request,
+            expected: request.files.map(file => ({ file, syntax: [], semantic: [], suggestion: [] }))
+        });
+    }
+
+    export interface CheckAllErrors extends VerifyGetErrRequest {
+        expectedSequenceId: number;
+    }
+    function checkAllErrors({ expected, expectedSequenceId, ...rest }: CheckAllErrors) {
+        for (let i = 0; i < expected.length; i++) {
+            checkErrorsInFile({
+                ...rest,
+                expected: expected[i],
+                expectedSequenceId: i === expected.length - 1 ? expectedSequenceId : undefined,
+            });
+        }
+    }
+
+    function filePath(file: string | File) {
+        return isString(file) ? file : file.path;
+    }
+    interface CheckErrorsInFile extends VerifyGetErrRequestBase {
+        expected: GetErrDiagnostics;
+        expectedSequenceId?: number;
+    }
+    function checkErrorsInFile({
+        session, host, onErrEvent, existingTimeouts, expectedSequenceId,
+        expected: { file, syntax, semantic, suggestion },
+    }: CheckErrorsInFile) {
+        onErrEvent = onErrEvent || noop;
+        if (existingTimeouts !== undefined) {
+            host.checkTimeoutQueueLength(existingTimeouts + 1);
+            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
+        }
+        else {
+            host.checkTimeoutQueueLengthAndRun(1);
+        }
+        if (syntax) {
+            onErrEvent();
+            checkErrorMessage(session, "syntaxDiag", { file: filePath(file), diagnostics: syntax });
+        }
+        if (semantic) {
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            onErrEvent();
+            checkErrorMessage(session, "semanticDiag", { file: filePath(file), diagnostics: semantic });
+        }
+        if (suggestion) {
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            onErrEvent();
+            checkErrorMessage(session, "suggestionDiag", { file: filePath(file), diagnostics: suggestion });
+        }
+        if (expectedSequenceId !== undefined) {
+            checkCompleteEvent(session, syntax || semantic || suggestion ? 2 : 1, expectedSequenceId);
+        }
+        session.clearMessages();
+    }
+
+    function verifyErrorsUsingGeterr({ allFiles, openFiles, expectedGetErr }: VerifyGetErrScenario) {
+        it("verifies the errors in open file", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession(openFiles(), session);
+
+            verifyGetErrRequest({ session, host, expected: expectedGetErr() });
+        });
+    }
+
+    function verifyErrorsUsingGeterrForProject({ allFiles, openFiles, expectedGetErrForProject }: VerifyGetErrScenario) {
+        it("verifies the errors in projects", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host, { canUseEvents: true, });
+            openFilesForSession(openFiles(), session);
+
+            session.clearMessages();
+            for (const expected of expectedGetErrForProject()) {
+                const expectedSequenceId = session.getNextSeq();
+                session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                    command: protocol.CommandTypes.GeterrForProject,
+                    arguments: {
+                        delay: 0,
+                        file: expected.project
+                    }
+                });
+
+                checkAllErrors({ session, host, expected: expected.errors, expectedSequenceId });
+            }
+        });
+    }
+
+    function verifyErrorsUsingSyncMethods({ allFiles, openFiles, expectedSyncDiagnostics }: VerifyGetErrScenario) {
+        it("verifies the errors using sync commands", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const session = createSession(host);
+            openFilesForSession(openFiles(), session);
+            for (const { file, project, syntax, semantic, suggestion } of expectedSyncDiagnostics()) {
+                const actualSyntax = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${filePath(file)}, project: ${project}`);
+                const actualSemantic = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${filePath(file)}, project: ${project}`);
+                const actualSuggestion = session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+                    arguments: {
+                        file: filePath(file),
+                        projectFileName: project
+                    }
+                }).response as protocol.Diagnostic[];
+                assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${filePath(file)}, project: ${project}`);
+            }
+        });
+    }
+
+    function verifyConfigFileErrors({ allFiles, openFiles, expectedConfigFileDiagEvents }: VerifyGetErrScenario) {
+        it("verify config file errors", () => {
+            const host = createServerHost([...allFiles(), libFile]);
+            const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
+
+            for (const file of openFiles()) {
+                session.executeCommandSeq<protocol.OpenRequest>({
+                    command: protocol.CommandTypes.Open,
+                    arguments: { file: file.path }
+                });
+            }
+
+            assert.deepEqual(events, expectedConfigFileDiagEvents().map(data => ({
+                eventName: server.ConfigFileDiagEvent,
+                data
+            })));
+        });
+    }
+
+    export interface GetErrForProjectDiagnostics {
+        project: string;
+        errors: readonly GetErrDiagnostics[];
+    }
+    export interface SyncDiagnostics extends GetErrDiagnostics {
+        project?: string;
+    }
+    export interface VerifyGetErrScenario {
+        allFiles: () => readonly File[];
+        openFiles: () => readonly File[];
+        expectedGetErr: () => readonly GetErrDiagnostics[];
+        expectedGetErrForProject: () => readonly GetErrForProjectDiagnostics[];
+        expectedSyncDiagnostics: () => readonly SyncDiagnostics[];
+        expectedConfigFileDiagEvents: () => readonly server.ConfigFileDiagEvent["data"][];
+    }
+    export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
+        verifyErrorsUsingGeterr(scenario);
+        verifyErrorsUsingGeterrForProject(scenario);
+        verifyErrorsUsingSyncMethods(scenario);
+        verifyConfigFileErrors(scenario);
+    }
+
+    export function emptyDiagnostics(file: File): GetErrDiagnostics {
+        return {
+            file,
+            syntax: emptyArray,
+            semantic: emptyArray,
+            suggestion: emptyArray
+        };
+    }
+
+    export function syncDiagnostics(diagnostics: GetErrDiagnostics, project: string): SyncDiagnostics {
+        return { project, ...diagnostics };
     }
 }

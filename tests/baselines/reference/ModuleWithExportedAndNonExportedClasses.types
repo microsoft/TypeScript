@@ -1,6 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts ===
 module A {
->A : typeof A
+>A : typeof globalThis.A
 
     export class A {
 >A : A

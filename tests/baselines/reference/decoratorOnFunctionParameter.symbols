@@ -1,0 +1,26 @@
+=== tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts ===
+declare const dec: any;
+>dec : Symbol(dec, Decl(decoratorOnFunctionParameter.ts, 0, 13))
+
+class C { n = true; }
+>C : Symbol(C, Decl(decoratorOnFunctionParameter.ts, 0, 23))
+>n : Symbol(C.n, Decl(decoratorOnFunctionParameter.ts, 2, 9))
+
+function direct(@dec this: C) { return this.n; }
+>direct : Symbol(direct, Decl(decoratorOnFunctionParameter.ts, 2, 21))
+>dec : Symbol(dec, Decl(decoratorOnFunctionParameter.ts, 0, 13))
+>this : Symbol(this, Decl(decoratorOnFunctionParameter.ts, 4, 16))
+>C : Symbol(C, Decl(decoratorOnFunctionParameter.ts, 0, 23))
+>this.n : Symbol(C.n, Decl(decoratorOnFunctionParameter.ts, 2, 9))
+>this : Symbol(this, Decl(decoratorOnFunctionParameter.ts, 4, 16))
+>n : Symbol(C.n, Decl(decoratorOnFunctionParameter.ts, 2, 9))
+
+function called(@dec() this: C) { return this.n; }
+>called : Symbol(called, Decl(decoratorOnFunctionParameter.ts, 4, 48))
+>dec : Symbol(dec, Decl(decoratorOnFunctionParameter.ts, 0, 13))
+>this : Symbol(this, Decl(decoratorOnFunctionParameter.ts, 5, 16))
+>C : Symbol(C, Decl(decoratorOnFunctionParameter.ts, 0, 23))
+>this.n : Symbol(C.n, Decl(decoratorOnFunctionParameter.ts, 2, 9))
+>this : Symbol(this, Decl(decoratorOnFunctionParameter.ts, 5, 16))
+>n : Symbol(C.n, Decl(decoratorOnFunctionParameter.ts, 2, 9))
+

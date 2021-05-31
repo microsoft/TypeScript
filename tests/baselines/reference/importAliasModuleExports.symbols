@@ -1,0 +1,51 @@
+=== tests/cases/conformance/salsa/mod1.js ===
+class Alias {
+>Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
+
+    bar() { return 1 }
+>bar : Symbol(Alias.bar, Decl(mod1.js, 0, 13))
+}
+module.exports = Alias;
+>module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>module : Symbol(export=, Decl(mod1.js, 2, 1))
+>exports : Symbol(export=, Decl(mod1.js, 2, 1))
+>Alias : Symbol(Alias, Decl(mod1.js, 0, 0))
+
+=== tests/cases/conformance/salsa/main.js ===
+import A from './mod1'
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+A.prototype.foo = 0
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(main.js, 0, 6))
+>prototype : Symbol(A.prototype)
+
+A.prototype.func = function() { this._func = 0; }
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(main.js, 0, 6))
+>prototype : Symbol(A.prototype)
+>this : Symbol(A, Decl(mod1.js, 0, 0))
+
+Object.defineProperty(A.prototype, "def", { value: 0 });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>A.prototype : Symbol(A.prototype)
+>A : Symbol(A, Decl(main.js, 0, 6))
+>prototype : Symbol(A.prototype)
+>value : Symbol(value, Decl(main.js, 3, 43))
+
+new A().bar
+>new A().bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
+>A : Symbol(A, Decl(main.js, 0, 6))
+>bar : Symbol(A.bar, Decl(mod1.js, 0, 13))
+
+new A().foo
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().func()
+>A : Symbol(A, Decl(main.js, 0, 6))
+
+new A().def
+>A : Symbol(A, Decl(main.js, 0, 6))
+

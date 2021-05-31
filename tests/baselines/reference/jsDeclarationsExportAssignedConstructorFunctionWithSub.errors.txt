@@ -1,0 +1,20 @@
+tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS9005: Declaration emit for this file requires using private name 'Sub'. An explicit type annotation may unblock declaration emit.
+tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.js(4,1): error TS9005: Declaration emit for this file requires using private name 'exports'. An explicit type annotation may unblock declaration emit.
+
+
+==== tests/cases/conformance/jsdoc/declarations/jsDeclarationsExportAssignedConstructorFunctionWithSub.js (2 errors) ====
+    /**
+     * @param {number} p
+     */
+    module.exports = function (p) {
+    ~~~~~~
+!!! error TS9005: Declaration emit for this file requires using private name 'Sub'. An explicit type annotation may unblock declaration emit.
+    ~~~~~~
+!!! error TS9005: Declaration emit for this file requires using private name 'exports'. An explicit type annotation may unblock declaration emit.
+        this.t = 12 + p;
+    }
+    module.exports.Sub = function() {
+        this.instance = new module.exports(10);
+    }
+    module.exports.Sub.prototype = { }
+    

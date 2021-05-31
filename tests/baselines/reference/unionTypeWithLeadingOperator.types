@@ -12,7 +12,7 @@ type B =
 >type : "DECREMENT"
 
 type C = [| 0 | 1, | "foo" | "bar"];
->C : [0 | 1, "foo" | "bar"]
+>C : C
 
 export type D = 
 >D : D

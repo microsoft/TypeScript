@@ -146,7 +146,7 @@ function bar() { } = value;
 >value : any
 
 () => { } = value;
->() => { } : () => void
+>() => { } = : () => void
 >value : any
 
 // function calls
@@ -225,8 +225,8 @@ foo() = value;
 
 ([]) = value;
 >([]) = value : any
->([]) : undefined[]
->[] : undefined[]
+>([]) : []
+>[] : []
 >value : any
 
 (function baz() { }) = value;

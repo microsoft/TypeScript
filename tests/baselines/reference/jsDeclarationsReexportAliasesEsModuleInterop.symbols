@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+class Foo {}
+>Foo : Symbol(Foo, Decl(cls.js, 0, 0))
+
+module.exports = Foo;
+>module.exports : Symbol(module.exports, Decl(cls.js, 0, 0))
+>module : Symbol(export=, Decl(cls.js, 0, 12))
+>exports : Symbol(export=, Decl(cls.js, 0, 12))
+>Foo : Symbol(Foo, Decl(cls.js, 0, 0))
+
+=== tests/cases/conformance/jsdoc/declarations/usage.js ===
+import {default as Fooa} from "./cls";
+>default : Symbol(export=, Decl(cls.js, 0, 12))
+>Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
+
+export const x = new Fooa();
+>x : Symbol(x, Decl(usage.js, 2, 12))
+>Fooa : Symbol(Fooa, Decl(usage.js, 0, 8))
+
+export {default as Foob} from "./cls";
+>default : Symbol(export=, Decl(cls.js, 0, 12))
+>Foob : Symbol(Foob, Decl(usage.js, 4, 8))
+

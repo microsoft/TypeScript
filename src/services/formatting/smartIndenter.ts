@@ -182,7 +182,25 @@ namespace ts.formatting {
 
                 if (useActualIndentation) {
                     // check if current node is a list item - if yes, take indentation from it
-                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, !parentAndChildShareLine);
+                    const firstListChild = getContainingList(current, sourceFile)?.[0];
+                    // A list indents its children if the children begin on a later line than the list itself:
+                    //
+                    // f1(               L0 - List start
+                    //   {               L1 - First child start: indented, along with all other children
+                    //     prop: 0
+                    //   },
+                    //   {
+                    //     prop: 1
+                    //   }
+                    // )
+                    //
+                    // f2({             L0 - List start and first child start: children are not indented.
+                    //   prop: 0             Object properties are indented only one level, because the list
+                    // }, {                  itself contributes nothing.
+                    //   prop: 1        L3 - The indentation of the second object literal is best understood by
+                    // })                    looking at the relationship between the list and *first* list item.
+                    const listIndentsChild = !!firstListChild && getStartLineAndCharacterForNode(firstListChild, sourceFile).line > containingListOrParentStart.line;
+                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, listIndentsChild);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -312,7 +330,7 @@ namespace ts.formatting {
         }
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
-            if (parent.kind === SyntaxKind.IfStatement && (<IfStatement>parent).elseStatement === child) {
+            if (parent.kind === SyntaxKind.IfStatement && (parent as IfStatement).elseStatement === child) {
                 const elseKeyword = findChildOfKind(parent, SyntaxKind.ElseKeyword, sourceFile)!;
                 Debug.assert(elseKeyword !== undefined);
 
@@ -323,11 +341,55 @@ namespace ts.formatting {
             return false;
         }
 
+        // A multiline conditional typically increases the indentation of its whenTrue and whenFalse children:
+        //
+        // condition
+        //   ? whenTrue
+        //   : whenFalse;
+        //
+        // However, that indentation does not apply if the subexpressions themselves span multiple lines,
+        // applying their own indentation:
+        //
+        // (() => {
+        //   return complexCalculationForCondition();
+        // })() ? {
+        //   whenTrue: 'multiline object literal'
+        // } : (
+        //   whenFalse('multiline parenthesized expression')
+        // );
+        //
+        // In these cases, we must discard the indentation increase that would otherwise be applied to the
+        // whenTrue and whenFalse children to avoid double-indenting their contents. To identify this scenario,
+        // we check for the whenTrue branch beginning on the line that the condition ends, and the whenFalse
+        // branch beginning on the line that the whenTrue branch ends.
+        export function childIsUnindentedBranchOfConditionalExpression(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (isConditionalExpression(parent) && (child === parent.whenTrue || child === parent.whenFalse)) {
+                const conditionEndLine = getLineAndCharacterOfPosition(sourceFile, parent.condition.end).line;
+                if (child === parent.whenTrue) {
+                    return childStartLine === conditionEndLine;
+                }
+                else {
+                    // On the whenFalse side, we have to look at the whenTrue side, because if that one was
+                    // indented, whenFalse must also be indented:
+                    //
+                    // const y = true
+                    //   ? 1 : (          L1: whenTrue indented because it's on a new line
+                    //     0              L2: indented two stops, one because whenTrue was indented
+                    //   );                   and one because of the parentheses spanning multiple lines
+                    const trueStartLine = getStartLineAndCharacterForNode(parent.whenTrue, sourceFile).line;
+                    const trueEndLine = getLineAndCharacterOfPosition(sourceFile, parent.whenTrue.end).line;
+                    return conditionEndLine === trueStartLine && trueEndLine === childStartLine;
+                }
+            }
+            return false;
+        }
+
         export function argumentStartsOnSameLineAsPreviousArgument(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (isCallOrNewExpression(parent)) {
                 if (!parent.arguments) return false;
-
-                const currentNode = Debug.assertDefined(find(parent.arguments, arg => arg.pos === child.pos));
+                const currentNode = find(parent.arguments, arg => arg.pos === child.pos);
+                // If it's not one of the arguments, don't look past this
+                if (!currentNode) return false;
                 const currentIndex = parent.arguments.indexOf(currentNode);
                 if (currentIndex === 0) return false; // Can't look at previous node if first
 
@@ -353,13 +415,13 @@ namespace ts.formatting {
         function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
-                    return getList((<TypeReferenceNode>node).typeArguments);
+                    return getList((node as TypeReferenceNode).typeArguments);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return getList((<ObjectLiteralExpression>node).properties);
+                    return getList((node as ObjectLiteralExpression).properties);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getList((<ArrayLiteralExpression>node).elements);
+                    return getList((node as ArrayLiteralExpression).elements);
                 case SyntaxKind.TypeLiteral:
-                    return getList((<TypeLiteralNode>node).members);
+                    return getList((node as TypeLiteralNode).members);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -369,24 +431,24 @@ namespace ts.formatting {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
-                    return getList((<SignatureDeclaration>node).typeParameters) || getList((<SignatureDeclaration>node).parameters);
+                    return getList((node as SignatureDeclaration).typeParameters) || getList((node as SignatureDeclaration).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.JSDocTemplateTag:
-                    return getList((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node).typeParameters);
+                    return getList((node as ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag).typeParameters);
                 case SyntaxKind.NewExpression:
                 case SyntaxKind.CallExpression:
-                    return getList((<CallExpression>node).typeArguments) || getList((<CallExpression>node).arguments);
+                    return getList((node as CallExpression).typeArguments) || getList((node as CallExpression).arguments);
                 case SyntaxKind.VariableDeclarationList:
-                    return getList((<VariableDeclarationList>node).declarations);
+                    return getList((node as VariableDeclarationList).declarations);
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.NamedExports:
-                    return getList((<NamedImportsOrExports>node).elements);
+                    return getList((node as NamedImportsOrExports).elements);
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
-                    return getList((<ObjectBindingPattern | ArrayBindingPattern>node).elements);
+                    return getList((node as ObjectBindingPattern | ArrayBindingPattern).elements);
             }
 
             function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {
@@ -557,26 +619,30 @@ namespace ts.formatting {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                    return childKind !== SyntaxKind.Block;
+                case SyntaxKind.ArrowFunction:
+                    if (sourceFile && childKind === SyntaxKind.ParenthesizedExpression) {
+                        return rangeIsOnOneLine(sourceFile, child!);
+                    }
                     return childKind !== SyntaxKind.Block;
                 case SyntaxKind.ExportDeclaration:
                     return childKind !== SyntaxKind.NamedExports;
                 case SyntaxKind.ImportDeclaration:
                     return childKind !== SyntaxKind.ImportClause ||
-                        (!!(<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings!.kind !== SyntaxKind.NamedImports);
+                        (!!(child as ImportClause).namedBindings && (child as ImportClause).namedBindings!.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.JsxFragment:
                     return childKind !== SyntaxKind.JsxClosingFragment;
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    if (childKind === SyntaxKind.TypeLiteral) {
+                    if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
                         return false;
                     }
-                    // falls through
+                    break;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;

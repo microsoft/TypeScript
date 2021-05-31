@@ -1,0 +1,60 @@
+=== tests/cases/conformance/expressions/optionalChaining/callChain/callChain.3.ts ===
+declare function absorb<T>(): T;
+>absorb : Symbol(absorb, Decl(callChain.3.ts, 0, 0))
+>T : Symbol(T, Decl(callChain.3.ts, 0, 24))
+>T : Symbol(T, Decl(callChain.3.ts, 0, 24))
+
+declare const a: { m?<T>(obj: {x: T}): T } | undefined;
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>T : Symbol(T, Decl(callChain.3.ts, 1, 22))
+>obj : Symbol(obj, Decl(callChain.3.ts, 1, 25))
+>x : Symbol(x, Decl(callChain.3.ts, 1, 31))
+>T : Symbol(T, Decl(callChain.3.ts, 1, 22))
+>T : Symbol(T, Decl(callChain.3.ts, 1, 22))
+
+const n1: number = a?.m?.({x: 12 }); // should be an error (`undefined` is not assignable to `number`)
+>n1 : Symbol(n1, Decl(callChain.3.ts, 2, 5))
+>a?.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 2, 27))
+
+const n2: number = a?.m?.({x: absorb()}); // likewise
+>n2 : Symbol(n2, Decl(callChain.3.ts, 3, 5))
+>a?.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 3, 27))
+>absorb : Symbol(absorb, Decl(callChain.3.ts, 0, 0))
+
+const n3: number | undefined = a?.m?.({x: 12}); // should be ok
+>n3 : Symbol(n3, Decl(callChain.3.ts, 4, 5))
+>a?.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 4, 39))
+
+const n4: number | undefined = a?.m?.({x: absorb()}); // likewise
+>n4 : Symbol(n4, Decl(callChain.3.ts, 5, 5))
+>a?.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 5, 39))
+>absorb : Symbol(absorb, Decl(callChain.3.ts, 0, 0))
+
+// Also a test showing `!` vs `?` for good measure
+let t1 = a?.m?.({x: 12});
+>t1 : Symbol(t1, Decl(callChain.3.ts, 8, 3))
+>a?.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 8, 17))
+
+t1 = a!.m!({x: 12});
+>t1 : Symbol(t1, Decl(callChain.3.ts, 8, 3))
+>a!.m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>a : Symbol(a, Decl(callChain.3.ts, 1, 13))
+>m : Symbol(m, Decl(callChain.3.ts, 1, 18))
+>x : Symbol(x, Decl(callChain.3.ts, 9, 12))
+

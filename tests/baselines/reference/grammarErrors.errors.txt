@@ -1,0 +1,38 @@
+error TS5055: Cannot write file '/a.js' because it would overwrite input file.
+  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+error TS5056: Cannot write file '/a.js' because it would be overwritten by multiple input files.
+/a.js(1,1): error TS8006: 'import type' declarations can only be used in TypeScript files.
+/a.js(2,1): error TS8006: 'export type' declarations can only be used in TypeScript files.
+/b.ts(1,8): error TS1363: A type-only import can specify a default import or named bindings, but not both.
+/c.ts(4,1): error TS1392: An import alias cannot use 'import type'
+
+
+!!! error TS5055: Cannot write file '/a.js' because it would overwrite input file.
+!!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+!!! error TS5056: Cannot write file '/a.js' because it would be overwritten by multiple input files.
+==== /a.ts (0 errors) ====
+    export default class A {}
+    export class B {}
+    export class C {}
+    
+==== /b.ts (1 errors) ====
+    import type A, { B, C } from './a';
+           ~~~~~~~~~~~~~~~~
+!!! error TS1363: A type-only import can specify a default import or named bindings, but not both.
+    
+==== /a.js (2 errors) ====
+    import type A from './a';
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8006: 'import type' declarations can only be used in TypeScript files.
+    export type { A };
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS8006: 'export type' declarations can only be used in TypeScript files.
+    
+==== /c.ts (1 errors) ====
+    namespace ns {
+      export class Foo {}
+    }
+    import type Foo = ns.Foo;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1392: An import alias cannot use 'import type'
+    

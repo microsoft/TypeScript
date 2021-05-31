@@ -8,7 +8,7 @@ declare function f<T>(obj: T, key: keyof T): void;
 >key : keyof T
 
 f(a, "");
->f(a, "") : any
+>f(a, "") : void
 >f : <T>(obj: T, key: keyof T) => void
 >a : typeof a
 >"" : ""

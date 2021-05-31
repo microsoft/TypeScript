@@ -1,8 +1,8 @@
-tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts(2,21): error TS2345: Argument of type '"invalid"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts(2,21): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== tests/cases/conformance/types/primitives/string/stringPropertyAccessWithError.ts (1 errors) ====
     var x = '';
     var d = x['charAt']('invalid'); // error
                         ~~~~~~~~~
-!!! error TS2345: Argument of type '"invalid"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.

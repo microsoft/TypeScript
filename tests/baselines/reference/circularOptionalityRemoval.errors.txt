@@ -1,0 +1,32 @@
+tests/cases/compiler/circularOptionalityRemoval.ts(2,14): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/circularOptionalityRemoval.ts(2,38): error TS2372: Parameter 'x' cannot reference itself.
+tests/cases/compiler/circularOptionalityRemoval.ts(2,38): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/circularOptionalityRemoval.ts(2,46): error TS2372: Parameter 'x' cannot reference itself.
+tests/cases/compiler/circularOptionalityRemoval.ts(5,14): error TS1015: Parameter cannot have question mark and initializer.
+tests/cases/compiler/circularOptionalityRemoval.ts(5,14): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/compiler/circularOptionalityRemoval.ts(5,27): error TS2304: Cannot find name 'someCondition'.
+tests/cases/compiler/circularOptionalityRemoval.ts(5,54): error TS2372: Parameter 'x' cannot reference itself.
+
+
+==== tests/cases/compiler/circularOptionalityRemoval.ts (8 errors) ====
+    // Constructed repro
+    function fn1(x: number | undefined = x > 0 ? x : 0) { }
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+                                         ~
+!!! error TS2372: Parameter 'x' cannot reference itself.
+                                         ~
+!!! error TS2532: Object is possibly 'undefined'.
+                                                 ~
+!!! error TS2372: Parameter 'x' cannot reference itself.
+    
+    // Report from user
+    function fn2(x?: string = someCondition ? 'value1' : x) { }
+                 ~
+!!! error TS1015: Parameter cannot have question mark and initializer.
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+                              ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'someCondition'.
+                                                         ~
+!!! error TS2372: Parameter 'x' cannot reference itself.

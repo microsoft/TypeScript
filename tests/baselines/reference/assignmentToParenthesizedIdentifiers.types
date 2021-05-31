@@ -184,7 +184,7 @@ fn = () => 3; // Bug 823548: Should be error (fn is not a reference)
 >3 : 3
 
 function fn2(x: number, y: { t: number }) {
->fn2 : (x: number, y: { t: number; }) => void
+>fn2 : (x: number, y: {    t: number;}) => void
 >x : number
 >y : { t: number; }
 >t : number

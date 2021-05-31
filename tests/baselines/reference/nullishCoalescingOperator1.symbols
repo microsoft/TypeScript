@@ -1,0 +1,160 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator1.ts ===
+declare const a1: string | undefined | null
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator1.ts, 0, 13))
+
+declare const a2: string | undefined | null
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator1.ts, 1, 13))
+
+declare const a3: string | undefined | null
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator1.ts, 2, 13))
+
+declare const a4: string | undefined | null
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator1.ts, 3, 13))
+
+declare const b1: number | undefined | null
+>b1 : Symbol(b1, Decl(nullishCoalescingOperator1.ts, 5, 13))
+
+declare const b2: number | undefined | null
+>b2 : Symbol(b2, Decl(nullishCoalescingOperator1.ts, 6, 13))
+
+declare const b3: number | undefined | null
+>b3 : Symbol(b3, Decl(nullishCoalescingOperator1.ts, 7, 13))
+
+declare const b4: number | undefined | null
+>b4 : Symbol(b4, Decl(nullishCoalescingOperator1.ts, 8, 13))
+
+declare const c1: boolean | undefined | null
+>c1 : Symbol(c1, Decl(nullishCoalescingOperator1.ts, 10, 13))
+
+declare const c2: boolean | undefined | null
+>c2 : Symbol(c2, Decl(nullishCoalescingOperator1.ts, 11, 13))
+
+declare const c3: boolean | undefined | null
+>c3 : Symbol(c3, Decl(nullishCoalescingOperator1.ts, 12, 13))
+
+declare const c4: boolean | undefined | null
+>c4 : Symbol(c4, Decl(nullishCoalescingOperator1.ts, 13, 13))
+
+interface I { a: string }
+>I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+>a : Symbol(I.a, Decl(nullishCoalescingOperator1.ts, 15, 13))
+
+declare const d1: I | undefined | null
+>d1 : Symbol(d1, Decl(nullishCoalescingOperator1.ts, 16, 13))
+>I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+
+declare const d2: I | undefined | null
+>d2 : Symbol(d2, Decl(nullishCoalescingOperator1.ts, 17, 13))
+>I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+
+declare const d3: I | undefined | null
+>d3 : Symbol(d3, Decl(nullishCoalescingOperator1.ts, 18, 13))
+>I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+
+declare const d4: I | undefined | null
+>d4 : Symbol(d4, Decl(nullishCoalescingOperator1.ts, 19, 13))
+>I : Symbol(I, Decl(nullishCoalescingOperator1.ts, 13, 44))
+
+const aa1 = a1 ?? 'whatever';
+>aa1 : Symbol(aa1, Decl(nullishCoalescingOperator1.ts, 21, 5))
+>a1 : Symbol(a1, Decl(nullishCoalescingOperator1.ts, 0, 13))
+
+const aa2 = a2 ?? 'whatever';
+>aa2 : Symbol(aa2, Decl(nullishCoalescingOperator1.ts, 22, 5))
+>a2 : Symbol(a2, Decl(nullishCoalescingOperator1.ts, 1, 13))
+
+const aa3 = a3 ?? 'whatever';
+>aa3 : Symbol(aa3, Decl(nullishCoalescingOperator1.ts, 23, 5))
+>a3 : Symbol(a3, Decl(nullishCoalescingOperator1.ts, 2, 13))
+
+const aa4 = a4 ?? 'whatever';
+>aa4 : Symbol(aa4, Decl(nullishCoalescingOperator1.ts, 24, 5))
+>a4 : Symbol(a4, Decl(nullishCoalescingOperator1.ts, 3, 13))
+
+const bb1 = b1 ?? 1;
+>bb1 : Symbol(bb1, Decl(nullishCoalescingOperator1.ts, 26, 5))
+>b1 : Symbol(b1, Decl(nullishCoalescingOperator1.ts, 5, 13))
+
+const bb2 = b2 ?? 1;
+>bb2 : Symbol(bb2, Decl(nullishCoalescingOperator1.ts, 27, 5))
+>b2 : Symbol(b2, Decl(nullishCoalescingOperator1.ts, 6, 13))
+
+const bb3 = b3 ?? 1;
+>bb3 : Symbol(bb3, Decl(nullishCoalescingOperator1.ts, 28, 5))
+>b3 : Symbol(b3, Decl(nullishCoalescingOperator1.ts, 7, 13))
+
+const bb4 = b4 ?? 1;
+>bb4 : Symbol(bb4, Decl(nullishCoalescingOperator1.ts, 29, 5))
+>b4 : Symbol(b4, Decl(nullishCoalescingOperator1.ts, 8, 13))
+
+const cc1 = c1 ?? true;
+>cc1 : Symbol(cc1, Decl(nullishCoalescingOperator1.ts, 31, 5))
+>c1 : Symbol(c1, Decl(nullishCoalescingOperator1.ts, 10, 13))
+
+const cc2 = c2 ?? true;
+>cc2 : Symbol(cc2, Decl(nullishCoalescingOperator1.ts, 32, 5))
+>c2 : Symbol(c2, Decl(nullishCoalescingOperator1.ts, 11, 13))
+
+const cc3 = c3 ?? true;
+>cc3 : Symbol(cc3, Decl(nullishCoalescingOperator1.ts, 33, 5))
+>c3 : Symbol(c3, Decl(nullishCoalescingOperator1.ts, 12, 13))
+
+const cc4 = c4 ?? true;
+>cc4 : Symbol(cc4, Decl(nullishCoalescingOperator1.ts, 34, 5))
+>c4 : Symbol(c4, Decl(nullishCoalescingOperator1.ts, 13, 13))
+
+const dd1 = d1 ?? {b: 1};
+>dd1 : Symbol(dd1, Decl(nullishCoalescingOperator1.ts, 36, 5))
+>d1 : Symbol(d1, Decl(nullishCoalescingOperator1.ts, 16, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator1.ts, 36, 19))
+
+const dd2 = d2 ?? {b: 1};
+>dd2 : Symbol(dd2, Decl(nullishCoalescingOperator1.ts, 37, 5))
+>d2 : Symbol(d2, Decl(nullishCoalescingOperator1.ts, 17, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator1.ts, 37, 19))
+
+const dd3 = d3 ?? {b: 1};
+>dd3 : Symbol(dd3, Decl(nullishCoalescingOperator1.ts, 38, 5))
+>d3 : Symbol(d3, Decl(nullishCoalescingOperator1.ts, 18, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator1.ts, 38, 19))
+
+const dd4 = d4 ?? {b: 1};
+>dd4 : Symbol(dd4, Decl(nullishCoalescingOperator1.ts, 39, 5))
+>d4 : Symbol(d4, Decl(nullishCoalescingOperator1.ts, 19, 13))
+>b : Symbol(b, Decl(nullishCoalescingOperator1.ts, 39, 19))
+
+// Repro from #34635
+
+declare function foo(): void;
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+
+const maybeBool = false;
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+if (!(maybeBool ?? true)) {
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+
+if (maybeBool ?? true) {
+>maybeBool : Symbol(maybeBool, Decl(nullishCoalescingOperator1.ts, 45, 5))
+
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+else {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+
+if (false ?? true) {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+else {
+    foo();
+>foo : Symbol(foo, Decl(nullishCoalescingOperator1.ts, 39, 25))
+}
+

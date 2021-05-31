@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/accessorsOverrideProperty.ts ===
+class A {
+>A : Symbol(A, Decl(accessorsOverrideProperty.ts, 0, 0))
+
+    p = 'yep'
+>p : Symbol(A.p, Decl(accessorsOverrideProperty.ts, 0, 9))
+}
+class B extends A {
+>B : Symbol(B, Decl(accessorsOverrideProperty.ts, 2, 1))
+>A : Symbol(A, Decl(accessorsOverrideProperty.ts, 0, 0))
+
+    get p() { return 'oh no' } // error
+>p : Symbol(B.p, Decl(accessorsOverrideProperty.ts, 3, 19))
+}
+class C {
+>C : Symbol(C, Decl(accessorsOverrideProperty.ts, 5, 1))
+
+   p = 101
+>p : Symbol(C.p, Decl(accessorsOverrideProperty.ts, 6, 9))
+}
+class D extends C {
+>D : Symbol(D, Decl(accessorsOverrideProperty.ts, 8, 1))
+>C : Symbol(C, Decl(accessorsOverrideProperty.ts, 5, 1))
+
+     _secret = 11
+>_secret : Symbol(D._secret, Decl(accessorsOverrideProperty.ts, 9, 19))
+
+    get p() { return this._secret } // error
+>p : Symbol(D.p, Decl(accessorsOverrideProperty.ts, 10, 17), Decl(accessorsOverrideProperty.ts, 11, 35))
+>this._secret : Symbol(D._secret, Decl(accessorsOverrideProperty.ts, 9, 19))
+>this : Symbol(D, Decl(accessorsOverrideProperty.ts, 8, 1))
+>_secret : Symbol(D._secret, Decl(accessorsOverrideProperty.ts, 9, 19))
+
+    set p(value) { this._secret = value } // error
+>p : Symbol(D.p, Decl(accessorsOverrideProperty.ts, 10, 17), Decl(accessorsOverrideProperty.ts, 11, 35))
+>value : Symbol(value, Decl(accessorsOverrideProperty.ts, 12, 10))
+>this._secret : Symbol(D._secret, Decl(accessorsOverrideProperty.ts, 9, 19))
+>this : Symbol(D, Decl(accessorsOverrideProperty.ts, 8, 1))
+>_secret : Symbol(D._secret, Decl(accessorsOverrideProperty.ts, 9, 19))
+>value : Symbol(value, Decl(accessorsOverrideProperty.ts, 12, 10))
+}
+

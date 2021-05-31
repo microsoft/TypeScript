@@ -23,6 +23,7 @@ a; y;`,
         "/y.ts":
 `import { b } from './other';
 import { p } from './a';
+
 export const y: Date = p + b;
 `,
     },

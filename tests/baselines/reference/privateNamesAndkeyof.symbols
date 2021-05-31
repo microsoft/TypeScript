@@ -1,0 +1,50 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesAndkeyof.ts, 0, 0))
+
+    #fooField = 3;
+>#fooField : Symbol(A.#fooField, Decl(privateNamesAndkeyof.ts, 0, 9))
+
+    #fooMethod() { };
+>#fooMethod : Symbol(A.#fooMethod, Decl(privateNamesAndkeyof.ts, 1, 18))
+
+    get #fooProp() { return 1; };
+>#fooProp : Symbol(A.#fooProp, Decl(privateNamesAndkeyof.ts, 2, 21), Decl(privateNamesAndkeyof.ts, 3, 33))
+
+    set #fooProp(value: number) { };
+>#fooProp : Symbol(A.#fooProp, Decl(privateNamesAndkeyof.ts, 2, 21), Decl(privateNamesAndkeyof.ts, 3, 33))
+>value : Symbol(value, Decl(privateNamesAndkeyof.ts, 4, 17))
+
+    bar = 3;
+>bar : Symbol(A.bar, Decl(privateNamesAndkeyof.ts, 4, 36))
+
+    baz = 3;
+>baz : Symbol(A.baz, Decl(privateNamesAndkeyof.ts, 5, 12))
+}
+
+// `keyof A` should not include '#foo*'
+let k: keyof A = "bar"; // OK
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+>A : Symbol(A, Decl(privateNamesAndkeyof.ts, 0, 0))
+
+k = "baz"; // OK
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "#fooField"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "#fooMethod"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "#fooProp"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "fooField"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "fooMethod"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+
+k = "fooProp"; // Error
+>k : Symbol(k, Decl(privateNamesAndkeyof.ts, 10, 3))
+

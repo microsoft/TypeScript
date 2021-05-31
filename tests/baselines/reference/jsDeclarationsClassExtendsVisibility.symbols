@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+const Bar = require("./bar");
+>Bar : Symbol(Bar, Decl(cls.js, 0, 5))
+>require : Symbol(require)
+>"./bar" : Symbol("tests/cases/conformance/jsdoc/declarations/bar", Decl(bar.js, 0, 0))
+
+const Strings = {
+>Strings : Symbol(Strings, Decl(cls.js, 1, 5))
+
+    a: "A",
+>a : Symbol(a, Decl(cls.js, 1, 17))
+
+    b: "B"
+>b : Symbol(b, Decl(cls.js, 2, 11))
+
+};
+class Foo extends Bar {}
+>Foo : Symbol(Foo, Decl(cls.js, 4, 2))
+>Bar : Symbol(Bar, Decl(cls.js, 0, 5))
+
+module.exports = Foo;
+>module.exports : Symbol(module.exports, Decl(cls.js, 0, 0))
+>module : Symbol(export=, Decl(cls.js, 5, 24))
+>exports : Symbol(export=, Decl(cls.js, 5, 24))
+>Foo : Symbol(Foo, Decl(cls.js, 4, 2))
+
+module.exports.Strings = Strings;
+>module.exports.Strings : Symbol(Strings, Decl(cls.js, 6, 21))
+>module.exports : Symbol(Strings, Decl(cls.js, 6, 21))
+>module : Symbol(module, Decl(cls.js, 5, 24))
+>exports : Symbol(module.exports, Decl(cls.js, 0, 0))
+>Strings : Symbol(Strings, Decl(cls.js, 6, 21))
+>Strings : Symbol(Strings, Decl(cls.js, 1, 5))
+
+=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+class Bar {}
+>Bar : Symbol(Bar, Decl(bar.js, 0, 0))
+
+module.exports = Bar;
+>module.exports : Symbol(module.exports, Decl(bar.js, 0, 0))
+>module : Symbol(export=, Decl(bar.js, 0, 12))
+>exports : Symbol(export=, Decl(bar.js, 0, 12))
+>Bar : Symbol(Bar, Decl(bar.js, 0, 0))
+

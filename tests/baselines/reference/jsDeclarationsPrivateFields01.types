@@ -1,0 +1,48 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+export class C {
+>C : C
+
+    #hello = "hello";
+>#hello : string
+>"hello" : "hello"
+
+    #world = 100;
+>#world : number
+>100 : 100
+
+    #calcHello() {
+>#calcHello : () => string
+
+        return this.#hello;
+>this.#hello : string
+>this : this
+    }
+
+    get #screamingHello() {
+>#screamingHello : string
+
+        return this.#hello.toUpperCase();
+>this.#hello.toUpperCase() : string
+>this.#hello.toUpperCase : () => string
+>this.#hello : string
+>this : this
+>toUpperCase : () => string
+    }
+    /** @param value {string} */
+    set #screamingHello(value) {
+>#screamingHello : string
+>value : string
+
+        throw "NO";
+>"NO" : "NO"
+    }
+
+    getWorld() {
+>getWorld : () => number
+
+        return this.#world;
+>this.#world : number
+>this : this
+    }
+}
+

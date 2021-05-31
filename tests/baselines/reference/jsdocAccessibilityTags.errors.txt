@@ -1,0 +1,95 @@
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(50,14): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(55,14): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(58,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(58,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(59,9): error TS2341: Property 'priv' is private and only accessible within class 'A'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(59,24): error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(60,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(60,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(61,9): error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js(61,25): error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+
+
+==== tests/cases/conformance/jsdoc/jsdocAccessibilityTag.js (10 errors) ====
+    class A {
+        /**
+         * Ap docs
+         *
+         * @private
+         */
+        priv = 4;
+        /**
+         * Aq docs
+         *
+         * @protected
+         */
+        prot = 5;
+        /**
+         * Ar docs
+         *
+         * @public
+         */
+        pub = 6;
+        /** @public */
+        get ack() { return this.priv }
+        /** @private */
+        set ack(value) { }
+    }
+    class C {
+        constructor() {
+            /**
+             * Cp docs
+             *
+             * @private
+             */
+            this.priv2 = 1;
+            /**
+             * Cq docs
+             *
+             * @protected
+             */
+            this.prot2 = 2;
+            /**
+             * Cr docs
+             *
+             * @public
+             */
+            this.pub2 = 3;
+        }
+        h() { return this.priv2 }
+    }
+    class B extends A {
+        m() {
+            this.priv + this.prot + this.pub
+                 ~~~~
+!!! error TS2341: Property 'priv' is private and only accessible within class 'A'.
+        }
+    }
+    class D extends C {
+        n() {
+            this.priv2 + this.prot2 + this.pub2
+                 ~~~~~
+!!! error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+        }
+    }
+    new A().priv + new A().prot + new A().pub
+            ~~~~
+!!! error TS2341: Property 'priv' is private and only accessible within class 'A'.
+                           ~~~~
+!!! error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+    new B().priv + new B().prot + new B().pub
+            ~~~~
+!!! error TS2341: Property 'priv' is private and only accessible within class 'A'.
+                           ~~~~
+!!! error TS2445: Property 'prot' is protected and only accessible within class 'A' and its subclasses.
+    new C().priv2 + new C().prot2 + new C().pub2
+            ~~~~~
+!!! error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+                            ~~~~~
+!!! error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+    new D().priv2 + new D().prot2 + new D().pub2
+            ~~~~~
+!!! error TS2341: Property 'priv2' is private and only accessible within class 'C'.
+                            ~~~~~
+!!! error TS2445: Property 'prot2' is protected and only accessible within class 'C' and its subclasses.
+    

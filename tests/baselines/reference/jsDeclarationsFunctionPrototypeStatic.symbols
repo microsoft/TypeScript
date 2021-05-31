@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+module.exports = MyClass;
+>module.exports : Symbol(module.exports, Decl(source.js, 0, 0))
+>module : Symbol(export=, Decl(source.js, 0, 0))
+>exports : Symbol(export=, Decl(source.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25), Decl(source.js, 2, 21), Decl(source.js, 4, 40))
+
+function MyClass() {}
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25), Decl(source.js, 2, 21), Decl(source.js, 4, 40))
+
+MyClass.staticMethod = function() {}
+>MyClass.staticMethod : Symbol(MyClass.staticMethod, Decl(source.js, 2, 21))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25), Decl(source.js, 2, 21), Decl(source.js, 4, 40))
+>staticMethod : Symbol(MyClass.staticMethod, Decl(source.js, 2, 21))
+
+MyClass.prototype.method = function() {}
+>MyClass.prototype : Symbol(MyClass.method, Decl(source.js, 3, 36))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25), Decl(source.js, 2, 21), Decl(source.js, 4, 40))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>method : Symbol(MyClass.method, Decl(source.js, 3, 36))
+
+MyClass.staticProperty = 123;
+>MyClass.staticProperty : Symbol(MyClass.staticProperty, Decl(source.js, 4, 40))
+>MyClass : Symbol(MyClass, Decl(source.js, 0, 25), Decl(source.js, 2, 21), Decl(source.js, 4, 40))
+>staticProperty : Symbol(MyClass.staticProperty, Decl(source.js, 4, 40))
+
+/**
+ * Callback to be invoked when test execution is complete.
+ *
+ * @callback DoneCB
+ * @param {number} failures - Number of failures that occurred.
+ */

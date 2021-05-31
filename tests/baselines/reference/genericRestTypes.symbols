@@ -44,3 +44,61 @@ type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
 >Bind1 : Symbol(Bind1, Decl(genericRestTypes.ts, 8, 90))
 >MyFunctionType : Symbol(MyFunctionType, Decl(genericRestTypes.ts, 4, 110))
 
+function assignmentWithComplexRest<T extends any[]>() {
+>assignmentWithComplexRest : Symbol(assignmentWithComplexRest, Decl(genericRestTypes.ts, 11, 37))
+>T : Symbol(T, Decl(genericRestTypes.ts, 13, 35))
+
+    const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 14, 9))
+>x : Symbol(x, Decl(genericRestTypes.ts, 14, 16))
+>rest : Symbol(rest, Decl(genericRestTypes.ts, 14, 26))
+>T : Symbol(T, Decl(genericRestTypes.ts, 13, 35))
+>x : Symbol(x, Decl(genericRestTypes.ts, 14, 50))
+>_ : Symbol(_, Decl(genericRestTypes.ts, 14, 52))
+>x : Symbol(x, Decl(genericRestTypes.ts, 14, 50))
+
+    const fn2: (...args: never) => void = fn1;
+>fn2 : Symbol(fn2, Decl(genericRestTypes.ts, 15, 9))
+>args : Symbol(args, Decl(genericRestTypes.ts, 15, 16))
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 14, 9))
+}
+
+function assignmentWithComplexRest2<T extends any[]>() {
+>assignmentWithComplexRest2 : Symbol(assignmentWithComplexRest2, Decl(genericRestTypes.ts, 16, 1))
+>T : Symbol(T, Decl(genericRestTypes.ts, 18, 36))
+
+    const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 19, 9))
+>cb : Symbol(cb, Decl(genericRestTypes.ts, 19, 16))
+>x : Symbol(x, Decl(genericRestTypes.ts, 19, 21))
+>rest : Symbol(rest, Decl(genericRestTypes.ts, 19, 31))
+>T : Symbol(T, Decl(genericRestTypes.ts, 18, 36))
+>cb : Symbol(cb, Decl(genericRestTypes.ts, 19, 64))
+
+    const fn2: (cb: (...args: never) => void) => void = fn1;
+>fn2 : Symbol(fn2, Decl(genericRestTypes.ts, 20, 9))
+>cb : Symbol(cb, Decl(genericRestTypes.ts, 20, 16))
+>args : Symbol(args, Decl(genericRestTypes.ts, 20, 21))
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 19, 9))
+}
+
+function assignmentWithComplexRest3<T extends any[]>() {
+>assignmentWithComplexRest3 : Symbol(assignmentWithComplexRest3, Decl(genericRestTypes.ts, 21, 1))
+>T : Symbol(T, Decl(genericRestTypes.ts, 23, 36))
+
+    const fn1: (x: string, ...rest: T) => void = (x, ..._) => x;
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 24, 9))
+>x : Symbol(x, Decl(genericRestTypes.ts, 24, 16))
+>rest : Symbol(rest, Decl(genericRestTypes.ts, 24, 26))
+>T : Symbol(T, Decl(genericRestTypes.ts, 23, 36))
+>x : Symbol(x, Decl(genericRestTypes.ts, 24, 50))
+>_ : Symbol(_, Decl(genericRestTypes.ts, 24, 52))
+>x : Symbol(x, Decl(genericRestTypes.ts, 24, 50))
+
+    const fn2: (...args: {x: "a"} & {x: "b"}) => void = fn1;
+>fn2 : Symbol(fn2, Decl(genericRestTypes.ts, 25, 9))
+>args : Symbol(args, Decl(genericRestTypes.ts, 25, 16))
+>x : Symbol(x, Decl(genericRestTypes.ts, 25, 26))
+>x : Symbol(x, Decl(genericRestTypes.ts, 25, 37))
+>fn1 : Symbol(fn1, Decl(genericRestTypes.ts, 24, 9))
+}

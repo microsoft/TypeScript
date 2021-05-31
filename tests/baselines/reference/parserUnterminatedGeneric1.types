@@ -1,6 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric1.ts ===
  interface IQService {
         all(promises: IPromise < any > []): IPromise<
->all : (promises: any[]) => any
+>all : (promises: IPromise<any>[]) => any
 >promises : any[]
 

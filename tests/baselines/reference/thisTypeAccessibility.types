@@ -41,6 +41,28 @@ interface MyClass {
 >p : number
 }
 
+class MyGenericClass<T> {
+>MyGenericClass : MyGenericClass<T>
+
+    private p: T;
+>p : T
+
+    protected pp: T;
+>pp : T
+
+    public ppp: T;
+>ppp : T
+
+    private static sp: number;
+>sp : number
+
+    protected static spp: number;
+>spp : number
+
+    public static sppp: number;
+>sppp : number
+}
+
 MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
 >MyClass.prototype.extension1 = function (this: MyClass, p: number) {     this.p = p;    this.pp = p;    this.ppp = p;    MyClass.sp = p;    MyClass.spp = p;    MyClass.sppp = p;} : (this: MyClass, p: number) => void
 >MyClass.prototype.extension1 : (p: number) => void
@@ -205,4 +227,52 @@ MyClass.prototype.extension3 = extension3;
 >prototype : MyClass
 >extension3 : (p: number) => void
 >extension3 : <T extends MyClass>(this: T, p: number) => void
+
+function extension4<T extends number>(this: MyGenericClass<T>, p: T) {
+>extension4 : <T extends number>(this: MyGenericClass<T>, p: T) => void
+>this : MyGenericClass<T>
+>p : T
+
+    this.p = p;
+>this.p = p : T
+>this.p : T
+>this : MyGenericClass<T>
+>p : T
+>p : T
+
+    this.pp = p;
+>this.pp = p : T
+>this.pp : T
+>this : MyGenericClass<T>
+>pp : T
+>p : T
+
+    this.ppp = p;
+>this.ppp = p : T
+>this.ppp : T
+>this : MyGenericClass<T>
+>ppp : T
+>p : T
+
+    MyGenericClass.sp = p;
+>MyGenericClass.sp = p : T
+>MyGenericClass.sp : number
+>MyGenericClass : typeof MyGenericClass
+>sp : number
+>p : T
+
+    MyGenericClass.spp = p;
+>MyGenericClass.spp = p : T
+>MyGenericClass.spp : number
+>MyGenericClass : typeof MyGenericClass
+>spp : number
+>p : T
+
+    MyGenericClass.sppp = p;
+>MyGenericClass.sppp = p : T
+>MyGenericClass.sppp : number
+>MyGenericClass : typeof MyGenericClass
+>sppp : number
+>p : T
+}
 

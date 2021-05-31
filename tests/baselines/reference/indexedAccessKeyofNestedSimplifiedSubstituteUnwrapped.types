@@ -1,0 +1,39 @@
+=== tests/cases/compiler/indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.ts ===
+type AnyFunction = (...args: any[]) => any;
+>AnyFunction : AnyFunction
+>args : any[]
+
+type Params<T> = Parameters<Extract<T, AnyFunction>>;
+>Params : Params<T>
+
+interface Wrapper<T> {
+	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
+>call : <K extends keyof T>(event: K, ...args: Params<T[K]>) => void
+>event : K
+>args : Parameters<Extract<T[K], AnyFunction>>
+}
+
+interface AWrapped {
+	foo(): void;
+>foo : () => void
+}
+
+class A {
+>A : A
+
+	foo: Wrapper<AWrapped>;
+>foo : Wrapper<AWrapped>
+}
+
+interface BWrapped extends AWrapped {
+	bar(): void;
+>bar : () => void
+}
+
+class B extends A {
+>B : B
+>A : A
+
+	foo: Wrapper<BWrapped>;
+>foo : Wrapper<BWrapped>
+}

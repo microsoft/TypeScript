@@ -1,6 +1,6 @@
 tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(9,1): error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
   Type 'unknown[]' is not assignable to type 'T'.
-    'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+    'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown[]'.
 
 
 ==== tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts (1 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/functionTypeArgumentAssignmentCompat.ts(9,1): error TS2322:
     ~
 !!! error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
 !!! error TS2322:   Type 'unknown[]' is not assignable to type 'T'.
-!!! error TS2322:     'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     'T' could be instantiated with an arbitrary type which could be unrelated to 'unknown[]'.
     var s = f("str").toUpperCase();
     
     console.log(s);

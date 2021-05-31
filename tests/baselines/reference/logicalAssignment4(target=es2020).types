@@ -1,0 +1,159 @@
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment4.ts ===
+function foo1(results: number[] | undefined) {
+>foo1 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ||= []).push(100);
+>(results ||= []).push(100) : number
+>(results ||= []).push : (...items: number[]) => number
+>(results ||= []) : number[]
+>results ||= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo2(results: number[] | undefined) {
+>foo2 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    (results ??= []).push(100);
+>(results ??= []).push(100) : number
+>(results ??= []).push : (...items: number[]) => number
+>(results ??= []) : number[]
+>results ??= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo3(results: number[] | undefined) {
+>foo3 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    results ||= [];
+>results ||= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+
+    results.push(100);
+>results.push(100) : number
+>results.push : (...items: number[]) => number
+>results : number[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+function foo4(results: number[] | undefined) {
+>foo4 : (results: number[] | undefined) => void
+>results : number[] | undefined
+
+    results ??= [];
+>results ??= [] : number[]
+>results : number[] | undefined
+>[] : never[]
+
+    results.push(100);
+>results.push(100) : number
+>results.push : (...items: number[]) => number
+>results : number[]
+>push : (...items: number[]) => number
+>100 : 100
+}
+
+interface ThingWithOriginal {
+    name: string;
+>name : string
+
+    original?: ThingWithOriginal
+>original : ThingWithOriginal | undefined
+}
+declare const v: number
+>v : number
+
+function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) {
+>doSomethingWithAlias : (thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) => void
+>thing : ThingWithOriginal | undefined
+>defaultValue : ThingWithOriginal | undefined
+
+    if (v === 1) {
+>v === 1 : boolean
+>v : number
+>1 : 1
+
+        if (thing &&= thing.original) {
+>thing &&= thing.original : ThingWithOriginal | undefined
+>thing : ThingWithOriginal | undefined
+>thing.original : ThingWithOriginal | undefined
+>thing : ThingWithOriginal
+>original : ThingWithOriginal | undefined
+
+            thing.name;
+>thing.name : string
+>thing : ThingWithOriginal
+>name : string
+        }
+    }
+    else if (v === 2) {
+>v === 2 : boolean
+>v : number
+>2 : 2
+
+        if (thing &&= defaultValue) {
+>thing &&= defaultValue : ThingWithOriginal | undefined
+>thing : ThingWithOriginal | undefined
+>defaultValue : ThingWithOriginal | undefined
+
+            thing.name;
+>thing.name : string
+>thing : ThingWithOriginal
+>name : string
+
+            defaultValue.name
+>defaultValue.name : string
+>defaultValue : ThingWithOriginal
+>name : string
+        }
+    }
+    else if (v === 3) {
+>v === 3 : boolean
+>v : number
+>3 : 3
+
+        if (thing ||= defaultValue) {
+>thing ||= defaultValue : ThingWithOriginal | undefined
+>thing : ThingWithOriginal | undefined
+>defaultValue : ThingWithOriginal | undefined
+
+            thing.name;
+>thing.name : string
+>thing : ThingWithOriginal
+>name : string
+
+            defaultValue.name;
+>defaultValue.name : string
+>defaultValue : ThingWithOriginal | undefined
+>name : string
+        }
+    }
+    else {
+        if (thing ??= defaultValue) {
+>thing ??= defaultValue : ThingWithOriginal | undefined
+>thing : ThingWithOriginal | undefined
+>defaultValue : ThingWithOriginal | undefined
+
+            thing.name;
+>thing.name : string
+>thing : ThingWithOriginal
+>name : string
+
+            defaultValue.name;
+>defaultValue.name : string
+>defaultValue : ThingWithOriginal | undefined
+>name : string
+        }
+    }
+}
+

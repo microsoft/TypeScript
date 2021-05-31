@@ -1,0 +1,116 @@
+=== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts ===
+declare var ab: { a: number, b: number };
+>ab : Symbol(ab, Decl(spreadOverwritesPropertyStrict.ts, 0, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 0, 17))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 0, 28))
+
+declare var abq: { a: number, b?: number };
+>abq : Symbol(abq, Decl(spreadOverwritesPropertyStrict.ts, 1, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 1, 18))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 1, 29))
+
+var unused1 = { b: 1, ...ab } // error
+>unused1 : Symbol(unused1, Decl(spreadOverwritesPropertyStrict.ts, 2, 3))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 2, 15))
+>ab : Symbol(ab, Decl(spreadOverwritesPropertyStrict.ts, 0, 11))
+
+var unused2 = { ...ab, ...ab } // ok, overwritten error doesn't apply to spreads
+>unused2 : Symbol(unused2, Decl(spreadOverwritesPropertyStrict.ts, 3, 3))
+>ab : Symbol(ab, Decl(spreadOverwritesPropertyStrict.ts, 0, 11))
+>ab : Symbol(ab, Decl(spreadOverwritesPropertyStrict.ts, 0, 11))
+
+var unused3 = { b: 1, ...abq } // ok, abq might have b: undefined
+>unused3 : Symbol(unused3, Decl(spreadOverwritesPropertyStrict.ts, 4, 3))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 4, 15))
+>abq : Symbol(abq, Decl(spreadOverwritesPropertyStrict.ts, 1, 11))
+
+var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
+>unused4 : Symbol(unused4, Decl(spreadOverwritesPropertyStrict.ts, 5, 3))
+>ab : Symbol(ab, Decl(spreadOverwritesPropertyStrict.ts, 0, 11))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 5, 22))
+
+var unused5 = { ...abq, b: 1 } // ok
+>unused5 : Symbol(unused5, Decl(spreadOverwritesPropertyStrict.ts, 6, 3))
+>abq : Symbol(abq, Decl(spreadOverwritesPropertyStrict.ts, 1, 11))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 6, 23))
+
+function g(obj: { x: number | undefined }) {
+>g : Symbol(g, Decl(spreadOverwritesPropertyStrict.ts, 6, 30))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 7, 11))
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 7, 17))
+
+    return { x: 1, ...obj }; // ok, obj might have x: undefined
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 8, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 7, 11))
+}
+function f(obj: { x: number } | undefined) {
+>f : Symbol(f, Decl(spreadOverwritesPropertyStrict.ts, 9, 1))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 10, 11))
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 10, 17))
+
+    return { x: 1, ...obj }; // ok, obj might be undefined
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 11, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 10, 11))
+}
+function h(obj: { x: number } | { x: string }) {
+>h : Symbol(h, Decl(spreadOverwritesPropertyStrict.ts, 12, 1))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 13, 11))
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 13, 17))
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 13, 33))
+
+    return { x: 1, ...obj } // error
+>x : Symbol(x, Decl(spreadOverwritesPropertyStrict.ts, 14, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesPropertyStrict.ts, 13, 11))
+}
+function i(b: boolean, t: { command: string, ok: string }) {
+>i : Symbol(i, Decl(spreadOverwritesPropertyStrict.ts, 15, 1))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 16, 11))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 16, 22))
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 16, 27))
+>ok : Symbol(ok, Decl(spreadOverwritesPropertyStrict.ts, 16, 44))
+
+    return { command: "hi", ...(b ? t : {}) } // ok
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 17, 12))
+>b : Symbol(b, Decl(spreadOverwritesPropertyStrict.ts, 16, 11))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 16, 22))
+}
+function j() {
+>j : Symbol(j, Decl(spreadOverwritesPropertyStrict.ts, 18, 1))
+
+    return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 20, 17))
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 20, 40))
+}
+function k(t: { command: string, ok: string }) {
+>k : Symbol(k, Decl(spreadOverwritesPropertyStrict.ts, 21, 1))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 22, 15))
+>ok : Symbol(ok, Decl(spreadOverwritesPropertyStrict.ts, 22, 32))
+
+    return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+>command : Symbol(command, Decl(spreadOverwritesPropertyStrict.ts, 23, 12))
+>spoiler : Symbol(spoiler, Decl(spreadOverwritesPropertyStrict.ts, 23, 32))
+>spoiler2 : Symbol(spoiler2, Decl(spreadOverwritesPropertyStrict.ts, 23, 49))
+>t : Symbol(t, Decl(spreadOverwritesPropertyStrict.ts, 22, 11))
+}
+
+function l(anyrequired: { a: any }) {
+>l : Symbol(l, Decl(spreadOverwritesPropertyStrict.ts, 24, 1))
+>anyrequired : Symbol(anyrequired, Decl(spreadOverwritesPropertyStrict.ts, 26, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 26, 25))
+
+    return { a: 'zzz', ...anyrequired } // error
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 27, 12))
+>anyrequired : Symbol(anyrequired, Decl(spreadOverwritesPropertyStrict.ts, 26, 11))
+}
+function m(anyoptional: { a?: any }) {
+>m : Symbol(m, Decl(spreadOverwritesPropertyStrict.ts, 28, 1))
+>anyoptional : Symbol(anyoptional, Decl(spreadOverwritesPropertyStrict.ts, 29, 11))
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 29, 25))
+
+    return { a: 'zzz', ...anyoptional } // ok
+>a : Symbol(a, Decl(spreadOverwritesPropertyStrict.ts, 30, 12))
+>anyoptional : Symbol(anyoptional, Decl(spreadOverwritesPropertyStrict.ts, 29, 11))
+}
+
+

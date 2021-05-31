@@ -52,6 +52,7 @@ let k5 =
         <div> My Div </div>
     </Comp>;
 
+
 //// [file.jsx]
 "use strict";
 exports.__esModule = true;

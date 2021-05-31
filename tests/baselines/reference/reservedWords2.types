@@ -64,5 +64,14 @@ enum void {}
 >void {} : undefined
 >{} : {}
 
+function f(default: number) {}
+>f : (: number) => void
+> : number
+
+class C { m(null: string) {} }
+>C : C
+>m : (: any, string: any) => void
+> : any
+>string : any
 
 

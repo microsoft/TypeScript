@@ -5,7 +5,9 @@ interface DiagnosticDetails {
     category: string;
     code: number;
     reportsUnnecessary?: {};
+    reportsDeprecated?: {};
     isEarly?: boolean;
+    elidedInCompatabilityPyramid?: boolean;
 }
 
 type InputDiagnosticMessageTable = Map<string, DiagnosticDetails>;
@@ -63,14 +65,17 @@ function buildInfoFileOutput(messageTable: InputDiagnosticMessageTable, inputFil
         "// generated from '" + inputFilePathRel + "' by '" + thisFilePathRel.replace(/\\/g, "/") + "'\r\n" +
         "/* @internal */\r\n" +
         "namespace ts {\r\n" +
-        "    function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}): DiagnosticMessage {\r\n" +
-        "        return { code, category, key, message, reportsUnnecessary };\r\n" +
+        "    function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}, elidedInCompatabilityPyramid?: boolean, reportsDeprecated?: {}): DiagnosticMessage {\r\n" +
+        "        return { code, category, key, message, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated };\r\n" +
         "    }\r\n" +
         "    export const Diagnostics = {\r\n";
-    messageTable.forEach(({ code, category, reportsUnnecessary }, name) => {
+    messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
         const propName = convertPropertyName(name);
         const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
-        result += `        ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}),\r\n`;
+        const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
+        const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
+
+        result += `        ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),\r\n`;
     });
 
     result += "    };\r\n}";

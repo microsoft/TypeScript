@@ -10,8 +10,8 @@ const Foo = {
 }
 
 export const Baa = {
->Baa : { [Foo.BANANA]: number; }
->{    [Foo.BANANA]: 1} : { [Foo.BANANA]: number; }
+>Baa : { banana: number; }
+>{    [Foo.BANANA]: 1} : { banana: number; }
 
     [Foo.BANANA]: 1
 >[Foo.BANANA] : number

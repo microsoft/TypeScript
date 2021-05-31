@@ -30,6 +30,7 @@ class Chain2<T extends { length: number }> {
         // should get a fresh type parameter which each then call
         var z = this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then(x => x.length)/*number*/; // Should error on "abc" because it is not a Function
 >z : Symbol(z, Decl(promiseChaining1.ts, 6, 11))
+>this.then(x => result)/*S*/.then(x => "abc")/*Function*/.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
 >this.then(x => result)/*S*/.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
 >this.then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
 >this : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))
@@ -38,8 +39,11 @@ class Chain2<T extends { length: number }> {
 >result : Symbol(result, Decl(promiseChaining1.ts, 4, 11))
 >then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
 >x : Symbol(x, Decl(promiseChaining1.ts, 6, 49))
+>then : Symbol(Chain2.then, Decl(promiseChaining1.ts, 2, 36))
 >x : Symbol(x, Decl(promiseChaining1.ts, 6, 78))
+>x.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(promiseChaining1.ts, 6, 78))
+>length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 
         return new Chain2(result);
 >Chain2 : Symbol(Chain2, Decl(promiseChaining1.ts, 0, 0))

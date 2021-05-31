@@ -1,0 +1,22 @@
+tests/cases/compiler/input.ts(1,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
+tests/cases/compiler/input.ts(6,14): error TS2323: Cannot redeclare exported variable 'Sub'.
+
+
+==== tests/cases/compiler/input.ts (2 errors) ====
+    export = exports;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2309: An export assignment cannot be used in a module with other exported elements.
+    declare class exports {
+        constructor(p: number);
+        t: number;
+    }
+    export class Sub {
+                 ~~~
+!!! error TS2323: Cannot redeclare exported variable 'Sub'.
+        instance!: {
+            t: number;
+        };
+    }
+    declare namespace exports {
+        export { Sub };
+    }

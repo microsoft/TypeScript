@@ -52,7 +52,7 @@ var C = /** @class */ (function () {
         get: function () {
             return this;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

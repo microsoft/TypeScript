@@ -1,0 +1,179 @@
+=== /a.ts ===
+export default class {}
+export class A {}
+>A : Symbol(A, Decl(a.ts, 0, 23))
+
+export type B = {};
+>B : Symbol(B, Decl(a.ts, 1, 17))
+
+export const enum C { One, Two }
+>C : Symbol(C, Decl(a.ts, 2, 19))
+>One : Symbol(C.One, Decl(a.ts, 3, 21))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+=== /b.ts ===
+import { A, B } from './a'; // Error
+>A : Symbol(A, Decl(b.ts, 0, 8))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+
+let a: A;
+>a : Symbol(a, Decl(b.ts, 1, 3))
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+let b: B;
+>b : Symbol(b, Decl(b.ts, 2, 3))
+>B : Symbol(B, Decl(b.ts, 0, 11))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(b.ts, 1, 3))
+>b : Symbol(b, Decl(b.ts, 2, 3))
+
+=== /c.ts ===
+import Default, * as named from './a'; // Error
+>Default : Symbol(Default, Decl(c.ts, 0, 6))
+>named : Symbol(named, Decl(c.ts, 0, 15))
+
+let a: Default;
+>a : Symbol(a, Decl(c.ts, 1, 3))
+>Default : Symbol(Default, Decl(c.ts, 0, 6))
+
+let b: named.B;
+>b : Symbol(b, Decl(c.ts, 2, 3))
+>named : Symbol(named, Decl(c.ts, 0, 15))
+>B : Symbol(named.B, Decl(a.ts, 1, 17))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(c.ts, 1, 3))
+>b : Symbol(b, Decl(c.ts, 2, 3))
+
+=== /d.ts ===
+import Default, { A } from './a';
+>Default : Symbol(Default, Decl(d.ts, 0, 6))
+>A : Symbol(A, Decl(d.ts, 0, 17))
+
+const a = A;
+>a : Symbol(a, Decl(d.ts, 1, 5))
+>A : Symbol(A, Decl(d.ts, 0, 17))
+
+let b: Default;
+>b : Symbol(b, Decl(d.ts, 2, 3))
+>Default : Symbol(Default, Decl(d.ts, 0, 6))
+
+console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(d.ts, 1, 5))
+>b : Symbol(b, Decl(d.ts, 2, 3))
+
+=== /e.ts ===
+import { A, B } from './a'; // noUnusedLocals error only
+>A : Symbol(A, Decl(e.ts, 0, 8))
+>B : Symbol(B, Decl(e.ts, 0, 11))
+
+=== /f.ts ===
+import { C } from './a';
+>C : Symbol(C, Decl(f.ts, 0, 8))
+
+import type { C as D } from './a';
+>C : Symbol(C, Decl(a.ts, 2, 19))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+
+C.One;
+>C.One : Symbol(C.One, Decl(a.ts, 3, 21))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>One : Symbol(C.One, Decl(a.ts, 3, 21))
+
+let c: D = C.Two;
+>c : Symbol(c, Decl(f.ts, 3, 3))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+>C.Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+let d: D.Two = C.Two;
+>d : Symbol(d, Decl(f.ts, 4, 3))
+>D : Symbol(D, Decl(f.ts, 1, 13))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C.Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+>C : Symbol(C, Decl(f.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+console.log(c, d);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(f.ts, 3, 3))
+>d : Symbol(d, Decl(f.ts, 4, 3))
+
+=== /g.ts ===
+import { C } from './a';
+>C : Symbol(C, Decl(g.ts, 0, 8))
+
+let c: C;
+>c : Symbol(c, Decl(g.ts, 1, 3))
+>C : Symbol(C, Decl(g.ts, 0, 8))
+
+let d: C.Two;
+>d : Symbol(d, Decl(g.ts, 2, 3))
+>C : Symbol(C, Decl(g.ts, 0, 8))
+>Two : Symbol(C.Two, Decl(a.ts, 3, 26))
+
+console.log(c, d);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>c : Symbol(c, Decl(g.ts, 1, 3))
+>d : Symbol(d, Decl(g.ts, 2, 3))
+
+=== /h.ts ===
+class H {}
+>H : Symbol(H, Decl(h.ts, 0, 0))
+
+export = H;
+>H : Symbol(H, Decl(h.ts, 0, 0))
+
+=== /i.ts ===
+import H = require('./h'); // Error
+>H : Symbol(H, Decl(i.ts, 0, 0))
+
+let h: H = {};
+>h : Symbol(h, Decl(i.ts, 1, 3))
+>H : Symbol(H, Decl(i.ts, 0, 0))
+
+console.log(h);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>h : Symbol(h, Decl(i.ts, 1, 3))
+
+=== /j.ts ===
+import H = require('./h'); // noUnusedLocals error only
+No type information for this code.
+No type information for this code.=== /k.ts ===
+const enum K { One, Two }
+>K : Symbol(K, Decl(k.ts, 0, 0))
+>One : Symbol(K.One, Decl(k.ts, 0, 14))
+>Two : Symbol(K.Two, Decl(k.ts, 0, 19))
+
+export = K;
+>K : Symbol(K, Decl(k.ts, 0, 0))
+
+=== /l.ts ===
+import K = require('./k');
+>K : Symbol(K, Decl(l.ts, 0, 0))
+
+K.One;
+>K.One : Symbol(K.One, Decl(k.ts, 0, 14))
+>K : Symbol(K, Decl(l.ts, 0, 0))
+>One : Symbol(K.One, Decl(k.ts, 0, 14))
+
+=== /j.ts ===
+// Sad face https://github.com/microsoft/TypeScript/blob/6b04f5039429b9d412696fe2febe39ecc69ad365/src/testRunner/compilerRunner.ts#L207
+No type information for this code.

@@ -7,7 +7,7 @@ declare const x: { a: 1, b: string };
 >b : string
 
 declare const y: { a: number, b: 'a' };
->y : { a: number; b: "a"; }
+>y : { a: number; b: 'a'; }
 >a : number
 >b : "a"
 

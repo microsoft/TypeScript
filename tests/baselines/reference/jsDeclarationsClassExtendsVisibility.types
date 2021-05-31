@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsdoc/declarations/cls.js ===
+const Bar = require("./bar");
+>Bar : typeof Bar
+>require("./bar") : typeof Bar
+>require : any
+>"./bar" : "./bar"
+
+const Strings = {
+>Strings : { a: string; b: string; }
+>{    a: "A",    b: "B"} : { a: string; b: string; }
+
+    a: "A",
+>a : string
+>"A" : "A"
+
+    b: "B"
+>b : string
+>"B" : "B"
+
+};
+class Foo extends Bar {}
+>Foo : Foo
+>Bar : Bar
+
+module.exports = Foo;
+>module.exports = Foo : typeof Foo
+>module.exports : typeof Foo
+>module : { exports: typeof Foo; }
+>exports : typeof Foo
+>Foo : typeof Foo
+
+module.exports.Strings = Strings;
+>module.exports.Strings = Strings : { a: string; b: string; }
+>module.exports.Strings : { a: string; b: string; }
+>module.exports : typeof Foo
+>module : { exports: typeof Foo; }
+>exports : typeof Foo
+>Strings : { a: string; b: string; }
+>Strings : { a: string; b: string; }
+
+=== tests/cases/conformance/jsdoc/declarations/bar.js ===
+class Bar {}
+>Bar : Bar
+
+module.exports = Bar;
+>module.exports = Bar : typeof Bar
+>module.exports : typeof Bar
+>module : { exports: typeof Bar; }
+>exports : typeof Bar
+>Bar : typeof Bar
+

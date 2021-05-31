@@ -23,7 +23,7 @@ var C234 = /** @class */ (function () {
                 return 0;
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C234;

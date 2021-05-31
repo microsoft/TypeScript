@@ -2,8 +2,18 @@
 namespace ts.refactor.convertParamsToDestructuredObject {
     const refactorName = "Convert parameters to destructured object";
     const minimumParameterLength = 2;
-    registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
+    const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
 
+    const toDestructuredAction = {
+        name: refactorName,
+        description: refactorDescription,
+        kind: "refactor.rewrite.parameters.toDestructured"
+    };
+    registerRefactor(refactorName, {
+        kinds: [toDestructuredAction.kind],
+        getEditsForAction,
+        getAvailableActions
+    });
 
     function getAvailableActions(context: RefactorContext): readonly ApplicableRefactorInfo[] {
         const { file, startPosition } = context;
@@ -12,14 +22,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
         if (!functionDeclaration) return emptyArray;
 
-        const description = getLocaleSpecificMessage(Diagnostics.Convert_parameters_to_destructured_object);
         return [{
             name: refactorName,
-            description,
-            actions: [{
-                name: refactorName,
-                description
-            }]
+            description: refactorDescription,
+            actions: [toDestructuredAction]
         }];
     }
 
@@ -45,18 +51,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         changes: textChanges.ChangeTracker,
         functionDeclaration: ValidFunctionDeclaration,
         groupedReferences: GroupedReferences): void {
-        const newParamDeclaration = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
-        changes.replaceNodeRangeWithNodes(
-            sourceFile,
-            first(functionDeclaration.parameters),
-            last(functionDeclaration.parameters),
-            newParamDeclaration,
-            {   joiner: ", ",
-                // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
-                indentation: 0,
-                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
-            });
+        const signature = groupedReferences.signature;
+        const newFunctionDeclarationParams = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+
+        if (signature) {
+            const newSignatureParams = map(createNewParameters(signature, program, host), param => getSynthesizedDeepClone(param));
+            replaceParameters(signature, newSignatureParams);
+        }
+        replaceParameters(functionDeclaration, newFunctionDeclarationParams);
 
         const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
         for (const call of functionCalls) {
@@ -69,6 +71,21 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     newArgument,
                     { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
             }
+        }
+
+        function replaceParameters(declarationOrSignature: ValidFunctionDeclaration | ValidMethodSignature, parameterDeclarations: ParameterDeclaration[]) {
+            changes.replaceNodeRangeWithNodes(
+                sourceFile,
+                first(declarationOrSignature.parameters),
+                last(declarationOrSignature.parameters),
+                parameterDeclarations,
+                {
+                    joiner: ", ",
+                    // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
+                    indentation: 0,
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+                });
         }
     }
 
@@ -93,11 +110,39 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
             const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
+            const contextualSymbols = map(functionNames, name => getSymbolForContextualType(name, checker));
 
             for (const entry of referenceEntries) {
-                if (entry.kind !== FindAllReferences.EntryKind.Node) {
+                if (entry.kind === FindAllReferences.EntryKind.Span) {
                     groupedReferences.valid = false;
                     continue;
+                }
+
+                /* Declarations in object literals may be implementations of method signatures which have a different symbol from the declaration
+                For example:
+                    interface IFoo { m(a: number): void }
+                    const foo: IFoo = { m(a: number): void {} }
+                In these cases we get the symbol for the signature from the contextual type.
+                */
+                if (contains(contextualSymbols, getSymbolTargetAtLocation(entry.node))) {
+                    if (isValidMethodSignature(entry.node.parent)) {
+                        groupedReferences.signature = entry.node.parent;
+                        continue;
+                    }
+                    const call = entryToFunctionCall(entry);
+                    if (call) {
+                        groupedReferences.functionCalls.push(call);
+                        continue;
+                    }
+                }
+
+                const contextualSymbol = getSymbolForContextualType(entry.node, checker);
+                if (contextualSymbol && contains(contextualSymbols, contextualSymbol)) {
+                    const decl = entryToDeclaration(entry);
+                    if (decl) {
+                        groupedReferences.declarations.push(decl);
+                        continue;
+                    }
                 }
 
                 /* We compare symbols because in some cases find all references wil return a reference that may or may not be to the refactored function.
@@ -166,6 +211,20 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         function getSymbolTargetAtLocation(node: Node) {
             const symbol = checker.getSymbolAtLocation(node);
             return symbol && getSymbolTarget(symbol, checker);
+        }
+    }
+
+    /**
+     * Gets the symbol for the contextual type of the node if it is not a union or intersection.
+     */
+    function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | undefined {
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            const contextualType = checker.getContextualTypeForObjectLiteralElement(element as ObjectLiteralElementLike);
+            const symbol = contextualType?.getSymbol();
+            if (symbol && !(getCheckFlags(symbol) & CheckFlags.Synthetic)) {
+                return symbol;
+            }
         }
     }
 
@@ -286,6 +345,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return false;
     }
 
+    function isValidMethodSignature(node: Node): node is ValidMethodSignature {
+        return isMethodSignature(node) && (isInterfaceDeclaration(node.parent) || isTypeLiteralNode(node.parent));
+    }
+
     function isValidFunctionDeclaration(
         functionDeclaration: FunctionLikeDeclaration,
         checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
@@ -294,6 +357,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             case SyntaxKind.FunctionDeclaration:
                 return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.MethodDeclaration:
+                if (isObjectLiteralExpression(functionDeclaration.parent)) {
+                    const contextualSymbol = getSymbolForContextualType(functionDeclaration.name, checker);
+                    // don't offer the refactor when there are multiple signatures since we won't know which ones the user wants to change
+                    return contextualSymbol?.declarations?.length === 1 && isSingleImplementation(functionDeclaration, checker);
+                }
                 return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
@@ -356,16 +424,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function getRefactorableParameters(parameters: NodeArray<ValidParameterDeclaration>): NodeArray<ValidParameterDeclaration> {
         if (hasThisParameter(parameters)) {
-            parameters = createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
+            parameters = factory.createNodeArray(parameters.slice(1), parameters.hasTrailingComma);
         }
         return parameters;
     }
 
     function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
         if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
-            return createShorthandPropertyAssignment(name);
+            return factory.createShorthandPropertyAssignment(name);
         }
-        return createPropertyAssignment(name, initializer);
+        return factory.createPropertyAssignment(name, initializer);
     }
 
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
@@ -384,28 +452,28 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         if (hasRestParameter && functionArguments.length >= parameters.length) {
             const restArguments = functionArguments.slice(parameters.length - 1);
-            const restProperty = createPropertyAssignment(getParameterName(last(parameters)), createArrayLiteral(restArguments));
+            const restProperty = factory.createPropertyAssignment(getParameterName(last(parameters)), factory.createArrayLiteralExpression(restArguments));
             properties.push(restProperty);
         }
 
-        const objectLiteral = createObjectLiteral(properties, /*multiLine*/ false);
+        const objectLiteral = factory.createObjectLiteralExpression(properties, /*multiLine*/ false);
         return objectLiteral;
     }
 
-    function createNewParameters(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+    function createNewParameters(functionDeclaration: ValidFunctionDeclaration | ValidMethodSignature, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
         const checker = program.getTypeChecker();
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
-        const objectParameterName = createObjectBindingPattern(bindingElements);
+        const objectParameterName = factory.createObjectBindingPattern(bindingElements);
         const objectParameterType = createParameterTypeNode(refactorableParameters);
 
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
         if (every(refactorableParameters, isOptionalParameter)) {
-            objectInitializer = createObjectLiteral();
+            objectInitializer = factory.createObjectLiteralExpression();
         }
 
-        const objectParameter = createParameter(
+        const objectParameter = factory.createParameterDeclaration(
             /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
@@ -416,7 +484,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         if (hasThisParameter(functionDeclaration.parameters)) {
             const thisParameter = functionDeclaration.parameters[0];
-            const newThisParameter = createParameter(
+            const newThisParameter = factory.createParameterDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
@@ -431,16 +499,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 copyComments(thisParameter.type, newThisParameter.type!);
             }
 
-            return createNodeArray([newThisParameter, objectParameter]);
+            return factory.createNodeArray([newThisParameter, objectParameter]);
         }
-        return createNodeArray([objectParameter]);
+        return factory.createNodeArray([objectParameter]);
 
         function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
-            const element = createBindingElement(
+            const element = factory.createBindingElement(
                 /*dotDotDotToken*/ undefined,
                 /*propertyName*/ undefined,
                 getParameterName(parameterDeclaration),
-                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
+                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? factory.createArrayLiteralExpression() : parameterDeclaration.initializer);
 
             suppressLeadingAndTrailingTrivia(element);
             if (parameterDeclaration.initializer && element.initializer) {
@@ -451,7 +519,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
         function createParameterTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
-            const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
+            const typeNode = addEmitFlags(factory.createTypeLiteralNode(members), EmitFlags.SingleLine);
             return typeNode;
         }
 
@@ -461,12 +529,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 parameterType = getTypeNode(parameterDeclaration);
             }
 
-            const propertySignature = createPropertySignature(
+            const propertySignature = factory.createPropertySignature(
                 /*modifiers*/ undefined,
                 getParameterName(parameterDeclaration),
-                isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
-                parameterType,
-                /*initializer*/ undefined);
+                isOptionalParameter(parameterDeclaration) ? factory.createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+                parameterType);
 
             suppressLeadingAndTrailingTrivia(propertySignature);
             copyComments(parameterDeclaration.name, propertySignature.name);
@@ -491,27 +558,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
     }
 
-    function copyComments(sourceNode: Node, targetNode: Node) {
-        const sourceFile = sourceNode.getSourceFile();
-        const text = sourceFile.text;
-        if (hasLeadingLineBreak(sourceNode, text)) {
-            copyLeadingComments(sourceNode, targetNode, sourceFile);
-        }
-        else {
-            copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
-        }
-        copyTrailingComments(sourceNode, targetNode, sourceFile);
-    }
-
-    function hasLeadingLineBreak(node: Node, text: string) {
-        const start = node.getFullStart();
-        const end = node.getStart();
-        for (let i = start; i < end; i++) {
-            if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
-        }
-        return false;
-    }
-
     function getParameterName(paramDeclaration: ValidParameterDeclaration) {
         return getTextOfIdentifierOrLiteral(paramDeclaration.name);
     }
@@ -523,7 +569,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (classDeclaration.name) return [classDeclaration.name];
                 // If the class declaration doesn't have a name, it should have a default modifier.
                 // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-                const defaultModifier = Debug.assertDefined(
+                const defaultModifier = Debug.checkDefined(
                     findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
                     "Nameless class declaration should be a default export");
                 return [defaultModifier];
@@ -542,14 +588,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 if (functionDeclaration.name) return [functionDeclaration.name];
                 // If the function declaration doesn't have a name, it should have a default modifier.
                 // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
-                const defaultModifier = Debug.assertDefined(
+                const defaultModifier = Debug.checkDefined(
                     findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
                     "Nameless function declaration should be a default export");
                 return [defaultModifier];
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
-                const ctrKeyword = Debug.assertDefined(
+                const ctrKeyword = Debug.checkDefined(
                     findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
                     "Constructor declaration should have constructor keyword");
                 if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
@@ -600,6 +646,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         parameters: NodeArray<ValidParameterDeclaration>;
     }
 
+    interface ValidMethodSignature extends MethodSignature {
+        parameters: NodeArray<ValidParameterDeclaration>;
+    }
+
     type ValidFunctionDeclaration = ValidConstructor | ValidFunction | ValidMethod | ValidArrowFunction | ValidFunctionExpression;
 
     interface ValidParameterDeclaration extends ParameterDeclaration {
@@ -611,6 +661,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     interface GroupedReferences {
         functionCalls: (CallExpression | NewExpression)[];
         declarations: Node[];
+        signature?: ValidMethodSignature;
         classReferences?: ClassReferences;
         valid: boolean;
     }

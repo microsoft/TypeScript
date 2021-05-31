@@ -29,9 +29,9 @@ class SymbolIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this
@@ -39,7 +39,7 @@ class SymbolIterator {
 }
 
 foo(...new SymbolIterator);
->foo(...new SymbolIterator) : any
+>foo(...new SymbolIterator) : unknown
 >foo : <T>(s: T[]) => T
 >...new SymbolIterator : symbol
 >new SymbolIterator : SymbolIterator

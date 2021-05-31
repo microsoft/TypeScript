@@ -1,20 +1,14 @@
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(21,11): error TS2430: Interface 'Derived2' incorrectly extends interface 'Base2'.
-  Types of property 'x' are incompatible.
-    Type '{ a: string; b: number; }' is not assignable to type '{ b: string; }'.
-      Types of property 'b' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+  The types of 'x.b' are incompatible between these types.
+    Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(52,15): error TS2320: Interface 'Derived3<T>' cannot simultaneously extend types 'Base1<number>' and 'Base2<number>'.
   Named property 'x' of types 'Base1<number>' and 'Base2<number>' are not identical.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(54,15): error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base1<number>'.
-  Types of property 'x' are incompatible.
-    Type '{ a: T; b: T; }' is not assignable to type '{ a: number; }'.
-      Types of property 'a' are incompatible.
-        Type 'T' is not assignable to type 'number'.
+  The types of 'x.a' are incompatible between these types.
+    Type 'T' is not assignable to type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(54,15): error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base2<number>'.
-  Types of property 'x' are incompatible.
-    Type '{ a: T; b: T; }' is not assignable to type '{ b: number; }'.
-      Types of property 'b' are incompatible.
-        Type 'T' is not assignable to type 'number'.
+  The types of 'x.b' are incompatible between these types.
+    Type 'T' is not assignable to type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts(60,15): error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base1<T>'.
   Types of property 'x' are incompatible.
     Type 'T' is not assignable to type '{ a: T; }'.
@@ -47,10 +41,8 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
     interface Derived2 extends Base1, Base2 { // error
               ~~~~~~~~
 !!! error TS2430: Interface 'Derived2' incorrectly extends interface 'Base2'.
-!!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: string; b: number; }' is not assignable to type '{ b: string; }'.
-!!! error TS2430:       Types of property 'b' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:   The types of 'x.b' are incompatible between these types.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
         x: {
             a: string; b: number;
         }
@@ -89,16 +81,12 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
         interface Derived4<T> extends Base1<number>, Base2<number> { // error
                   ~~~~~~~~
 !!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base1<number>'.
-!!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: T; b: T; }' is not assignable to type '{ a: number; }'.
-!!! error TS2430:       Types of property 'a' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'number'.
+!!! error TS2430:   The types of 'x.a' are incompatible between these types.
+!!! error TS2430:     Type 'T' is not assignable to type 'number'.
                   ~~~~~~~~
 !!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base2<number>'.
-!!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: T; b: T; }' is not assignable to type '{ b: number; }'.
-!!! error TS2430:       Types of property 'b' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'number'.
+!!! error TS2430:   The types of 'x.b' are incompatible between these types.
+!!! error TS2430:     Type 'T' is not assignable to type 'number'.
             x: {
                 a: T; b: T;
             }

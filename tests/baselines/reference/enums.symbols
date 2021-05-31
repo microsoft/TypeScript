@@ -1,0 +1,73 @@
+=== /a.ts ===
+enum SyntaxKind {
+>SyntaxKind : Symbol(SyntaxKind, Decl(a.ts, 0, 0))
+
+  ImportClause,
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+
+  ExportDeclaration
+>ExportDeclaration : Symbol(SyntaxKind.ExportDeclaration, Decl(a.ts, 1, 15))
+}
+
+const enum SymbolFlags {
+>SymbolFlags : Symbol(SymbolFlags, Decl(a.ts, 3, 1))
+
+  Type = "Type",
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+
+  Value = "Value"
+>Value : Symbol(SymbolFlags.Value, Decl(a.ts, 6, 16))
+}
+
+export type { SyntaxKind };
+>SyntaxKind : Symbol(SyntaxKind, Decl(a.ts, 10, 13))
+
+export { SymbolFlags };
+>SymbolFlags : Symbol(SymbolFlags, Decl(a.ts, 11, 8))
+
+=== /b.ts ===
+import type { SyntaxKind, SymbolFlags } from './a';
+>SyntaxKind : Symbol(SyntaxKind, Decl(b.ts, 0, 13))
+>SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
+
+SyntaxKind.ImportClause;
+>SyntaxKind.ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+>SyntaxKind : Symbol(SyntaxKind, Decl(b.ts, 0, 13))
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+
+SymbolFlags.Type;
+>SymbolFlags.Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+>SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+
+let kind: SyntaxKind.ImportClause;
+>kind : Symbol(kind, Decl(b.ts, 4, 3))
+>SyntaxKind : Symbol(SyntaxKind, Decl(b.ts, 0, 13))
+>ImportClause : Symbol(SyntaxKind.ImportClause, Decl(a.ts, 0, 17))
+
+let flags: SymbolFlags;
+>flags : Symbol(flags, Decl(b.ts, 5, 3))
+>SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
+
+type TypeFlag = SymbolFlags.Type;
+>TypeFlag : Symbol(TypeFlag, Decl(b.ts, 5, 23))
+>SymbolFlags : Symbol(SymbolFlags, Decl(b.ts, 0, 25))
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+
+export type { TypeFlag };
+>TypeFlag : Symbol(TypeFlag, Decl(b.ts, 8, 13))
+
+=== /c.ts ===
+import { SymbolFlags } from './a';
+>SymbolFlags : Symbol(SymbolFlags, Decl(c.ts, 0, 8))
+
+import type { TypeFlag } from './b';
+>TypeFlag : Symbol(TypeFlag, Decl(c.ts, 1, 13))
+
+const flags: TypeFlag = SymbolFlags.Type;
+>flags : Symbol(flags, Decl(c.ts, 2, 5))
+>TypeFlag : Symbol(TypeFlag, Decl(c.ts, 1, 13))
+>SymbolFlags.Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+>SymbolFlags : Symbol(SymbolFlags, Decl(c.ts, 0, 8))
+>Type : Symbol(SymbolFlags.Type, Decl(a.ts, 5, 24))
+

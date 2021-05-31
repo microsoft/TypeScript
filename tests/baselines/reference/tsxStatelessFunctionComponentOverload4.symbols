@@ -44,7 +44,7 @@ const c2 = <OneThing {...obj} yy1 />; // type incompatible;
 >obj : Symbol(obj, Decl(file.tsx, 4, 3))
 >yy1 : Symbol(yy1, Decl(file.tsx, 13, 29))
 
-const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
+const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK because all attribute are spread
 >c3 : Symbol(c3, Decl(file.tsx, 14, 5))
 >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
 >obj : Symbol(obj, Decl(file.tsx, 4, 3))

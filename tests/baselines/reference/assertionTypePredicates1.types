@@ -1,0 +1,681 @@
+=== tests/cases/conformance/controlFlow/assertionTypePredicates1.ts ===
+declare function isString(value: unknown): value is string;
+>isString : (value: unknown) => value is string
+>value : unknown
+
+declare function isArrayOfStrings(value: unknown): value is string[];
+>isArrayOfStrings : (value: unknown) => value is string[]
+>value : unknown
+
+const assert: (value: unknown) => asserts value = value => {}
+>assert : (value: unknown) => asserts value
+>value : unknown
+>value => {} : (value: unknown) => void
+>value : unknown
+
+declare function assertIsString(value: unknown): asserts value is string;
+>assertIsString : (value: unknown) => asserts value is string
+>value : unknown
+
+declare function assertIsArrayOfStrings(value: unknown): asserts value is string[];
+>assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
+>value : unknown
+
+declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+>assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>value : T
+
+function f01(x: unknown) {
+>f01 : (x: unknown) => void
+>x : unknown
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(typeof x === "string");
+>assert(typeof x === "string") : void
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(x instanceof Error);
+>assert(x instanceof Error) : void
+>assert : (value: unknown) => asserts value
+>x instanceof Error : boolean
+>x : unknown
+>Error : ErrorConstructor
+
+        x.message;
+>x.message : string
+>x : Error
+>message : string
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(typeof x === "boolean" || typeof x === "number");
+>assert(typeof x === "boolean" || typeof x === "number") : void
+>assert : (value: unknown) => asserts value
+>typeof x === "boolean" || typeof x === "number" : boolean
+>typeof x === "boolean" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"boolean" : "boolean"
+>typeof x === "number" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"number" : "number"
+
+        x.toLocaleString;
+>x.toLocaleString : ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
+>x : number | boolean
+>toLocaleString : ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string) | (() => string)
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(isArrayOfStrings(x));
+>assert(isArrayOfStrings(x)) : void
+>assert : (value: unknown) => asserts value
+>isArrayOfStrings(x) : boolean
+>isArrayOfStrings : (value: unknown) => value is string[]
+>x : unknown
+
+        x[0].length;
+>x[0].length : number
+>x[0] : string
+>x : string[]
+>0 : 0
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assertIsArrayOfStrings(x);
+>assertIsArrayOfStrings(x) : void
+>assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
+>x : unknown
+
+        x[0].length;
+>x[0].length : number
+>x[0] : string
+>x : string[]
+>0 : 0
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assertIsArrayOfStrings(false);
+>assertIsArrayOfStrings(false) : void
+>assertIsArrayOfStrings : (value: unknown) => asserts value is string[]
+>false : false
+
+        x;
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(x === undefined || typeof x === "string");
+>assert(x === undefined || typeof x === "string") : void
+>assert : (value: unknown) => asserts value
+>x === undefined || typeof x === "string" : boolean
+>x === undefined : boolean
+>x : unknown
+>undefined : undefined
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x;  // string | undefined
+>x : string | undefined
+
+        assertDefined(x);
+>assertDefined(x) : void
+>assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>x : string | undefined
+
+        x;  // string
+>x : string
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false);
+>assert(false) : void
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : unknown
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(false && x === undefined);
+>assert(false && x === undefined) : void
+>assert : (value: unknown) => asserts value
+>false && x === undefined : false
+>false : false
+>x === undefined : boolean
+>x : unknown
+>undefined : undefined
+
+        x;  // Unreachable
+>x : unknown
+    }
+}
+
+function f02(x: string | undefined) {
+>f02 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(x);
+>assert(x) : void
+>assert : (value: unknown) => asserts value
+>x : string | undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assert(x !== undefined);
+>assert(x !== undefined) : void
+>assert : (value: unknown) => asserts value
+>x !== undefined : boolean
+>x : string | undefined
+>undefined : undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        assertDefined(x);
+>assertDefined(x) : void
+>assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>x : string | undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+}
+
+function f03(x: string | undefined, assert: (value: unknown) => asserts value) {
+>f03 : (x: string | undefined, assert: (value: unknown) => asserts value) => void
+>x : string | undefined
+>assert : (value: unknown) => asserts value
+>value : unknown
+
+    assert(x);
+>assert(x) : void
+>assert : (value: unknown) => asserts value
+>x : string | undefined
+
+    x.length;
+>x.length : number
+>x : string
+>length : number
+}
+
+namespace Debug {
+>Debug : typeof Debug
+
+    export declare function assert(value: unknown, message?: string): asserts value;
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>value : unknown
+>message : string | undefined
+
+    export declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
+>assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>value : T
+}
+
+function f10(x: string | undefined) {
+>f10 : (x: string | undefined) => void
+>x : string | undefined
+
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assert(x);
+>Debug.assert(x) : void
+>Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug : typeof Debug
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>x : string | undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assert(x !== undefined);
+>Debug.assert(x !== undefined) : void
+>Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug : typeof Debug
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>x !== undefined : boolean
+>x : string | undefined
+>undefined : undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assertDefined(x);
+>Debug.assertDefined(x) : void
+>Debug.assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>Debug : typeof Debug
+>assertDefined : <T>(value: T) => asserts value is NonNullable<T>
+>x : string | undefined
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+        Debug.assert(false);
+>Debug.assert(false) : void
+>Debug.assert : (value: unknown, message?: string | undefined) => asserts value
+>Debug : typeof Debug
+>assert : (value: unknown, message?: string | undefined) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : string | undefined
+    }
+}
+
+class Test {
+>Test : Test
+
+    assert(value: unknown): asserts value {
+>assert : (value: unknown) => asserts value
+>value : unknown
+
+        if (value) return;
+>value : unknown
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    isTest2(): this is Test2 {
+>isTest2 : () => this is Test2
+
+        return this instanceof Test2;
+>this instanceof Test2 : boolean
+>this : this
+>Test2 : typeof Test2
+    }
+    assertIsTest2(): asserts this is Test2 {
+>assertIsTest2 : () => asserts this is Test2
+
+        if (this instanceof Test2) return;
+>this instanceof Test2 : boolean
+>this : this
+>Test2 : typeof Test2
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    assertThis(): asserts this {
+>assertThis : () => asserts this
+
+        if (!this) return;
+>!this : false
+>this : this
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    bar() {
+>bar : () => void
+
+        this.assertThis();
+>this.assertThis() : void
+>this.assertThis : () => asserts this
+>this : this
+>assertThis : () => asserts this
+
+        this;
+>this : this
+    }
+    foo(x: unknown) {
+>foo : (x: unknown) => void
+>x : unknown
+
+        this.assert(typeof x === "string");
+>this.assert(typeof x === "string") : void
+>this.assert : (value: unknown) => asserts value
+>this : this
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+
+        if (this.isTest2()) {
+>this.isTest2() : boolean
+>this.isTest2 : () => this is Test2
+>this : this
+>isTest2 : () => this is Test2
+
+            this.z;
+>this.z : number
+>this : this & Test2
+>z : number
+        }
+        this.assertIsTest2();
+>this.assertIsTest2() : void
+>this.assertIsTest2 : () => asserts this is Test2
+>this : this
+>assertIsTest2 : () => asserts this is Test2
+
+        this.z;
+>this.z : number
+>this : this & Test2
+>z : number
+    }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        this.assert(false);
+>this.assert(false) : void
+>this.assert : (value: unknown) => asserts value
+>this : this
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
+    }
+}
+
+class Test2 extends Test {
+>Test2 : Test2
+>Test : Test
+
+    z = 0;
+>z : number
+>0 : 0
+}
+
+class Derived extends Test {
+>Derived : Derived
+>Test : Test
+
+    foo(x: unknown) {
+>foo : (x: unknown) => void
+>x : unknown
+
+        super.assert(typeof x === "string");
+>super.assert(typeof x === "string") : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+        x.length;
+>x.length : number
+>x : string
+>length : number
+    }
+    baz(x: number) {
+>baz : (x: number) => void
+>x : number
+
+        super.assert(false);
+>super.assert(false) : void
+>super.assert : (value: unknown) => asserts value
+>super : Test
+>assert : (value: unknown) => asserts value
+>false : false
+
+        x;  // Unreachable
+>x : number
+    }
+}
+
+function f11(items: Test[]) {
+>f11 : (items: Test[]) => void
+>items : Test[]
+
+    for (let item of items) {
+>item : Test
+>items : Test[]
+
+        if (item.isTest2()) {
+>item.isTest2() : boolean
+>item.isTest2 : () => this is Test2
+>item : Test
+>isTest2 : () => this is Test2
+
+            item.z;
+>item.z : number
+>item : Test2
+>z : number
+        }
+        item.assertIsTest2();
+>item.assertIsTest2() : void
+>item.assertIsTest2 : () => asserts this is Test2
+>item : Test
+>assertIsTest2 : () => asserts this is Test2
+
+        item.z;
+>item.z : number
+>item : Test2
+>z : number
+    }
+}
+
+// Invalid constructs
+
+declare let Q1: new (x: unknown) => x is string;
+>Q1 : new (x: unknown) => x is string
+>x : unknown
+
+declare let Q2: new (x: boolean) => asserts x;
+>Q2 : new (x: boolean) => asserts x
+>x : boolean
+
+declare let Q3: new (x: unknown) => asserts x is string;
+>Q3 : new (x: unknown) => asserts x is string
+>x : unknown
+
+declare class Wat {
+>Wat : Wat
+
+    get p1(): this is string;
+>p1 : boolean
+
+    set p1(x: this is string);
+>p1 : boolean
+>x : boolean
+
+    get p2(): asserts this is string;
+>p2 : void
+
+    set p2(x: asserts this is string);
+>p2 : void
+>x : void
+}
+
+function f20(x: unknown) {
+>f20 : (x: unknown) => void
+>x : unknown
+
+    const assert = (value: unknown): asserts value => {}
+>assert : (value: unknown) => asserts value
+>(value: unknown): asserts value => {} : (value: unknown) => asserts value
+>value : unknown
+
+    assert(typeof x === "string");  // Error
+>assert(typeof x === "string") : void
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const a = [assert];
+>a : ((value: unknown) => asserts value)[]
+>[assert] : ((value: unknown) => asserts value)[]
+>assert : (value: unknown) => asserts value
+
+    a[0](typeof x === "string");  // Error
+>a[0](typeof x === "string") : void
+>a[0] : (value: unknown) => asserts value
+>a : ((value: unknown) => asserts value)[]
+>0 : 0
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t1 = new Test();
+>t1 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t1.assert(typeof x === "string");  // Error
+>t1.assert(typeof x === "string") : void
+>t1.assert : (value: unknown) => asserts value
+>t1 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+
+    const t2: Test = new Test();
+>t2 : Test
+>new Test() : Test
+>Test : typeof Test
+
+    t2.assert(typeof x === "string");
+>t2.assert(typeof x === "string") : void
+>t2.assert : (value: unknown) => asserts value
+>t2 : Test
+>assert : (value: unknown) => asserts value
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"string" : "string"
+}
+
+// Repro from #35940
+
+interface Thing {
+    good: boolean;
+>good : boolean
+
+    isGood(): asserts this is GoodThing;
+>isGood : () => asserts this is GoodThing
+}
+
+interface GoodThing {
+    good: true;
+>good : true
+>true : true
+}
+
+function example1(things: Thing[]) {
+>example1 : (things: Thing[]) => void
+>things : Thing[]
+
+    for (let thing of things) {
+>thing : Thing
+>things : Thing[]
+
+        thing.isGood();
+>thing.isGood() : void
+>thing.isGood : () => asserts this is GoodThing
+>thing : Thing
+>isGood : () => asserts this is GoodThing
+
+        thing.good;
+>thing.good : true
+>thing : Thing & GoodThing
+>good : true
+    }
+}
+

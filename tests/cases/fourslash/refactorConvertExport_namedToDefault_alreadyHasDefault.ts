@@ -5,4 +5,4 @@
 ////export default function g() {}
 
 goTo.select("a", "b");
-verify.refactorsAvailable([]);
+verify.refactorsAvailable(["Infer function return type"]);

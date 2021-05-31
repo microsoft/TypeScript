@@ -4,10 +4,10 @@
 
 /////** @/*tag*/ */
 //////</*comment*/
-////const x: "a" | "b" = "/*openQuote*/"/*closeQuote*/;
-////const y: 'a' | 'b' = '/*openSingleQuote*/'/*closeSingleQuote*/;
-////const z: 'a' | 'b' = `/*openTemplate*/`/*closeTemplate*/;
-////const q: "`a`" | "`b`" = "`/*openTemplateInQuote*/a`/*closeTemplateInQuote*/";
+////const x: "a" | "b" = "[|/*openQuote*/|]"/*closeQuote*/;
+////const y: 'a' | 'b' = '[|/*openSingleQuote*/|]'/*closeSingleQuote*/;
+////const z: 'a' | 'b' = `[|/*openTemplate*/|]`/*closeTemplate*/;
+////const q: "`a`" | "`b`" = "[|`/*openTemplateInQuote*/a`/*closeTemplateInQuote*/|]";
 
 ////// "/*quoteInComment*/ </*lessInComment*/
 
@@ -33,13 +33,22 @@ verify.completions(
     { marker: "tag", includes: ["param"], triggerCharacter: "@" },
     { marker: "comment", exact: undefined, triggerCharacter: "<" },
 
-    { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },
+    { marker: "openQuote", exact: [
+        { name: "a", replacementSpan: test.ranges()[0] },
+        { name: "b", replacementSpan: test.ranges()[0] }
+    ], triggerCharacter: '"' },
     { marker: "closeQuote", exact: undefined, triggerCharacter: '"' },
 
-    { marker: "openSingleQuote", exact: ["a", "b"], triggerCharacter: "'" },
+    { marker: "openSingleQuote", exact: [
+        { name: "a", replacementSpan: test.ranges()[1] },
+        { name: "b", replacementSpan: test.ranges()[1] }
+    ], triggerCharacter: "'" },
     { marker: "closeSingleQuote", exact: undefined, triggerCharacter: "'" },
 
-    { marker: "openTemplate", exact: ["a", "b"], triggerCharacter: "`" },
+    { marker: "openTemplate", exact: [
+        { name: "a", replacementSpan: test.ranges()[2] },
+        { name: "b", replacementSpan: test.ranges()[2] }
+    ], triggerCharacter: "`" },
     { marker: "closeTemplate", exact: undefined, triggerCharacter: "`" },
 
     { marker: "quoteInComment", exact: undefined, triggerCharacter: '"' },

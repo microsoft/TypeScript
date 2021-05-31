@@ -1,0 +1,279 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts ===
+class A {
+>A : A
+
+    x = 1;
+>x : number
+>1 : 1
+}
+
+class C1 extends A {
+>C1 : C1
+>A : A
+
+    constructor(n: number) {
+>n : number
+
+        let a1 = this;  // Error
+>a1 : this
+>this : this
+
+        let a2 = this.x;  // Error
+>a2 : number
+>this.x : number
+>this : this
+>x : number
+
+        let a3 = super.x;  // Error
+>a3 : number
+>super.x : number
+>super : A
+>x : number
+
+        let a4 = () => this;
+>a4 : () => this
+>() => this : () => this
+>this : this
+
+        let a5 = () => this.x;
+>a5 : () => number
+>() => this.x : () => number
+>this.x : number
+>this : this
+>x : number
+
+        let a6 = () => super.x;
+>a6 : () => number
+>() => super.x : () => number
+>super.x : number
+>super : A
+>x : number
+
+        if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            super();
+>super() : void
+>super : typeof A
+
+            let b1 = this;
+>b1 : this
+>this : this
+
+            let b2 = this.x;
+>b2 : number
+>this.x : number
+>this : this
+>x : number
+
+            let b3 = super.x;
+>b3 : number
+>super.x : number
+>super : A
+>x : number
+        }
+        else {
+            let c1 = this;  // Error
+>c1 : this
+>this : this
+
+            let c2 = this.x;  // Error
+>c2 : number
+>this.x : number
+>this : this
+>x : number
+
+            let c3 = super.x;  // Error
+>c3 : number
+>super.x : number
+>super : A
+>x : number
+        }
+        if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            switch (n) {
+>n : number
+
+                case 1:
+>1 : 1
+
+                    super();
+>super() : void
+>super : typeof A
+
+                    let d1 = this.x;
+>d1 : number
+>this.x : number
+>this : this
+>x : number
+
+                case 2:
+>2 : 2
+
+                    let d2 = this.x;  // Error
+>d2 : number
+>this.x : number
+>this : this
+>x : number
+
+                default:
+                    super();
+>super() : void
+>super : typeof A
+
+                    let d3 = this.x;
+>d3 : number
+>this.x : number
+>this : this
+>x : number
+            }
+            let d4 = this.x;
+>d4 : number
+>this.x : number
+>this : this
+>x : number
+        }
+        if (!!true) {
+>!!true : true
+>!true : false
+>true : true
+
+            let e1 = { w: !!true ? super() : 0 };
+>e1 : { w: number | void; }
+>{ w: !!true ? super() : 0 } : { w: number | void; }
+>w : number | void
+>!!true ? super() : 0 : void | 0
+>!!true : true
+>!true : false
+>true : true
+>super() : void
+>super : typeof A
+>0 : 0
+
+            let e2 = this.x;  // Error
+>e2 : number
+>this.x : number
+>this : this
+>x : number
+
+            let e3 = { w: !!true ? super() : super() };
+>e3 : { w: void; }
+>{ w: !!true ? super() : super() } : { w: void; }
+>w : void
+>!!true ? super() : super() : void
+>!!true : true
+>!true : false
+>true : true
+>super() : void
+>super : typeof A
+>super() : void
+>super : typeof A
+
+            let e4 = this.x;
+>e4 : number
+>this.x : number
+>this : this
+>x : number
+        }
+        let f1 = this;  // Error
+>f1 : this
+>this : this
+
+        let f2 = this.x;  // Error
+>f2 : number
+>this.x : number
+>this : this
+>x : number
+
+        let f3 = super.x;  // Error
+>f3 : number
+>super.x : number
+>super : A
+>x : number
+    }
+}
+
+// Repro from #38512
+
+export class Foo {
+>Foo : Foo
+
+    constructor(value: number) {
+>value : number
+    }
+}
+
+export class BarCorrectlyFails extends Foo {
+>BarCorrectlyFails : BarCorrectlyFails
+>Foo : Foo
+
+    constructor(something: boolean) {
+>something : boolean
+
+        if (!something) {
+>!something : boolean
+>something : boolean
+
+            const value = this.bar();  // Error
+>value : number
+>this.bar() : number
+>this.bar : () => number
+>this : this
+>bar : () => number
+
+            super(value);
+>super(value) : void
+>super : typeof Foo
+>value : number
+        }
+        else {
+            super(1337);
+>super(1337) : void
+>super : typeof Foo
+>1337 : 1337
+        }
+    }
+    bar(): number { return 4; }
+>bar : () => number
+>4 : 4
+}
+
+export class BarIncorrectlyWorks extends Foo {
+>BarIncorrectlyWorks : BarIncorrectlyWorks
+>Foo : Foo
+
+    constructor(something: boolean) {
+>something : boolean
+
+        if (something) {
+>something : boolean
+
+            super(1337);
+>super(1337) : void
+>super : typeof Foo
+>1337 : 1337
+        }
+        else {
+            const value = this.bar();  // Error
+>value : number
+>this.bar() : number
+>this.bar : () => number
+>this : this
+>bar : () => number
+
+            super(value);
+>super(value) : void
+>super : typeof Foo
+>value : number
+        }
+    }
+    bar(): number { return 4; }
+>bar : () => number
+>4 : 4
+}
+

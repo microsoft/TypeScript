@@ -1,0 +1,41 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+/** @type {?} */
+export const a = null;
+>a : any
+>null : null
+
+/** @type {*} */
+export const b = null;
+>b : any
+>null : null
+
+/** @type {string?} */
+export const c = null;
+>c : string
+>null : null
+
+/** @type {string=} */
+export const d = null;
+>d : string
+>null : null
+
+/** @type {string!} */
+export const e = null;
+>e : string
+>null : null
+
+/** @type {function(string, number): object} */
+export const f = null;
+>f : (arg0: string, arg1: number) => any
+>null : null
+
+/** @type {function(new: object, string, number)} */
+export const g = null;
+>g : new (arg1: string, arg2: number) => any
+>null : null
+
+/** @type {Object.<string, number>} */
+export const h = null;
+>h : { [x: string]: number; }
+>null : null
+

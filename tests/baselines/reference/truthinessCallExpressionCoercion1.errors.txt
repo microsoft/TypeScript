@@ -1,0 +1,105 @@
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(3,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(19,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(33,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(46,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+tests/cases/compiler/truthinessCallExpressionCoercion1.ts(76,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== tests/cases/compiler/truthinessCallExpressionCoercion1.ts (5 errors) ====
+    function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
+        // error
+        required ? console.log('required') : undefined;
+        ~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // ok
+        optional ? console.log('optional') : undefined;
+    
+        // ok
+        !!required ? console.log('not required') : undefined;
+    
+        // ok
+        required() ? console.log('required call') : undefined;
+    }
+    
+    function onlyErrorsWhenUnusedInBody() {
+        function test() { return Math.random() > 0.5; }
+    
+        // error
+        test ? console.log('test') : undefined;
+        ~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // ok
+        test ? console.log(test) : undefined;
+    
+        // ok
+        test ? test() : undefined;
+    
+        // ok
+        test
+            ? [() => null].forEach(() => { test(); })
+            : undefined;
+    
+        // error
+        test
+        ~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+            ? [() => null].forEach(test => { test() })
+            : undefined;
+    }
+    
+    function checksPropertyAccess() {
+        const x = {
+            foo: {
+                bar() { return true; }
+            }
+        }
+    
+        // error
+        x.foo.bar ? console.log('x.foo.bar') : undefined;
+        ~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+        // ok
+        x.foo.bar ? x.foo.bar : undefined;
+    
+        var chrome = {
+            platformKeys: {
+                subtleCrypto() {
+                    return {
+                        sign() {},
+                        exportKey() { return true }
+                    }
+                }
+            }
+        }
+        // ok
+        if (chrome.platformKeys.subtleCrypto().exportKey) {
+            chrome.platformKeys.subtleCrypto().exportKey
+        }
+    }
+    
+    class Foo {
+        maybeIsUser?: () => boolean;
+    
+        isUser() {
+            return true;
+        }
+    
+        test() {
+            // error
+            this.isUser ? console.log('this.isUser') : undefined;
+            ~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    
+            // ok
+            this.maybeIsUser ? console.log('this.maybeIsUser') : undefined;
+    
+            // ok
+            if (this.isUser) {
+                this.isUser();
+            }
+        }
+    }
+    

@@ -1,0 +1,115 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export function a() {}
+>a : Symbol(a, Decl(index.js, 0, 0))
+
+export function b() {}
+>b : Symbol(b, Decl(index.js, 0, 22), Decl(index.js, 2, 22))
+
+b.cat = "cat";
+>b.cat : Symbol(b.cat, Decl(index.js, 2, 22))
+>b : Symbol(b, Decl(index.js, 0, 22), Decl(index.js, 2, 22))
+>cat : Symbol(b.cat, Decl(index.js, 2, 22))
+
+export function c() {}
+>c : Symbol(c, Decl(index.js, 3, 14), Decl(index.js, 5, 22))
+
+c.Cls = class {}
+>c.Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
+>c : Symbol(c, Decl(index.js, 3, 14), Decl(index.js, 5, 22))
+>Cls : Symbol(c.Cls, Decl(index.js, 5, 22))
+
+/**
+ * @param {number} a
+ * @param {number} b
+ * @return {string} 
+ */
+export function d(a, b) { return /** @type {*} */(null); }
+>d : Symbol(d, Decl(index.js, 6, 16))
+>a : Symbol(a, Decl(index.js, 13, 18))
+>b : Symbol(b, Decl(index.js, 13, 20))
+
+/**
+ * @template T,U
+ * @param {T} a
+ * @param {U} b
+ * @return {T & U} 
+ */
+export function e(a, b) { return /** @type {*} */(null); }
+>e : Symbol(e, Decl(index.js, 13, 58))
+>a : Symbol(a, Decl(index.js, 21, 18))
+>b : Symbol(b, Decl(index.js, 21, 20))
+
+/**
+ * @template T
+ * @param {T} a
+ */
+export function f(a) {
+>f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
+>a : Symbol(a, Decl(index.js, 27, 18))
+
+    return a;
+>a : Symbol(a, Decl(index.js, 27, 18))
+}
+f.self = f;
+>f.self : Symbol(f.self, Decl(index.js, 29, 1))
+>f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
+>self : Symbol(f.self, Decl(index.js, 29, 1))
+>f : Symbol(f, Decl(index.js, 21, 58), Decl(index.js, 29, 1))
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function g(a, b) {
+>g : Symbol(g, Decl(index.js, 30, 11))
+>a : Symbol(a, Decl(index.js, 36, 11))
+>b : Symbol(b, Decl(index.js, 36, 13))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 33, 12))
+>a : Symbol(a, Decl(index.js, 36, 11))
+>x : Symbol(x, Decl(index.js, 33, 12))
+>b.y : Symbol(y, Decl(index.js, 34, 12))
+>b : Symbol(b, Decl(index.js, 36, 13))
+>y : Symbol(y, Decl(index.js, 34, 12))
+}
+
+export { g };
+>g : Symbol(g, Decl(index.js, 40, 8))
+
+/**
+ * @param {{x: string}} a
+ * @param {{y: typeof b}} b
+ */
+function hh(a, b) {
+>hh : Symbol(hh, Decl(index.js, 40, 13))
+>a : Symbol(a, Decl(index.js, 46, 12))
+>b : Symbol(b, Decl(index.js, 46, 14))
+
+    return a.x && b.y();
+>a.x : Symbol(x, Decl(index.js, 43, 12))
+>a : Symbol(a, Decl(index.js, 46, 12))
+>x : Symbol(x, Decl(index.js, 43, 12))
+>b.y : Symbol(y, Decl(index.js, 44, 12))
+>b : Symbol(b, Decl(index.js, 46, 14))
+>y : Symbol(y, Decl(index.js, 44, 12))
+}
+
+export { hh as h };
+>hh : Symbol(hh, Decl(index.js, 40, 13))
+>h : Symbol(h, Decl(index.js, 50, 8))
+
+export function i() {}
+>i : Symbol(i, Decl(index.js, 50, 19))
+
+export { i as ii };
+>i : Symbol(i, Decl(index.js, 50, 19))
+>ii : Symbol(ii, Decl(index.js, 53, 8))
+
+export { j as jj };
+>j : Symbol(j, Decl(index.js, 55, 19))
+>jj : Symbol(jj, Decl(index.js, 55, 8))
+
+export function j() {}
+>j : Symbol(j, Decl(index.js, 55, 19))
+

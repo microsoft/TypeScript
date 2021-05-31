@@ -1,0 +1,25 @@
+tests/cases/conformance/externalModules/typeOnly/b.ts(1,1): error TS1383: Only named exports may use 'export type'.
+tests/cases/conformance/externalModules/typeOnly/c.ts(1,1): error TS1383: Only named exports may use 'export type'.
+
+
+==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
+    export class A {}
+    
+==== tests/cases/conformance/externalModules/typeOnly/b.ts (1 errors) ====
+    export type * from './a'; // Grammar error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1383: Only named exports may use 'export type'.
+    
+==== tests/cases/conformance/externalModules/typeOnly/c.ts (1 errors) ====
+    export type * as ns from './a'; // Grammar error
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1383: Only named exports may use 'export type'.
+    
+==== tests/cases/conformance/externalModules/typeOnly/d.ts (0 errors) ====
+    import { A } from './b';
+    A;
+    
+==== tests/cases/conformance/externalModules/typeOnly/e.ts (0 errors) ====
+    import { ns } from './c';
+    ns.A;
+    

@@ -1,0 +1,28 @@
+/d.ts(2,5): error TS1361: 'D' cannot be used as a value because it was imported using 'import type'.
+/d.ts(3,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+
+
+==== /a.ts (0 errors) ====
+    class A { a!: string }
+    export type { A as B };
+    export type Z = A;
+    
+==== /b.ts (0 errors) ====
+    import { Z as Y } from './a';
+    export { B as C } from './a';
+    
+==== /c.ts (0 errors) ====
+    import type { C } from './b';
+    export { C as D };
+    
+==== /d.ts (2 errors) ====
+    import { D } from './c';
+    new D();
+        ~
+!!! error TS1361: 'D' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /c.ts:1:15: 'D' was imported here.
+    const d: D = {};
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
+!!! related TS2728 /a.ts:1:11: 'a' is declared here.
+    

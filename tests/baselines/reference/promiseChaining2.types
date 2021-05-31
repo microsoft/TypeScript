@@ -22,10 +22,10 @@ class Chain2<T extends { length: number }> {
 
         // should get a fresh type parameter which each then call
         var z = this.then(x => result).then(x => "abc").then(x => x.length);
->z : any
->this.then(x => result).then(x => "abc").then(x => x.length) : any
->this.then(x => result).then(x => "abc").then : any
->this.then(x => result).then(x => "abc") : any
+>z : Chain2<Function>
+>this.then(x => result).then(x => "abc").then(x => x.length) : Chain2<Function>
+>this.then(x => result).then(x => "abc").then : <S extends Function>(cb: (x: Function) => S) => Chain2<S>
+>this.then(x => result).then(x => "abc") : Chain2<Function>
 >this.then(x => result).then : <S extends Function>(cb: (x: S) => S) => Chain2<S>
 >this.then(x => result) : Chain2<S>
 >this.then : <S extends Function>(cb: (x: T) => S) => Chain2<S>
@@ -38,12 +38,12 @@ class Chain2<T extends { length: number }> {
 >x => "abc" : (x: S) => string
 >x : S
 >"abc" : "abc"
->then : any
->x => x.length : (x: any) => any
->x : any
->x.length : any
->x : any
->length : any
+>then : <S extends Function>(cb: (x: Function) => S) => Chain2<S>
+>x => x.length : (x: Function) => number
+>x : Function
+>x.length : number
+>x : Function
+>length : number
 
         return new Chain2(result);
 >new Chain2(result) : Chain2<S>

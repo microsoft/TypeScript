@@ -1,0 +1,657 @@
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(6,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(11,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(12,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(17,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(18,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(23,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(24,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(30,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(36,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(42,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(48,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(56,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(56,9): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(61,9): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(62,9): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(67,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(68,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(73,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(74,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(80,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(86,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(92,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(98,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(107,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(112,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(113,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(118,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(119,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(131,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(137,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(143,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(149,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(157,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(162,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(163,9): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(174,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(175,13): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(181,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(187,16): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(193,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(199,20): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(207,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(213,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(219,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(225,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(231,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(236,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(237,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(242,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(243,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(248,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(249,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(257,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(263,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(269,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(275,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(281,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(281,16): error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(286,16): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(287,16): error TS2393: Duplicate function implementation.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(292,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(293,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(298,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(299,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(308,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(314,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(320,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(326,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(331,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(332,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(337,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(338,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(343,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(344,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(357,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(363,9): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(370,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(376,13): error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(382,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(387,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(388,16): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(399,20): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(400,20): error TS2300: Duplicate identifier '#foo'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts (83 errors) ====
+    function Field() {
+    
+        // Error
+        class A_Field_Field {
+            #foo = "foo";
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Field_Method {
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            #foo() { }
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Field_Getter {
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Field_Setter {
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Field_StaticField {
+            #foo = "foo";
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Field_StaticMethod {
+            #foo = "foo";
+            static #foo() { }
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Field_StaticGetter {
+            #foo = "foo";
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Field_StaticSetter {
+            #foo = "foo";
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    }
+    
+    function Method() {
+        // Error
+        class A_Method_Field {
+            #foo() { }
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            ~~~~
+!!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:55:9: '#foo' was also declared here.
+        }
+    
+        // Error
+        class A_Method_Method {
+            #foo() { }
+            ~~~~
+!!! error TS2393: Duplicate function implementation.
+            #foo() { }
+            ~~~~
+!!! error TS2393: Duplicate function implementation.
+        }
+    
+        // Error
+        class A_Method_Getter {
+            #foo() { }
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Method_Setter {
+            #foo() { }
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Method_StaticField {
+            #foo() { }
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Method_StaticMethod {
+            #foo() { }
+            static #foo() { }
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Method_StaticGetter {
+            #foo() { }
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Method_StaticSetter {
+            #foo() { }
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    }
+    
+    
+    function Getter() {
+        // Error
+        class A_Getter_Field {
+            get #foo() { return ""}
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Getter_Method {
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            #foo() { }
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Getter_Getter {
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        //OK
+        class A_Getter_Setter {
+            get #foo() { return ""}
+            set #foo(value: string) { }
+        }
+    
+        // Error
+        class A_Getter_StaticField {
+            get #foo() { return ""}
+            static #foo() { }
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Getter_StaticMethod {
+            get #foo() { return ""}
+            static #foo() { }
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Getter_StaticGetter {
+            get #foo() { return ""}
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Getter_StaticSetter {
+            get #foo() { return ""}
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    }
+    
+    function Setter() {
+        // Error
+        class A_Setter_Field {
+            set #foo(value: string) { }
+            #foo = "foo";
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Setter_Method {
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            #foo() { }
+            ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // OK
+        class A_Setter_Getter {
+            set #foo(value: string) { }
+            get #foo() { return ""}
+        }
+    
+        // Error
+        class A_Setter_Setter {
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_Setter_StaticField {
+            set #foo(value: string) { }
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Setter_StaticMethod {
+            set #foo(value: string) { }
+            static #foo() { }
+                   ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Setter_StaticGetter {
+            set #foo(value: string) { }
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_Setter_StaticSetter {
+            set #foo(value: string) { }
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    }
+    
+    function StaticField() {
+        // Error
+        class A_StaticField_Field {
+            static #foo = "foo";
+            #foo = "foo";
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticField_Method {
+            static #foo = "foo";
+            #foo() { }
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticField_Getter {
+            static #foo = "foo";
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticField_Setter {
+            static #foo = "foo";
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticField_StaticField {
+            static #foo = "foo";
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticField_StaticMethod {
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticField_StaticGetter {
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticField_StaticSetter {
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    }
+    
+    function StaticMethod() {
+        // Error
+        class A_StaticMethod_Field {
+            static #foo() { }
+            #foo = "foo";
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticMethod_Method {
+            static #foo() { }
+            #foo() { }
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticMethod_Getter {
+            static #foo() { }
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticMethod_Setter {
+            static #foo() { }
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticMethod_StaticField {
+            static #foo() { }
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+                   ~~~~
+!!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
+!!! related TS6203 tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts:280:16: '#foo' was also declared here.
+        }
+    
+        // Error
+        class A_StaticMethod_StaticMethod {
+            static #foo() { }
+                   ~~~~
+!!! error TS2393: Duplicate function implementation.
+            static #foo() { }
+                   ~~~~
+!!! error TS2393: Duplicate function implementation.
+        }
+    
+        // Error
+        class A_StaticMethod_StaticGetter {
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticMethod_StaticSetter {
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    }
+    
+    function StaticGetter() {
+    
+        // Error
+        class A_StaticGetter_Field {
+            static get #foo() { return ""}
+            #foo = "foo";
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticGetter_Method {
+            static get #foo() { return ""}
+            #foo() { }
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticGetter_Getter {
+            static get #foo() { return ""}
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticGetter_Setter {
+            static get #foo() { return ""}
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticGetter_StaticField {
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticGetter_StaticMethod {
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticGetter_StaticGetter {
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static get #foo() { return ""}
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+        // OK
+        class A_StaticGetter_StaticSetter {
+            static get #foo() { return ""}
+            static set #foo(value: string) { }
+        }
+    }
+    
+    function StaticSetter() {
+        // Error
+        class A_StaticSetter_Field {
+            static set #foo(value: string) { }
+            #foo = "foo";
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticSetter_Method {
+            static set #foo(value: string) { }
+            #foo() { }
+            ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+    
+        // Error
+        class A_StaticSetter_Getter {
+            static set #foo(value: string) { }
+            get #foo() { return ""}
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticSetter_Setter {
+            static set #foo(value: string) { }
+            set #foo(value: string) { }
+                ~~~~
+!!! error TS2804: Duplicate identifier '#foo'. Static and instance elements cannot share the same private name.
+        }
+    
+        // Error
+        class A_StaticSetter_StaticField {
+            static set #foo(value: string) { }
+            static #foo = "foo";
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // Error
+        class A_StaticSetter_StaticMethod {
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static #foo() { }
+                   ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    
+        // OK
+        class A_StaticSetter_StaticGetter {
+            static set #foo(value: string) { }
+            static get #foo() { return ""}
+        }
+    
+        // Error
+        class A_StaticSetter_StaticSetter {
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+            static set #foo(value: string) { }
+                       ~~~~
+!!! error TS2300: Duplicate identifier '#foo'.
+        }
+    }
+    

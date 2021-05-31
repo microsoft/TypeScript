@@ -40,3 +40,17 @@ function foo5(bar: "a" | "b"): number {
             return 1;
     }
 }
+
+function foo6(bar: "a", a: boolean, b: boolean): number {
+    if (a) {
+        switch (bar) {
+            case "a": return 1;
+        }
+    }
+    else {
+        switch (b) {
+            case true: return -1;
+            case false: return 0;
+        }
+    }
+}

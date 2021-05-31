@@ -28,9 +28,11 @@ namespace ts {
     // See https://github.com/microsoft/typescript-etw for more information
     let etwModule;
     try {
-        // require() will throw an exception if the module is not installed
+        const etwModulePath = process.env.TS_ETW_MODULE_PATH ?? "./node_modules/@microsoft/typescript-etw";
+
+        // require() will throw an exception if the module is not found
         // It may also return undefined if not installed properly
-        etwModule = require("@microsoft/typescript-etw");
+        etwModule = require(etwModulePath);
     }
     catch (e) {
         etwModule = undefined;
@@ -38,6 +40,4 @@ namespace ts {
 
     /** Performance logger that will generate ETW events if possible - check for `logEvent` member, as `etwModule` will be `{}` when browserified */
     export const perfLogger: PerfLogger = etwModule && etwModule.logEvent ? etwModule : nullLogger;
-    const args = typeof process === "undefined" ? [] : process.argv;
-    perfLogger.logInfoEvent(`Starting TypeScript v${versionMajorMinor} with command line: ${JSON.stringify(args)}`);
 }

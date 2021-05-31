@@ -1,0 +1,26 @@
+=== tests/cases/conformance/salsa/lateBoundClassMemberAssignmentJS2.js ===
+const _sym = "my-fake-sym";
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
+
+export class MyClass {
+>MyClass : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))
+
+    constructor() {
+        this[_sym] = "ok";
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
+    }
+
+    method() {
+>method : Symbol(MyClass.method, Decl(lateBoundClassMemberAssignmentJS2.js, 4, 5))
+
+        this[_sym] = "yep";
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
+
+        const x = this[_sym];
+>x : Symbol(x, Decl(lateBoundClassMemberAssignmentJS2.js, 8, 13))
+>this : Symbol(MyClass, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 27))
+>_sym : Symbol(_sym, Decl(lateBoundClassMemberAssignmentJS2.js, 0, 5))
+    }
+}

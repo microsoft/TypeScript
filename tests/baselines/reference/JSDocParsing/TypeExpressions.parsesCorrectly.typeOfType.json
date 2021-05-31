@@ -4,7 +4,7 @@
     "end": 9,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "exprName": {
         "kind": "Identifier",
         "pos": 7,

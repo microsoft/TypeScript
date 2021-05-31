@@ -14,7 +14,7 @@ namespace ts.codefix {
                 doChange(changeTracker, configFile)
             );
             return [
-                createCodeFixActionNoFixId(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
+                createCodeFixActionWithoutFixAll(fixID, changes, Diagnostics.Enable_the_jsx_flag_in_your_configuration_file)
             ];
         },
         fixIds: [fixID],
@@ -30,6 +30,6 @@ namespace ts.codefix {
     });
 
     function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        setJsonCompilerOptionValue(changeTracker, configFile, "jsx", createStringLiteral("react"));
+        setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
     }
 }

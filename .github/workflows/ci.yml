@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - release-*
+  pull_request:
+    branches:
+      - master
+      - release-*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 5
+    - name: Use node version ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Remove existing TypeScript
+      run: |
+        npm uninstall typescript --no-save
+        npm uninstall tslint --no-save
+    - run:  npm ci
+
+    # Re: https://github.com/actions/setup-node/pull/125
+    - name: Register Problem Matcher for TSC
+      run: echo "##[add-matcher].github/tsc.json"
+
+    - name: Tests
+      run:  npm test -- --no-lint
+
+    - name: Linter
+      run:  npm run lint:ci
+
+    - name: Adding playwright
+      run: npm install --no-save --no-package-lock playwright
+
+    - name: Validate the browser can import TypeScript
+      run: gulp test-browser-integration
+

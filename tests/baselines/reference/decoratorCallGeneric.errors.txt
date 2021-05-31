@@ -1,7 +1,6 @@
 tests/cases/conformance/decorators/decoratorCallGeneric.ts(7,2): error TS2345: Argument of type 'typeof C' is not assignable to parameter of type 'I<C>'.
-  Types of property 'm' are incompatible.
-    Type '() => void' is not assignable to type '() => C'.
-      Type 'void' is not assignable to type 'C'.
+  The types returned by 'm()' are incompatible between these types.
+    Type 'void' is not assignable to type 'C'.
 
 
 ==== tests/cases/conformance/decorators/decoratorCallGeneric.ts (1 errors) ====
@@ -14,9 +13,8 @@ tests/cases/conformance/decorators/decoratorCallGeneric.ts(7,2): error TS2345: A
     @dec
      ~~~
 !!! error TS2345: Argument of type 'typeof C' is not assignable to parameter of type 'I<C>'.
-!!! error TS2345:   Types of property 'm' are incompatible.
-!!! error TS2345:     Type '() => void' is not assignable to type '() => C'.
-!!! error TS2345:       Type 'void' is not assignable to type 'C'.
+!!! error TS2345:   The types returned by 'm()' are incompatible between these types.
+!!! error TS2345:     Type 'void' is not assignable to type 'C'.
     class C {
         _brand: any;
         static m() {}

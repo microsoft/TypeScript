@@ -82,9 +82,7 @@ function f1(x: Private & Private2) {
 >Private2 : Symbol(Private2, Decl(mixinAccessModifiers.ts, 5, 1))
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 8, 32))
 >x : Symbol(x, Decl(mixinAccessModifiers.ts, 36, 12))
->p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 8, 32))
 }
 
 function f2(x: Private & Protected) {
@@ -94,9 +92,7 @@ function f2(x: Private & Protected) {
 >Protected : Symbol(Protected, Decl(mixinAccessModifiers.ts, 10, 1))
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 13, 32))
 >x : Symbol(x, Decl(mixinAccessModifiers.ts, 40, 12))
->p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 13, 32))
 }
 
 function f3(x: Private & Public) {
@@ -106,9 +102,7 @@ function f3(x: Private & Public) {
 >Public : Symbol(Public, Decl(mixinAccessModifiers.ts, 22, 1))
 
 	x.p;  // Error, private constituent makes property inaccessible
->x.p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 25, 32))
 >x : Symbol(x, Decl(mixinAccessModifiers.ts, 44, 12))
->p : Symbol(p, Decl(mixinAccessModifiers.ts, 3, 32), Decl(mixinAccessModifiers.ts, 25, 32))
 }
 
 function f4(x: Protected & Protected2) {
@@ -377,14 +371,10 @@ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}
 >b : Symbol(b, Decl(mixinAccessModifiers.ts, 122, 72))
 
 	x.privateMethod(); // Error, private constituent makes method inaccessible
->x.privateMethod : Symbol(privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 112, 28))
 >x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
->privateMethod : Symbol(privateMethod, Decl(mixinAccessModifiers.ts, 107, 27), Decl(mixinAccessModifiers.ts, 112, 28))
 
 	x.protectedMethod(); // Error, protected when all constituents are protected
->x.protectedMethod : Symbol(protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 113, 27))
 >x : Symbol(x, Decl(mixinAccessModifiers.ts, 122, 12))
->protectedMethod : Symbol(protectedMethod, Decl(mixinAccessModifiers.ts, 108, 27), Decl(mixinAccessModifiers.ts, 113, 27))
 }
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {

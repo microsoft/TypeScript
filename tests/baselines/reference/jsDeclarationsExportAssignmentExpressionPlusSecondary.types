@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const Strings = {
+>Strings : { a: string; b: string; }
+>{    a: "A",    b: "B"} : { a: string; b: string; }
+
+    a: "A",
+>a : string
+>"A" : "A"
+
+    b: "B"
+>b : string
+>"B" : "B"
+
+};
+module.exports = {
+>module.exports = {    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+>module.exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+>module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
+>exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+>{    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; }
+
+    thing: "ok",
+>thing : string
+>"ok" : "ok"
+
+    also: "ok",
+>also : string
+>"ok" : "ok"
+
+    desc: {
+>desc : { item: string; }
+>{        item: "ok"    } : { item: string; }
+
+        item: "ok"
+>item : string
+>"ok" : "ok"
+    }
+};
+module.exports.Strings = Strings;
+>module.exports.Strings = Strings : { a: string; b: string; }
+>module.exports.Strings : { a: string; b: string; }
+>module.exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+>module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
+>exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
+>Strings : { a: string; b: string; }
+>Strings : { a: string; b: string; }
+

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/indexedAccessNormalization.ts ===
+// Repro from from #43152
+
+type MyMap<M extends object> = {
+>MyMap : MyMap<M>
+
+    [K in keyof M]: {
+        x: number
+>x : number
+    }
+}
+
+declare function g<T>(value?: T): void;
+>g : <T>(value?: T | undefined) => void
+>value : T | undefined
+
+function f1<M extends object>(mymap: MyMap<M>, k: keyof M) {
+>f1 : <M extends object>(mymap: MyMap<M>, k: keyof M) => void
+>mymap : MyMap<M>
+>k : keyof M
+
+    const elemofM = mymap[k];
+>elemofM : MyMap<M>[keyof M]
+>mymap[k] : MyMap<M>[keyof M]
+>mymap : MyMap<M>
+>k : keyof M
+
+    g(elemofM);
+>g(elemofM) : void
+>g : <T>(value?: T | undefined) => void
+>elemofM : MyMap<M>[keyof M]
+}
+
+function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
+>f2 : <M extends object>(mymap: MyMap<M>, k: keyof M, z: {    x: number;}) => void
+>mymap : MyMap<M>
+>k : keyof M
+>z : { x: number; }
+>x : number
+
+    const q1: MyMap<M>[keyof M] = z;
+>q1 : MyMap<M>[keyof M]
+>z : { x: number; }
+
+    const q2: MyMap<M>[keyof M] | undefined = z;
+>q2 : MyMap<M>[keyof M] | undefined
+>z : { x: number; }
+
+    const q3: MyMap<M>[keyof M] | string = z;
+>q3 : string | MyMap<M>[keyof M]
+>z : { x: number; }
+}
+

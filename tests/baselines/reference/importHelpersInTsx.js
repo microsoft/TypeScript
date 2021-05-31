@@ -22,6 +22,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 //// [external.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 var tslib_1 = require("tslib");
 exports.x = React.createElement("span", tslib_1.__assign({}, o));
 //// [script.js]

@@ -14,6 +14,7 @@ namespace ts.codefix {
         Diagnostics.Operator_0_cannot_be_applied_to_type_1.code,
         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code,
         Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code,
+        Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
         Diagnostics.Type_0_is_not_an_array_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators.code,
@@ -45,7 +46,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const { sourceFile, program, cancellationToken } = context;
             const checker = context.program.getTypeChecker();
-            const fixedDeclarations = createMap<true>();
+            const fixedDeclarations = new Set<number>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
                 const expression = getFixableErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
                 if (!expression) {
@@ -58,7 +59,7 @@ namespace ts.codefix {
         },
     });
 
-    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const { sourceFile, program, cancellationToken } = context;
         const awaitableInitializers = findAwaitableInitializers(expression, sourceFile, cancellationToken, program, checker);
         if (awaitableInitializers) {
@@ -68,7 +69,9 @@ namespace ts.codefix {
                     makeChange(t, errorCode, sourceFile, checker, expression, fixedDeclarations);
                 }
             });
-            return createCodeFixActionNoFixId(
+            // No fix-all because it will already be included once with the use site fix,
+            // and for simplicity the fix-all doesn‘t let the user choose between use-site and declaration-site fixes.
+            return createCodeFixActionWithoutFixAll(
                 "addMissingAwaitToInitializer",
                 initializerChanges,
                 awaitableInitializers.initializers.length === 1
@@ -77,7 +80,7 @@ namespace ts.codefix {
         }
     }
 
-    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Map<true>) {
+    function getUseSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const changes = trackChanges(t => makeChange(t, errorCode, context.sourceFile, checker, expression, fixedDeclarations));
         return createCodeFixAction(fixId, changes, Diagnostics.Add_await, fixId, Diagnostics.Fix_all_expressions_possibly_missing_await);
     }
@@ -146,7 +149,7 @@ namespace ts.codefix {
                 declaration.type ||
                 !declaration.initializer ||
                 variableStatement.getSourceFile() !== sourceFile ||
-                hasModifier(variableStatement, ModifierFlags.Export) ||
+                hasSyntacticModifier(variableStatement, ModifierFlags.Export) ||
                 !variableName ||
                 !isInsideAwaitableBody(declaration.initializer)) {
                 isCompleteFix = false;
@@ -209,7 +212,7 @@ namespace ts.codefix {
             reference;
         const diagnostic = find(diagnostics, diagnostic =>
             diagnostic.start === errorNode.getStart(sourceFile) &&
-            diagnostic.start + diagnostic.length! === errorNode.getEnd());
+            (diagnostic.start + diagnostic.length!) === errorNode.getEnd());
 
         return diagnostic && contains(errorCodes, diagnostic.code) ||
             // A Promise is usually not correct in a binary expression (it’s not valid
@@ -232,49 +235,58 @@ namespace ts.codefix {
                 ancestor.parent.kind === SyntaxKind.MethodDeclaration));
     }
 
-    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Map<true>) {
+    function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
         if (isBinaryExpression(insertionSite)) {
             for (const side of [insertionSite.left, insertionSite.right]) {
                 if (fixedDeclarations && isIdentifier(side)) {
                     const symbol = checker.getSymbolAtLocation(side);
-                    if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                    if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                         continue;
                     }
                 }
                 const type = checker.getTypeAtLocation(side);
-                const newNode = checker.getPromisedTypeOfPromise(type) ? createAwait(side) : side;
+                const newNode = checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(side) : side;
                 changeTracker.replaceNode(sourceFile, side, newNode);
             }
         }
         else if (errorCode === propertyAccessCode && isPropertyAccessExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite.parent.expression)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite.parent.expression);
-                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                     return;
                 }
             }
             changeTracker.replaceNode(
                 sourceFile,
                 insertionSite.parent.expression,
-                createParen(createAwait(insertionSite.parent.expression)));
+                factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
         }
         else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
             if (fixedDeclarations && isIdentifier(insertionSite)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite);
-                if (symbol && fixedDeclarations.has(getSymbolId(symbol).toString())) {
+                if (symbol && fixedDeclarations.has(getSymbolId(symbol))) {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createParen(createAwait(insertionSite)));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
+            insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
         }
         else {
             if (fixedDeclarations && isVariableDeclaration(insertionSite.parent) && isIdentifier(insertionSite.parent.name)) {
                 const symbol = checker.getSymbolAtLocation(insertionSite.parent.name);
-                if (symbol && !addToSeen(fixedDeclarations, getSymbolId(symbol))) {
+                if (symbol && !tryAddToSet(fixedDeclarations, getSymbolId(symbol))) {
                     return;
                 }
             }
-            changeTracker.replaceNode(sourceFile, insertionSite, createAwait(insertionSite));
+            changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwaitExpression(insertionSite));
+        }
+    }
+
+    function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+        const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
+        if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
+            changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");
         }
     }
 }

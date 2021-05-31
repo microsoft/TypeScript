@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameAmbientNoImplicitAny.ts ===
+declare class A {
+>A : Symbol(A, Decl(privateNameAmbientNoImplicitAny.ts, 0, 0))
+
+    #prop;
+>#prop : Symbol(A.#prop, Decl(privateNameAmbientNoImplicitAny.ts, 0, 17))
+}
+class B {
+>B : Symbol(B, Decl(privateNameAmbientNoImplicitAny.ts, 2, 1))
+
+    #prop;
+>#prop : Symbol(B.#prop, Decl(privateNameAmbientNoImplicitAny.ts, 3, 9))
+}

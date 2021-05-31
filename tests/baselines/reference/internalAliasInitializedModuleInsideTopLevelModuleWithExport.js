@@ -12,6 +12,7 @@ export var x: b.c = new b.c();
 //// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.js]
 "use strict";
 exports.__esModule = true;
+exports.x = exports.b = exports.a = void 0;
 var a;
 (function (a) {
     var b;

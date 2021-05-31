@@ -289,4 +289,13 @@ async function * awaitedType2() {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 }
+async function * nextType1(): { next(...args: [] | [number | PromiseLike<number>]): any } {
+>nextType1 : Symbol(nextType1, Decl(types.asyncGenerators.es2018.1.ts, 122, 1))
+>next : Symbol(next, Decl(types.asyncGenerators.es2018.1.ts, 123, 31))
+>args : Symbol(args, Decl(types.asyncGenerators.es2018.1.ts, 123, 37))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+    const x = yield; // `number | PromiseLike<number>` (should not await TNext)
+>x : Symbol(x, Decl(types.asyncGenerators.es2018.1.ts, 124, 9))
+}
 

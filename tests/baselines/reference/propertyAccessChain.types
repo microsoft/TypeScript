@@ -1,0 +1,109 @@
+=== tests/cases/conformance/expressions/optionalChaining/propertyAccessChain/propertyAccessChain.ts ===
+declare const o1: undefined | { b: string };
+>o1 : { b: string; } | undefined
+>b : string
+
+o1?.b;
+>o1?.b : string | undefined
+>o1 : { b: string; } | undefined
+>b : string | undefined
+
+declare const o2: undefined | { b: { c: string } };
+>o2 : { b: {    c: string;}; } | undefined
+>b : { c: string; }
+>c : string
+
+o2?.b.c;
+>o2?.b.c : string | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+
+declare const o3: { b: undefined | { c: string } };
+>o3 : { b: undefined | {    c: string;}; }
+>b : { c: string; } | undefined
+>c : string
+
+o3.b?.c;
+>o3.b?.c : string | undefined
+>o3.b : { c: string; } | undefined
+>o3 : { b: { c: string; } | undefined; }
+>b : { c: string; } | undefined
+>c : string | undefined
+
+declare const o4: { b?: { c: { d?: { e: string } } } };
+>o4 : { b?: { c: {    d?: {        e: string;    };}; } | undefined; }
+>b : { c: {    d?: {        e: string;    };}; } | undefined
+>c : { d?: { e: string; } | undefined; }
+>d : { e: string; } | undefined
+>e : string
+
+o4.b?.c.d?.e;
+>o4.b?.c.d?.e : string | undefined
+>o4.b?.c.d : { e: string; } | undefined
+>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
+>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
+>d : { e: string; } | undefined
+>e : string | undefined
+
+declare const o5: { b?(): { c: { d?: { e: string } } } };
+>o5 : { b?(): {    c: {        d?: {            e: string;        };    };}; }
+>b : (() => {    c: {        d?: {            e: string;        };    };}) | undefined
+>c : { d?: { e: string; } | undefined; }
+>d : { e: string; } | undefined
+>e : string
+
+o5.b?.().c.d?.e;
+>o5.b?.().c.d?.e : string | undefined
+>o5.b?.().c.d : { e: string; } | undefined
+>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
+>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
+>d : { e: string; } | undefined
+>e : string | undefined
+
+// GH#33744
+declare const o6: <T>() => undefined | ({ x: number });
+>o6 : <T>() => undefined | ({    x: number;})
+>x : number
+
+o6<number>()?.x;
+>o6<number>()?.x : number | undefined
+>o6<number>() : { x: number; } | undefined
+>o6 : <T>() => { x: number; } | undefined
+>x : number | undefined
+
+// GH#34109
+o1?.b ? 1 : 0;
+>o1?.b ? 1 : 0 : 0 | 1
+>o1?.b : string | undefined
+>o1 : { b: string; } | undefined
+>b : string | undefined
+>1 : 1
+>0 : 0
+
+// GH#36031
+o2?.b!.c;
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+
+o2?.b!.c!;
+>o2?.b!.c! : string
+>o2?.b!.c : string | undefined
+>o2?.b! : { c: string; } | undefined
+>o2?.b : { c: string; } | undefined
+>o2 : { b: { c: string; }; } | undefined
+>b : { c: string; } | undefined
+>c : string | undefined
+

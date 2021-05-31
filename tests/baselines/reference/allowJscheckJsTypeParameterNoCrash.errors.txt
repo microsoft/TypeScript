@@ -1,4 +1,4 @@
-tests/cases/compiler/app.js(6,7): error TS2322: Type '1' is not assignable to type 'WatchHandler<any>'.
+tests/cases/compiler/app.js(6,7): error TS2322: Type 'number' is not assignable to type 'WatchHandler<any>'.
 
 
 ==== tests/cases/compiler/func.ts (0 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/app.js(6,7): error TS2322: Type '1' is not assignable to ty
         data1(val) {
           this.data2 = 1;
           ~~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'WatchHandler<any>'.
+!!! error TS2322: Type 'number' is not assignable to type 'WatchHandler<any>'.
         },
         data2(val) { },
       }
