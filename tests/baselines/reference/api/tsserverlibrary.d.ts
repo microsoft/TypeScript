@@ -9554,6 +9554,7 @@ declare namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        session?: Session<unknown>;
         config: any;
     }
     interface PluginModule {
@@ -9930,7 +9931,7 @@ declare namespace ts.server {
         configFileName?: NormalizedPath;
         configFileErrors?: readonly Diagnostic[];
     }
-    export interface ProjectServiceOptions {
+    export interface ProjectServiceOptions<TMessage = string> {
         host: ServerHost;
         logger: Logger;
         cancellationToken: HostCancellationToken;
@@ -9947,6 +9948,7 @@ declare namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
+        session: Session<TMessage> | undefined;
     }
     export interface WatchOptionsAndErrors {
         watchOptions: WatchOptions;
@@ -10022,7 +10024,7 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
-        constructor(opts: ProjectServiceOptions);
+        constructor(opts: ProjectServiceOptions<unknown>);
         toPath(fileName: string): Path;
         private loadTypesMap;
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
