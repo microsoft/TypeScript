@@ -233,6 +233,14 @@ interface String {
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
+     * Replaces text in a string, using an object that supports replacement within a string.
+     * @param searchValue A object can search for and replace matches within a string.
+     * @param replacer A function that returns the replacement text or a string containing the text to replace for every
+     * successful match of searchValue in this string.
+     */
+    replace(searchValue: { [Symbol.replace](string: string, replacer: string | ((substring: string, ...args: any[]) => string)): string; }, replacer: string | ((substring: string, ...args: any[]) => string)): string;
+
+    /**
      * Finds the first substring match in a regular expression search.
      * @param searcher An object which supports searching within a string.
      */

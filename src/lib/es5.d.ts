@@ -434,6 +434,13 @@ interface String {
     replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
+     * Replaces text in a string, using a regular expression or search string.
+     * @param searchValue A string to search for.
+     * @param replacer A string containing the text to replace for every successful match or a function that returns the replacement text.
+     */
+    replace(searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string;
+
+    /**
      * Finds the first substring match in a regular expression search.
      * @param regexp The regular expression pattern and applicable flags.
      */

@@ -7131,12 +7131,12 @@ module TypeScript {
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->this.text[i].replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.text[i].replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >i : Symbol(i, Decl(parserRealSource11.ts, 2337, 28))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                     }
                 }
                 else {
@@ -7144,11 +7144,11 @@ module TypeScript {
 >this.text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >text : Symbol(Comment.text, Decl(parserRealSource11.ts, 2325, 38))
->this.content.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>this.content.replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
 >this : Symbol(Comment, Decl(parserRealSource11.ts, 2323, 5))
 >content : Symbol(Comment.content, Decl(parserRealSource11.ts, 2329, 21))
->replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
                 }
             }
 

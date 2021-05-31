@@ -11100,13 +11100,13 @@ module TypeScript {
 >text : string[]
 >i : number
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
->this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
 >this.text[i] : string
 >this.text : string[]
 >this : this
 >text : string[]
 >i : number
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
 >/^\s+|\s+$/g : RegExp
 >'' : ""
                     }
@@ -11120,11 +11120,11 @@ module TypeScript {
 >[(this.content.replace(/^\s+|\s+$/g, ''))] : string[]
 >(this.content.replace(/^\s+|\s+$/g, '')) : string
 >this.content.replace(/^\s+|\s+$/g, '') : string
->this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
 >this.content : string
 >this : this
 >content : string
->replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string | RegExp, replacer: string | ((substring: string, ...args: any[]) => string)): string; }
 >/^\s+|\s+$/g : RegExp
 >'' : ""
                 }
