@@ -10840,7 +10840,7 @@ namespace ts {
                     constructSignatures = appendSignatures(constructSignatures, signatures);
                 }
                 callSignatures = appendSignatures(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
-                indexInfos = reduceLeft(getIndexInfosOfType(t), appendIndexInfo, indexInfos);
+                indexInfos = reduceLeft(getIndexInfosOfType(t), (infos, newInfo) => appendIndexInfo(infos, newInfo, /*union*/ false), indexInfos);
             }
             setStructuredTypeMembers(type, emptySymbols, callSignatures || emptyArray, constructSignatures || emptyArray, indexInfos || emptyArray);
         }
@@ -10854,12 +10854,14 @@ namespace ts {
             return signatures;
         }
 
-        function appendIndexInfo(indexInfos: IndexInfo[] | undefined, newInfo: IndexInfo) {
+        function appendIndexInfo(indexInfos: IndexInfo[] | undefined, newInfo: IndexInfo, union: boolean) {
             if (indexInfos) {
                 for (let i = 0; i < indexInfos.length; i++) {
                     const info = indexInfos[i];
                     if (info.keyType === newInfo.keyType) {
-                        indexInfos[i] = createIndexInfo(info.keyType, getIntersectionType([info.type, newInfo.type]), info.isReadonly && newInfo.isReadonly);
+                        indexInfos[i] = createIndexInfo(info.keyType,
+                            union ? getUnionType([info.type, newInfo.type]) : getIntersectionType([info.type, newInfo.type]),
+                            union ? info.isReadonly || newInfo.isReadonly : info.isReadonly && newInfo.isReadonly);
                         return indexInfos;
                     }
                 }
@@ -11033,8 +11035,7 @@ namespace ts {
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
-            let stringIndexInfo: IndexInfo | undefined;
-            let numberIndexInfo: IndexInfo | undefined;
+            let indexInfos: IndexInfo[] | undefined;
             // Resolve upfront such that recursive references see an empty object type.
             setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, emptyArray);
             // In { [P in K]: T }, we refer to P as the type parameter type, K as the constraint type,
@@ -11061,7 +11062,7 @@ namespace ts {
             else {
                 forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
             }
-            setStructuredTypeMembers(type, members, emptyArray, emptyArray, createIndexInfoArray(stringIndexInfo, numberIndexInfo));
+            setStructuredTypeMembers(type, members, emptyArray, emptyArray, indexInfos || emptyArray);
 
             function addMemberForKeyType(keyType: Type) {
                 const propNameType = nameType ? instantiateType(nameType, appendTypeMapping(type.mapper, typeParameter, keyType)) : keyType;
@@ -11101,16 +11102,13 @@ namespace ts {
                         members.set(propName, prop);
                     }
                 }
-                else if (propNameType.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum)) {
+                else if (propNameType.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum | TypeFlags.ESSymbol) || isPatternLiteralType(propNameType)) {
+                    const indexKeyType = propNameType.flags & (TypeFlags.Any | TypeFlags.String) ? stringType :
+                        propNameType.flags & (TypeFlags.Number | TypeFlags.Enum) ? numberType :
+                        propNameType;
                     const propType = instantiateType(templateType, appendTypeMapping(type.mapper, typeParameter, keyType));
-                    if (propNameType.flags & (TypeFlags.Any | TypeFlags.String)) {
-                        stringIndexInfo = createIndexInfo(stringType, stringIndexInfo ? getUnionType([stringIndexInfo.type, propType]) : propType,
-                            !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
-                    }
-                    else {
-                        numberIndexInfo = createIndexInfo(numberType, numberIndexInfo ? getUnionType([numberIndexInfo.type, propType]) : propType,
-                            !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
-                    }
+                    const indexInfo = createIndexInfo(indexKeyType, propType, !!(templateModifiers & MappedTypeModifiers.IncludeReadonly));
+                    indexInfos = appendIndexInfo(indexInfos, indexInfo, /*union*/ true);
                 }
             }
         }
@@ -12016,6 +12014,12 @@ namespace ts {
                 }
             }
             return undefined;
+        }
+
+        function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
+            const indexInfos = getIndexInfosOfType(type);
+            return find(indexInfos, info => info.keyType !== stringType && isTypeAssignableTo(keyType, info.keyType)) ||
+                findIndexInfo(indexInfos, stringType);
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -14634,16 +14638,15 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
-                const stringIndexInfo = getIndexInfoOfType(objectType, stringType);
-                const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, numberType) || stringIndexInfo;
+                const indexInfo = getApplicableIndexInfo(objectType, indexType);
                 if (indexInfo) {
-                    if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo === stringIndexInfo) {
+                    if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType === stringType) {
                         if (accessExpression) {
                             error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
                         }
                         return undefined;
                     }
-                    if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
+                    if (accessNode && indexInfo.keyType === stringType && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                         return accessFlags & AccessFlags.IncludeUndefined ? getUnionType([indexInfo.type, undefinedType]) : indexInfo.type;
