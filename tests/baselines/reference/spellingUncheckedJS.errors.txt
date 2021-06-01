@@ -53,6 +53,8 @@ tests/cases/conformance/salsa/spellingUncheckedJS.js(27,8): error TS2551: Proper
     AudioBuffin // etc
     Jimmy
     Jon
+    window.argle
+    self.blargle
     
 ==== tests/cases/conformance/salsa/other.js (1 errors) ====
     var Jimmy = 1
@@ -64,4 +66,6 @@ tests/cases/conformance/salsa/spellingUncheckedJS.js(27,8): error TS2551: Proper
     var other = {
         puuce: 4
     }
+    window.argle
+    self.blargle
     

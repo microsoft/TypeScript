@@ -14577,7 +14577,6 @@ namespace ts {
             if (noImplicitAny) {
                 return false; // Flag is meaningless under `noImplicitAny` mode
             }
-
             if (getObjectFlags(type) & ObjectFlags.JSLiteral) {
                 return true;
             }
@@ -27481,7 +27480,8 @@ namespace ts {
                 if (compilerOptions.checkJs === undefined && !file.checkJsDirective && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
                     const parentFile = forEach(declarations, getSourceFileOfNode);
                     return file !== parentFile && !!parentFile && isGlobalSourceFile(parentFile)
-                        || !!(parent && parent.flags & SymbolFlags.Class);
+                        || !!(parent && parent.flags & SymbolFlags.Class)
+                        || !!node && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword;
                 }
             }
         }

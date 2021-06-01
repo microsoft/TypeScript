@@ -118,6 +118,16 @@ Jimmy
 Jon
 >Jon : any
 
+window.argle
+>window.argle : any
+>window : Window & typeof globalThis
+>argle : any
+
+self.blargle
+>self.blargle : any
+>self : Window & typeof globalThis
+>blargle : any
+
 === tests/cases/conformance/salsa/other.js ===
 var Jimmy = 1
 >Jimmy : number
@@ -138,4 +148,13 @@ var other = {
 >puuce : number
 >4 : 4
 }
+window.argle
+>window.argle : any
+>window : Window & typeof globalThis
+>argle : any
+
+self.blargle
+>self.blargle : any
+>self : Window & typeof globalThis
+>blargle : any
 

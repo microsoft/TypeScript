@@ -73,6 +73,11 @@ Jimmy
 >Jimmy : Symbol(Jimmy, Decl(other.js, 0, 3))
 
 Jon
+window.argle
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+self.blargle
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 
 === tests/cases/conformance/salsa/other.js ===
 var Jimmy = 1
@@ -88,4 +93,9 @@ var other = {
     puuce: 4
 >puuce : Symbol(puuce, Decl(other.js, 3, 13))
 }
+window.argle
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+self.blargle
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 
