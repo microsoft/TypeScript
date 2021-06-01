@@ -1,9 +1,9 @@
 tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2774: Class declaration cannot implement overload list for 'default'.
+tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2813: Class declaration cannot implement overload list for 'default'.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2323: Cannot redeclare exported variable 'default'.
 tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
-tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2775: Function with bodies can only merge with classes that are ambient.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2814: Function with bodies can only merge with classes that are ambient.
 tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot have multiple default exports.
 
 
@@ -15,8 +15,8 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS6204 tests/cases/conformance/es6/modules/m1.ts:10:16: and here.
                          ~~~
-!!! error TS2774: Class declaration cannot implement overload list for 'default'.
-!!! related TS6503 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+!!! error TS2813: Class declaration cannot implement overload list for 'default'.
+!!! related TS6506 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
     
     }
     
@@ -27,8 +27,8 @@ tests/cases/conformance/es6/modules/m1.ts(10,16): error TS2528: A module cannot 
 !!! error TS2528: A module cannot have multiple default exports.
 !!! related TS2753 tests/cases/conformance/es6/modules/m1.ts:10:16: Another export default is here.
                             ~~~
-!!! error TS2775: Function with bodies can only merge with classes that are ambient.
-!!! related TS6503 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/conformance/es6/modules/m1.ts:1:22: Consider adding a 'declare' modifier to this class.
     
     }
     

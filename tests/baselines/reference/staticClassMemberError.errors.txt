@@ -1,7 +1,7 @@
 tests/cases/compiler/staticClassMemberError.ts(4,3): error TS2662: Cannot find name 's'. Did you mean the static member 'C.s'?
 tests/cases/compiler/staticClassMemberError.ts(9,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/staticClassMemberError.ts(9,10): error TS2775: Function with bodies can only merge with classes that are ambient.
-tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2774: Class declaration cannot implement overload list for 'Foo'.
+tests/cases/compiler/staticClassMemberError.ts(9,10): error TS2814: Function with bodies can only merge with classes that are ambient.
+tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2813: Class declaration cannot implement overload list for 'Foo'.
 
 
 ==== tests/cases/compiler/staticClassMemberError.ts (4 errors) ====
@@ -19,11 +19,11 @@ tests/cases/compiler/staticClassMemberError.ts(10,7): error TS2774: Class declar
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
              ~~~
-!!! error TS2775: Function with bodies can only merge with classes that are ambient.
-!!! related TS6503 tests/cases/compiler/staticClassMemberError.ts:10:7: Consider adding a 'declare' modifier to this class.
+!!! error TS2814: Function with bodies can only merge with classes that are ambient.
+!!! related TS6506 tests/cases/compiler/staticClassMemberError.ts:10:7: Consider adding a 'declare' modifier to this class.
     class Foo {
           ~~~
-!!! error TS2774: Class declaration cannot implement overload list for 'Foo'.
-!!! related TS6503 tests/cases/compiler/staticClassMemberError.ts:10:7: Consider adding a 'declare' modifier to this class.
+!!! error TS2813: Class declaration cannot implement overload list for 'Foo'.
+!!! related TS6506 tests/cases/compiler/staticClassMemberError.ts:10:7: Consider adding a 'declare' modifier to this class.
      static bar;
     }
