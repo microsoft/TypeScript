@@ -12,6 +12,7 @@ verify.moveToNewFile({
 
 "/x.ts":
 `import * as o from './other';
+
 export const x = o.foo();
 `
     },

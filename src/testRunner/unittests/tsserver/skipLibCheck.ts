@@ -25,16 +25,16 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: file2.path }
             );
-            let errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            let errorResult = session.executeCommand(file2GetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 0);
 
             const closeFileRequest = makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file1.path });
             session.executeCommand(closeFileRequest);
-            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            errorResult = session.executeCommand(file2GetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length !== 0);
 
             openFilesForSession([file1], session);
-            errorResult = <protocol.Diagnostic[]>session.executeCommand(file2GetErrRequest).response;
+            errorResult = session.executeCommand(file2GetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 0);
         });
 
@@ -70,7 +70,7 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile.path }
             );
-            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            const errorResult = session.executeCommand(dTsFileGetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 0);
         });
 
@@ -106,7 +106,7 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile.path }
             );
-            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            const errorResult = session.executeCommand(dTsFileGetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 0);
         });
 
@@ -137,14 +137,14 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile1.path }
             );
-            const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
+            const error1Result = session.executeCommand(dTsFile1GetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(error1Result.length === 0);
 
             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile2.path }
             );
-            const error2Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile2GetErrRequest).response;
+            const error2Result = session.executeCommand(dTsFile2GetErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(error2Result.length === 0);
         });
 
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: jsFile.path }
             );
-            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
             assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
@@ -192,7 +192,7 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: jsFile.path }
             );
-            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
             assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });
@@ -221,7 +221,7 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: jsFile.path }
             );
-            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            const errorResult = session.executeCommand(getErrRequest).response as protocol.Diagnostic[];
             assert.isTrue(errorResult.length === 1);
             assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
         });

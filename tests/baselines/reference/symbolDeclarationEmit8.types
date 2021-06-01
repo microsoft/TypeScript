@@ -5,8 +5,8 @@ var obj = {
 
     [Symbol.isConcatSpreadable]: 0
 >[Symbol.isConcatSpreadable] : number
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >0 : 0
 }

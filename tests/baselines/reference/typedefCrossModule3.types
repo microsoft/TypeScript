@@ -14,7 +14,7 @@ ns.Foo = class {}
 module.exports = ns;
 >module.exports = ns : typeof ns
 >module.exports : typeof ns
->module : { "\"tests/cases/conformance/jsdoc/mod2\"": typeof ns; }
+>module : { exports: typeof ns; }
 >exports : typeof ns
 >ns : typeof ns
 

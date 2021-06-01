@@ -5,6 +5,10 @@ class C {
     method(@dec this: C) {}
 }
 
+class C2 {
+    method(@dec allowed: C2, @dec this: C2) {}
+}
+
 //// [decoratorOnClassMethodThisParameter.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -19,8 +23,14 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () { };
-    __decorate([
-        __param(0, dec)
-    ], C.prototype, "method", null);
     return C;
+}());
+var C2 = /** @class */ (function () {
+    function C2() {
+    }
+    C2.prototype.method = function (allowed) { };
+    __decorate([
+        __param(0, dec), __param(1, dec)
+    ], C2.prototype, "method", null);
+    return C2;
 }());

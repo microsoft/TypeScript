@@ -45,8 +45,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
           Types of property 'a' are incompatible.
             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-                Type 'Base' is not assignable to type 'T'.
-                  'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts (7 errors) ====
@@ -152,7 +150,5 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:           Types of property 'a' are incompatible.
 !!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:               'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-!!! error TS2430:                 Type 'Base' is not assignable to type 'T'.
-!!! error TS2430:                   'T' could be instantiated with an arbitrary type which could be unrelated to 'Base'.
         a16: new (x: { a: T; b: T }) => T[]; 
     }

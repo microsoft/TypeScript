@@ -1,0 +1,44 @@
+=== tests/cases/conformance/override/override12.ts ===
+class A {
+>A : A
+
+    public m1(): number {
+>m1 : () => number
+
+        return 0;
+>0 : 0
+    }
+
+    public m2(): number {
+>m2 : () => number
+
+        return 0;
+>0 : 0
+    }
+
+    public m3(): void {}
+>m3 : () => void
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    override m1() {
+>m1 : () => number
+
+        return 10;
+>10 : 10
+    }
+
+    override m2(): number {
+>m2 : () => number
+
+        return 30;
+>30 : 30
+    }
+
+    override m3(): void {}
+>m3 : () => void
+}
+

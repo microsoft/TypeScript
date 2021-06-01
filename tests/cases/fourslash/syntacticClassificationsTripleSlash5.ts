@@ -2,8 +2,10 @@
 
 //// /// <reference
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/// "),
     c.punctuation("<"),
     c.jsxSelfClosingTagName("reference"));
+
+

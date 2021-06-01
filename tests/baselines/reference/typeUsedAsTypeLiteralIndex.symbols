@@ -1,0 +1,56 @@
+=== tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts ===
+type K = number | string;
+>K : Symbol(K, Decl(typeUsedAsTypeLiteralIndex.ts, 0, 0))
+
+type T = {
+>T : Symbol(T, Decl(typeUsedAsTypeLiteralIndex.ts, 0, 25))
+
+    [K]: number;  // Did you mean to use 'P in K'?
+>[K] : Symbol([K], Decl(typeUsedAsTypeLiteralIndex.ts, 1, 10))
+}
+
+const K1 = Symbol();
+>K1 : Symbol(K1, Decl(typeUsedAsTypeLiteralIndex.ts, 5, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+type T1 = {
+>T1 : Symbol(T1, Decl(typeUsedAsTypeLiteralIndex.ts, 5, 20))
+
+    [K1]: number;
+>[K1] : Symbol([K1], Decl(typeUsedAsTypeLiteralIndex.ts, 6, 11))
+>K1 : Symbol(K1, Decl(typeUsedAsTypeLiteralIndex.ts, 5, 5))
+}
+
+type K2 = "x" | "y";
+>K2 : Symbol(K2, Decl(typeUsedAsTypeLiteralIndex.ts, 8, 1))
+
+type T2 = {
+>T2 : Symbol(T2, Decl(typeUsedAsTypeLiteralIndex.ts, 10, 20))
+
+    [K2]: number;  // Did you mean to use 'K in K2'?
+>[K2] : Symbol([K2], Decl(typeUsedAsTypeLiteralIndex.ts, 11, 11))
+}
+
+type K3 = number | string;
+>K3 : Symbol(K3, Decl(typeUsedAsTypeLiteralIndex.ts, 13, 1))
+
+type T3 = {
+>T3 : Symbol(T3, Decl(typeUsedAsTypeLiteralIndex.ts, 15, 26))
+
+    [K3]: number; // Did you mean to use 'K in K3'?
+>[K3] : Symbol([K3], Decl(typeUsedAsTypeLiteralIndex.ts, 16, 11))
+}
+
+type K4 = number | string;
+>K4 : Symbol(K4, Decl(typeUsedAsTypeLiteralIndex.ts, 18, 1))
+
+type T4 = {
+>T4 : Symbol(T4, Decl(typeUsedAsTypeLiteralIndex.ts, 20, 26))
+
+    [K4]: number;
+>[K4] : Symbol([K4], Decl(typeUsedAsTypeLiteralIndex.ts, 21, 11))
+
+    k4: string;
+>k4 : Symbol(k4, Decl(typeUsedAsTypeLiteralIndex.ts, 22, 17))
+}
+

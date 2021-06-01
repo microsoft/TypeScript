@@ -181,7 +181,7 @@ namespace ts.CallHierarchy {
             const indices = indicesOf(symbol.declarations);
             const keys = map(symbol.declarations, decl => ({ file: decl.getSourceFile().fileName, pos: decl.pos }));
             indices.sort((a, b) => compareStringsCaseSensitive(keys[a].file, keys[b].file) || keys[a].pos - keys[b].pos);
-            const sortedDeclarations = map(indices, i => symbol.declarations[i]);
+            const sortedDeclarations = map(indices, i => symbol.declarations![i]);
             let lastDecl: CallHierarchyDeclaration | undefined;
             for (const decl of sortedDeclarations) {
                 if (isValidCallHierarchyDeclaration(decl)) {
@@ -248,6 +248,10 @@ namespace ts.CallHierarchy {
                     return location.parent;
                 }
                 return undefined;
+            }
+            // #39453
+            if (isVariableDeclaration(location) && location.initializer && isConstNamedExpression(location.initializer)) {
+                return location.initializer;
             }
             if (!followingSymbol) {
                 let symbol = typeChecker.getSymbolAtLocation(location);

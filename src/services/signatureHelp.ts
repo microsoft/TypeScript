@@ -237,8 +237,8 @@ namespace ts.SignatureHelp {
             return undefined;
         }
         else if (isTemplateHead(node) && parent.parent.kind === SyntaxKind.TaggedTemplateExpression) {
-            const templateExpression = <TemplateExpression>parent;
-            const tagExpression = <TaggedTemplateExpression>templateExpression.parent;
+            const templateExpression = parent as TemplateExpression;
+            const tagExpression = templateExpression.parent as TaggedTemplateExpression;
             Debug.assert(templateExpression.kind === SyntaxKind.TemplateExpression);
 
             const argumentIndex = isInsideTemplateLiteral(node, position, sourceFile) ? 0 : 1;
@@ -304,14 +304,17 @@ namespace ts.SignatureHelp {
         if (!info) return undefined;
         const { contextualType, argumentIndex, argumentCount, argumentsSpan } = info;
 
-        const signatures = contextualType.getCallSignatures();
+        // for optional function condition.
+        const nonNullableContextualType = contextualType.getNonNullableType();
+
+        const signatures = nonNullableContextualType.getCallSignatures();
         if (signatures.length !== 1) return undefined;
 
-        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(contextualType.symbol) };
+        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(nonNullableContextualType.symbol) };
         return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
     }
 
-    interface ContextualSignatureLocationInfo {readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
+    interface ContextualSignatureLocationInfo { readonly contextualType: Type; readonly argumentIndex: number; readonly argumentCount: number; readonly argumentsSpan: TextSpan; }
     function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: SourceFile, checker: TypeChecker): ContextualSignatureLocationInfo | undefined {
         if (startingToken.kind !== SyntaxKind.OpenParenToken && startingToken.kind !== SyntaxKind.CommaToken) return undefined;
         const { parent } = startingToken;
@@ -514,7 +517,6 @@ namespace ts.SignatureHelp {
         if (argumentIndex !== 0) {
             Debug.assertLessThan(argumentIndex, argumentCount);
         }
-
         let selectedItemIndex = 0;
         let itemsSeen = 0;
         for (let i = 0; i < items.length; i++) {
@@ -538,8 +540,19 @@ namespace ts.SignatureHelp {
         }
 
         Debug.assert(selectedItemIndex !== -1); // If candidates is non-empty it should always include bestSignature. We check for an empty candidates before calling this function.
-
-        return { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+        const help = { items: flatMapToMutable(items, identity), applicableSpan, selectedItemIndex, argumentIndex, argumentCount };
+        const selected = help.items[selectedItemIndex];
+        if (selected.isVariadic) {
+            const firstRest = findIndex(selected.parameters, p => !!p.isRest);
+            if (-1 < firstRest && firstRest < selected.parameters.length - 1) {
+                // We don't have any code to get this correct; instead, don't highlight a current parameter AT ALL
+                help.argumentIndex = selected.parameters.length;
+            }
+            else {
+                help.argumentIndex = Math.min(help.argumentIndex, selected.parameters.length - 1);
+            }
+        }
+        return help;
     }
 
     function createTypeHelpItems(
@@ -561,7 +574,7 @@ namespace ts.SignatureHelp {
         const parameters = typeParameters.map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
 
         const documentation = symbol.getDocumentationComment(checker);
-        const tags = symbol.getJsDocTags();
+        const tags = symbol.getJsDocTags(checker);
         const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
         return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
     }
@@ -611,7 +624,6 @@ namespace ts.SignatureHelp {
     }
 
     function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo[] {
-        const isVariadic = checker.hasEffectiveRestParameter(candidateSignature);
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
@@ -620,14 +632,16 @@ namespace ts.SignatureHelp {
             }
         });
         const lists = checker.getExpandedParameters(candidateSignature);
-        return lists.map(parameterList => {
-            return {
-                isVariadic: isVariadic && (lists.length === 1 || !!((parameterList[parameterList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter)),
-                parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
-                prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
-                suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
-            };
-        });
+        const isVariadic: (parameterList: readonly Symbol[]) => boolean =
+            !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
+            : lists.length === 1 ? _ => true
+            : pList => !!(pList.length && (pList[pList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        return lists.map(parameterList => ({
+            isVariadic: isVariadic(parameterList),
+            parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
+            prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)],
+            suffix: [punctuationPart(SyntaxKind.CloseParenToken)]
+        }));
     }
 
     function createSignatureHelpParameterForParameter(parameter: Symbol, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
@@ -635,8 +649,9 @@ namespace ts.SignatureHelp {
             const param = checker.symbolToParameterDeclaration(parameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        const isOptional = checker.isOptionalParameter(<ParameterDeclaration>parameter.valueDeclaration);
-        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional };
+        const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
+        const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
     }
 
     function createSignatureHelpParameterForTypeParameter(typeParameter: TypeParameter, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile, printer: Printer): SignatureHelpParameter {
@@ -644,6 +659,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false, isRest: false };
     }
 }

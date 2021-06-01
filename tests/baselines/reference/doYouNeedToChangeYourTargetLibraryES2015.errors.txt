@@ -1,0 +1,347 @@
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(3,26): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(4,30): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(5,35): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(6,35): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(7,24): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(8,45): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(9,35): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(10,33): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(11,28): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(12,38): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(13,24): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(14,35): error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(15,28): error TS2550: Property 'find' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(18,33): error TS2550: Property 'findIndex' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(21,28): error TS2550: Property 'fill' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(22,34): error TS2550: Property 'copyWithin' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(23,31): error TS2550: Property 'entries' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(24,28): error TS2550: Property 'keys' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(25,30): error TS2550: Property 'values' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(26,40): error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(27,38): error TS2550: Property 'of' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(28,44): error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(29,59): error TS2550: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(31,40): error TS2550: Property 'is' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(32,52): error TS2550: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(33,46): error TS2550: Property 'isFinite' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(34,47): error TS2550: Property 'isInteger' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(35,43): error TS2550: Property 'isNaN' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(36,51): error TS2550: Property 'isSafeInteger' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(37,48): error TS2550: Property 'parseFloat' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(38,46): error TS2550: Property 'parseInt' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(39,28): error TS2550: Property 'clz32' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(40,27): error TS2550: Property 'imul' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(41,27): error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(42,28): error TS2550: Property 'log10' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(43,27): error TS2550: Property 'log2' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(44,28): error TS2550: Property 'log1p' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(45,28): error TS2550: Property 'expm1' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(46,27): error TS2550: Property 'cosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(47,27): error TS2550: Property 'sinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(48,27): error TS2550: Property 'tanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(49,28): error TS2550: Property 'acosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(50,28): error TS2550: Property 'asinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(51,28): error TS2550: Property 'atanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(52,28): error TS2550: Property 'hypot' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(53,28): error TS2550: Property 'trunc' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(54,29): error TS2550: Property 'fround' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(55,27): error TS2550: Property 'cbrt' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(56,16): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(57,16): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(58,24): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(59,25): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(60,28): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(61,27): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(62,23): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(63,26): error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(64,20): error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(65,20): error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(66,21): error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(67,26): error TS2583: Cannot find name 'AsyncIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(68,34): error TS2550: Property 'codePointAt' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(69,31): error TS2550: Property 'includes' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(70,31): error TS2550: Property 'endsWith' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(71,32): error TS2550: Property 'normalize' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(72,29): error TS2550: Property 'repeat' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(73,33): error TS2550: Property 'startsWith' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(74,29): error TS2550: Property 'anchor' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(75,26): error TS2550: Property 'big' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(76,28): error TS2550: Property 'blink' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(77,27): error TS2550: Property 'bold' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(78,28): error TS2550: Property 'fixed' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(79,32): error TS2550: Property 'fontcolor' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(80,31): error TS2550: Property 'fontsize' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(81,30): error TS2550: Property 'italics' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(82,27): error TS2550: Property 'link' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(83,28): error TS2550: Property 'small' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(84,29): error TS2550: Property 'strike' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(85,26): error TS2550: Property 'sub' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(86,26): error TS2550: Property 'sup' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(87,51): error TS2550: Property 'fromCodePoint' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(88,41): error TS2550: Property 'raw' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(89,32): error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(90,33): error TS2550: Property 'sticky' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts(91,34): error TS2550: Property 'unicode' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+==== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts (84 errors) ====
+    // es2015
+    const noOp = () => {};
+    const testReflectApply = Reflect.apply(noOp, this, []);
+                             ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectConstruct = Reflect.construct(noOp, []);
+                                 ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
+                                      ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
+                                      ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectGet = Reflect.get({}, "");
+                           ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
+                                                ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
+                                      ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectIsExtensible = Reflect.isExtensible({});
+                                    ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectOwnKeys = Reflect.ownKeys({});
+                               ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectPreventExtensions = Reflect.preventExtensions({});
+                                         ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectSet = Reflect.set({}, "", 0);
+                           ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {}); 
+                                      ~~~~~~~
+!!! error TS2583: Cannot find name 'Reflect'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayFind = [""].find((val, idx, obj) => {
+                               ~~~~
+!!! error TS2550: Property 'find' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        return true;
+    });
+    const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
+                                    ~~~~~~~~~
+!!! error TS2550: Property 'findIndex' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+        return true;
+    });
+    const testArrayFill = [""].fill("fill");
+                               ~~~~
+!!! error TS2550: Property 'fill' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayCopyWithin = [""].copyWithin(0, 0);
+                                     ~~~~~~~~~~
+!!! error TS2550: Property 'copyWithin' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayEntries = [""].entries();
+                                  ~~~~~~~
+!!! error TS2550: Property 'entries' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayKeys = [""].keys();
+                               ~~~~
+!!! error TS2550: Property 'keys' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayValues = [""].values();
+                                 ~~~~~~
+!!! error TS2550: Property 'values' does not exist on type 'string[]'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayConstructorFrom = Array.from([]);
+                                           ~~~~
+!!! error TS2550: Property 'from' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testArrayConstructorOf = Array.of([]);
+                                         ~~
+!!! error TS2550: Property 'of' does not exist on type 'ArrayConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testObjectConstructorAssign = Object.assign({}, {});
+                                               ~~~~~~
+!!! error TS2550: Property 'assign' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols({});
+                                                              ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2550: Property 'getOwnPropertySymbols' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testObjectConstructorKeys = Object.keys({});
+    const testObjectConstructorIs = Object.is({}, {});
+                                           ~~
+!!! error TS2550: Property 'is' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
+                                                       ~~~~~~~~~~~~~~
+!!! error TS2550: Property 'setPrototypeOf' does not exist on type 'ObjectConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorIsFinite = Number.isFinite(0);
+                                                 ~~~~~~~~
+!!! error TS2550: Property 'isFinite' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorIsInteger = Number.isInteger(0);
+                                                  ~~~~~~~~~
+!!! error TS2550: Property 'isInteger' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorIsNan = Number.isNaN(0);
+                                              ~~~~~
+!!! error TS2550: Property 'isNaN' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorIsSafeInteger = Number.isSafeInteger(0);
+                                                      ~~~~~~~~~~~~~
+!!! error TS2550: Property 'isSafeInteger' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorParseFloat = Number.parseFloat("0");
+                                                   ~~~~~~~~~~
+!!! error TS2550: Property 'parseFloat' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testNumberConstructorParseInt = Number.parseInt("0");
+                                                 ~~~~~~~~
+!!! error TS2550: Property 'parseInt' does not exist on type 'NumberConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathClz32 = Math.clz32(0);
+                               ~~~~~
+!!! error TS2550: Property 'clz32' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathImul = Math.imul(0,0);
+                              ~~~~
+!!! error TS2550: Property 'imul' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathSign = Math.sign(0);
+                              ~~~~
+!!! error TS2550: Property 'sign' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathLog10 = Math.log10(0);
+                               ~~~~~
+!!! error TS2550: Property 'log10' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathLog2 = Math.log2(0);
+                              ~~~~
+!!! error TS2550: Property 'log2' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathLog1p = Math.log1p(0);
+                               ~~~~~
+!!! error TS2550: Property 'log1p' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathExpm1 = Math.expm1(0);
+                               ~~~~~
+!!! error TS2550: Property 'expm1' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathCosh = Math.cosh(0);
+                              ~~~~
+!!! error TS2550: Property 'cosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathSinh = Math.sinh(0);
+                              ~~~~
+!!! error TS2550: Property 'sinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathTanh = Math.tanh(0);
+                              ~~~~
+!!! error TS2550: Property 'tanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathAcosh = Math.acosh(0);
+                               ~~~~~
+!!! error TS2550: Property 'acosh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathAsinh = Math.asinh(0);
+                               ~~~~~
+!!! error TS2550: Property 'asinh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathAtanh = Math.atanh(0);
+                               ~~~~~
+!!! error TS2550: Property 'atanh' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathHypot = Math.hypot(0,0);
+                               ~~~~~
+!!! error TS2550: Property 'hypot' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathTrunc = Math.trunc(0);
+                               ~~~~~
+!!! error TS2550: Property 'trunc' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathFround = Math.fround(0);
+                                ~~~~~~
+!!! error TS2550: Property 'fround' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMathCbrt = Math.cbrt(0);
+                              ~~~~
+!!! error TS2550: Property 'cbrt' does not exist on type 'Math'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testMap: Map<any, any> = null as any;
+                   ~~~
+!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testSet: Set<any> = null as any;
+                   ~~~
+!!! error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testPromiseAll = Promise.all([]);
+                           ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testPromiseRace = Promise.race([]);
+                            ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testPromiseResolve = Promise.resolve();
+                               ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testPromiseReject = Promise.reject();
+                              ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testSymbolFor = Symbol.for('a');
+                          ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
+                             ~~~~~~
+!!! error TS2585: 'Symbol' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+    const testWeakMap: WeakMap<any, any> = null as any;
+                       ~~~~~~~
+!!! error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testWeakSet: WeakMap<any, any> = null as any;
+                       ~~~~~~~
+!!! error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testIterator: Iterator<any, any, any> = null as any;
+                        ~~~~~~~~
+!!! error TS2583: Cannot find name 'Iterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
+                             ~~~~~~~~~~~~~
+!!! error TS2583: Cannot find name 'AsyncIterator'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringCodePointAt = "".codePointAt(0);
+                                     ~~~~~~~~~~~
+!!! error TS2550: Property 'codePointAt' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringIncludes = "".includes("");
+                                  ~~~~~~~~
+!!! error TS2550: Property 'includes' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringEndsWith = "".endsWith("");
+                                  ~~~~~~~~
+!!! error TS2550: Property 'endsWith' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringNormalize = "".normalize();
+                                   ~~~~~~~~~
+!!! error TS2550: Property 'normalize' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringRepeat = "".repeat(0);
+                                ~~~~~~
+!!! error TS2550: Property 'repeat' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringStartsWith = "".startsWith("");
+                                    ~~~~~~~~~~
+!!! error TS2550: Property 'startsWith' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringAnchor = "".anchor("");
+                                ~~~~~~
+!!! error TS2550: Property 'anchor' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringBig = "".big();
+                             ~~~
+!!! error TS2550: Property 'big' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringBlink = "".blink();
+                               ~~~~~
+!!! error TS2550: Property 'blink' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringBold = "".bold();
+                              ~~~~
+!!! error TS2550: Property 'bold' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringFixed = "".fixed();
+                               ~~~~~
+!!! error TS2550: Property 'fixed' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringFontColor = "".fontcolor("blue");
+                                   ~~~~~~~~~
+!!! error TS2550: Property 'fontcolor' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringFontSize = "".fontsize(0);
+                                  ~~~~~~~~
+!!! error TS2550: Property 'fontsize' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringItalics = "".italics();
+                                 ~~~~~~~
+!!! error TS2550: Property 'italics' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringLink = "".link("");
+                              ~~~~
+!!! error TS2550: Property 'link' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringSmall = "".small();
+                               ~~~~~
+!!! error TS2550: Property 'small' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringStrike = "".strike();
+                                ~~~~~~
+!!! error TS2550: Property 'strike' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringSub = "".sub();
+                             ~~~
+!!! error TS2550: Property 'sub' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringSup = "".sup();
+                             ~~~
+!!! error TS2550: Property 'sup' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringConstructorFromCodePoint = String.fromCodePoint();
+                                                      ~~~~~~~~~~~~~
+!!! error TS2550: Property 'fromCodePoint' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testStringConstructorRaw = String.raw``;
+                                            ~~~
+!!! error TS2550: Property 'raw' does not exist on type 'StringConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testRegExpFlags = /abc/g.flags;
+                                   ~~~~~
+!!! error TS2550: Property 'flags' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testRegExpSticky = /abc/g.sticky;
+                                    ~~~~~~
+!!! error TS2550: Property 'sticky' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    const testRegExpUnicode = /abc/g.unicode;
+                                     ~~~~~~~
+!!! error TS2550: Property 'unicode' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    

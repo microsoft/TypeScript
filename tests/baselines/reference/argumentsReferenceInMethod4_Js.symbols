@@ -1,0 +1,69 @@
+=== /a.js ===
+class A {
+>A : Symbol(A, Decl(a.js, 0, 0))
+
+	/**
+	 * @param {object} [foo={}]
+	 */
+	m(foo = {}) {
+>m : Symbol(A.m, Decl(a.js, 0, 9))
+>foo : Symbol(foo, Decl(a.js, 4, 3))
+
+		const key = "bar";
+>key : Symbol(key, Decl(a.js, 5, 7))
+
+		/**
+		 * @type object
+		 */
+		this.foo = foo;
+>this.foo : Symbol(A.foo, Decl(a.js, 5, 20))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>foo : Symbol(A.foo, Decl(a.js, 5, 20))
+>foo : Symbol(foo, Decl(a.js, 4, 3))
+
+		/**
+		 * @type object
+		 */
+		const arguments = this.arguments;
+>arguments : Symbol(arguments, Decl(a.js, 15, 7))
+>this.arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
+
+		/**
+		 * @type object
+		 */
+		this.bar = arguments.bar;
+>this.bar : Symbol(A.bar, Decl(a.js, 15, 35))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>bar : Symbol(A.bar, Decl(a.js, 15, 35))
+>arguments : Symbol(arguments, Decl(a.js, 15, 7))
+
+		/**
+		 * @type object
+		 */
+		this.baz = arguments[key];
+>this.baz : Symbol(A.baz, Decl(a.js, 20, 27))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>baz : Symbol(A.baz, Decl(a.js, 20, 27))
+>arguments : Symbol(arguments, Decl(a.js, 15, 7))
+>key : Symbol(key, Decl(a.js, 5, 7))
+
+		/**
+		 * @type object
+		 */
+		this.options = arguments;
+>this.options : Symbol(A.options, Decl(a.js, 25, 28))
+>this : Symbol(A, Decl(a.js, 0, 0))
+>options : Symbol(A.options, Decl(a.js, 25, 28))
+>arguments : Symbol(arguments, Decl(a.js, 15, 7))
+	}
+
+	get arguments() {
+>arguments : Symbol(A.arguments, Decl(a.js, 31, 2))
+
+		return { bar: {} };
+>bar : Symbol(bar, Decl(a.js, 34, 10))
+	}
+}
+

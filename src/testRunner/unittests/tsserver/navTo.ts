@@ -61,8 +61,12 @@ namespace ts.projectSystem {
 export const ghijkl = a.abcdef;`
             };
             const host = createServerHost([configFile1, file1, configFile2, file2]);
-            const session = createSession(host);
+            const logger = createHasErrorMessageLogger().logger;
+            const logs: string[] = [];
+            logger.info = s => logs.push(s);
+            const session = createSession(host, { logger });
             openFilesForSession([file1, file2], session);
+            logs.length = 0;
 
             const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef", file: file1.path });
             const items = session.executeCommand(request).response as protocol.NavtoItem[];
@@ -70,6 +74,62 @@ export const ghijkl = a.abcdef;`
             const item = items[0];
             assert.strictEqual(item.name, "abcdef");
             assert.strictEqual(item.file, file1.path);
+            assert.deepEqual(logs, []);
+        });
+
+        it("should de-duplicate symbols when searching all projects", () => {
+            const solutionConfig: File = {
+                path: "/tsconfig.json",
+                content: JSON.stringify({
+                    references: [{ path: "./a" }, { path: "./b" }],
+                    files: [],
+                })
+            };
+            const configFile1: File = {
+                path: "/a/tsconfig.json",
+                content: `{
+    "compilerOptions": {
+        "composite": true
+    }
+}`
+            };
+            const file1: File = {
+                path: "/a/index.ts",
+                content: "export const abcdef = 1;"
+            };
+            const configFile2: File = {
+                path: "/b/tsconfig.json",
+                content: `{
+    "compilerOptions": {
+        "composite": true
+    },
+    "references": [
+        { "path": "../a" }
+    ]
+}`
+            };
+            const file2: File = {
+                path: "/b/index.ts",
+                content: `import a = require("../a");
+export const ghijkl = a.abcdef;`
+            };
+            const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
+            const logger = createHasErrorMessageLogger().logger;
+            const logs: string[] = [];
+            logger.info = s => logs.push(s);
+            const session = createSession(host, { logger });
+            openFilesForSession([file1], session);
+            logs.length = 0;
+
+            const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef" });
+            const items = session.executeCommand(request).response as protocol.NavtoItem[];
+            assert.strictEqual(items.length, 1);
+            const item = items[0];
+            assert.strictEqual(item.name, "abcdef");
+            assert.strictEqual(item.file, file1.path);
+            // Cannt check logs as empty since it loads projects and writes information for those in the log
+            assert.isFalse(contains(logs, "Search path: /a"));
+            assert.isFalse(contains(logs, "For info: /a/index.ts :: Config file name: /a/tsconfig.json"));
         });
 
         it("should work with Deprecated", () => {

@@ -1,0 +1,114 @@
+=== tests/cases/compiler/staticFieldWithInterfaceContext.ts ===
+interface I {
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+
+    x: { a: "a" };
+>x : Symbol(I.x, Decl(staticFieldWithInterfaceContext.ts, 0, 13))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 1, 8))
+}
+let c: I = class {
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 3, 3))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+
+    // should typecheck the same as the last line
+    static x = { a: "a" };
+>x : Symbol(c.x, Decl(staticFieldWithInterfaceContext.ts, 3, 18))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 5, 16))
+
+};
+c.x = { a: "a" };
+>c.x : Symbol(I.x, Decl(staticFieldWithInterfaceContext.ts, 0, 13))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 3, 3))
+>x : Symbol(I.x, Decl(staticFieldWithInterfaceContext.ts, 0, 13))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 7, 7))
+
+const ex = "x";
+>ex : Symbol(ex, Decl(staticFieldWithInterfaceContext.ts, 9, 5))
+
+let c2: I = class { static [ex] = { a: "a" }; };
+>c2 : Symbol(c2, Decl(staticFieldWithInterfaceContext.ts, 10, 3))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>[ex] : Symbol(c2[ex], Decl(staticFieldWithInterfaceContext.ts, 10, 19))
+>ex : Symbol(ex, Decl(staticFieldWithInterfaceContext.ts, 9, 5))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 10, 35))
+
+c[ex] = { a: "a" };
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 3, 3))
+>ex : Symbol(ex, Decl(staticFieldWithInterfaceContext.ts, 9, 5))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 11, 9))
+
+function f(c: I = class { static x = { a: "a" } }) { }
+>f : Symbol(f, Decl(staticFieldWithInterfaceContext.ts, 11, 19))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 13, 11))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>x : Symbol((Anonymous class).x, Decl(staticFieldWithInterfaceContext.ts, 13, 25))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 13, 38))
+
+let { c: c3 }: { c: I } = { c: class { static x = { a: "a" } } };
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 15, 16))
+>c3 : Symbol(c3, Decl(staticFieldWithInterfaceContext.ts, 15, 5))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 15, 16))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 15, 27))
+>x : Symbol(c.x, Decl(staticFieldWithInterfaceContext.ts, 15, 38))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 15, 51))
+
+let { c: c4 = class { static x = { a: "a" } }}: { c?: I } = { };
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 16, 49))
+>c4 : Symbol(c4, Decl(staticFieldWithInterfaceContext.ts, 16, 5))
+>x : Symbol(c4.x, Decl(staticFieldWithInterfaceContext.ts, 16, 21))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 16, 34))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 16, 49))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+
+let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static x = { a: "a" } } };
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 17, 49))
+>c5 : Symbol(c5, Decl(staticFieldWithInterfaceContext.ts, 17, 5))
+>x : Symbol(c5.x, Decl(staticFieldWithInterfaceContext.ts, 17, 21))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 17, 34))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 17, 49))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>c : Symbol(c, Decl(staticFieldWithInterfaceContext.ts, 17, 61))
+>x : Symbol(c.x, Decl(staticFieldWithInterfaceContext.ts, 17, 72))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 17, 85))
+
+let [ c6 ]: [I] = [class { static x = { a: "a" } }];
+>c6 : Symbol(c6, Decl(staticFieldWithInterfaceContext.ts, 18, 5))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>x : Symbol((Anonymous class).x, Decl(staticFieldWithInterfaceContext.ts, 18, 26))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 18, 39))
+
+let [ c7 ]: I[] = [class { static x = { a: "a" } }];
+>c7 : Symbol(c7, Decl(staticFieldWithInterfaceContext.ts, 19, 5))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>x : Symbol((Anonymous class).x, Decl(staticFieldWithInterfaceContext.ts, 19, 26))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 19, 39))
+
+let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
+>c8 : Symbol(c8, Decl(staticFieldWithInterfaceContext.ts, 21, 5))
+>x : Symbol(c8.x, Decl(staticFieldWithInterfaceContext.ts, 21, 18))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 21, 31))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+
+let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
+>c9 : Symbol(c9, Decl(staticFieldWithInterfaceContext.ts, 22, 5))
+>x : Symbol(c9.x, Decl(staticFieldWithInterfaceContext.ts, 22, 18))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 22, 31))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+
+let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
+>c10 : Symbol(c10, Decl(staticFieldWithInterfaceContext.ts, 23, 5))
+>x : Symbol(c10.x, Decl(staticFieldWithInterfaceContext.ts, 23, 19))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 23, 32))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>x : Symbol((Anonymous class).x, Decl(staticFieldWithInterfaceContext.ts, 23, 62))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 23, 75))
+
+let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a" } }];
+>c11 : Symbol(c11, Decl(staticFieldWithInterfaceContext.ts, 24, 5))
+>x : Symbol(c11.x, Decl(staticFieldWithInterfaceContext.ts, 24, 19))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 24, 32))
+>I : Symbol(I, Decl(staticFieldWithInterfaceContext.ts, 0, 0))
+>x : Symbol((Anonymous class).x, Decl(staticFieldWithInterfaceContext.ts, 24, 61))
+>a : Symbol(a, Decl(staticFieldWithInterfaceContext.ts, 24, 74))
+

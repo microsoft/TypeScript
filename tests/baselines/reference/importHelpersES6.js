@@ -3,7 +3,8 @@
 //// [a.ts]
 declare var dec: any;
 @dec export class A {
-
+    #x: number = 1;
+    async f() { this.#x = await this.#x; }
 }
 
 const o = { a: 1 };
@@ -15,12 +16,22 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 export declare function __param(paramIndex: number, decorator: Function): Function;
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
+export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
 
 
 //// [a.js]
-import { __decorate } from "tslib";
+var _A_x;
+import { __awaiter, __classPrivateFieldGet, __classPrivateFieldSet, __decorate } from "tslib";
 let A = class A {
+    constructor() {
+        _A_x.set(this, 1);
+    }
+    f() {
+        return __awaiter(this, void 0, void 0, function* () { __classPrivateFieldSet(this, _A_x, yield __classPrivateFieldGet(this, _A_x, "f"), "f"); });
+    }
 };
+_A_x = new WeakMap();
 A = __decorate([
     dec
 ], A);

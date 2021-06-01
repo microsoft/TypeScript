@@ -1,0 +1,398 @@
+=== tests/cases/compiler/convertClassExpressionToFunctionFromObjectProperty1.ts ===
+const foo: any = {};
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+// properties
+foo.x = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.y = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+
+// keywords
+foo.break = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.case = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.catch = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.class = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.const = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.continue = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.debugger = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.default = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.delete = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.do = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.else = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.enum = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.export = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.extends = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.false = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.finally = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.for = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.function = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.if = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.import = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.in = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.instanceof = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.new = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.null = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.return = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.super = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.switch = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.this = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.throw = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.true = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.try = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.typeof = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.var = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.void = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.while = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.with = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.implements = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.interface = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.let = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.package = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.private = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.protected = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.public = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.static = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.yield = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.abstract = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.as = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.asserts = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.any = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.async = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.await = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.boolean = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.constructor = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.declare = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.get = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.infer = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.is = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.keyof = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.module = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.namespace = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.never = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.readonly = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.require = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.number = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.object = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.set = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.string = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.symbol = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.type = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.undefined = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.unique = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.unknown = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.from = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.global = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.bigint = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+foo.of = class {
+>foo : Symbol(foo, Decl(convertClassExpressionToFunctionFromObjectProperty1.ts, 0, 5))
+
+    constructor () {}
+}
+

@@ -111,6 +111,12 @@
 ////     return y + z;
 //// }|];
 ////
+////// Over a variable
+////[|/**
+//// * foo
+//// */|]
+////const foo = null;
+////
 ////function Foo()[| {
 ////   [|/**
 ////     * Description

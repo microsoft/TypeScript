@@ -69,7 +69,7 @@ namespace ts {
                 assert.equal(actualError.category, expectedError.category, `Expected error-category: ${JSON.stringify(expectedError.category)}. Actual error-category: ${JSON.stringify(actualError.category)}.`);
                 if (!ignoreLocation) {
                     assert(actualError.file);
-                    assert(actualError.start);
+                    assert.isDefined(actualError.start);
                     assert(actualError.length);
                 }
             }
@@ -601,6 +601,85 @@ namespace ts {
                     experimentalDecorators: true,
                 },
                 hasParseErrors: true
+            });
+        });
+
+        it("Convert a tsconfig file with stray trailing characters", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            } blah`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                hasParseErrors: true,
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Convert a tsconfig file with stray leading characters", () => {
+            assertCompilerOptionsWithJsonText(`blah {
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                hasParseErrors: true,
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Convert a tsconfig file as an array", () => {
+            assertCompilerOptionsWithJsonText(`[{
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            }]`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Don't crash when root expression is not objecty at all", () => {
+            assertCompilerOptionsWithJsonText(`42`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: [{
+                    ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                    messageText: "The root value of a 'tsconfig.json' file must be an object.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("Allow trailing comments", () => {
+            assertCompilerOptionsWithJsonText(`{} // no options`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: []
             });
         });
     });

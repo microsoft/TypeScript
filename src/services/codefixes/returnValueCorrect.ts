@@ -173,7 +173,7 @@ namespace ts.codefix {
                 return getFixInfo(checker, declaration, checker.getTypeFromTypeNode(declaration.type), /* isFunctionType */ false);
             case Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code:
                 if (!declaration || !isCallExpression(declaration.parent) || !declaration.body) return undefined;
-                const pos = declaration.parent.arguments.indexOf(<Expression>declaration);
+                const pos = declaration.parent.arguments.indexOf(declaration as Expression);
                 const type = checker.getContextualTypeForArgumentAtIndex(declaration.parent, pos);
                 if (!type) return undefined;
                 return getFixInfo(checker, declaration, type, /* isFunctionType */ true);

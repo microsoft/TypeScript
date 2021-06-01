@@ -30,7 +30,8 @@ __exportStar(require("./thingB"), exports);
 "use strict";
 exports.__esModule = true;
 exports.thing2 = void 0;
-exports.thing2 = function (param) { return null; };
+var thing2 = function (param) { return null; };
+exports.thing2 = thing2;
 
 
 //// [thingB.d.ts]

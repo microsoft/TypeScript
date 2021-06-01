@@ -71,7 +71,7 @@ namespace ts.server {
 
     function compilerOptionsChanged(opt1: CompilerOptions, opt2: CompilerOptions): boolean {
         // TODO: add more relevant properties
-        return opt1.allowJs !== opt2.allowJs;
+        return getAllowJSCompilerOption(opt1) !== getAllowJSCompilerOption(opt2);
     }
 
     function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {

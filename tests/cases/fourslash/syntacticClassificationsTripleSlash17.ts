@@ -2,6 +2,6 @@
 
 //// /// <summary>Text</summary>
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/// <summary>Text</summary>"));

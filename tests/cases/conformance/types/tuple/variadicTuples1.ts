@@ -6,7 +6,7 @@
 type TV0<T extends unknown[]> = [string, ...T];
 type TV1<T extends unknown[]> = [string, ...T, number];
 type TV2<T extends unknown[]> = [string, ...T, number, ...T];
-type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];  // Error
+type TV3<T extends unknown[]> = [string, ...T, ...number[], ...T];
 
 // Normalization
 
@@ -208,51 +208,62 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 // Inference between variadic tuple types
 
-type First<T extends readonly unknown[]> = T[0];
-type DropFirst<T extends readonly unknown[]> = T extends readonly [any, ...infer U] ? U : [...T];
+type First<T extends readonly unknown[]> =
+    T extends readonly [unknown, ...unknown[]] ? T[0] :
+    T[0] | undefined;
 
-type Last<T extends readonly unknown[]> = T extends readonly [...infer _, infer U] ? U : undefined;
-type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, any] ? U : [...T];
+type DropFirst<T extends readonly unknown[]> = T extends readonly [unknown?, ...infer U] ? U : [...T];
+
+type Last<T extends readonly unknown[]> =
+    T extends readonly [...unknown[], infer U] ? U :
+    T extends readonly [unknown, ...unknown[]] ? T[number] :
+    T[number] | undefined;
+
+type DropLast<T extends readonly unknown[]> = T extends readonly [...infer U, unknown] ? U : [...T];
 
 type T00 = First<[number, symbol, string]>;
 type T01 = First<[symbol, string]>;
 type T02 = First<[string]>;
 type T03 = First<[number, symbol, ...string[]]>;
 type T04 = First<[symbol, ...string[]]>;
-type T05 = First<string[]>;
-type T06 = First<[]>;
-type T07 = First<any>;
-type T08 = First<never>;
+type T05 = First<[string?]>;
+type T06 = First<string[]>;
+type T07 = First<[]>;
+type T08 = First<any>;
+type T09 = First<never>;
 
 type T10 = DropFirst<[number, symbol, string]>;
 type T11 = DropFirst<[symbol, string]>;
 type T12 = DropFirst<[string]>;
 type T13 = DropFirst<[number, symbol, ...string[]]>;
 type T14 = DropFirst<[symbol, ...string[]]>;
-type T15 = DropFirst<string[]>;
-type T16 = DropFirst<[]>;
-type T17 = DropFirst<any>;
-type T18 = DropFirst<never>;
+type T15 = DropFirst<[string?]>;
+type T16 = DropFirst<string[]>;
+type T17 = DropFirst<[]>;
+type T18 = DropFirst<any>;
+type T19 = DropFirst<never>;
 
 type T20 = Last<[number, symbol, string]>;
 type T21 = Last<[symbol, string]>;
 type T22 = Last<[string]>;
 type T23 = Last<[number, symbol, ...string[]]>;
 type T24 = Last<[symbol, ...string[]]>;
-type T25 = Last<string[]>;
-type T26 = Last<[]>;  // unknown[], maybe should be []
-type T27 = Last<any>;  // unknown, maybe should be any
-type T28 = Last<never>;
+type T25 = Last<[string?]>;
+type T26 = Last<string[]>;
+type T27 = Last<[]>;
+type T28 = Last<any>;
+type T29 = Last<never>;
 
 type T30 = DropLast<[number, symbol, string]>;
 type T31 = DropLast<[symbol, string]>;
 type T32 = DropLast<[string]>;
 type T33 = DropLast<[number, symbol, ...string[]]>;
 type T34 = DropLast<[symbol, ...string[]]>;
-type T35 = DropLast<string[]>;
-type T36 = DropLast<[]>;  // unknown[], maybe should be []
-type T37 = DropLast<any>;
-type T38 = DropLast<never>;
+type T35 = DropLast<[string?]>;
+type T36 = DropLast<string[]>;
+type T37 = DropLast<[]>;  // unknown[], maybe should be []
+type T38 = DropLast<any>;
+type T39 = DropLast<never>;
 
 type R00 = First<readonly [number, symbol, string]>;
 type R01 = First<readonly [symbol, string]>;
@@ -324,15 +335,20 @@ declare function fn10(a: string, b: number, c: boolean): string[];
 curry2(fn10, ['hello', 42], [true]);
 curry2(fn10, ['hello'], [42, true]);
 
+// Inference to [...T] has higher priority than inference to [...T, number?]
+
+declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
+
+ft([1, 2, 3], [1, 2, 3]);
+ft([1, 2], [1, 2, 3]);
+ft(['a', 'b'], ['c', 'd'])
+ft(['a', 'b'], ['c', 'd', 42])
+
 // Last argument is contextually typed
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 
 call('hello', 32, (a, b) => 42);
-
-// Would be nice to infer [...string[], (...args: string[]) => number] here
-// Requires [starting-fixed-part, ...rest-part, ending-fixed-part] tuple structure
-
 call(...sa, (...x) => 42);
 
 // No inference to ending optional elements (except with identical structure)
@@ -341,8 +357,8 @@ declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 
 function f21<U extends string[]>(args: [...U, number?]) {
     let v1 = f20(args);  // U
-    let v2 = f20(["foo", "bar"]);  // []
-    let v3 = f20(["foo", 42]);  // []
+    let v2 = f20(["foo", "bar"]);  // [string]
+    let v3 = f20(["foo", 42]);  // [string]
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
@@ -376,3 +392,13 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 
 callApi(getUser);
 callApi(getOrgUser);
+
+// Repro from #40235
+
+type Numbers = number[];
+type Unbounded = [...Numbers, boolean];
+const data: Unbounded = [false, false];  // Error
+
+type U1 = [string, ...Numbers, boolean];
+type U2 = [...[string, ...Numbers], boolean];
+type U3 = [...[string, number], boolean];

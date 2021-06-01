@@ -1,0 +1,163 @@
+=== tests/cases/conformance/jsdoc/typedefOnStatements.js ===
+/** @typedef {{a: string}} A */
+;
+/** @typedef {{ b: string }} B */
+debugger;
+/** @typedef {{ c: string }} C */
+{
+}
+/** @typedef {{ d: string }} D */
+1 + 1;
+/** @typedef {{ e: string }} E */
+if (false) {
+}
+/** @typedef {{ f: string }} F */
+do {
+} while (false);
+/** @typedef {{ g: string }} G */
+while (false) {
+}
+/** @typedef {{ h: string }} H */
+for (;; false) {
+}
+/** @typedef {{ i: string }} I */
+for (let i in []) {
+>i : Symbol(i, Decl(typedefOnStatements.js, 22, 8))
+}
+/** @typedef {{ j: string }} J */
+break;
+/** @typedef {{ k: string }} K */
+for (let k of []) {
+>k : Symbol(k, Decl(typedefOnStatements.js, 27, 8))
+}
+/** @typedef {{ l: string }} L */
+continue;
+/** @typedef {{ m: string }} M */
+with (name) {
+>name : Symbol(name, Decl(lib.dom.d.ts, --, --))
+}
+/** @typedef {{ n: string }} N */
+switch (name) {
+>name : Symbol(name, Decl(lib.dom.d.ts, --, --))
+}
+
+/** @typedef {{ o: string }} O */
+fork: while (false) {
+}
+
+/** @typedef {{ p: string }} P */
+throw new Error('Unreachable')
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+/** @typedef {{ q: string }} Q */
+try {
+}
+catch (e) {
+>e : Symbol(e, Decl(typedefOnStatements.js, 48, 7))
+}
+
+/**
+ * @param {A} a
+ * @param {B} b
+ * @param {C} c
+ * @param {D} d
+ * @param {E} e
+ * @param {F} f
+ * @param {G} g
+ * @param {H} h
+ * @param {I} i
+ * @param {J} j
+ * @param {K} k
+ * @param {L} l
+ * @param {M} m
+ * @param {N} n
+ * @param {O} o
+ * @param {P} p
+ * @param {Q} q
+ */
+function proof (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q) {
+>proof : Symbol(proof, Decl(typedefOnStatements.js, 49, 1))
+>a : Symbol(a, Decl(typedefOnStatements.js, 70, 16))
+>b : Symbol(b, Decl(typedefOnStatements.js, 70, 18))
+>c : Symbol(c, Decl(typedefOnStatements.js, 70, 20))
+>d : Symbol(d, Decl(typedefOnStatements.js, 70, 22))
+>e : Symbol(e, Decl(typedefOnStatements.js, 70, 24))
+>f : Symbol(f, Decl(typedefOnStatements.js, 70, 26))
+>g : Symbol(g, Decl(typedefOnStatements.js, 70, 28))
+>h : Symbol(h, Decl(typedefOnStatements.js, 70, 30))
+>i : Symbol(i, Decl(typedefOnStatements.js, 70, 32))
+>j : Symbol(j, Decl(typedefOnStatements.js, 70, 34))
+>k : Symbol(k, Decl(typedefOnStatements.js, 70, 36))
+>l : Symbol(l, Decl(typedefOnStatements.js, 70, 38))
+>m : Symbol(m, Decl(typedefOnStatements.js, 70, 40))
+>n : Symbol(n, Decl(typedefOnStatements.js, 70, 42))
+>o : Symbol(o, Decl(typedefOnStatements.js, 70, 44))
+>p : Symbol(p, Decl(typedefOnStatements.js, 70, 46))
+>q : Symbol(q, Decl(typedefOnStatements.js, 70, 48))
+
+    console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a.a : Symbol(a, Decl(typedefOnStatements.js, 0, 15))
+>a : Symbol(a, Decl(typedefOnStatements.js, 70, 16))
+>a : Symbol(a, Decl(typedefOnStatements.js, 0, 15))
+>b.b : Symbol(b, Decl(typedefOnStatements.js, 2, 15))
+>b : Symbol(b, Decl(typedefOnStatements.js, 70, 18))
+>b : Symbol(b, Decl(typedefOnStatements.js, 2, 15))
+>c.c : Symbol(c, Decl(typedefOnStatements.js, 4, 15))
+>c : Symbol(c, Decl(typedefOnStatements.js, 70, 20))
+>c : Symbol(c, Decl(typedefOnStatements.js, 4, 15))
+>d.d : Symbol(d, Decl(typedefOnStatements.js, 7, 15))
+>d : Symbol(d, Decl(typedefOnStatements.js, 70, 22))
+>d : Symbol(d, Decl(typedefOnStatements.js, 7, 15))
+>e.e : Symbol(e, Decl(typedefOnStatements.js, 9, 15))
+>e : Symbol(e, Decl(typedefOnStatements.js, 70, 24))
+>e : Symbol(e, Decl(typedefOnStatements.js, 9, 15))
+>f.f : Symbol(f, Decl(typedefOnStatements.js, 12, 15))
+>f : Symbol(f, Decl(typedefOnStatements.js, 70, 26))
+>f : Symbol(f, Decl(typedefOnStatements.js, 12, 15))
+>g.g : Symbol(g, Decl(typedefOnStatements.js, 15, 15))
+>g : Symbol(g, Decl(typedefOnStatements.js, 70, 28))
+>g : Symbol(g, Decl(typedefOnStatements.js, 15, 15))
+>h.h : Symbol(h, Decl(typedefOnStatements.js, 18, 15))
+>h : Symbol(h, Decl(typedefOnStatements.js, 70, 30))
+>h : Symbol(h, Decl(typedefOnStatements.js, 18, 15))
+>i.i : Symbol(i, Decl(typedefOnStatements.js, 21, 15))
+>i : Symbol(i, Decl(typedefOnStatements.js, 70, 32))
+>i : Symbol(i, Decl(typedefOnStatements.js, 21, 15))
+>j.j : Symbol(j, Decl(typedefOnStatements.js, 24, 15))
+>j : Symbol(j, Decl(typedefOnStatements.js, 70, 34))
+>j : Symbol(j, Decl(typedefOnStatements.js, 24, 15))
+>k.k : Symbol(k, Decl(typedefOnStatements.js, 26, 15))
+>k : Symbol(k, Decl(typedefOnStatements.js, 70, 36))
+>k : Symbol(k, Decl(typedefOnStatements.js, 26, 15))
+>l.l : Symbol(l, Decl(typedefOnStatements.js, 29, 15))
+>l : Symbol(l, Decl(typedefOnStatements.js, 70, 38))
+>l : Symbol(l, Decl(typedefOnStatements.js, 29, 15))
+>m.m : Symbol(m, Decl(typedefOnStatements.js, 31, 15))
+>m : Symbol(m, Decl(typedefOnStatements.js, 70, 40))
+>m : Symbol(m, Decl(typedefOnStatements.js, 31, 15))
+>n.n : Symbol(n, Decl(typedefOnStatements.js, 34, 15))
+>n : Symbol(n, Decl(typedefOnStatements.js, 70, 42))
+>n : Symbol(n, Decl(typedefOnStatements.js, 34, 15))
+>o.o : Symbol(o, Decl(typedefOnStatements.js, 38, 15))
+>o : Symbol(o, Decl(typedefOnStatements.js, 70, 44))
+>o : Symbol(o, Decl(typedefOnStatements.js, 38, 15))
+>p.p : Symbol(p, Decl(typedefOnStatements.js, 42, 15))
+>p : Symbol(p, Decl(typedefOnStatements.js, 70, 46))
+>p : Symbol(p, Decl(typedefOnStatements.js, 42, 15))
+>q.q : Symbol(q, Decl(typedefOnStatements.js, 45, 15))
+>q : Symbol(q, Decl(typedefOnStatements.js, 70, 48))
+>q : Symbol(q, Decl(typedefOnStatements.js, 45, 15))
+
+    /** @type {Alpha} */
+    var alpha = { alpha: "aleph" }
+>alpha : Symbol(alpha, Decl(typedefOnStatements.js, 73, 7))
+>alpha : Symbol(alpha, Decl(typedefOnStatements.js, 73, 17))
+
+    /** @typedef {{ alpha: string }} Alpha */
+    return
+}
+
+

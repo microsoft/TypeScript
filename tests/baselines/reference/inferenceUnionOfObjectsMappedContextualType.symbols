@@ -1,0 +1,56 @@
+=== tests/cases/compiler/inferenceUnionOfObjectsMappedContextualType.ts ===
+type Entity = {
+>Entity : Symbol(Entity, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 0))
+
+    someDate: Date | null;
+>someDate : Symbol(someDate, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 15))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+} & ({ id: string; } | { id: number; })
+>id : Symbol(id, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 6))
+>id : Symbol(id, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 24))
+
+type RowRendererMeta<TInput extends {}> = {
+>RowRendererMeta : Symbol(RowRendererMeta, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 39))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 4, 21))
+
+    [key in keyof TInput]: { key: key; caption: string; formatter?: (value: TInput[key]) => string; };
+>key : Symbol(key, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 5))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 4, 21))
+>key : Symbol(key, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 28))
+>key : Symbol(key, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 5))
+>caption : Symbol(caption, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 38))
+>formatter : Symbol(formatter, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 55))
+>value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 69))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 4, 21))
+>key : Symbol(key, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 5, 5))
+}
+
+type RowRenderer<TInput extends {}> = RowRendererMeta<TInput>[keyof RowRendererMeta<TInput>];
+>RowRenderer : Symbol(RowRenderer, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 6, 1))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 8, 17))
+>RowRendererMeta : Symbol(RowRendererMeta, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 39))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 8, 17))
+>RowRendererMeta : Symbol(RowRendererMeta, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 2, 39))
+>TInput : Symbol(TInput, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 8, 17))
+
+const test: RowRenderer<Entity> = {
+>test : Symbol(test, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 10, 5))
+>RowRenderer : Symbol(RowRenderer, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 6, 1))
+>Entity : Symbol(Entity, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 0, 0))
+
+    key: 'someDate',
+>key : Symbol(key, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 10, 35))
+
+    caption: 'My Date',
+>caption : Symbol(caption, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 11, 20))
+
+    formatter: (value) => value ? value.toString() : '-' // value: any
+>formatter : Symbol(formatter, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 12, 23))
+>value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+>value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+>value.toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(inferenceUnionOfObjectsMappedContextualType.ts, 13, 16))
+>toString : Symbol(Date.toString, Decl(lib.es5.d.ts, --, --))
+}
+

@@ -1,6 +1,20 @@
 Exit Code: 2
 Standard output:
 node_modules/minimatch/minimatch.js(77,17): error TS2551: Property 'minimatch' does not exist on type 'typeof minimatch'. Did you mean 'Minimatch'?
+node_modules/minimatch/minimatch.js(144,12): error TS2339: Property '_made' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(146,22): error TS2339: Property 'pattern' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(147,22): error TS2339: Property 'options' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(160,8): error TS2339: Property 'parseNegate' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(163,33): error TS2339: Property 'braceExpand' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(167,3): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(167,19): error TS2339: Property 'pattern' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(178,3): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(178,19): error TS2339: Property 'pattern' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(185,3): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(185,19): error TS2339: Property 'pattern' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(192,3): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(192,19): error TS2339: Property 'pattern' does not exist on type 'make'.
+node_modules/minimatch/minimatch.js(201,22): error TS2339: Property 'options' does not exist on type 'parseNegate'.
 node_modules/minimatch/minimatch.js(410,15): error TS2532: Object is possibly 'undefined'.
 node_modules/minimatch/minimatch.js(411,13): error TS2532: Object is possibly 'undefined'.
 node_modules/minimatch/minimatch.js(414,9): error TS2532: Object is possibly 'undefined'.
@@ -17,6 +31,9 @@ node_modules/minimatch/minimatch.js(575,28): error TS2532: Object is possibly 'u
 node_modules/minimatch/minimatch.js(575,31): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
 node_modules/minimatch/minimatch.js(631,10): error TS2339: Property '_glob' does not exist on type 'RegExp'.
 node_modules/minimatch/minimatch.js(632,10): error TS2339: Property '_src' does not exist on type 'RegExp'.
+node_modules/minimatch/minimatch.js(651,18): error TS2339: Property 'set' does not exist on type 'makeRe'.
+node_modules/minimatch/minimatch.js(657,22): error TS2339: Property 'options' does not exist on type 'makeRe'.
+node_modules/minimatch/minimatch.js(677,12): error TS2339: Property 'negate' does not exist on type 'makeRe'.
 node_modules/minimatch/minimatch.js(763,14): error TS2554: Expected 0 arguments, but got 2.
 node_modules/minimatch/minimatch.js(766,14): error TS2554: Expected 0 arguments, but got 3.
 node_modules/minimatch/minimatch.js(774,16): error TS2554: Expected 0 arguments, but got 1.

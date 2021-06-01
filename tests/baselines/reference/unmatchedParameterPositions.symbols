@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unmatchedParameterPositions.ts ===
+// Repros from #40251
+
+declare let s: (...items: never[]) => never[];
+>s : Symbol(s, Decl(unmatchedParameterPositions.ts, 2, 11))
+>items : Symbol(items, Decl(unmatchedParameterPositions.ts, 2, 16))
+
+let t1: () => unknown[] = s;
+>t1 : Symbol(t1, Decl(unmatchedParameterPositions.ts, 3, 3))
+>s : Symbol(s, Decl(unmatchedParameterPositions.ts, 2, 11))
+
+let t2: (...args: []) => unknown[] = s;
+>t2 : Symbol(t2, Decl(unmatchedParameterPositions.ts, 4, 3))
+>args : Symbol(args, Decl(unmatchedParameterPositions.ts, 4, 9))
+>s : Symbol(s, Decl(unmatchedParameterPositions.ts, 2, 11))
+

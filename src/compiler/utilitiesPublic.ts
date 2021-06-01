@@ -14,6 +14,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2021:
+                return "lib.es2021.full.d.ts";
             case ScriptTarget.ES2020:
                 return "lib.es2020.full.d.ts";
             case ScriptTarget.ES2019:
@@ -247,7 +249,7 @@ namespace ts {
         if (d && d.kind === SyntaxKind.TypeParameter) {
             for (let current: Node = d; current; current = current.parent) {
                 if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
-                    return <Declaration>current;
+                    return current as Declaration;
                 }
             }
         }
@@ -311,12 +313,15 @@ namespace ts {
     // nodes like variable declarations and binding elements can returned a view of their flags
     // that includes the modifiers from their container.  i.e. flags like export/declare aren't
     // stored on the variable declaration directly, but on the containing variable statement
-    // (if it has one).  Similarly, flags for let/const are store on the variable declaration
+    // (if it has one).  Similarly, flags for let/const are stored on the variable declaration
     // list.  By calling this function, all those flags are combined so that the client can treat
     // the node as if it actually had those flags.
     export function getCombinedNodeFlags(node: Node): NodeFlags {
         return getCombinedFlags(node, n => n.flags);
     }
+
+    /* @internal */
+    export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"];
 
     /**
      * Checks to see if the locale is in the appropriate format,
@@ -326,7 +331,8 @@ namespace ts {
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Push<Diagnostic>) {
-        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
+        const lowerCaseLocale = locale.toLowerCase();
+        const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
         if (!matchResult) {
             if (errors) {
@@ -340,7 +346,7 @@ namespace ts {
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
-        if (!trySetLanguageAndTerritory(language, territory, errors)) {
+        if (contains(supportedLocaleDirectories, lowerCaseLocale) && !trySetLanguageAndTerritory(language, territory, errors)) {
             trySetLanguageAndTerritory(language, /*territory*/ undefined, errors);
         }
 
@@ -404,6 +410,28 @@ namespace ts {
     }
 
     /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+     * At that point findAncestor returns undefined.
+     */
+    export function findAncestor<T extends Node>(node: Node | undefined, callback: (element: Node) => element is T): T | undefined;
+    export function findAncestor(node: Node | undefined, callback: (element: Node) => boolean | "quit"): Node | undefined;
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined {
+        while (node) {
+            const result = callback(node);
+            if (result === "quit") {
+                return undefined;
+            }
+            else if (result) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
+
+    /**
      * Gets a value indicating whether a node originated in the parse tree.
      *
      * @param node The node to test.
@@ -462,7 +490,7 @@ namespace ts {
         return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
-        if (symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+        if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
             return idText(symbol.valueDeclaration.name);
         }
         return unescapeLeadingUnderscores(symbol.escapedName);
@@ -588,10 +616,10 @@ namespace ts {
         return (declaration as NamedDeclaration).name;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined {
+    export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/
@@ -745,6 +773,10 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined {
+        return getFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag);
@@ -868,6 +900,14 @@ namespace ts {
         return getJSDocTags(node).filter(doc => doc.kind === kind);
     }
 
+    /** Gets the text of a jsdoc comment, flattening links to their text. */
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
+        return typeof comment === "string" ? comment
+            : comment?.map(c =>
+                // TODO: Other kinds here
+                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+    }
+
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
@@ -904,7 +944,7 @@ namespace ts {
 
     // #region
 
-    export function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier {
+    export function isMemberName(node: Node): node is MemberName {
         return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.PrivateIdentifier;
     }
 
@@ -966,7 +1006,7 @@ namespace ts {
     }
 
     export function isNullishCoalesce(node: Node) {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isConstTypeReference(node: Node) {
@@ -1030,12 +1070,21 @@ namespace ts {
     }
 
     /**
+     * True if kind is of some token syntax kind.
+     * For example, this is true for an IfKeyword but not for an IfStatement.
+     * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
+     */
+    export function isTokenKind(kind: SyntaxKind): boolean {
+        return kind >= SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken;
+    }
+
+    /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
      * Literals are considered tokens, except TemplateLiteral, but does include TemplateHead/Middle/Tail.
      */
     export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+        return isTokenKind(n.kind);
     }
 
     // Node Arrays
@@ -1085,7 +1134,8 @@ namespace ts {
             case SyntaxKind.NamespaceImport:
                 return (node as NamespaceImport).parent.isTypeOnly;
             case SyntaxKind.ImportClause:
-                return (node as ImportClause).isTypeOnly;
+            case SyntaxKind.ImportEqualsDeclaration:
+                return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
             default:
                 return false;
         }
@@ -1104,8 +1154,8 @@ namespace ts {
 
     // Private Identifiers
     /*@internal*/
-    export function isPrivateIdentifierPropertyDeclaration(node: Node): node is PrivateIdentifierPropertyDeclaration {
-        return isPropertyDeclaration(node) && isPrivateIdentifier(node.name);
+    export function isPrivateIdentifierClassElementDeclaration(node: Node): node is PrivateClassElementDeclaration {
+        return (isPropertyDeclaration(node) || isMethodOrAccessor(node)) && isPrivateIdentifier(node.name);
     }
 
     /*@internal*/
@@ -1129,6 +1179,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OverrideKeyword:
                 return true;
         }
         return false;
@@ -1141,7 +1192,7 @@ namespace ts {
 
     /* @internal */
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword || idToken === SyntaxKind.OverrideKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {
@@ -1172,8 +1223,8 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is SignatureDeclaration {
-        return node && isFunctionLikeKind(node.kind);
+    export function isFunctionLike(node: Node | undefined): node is SignatureDeclaration {
+        return !!node && isFunctionLikeKind(node.kind);
     }
 
     /* @internal */
@@ -1484,8 +1535,8 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
                 return true;
             case SyntaxKind.PrefixUnaryExpression:
-                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
-                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+                return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
+                    (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
             default:
                 return false;
         }
@@ -1542,7 +1593,7 @@ namespace ts {
             case SyntaxKind.WhileStatement:
                 return true;
             case SyntaxKind.LabeledStatement:
-                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+                return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
         }
 
         return false;
@@ -1822,7 +1873,13 @@ namespace ts {
 
     /** True if node is of a kind that may contain comment text. */
     export function isJSDocCommentContainingNode(node: Node): boolean {
-        return node.kind === SyntaxKind.JSDocComment || node.kind === SyntaxKind.JSDocNamepathType || isJSDocTag(node) || isJSDocTypeLiteral(node) || isJSDocSignature(node);
+        return node.kind === SyntaxKind.JSDocComment
+            || node.kind === SyntaxKind.JSDocNamepathType
+            || node.kind === SyntaxKind.JSDocText
+            || isJSDocLinkLike(node)
+            || isJSDocTag(node)
+            || isJSDocTypeLiteral(node)
+            || isJSDocSignature(node);
     }
 
     // TODO: determine what this does before making it public.
@@ -1912,5 +1969,8 @@ namespace ts {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    }
     // #endregion
 }

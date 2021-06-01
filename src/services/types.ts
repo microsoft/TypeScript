@@ -43,7 +43,7 @@ namespace ts {
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
-        getJsDocTags(): JSDocTagInfo[];
+        getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -211,14 +211,20 @@ namespace ts {
 
     /* @internal */
     export const enum PackageJsonAutoImportPreference {
-        None,
-        ExcludeDevDependencies,
-        All
+        Off,
+        On,
+        Auto,
     }
 
     export interface PerformanceEvent {
         kind: "UpdateGraph" | "CreatePackageJsonAutoImportProvider";
         durationMs: number;
+    }
+
+    export enum LanguageServiceMode {
+        Semantic,
+        PartialSemantic,
+        Syntactic,
     }
 
     //
@@ -266,13 +272,12 @@ namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
-        /* @internal */ includeTripleslashReferencesFrom?(containingFile: string): boolean;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */
         getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */
-        getProbableSymlinks?(files: readonly SourceFile[]): ReadonlyESMap<string, string>;
+        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.
@@ -296,9 +301,13 @@ namespace ts {
         /* @internal */
         getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
+        getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+        /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
-        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        getExportMapCache?(): ExportMapCache;
+        /* @internal */
+        getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
@@ -307,12 +316,19 @@ namespace ts {
         getPackageJsonAutoImportProvider?(): Program | undefined;
         /* @internal */
         sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     }
 
     /* @internal */
     export const emptyOptions = {};
 
     export type WithMetadata<T> = T & { metadata?: unknown; };
+
+    export const enum SemanticClassificationFormat {
+        Original = "original",
+        TwentyTwenty = "2020"
+    }
 
     //
     // Public services of a language service instance associated
@@ -377,13 +393,25 @@ namespace ts {
 
         /** @deprecated Use getEncodedSyntacticClassifications instead. */
         getSyntacticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSyntacticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
 
         /** @deprecated Use getEncodedSemanticClassifications instead. */
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
+        getSemanticClassifications(fileName: string, span: TextSpan, format: SemanticClassificationFormat): ClassifiedSpan[] | ClassifiedSpan2020[];
 
-        // Encoded as triples of [start, length, ClassificationType].
+        /** Encoded as triples of [start, length, ClassificationType]. */
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
-        getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
+
+        /**
+         * Gets semantic highlights information for a particular file. Has two formats, an older
+         * version used by VS and a format used by VS Code.
+         *
+         * @param fileName The path to the file
+         * @param position A text span to return results within
+         * @param format Which format to use, defaults to "original"
+         * @returns a number array encoded as triples of [start, length, ClassificationType, ...].
+         */
+        getEncodedSemanticClassifications(fileName: string, span: TextSpan, format?: SemanticClassificationFormat): Classifications;
 
         /**
          * Gets completion entries at a particular position in a file.
@@ -400,10 +428,11 @@ namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero based index of the character where you want the entries
-         * @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
          * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source Source code for the current file, can be undefined for backwards compatibility
+         * @param source `source` property from the completion entry
          * @param preferences User settings, can be undefined for backwards compatibility
+         * @param data `data` property from the completion entry
          */
         getCompletionEntryDetails(
             fileName: string,
@@ -412,6 +441,7 @@ namespace ts {
             formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
             source: string | undefined,
             preferences: UserPreferences | undefined,
+            data: CompletionEntryData | undefined,
         ): CompletionEntryDetails | undefined;
 
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
@@ -444,6 +474,7 @@ namespace ts {
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
+        getFileReferences(fileName: string): ReferenceEntry[];
 
         /** @deprecated */
         getOccurrencesAtPosition(fileName: string, position: number): readonly ReferenceEntry[] | undefined;
@@ -465,7 +496,7 @@ namespace ts {
         getFormattingEditsForDocument(fileName: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
-        getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined;
+        getDocCommentTemplateAtPosition(fileName: string, position: number, options?: DocCommentTemplateOptions): TextInsertion | undefined;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         /**
@@ -495,9 +526,9 @@ namespace ts {
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
 
-        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason): ApplicableRefactorInfo[];
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
-        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
+        organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
@@ -521,9 +552,11 @@ namespace ts {
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
-    export type OrganizeImportsScope = CombinedCodeFixScope;
+    export interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        skipDestructiveCodeActions?: boolean;
+    }
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -596,6 +629,11 @@ namespace ts {
     export interface ClassifiedSpan {
         textSpan: TextSpan;
         classificationType: ClassificationTypeNames;
+    }
+
+    export interface ClassifiedSpan2020 {
+        textSpan: TextSpan;
+        classificationType: number;
     }
 
     /**
@@ -762,6 +800,11 @@ namespace ts {
          * the current context.
          */
         notApplicableReason?: string;
+
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        kind?: string;
     }
 
     /**
@@ -954,6 +997,7 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        unverified?: boolean;
         /* @internal */ isLocal?: boolean;
     }
 
@@ -994,6 +1038,9 @@ namespace ts {
         enumMemberName,
         functionName,
         regularExpressionLiteral,
+        link,
+        linkName,
+        linkText,
     }
 
     export interface SymbolDisplayPart {
@@ -1001,9 +1048,13 @@ namespace ts {
         kind: string;
     }
 
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        target: DocumentSpan;
+    }
+
     export interface JSDocTagInfo {
         name: string;
-        text?: string;
+        text?: SymbolDisplayPart[];
     }
 
     export interface QuickInfo {
@@ -1038,11 +1089,16 @@ namespace ts {
         readonly allowRenameOfImportPath?: boolean;
     }
 
+    export interface DocCommentTemplateOptions {
+        readonly generateReturnInDocTemplate?: boolean;
+    }
+
     export interface SignatureHelpParameter {
         name: string;
         documentation: SymbolDisplayPart[];
         displayParts: SymbolDisplayPart[];
         isOptional: boolean;
+        isRest?: boolean;
     }
 
     export interface SelectionRange {
@@ -1082,12 +1138,39 @@ namespace ts {
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
-
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        optionalReplacementSpan?: TextSpan;
         /**
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
+        /**
+         * Indicates to client to continue requesting completions on subsequent keystrokes.
+         */
+        isIncomplete?: true;
         entries: CompletionEntry[];
+    }
+
+    export interface CompletionEntryData {
+        /** The file name declaring the export's module symbol, if it was an external module */
+        fileName?: string;
+        /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
+        ambientModuleName?: string;
+        /** True if the export was found in the package.json AutoImportProvider */
+        isPackageJsonImport?: true;
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
+        exportName: string;
+        /**
+         * Set for auto imports with eagerly resolved module specifiers.
+         */
+        moduleSpecifier?: string;
     }
 
     // see comments in protocol.ts
@@ -1097,6 +1180,7 @@ namespace ts {
         kindModifiers?: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
         insertText?: string;
+        isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
@@ -1105,9 +1189,20 @@ namespace ts {
         replacementSpan?: TextSpan;
         hasAction?: true;
         source?: string;
+        sourceDisplay?: SymbolDisplayPart[];
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
+        isImportStatementCompletion?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name. Currently only defined for auto-import completions, but the type is
+         * `unknown` in the protocol, so it can be changed as needed to support other kinds of completions.
+         * The presence of this property should generally not be used to assume that this completion entry
+         * is an auto-import.
+         */
+        data?: CompletionEntryData;
     }
 
     export interface CompletionEntryDetails {
@@ -1118,7 +1213,9 @@ namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        /** @deprecated Use `sourceDisplay` instead. */
         source?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {
@@ -1319,6 +1416,15 @@ namespace ts {
 
         /** String literal */
         string = "string",
+
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        link = "link",
+
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text",
     }
 
     export const enum ScriptElementKindModifier {
@@ -1428,6 +1534,10 @@ namespace ts {
 
     /** @internal */
     export interface Refactor {
+        /** List of action kinds a refactor can provide.
+         * Used to skip unnecessary calculation when specific refactors are requested. */
+        kinds?: string[];
+
         /** Compute the associated code actions */
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
@@ -1444,5 +1554,6 @@ namespace ts {
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;
+        kind?: string;
     }
 }

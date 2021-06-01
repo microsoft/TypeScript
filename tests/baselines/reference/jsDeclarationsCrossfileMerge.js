@@ -24,5 +24,6 @@ module.exports.memberName = "thing";
 
 
 //// [index.d.ts]
-declare const _exports: typeof import("./exporter").default;
+declare const _exports: typeof m.default;
 export = _exports;
+import m = require("./exporter");

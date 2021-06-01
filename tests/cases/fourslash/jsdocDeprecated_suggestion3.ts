@@ -13,7 +13,7 @@
 //// declare function b(): void
 //// declare const tb: b;
 //// [|b|]
-//// [|b()|];
+//// [|b|]();
 
 //// interface c { }
 //// /** @deprecated */
@@ -21,7 +21,7 @@
 //// declare function c(a: number): void
 //// declare const tc: c;
 //// c;
-//// [|c()|];
+//// [|c|]();
 //// c(1);
 
 //// /** @deprecated */
@@ -38,8 +38,8 @@
 //// /** @deprecated */
 //// declare function e(a: number): void
 //// [|e|];
-//// [|e()|];
-//// [|e(1)|];
+//// [|e|]();
+//// [|e|](1);
 
 //// /** @deprecated */
 //// interface f { a: number }
@@ -56,67 +56,67 @@
 const ranges = test.ranges();
 verify.getSuggestionDiagnostics([
     {
-        message: "'a' is deprecated",
+        message: "'a' is deprecated.",
         code: 6385,
         range: ranges[0],
         reportsDeprecated: true,
     },
     {
-        message: "'b' is deprecated",
+        message: "'b' is deprecated.",
         code: 6385,
         range: ranges[1],
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
-        code: 6385,
+        message: "The signature '(): void' of 'b' is deprecated.",
+        code: 6387,
         range: ranges[2],
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
-        code: 6385,
+        message: "The signature '(): void' of 'c' is deprecated.",
+        code: 6387,
         range: ranges[3],
         reportsDeprecated: true,
     },
     {
-        message: "'d' is deprecated",
+        message: "'d' is deprecated.",
         code: 6385,
         range: ranges[4],
         reportsDeprecated: true,
     },
     {
-        message: "'e' is deprecated",
+        message: "'e' is deprecated.",
         code: 6385,
         range: ranges[5],
         reportsDeprecated: true,
     },
     {
-        message: "'(): void' is deprecated",
-        code: 6385,
+        message: "The signature '(): void' of 'e' is deprecated.",
+        code: 6387,
         range: ranges[6],
         reportsDeprecated: true,
     },
     {
-        message: "'(a: number): void' is deprecated",
-        code: 6385,
+        message: "The signature '(a: number): void' of 'e' is deprecated.",
+        code: 6387,
         range: ranges[7],
         reportsDeprecated: true,
     },
     {
-        message: "'f' is deprecated",
+        message: "'f' is deprecated.",
         code: 6385,
         range: ranges[8],
         reportsDeprecated: true,
     },
     {
-        message: "'g' is deprecated",
+        message: "'g' is deprecated.",
         code: 6385,
         range: ranges[9],
         reportsDeprecated: true,
     },
     {
-        message: "'H' is deprecated",
+        message: "'H' is deprecated.",
         code: 6385,
         range: ranges[10],
         reportsDeprecated: true,
