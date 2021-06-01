@@ -13,7 +13,7 @@ Config: /user/username/projects/sample1/tests/tsconfig.json : {
   "declaration": true,
   "forceConsistentCasingInFileNames": true,
   "skipDefaultLibCheck": true,
-  "persistResolutions": false,
+  "persistResolutions": true,
   "traceResolution": true,
   "configFilePath": "/user/username/projects/sample1/tests/tsconfig.json"
  },
@@ -41,7 +41,7 @@ Config: /user/username/projects/sample1/core/tsconfig.json : {
   "declaration": true,
   "declarationMap": true,
   "skipDefaultLibCheck": true,
-  "persistResolutions": false,
+  "persistResolutions": true,
   "traceResolution": true,
   "configFilePath": "/user/username/projects/sample1/core/tsconfig.json"
  }
@@ -59,7 +59,7 @@ Config: /user/username/projects/sample1/logic/tsconfig.json : {
   "sourceMap": true,
   "forceConsistentCasingInFileNames": true,
   "skipDefaultLibCheck": true,
-  "persistResolutions": false,
+  "persistResolutions": true,
   "traceResolution": true,
   "configFilePath": "/user/username/projects/sample1/logic/tsconfig.json"
  },

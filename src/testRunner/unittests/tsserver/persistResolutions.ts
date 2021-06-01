@@ -40,7 +40,7 @@ namespace ts.projectSystem {
         const content = JSON.parse(file.content);
         content.compilerOptions = {
             ...content.compilerOptions || {},
-            persistResolutions: false,
+            persistResolutions: true,
             traceResolution: true,
         };
         file.content = JSON.stringify(content, /*replacer*/ undefined, 4);
@@ -317,7 +317,7 @@ namespace ts.projectSystem {
         function setupHost() {
             const coreConfig: File = {
                 path: `${tscWatch.projectRoot}/core/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { composite: true, persistResolutions: false, traceResolution: true } })
+                content: JSON.stringify({ compilerOptions: { composite: true, persistResolutions: true, traceResolution: true } })
             };
             const coreIndex: File = {
                 path: `${tscWatch.projectRoot}/core/index.ts`,
@@ -334,7 +334,7 @@ namespace ts.projectSystem {
             const logicConfig: File = {
                 path: `${tscWatch.projectRoot}/logic/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { composite: true, persistResolutions: false, traceResolution: true },
+                    compilerOptions: { composite: true, persistResolutions: true, traceResolution: true },
                     references: [{ path: "../core" }]
                 })
             };
@@ -354,7 +354,7 @@ export function returnAnotherClass() {
             const testsConfig: File = {
                 path: `${tscWatch.projectRoot}/tests/tsconfig.json`,
                 content: JSON.stringify({
-                    compilerOptions: { composite: true, persistResolutions: false, traceResolution: true },
+                    compilerOptions: { composite: true, persistResolutions: true, traceResolution: true },
                     references: [{ path: "../logic" }]
                 })
             };
