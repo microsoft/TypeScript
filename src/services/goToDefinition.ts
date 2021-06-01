@@ -161,6 +161,10 @@ namespace ts.GoToDefinition {
             return undefined;
         }
 
+        if (isImportMeta(node.parent) && node.parent.name === node) {
+            return definitionFromType(typeChecker.getTypeAtLocation(node.parent), typeChecker, node.parent);
+        }
+
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) return undefined;
 

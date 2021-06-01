@@ -884,6 +884,10 @@ namespace ts.FindAllReferences {
                     node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined);
             }
 
+            if (isImportMeta(node.parent) && node.parent.name === node) {
+                return getAllReferencesForImportMeta(sourceFiles, cancellationToken);
+            }
+
             // Labels
             if (isJumpStatementTarget(node)) {
                 const labelDefinition = getTargetLabel(node.parent, node.text);
@@ -1423,6 +1427,20 @@ namespace ts.FindAllReferences {
                 default:
                     return false;
             }
+        }
+
+        function getAllReferencesForImportMeta(sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
+            const references = flatMap(sourceFiles, sourceFile => {
+                cancellationToken.throwIfCancellationRequested();
+                return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, "import.meta", sourceFile), node => {
+                    // node is the first token, `import`
+                    const parent = node.parent;
+                    if (isImportMeta(parent)) {
+                        return nodeEntry(parent);
+                    }
+                });
+            });
+            return references.length ? [{ definition: { type: DefinitionKind.Keyword, node: references[0].node }, references }] : undefined;
         }
 
         function getAllReferencesForKeyword(sourceFiles: readonly SourceFile[], keywordKind: SyntaxKind, cancellationToken: CancellationToken, filter?: (node: Node) => boolean): SymbolAndEntries[] | undefined {
