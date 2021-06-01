@@ -35048,13 +35048,15 @@ namespace ts {
                             // Include the `<>` in the error message
                             : rangeOfTypeParameters(sourceFile, parent.typeParameters!);
                         const only = parent.typeParameters!.length === 1;
-                        const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused; //TODO: 41974, unusedTypeParameters_TemplateTag
+                        //TODO: following line is possible reason for bug #41974, unusedTypeParameters_TemplateTag
+                        const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
                         const arg0 = only ? name : undefined;
                         addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, message, arg0));
                     }
                 }
                 else {
-                    addDiagnostic(typeParameter, UnusedKind.Parameter, createDiagnosticForNode(typeParameter, Diagnostics._0_is_declared_but_its_value_is_never_read, name)); //TODO: 41974, unusedTypeParameters_TemplateTag
+                    //TODO: following line is possible reason for bug #41974, unusedTypeParameters_TemplateTag
+                    addDiagnostic(typeParameter, UnusedKind.Parameter, createDiagnosticForNode(typeParameter, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
                 }
             }
         }
