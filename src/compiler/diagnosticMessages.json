@@ -4877,6 +4877,10 @@
         "category": "Message",
         "code": 6242
     },
+    "Enable strict checking of optional properties.": {
+        "category": "Message",
+        "code": 6243
+    },
 
     "Projects to reference": {
         "category": "Message",
