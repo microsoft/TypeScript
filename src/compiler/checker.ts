@@ -32803,7 +32803,7 @@ namespace ts {
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             const tag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
-            if (tag) { 
+            if (tag) {
                 return checkAssertionWorker(tag.typeExpression.type, tag.typeExpression.type, node.expression, checkMode);
             }
             return checkExpression(node.expression, checkMode);
