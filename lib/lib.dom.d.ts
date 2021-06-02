@@ -181,6 +181,11 @@ interface BiquadFilterOptions extends AudioNodeOptions {
     type?: BiquadFilterType;
 }
 
+interface BlobEventInit extends EventInit {
+    data: Blob;
+    timecode?: DOMHighResTimeStamp;
+}
+
 interface BlobPropertyBag {
     endings?: EndingType;
     type?: string;
@@ -725,6 +730,18 @@ interface MediaKeySystemMediaCapability {
 interface MediaQueryListEventInit extends EventInit {
     matches?: boolean;
     media?: string;
+}
+
+interface MediaRecorderErrorEventInit extends EventInit {
+    error: DOMException;
+}
+
+interface MediaRecorderOptions {
+    mimeType?: string;
+    audioBitsPerSecond?: number;
+    videoBitsPerSecond?: number;
+    bitsPerSecond?: number;
+    audioBitrateMode?: BitrateMode;
 }
 
 interface MediaStreamAudioSourceOptions {
@@ -2618,6 +2635,16 @@ declare var Blob: {
     prototype: Blob;
     new(blobParts?: BlobPart[], options?: BlobPropertyBag): Blob;
 };
+
+interface BlobEvent extends Event {
+    readonly data: Blob;
+    readonly timecode: DOMHighResTimeStamp;
+}
+
+declare var BlobEvent: {
+    prototype: BlobEvent;
+    new(type: string, eventInitDict: BlobEventInit): BlobEvent;
+}
 
 interface Body {
     readonly body: ReadableStream<Uint8Array> | null;
@@ -4720,6 +4747,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "AnimationPlaybackEvent"): AnimationPlaybackEvent;
     createEvent(eventInterface: "AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface: "BeforeUnloadEvent"): BeforeUnloadEvent;
+    createEvent(eventInterface: "BlobEvent"): BlobEvent;
     createEvent(eventInterface: "ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface: "CloseEvent"): CloseEvent;
     createEvent(eventInterface: "CompositionEvent"): CompositionEvent;
@@ -4746,6 +4774,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
+    createEvent(eventInterface: "MediaRecorderErrorEvent"): MediaRecorderErrorEvent;
     createEvent(eventInterface: "MediaStreamErrorEvent"): MediaStreamErrorEvent;
     createEvent(eventInterface: "MediaStreamEvent"): MediaStreamEvent;
     createEvent(eventInterface: "MediaStreamTrackEvent"): MediaStreamTrackEvent;
@@ -4970,6 +4999,7 @@ interface DocumentEvent {
     createEvent(eventInterface: "AnimationPlaybackEvent"): AnimationPlaybackEvent;
     createEvent(eventInterface: "AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface: "BeforeUnloadEvent"): BeforeUnloadEvent;
+    createEvent(eventInterface: "BlobEvent"): BlobEvent;
     createEvent(eventInterface: "ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface: "CloseEvent"): CloseEvent;
     createEvent(eventInterface: "CompositionEvent"): CompositionEvent;
@@ -4996,6 +5026,7 @@ interface DocumentEvent {
     createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
+    createEvent(eventInterface: "MediaRecorderErrorEvent"): MediaRecorderErrorEvent;
     createEvent(eventInterface: "MediaStreamErrorEvent"): MediaStreamErrorEvent;
     createEvent(eventInterface: "MediaStreamEvent"): MediaStreamEvent;
     createEvent(eventInterface: "MediaStreamTrackEvent"): MediaStreamTrackEvent;
@@ -10321,6 +10352,58 @@ declare var MediaQueryListEvent: {
     prototype: MediaQueryListEvent;
     new(type: string, eventInitDict?: MediaQueryListEventInit): MediaQueryListEvent;
 };
+
+interface MediaRecorderEventMap {
+    "dataavailable": BlobEvent;
+    "error": MediaRecorderErrorEvent;
+    "pause": Event;
+    "resume": Event;
+    "start": Event;
+    "stop": Event;
+}
+
+interface MediaRecorder extends EventTarget {
+    readonly stream: MediaStream;
+    readonly mimeType: string;
+    readonly state: RecordingState;
+    readonly videoBitsPerSecond: number;
+    readonly audioBitsPerSecond: number;
+    readonly audioBitrateMode: BitrateMode;
+
+    ondataavailable: ((event: BlobEvent) => void) | null;
+    onerror: ((event: MediaRecorderErrorEvent) => void) | null;
+    onpause: EventListener | null;
+    onresume: EventListener | null;
+    onstart: EventListener | null;
+    onstop: EventListener | null;
+
+    addEventListener<K extends keyof MediaRecorderEventMap>(type: K, listener: (this: MediaRecorder, ev: MediaRecorderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MediaRecorderEventMap>(type: K, listener: (this: MediaRecorder, ev: MediaRecorderEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+
+    start(timeslice?: number): void;
+    stop(): void;
+    resume(): void;
+    pause(): void;
+    requestData(): void;
+}
+
+declare var MediaRecorder: {
+    prototype: MediaRecorder;
+    new(stream: MediaStream): MediaRecorder;
+    new(stream: MediaStream, options: MediaRecorderOptions): MediaRecorder;
+    isTypeSupported(type: string): boolean;
+}
+
+interface MediaRecorderErrorEvent extends Event {
+    readonly error: DOMException;
+}
+
+declare var MediaRecorderErrorEvent: {
+    prototype: MediaRecorderErrorEvent;
+    new (type: string, eventInitDict: MediaRecorderErrorEventInit): MediaRecorderErrorEvent;
+}
 
 interface MediaSourceEventMap {
     "sourceclose": Event;
@@ -20099,6 +20182,7 @@ type AutoKeyword = "auto";
 type AutomationRate = "a-rate" | "k-rate";
 type BinaryType = "arraybuffer" | "blob";
 type BiquadFilterType = "allpass" | "bandpass" | "highpass" | "highshelf" | "lowpass" | "lowshelf" | "notch" | "peaking";
+type BitrateMode = 'vbr' | 'cbr';
 type CanPlayTypeResult = "" | "maybe" | "probably";
 type CanvasDirection = "inherit" | "ltr" | "rtl";
 type CanvasFillRule = "evenodd" | "nonzero";
@@ -20166,6 +20250,7 @@ type PremultiplyAlpha = "default" | "none" | "premultiply";
 type PublicKeyCredentialType = "public-key";
 type PushEncryptionKeyName = "auth" | "p256dh";
 type PushPermissionState = "denied" | "granted" | "prompt";
+type RecordingState = 'inactive' | 'recording' | 'paused';
 type RTCBundlePolicy = "balanced" | "max-bundle" | "max-compat";
 type RTCDataChannelState = "closed" | "closing" | "connecting" | "open";
 type RTCDegradationPreference = "balanced" | "maintain-framerate" | "maintain-resolution";
