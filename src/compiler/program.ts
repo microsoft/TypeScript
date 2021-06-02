@@ -1924,7 +1924,7 @@ namespace ts {
                     (sourceFile.scriptKind === ScriptKind.TS
                     || sourceFile.scriptKind === ScriptKind.TSX
                     || isCheckJsTrue
-                    || (isCheckJsUndefined && sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX)
+                    || isCheckJsUndefined && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX)
                     || sourceFile.scriptKind === ScriptKind.External
                     || sourceFile.scriptKind === ScriptKind.Deferred);
                 let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
