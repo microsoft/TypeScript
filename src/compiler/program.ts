@@ -1802,25 +1802,26 @@ namespace ts {
 
         function getDiagnosticsHelper<T extends Diagnostic>(
             sourceFile: SourceFile | undefined,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
-            cancellationToken: CancellationToken | undefined): readonly T[] {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined) => readonly T[],
+            cancellationToken: CancellationToken | undefined,
+            includeUncheckedJS: boolean | undefined): readonly T[] {
             if (sourceFile) {
-                return getDiagnostics(sourceFile, cancellationToken);
+                return getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
             }
             return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
                 if (cancellationToken) {
                     cancellationToken.throwIfCancellationRequested();
                 }
-                return getDiagnostics(sourceFile, cancellationToken);
+                return getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
             }));
         }
 
         function getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
-            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken, /*includeUncheckedJS*/ undefined);
         }
 
-        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
+        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, includeUncheckedJS?: boolean): readonly Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken, includeUncheckedJS);
         }
 
         function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -1830,7 +1831,7 @@ namespace ts {
         }
 
         function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
+            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, /*includeUncheckedJS*/ undefined);
         }
 
         function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
@@ -1853,7 +1854,7 @@ namespace ts {
                 return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
             }
             else {
-                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
+                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken, /*includeUncheckedJS*/ undefined);
             }
         }
 
@@ -1892,18 +1893,18 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
             return concatenate(
-                filterSemanticDiagnotics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
+                filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, includeUncheckedJS), options),
                 getProgramDiagnostics(sourceFile)
             );
         }
 
-        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
+        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, includeUncheckedJS, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
         }
 
-        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
@@ -1914,7 +1915,7 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
                 const isCheckJsTrue = isCheckJsEnabledForFile(sourceFile, options);
-                const isCheckJsUndefined = sourceFile.checkJsDirective === undefined && options.checkJs === undefined;
+                const isCheckJsUndefined = includeUncheckedJS && sourceFile.checkJsDirective === undefined && options.checkJs === undefined;
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = !isTsNoCheck &&
@@ -1944,6 +1945,7 @@ namespace ts {
             const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
             for (const errorExpectation of directives.getUnusedExpectations()) {
+                // TODO: Need to test ts-expect-error (although it's not a good idea but w/e)
                 diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
             }
 
@@ -2195,7 +2197,7 @@ namespace ts {
         }
 
         function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, /*includeUncheckedJS*/ undefined, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
         function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
@@ -2209,8 +2211,9 @@ namespace ts {
         function getAndCacheDiagnostics<T extends SourceFile | undefined, U extends Diagnostic>(
             sourceFile: T,
             cancellationToken: CancellationToken | undefined,
+            includeUncheckedJS: boolean | undefined,
             cache: DiagnosticCache<U>,
-            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined) => readonly U[],
+            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined) => readonly U[],
         ): readonly U[] {
 
             const cachedResult = sourceFile
@@ -2220,7 +2223,7 @@ namespace ts {
             if (cachedResult) {
                 return cachedResult;
             }
-            const result = getDiagnostics(sourceFile, cancellationToken);
+            const result = getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
             if (sourceFile) {
                 (cache.perFile || (cache.perFile = new Map())).set(sourceFile.path, result);
             }
@@ -3896,7 +3899,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function filterSemanticDiagnotics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
+    export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
         return filter(diagnostic, d => !d.skippedOn || !option[d.skippedOn]);
     }
 

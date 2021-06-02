@@ -693,7 +693,7 @@ namespace ts {
             const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
             // Report the bind and check diagnostics from the cache if we already have those diagnostics present
             if (cachedDiagnostics) {
-                return filterSemanticDiagnotics(cachedDiagnostics, state.compilerOptions);
+                return filterSemanticDiagnostics(cachedDiagnostics, state.compilerOptions);
             }
         }
 
@@ -702,7 +702,7 @@ namespace ts {
         if (state.semanticDiagnosticsPerFile) {
             state.semanticDiagnosticsPerFile.set(path, diagnostics);
         }
-        return filterSemanticDiagnotics(diagnostics, state.compilerOptions);
+        return filterSemanticDiagnostics(diagnostics, state.compilerOptions);
     }
 
     export type ProgramBuildInfoDiagnostic = number | [fileId: number, diagnostics: readonly ReusableDiagnostic[]];

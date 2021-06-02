@@ -156,7 +156,7 @@ namespace ts.codefix {
                 continue;
             }
 
-            const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
+            const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken, /*includeUncheckedJS*/ true);
             const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
                 return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
             });

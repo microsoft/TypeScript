@@ -95,7 +95,7 @@ namespace ts.codefix {
 
     function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixContextBase) {
         return [
-            ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            ...program.getSemanticDiagnostics(sourceFile, cancellationToken, /*includeUncheckedJS*/ true),
             ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken)
         ];

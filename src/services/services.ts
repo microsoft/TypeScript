@@ -1560,7 +1560,7 @@ namespace ts {
             // Only perform the action per file regardless of '-out' flag as LanguageServiceHost is expected to call this function per file.
             // Therefore only get diagnostics for given file.
 
-            const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken);
+            const semanticDiagnostics = program.getSemanticDiagnostics(targetSourceFile, cancellationToken, /*includeUncheckedJS*/ true);
             if (!getEmitDeclarations(program.getCompilerOptions())) {
                 return semanticDiagnostics.slice();
             }

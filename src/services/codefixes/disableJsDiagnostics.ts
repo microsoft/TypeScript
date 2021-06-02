@@ -12,7 +12,8 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, span, host, formatContext } = context;
 
-            if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+            const isCheckJsUndefined = sourceFile.checkJsDirective === undefined && program.getCompilerOptions().checkJs === undefined;
+            if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions()) && !isCheckJsUndefined) {
                 return undefined;
             }
 
