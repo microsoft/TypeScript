@@ -7,6 +7,10 @@ inmodule.toFixed()
 function f() {
     var locals = 2 + true
     locale.toFixed()
+    // @ts-expect-error
+    localf.toExponential()
+    // @ts-expect-error
+    "this is fine"
 }
 class Classe {
     non = 'oui'

@@ -4,8 +4,8 @@ export var inModule = 1
 >1 : 1
 
 inmodule.toFixed()
->inmodule.toFixed() : any
->inmodule.toFixed : any
+>inmodule.toFixed() : error
+>inmodule.toFixed : error
 >inmodule : any
 >toFixed : any
 
@@ -19,10 +19,21 @@ function f() {
 >true : true
 
     locale.toFixed()
->locale.toFixed() : any
->locale.toFixed : any
+>locale.toFixed() : error
+>locale.toFixed : error
 >locale : any
 >toFixed : any
+
+    // @ts-expect-error
+    localf.toExponential()
+>localf.toExponential() : error
+>localf.toExponential : error
+>localf : any
+>toExponential : any
+
+    // @ts-expect-error
+    "this is fine"
+>"this is fine" : "this is fine"
 }
 class Classe {
 >Classe : Classe
@@ -66,20 +77,20 @@ var object = {
 >3 : 3
 }
 object.spaaaace // error on read
->object.spaaaace : any
+>object.spaaaace : error
 >object : { spaaace: number; }
 >spaaaace : any
 
 object.spaace = 12 // error on write
 >object.spaace = 12 : 12
->object.spaace : any
+>object.spaace : error
 >object : { spaaace: number; }
 >spaace : any
 >12 : 12
 
 object.fresh = 12 // OK
 >object.fresh = 12 : 12
->object.fresh : any
+>object.fresh : error
 >object : { spaaace: number; }
 >fresh : any
 >12 : 12
@@ -98,9 +109,9 @@ new Date().getGMTDate() // OK, from another file
 
 // No suggestions for globals from other files
 const atoc = setIntegral(() => console.log('ok'), 500)
->atoc : any
->setIntegral(() => console.log('ok'), 500) : any
->setIntegral : any
+>atoc : error
+>setIntegral(() => console.log('ok'), 500) : error
+>setIntegral : error
 >() => console.log('ok') : () => void
 >console.log('ok') : void
 >console.log : (...data: any[]) => void
@@ -110,23 +121,13 @@ const atoc = setIntegral(() => console.log('ok'), 500)
 >500 : 500
 
 AudioBuffin // etc
->AudioBuffin : any
+>AudioBuffin : error
 
 Jimmy
 >Jimmy : number
 
 Jon
->Jon : any
-
-window.argle
->window.argle : any
->window : Window & typeof globalThis
->argle : any
-
-self.blargle
->self.blargle : any
->self : Window & typeof globalThis
->blargle : any
+>Jon : error
 
 === tests/cases/conformance/salsa/other.js ===
 var Jimmy = 1
@@ -138,7 +139,7 @@ var John = 2
 >2 : 2
 
 Jon // error, it's from the same file
->Jon : any
+>Jon : error
 
 var other = {
 >other : { puuce: number; }
@@ -148,13 +149,4 @@ var other = {
 >puuce : number
 >4 : 4
 }
-window.argle
->window.argle : any
->window : Window & typeof globalThis
->argle : any
-
-self.blargle
->self.blargle : any
->self : Window & typeof globalThis
->blargle : any
 

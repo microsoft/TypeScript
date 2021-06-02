@@ -1947,7 +1947,6 @@ namespace ts {
             const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
             for (const errorExpectation of directives.getUnusedExpectations()) {
-                // TODO: Need to test ts-expect-error (although it's not a good idea but w/e)
                 diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
             }
 
