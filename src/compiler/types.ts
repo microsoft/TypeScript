@@ -3956,6 +3956,8 @@ namespace ts {
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        /* @internal */ useSourceOfProjectReferenceRedirect: boolean;
+        /* @internal */ isSourceFileFromProjectReference(file: SourceFile): boolean;
         /* @internal */ useCaseSensitiveFileNames(): boolean;
 
         getProjectReferences(): readonly ProjectReference[] | undefined;
@@ -4045,7 +4047,9 @@ namespace ts {
         getFilesByNameMap(): ReadonlyESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
         isSourceFileFromExternalLibraryPath(path: Path): boolean;
         getFileProcessingDiagnostics(): FilePreprocessingDiagnostic[] | undefined;
+        isSourceFileFromProjectReference(file: SourceFileOfProgramFromBuildInfo): boolean;
 
+        useSourceOfProjectReferenceRedirect: boolean;
         redirectTargetsMap: MultiMap<Path, string>;
         sourceFileToPackageName: ESMap<Path, string>;
     }

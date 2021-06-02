@@ -83,6 +83,7 @@ namespace ts {
         filesByName: ESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
         fileIncludeReasons: MultiMap<Path, FileIncludeReason>;
         sourceFileFromExternalLibraryPath: Set<Path> | undefined;
+        sourceFileFromProjectReferencePath: Set<Path> | undefined;
         redirectTargetsMap: MultiMap<Path, string>;
         sourceFileToPackageName: ESMap<Path, string>;
         projectReferences: readonly ProjectReference[] | undefined;
@@ -90,6 +91,7 @@ namespace ts {
         automaticTypeDirectiveNames: string[] | undefined;
         resolvedTypeReferenceDirectives: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
         fileProcessingDiagnostics: FilePreprocessingDiagnostic[] | undefined;
+        useSourceOfProjectReferenceRedirect: boolean;
     }
 
     export const enum BuilderFileEmit {
@@ -340,6 +342,7 @@ namespace ts {
         if (!state.program || !state.compilerOptions.persistResolutions || state.persistedProgramState) return;
         const filesByName = mapEntries(state.program.getFilesByNameMap(), (key, value) => [key, value ? value.path : value as SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile]);
         let sourceFileFromExternalLibraryPath: Set<Path> | undefined;
+        let sourceFileFromProjectReferencePath: Set<Path> | undefined;
         const files = mapToReadonlyArray(state.program.getSourceFiles(), toSourceFileOfProgramFromBuildInfo);
         state.persistedProgramState = {
             files,
@@ -347,6 +350,7 @@ namespace ts {
             filesByName,
             fileIncludeReasons: state.program.getFileIncludeReasons(),
             sourceFileFromExternalLibraryPath,
+            sourceFileFromProjectReferencePath,
             redirectTargetsMap: state.program.redirectTargetsMap,
             sourceFileToPackageName: state.program.sourceFileToPackageName,
             projectReferences: state.program.getProjectReferences(),
@@ -354,10 +358,12 @@ namespace ts {
             resolvedTypeReferenceDirectives: state.program.getResolvedTypeReferenceDirectives(),
             automaticTypeDirectiveNames: state.program.getAutomaticTypeDirectiveNames(),
             fileProcessingDiagnostics: state.program.getFileProcessingDiagnostics(),
+            useSourceOfProjectReferenceRedirect: state.program.useSourceOfProjectReferenceRedirect,
         };
 
         function toSourceFileOfProgramFromBuildInfo(sourceFile: SourceFile): SourceFileOfProgramFromBuildInfo {
             if (state.program!.isSourceFileFromExternalLibraryPath(sourceFile.path)) (sourceFileFromExternalLibraryPath ||= new Set()).add(sourceFile.path);
+            if (sourceFile.resolvedPath !== sourceFile.path && state.program!.isSourceFileFromExternalLibraryPath(sourceFile.path)) (sourceFileFromExternalLibraryPath ||= new Set()).add(sourceFile.path);
             const file: SourceFileOfProgramFromBuildInfo = {
                 fileName: sourceFile.fileName,
                 originalFileName: sourceFile.originalFileName,
@@ -878,6 +884,7 @@ namespace ts {
 
         includeReasons: readonly PersistedProgramFileIncludeReason[];
         isSourceFileFromExternalLibraryPath?: true;
+        isSourceFileFromProjectReference?: true;
         redirectTargets?: readonly ProgramBuildInfoAbsoluteFileId[];
         packageName?: string;
     }
@@ -924,6 +931,7 @@ namespace ts {
         resolvedTypeReferenceDirectives: readonly PersistedProgramResolutionEntry[] | undefined;
         fileProcessingDiagnostics: readonly PersistedProgramFilePreprocessingDiagnostic[] | undefined;
         resolutions: readonly PersistedProgramResolution[] | undefined;
+        useSourceOfProjectReferenceRedirect: true | undefined;
     }
     export interface ProgramBuildInfo {
         fileNames: readonly string[];
@@ -1036,6 +1044,7 @@ namespace ts {
                 automaticTypeDirectiveNames: program.getAutomaticTypeDirectiveNames()?.length ? program.getAutomaticTypeDirectiveNames() : undefined,
                 fileProcessingDiagnostics: mapToReadonlyArrayOrUndefined(program.getFileProcessingDiagnostics(), toPersistedProgramFilePreprocessingDiagnostic),
                 resolutions: mapToReadonlyArrayOrUndefined(resolutions, toPersistedProgramResolution),
+                useSourceOfProjectReferenceRedirect: program.useSourceOfProjectReferenceRedirect ? true : undefined
             };
         }
         return {
@@ -1109,6 +1118,7 @@ namespace ts {
                 redirectTargets: mapToReadonlyArrayOrUndefined(program.redirectTargetsMap.get(sourceFile.path), toAbsoluteFileId),
                 includeReasons: program.getFileIncludeReasons().get(sourceFile.path)!.map(toPersistedProgramFileIncludeReason),
                 isSourceFileFromExternalLibraryPath: program.isSourceFileFromExternalLibraryPath(sourceFile.path) ? true : undefined,
+                isSourceFileFromProjectReference: sourceFile.path !== sourceFile.resolvedPath && program.isSourceFileFromProjectReference(sourceFile) ? true : undefined,
                 packageName: program.sourceFileToPackageName.get(sourceFile.path),
             };
         }
@@ -1726,6 +1736,7 @@ namespace ts {
         const filesByName = new Map<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>();
         const fileIncludeReasons = createMultiMap<Path, FileIncludeReason>();
         let sourceFileFromExternalLibraryPath: Set<Path> | undefined;
+        let sourceFileFromProjectReferencePath: Set<Path> | undefined;
         const redirectTargetsMap = createMultiMap<Path, string>();
         const sourceFileToPackageName = new Map<Path, string>();
         program.peristedProgram.filesByName?.forEach(entry => {
@@ -1745,6 +1756,7 @@ namespace ts {
             filesByName,
             fileIncludeReasons,
             sourceFileFromExternalLibraryPath,
+            sourceFileFromProjectReferencePath,
             redirectTargetsMap,
             sourceFileToPackageName,
             projectReferences: program.peristedProgram.projectReferences?.map(toProjectReference),
@@ -1752,6 +1764,7 @@ namespace ts {
             automaticTypeDirectiveNames: program.peristedProgram.automaticTypeDirectiveNames,
             resolvedTypeReferenceDirectives: toResolutionMap(program.peristedProgram.resolvedTypeReferenceDirectives) || new Map(),
             fileProcessingDiagnostics: map(program.peristedProgram.fileProcessingDiagnostics, toFileProcessingDiagnostic),
+            useSourceOfProjectReferenceRedirect: !!program.peristedProgram.useSourceOfProjectReferenceRedirect,
         };
         return {
             program: createProgramFromPersistedProgramState(persistedProgramState, compilerOptions),
@@ -1764,6 +1777,7 @@ namespace ts {
 
             fileIncludeReasons.set(path, file.includeReasons.map(toFileIncludeReason));
             if (file.isSourceFileFromExternalLibraryPath) (sourceFileFromExternalLibraryPath ||= new Set()).add(path);
+            if (file.isSourceFileFromProjectReference) (sourceFileFromProjectReferencePath ||= new Set()).add(path);
             if (file.redirectTargets) redirectTargetsMap.set(path, file.redirectTargets.map(toFileAbsolutePath));
             if (file.packageName) sourceFileToPackageName.set(path, file.packageName);
 
@@ -1874,9 +1888,11 @@ namespace ts {
             getResolvedTypeReferenceDirectives: () => persistedProgramState.resolvedTypeReferenceDirectives,
             getFilesByNameMap: () => persistedProgramState.filesByName,
             isSourceFileFromExternalLibraryPath: path => !!persistedProgramState.sourceFileFromExternalLibraryPath?.has(path),
+            isSourceFileFromProjectReference: file => !!persistedProgramState.sourceFileFromProjectReferencePath?.has(file.path),
             getFileProcessingDiagnostics: () => persistedProgramState.fileProcessingDiagnostics,
             redirectTargetsMap: persistedProgramState.redirectTargetsMap,
             sourceFileToPackageName: persistedProgramState.sourceFileToPackageName,
+            useSourceOfProjectReferenceRedirect: persistedProgramState.useSourceOfProjectReferenceRedirect
         };
     }
 

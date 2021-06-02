@@ -63,33 +63,48 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 u
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/myClass.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/anotherClass.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic/index.d.ts 500 undefined WatchType: Closed Script info
+Reusing resolution of module '../logic' from '/user/username/projects/myproject/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/logic/index.ts'.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic/index.ts 500 undefined WatchType: Closed Script info
+Reusing resolution of module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/core/myClass.ts'.
+Reusing resolution of module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/core/anotherClass.ts'.
+======== Resolving module '../core' from '/user/username/projects/myproject/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/core', target file type 'TypeScript'.
+File '/user/username/projects/myproject/core.ts' does not exist.
+File '/user/username/projects/myproject/core.tsx' does not exist.
+File '/user/username/projects/myproject/core.d.ts' does not exist.
+File '/user/username/projects/myproject/core/package.json' does not exist.
+File '/user/username/projects/myproject/core/index.ts' exist - use it as a name resolution result.
+======== Module name '../core' was successfully resolved to '/user/username/projects/myproject/core/index.ts'. ========
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/myClass.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/index.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/anotherClass.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Completely Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tests/tsconfig.json' (Configured)
-	Files (5)
+	Files (6)
 	/a/lib/lib.d.ts
-	/user/username/projects/myproject/core/myClass.d.ts
-	/user/username/projects/myproject/core/anotherClass.d.ts
-	/user/username/projects/myproject/logic/index.d.ts
+	/user/username/projects/myproject/core/myClass.ts
+	/user/username/projects/myproject/core/index.ts
+	/user/username/projects/myproject/core/anotherClass.ts
+	/user/username/projects/myproject/logic/index.ts
 	/user/username/projects/myproject/tests/index.ts
 
 
 	../../../../../a/lib/lib.d.ts
 	  Default library
-	../core/myClass.d.ts
-	  Imported via "../core/myClass" from file '../logic/index.d.ts'
-	  File is output of project reference source '../core/myClass.ts'
-	../core/anotherClass.d.ts
-	  Imported via "../core/anotherClass" from file '../logic/index.d.ts'
-	  File is output of project reference source '../core/anotherClass.ts'
-	../logic/index.d.ts
+	../core/myClass.ts
+	  Imported via "../core/myClass" from file '../logic/index.ts'
+	../core/index.ts
+	  Imported via "../core" from file '../logic/index.ts'
+	../core/anotherClass.ts
+	  Imported via "../core/anotherClass" from file '../logic/index.ts'
+	../logic/index.ts
 	  Imported via "../logic" from file 'index.ts'
-	  File is output of project reference source '../logic/index.ts'
 	index.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -97,7 +112,7 @@ Project '/user/username/projects/myproject/tests/tsconfig.json' (Configured)
 Search path: /user/username/projects/myproject/tests
 For info: /user/username/projects/myproject/tests/tsconfig.json :: No config files found.
 Project '/user/username/projects/myproject/tests/tsconfig.json' (Configured)
-	Files (5)
+	Files (6)
 
 -----------------------------------------------
 Open files: 
@@ -119,22 +134,26 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-{"fileName":"/user/username/projects/myproject/core/myClass.d.ts","version":"-7432826827-export declare class myClass {\n}\n"}
-export declare class myClass {
-}
+{"fileName":"/user/username/projects/myproject/core/myClass.ts","version":"-11785903855-export class myClass { }"}
+export class myClass { }
 
+{"fileName":"/user/username/projects/myproject/core/index.ts","version":"4120767815-export function bar() { return 10; }"}
+export function bar() { return 10; }
 
-{"fileName":"/user/username/projects/myproject/core/anotherClass.d.ts","version":"-6928009824-export declare class anotherClass {\n}\n"}
-export declare class anotherClass {
-}
+{"fileName":"/user/username/projects/myproject/core/anotherClass.ts","version":"-6664885476-export class anotherClass { }"}
+export class anotherClass { }
 
-
-{"fileName":"/user/username/projects/myproject/logic/index.d.ts","version":"-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n"}
+{"fileName":"/user/username/projects/myproject/logic/index.ts","version":"-8233748805-import { myClass } from \"../core/myClass\";\nimport { bar } from \"../core\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport function returnMyClass() {\n    bar();\n    return new myClass();\n}\nexport function returnAnotherClass() {\n    return new anotherClass();\n}"}
 import { myClass } from "../core/myClass";
+import { bar } from "../core";
 import { anotherClass } from "../core/anotherClass";
-export declare function returnMyClass(): myClass;
-export declare function returnAnotherClass(): anotherClass;
-
+export function returnMyClass() {
+    bar();
+    return new myClass();
+}
+export function returnAnotherClass() {
+    return new anotherClass();
+}
 
 {"fileName":"/user/username/projects/myproject/tests/index.ts","version":"-2125404654-import { returnMyClass } from \"../logic\";\nreturnMyClass();"}
 import { returnMyClass } from "../logic";

@@ -1162,6 +1162,8 @@ namespace ts {
             realpath: host.realpath?.bind(host),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getFileIncludeReasons: () => fileReasons,
+            isSourceFileFromProjectReference,
+            useSourceOfProjectReferenceRedirect,
             structureIsReused,
         };
 
@@ -1563,6 +1565,11 @@ namespace ts {
                 newSourceFile.originalFileName = oldSourceFile.originalFileName;
                 newSourceFile.resolvedPath = oldSourceFile.resolvedPath;
                 newSourceFile.fileName = oldSourceFile.fileName;
+
+                if (oldProgram.useSourceOfProjectReferenceRedirect !== useSourceOfProjectReferenceRedirect &&
+                    (newSourceFile.path !== newSourceFile.resolvedPath || oldProgram.isSourceFileFromProjectReference(oldSourceFile as SourceFile & SourceFileOfProgramFromBuildInfo))) {
+                    return StructureIsReused.Not;
+                }
 
                 const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
                 if (packageName !== undefined) {
@@ -2842,6 +2849,13 @@ namespace ts {
 
             const referencedProjectPath = mapFromFileToProjectReferenceRedirects.get(toPath(fileName));
             return referencedProjectPath && getResolvedProjectReferenceByPath(referencedProjectPath);
+        }
+
+        function isSourceFileFromProjectReference(file: SourceFile) {
+            return file.resolvedPath !== file.path ||
+                useSourceOfProjectReferenceRedirect ?
+                !!getProjectReferenceRedirectProject(file.fileName) : // Is this source of project reference
+                !!getSourceOfProjectReferenceRedirect(file.fileName); // Is this output of project reference
         }
 
         function forEachResolvedProjectReference<T>(

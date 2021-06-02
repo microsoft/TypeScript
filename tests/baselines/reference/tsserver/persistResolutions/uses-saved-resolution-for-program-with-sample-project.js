@@ -75,34 +75,43 @@ DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 un
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic 1 undefined Config: /user/username/projects/sample1/logic/tsconfig.json WatchType: Wild card directory
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherModule.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.d.ts 500 undefined WatchType: Closed Script info
+Reusing resolution of module '../core/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
+Reusing resolution of module '../logic/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/logic/index.ts'.
+Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
+FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/index.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/logic/index.ts 500 undefined WatchType: Closed Script info
+Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
+======== Resolving module '../core/index' from '/user/username/projects/sample1/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file type 'TypeScript'.
+File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
+======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
+FileWatcher:: Added:: WatchInfo: /user/username/projects/sample1/core/anotherModule.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/tests/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/sample1/node_modules/@types 1 undefined Project: /user/username/projects/sample1/tests/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Completely Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/sample1/tests/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/sample1/tests/tsconfig.json' (Configured)
 	Files (5)
 	/a/lib/lib.d.ts
-	/user/username/projects/sample1/core/index.d.ts
-	/user/username/projects/sample1/core/anotherModule.d.ts
-	/user/username/projects/sample1/logic/index.d.ts
+	/user/username/projects/sample1/core/index.ts
+	/user/username/projects/sample1/core/anotherModule.ts
+	/user/username/projects/sample1/logic/index.ts
 	/user/username/projects/sample1/tests/index.ts
 
 
 	../../../../../a/lib/lib.d.ts
 	  Default library
-	../core/index.d.ts
+	../core/index.ts
 	  Imported via '../core/index' from file 'index.ts'
-	  File is output of project reference source '../core/index.ts'
-	../core/anotherModule.d.ts
-	  Imported via '../core/anotherModule' from file '../logic/index.d.ts'
+	  Imported via '../core/index' from file '../logic/index.ts'
+	../core/anotherModule.ts
+	  Imported via '../core/anotherModule' from file '../logic/index.ts'
 	  Imported via '../core/anotherModule' from file 'index.ts'
-	  File is output of project reference source '../core/anotherModule.ts'
-	../logic/index.d.ts
+	../logic/index.ts
 	  Imported via '../logic/index' from file 'index.ts'
-	  File is output of project reference source '../logic/index.ts'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -132,20 +141,23 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-{"fileName":"/user/username/projects/sample1/core/index.d.ts","version":"-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map"}
-export declare const someString: string;
-export declare function leftPad(s: string, n: number): string;
-export declare function multiply(a: number, b: number): number;
-//# sourceMappingURL=index.d.ts.map
+{"fileName":"/user/username/projects/sample1/core/index.ts","version":"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"}
+export const someString: string = "HELLO WORLD";
+export function leftPad(s: string, n: number) { return s + n; }
+export function multiply(a: number, b: number) { return a * b; }
 
-{"fileName":"/user/username/projects/sample1/core/anotherModule.d.ts","version":"-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map"}
-export declare const World = "hello";
-//# sourceMappingURL=anotherModule.d.ts.map
 
-{"fileName":"/user/username/projects/sample1/logic/index.d.ts","version":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}
-export declare function getSecondsInDay(): number;
+{"fileName":"/user/username/projects/sample1/core/anotherModule.ts","version":"-2676574883-export const World = \"hello\";\r\n"}
+export const World = "hello";
+
+
+{"fileName":"/user/username/projects/sample1/logic/index.ts","version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"}
+import * as c from '../core/index';
+export function getSecondsInDay() {
+    return c.multiply(10, 15);
+}
 import * as mod from '../core/anotherModule';
-export declare const m: typeof mod;
+export const m = mod;
 
 
 {"fileName":"/user/username/projects/sample1/tests/index.ts","version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n"}
