@@ -2063,7 +2063,7 @@ namespace ts {
                             if (isGlobalScopeAugmentationDeclaration) {
                                 suggestion = undefined;
                             }
-                            if (originalLocation && isBadUncheckedJSSuggestion(lastLocation, /*parent*/ undefined, suggestion?.valueDeclaration ? [suggestion.valueDeclaration] : [])) {
+                            if (originalLocation && isExcludedJSError(originalLocation, suggestion, /*forbidClasses*/ false)) {
                                 suggestion = undefined;
                             }
                             if (suggestion) {
@@ -27455,8 +27455,8 @@ namespace ts {
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
-                    const isBadJSSuggestion = isBadUncheckedJSSuggestion(node, leftType.symbol, leftType.symbol?.declarations);
-                    if (isBadJSSuggestion === undefined ? isJSLiteralType(leftType) : isBadJSSuggestion) {
+                    const isExcludedError = isExcludedJSError(node, leftType.symbol, /*forbidClasses*/ true);
+                    if (isExcludedError === undefined ? isJSLiteralType(leftType) : isExcludedError) {
                         return anyType;
                     }
                     if (leftType.symbol === globalThisSymbol) {
@@ -27504,17 +27504,20 @@ namespace ts {
 
         /**
          * Only applies to unchecked JS files without checkJS, // @ts-check or // @ts-nocheck
-         * @returns undefined when not applicable, true for bad suggestions, false for good ones
-         * TODO: Should probably only pass one declaration
+         * @returns undefined when not applicable, true for excluded errors, false for included ones
+         *
+         * An error is excluded when it:
+         * - Is from a global file that is different from the reference file, or
+         * - (optionally) Is a class, or is a this.x property access expression
          */
-        function isBadUncheckedJSSuggestion(node: Node | undefined, parent: Symbol | undefined, declarations: Node[] | undefined): boolean | undefined {
+        function isExcludedJSError(node: Node | undefined, suggestion: Symbol | undefined, excludeClasses: boolean): boolean | undefined {
             const file = getSourceFileOfNode(node);
             if (file) {
                 if (compilerOptions.checkJs === undefined && !file.checkJsDirective && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
-                    const parentFile = forEach(declarations, getSourceFileOfNode);
-                    return file !== parentFile && !!parentFile && isGlobalSourceFile(parentFile)
-                        || !!(parent && parent.flags & SymbolFlags.Class)
-                        || !!node && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword;
+                    const declarationFile = forEach(suggestion?.declarations, getSourceFileOfNode);
+                    return file !== declarationFile && !!declarationFile && isGlobalSourceFile(declarationFile)
+                        || !!(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class)
+                        || !!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword;
                 }
             }
         }
