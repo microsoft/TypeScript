@@ -1,21 +1,19 @@
 namespace ts.tscWatch {
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
-    import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
-    import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
-    type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
+    describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
+        type TsBuildWatchSystem = TestFSWithWatch.TestServerHostTrackingWrittenFiles;
 
-    function createTsBuildWatchSystem(fileOrFolderList: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
-        return TestFSWithWatch.changeToHostTrackingWrittenFiles(
-            createWatchedSystem(fileOrFolderList, params)
-        );
-    }
+        function createTsBuildWatchSystem(fileOrFolderList: readonly TestFSWithWatch.FileOrFolderOrSymLink[], params?: TestFSWithWatch.TestServerHostCreationParameters) {
+            return TestFSWithWatch.changeToHostTrackingWrittenFiles(
+                createWatchedSystem(fileOrFolderList, params)
+            );
+        }
 
-    type OutputFileStamp = [string, Date | undefined, boolean];
-    function transformOutputToOutputFileStamp(f: string, host: TsBuildWatchSystem): OutputFileStamp {
-        return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
-    }
+        type OutputFileStamp = [string, Date | undefined, boolean];
+        function transformOutputToOutputFileStamp(f: string, host: TsBuildWatchSystem): OutputFileStamp {
+            return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
+        }
 
-    describe("unittests:: tsbuild:: watchMode:: program updates", () => {
         const scenario = "programUpdates";
         const project = "sample1";
         const enum SubProject {
@@ -28,7 +26,7 @@ namespace ts.tscWatch {
         /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
         type SubProjectFiles = [ReadonlyFile, ReadonlyFile] | [ReadonlyFile, ReadonlyFile, ReadonlyFile, ReadonlyFile];
         function projectPath(subProject: SubProject) {
-            return getFilePathInProject(project, subProject);
+            return TestFSWithWatch.getTsBuildProjectFilePath(project, subProject);
         }
 
         function projectFilePath(subProject: SubProject, baseFileName: string) {
@@ -36,7 +34,7 @@ namespace ts.tscWatch {
         }
 
         function projectFile(subProject: SubProject, baseFileName: string): File {
-            return getFileFromProject(project, `${subProject}/${baseFileName}`);
+            return TestFSWithWatch.getTsBuildProjectFile(project, `${subProject}/${baseFileName}`);
         }
 
         function subProjectFiles(subProject: SubProject, anotherModuleAndSomeDecl?: true): SubProjectFiles {
@@ -786,292 +784,6 @@ export function someFn() { }`),
                     })),
                     timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
                 }
-            ]
-        });
-    });
-
-    describe("unittests:: tsbuild:: watchMode:: with demo project", () => {
-        const projectLocation = `${projectsLocation}/demo`;
-        let coreFiles: File[];
-        let animalFiles: File[];
-        let zooFiles: File[];
-        let solutionFile: File;
-        let baseConfig: File;
-        let allFiles: File[];
-        before(() => {
-            coreFiles = subProjectFiles("core", ["tsconfig.json", "utilities.ts"]);
-            animalFiles = subProjectFiles("animals", ["tsconfig.json", "animal.ts", "dog.ts", "index.ts"]);
-            zooFiles = subProjectFiles("zoo", ["tsconfig.json", "zoo.ts"]);
-            solutionFile = projectFile("tsconfig.json");
-            baseConfig = projectFile("tsconfig-base.json");
-            allFiles = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile, baseConfig, { path: libFile.path, content: libContent }];
-        });
-
-        after(() => {
-            coreFiles = undefined!;
-            animalFiles = undefined!;
-            zooFiles = undefined!;
-            solutionFile = undefined!;
-            baseConfig = undefined!;
-            allFiles = undefined!;
-        });
-
-        verifyTscWatch({
-            scenario: "demo",
-            subScenario: "updates with circular reference",
-            commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => {
-                const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
-                sys.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
-                    "}",
-                    `},
-  "references": [
-    {
-      "path": "../zoo"
-    }
-  ]`
-                ));
-                return sys;
-            },
-            changes: [
-                {
-                    caption: "Fix error",
-                    change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
-                    timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build core
-                        sys.checkTimeoutQueueLengthAndRun(1); // build animals
-                        sys.checkTimeoutQueueLengthAndRun(1); // build zoo
-                        sys.checkTimeoutQueueLengthAndRun(1); // build solution
-                        sys.checkTimeoutQueueLength(0);
-                    },
-                }
-            ]
-        });
-
-        verifyTscWatch({
-            scenario: "demo",
-            subScenario: "updates with bad reference",
-            commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => {
-                const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
-                sys.writeFile(coreFiles[1].path, `import * as A from '../animals';
-${coreFiles[1].content}`);
-                return sys;
-            },
-            changes: [
-                {
-                    caption: "Prepend a line",
-                    change: sys => sys.writeFile(coreFiles[1].path, `
-import * as A from '../animals';
-${coreFiles[1].content}`),
-                    // build core
-                    timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-                }
-            ]
-        });
-
-        function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {
-            return fileNames.map(file => projectFile(`${subProject}/${file}`));
-        }
-
-        function projectFile(fileName: string): File {
-            return getFileFromProject("demo", fileName);
-        }
-    });
-
-    describe("unittests:: tsbuild:: watchMode:: with noEmitOnError", () => {
-        function change(caption: string, content: string): TscWatchCompileChange {
-            return {
-                caption,
-                change: sys => sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, content),
-                // build project
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-            };
-        }
-
-        const noChange: TscWatchCompileChange = {
-            caption: "No change",
-            change: sys => sys.writeFile(`${projectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${projectsLocation}/noEmitOnError/src/main.ts`)!),
-            // build project
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
-        };
-        verifyTscWatch({
-            scenario: "noEmitOnError",
-            subScenario: "does not emit any files on error",
-            commandLineArgs: ["-b", "-w", "-verbose"],
-            sys: () => createWatchedSystem(
-                [
-                    ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                        .map(f => getFileFromProject("noEmitOnError", f)),
-                    { path: libFile.path, content: libContent }
-                ],
-                { currentDirectory: `${projectsLocation}/noEmitOnError` }
-            ),
-            changes: [
-                noChange,
-                change("Fix Syntax error", `import { A } from "../shared/types/db";
-const a = {
-    lastName: 'sdsd'
-};`),
-                change("Semantic Error", `import { A } from "../shared/types/db";
-const a: string = 10;`),
-                noChange,
-                change("Fix Semantic Error", `import { A } from "../shared/types/db";
-const a: string = "hello";`),
-                noChange,
-            ],
-            baselineIncremental: true
-        });
-    });
-
-    describe("unittests:: tsbuild:: watchMode:: with reexport when referenced project reexports definitions from another file", () => {
-        function build(sys: WatchedSystem) {
-            sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
-            sys.checkTimeoutQueueLengthAndRun(1); // build src/main
-            sys.checkTimeoutQueueLengthAndRun(1); // build src
-            sys.checkTimeoutQueueLength(0);
-        }
-        verifyTscWatch({
-            scenario: "reexport",
-            subScenario: "Reports errors correctly",
-            commandLineArgs: ["-b", "-w", "-verbose", "src"],
-            sys: () => createWatchedSystem(
-                [
-                    ...[
-                        "src/tsconfig.json",
-                        "src/main/tsconfig.json", "src/main/index.ts",
-                        "src/pure/tsconfig.json", "src/pure/index.ts", "src/pure/session.ts"
-                    ]
-                        .map(f => getFileFromProject("reexport", f)),
-                    { path: libFile.path, content: libContent }
-                ],
-                { currentDirectory: `${projectsLocation}/reexport` }
-            ),
-            changes: [
-                {
-                    caption: "Introduce error",
-                    change: sys => replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "// ", ""),
-                    timeouts: build,
-                },
-                {
-                    caption: "Fix error",
-                    change: sys => replaceFileText(sys, `${projectsLocation}/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
-                    timeouts: build
-                }
-            ]
-        });
-    });
-
-    describe("unittests:: tsbuild:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
-        function build(sys: WatchedSystem) {
-            sys.checkTimeoutQueueLengthAndRun(1); // build the project
-            sys.checkTimeoutQueueLength(0);
-        }
-        verifyTscWatch({
-            scenario: "configFileErrors",
-            subScenario: "reports syntax errors in config file",
-            sys: () => createWatchedSystem(
-                [
-                    { path: `${projectRoot}/a.ts`, content: "export function foo() { }" },
-                    { path: `${projectRoot}/b.ts`, content: "export function bar() { }" },
-                    {
-                        path: `${projectRoot}/tsconfig.json`,
-                        content: Utils.dedent`
-{
-    "compilerOptions": {
-        "composite": true,
-    },
-    "files": [
-        "a.ts"
-        "b.ts"
-    ]
-}`
-                    },
-                    libFile
-                ],
-                { currentDirectory: projectRoot }
-            ),
-            commandLineArgs: ["--b", "-w"],
-            changes: [
-                {
-                    caption: "reports syntax errors after change to config file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/tsconfig.json`, ",", `,
-        "declaration": true,`),
-                    timeouts: build,
-                },
-                {
-                    caption: "reports syntax errors after change to ts file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/a.ts`, "foo", "fooBar"),
-                    timeouts: build,
-                },
-                {
-                    caption: "reports error when there is no change to tsconfig file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/tsconfig.json`, "", ""),
-                    timeouts: build,
-                },
-                {
-                    caption: "builds after fixing config file errors",
-                    change: sys => sys.writeFile(`${projectRoot}/tsconfig.json`, JSON.stringify({
-                        compilerOptions: { composite: true, declaration: true },
-                        files: ["a.ts", "b.ts"]
-                    })),
-                    timeouts: build,
-                }
-            ]
-        });
-    });
-
-    describe("unittests:: tsbuild:: watchMode:: module resolution different in referenced project", () => {
-        verifyTscWatch({
-            scenario: "moduleResolutionCache",
-            subScenario: "handles the cache correctly when two projects use different module resolution settings",
-            sys: () => createWatchedSystem(
-                [
-                    { path: `${projectRoot}/project1/index.ts`, content: `import { foo } from "file";` },
-                    { path: `${projectRoot}/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
-                    {
-                        path: `${projectRoot}/project1/tsconfig.json`,
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, types: ["foo", "bar"] },
-                            files: ["index.ts"]
-                        })
-                    },
-                    { path: `${projectRoot}/project2/index.ts`, content: `import { foo } from "file";` },
-                    { path: `${projectRoot}/project2/file.d.ts`, content: "export const foo = 10;" },
-                    {
-                        path: `${projectRoot}/project2/tsconfig.json`,
-                        content: JSON.stringify({
-                            compilerOptions: { composite: true, types: ["foo"], moduleResolution: "classic" },
-                            files: ["index.ts"]
-                        })
-                    },
-                    { path: `${projectRoot}/node_modules/@types/foo/index.d.ts`, content: "export const foo = 10;" },
-                    { path: `${projectRoot}/node_modules/@types/bar/index.d.ts`, content: "export const bar = 10;" },
-                    {
-                        path: `${projectRoot}/tsconfig.json`,
-                        content: JSON.stringify({
-                            files: [],
-                            references: [
-                                { path: "./project1" },
-                                { path: "./project2" }
-                            ]
-                        })
-                    },
-                    libFile
-                ],
-                { currentDirectory: projectRoot }
-            ),
-            commandLineArgs: ["--b", "-w", "-v"],
-            changes: [
-                {
-                    caption: "Append text",
-                    change: sys => sys.appendFile(`${projectRoot}/project1/index.ts`, "const bar = 10;"),
-                    timeouts: sys => {
-                        sys.checkTimeoutQueueLengthAndRun(1); // build project1
-                        sys.checkTimeoutQueueLengthAndRun(1); // Solution
-                        sys.checkTimeoutQueueLength(0);
-                    }
-                },
             ]
         });
     });

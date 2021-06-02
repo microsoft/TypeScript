@@ -1977,19 +1977,17 @@ namespace ts {
                     declareModuleSymbol(node);
                 }
                 else {
-                    let pattern: Pattern | undefined;
+                    let pattern: string | Pattern | undefined;
                     if (node.name.kind === SyntaxKind.StringLiteral) {
                         const { text } = node.name;
-                        if (hasZeroOrOneAsteriskCharacter(text)) {
-                            pattern = tryParsePattern(text);
-                        }
-                        else {
+                        pattern = tryParsePattern(text);
+                        if (pattern === undefined) {
                             errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
                         }
                     }
 
                     const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes)!;
-                    file.patternAmbientModules = append<PatternAmbientModule>(file.patternAmbientModules, pattern && { pattern, symbol });
+                    file.patternAmbientModules = append<PatternAmbientModule>(file.patternAmbientModules, pattern && !isString(pattern) ? { pattern, symbol } : undefined);
                 }
             }
             else {

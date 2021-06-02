@@ -42,6 +42,7 @@ Options:
  --strictFunctionTypes                              Enable strict checking of function types.
  --strictBindCallApply                              Enable strict 'bind', 'call', and 'apply' methods on functions.
  --strictPropertyInitialization                     Enable strict checking of property initialization in classes.
+ --strictOptionalProperties                         Enable strict checking of optional properties.
  --noImplicitThis                                   Raise error on 'this' expressions with an implied 'any' type.
  --alwaysStrict                                     Parse in strict mode and emit "use strict" for each source file.
  --noUnusedLocals                                   Report errors on unused locals.

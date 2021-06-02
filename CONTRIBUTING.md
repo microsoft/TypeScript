@@ -102,7 +102,7 @@ You will need to complete a Contributor License Agreement (CLA). Briefly, this a
 Your pull request should:
 
 * Include a description of what your change intends to do
-* Be based on reasonably recent commit in the **master** branch
+* Be based on reasonably recent commit in the **main** branch
 * Include adequate tests
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
@@ -118,7 +118,7 @@ There are three relevant locations to be aware of when it comes to TypeScript's 
 * `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
 * `built/local`: the build output location, including where `src/lib` files will be copied to.
 
-Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
 
 Library files in `built/local/` are updated automatically by running the standard build task:
 

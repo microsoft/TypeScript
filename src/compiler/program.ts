@@ -406,7 +406,7 @@ namespace ts {
             const lineStart = getPositionOfLineAndCharacter(file, i, 0);
             const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
             let lineContent = file.text.slice(lineStart, lineEnd);
-            lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+            lineContent = trimStringEnd(lineContent);  // trim from end
             lineContent = lineContent.replace(/\t/g, " ");   // convert tabs to single spaces
 
             // Output the gutter and the actual contents of the line.
@@ -745,9 +745,7 @@ namespace ts {
         if (!program) return false;
         // If any compiler options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree or `sourceFile.bindDiagnostics`.
-        const oldOptions = program.getCompilerOptions();
-        return !!sourceFileAffectingCompilerOptions.some(option =>
-            !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
     }
 
     function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
@@ -885,9 +883,9 @@ namespace ts {
         // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
         const packageIdToSourceFile = new Map<string, SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
-        let sourceFileToPackageName = new Map<string, string>();
+        let sourceFileToPackageName = new Map<Path, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
-        let redirectTargetsMap = createMultiMap<string>();
+        let redirectTargetsMap = createMultiMap<Path, string>();
 
         /**
          * map with
@@ -1290,7 +1288,15 @@ namespace ts {
                     const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
-                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
+                            trace(host,
+                                oldResolvedModule.packageId ?
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2,
+                                moduleName,
+                                getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                                oldResolvedModule.resolvedFileName,
+                                oldResolvedModule.packageId && packageIdToString(oldResolvedModule.packageId)
+                            );
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
@@ -1421,10 +1427,6 @@ namespace ts {
                 return StructureIsReused.Not;
             }
 
-            if (!arrayIsEqualTo(options.types, oldOptions.types)) {
-                return StructureIsReused.Not;
-            }
-
             // Check if any referenced project tsconfig files are different
             if (!canReuseProjectReferences()) {
                 return StructureIsReused.Not;
@@ -1505,7 +1507,7 @@ namespace ts {
 
                     if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
-                        return StructureIsReused.Not;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -1598,7 +1600,7 @@ namespace ts {
                 return structureIsReused;
             }
 
-            if (host.hasChangedAutomaticTypeDirectiveNames?.()) {
+            if (changesAffectingProgramStructure(oldOptions, options) || host.hasChangedAutomaticTypeDirectiveNames?.()) {
                 return StructureIsReused.SafeModules;
             }
 
@@ -3053,6 +3055,9 @@ namespace ts {
         function verifyCompilerOptions() {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+            if (options.strictOptionalProperties && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictOptionalProperties", "strictNullChecks");
             }
 
             if (options.isolatedModules) {
