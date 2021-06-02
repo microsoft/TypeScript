@@ -75,10 +75,6 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be either 'string' or 'number'.": {
-        "category": "Error",
-        "code": 1023
-    },
     "'readonly' modifier can only appear on a property declaration or index signature.": {
         "category": "Error",
         "code": 1024
@@ -891,6 +887,14 @@
         "category": "Error",
         "code": 1267
     },
+    "An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.": {
+        "category": "Error",
+        "code": 1268
+    },
+    "An index signature parameter type cannot be a generic type.": {
+        "category": "Error",
+        "code": 1269
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -995,10 +999,6 @@
     "'unique symbol' types are not allowed here.": {
         "category": "Error",
         "code": 1335
-    },
-    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
-        "category": "Error",
-        "code": 1336
     },
     "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
         "category": "Error",

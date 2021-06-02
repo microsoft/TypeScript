@@ -41154,23 +41154,15 @@ namespace ts {
             if (!parameter.type) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
-            if (parameter.type.kind !== SyntaxKind.StringKeyword && parameter.type.kind !== SyntaxKind.NumberKeyword) {
-                const type = getTypeFromTypeNode(parameter.type);
-
-                if (type.flags & TypeFlags.String || type.flags & TypeFlags.Number) {
-                    return grammarErrorOnNode(parameter.name,
-                        Diagnostics.An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead,
-                        getTextOfNode(parameter.name),
-                        typeToString(type),
-                        typeToString(node.type ? getTypeFromTypeNode(node.type) : anyType));
+            const type = getTypeFromTypeNode(parameter.type);
+            if (!(type.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol | TypeFlags.TemplateLiteral))) {
+                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol, /*strict*/ true)) {
+                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
                 }
-
-                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.StringOrNumberLiteral, /*strict*/ true)) {
-                    return grammarErrorOnNode(parameter.name,
-                        Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
-                }
-
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_either_string_or_number);
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
+            }
+            if (type.flags & TypeFlags.TemplateLiteral && !isPatternLiteralType(type)) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_generic_type);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);
