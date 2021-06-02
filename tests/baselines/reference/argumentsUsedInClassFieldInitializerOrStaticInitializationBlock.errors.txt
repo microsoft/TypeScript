@@ -1,0 +1,44 @@
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(3,10): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(9,10): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(15,15): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(21,15): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+
+
+==== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (4 errors) ====
+    function A() {
+      return class T {
+         a = arguments
+             ~~~~~~~~~
+!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+      }
+    }
+    
+    function A1() {
+      return new class T {
+         a = arguments
+             ~~~~~~~~~
+!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+      }
+    }
+    
+    function B() {
+      return class T {
+         a = { b: arguments }
+                  ~~~~~~~~~
+!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+      }
+    }
+    
+    function B1() {
+      return new class T {
+         a = { b: arguments }
+                  ~~~~~~~~~
+!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+      }
+    }
+    
+    function C() {
+      return class T {
+         a = function () { arguments }
+      }
+    }

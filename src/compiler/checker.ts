@@ -24223,6 +24223,11 @@ namespace ts {
                     }
                 }
 
+                const firstFunctionLikeContainerOrClassLikeContainer = findAncestor(node.parent, node => isClassLike(node) || isFunctionLike(node))!;
+                if (firstFunctionLikeContainerOrClassLikeContainer.kind === SyntaxKind.ClassExpression || firstFunctionLikeContainerOrClassLikeContainer.kind === SyntaxKind.ClassDeclaration) {
+                    error(node, Diagnostics.arguments_is_not_allowed_in_class_field_initializer_or_static_initialization_block);
+                }
+
                 getNodeLinks(container).flags |= NodeCheckFlags.CaptureArguments;
                 return getTypeOfSymbol(symbol);
             }

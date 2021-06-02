@@ -3336,6 +3336,10 @@
         "category": "Error",
         "code": 2812
     },
+    "'arguments' is not allowed in class field initializer or static initialization block.": {
+        "category": "Error",
+        "code": 2813
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
