@@ -86,7 +86,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : keyof Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : number | keyof Shape[]
+>K11 : keyof Shape[]
 
 type K12 = keyof Dictionary<Shape>;  // string
 >K12 : string | number
@@ -101,7 +101,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >K15 : "toString" | "toLocaleString" | "toFixed" | "toExponential" | "toPrecision" | "valueOf"
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : number | keyof [string, number]
+>K16 : keyof [string, number]
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"
