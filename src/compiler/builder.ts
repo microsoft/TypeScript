@@ -856,9 +856,10 @@ namespace ts {
             const optionKey = name.toLowerCase();
             const optionInfo = optionsNameMap.get(optionKey);
             if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics ||
-                // Since we should never compare strict directly between options but individual flag, but it does change value of that flag so store it
+                // We need to store `strict`, even though it won't be examined directly, so that the
+                // flags it controls (e.g. `strictNullChecks`) will be retrieved correctly from the buildinfo
                 optionKey === "strict" ||
-                // These affect if lib files need to be rechecked so store them
+                // We need to store these to determine whether `lib` files need to be rechecked.
                 optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck") {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
