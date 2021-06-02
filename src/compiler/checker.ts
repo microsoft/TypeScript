@@ -9896,7 +9896,12 @@ namespace ts {
                 }
                 else {
                     type = errorType;
-                    error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    if (declaration.kind === SyntaxKind.JSDocEnumTag) {
+                        error(declaration.typeExpression.type, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    }
+                    else {
+                        error(isNamedDeclaration(declaration) ? declaration.name : declaration || declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
+                    }
                 }
                 links.declaredType = type;
             }
@@ -32821,7 +32826,7 @@ namespace ts {
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
             const tag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
             if (tag) {
-                return checkAssertionWorker(tag, tag.typeExpression.type, node.expression, checkMode);
+                return checkAssertionWorker(tag.typeExpression.type, tag.typeExpression.type, node.expression, checkMode);
             }
             return checkExpression(node.expression, checkMode);
         }
@@ -35065,12 +35070,14 @@ namespace ts {
                             // Include the `<>` in the error message
                             : rangeOfTypeParameters(sourceFile, parent.typeParameters!);
                         const only = parent.typeParameters!.length === 1;
+                        //TODO: following line is possible reason for bug #41974, unusedTypeParameters_TemplateTag
                         const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
                         const arg0 = only ? name : undefined;
                         addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, message, arg0));
                     }
                 }
                 else {
+                    //TODO: following line is possible reason for bug #41974, unusedTypeParameters_TemplateTag
                     addDiagnostic(typeParameter, UnusedKind.Parameter, createDiagnosticForNode(typeParameter, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
                 }
             }
