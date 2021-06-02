@@ -1917,22 +1917,24 @@ namespace ts {
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
                 const isCheckJsTrue = isCheckJsEnabledForFile(sourceFile, options);
-                const isCheckJsUndefined = includeUncheckedJS && sourceFile.checkJsDirective === undefined && options.checkJs === undefined;
+                const isCheckJsUndefined = includeUncheckedJS
+                    && sourceFile.checkJsDirective === undefined && options.checkJs === undefined
+                    && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = !isTsNoCheck &&
                     (sourceFile.scriptKind === ScriptKind.TS
                     || sourceFile.scriptKind === ScriptKind.TSX
                     || isCheckJsTrue
-                    || isCheckJsUndefined && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX)
+                    || isCheckJsUndefined
                     || sourceFile.scriptKind === ScriptKind.External
                     || sourceFile.scriptKind === ScriptKind.Deferred);
-                let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics && !isCheckJsUndefined ? sourceFile.bindDiagnostics : emptyArray;
                 let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
-                if (isCheckJsUndefined && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX)) {
-                    // TODO: It can just be checkDiagnostics srsly
-                    bindDiagnostics = bindDiagnostics.filter(d => d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code);
-                    checkDiagnostics = checkDiagnostics.filter(d => d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code);
+                if (isCheckJsUndefined) {
+                    checkDiagnostics = checkDiagnostics.filter(d =>
+                        d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code
+                        || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code);
                 }
                 return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJsTrue ? sourceFile.jsDocDiagnostics : undefined);
             });
