@@ -11052,11 +11052,15 @@ namespace ts {
                 for (const prop of getPropertiesOfType(modifiersType)) {
                     addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
                 }
-                if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, stringType)) {
+                if (modifiersType.flags & TypeFlags.Any) {
                     addMemberForKeyType(stringType);
                 }
-                if (!keyofStringsOnly && getIndexInfoOfType(modifiersType, numberType)) {
-                    addMemberForKeyType(numberType);
+                else {
+                    for (const info of getIndexInfosOfType(modifiersType)) {
+                        if (!keyofStringsOnly || info.keyType.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
+                            addMemberForKeyType(info.keyType);
+                        }
+                    }
                 }
             }
             else {
@@ -11281,7 +11285,7 @@ namespace ts {
                     }
                     // The properties of a union type are those that are present in all constituent types, so
                     // we only need to check the properties of the first type without index signature
-                    if (type.flags & TypeFlags.Union && !getIndexInfoOfType(current, stringType) && !getIndexInfoOfType(current, numberType)) {
+                    if (type.flags & TypeFlags.Union && getIndexInfosOfType(current).length === 0) {
                         break;
                     }
                 }
@@ -11727,7 +11731,7 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
-                        const indexInfo = !isLateBoundName(name) && (isNumericLiteralName(name) && getIndexInfoOfType(type, numberType) || getIndexInfoOfType(type, stringType));
+                        const indexInfo = !isLateBoundName(name) && getApplicableIndexInfo(type, getLiteralType(isNumericLiteralName(name) ? +name : unescapeLeadingUnderscores(name)));
                         if (indexInfo) {
                             checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
                             indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
@@ -15430,7 +15434,7 @@ namespace ts {
 
             const members = createSymbolTable();
             const skippedPrivateMembers = new Set<__String>();
-            let indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getUnionIndexInfos([left, right]);
+            const indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getUnionIndexInfos([left, right]);
 
             for (const rightProp of getPropertiesOfType(right)) {
                 if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
