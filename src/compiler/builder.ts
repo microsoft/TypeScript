@@ -853,8 +853,13 @@ namespace ts {
         const { optionsNameMap } = getOptionsNameMap();
 
         for (const name of getOwnKeys(options).sort(compareStringsCaseSensitive)) {
-            const optionInfo = optionsNameMap.get(name.toLowerCase());
-            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics || name === "skipLibCheck" || name === "skipDefaultLibCheck") {
+            const optionKey = name.toLowerCase();
+            const optionInfo = optionsNameMap.get(optionKey);
+            if (optionInfo?.affectsEmit || optionInfo?.affectsSemanticDiagnostics ||
+                // Since we should never compare strict directly between options but individual flag, but it does change value of that flag so store it
+                optionKey === "strict" ||
+                // These affect if lib files need to be rechecked so store them
+                optionKey === "skiplibcheck" || optionKey === "skipdefaultlibcheck") {
                 (result ||= {})[name] = convertToReusableCompilerOptionValue(
                     optionInfo,
                     options[name] as CompilerOptionsValue,
