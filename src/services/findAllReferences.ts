@@ -1432,8 +1432,7 @@ namespace ts.FindAllReferences {
         function getAllReferencesForImportMeta(sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
-                return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, "import.meta", sourceFile), node => {
-                    // node is the first token, `import`
+                return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, "meta", sourceFile), node => {
                     const parent = node.parent;
                     if (isImportMeta(parent)) {
                         return nodeEntry(parent);

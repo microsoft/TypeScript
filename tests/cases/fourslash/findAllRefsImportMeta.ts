@@ -16,8 +16,9 @@
 // @Filename: baz.ts
 /////// <reference no-default-lib="true"/>
 /////// <reference path='./bar.d.ts' />
-////import.meta;
-
+////let x = import
+////  .  // hai :)
+////    meta;
 
 verify.baselineFindAllReferences("");
 

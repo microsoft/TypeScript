@@ -7,7 +7,9 @@
 // === /tests/cases/fourslash/baz.ts ===
 // /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />
-// import.[|meta|];
+// let x = import
+//   .  // hai :)
+//     [|meta|];
 
 [
   {
@@ -47,7 +49,7 @@
       },
       {
         "textSpan": {
-          "start": 82,
+          "start": 109,
           "length": 4
         },
         "fileName": "/tests/cases/fourslash/baz.ts",
