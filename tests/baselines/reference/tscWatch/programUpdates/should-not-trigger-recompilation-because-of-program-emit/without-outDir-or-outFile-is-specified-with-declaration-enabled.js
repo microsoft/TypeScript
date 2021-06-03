@@ -53,6 +53,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "strictFunctionTypes": true,                 /* Enable strict checking of function types. */
     // "strictBindCallApply": true,                 /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
     // "strictPropertyInitialization": true,        /* Enable strict checking of property initialization in classes. */
+    // "strictOptionalProperties": true,            /* Enable strict checking of optional properties. */
     // "noImplicitThis": true,                      /* Raise error on 'this' expressions with an implied 'any' type. */
     // "alwaysStrict": true,                        /* Parse in strict mode and emit "use strict" for each source file. */
 

@@ -2002,6 +2002,6 @@ namespace ts.refactor.extractSymbol {
     }
 
     function isInJSXContent(node: Node) {
-        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && isJsxElement(node.parent);
+        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
     }
 }

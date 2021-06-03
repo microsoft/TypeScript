@@ -574,6 +574,16 @@ namespace ts {
             return false;
         }
 
+        // If the ExpandoFunctionDeclaration have multiple overloads, then we only need to emit properties for the last one.
+        function shouldEmitFunctionProperties(input: FunctionDeclaration) {
+            if (input.body) {
+                return true;
+            }
+
+            const overloadSignatures = input.symbol.declarations?.filter(decl => isFunctionDeclaration(decl) && !decl.body);
+            return !overloadSignatures || overloadSignatures.indexOf(input) === overloadSignatures.length - 1;
+        }
+
         function getBindingNameVisible(elem: BindingElement | VariableDeclaration | OmittedExpression): boolean {
             if (isOmittedExpression(elem)) {
                 return false;
@@ -1194,7 +1204,7 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
-                    if (clean && resolver.isExpandoFunctionDeclaration(input)) {
+                    if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
                         const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);

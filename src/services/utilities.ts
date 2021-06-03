@@ -105,7 +105,7 @@ namespace ts {
         else if (isDeclarationName(node)) {
             return getMeaningFromDeclaration(node.parent);
         }
-        else if (isEntityName(node) && findAncestor(node, or(isJSDocNameReference, isJSDocLink, isJSDocMemberName))) {
+        else if (isEntityName(node) && findAncestor(node, or(isJSDocNameReference, isJSDocLinkLike, isJSDocMemberName))) {
             return SemanticMeaning.All;
         }
         else if (isTypeReference(node)) {
@@ -2233,8 +2233,11 @@ namespace ts {
         return displayPart(text, SymbolDisplayPartKind.link);
     }
 
-    export function buildLinkParts(link: JSDocLink, checker?: TypeChecker): SymbolDisplayPart[] {
-        const parts = [linkPart("{@link ")];
+    export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain, checker?: TypeChecker): SymbolDisplayPart[] {
+        const prefix = isJSDocLink(link) ? "link"
+            : isJSDocLinkCode(link) ? "linkcode"
+            : "linkplain";
+        const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
             if (link.text) {parts.push(linkTextPart(link.text));}
         }

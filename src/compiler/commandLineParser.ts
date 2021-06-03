@@ -406,7 +406,7 @@ namespace ts {
                 name: "lib",
                 type: libMap
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_library_files_to_be_included_in_the_compilation,
@@ -644,6 +644,15 @@ namespace ts {
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
         },
         {
+            name: "strictOptionalProperties",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_optional_properties
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -787,7 +796,7 @@ namespace ts {
                 name: "types",
                 type: "string"
             },
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Type_declaration_files_to_be_included_in_compilation,
@@ -976,7 +985,7 @@ namespace ts {
         {
             name: "noLib",
             type: "boolean",
-            affectsModuleResolution: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_include_the_default_library_file_lib_d_ts,
             // We are not returning a sourceFile for lib file when asked by the program,
@@ -1005,7 +1014,7 @@ namespace ts {
         {
             name: "disableSizeLimit",
             type: "boolean",
-            affectsSourceFile: true,
+            affectsProgramStructure: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Disable_size_limitations_on_JavaScript_projects,
             defaultValueDescription: "false"
@@ -1191,6 +1200,10 @@ namespace ts {
     /* @internal */
     export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
         !!option.affectsSourceFile || !!option.affectsModuleResolution || !!option.affectsBindDiagnostics);
+
+    /* @internal */
+    export const optionsAffectingProgramStructure: readonly CommandLineOption[] =
+        optionDeclarations.filter(option => !!option.affectsProgramStructure);
 
     /* @internal */
     export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option =>
@@ -2603,6 +2616,7 @@ namespace ts {
                 validatedFilesSpec: filter(filesSpecs, isString),
                 validatedIncludeSpecs,
                 validatedExcludeSpecs,
+                pathPatterns: undefined, // Initialized on first use
             };
         }
 
@@ -3104,10 +3118,6 @@ namespace ts {
         return filter(map(values, v => convertJsonOption(option.element, v, basePath, errors)), v => !!v);
     }
 
-    function trimString(s: string) {
-        return typeof s.trim === "function" ? s.trim() : s.replace(/^[\s]+|[\s]+$/g, "");
-    }
-
     /**
      * Tests for a path that ends in a recursive directory wildcard.
      * Matches **, \**, **\, and \**\, but not a**b.
@@ -3120,36 +3130,6 @@ namespace ts {
      *  \/?$        # matches an optional trailing directory separator at the end of the string.
      */
     const invalidTrailingRecursionPattern = /(^|\/)\*\*\/?$/;
-
-    /**
-     * Tests for a path where .. appears after a recursive directory wildcard.
-     * Matches **\..\*, **\a\..\*, and **\.., but not ..\**\*
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  (^|\/)      # matches either the beginning of the string or a directory separator.
-     *  \*\*\/      # matches a recursive directory wildcard "**" followed by a directory separator.
-     *  (.*\/)?     # optionally matches any number of characters followed by a directory separator.
-     *  \.\.        # matches a parent directory path component ".."
-     *  ($|\/)      # matches either the end of the string or a directory separator.
-     */
-    const invalidDotDotAfterRecursiveWildcardPattern = /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/;
-
-    /**
-     * Tests for a path containing a wildcard character in a directory component of the path.
-     * Matches \*\, \?\, and \a*b\, but not \a\ or \a\*.
-     *
-     * NOTE: used \ in place of / above to avoid issues with multiline comments.
-     *
-     * Breakdown:
-     *  \/          # matches a directory separator.
-     *  [^/]*?      # matches any number of characters excluding directory separators (non-greedy).
-     *  [*?]        # matches either a wildcard character (* or ?)
-     *  [^/]*       # matches any number of characters excluding directory separators (greedy).
-     *  \/          # matches a directory separator.
-     */
-    const watchRecursivePattern = /\/[^/]*?[*?][^/]*\//;
 
     /**
      * Matches the portion of a wildcard path that does not contain wildcards.
@@ -3287,6 +3267,20 @@ namespace ts {
         return matchesExcludeWorker(pathToCheck, validatedExcludeSpecs, useCaseSensitiveFileNames, currentDirectory, basePath);
     }
 
+    function invalidDotDotAfterRecursiveWildcard(s: string) {
+        // We used to use the regex /(^|\/)\*\*\/(.*\/)?\.\.($|\/)/ to check for this case, but
+        // in v8, that has polynomial performance because the recursive wildcard match - **/ -
+        // can be matched in many arbitrary positions when multiple are present, resulting
+        // in bad backtracking (and we don't care which is matched - just that some /.. segment
+        // comes after some **/ segment).
+        const wildcardIndex = startsWith(s, "**/") ? 0 : s.indexOf("/**/");
+        if (wildcardIndex === -1) {
+            return false;
+        }
+        const lastDotIndex = endsWith(s, "/..") ? s.length : s.lastIndexOf("/../");
+        return lastDotIndex > wildcardIndex;
+    }
+
     /* @internal */
     export function matchesExclude(
         pathToCheck: string,
@@ -3296,7 +3290,7 @@ namespace ts {
     ) {
         return matchesExcludeWorker(
             pathToCheck,
-            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcardPattern.test(spec)),
+            filter(excludeSpecs, spec => !invalidDotDotAfterRecursiveWildcard(spec)),
             useCaseSensitiveFileNames,
             currentDirectory
         );
@@ -3338,7 +3332,7 @@ namespace ts {
         if (disallowTrailingRecursion && invalidTrailingRecursionPattern.test(spec)) {
             return [Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
-        else if (invalidDotDotAfterRecursiveWildcardPattern.test(spec)) {
+        else if (invalidDotDotAfterRecursiveWildcard(spec)) {
             return [Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, spec];
         }
     }
@@ -3401,9 +3395,18 @@ namespace ts {
     function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string, flags: WatchDirectoryFlags } | undefined {
         const match = wildcardDirectoryPattern.exec(spec);
         if (match) {
+            // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
+            // less algorithmically complex (roughly O(3n) worst-case) than the regex we used to use,
+            // \/[^/]*?[*?][^/]*\/ which was polynominal in v8, since arbitrary sequences of wildcard
+            // characters could match any of the central patterns, resulting in bad backtracking.
+            const questionWildcardIndex = spec.indexOf("?");
+            const starWildcardIndex = spec.indexOf("*");
+            const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
             return {
                 key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
-                flags: watchRecursivePattern.test(spec) ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
+                flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
+                    || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
+                    ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None
             };
         }
         if (isImplicitGlob(spec)) {

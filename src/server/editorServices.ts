@@ -658,6 +658,11 @@ namespace ts.server {
         reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
     }
 
+    function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
+        let nextId = 1;
+        return () => nameFactory(nextId++);
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -703,6 +708,10 @@ namespace ts.server {
          * projects specified by a tsconfig.json file
          */
         readonly configuredProjects: Map<ConfiguredProject> = new Map<string, ConfiguredProject>();
+        /*@internal*/
+        readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
+        /*@internal*/
+        readonly newAutoImportProviderProjectName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
