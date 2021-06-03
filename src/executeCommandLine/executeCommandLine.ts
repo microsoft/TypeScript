@@ -296,7 +296,10 @@ namespace ts {
         }
         const categoryMap = new Map<string, CommandLineOption[]>();
         for (const option of options) {
-            const curCategory = option.category ? getDiagnosticText(option.category) : "No category";
+            if (!option.category) {
+                continue;
+            }
+            const curCategory = getDiagnosticText(option.category);
             const optionsOfCurCategory = categoryMap.get(curCategory) ?? [];
             optionsOfCurCategory.push(option);
             categoryMap.set(curCategory, optionsOfCurCategory);
