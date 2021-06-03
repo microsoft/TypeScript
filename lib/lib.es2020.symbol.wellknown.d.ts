@@ -26,7 +26,7 @@ interface SymbolConstructor {
      * A regular expression method that matches the regular expression against a string. Called
      * by the String.prototype.matchAll method.
      */
-    readonly matchAll: symbol;
+    readonly matchAll: unique symbol;
 }
 
 interface RegExp {
