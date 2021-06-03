@@ -368,6 +368,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
