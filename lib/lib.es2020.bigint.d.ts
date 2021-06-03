@@ -121,7 +121,7 @@ interface BigInt {
 }
 
 interface BigIntConstructor {
-    (value?: any): bigint;
+    (value: bigint | boolean | number | string): bigint;
     readonly prototype: BigInt;
 
     /**
@@ -184,7 +184,7 @@ interface BigInt64Array {
     every(predicate: (value: bigint, index: number, array: BigInt64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -456,7 +456,7 @@ interface BigUint64Array {
     every(predicate: (value: bigint, index: number, array: BigUint64Array) => boolean, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
