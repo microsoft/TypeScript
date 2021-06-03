@@ -7,8 +7,8 @@ function A() {
 >T : typeof T
 
      a = arguments
->a : IArguments
->arguments : IArguments
+>a : any
+>arguments : any
   }
 }
 
@@ -21,8 +21,8 @@ function A1() {
 >T : typeof T
 
      a = arguments
->a : IArguments
->arguments : IArguments
+>a : any
+>arguments : any
   }
 }
 
@@ -34,10 +34,10 @@ function B() {
 >T : typeof T
 
      a = { b: arguments }
->a : { b: IArguments; }
->{ b: arguments } : { b: IArguments; }
->b : IArguments
->arguments : IArguments
+>a : { b: any; }
+>{ b: arguments } : { b: any; }
+>b : any
+>arguments : any
   }
 }
 
@@ -50,10 +50,10 @@ function B1() {
 >T : typeof T
 
      a = { b: arguments }
->a : { b: IArguments; }
->{ b: arguments } : { b: IArguments; }
->b : IArguments
->arguments : IArguments
+>a : { b: any; }
+>{ b: arguments } : { b: any; }
+>b : any
+>arguments : any
   }
 }
 
