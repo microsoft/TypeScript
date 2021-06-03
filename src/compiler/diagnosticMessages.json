@@ -4593,34 +4593,6 @@
         "category": "Message",
         "code": 6171
     },
-    "Basic Options": {
-        "category": "Message",
-        "code": 6172
-    },
-    "Strict Type-Checking Options": {
-        "category": "Message",
-        "code": 6173
-    },
-    "Module Resolution Options": {
-        "category": "Message",
-        "code": 6174
-    },
-    "Source Map Options": {
-        "category": "Message",
-        "code": 6175
-    },
-    "Additional Checks": {
-        "category": "Message",
-        "code": 6176
-    },
-    "Experimental Options": {
-        "category": "Message",
-        "code": 6177
-    },
-    "Advanced Options": {
-        "category": "Message",
-        "code": 6178
-    },
     "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
         "category": "Message",
         "code": 6179
@@ -4881,6 +4853,64 @@
         "category": "Message",
         "code": 6243
     },
+
+    "Modules": {
+        "category": "Message",
+        "code": 6244
+    },
+    "File Management": {
+        "category": "Message",
+        "code": 6245
+    },
+    "Emit": {
+        "category": "Message",
+        "code": 6246
+    },
+    "JavaScript Support": {
+        "category": "Message",
+        "code": 6247
+    },
+    "Type Checking": {
+        "category": "Message",
+        "code": 6248
+    },
+    "Editor Support": {
+        "category": "Message",
+        "code": 6249
+    },
+    "Watch and Build Modes": {
+        "category": "Message",
+        "code": 6250
+    },
+    "Compiler Diagnostics": {
+        "category": "Message",
+        "code": 6251
+    },
+    "Interop Constraints": {
+        "category": "Message",
+        "code": 6252
+    },
+    "Backwards Compatibility": {
+        "category": "Message",
+        "code": 6253
+    },
+    "Language and Environment": {
+        "category": "Message",
+        "code": 6254
+    },
+    "Projects": {
+        "category": "Message",
+        "code": 6255
+    },
+    "Output Formatting": {
+        "category": "Message",
+        "code": 6256
+    },
+    "Completeness": {
+        "category": "Message",
+        "code": 6257
+    },
+
 
     "Projects to reference": {
         "category": "Message",
