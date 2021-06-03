@@ -126,8 +126,24 @@ namespace ts {
         const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
         const terminalWidth = sys.getWidthOfTerminal();
 
-        // terminal does not have enough width
-        if (terminalWidth < leftAlignOfRight + 20) {
+        // Note: child_process might return `terminalWidth` as undefined.
+        if (terminalWidth >= leftAlignOfRight + 20) {
+            let description = "";
+            if (option.description) {
+                description = getDiagnosticText(option.description);
+            }
+            text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
+            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+                if (valueCandidates) {
+                    text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
+                }
+                if (defaultValueDescription) {
+                    text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
+                }
+                text.push(sys.newLine);
+            }
+        }
+        else {
             text.push(blue(name), ": ");
             if (option.description) {
                 const description = getDiagnosticText(option.description);
@@ -150,22 +166,6 @@ namespace ts {
             }
             text.push(sys.newLine);
         }
-        else {
-            let description = "";
-            if (option.description) {
-                description = getDiagnosticText(option.description);
-            }
-            text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
-            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
-                if (valueCandidates) {
-                    text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
-                }
-                if (defaultValueDescription) {
-                    text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
-                }
-                text.push(sys.newLine);
-            }
-        }
         return text;
 
         function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
@@ -183,8 +183,6 @@ namespace ts {
             let remainRight = right;
             const rightCharacterNumber = terminalWidth - leftAlignOfRight;
             while (remainRight.length > 0) {
-                // @ts-ignore
-                console.log(remainRight.length);
                 let curLeft = "";
                 if (isFirstLine) {
                     curLeft = padLeft(left, rightAlignOfLeft);
