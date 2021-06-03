@@ -1708,5 +1708,15 @@ class Foo {
 }
 `);
 
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionForGeneratorCallbacks", `
+function [#|foo|](p: Promise<string[]>) {
+    return p.then(function* (strings) {
+        for (const s of strings) {
+            yield s.toUpperCase();
+        }
+    });
+}
+`);
+
     });
 }

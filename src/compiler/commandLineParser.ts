@@ -615,6 +615,15 @@ namespace ts {
             description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes
         },
         {
+            name: "strictOptionalProperties",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Enable_strict_checking_of_optional_properties
+        },
+        {
             name: "noImplicitThis",
             type: "boolean",
             affectsSemanticDiagnostics: true,

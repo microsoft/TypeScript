@@ -4849,6 +4849,10 @@
         "category": "Message",
         "code": 6242
     },
+    "Enable strict checking of optional properties.": {
+        "category": "Message",
+        "code": 6243
+    },
 
     "Modules": {
         "category": "Message",

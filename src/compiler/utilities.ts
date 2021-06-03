@@ -6086,6 +6086,7 @@ namespace ts {
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"
+        | "strictOptionalProperties"
         | "alwaysStrict"
         ;
 
