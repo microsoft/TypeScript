@@ -34057,13 +34057,22 @@ namespace ts {
                 });
             }
 
-            if (hasNonAmbientClass && !isConstructor && symbol.flags & SymbolFlags.Function) {
-                // A non-ambient class cannot be an implementation for a non-constructor function/class merge
-                // TODO: The below just replicates our older error from when classes and functions were
-                // entirely unable to merge - a more helpful message like "Class declaration cannot implement overload list"
-                // might be warranted. :shrug:
+            if (hasNonAmbientClass && !isConstructor && symbol.flags & SymbolFlags.Function && declarations) {
+                const relatedDiagnostics = filter(declarations, d => d.kind === SyntaxKind.ClassDeclaration)
+                    .map(d => createDiagnosticForNode(d, Diagnostics.Consider_adding_a_declare_modifier_to_this_class));
+
                 forEach(declarations, declaration => {
-                    addDuplicateDeclarationError(declaration, Diagnostics.Duplicate_identifier_0, symbolName(symbol), declarations);
+                    const diagnostic = declaration.kind === SyntaxKind.ClassDeclaration
+                            ? Diagnostics.Class_declaration_cannot_implement_overload_list_for_0
+                            : declaration.kind === SyntaxKind.FunctionDeclaration
+                                ? Diagnostics.Function_with_bodies_can_only_merge_with_classes_that_are_ambient
+                                : undefined;
+                    if (diagnostic) {
+                        addRelatedInfo(
+                            error(getNameOfDeclaration(declaration) || declaration, diagnostic, symbolName(symbol)),
+                            ...relatedDiagnostics
+                        );
+                    }
                 });
             }
 
