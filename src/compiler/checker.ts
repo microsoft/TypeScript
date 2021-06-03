@@ -8127,7 +8127,7 @@ namespace ts {
         }
 
         function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
-            return getTypeOfPropertyOfType(type, name) || isNumericLiteralName(name) && getIndexTypeOfType(type, numberType) || getIndexTypeOfType(type, stringType) || unknownType;
+            return getTypeOfPropertyOfType(type, name) || getApplicableIndexInfoForName(type, name)?.type || unknownType;
         }
 
         function isTypeAny(type: Type | undefined) {
@@ -12044,8 +12044,12 @@ namespace ts {
             // keyType property of the returned IndexInfo.
             return applicableInfos ?
                 createIndexInfo(unknownType, getIntersectionType(map(applicableInfos, info => info.type)),
-                    /*isReadonly */ reduceLeft(applicableInfos, (isReadonly, info) => isReadonly && info.isReadonly, true)) :
+                    reduceLeft(applicableInfos, (isReadonly, info) => isReadonly && info.isReadonly, /*initial*/ true)) :
                 applicableInfo || stringIndexInfo;
+        }
+
+        function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
+            return isNumericLiteralName(name) && getIndexInfoOfType(type, numberType) || getApplicableIndexInfo(type, getLiteralType(unescapeLeadingUnderscores(name)));
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -16702,9 +16706,7 @@ namespace ts {
 
                             let issuedElaboration = false;
                             if (!targetProp) {
-                                const indexInfo = isTypeAssignableToKind(nameType, TypeFlags.NumberLike) && getIndexInfoOfType(target, numberType) ||
-                                    getIndexInfoOfType(target, stringType) ||
-                                    undefined;
+                                const indexInfo = getApplicableIndexInfo(target, nameType);
                                 if (indexInfo && indexInfo.declaration && !getSourceFileOfNode(indexInfo.declaration).hasNoDefaultLib) {
                                     issuedElaboration = true;
                                     addRelatedInfo(reportedDiag, createDiagnosticForNode(indexInfo.declaration, Diagnostics.The_expected_type_comes_from_this_index_signature));
@@ -17186,7 +17188,7 @@ namespace ts {
         }
 
         function isStringIndexSignatureOnlyType(type: Type): boolean {
-            return type.flags & TypeFlags.Object && !isGenericMappedType(type) && getPropertiesOfType(type).length === 0 && getIndexInfoOfType(type, stringType) && !getIndexInfoOfType(type, numberType) ||
+            return type.flags & TypeFlags.Object && !isGenericMappedType(type) && getPropertiesOfType(type).length === 0 && getIndexInfosOfType(type).length === 1 && !!getIndexInfoOfType(type, stringType) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((type as UnionOrIntersectionType).types, isStringIndexSignatureOnlyType) ||
                 false;
         }
@@ -17900,7 +17902,7 @@ namespace ts {
                 const appendPropType = (propTypes: Type[] | undefined, type: Type) => {
                     type = getApparentType(type);
                     const prop = type.flags & TypeFlags.UnionOrIntersection ? getPropertyOfUnionOrIntersectionType(type as UnionOrIntersectionType, name) : getPropertyOfObjectType(type, name);
-                    const propType = prop && getTypeOfSymbol(prop) || isNumericLiteralName(name) && getIndexTypeOfType(type, numberType) || getIndexTypeOfType(type, stringType) || undefinedType;
+                    const propType = prop && getTypeOfSymbol(prop) || getApplicableIndexInfoForName(type, name)?.type || undefinedType;
                     return append(propTypes, propType);
                 };
                 return getUnionType(reduceLeft(types, appendPropType, /*initial*/ undefined) || emptyArray);
@@ -22285,10 +22287,7 @@ namespace ts {
             const nameType = getLiteralTypeFromPropertyName(name);
             if (!isTypeUsableAsPropertyName(nameType)) return errorType;
             const text = getPropertyNameFromType(nameType);
-            return getTypeOfPropertyOfType(type, text) ||
-                isNumericLiteralName(text) && includeUndefinedInIndexSignature(getIndexTypeOfType(type, numberType)) ||
-                includeUndefinedInIndexSignature(getIndexTypeOfType(type, stringType)) ||
-                errorType;
+            return getTypeOfPropertyOfType(type, text) || includeUndefinedInIndexSignature(getApplicableIndexInfoForName(type, text)?.type) || errorType;
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
@@ -27394,7 +27393,8 @@ namespace ts {
 
             let propType: Type;
             if (!prop) {
-                const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, stringType) : undefined;
+                const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ?
+                    getApplicableIndexInfoForName(apparentType, right.escapedText) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
                         return anyType;
@@ -27576,7 +27576,7 @@ namespace ts {
             let relatedInfo: Diagnostic | undefined;
             if (!isPrivateIdentifier(propNode) && containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
                 for (const subtype of (containingType as UnionType).types) {
-                    if (!getPropertyOfType(subtype, propNode.escapedText) && !getIndexInfoOfType(subtype, stringType)) {
+                    if (!getPropertyOfType(subtype, propNode.escapedText) && !getApplicableIndexInfoForName(subtype, propNode.escapedText)) {
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
                         break;
                     }
@@ -27868,7 +27868,7 @@ namespace ts {
          * Return true if the given type is considered to have numeric property names.
          */
         function hasNumericPropertyNames(type: Type) {
-            return getIndexTypeOfType(type, numberType) && !getIndexTypeOfType(type, stringType);
+            return getIndexInfosOfType(type).length === 1 && !!getIndexInfoOfType(type, numberType);
         }
 
         /**
