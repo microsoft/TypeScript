@@ -259,7 +259,7 @@ namespace ts {
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: BuilderState.TwoWayMap<Path, Path> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: TwoWayMap<Path, Path> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
