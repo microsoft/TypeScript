@@ -113,6 +113,8 @@ namespace ts {
         currentAffectedFilesSignatures: ESMap<Path, string> | undefined;
         /**
          * Newly computed visible to outside referencedSet
+         * We need to store the updates separately in case the in-progress build is cancelled
+         * and we need to roll back.
          */
         currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
         /**

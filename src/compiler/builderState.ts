@@ -43,6 +43,8 @@ namespace ts {
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
+         *
+         * This is equivalent to referencedMap, but for the emitted .d.ts file.
          */
         readonly exportedModulesMap: BuilderState.TwoWayMap<Path, Path> | undefined;
 
