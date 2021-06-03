@@ -11,7 +11,7 @@ namespace ts {
                                 : isPropertyAccessExpression(node.expression)
                                     ? node.expression.name.escapedText as string
                                     : "Wow, what do?";
-                            const capturedFunctionIdentifier = createUniqueName(`_${funcName}`);
+                            const capturedFunctionIdentifier = factory.createUniqueName(`_${funcName}`);
                             // TODO: Get the signature and use actual argument names of the original function.
                             // Unfortunately we don't seem to have access to them here.
                             // Some tranformers (not default typescript ones) seem to have access to checker. Need more investigation.
@@ -29,8 +29,8 @@ namespace ts {
                                     // index,
                                     identifier: (
                                         isPartialApplicationElement(arg)
-                                            ? createIdentifier(getOrigfuncArgName(index))
-                                            : !isLiteralKind(arg.kind) && createUniqueName(getOrigfuncArgName(index))
+                                            ? factory.createIdentifier(getOrigfuncArgName(index))
+                                            : !isLiteralKind(arg.kind) && factory.createUniqueName(getOrigfuncArgName(index))
                                         ) || undefined
                                 }));
                             args
@@ -39,9 +39,9 @@ namespace ts {
                                 .forEach(({ identifier }) => context.hoistVariableDeclaration(identifier));
 
                             context.hoistVariableDeclaration(capturedFunctionIdentifier);
-                            return parenthesizeDefaultExpression(
-                                createCommaList([ // For capturing vars
-                                    createBinary( // Capture the function
+                            return factory.createParenthesizedExpression(
+                                factory.createCommaListExpression([ // For capturing vars
+                                    factory.createBinaryExpression( // Capture the function
                                         capturedFunctionIdentifier,
                                         SyntaxKind.EqualsToken,
                                         node.expression
@@ -49,13 +49,13 @@ namespace ts {
                                     ...args
                                         .filter(isCapturedArg)
                                         .filter(({ arg }) => !isPartialApplicationElement(arg))
-                                        .map(({ arg, identifier }) => createBinary(
+                                        .map(({ arg, identifier }) => factory.createBinaryExpression(
                                             identifier,
                                             SyntaxKind.EqualsToken,
                                             arg
                                         )
                                     ),
-                                    createFunctionExpression(
+                                    factory.createFunctionExpression(
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
                                         /*name*/ funcName,
@@ -63,7 +63,7 @@ namespace ts {
                                         node.arguments
                                             .map<[Expression, number]>((arg, i) => [arg, i])
                                             .filter(([arg]) => isPartialApplicationElement(arg))
-                                            .map(([_arg, i]) => createParameter(
+                                            .map(([_arg, i]) => factory.createParameterDeclaration(
                                                 /*decorators*/ undefined,
                                                 /*modifiers*/ undefined,
                                                 /*dotDotDotToken*/ undefined,
@@ -73,9 +73,9 @@ namespace ts {
                                                 /*initializer*/ undefined
                                             )),
                                         /*type*/ undefined,
-                                        createBlock([
-                                            createReturn(
-                                                createCall(
+                                        factory.createBlock([
+                                            factory.createReturnStatement(
+                                                factory.createCallExpression(
                                                     capturedFunctionIdentifier,
                                                     /*typeArguments*/ undefined,
                                                     args.map(arg =>
