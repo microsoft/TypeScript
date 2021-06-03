@@ -646,17 +646,17 @@ namespace ts.server {
 
         applyCodeActionCommand = notImplemented;
 
-        provideInlineHints(file: string, span: TextSpan): InlineHint[] {
+        provideInlayHints(file: string, span: TextSpan): InlayHint[] {
             const { start, length } = span;
-            const args: protocol.ProvideInlineHintsRequestArgs = { file, start, length };
+            const args: protocol.ProvideInlayHintsRequestArgs = { file, start, length };
 
-            const request = this.processRequest<protocol.ProvideInlineHintsRequest>(CommandNames.ProvideInlineHints, args);
-            const response = this.processResponse<protocol.ProvideInlineHintsResponse>(request);
+            const request = this.processRequest<protocol.ProvideInlayHintsRequest>(CommandNames.ProvideInlayHints, args);
+            const response = this.processResponse<protocol.ProvideInlayHintsResponse>(request);
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 text: item.text,
-                range: this.decodeSpan(item.range, file),
-                hoverMessage: item.hoverMessage,
+                position: this.lineOffsetToPosition(file, item.position),
+                kind: item.kind as InlayHintKind | undefined,
                 whitespaceBefore: item.whitespaceBefore,
                 whitespaceAfter: item.whitespaceAfter
             }));

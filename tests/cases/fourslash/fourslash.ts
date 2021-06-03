@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    const enum InlayHintKind {
+        Other = 0,
+        Type = 1,
+        Parameter = 2,
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -393,10 +399,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
-        getInlineHints(expected: readonly VerifyInlineHintsOptions[], textSpan?: {
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
             start: number;
             length: number;
-        }, preference?: InlineHintsOptions);
+        }, preference?: InlayHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -632,17 +638,17 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
-    interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterNameHints?: boolean;
-        readonly includeInlineNonLiteralParameterNameHints?: boolean;
-        readonly includeInlineDuplicatedParameterNameHints?: boolean;
-        readonly includeInlineFunctionParameterTypeHints?: boolean;
-        readonly includeInlineVariableTypeHints?: boolean;
-        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
-        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
-        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlineEnumMemberValueHints?: boolean;
-        readonly includeInlineCallChainsHints?: boolean;
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: boolean;
+        readonly includeInlayNonLiteralParameterNameHints?: boolean;
+        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayCallChainsHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -746,14 +752,13 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
-    export interface VerifyInlineHintsOptions {
+    export interface VerifyInlayHintsOptions {
         text: string;
-        rangeOrPosition: number |TextSpan;
-        hoverMessage?: string;
+        position: number;
+        kind?: VerifyInlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
-
 
     interface VerifyNavigateToOptions {
         readonly pattern: string;

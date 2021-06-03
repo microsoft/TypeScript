@@ -247,8 +247,8 @@ namespace FourSlashInterface {
             }
         }
 
-        public getInlineHints(expected: readonly VerifyInlineHintsOptions[], span: ts.TextSpan, preference?: ts.InlineHintsOptions) {
-            this.state.verifyInlineHints(expected, span, preference);
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+            this.state.verifyInlayHints(expected, span, preference);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
@@ -1663,10 +1663,10 @@ namespace FourSlashInterface {
         readonly containerKind?: ts.ScriptElementKind;
     }
 
-    export interface VerifyInlineHintsOptions {
+    export interface VerifyInlayHintsOptions {
         text: string;
-        rangeOrPosition: number | ts.TextSpan;
-        hoverMessage?: string;
+        position: number;
+        kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

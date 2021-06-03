@@ -280,7 +280,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-        provideInlineHints(fileName: string, span: TextSpan, preference: InlineHintsOptions | undefined): string;
+        provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -1067,10 +1067,10 @@ namespace ts {
             );
         }
 
-        public provideInlineHints(fileName: string, span: TextSpan, preference: InlineHintsOptions | undefined): string {
+        public provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string {
             return this.forwardJSONCall(
-                `provideInlineHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
-                () => this.languageService.provideInlineHints(fileName, span, preference)
+                `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
+                () => this.languageService.provideInlayHints(fileName, span, preference)
             );
         }
 

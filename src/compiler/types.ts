@@ -3939,7 +3939,7 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
-        /*@internal*/ inlineHintsCallExpressionHintableCache?: ESMap<CallExpression, boolean>
+        /*@internal*/ inlayHintsCallExpressionHintableCache?: ESMap<CallExpression, boolean>
     }
 
     /*@internal*/
@@ -8414,16 +8414,16 @@ namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlineParameterNameHints?: boolean;
-        readonly includeInlineNonLiteralParameterNameHints?: boolean;
-        readonly includeInlineDuplicatedParameterNameHints?: boolean;
-        readonly includeInlineFunctionParameterTypeHints?: boolean;
-        readonly includeInlineVariableTypeHints?: boolean;
-        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
-        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
-        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlineEnumMemberValueHints?: boolean;
-        readonly includeInlineCallChainsHints?: boolean;
+        readonly includeInlayParameterNameHints?: boolean;
+        readonly includeInlayNonLiteralParameterNameHints?: boolean;
+        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayCallChainsHints?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

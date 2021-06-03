@@ -1184,7 +1184,7 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
-        "provideInlineHints"
+        "provideInlayHints"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2514,7 +2514,7 @@ namespace ts {
             };
         }
 
-        function getInlineHintsContext(file: SourceFile, span: TextSpan, preferences: UserPreferences): InlineHintsContext {
+        function getInlayHintsContext(file: SourceFile, span: TextSpan, preferences: UserPreferences): InlayHintsContext {
             return {
                 file,
                 program: getProgram()!,
@@ -2579,10 +2579,10 @@ namespace ts {
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
         }
 
-        function provideInlineHints(fileName: string, span: TextSpan, preferences: InlineHintsOptions = emptyOptions): InlineHint[] {
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            return InlineHints.provideInlineHints(getInlineHintsContext(sourceFile, span, preferences));
+            return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
         }
 
         const ls: LanguageService = {
@@ -2650,7 +2650,7 @@ namespace ts {
             toggleMultilineComment,
             commentSelection,
             uncommentSelection,
-            provideInlineHints,
+            provideInlayHints,
         };
 
         switch (languageServiceMode) {

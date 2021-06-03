@@ -1449,15 +1449,15 @@ namespace ts.server {
             });
         }
 
-        private provideInlineHints(args: protocol.ProvideInlineHintsRequestArgs) {
+        private provideInlayHints(args: protocol.ProvideInlayHintsRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const hints = languageService.provideInlineHints(file, args, this.getPreferences(file));
+            const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
 
             return hints.map(hint => ({
                 text: hint.text,
-                range: scriptInfo.textSpanToProtoTextSpan(hint.range),
-                hoverMessage: hint.hoverMessage,
+                range: scriptInfo.positionToLineOffset(hint.position),
+                kind: hint.kind,
                 whitespaceBefore: hint.whitespaceBefore,
                 whitespaceAfter: hint.whitespaceAfter
             }));
@@ -2976,8 +2976,8 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.ProvideInlineHints]: (request: protocol.ProvideInlineHintsRequest) => {
-                return this.requiredResponse(this.provideInlineHints(request.arguments));
+            [CommandNames.ProvideInlayHints]: (request: protocol.ProvideInlayHintsRequest) => {
+                return this.requiredResponse(this.provideInlayHints(request.arguments));
             }
         }));
 

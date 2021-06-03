@@ -837,33 +837,17 @@ namespace FourSlash {
             });
         }
 
-        public verifyInlineHints(expected: readonly FourSlashInterface.VerifyInlineHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlineHintsOptions) {
-            const hints = this.languageService.provideInlineHints(this.activeFile.fileName, span, preference);
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+            const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
             assert.equal(hints.length, expected.length, "Number of hints");
-            const normalizeVerifyInlineHintsOptions = (rangeOrPosition: FourSlashInterface.VerifyInlineHintsOptions["rangeOrPosition"]) => {
-                if (typeof rangeOrPosition === "number") {
-                    return { start: rangeOrPosition, length: 0 };
-                }
-                return rangeOrPosition;
+
+            const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+                return a.position - b.position;
             };
-            const compareTextSpan = (spanA: ts.TextSpan, spanB: ts.TextSpan) => {
-                if (spanA.start !== spanB.start) {
-                    return spanA.start - spanB.start;
-                }
-                return spanA.length - spanB.length;
-            };
-            const compareHintOptions = (a: FourSlashInterface.VerifyInlineHintsOptions, b: FourSlashInterface.VerifyInlineHintsOptions) => {
-                const spanA = normalizeVerifyInlineHintsOptions(a.rangeOrPosition);
-                const spanB = normalizeVerifyInlineHintsOptions(b.rangeOrPosition);
-                return compareTextSpan(spanA, spanB);
-            };
-            const sortHints = (a: ts.InlineHint, b: ts.InlineHint) => {
-                return compareTextSpan(a.range, b.range);
-            };
-            ts.zipWith(hints.sort(sortHints), [...expected].sort(compareHintOptions), (actual, expected) => {
+            ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
                 assert.equal(actual.text, expected.text, "Text");
-                assert.deepEqual(actual.range, normalizeVerifyInlineHintsOptions(expected.rangeOrPosition), "RangeOrPosition");
-                assert.equal(actual.hoverMessage, expected.hoverMessage, "hoverMessage");
+                assert.deepEqual(actual.position, expected.position, "Position");
+                assert.equal(actual.kind, expected.kind, "Kind");
                 assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
                 assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });

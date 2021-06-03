@@ -154,7 +154,7 @@ namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-        ProvideInlineHints = "provideInlineHints"
+        ProvideInlayHints = "provideInlayHints"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -2550,7 +2550,13 @@ namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
 
-    export interface ProvideInlineHintsRequestArgs extends FileRequestArgs {
+    export const enum InlayHintKind {
+        Other = 0,
+        Type = 1,
+        Parameter = 2,
+    }
+
+    export interface ProvideInlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
          */
@@ -2561,21 +2567,21 @@ namespace ts.server.protocol {
         length: number;
     }
 
-    export interface ProvideInlineHintsRequest extends Request {
-        command: CommandTypes.ProvideInlineHints;
-        arguments: ProvideInlineHintsRequestArgs;
+    export interface ProvideInlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: ProvideInlayHintsRequestArgs;
     }
 
-    export interface HintItem {
+    export interface InlayHintItem {
         text: string;
-        range: TextSpan;
-        hoverMessage?: string;
+        position: Location;
+        kind?: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
 
-    export interface ProvideInlineHintsResponse extends Response {
-        body?: HintItem[];
+    export interface ProvideInlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
 
     /**

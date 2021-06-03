@@ -33,7 +33,7 @@
         "rename.ts",
         "smartSelection.ts",
         "signatureHelp.ts",
-        "inlineHints.ts",
+        "inlayHints.ts",
         "sourcemaps.ts",
         "suggestionDiagnostics.ts",
         "symbolDisplay.ts",

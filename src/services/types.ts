@@ -487,7 +487,7 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-        provideInlineHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlineHint[]
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -572,17 +572,17 @@ namespace ts {
         includeInsertTextCompletions?: boolean;
     }
 
-    export interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterNameHints?: boolean;
-        readonly includeInlineNonLiteralParameterNameHints?: boolean;
-        readonly includeDuplicatedParameterNameHints?: boolean;
-        readonly includeInlineFunctionParameterTypeHints?: boolean,
-        readonly includeInlineVariableTypeHints?: boolean;
-        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
-        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
-        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlineEnumMemberValueHints?: boolean;
-        readonly includeInlineCallChainsHints?: boolean;
+    export interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: boolean;
+        readonly includeInlayNonLiteralParameterNameHints?: boolean;
+        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayCallChainsHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
@@ -708,10 +708,16 @@ namespace ts {
         fromSpans: TextSpan[];
     }
 
-    export interface InlineHint {
+    export const enum InlayHintKind {
+        Other = 0,
+        Type = 1,
+        Parameter = 2,
+    }
+
+    export interface InlayHint {
         text: string;
-        range: TextSpan;
-        hoverMessage?: string;
+        position: number;
+        kind?: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -1580,7 +1586,7 @@ namespace ts {
         kind?: string;
     }
 
-    export interface InlineHintsContext {
+    export interface InlayHintsContext {
         file: SourceFile;
         program: Program;
         cancellationToken: CancellationToken;

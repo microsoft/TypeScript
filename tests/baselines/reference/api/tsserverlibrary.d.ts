@@ -3927,16 +3927,16 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlineParameterNameHints?: boolean;
-        readonly includeInlineNonLiteralParameterNameHints?: boolean;
-        readonly includeInlineDuplicatedParameterNameHints?: boolean;
-        readonly includeInlineFunctionParameterTypeHints?: boolean;
-        readonly includeInlineVariableTypeHints?: boolean;
-        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
-        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
-        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlineEnumMemberValueHints?: boolean;
-        readonly includeInlineCallChainsHints?: boolean;
+        readonly includeInlayParameterNameHints?: boolean;
+        readonly includeInlayNonLiteralParameterNameHints?: boolean;
+        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayCallChainsHints?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -5648,7 +5648,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
-        provideInlineHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlineHint[];
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5710,17 +5710,17 @@ declare namespace ts {
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
     }
-    interface InlineHintsOptions extends UserPreferences {
-        readonly includeInlineParameterNameHints?: boolean;
-        readonly includeInlineNonLiteralParameterNameHints?: boolean;
-        readonly includeDuplicatedParameterNameHints?: boolean;
-        readonly includeInlineFunctionParameterTypeHints?: boolean;
-        readonly includeInlineVariableTypeHints?: boolean;
-        readonly includeInlineRequireAssignedVariableTypeHints?: boolean;
-        readonly includeInlinePropertyDeclarationTypeHints?: boolean;
-        readonly includeInlineFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlineEnumMemberValueHints?: boolean;
-        readonly includeInlineCallChainsHints?: boolean;
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: boolean;
+        readonly includeInlayNonLiteralParameterNameHints?: boolean;
+        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayRequireAssignedVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly includeInlayCallChainsHints?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
@@ -5827,10 +5827,15 @@ declare namespace ts {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
     }
-    interface InlineHint {
+    enum InlayHintKind {
+        Other = 0,
+        Type = 1,
+        Parameter = 2
+    }
+    interface InlayHint {
         text: string;
-        range: TextSpan;
-        hoverMessage?: string;
+        position: number;
+        kind?: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -6499,7 +6504,7 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
     }
-    interface InlineHintsContext {
+    interface InlayHintsContext {
         file: SourceFile;
         program: Program;
         cancellationToken: CancellationToken;
@@ -6799,7 +6804,7 @@ declare namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-        ProvideInlineHints = "provideInlineHints"
+        ProvideInlayHints = "provideInlayHints"
     }
     /**
      * A TypeScript Server message
@@ -8671,7 +8676,12 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    interface ProvideInlineHintsRequestArgs extends FileRequestArgs {
+    enum InlayHintKind {
+        Other = 0,
+        Type = 1,
+        Parameter = 2
+    }
+    interface ProvideInlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
          */
@@ -8681,19 +8691,19 @@ declare namespace ts.server.protocol {
          */
         length: number;
     }
-    interface ProvideInlineHintsRequest extends Request {
-        command: CommandTypes.ProvideInlineHints;
-        arguments: ProvideInlineHintsRequestArgs;
+    interface ProvideInlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: ProvideInlayHintsRequestArgs;
     }
-    interface HintItem {
+    interface InlayHintItem {
         text: string;
-        range: TextSpan;
-        hoverMessage?: string;
+        position: Location;
+        kind?: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
-    interface ProvideInlineHintsResponse extends Response {
-        body?: HintItem[];
+    interface ProvideInlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
     /**
      * Synchronous request for semantic diagnostics of one file.
@@ -10325,7 +10335,7 @@ declare namespace ts.server {
         private getSuggestionDiagnosticsSync;
         private getJsxClosingTag;
         private getDocumentHighlights;
-        private provideInlineHints;
+        private provideInlayHints;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
         private getProjectInfoWorker;
