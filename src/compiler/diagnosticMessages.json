@@ -3336,6 +3336,14 @@
         "category": "Error",
         "code": 2812
     },
+    "Class declaration cannot implement overload list for '{0}'.": {
+        "category": "Error",
+        "code": 2813
+    },
+    "Function with bodies can only merge with classes that are ambient.": {
+        "category": "Error",
+        "code": 2814
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5172,6 +5180,11 @@
         "category": "Message",
         "code": 6505
     },
+    "Consider adding a 'declare' modifier to this class.": {
+        "category": "Message",
+        "code": 6506
+    },
+
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
@@ -5185,7 +5198,7 @@
         "category": "Message",
         "code": 6802
     },
-
+ 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
