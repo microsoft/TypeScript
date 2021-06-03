@@ -25,6 +25,7 @@ tests/cases/compiler/parseErrorIncorrectReturnToken.ts(12,1): error TS1128: Decl
         m(n: number) => string {
                      ~~
 !!! error TS1005: '{' expected.
+!!! related TS1007 tests/cases/compiler/parseErrorIncorrectReturnToken.ts:8:9: The parser expected to find a '}' to match the '{' token here.
                         ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                ~

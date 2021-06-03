@@ -504,7 +504,7 @@ namespace ts {
 
     /*@internal*/
     export interface CacheWithRedirects<T> {
-        ownMap: ESMap<string, T>;
+        getOwnMap: () => ESMap<string, T>;
         redirectsMap: ESMap<Path, ESMap<string, T>>;
         getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
         clear(): void;
@@ -517,13 +517,17 @@ namespace ts {
         let ownMap: ESMap<string, T> = new Map();
         const redirectsMap = new Map<Path, ESMap<string, T>>();
         return {
-            ownMap,
+            getOwnMap,
             redirectsMap,
             getOrCreateMapOfCacheRedirects,
             clear,
             setOwnOptions,
             setOwnMap
         };
+
+        function getOwnMap() {
+            return ownMap;
+        }
 
         function setOwnOptions(newOptions: CompilerOptions) {
             options = newOptions;
@@ -586,10 +590,10 @@ namespace ts {
         if (directoryToModuleNameMap.redirectsMap.size === 0) {
             // The own map will be for projectCompilerOptions
             Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size === 0);
-            Debug.assert(directoryToModuleNameMap.ownMap.size === 0);
-            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.ownMap.size === 0);
-            directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.ownMap);
-            moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.ownMap);
+            Debug.assert(directoryToModuleNameMap.getOwnMap().size === 0);
+            Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.getOwnMap().size === 0);
+            directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.getOwnMap());
+            moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.getOwnMap());
         }
         else {
             // Set correct own map
@@ -948,7 +952,7 @@ namespace ts {
     }
 
     function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
-        const { baseUrl, paths } = state.compilerOptions;
+        const { baseUrl, paths, configFile } = state.compilerOptions;
         if (paths && !pathIsRelative(moduleName)) {
             if (state.traceEnabled) {
                 if (baseUrl) {
@@ -957,7 +961,8 @@ namespace ts {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
             const baseDirectory = getPathsBasePath(state.compilerOptions, state.host)!; // Always defined when 'paths' is defined
-            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, loader, /*onlyRecordFailures*/ false, state);
+            const pathPatterns = configFile?.configFileSpecs ? configFile.configFileSpecs.pathPatterns ||= tryParsePatterns(paths) : undefined;
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseDirectory, paths, pathPatterns, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -1396,7 +1401,7 @@ namespace ts {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
+            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, /*pathPatterns*/ undefined, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
             if (result) {
                 return removeIgnoredPackageId(result.value);
             }
@@ -1532,7 +1537,7 @@ namespace ts {
                     trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.versionPaths.version, version, rest);
                 }
                 const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, loader, !packageDirectoryExists, state);
+                const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
                 if (fromPaths) {
                     return fromPaths.value;
                 }
@@ -1542,8 +1547,9 @@ namespace ts {
         return loader(extensions, candidate, !nodeModulesDirectoryExists, state);
     }
 
-    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
-        const matchedPattern = matchPatternOrExact(getOwnKeys(paths), moduleName);
+    function tryLoadModuleUsingPaths(extensions: Extensions, moduleName: string, baseDirectory: string, paths: MapLike<string[]>, pathPatterns: readonly (string | Pattern)[] | undefined, loader: ResolutionKindSpecificLoader, onlyRecordFailures: boolean, state: ModuleResolutionState): SearchResult<Resolved> {
+        pathPatterns ||= tryParsePatterns(paths);
+        const matchedPattern = matchPatternOrExact(pathPatterns, moduleName);
         if (matchedPattern) {
             const matchedStar = isString(matchedPattern) ? undefined : matchedText(matchedPattern, moduleName);
             const matchedPatternText = isString(matchedPattern) ? matchedPattern : patternText(matchedPattern);

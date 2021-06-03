@@ -7,7 +7,7 @@ namespace evaluator {
     // Define a custom "Symbol" constructor to attach missing built-in symbols without
     // modifying the global "Symbol" constructor
     const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
-    (<any>FakeSymbol).prototype = Symbol.prototype;
+    (FakeSymbol as any).prototype = Symbol.prototype;
     for (const key of Object.getOwnPropertyNames(Symbol)) {
         Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
     }

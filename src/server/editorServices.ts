@@ -162,7 +162,7 @@ namespace ts.server {
         const map = new Map<string, ESMap<string, number>>();
         for (const option of commandLineOptions) {
             if (typeof option.type === "object") {
-                const optionMap = <ESMap<string, number>>option.type;
+                const optionMap = option.type as ESMap<string, number>;
                 // verify that map contains only numbers
                 optionMap.forEach(value => {
                     Debug.assert(typeof value === "number");
@@ -239,7 +239,7 @@ namespace ts.server {
             protocolOptions.indentStyle = indentStyle.get(protocolOptions.indentStyle.toLowerCase());
             Debug.assert(protocolOptions.indentStyle !== undefined);
         }
-        return <any>protocolOptions;
+        return protocolOptions as any;
     }
 
     export function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin {
@@ -249,7 +249,7 @@ namespace ts.server {
                 protocolOptions[id] = mappedValues.get(propertyValue.toLowerCase());
             }
         });
-        return <any>protocolOptions;
+        return protocolOptions as any;
     }
 
     export function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined {
@@ -658,6 +658,11 @@ namespace ts.server {
         reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
     }
 
+    function createProjectNameFactoryWithCounter(nameFactory: (counter: number) => string) {
+        let nextId = 1;
+        return () => nameFactory(nextId++);
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -703,6 +708,10 @@ namespace ts.server {
          * projects specified by a tsconfig.json file
          */
         readonly configuredProjects: Map<ConfiguredProject> = new Map<string, ConfiguredProject>();
+        /*@internal*/
+        readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
+        /*@internal*/
+        readonly newAutoImportProviderProjectName = createProjectNameFactoryWithCounter(makeAutoImportProviderProjectName);
         /**
          * Open files: with value being project root path, and key being Path of the file that is open
          */
@@ -1442,15 +1451,15 @@ namespace ts.server {
 
             switch (project.projectKind) {
                 case ProjectKind.External:
-                    unorderedRemoveItem(this.externalProjects, <ExternalProject>project);
+                    unorderedRemoveItem(this.externalProjects, project as ExternalProject);
                     this.projectToSizeMap.delete(project.getProjectName());
                     break;
                 case ProjectKind.Configured:
-                    this.configuredProjects.delete((<ConfiguredProject>project).canonicalConfigFilePath);
+                    this.configuredProjects.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     this.projectToSizeMap.delete((project as ConfiguredProject).canonicalConfigFilePath);
                     break;
                 case ProjectKind.Inferred:
-                    unorderedRemoveItem(this.inferredProjects, <InferredProject>project);
+                    unorderedRemoveItem(this.inferredProjects, project as InferredProject);
                     break;
             }
         }
@@ -2425,10 +2434,10 @@ namespace ts.server {
             const diagnostics = project.getLanguageService().getCompilerOptionsDiagnostics();
             diagnostics.push(...project.getAllProjectErrors());
 
-            this.eventHandler(<ConfigFileDiagEvent>{
+            this.eventHandler({
                 eventName: ConfigFileDiagEvent,
                 data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile }
-            });
+            } as ConfigFileDiagEvent);
         }
 
         private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {

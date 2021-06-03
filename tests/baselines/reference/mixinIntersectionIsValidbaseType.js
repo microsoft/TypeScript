@@ -77,5 +77,5 @@ var AMixin = function (SuperClass) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return A;
-    }((0, exports.Serializable)(SuperClass)));
+    }(exports.Serializable(SuperClass)));
 };

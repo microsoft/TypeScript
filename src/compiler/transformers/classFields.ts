@@ -658,13 +658,14 @@ namespace ts {
             }
 
             const staticProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ true);
+            let pendingPrivateStateAssignment: BinaryExpression | undefined;
             if (shouldTransformPrivateElements && some(node.members, m => hasStaticModifier(m) && !!m.name && isPrivateIdentifier(m.name))) {
                 const temp = factory.createTempVariable(hoistVariableDeclaration, /* reservedInNestedScopes */ true);
                 getPrivateIdentifierEnvironment().classConstructor = factory.cloneNode(temp);
-                getPendingExpressions().push(factory.createAssignment(
+                pendingPrivateStateAssignment = factory.createAssignment(
                     temp,
                     factory.getInternalName(node)
-                ));
+                );
             }
 
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -681,6 +682,10 @@ namespace ts {
                     transformClassMembers(node, isDerivedClass)
                 )
             ];
+
+            if (pendingPrivateStateAssignment) {
+                getPendingExpressions().unshift(pendingPrivateStateAssignment);
+            }
 
             // Write any pending expressions from elided or moved computed property names
             if (some(pendingExpressions)) {

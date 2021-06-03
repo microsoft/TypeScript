@@ -37,4 +37,4 @@ exports.__esModule = true;
 var foo_1 = require("foo");
 require("./a");
 require("./b");
-(0, foo_1["default"])((0, foo_1.bar)());
+foo_1["default"](foo_1.bar());
