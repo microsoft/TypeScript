@@ -6,25 +6,25 @@ namespace ts.textChanges {
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
     function getPos(n: TextRange): number {
-        const result = (<any>n).__pos;
+        const result = (n as any).__pos;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setPos(n: TextRange, pos: number): void {
         Debug.assert(typeof pos === "number");
-        (<any>n).__pos = pos;
+        (n as any).__pos = pos;
     }
 
     function getEnd(n: TextRange): number {
-        const result = (<any>n).__end;
+        const result = (n as any).__end;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setEnd(n: TextRange, end: number): void {
         Debug.assert(typeof end === "number");
-        (<any>n).__end = end;
+        (n as any).__end = end;
     }
 
     export interface ConfigurableStart {

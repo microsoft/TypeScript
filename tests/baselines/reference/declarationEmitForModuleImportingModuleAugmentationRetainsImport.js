@@ -31,7 +31,7 @@ var ParentThing = /** @class */ (function () {
     return ParentThing;
 }());
 exports.ParentThing = ParentThing;
-(0, child1_1.child1)(ParentThing.prototype);
+child1_1.child1(ParentThing.prototype);
 //// [child1.js]
 "use strict";
 exports.__esModule = true;

@@ -358,6 +358,8 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
+        /** Prefer semanticClassificationsAre for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -796,7 +798,14 @@ declare namespace completion {
         SuggestedClassMembers = "4",
         GlobalsOrKeywords = "5",
         AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7"
+        JavascriptIdentifiers = "7",
+        DeprecatedLocalDeclarationPriority = "8",
+        DeprecatedLocationPriority = "9",
+        DeprecatedOptionalMember = "10",
+        DeprecatedMemberDeclaredBySpreadAssignment = "11",
+        DeprecatedSuggestedClassMembers = "12",
+        DeprecatedGlobalsOrKeywords = "13",
+        DeprecatedAutoImportSuggestions = "14"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

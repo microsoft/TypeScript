@@ -57,7 +57,7 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
+            if (canBeConvertedToAsync(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
@@ -174,6 +174,11 @@ namespace ts {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through
@@ -212,5 +217,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }
