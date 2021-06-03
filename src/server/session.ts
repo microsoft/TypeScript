@@ -1456,7 +1456,7 @@ namespace ts.server {
 
             return hints.map(hint => ({
                 text: hint.text,
-                range: scriptInfo.positionToLineOffset(hint.position),
+                position: scriptInfo.positionToLineOffset(hint.position),
                 kind: hint.kind,
                 whitespaceBefore: hint.whitespaceBefore,
                 whitespaceAfter: hint.whitespaceAfter
