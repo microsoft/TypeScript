@@ -419,7 +419,7 @@ declare namespace ts {
         JSDocFunctionType = 311,
         JSDocVariadicType = 312,
         JSDocNamepathType = 313,
-        JSDocComment = 314,
+        JSDoc = 314,
         JSDocText = 315,
         JSDocTypeLiteral = 316,
         JSDocSignature = 317,
@@ -1757,7 +1757,7 @@ declare namespace ts {
     }
     export type JSDocTypeReferencingNode = JSDocVariadicType | JSDocOptionalType | JSDocNullableType | JSDocNonNullableType;
     export interface JSDoc extends Node {
-        readonly kind: SyntaxKind.JSDocComment;
+        readonly kind: SyntaxKind.JSDoc;
         readonly parent: HasJSDoc;
         readonly tags?: NodeArray<JSDocTag>;
         readonly comment?: string | NodeArray<JSDocComment>;
