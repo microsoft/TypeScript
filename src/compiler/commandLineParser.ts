@@ -440,7 +440,7 @@ namespace ts {
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Language_and_Environment,
-            description: Diagnostics.Specify_JSX_code_generation_Colon_preserve_react_native_react_react_jsx_or_react_jsxdev,
+            description: Diagnostics.Specify_JSX_code_generation,
             defaultValueDescription: "undefined"
         },
         {
