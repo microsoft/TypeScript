@@ -1,4 +1,5 @@
 // @noImplicitThis: true
+// @strict: true
 
 class Test {
     data = {};
@@ -12,6 +13,7 @@ class Test1 {
     ['this'] = '';
     constructor() {
         var copy: typeof this.data = { foo: '' };
+        var foo: typeof this.data.foo = '';
 
         var self: typeof this = this;
         self.data;
@@ -91,4 +93,33 @@ class Test9D1 {
 
 class Test9D2 {
     f2() {}
+}
+
+class Test10 {
+    a?: { b?: string }
+
+    foo() {
+        let a: typeof this.a = undefined as any;
+        if (this.a) {
+            let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+            let b: typeof this.a.b = undefined as any;
+
+            if (this.a.b) {
+                let b: typeof this.a.b = undefined as any;   // should narrow to string
+            }
+        }
+    }
+}
+
+class Test11 {
+    this?: { x?: string };
+    
+    foo() {
+        const o = this;
+        let bar: typeof o.this = {};
+
+        if (o.this && o.this.x) {
+            let y: string = o.this.x;   // should narrow to string
+        }
+    }
 }

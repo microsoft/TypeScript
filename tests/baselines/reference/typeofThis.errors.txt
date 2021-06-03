@@ -1,12 +1,14 @@
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(23,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(45,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(51,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): error TS7041: The containing arrow function captures the global value of 'this'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(24,19): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(32,19): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(46,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(46,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(52,23): error TS2331: 'this' cannot be referenced in a module or namespace body.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(52,23): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(57,19): error TS7041: The containing arrow function captures the global value of 'this'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(57,24): error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts (6 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts (8 errors) ====
     class Test {
         data = {};
         constructor() {
@@ -19,6 +21,7 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
         ['this'] = '';
         constructor() {
             var copy: typeof this.data = { foo: '' };
+            var foo: typeof this.data.foo = '';
     
             var self: typeof this = this;
             self.data;
@@ -40,6 +43,8 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
     
     function Test4(this: { no: number } | undefined) {
         let x: typeof this.no = 1;
+                      ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     }
     
     class Test5 {
@@ -75,6 +80,8 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
         let x: typeof this.no = 1;
                       ~~~~
 !!! error TS7041: The containing arrow function captures the global value of 'this'.
+                           ~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'typeof globalThis' has no index signature.
     }
     
     class Test9 {
@@ -110,4 +117,33 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts(56,19): 
     
     class Test9D2 {
         f2() {}
+    }
+    
+    class Test10 {
+        a?: { b?: string }
+    
+        foo() {
+            let a: typeof this.a = undefined as any;
+            if (this.a) {
+                let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+                let b: typeof this.a.b = undefined as any;
+    
+                if (this.a.b) {
+                    let b: typeof this.a.b = undefined as any;   // should narrow to string
+                }
+            }
+        }
+    }
+    
+    class Test11 {
+        this?: { x?: string };
+        
+        foo() {
+            const o = this;
+            let bar: typeof o.this = {};
+    
+            if (o.this && o.this.x) {
+                let y: string = o.this.x;   // should narrow to string
+            }
+        }
     }

@@ -4349,9 +4349,15 @@ namespace ts {
     }
 
     export function isThisInTypeQuery(node: Node): boolean {
-        return isThisIdentifier(node) &&
-            (node.parent.kind === SyntaxKind.TypeQuery ||
-            (node.parent.kind === SyntaxKind.QualifiedName && (node.parent as QualifiedName).left === node));
+        if (!isThisIdentifier(node)) {
+            return false;
+        }
+
+        while (isQualifiedName(node.parent) && node.parent.left === node) {
+            node = node.parent;
+        }
+
+        return node.parent.kind === SyntaxKind.TypeQuery;
     }
 
     export function identifierIsThisKeyword(id: Identifier): boolean {

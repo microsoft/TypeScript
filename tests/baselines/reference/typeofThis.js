@@ -11,6 +11,7 @@ class Test1 {
     ['this'] = '';
     constructor() {
         var copy: typeof this.data = { foo: '' };
+        var foo: typeof this.data.foo = '';
 
         var self: typeof this = this;
         self.data;
@@ -92,7 +93,37 @@ class Test9D2 {
     f2() {}
 }
 
+class Test10 {
+    a?: { b?: string }
+
+    foo() {
+        let a: typeof this.a = undefined as any;
+        if (this.a) {
+            let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+            let b: typeof this.a.b = undefined as any;
+
+            if (this.a.b) {
+                let b: typeof this.a.b = undefined as any;   // should narrow to string
+            }
+        }
+    }
+}
+
+class Test11 {
+    this?: { x?: string };
+    
+    foo() {
+        const o = this;
+        let bar: typeof o.this = {};
+
+        if (o.this && o.this.x) {
+            let y: string = o.this.x;   // should narrow to string
+        }
+    }
+}
+
 //// [typeofThis.js]
+"use strict";
 var Test = /** @class */ (function () {
     function Test() {
         this.data = {};
@@ -105,6 +136,7 @@ var Test1 = /** @class */ (function () {
         this.data = { foo: '' };
         this['this'] = '';
         var copy = { foo: '' };
+        var foo = '';
         var self = this;
         self.data;
         var str = '';
@@ -181,4 +213,31 @@ var Test9D2 = /** @class */ (function () {
     }
     Test9D2.prototype.f2 = function () { };
     return Test9D2;
+}());
+var Test10 = /** @class */ (function () {
+    function Test10() {
+    }
+    Test10.prototype.foo = function () {
+        var a = undefined;
+        if (this.a) {
+            var a_1 = undefined; // should narrow to { b?: string }
+            var b = undefined;
+            if (this.a.b) {
+                var b_1 = undefined; // should narrow to string
+            }
+        }
+    };
+    return Test10;
+}());
+var Test11 = /** @class */ (function () {
+    function Test11() {
+    }
+    Test11.prototype.foo = function () {
+        var o = this;
+        var bar = {};
+        if (o["this"] && o["this"].x) {
+            var y = o["this"].x; // should narrow to string
+        }
+    };
+    return Test11;
 }());
