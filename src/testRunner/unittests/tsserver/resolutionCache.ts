@@ -103,16 +103,13 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
             host.writeFile(moduleFile.path, moduleFile.content);
             host.runQueuedTimeoutCallbacks();
@@ -125,8 +122,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
 
             // Recheck
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "should remove the module not found error", session);
         });
 
         it("npm install @types works", () => {
@@ -136,8 +133,7 @@ namespace ts.projectSystem {
                 content: 'import f = require("pad"); f;'
             };
             const host = createServerHost([file1, libFile]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: {
@@ -147,21 +143,8 @@ namespace ts.projectSystem {
                     projectRootPath: folderPath
                 }
             });
-            checkNumberOfProjects(service, { inferredProjects: 1 });
 
-            const startOffset = file1.content.indexOf('"') + 1;
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file: file1,
-                    syntax: [],
-                    semantic: [
-                        createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, ["pad"])
-                    ],
-                    suggestion: []
-                }]
-            });
+            verifyGetErrRequest({ session, host, files: [file1] });
 
             const padIndex: File = {
                 path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
@@ -170,15 +153,9 @@ namespace ts.projectSystem {
             host.ensureFileOrFolder(padIndex, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
             host.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
             host.runQueuedTimeoutCallbacks(); // Actual update
-            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
-            session.clearMessages();
-
             host.runQueuedTimeoutCallbacks();
-            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            session.clearMessages();
-
             host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
+            baselineTsserverLogs("resolutionCache", `npm install @types works`, session);
         });
 
         it("suggestion diagnostics", () => {
@@ -188,29 +165,16 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: { file: file.path, fileContent: file.content },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
             host.checkTimeoutQueueLength(0);
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file,
-                    syntax: [],
-                    semantic: [],
-                    suggestion: [
-                        createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
-                    ]
-                }]
-            });
+            verifyGetErrRequest({ session, host, files: [file] });
+            baselineTsserverLogs("resolutionCache", `suggestion diagnostics`, session);
         });
 
         it("disable suggestion diagnostics", () => {
@@ -220,8 +184,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
@@ -235,18 +198,9 @@ namespace ts.projectSystem {
                 },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
             host.checkTimeoutQueueLength(0);
-            verifyGetErrRequest({
-                session,
-                host,
-                expected: [{
-                    file,
-                    syntax: [],
-                    semantic: []
-                }]
-            });
+            verifyGetErrRequest({ session, host, files: [file], skip: [{ suggestion: true }] });
+            baselineTsserverLogs("resolutionCache", `disable suggestion diagnostics`, session);
         });
 
         it("suppressed diagnostic events", () => {
@@ -256,23 +210,14 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
-            const service = session.getProjectService();
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs() });
 
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: server.CommandNames.Open,
                 arguments: { file: file.path, fileContent: file.content },
             });
 
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            session.clearMessages();
-
-            let expectedSequenceId = session.getNextSeq();
-
             session.executeCommandSeq<protocol.GeterrRequest>({
                 command: server.CommandNames.Geterr,
                 arguments: {
@@ -282,14 +227,6 @@ namespace ts.projectSystem {
             });
 
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
-
-            expectedSequenceId = session.getNextSeq();
-
             session.executeCommandSeq<protocol.GeterrForProjectRequest>({
                 command: server.CommandNames.Geterr,
                 arguments: {
@@ -299,11 +236,7 @@ namespace ts.projectSystem {
             });
 
             host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
+            baselineTsserverLogs("resolutionCache", "suppressed diagnostic events", session);
         });
     });
 
@@ -318,24 +251,19 @@ namespace ts.projectSystem {
                 content: "import * as T from './moduleFile'; T.bar();"
             };
             const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
-            assert.equal(diags.length, 1);
+            session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
@@ -348,8 +276,8 @@ namespace ts.projectSystem {
             session.executeCommand(changeRequest);
             host.runQueuedTimeoutCallbacks();
 
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
         });
 
         it("should restore the states for configured projects", () => {
@@ -366,28 +294,24 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
 
             openFilesForSession([file1], session);
             const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
                 server.CommandNames.SemanticDiagnosticsSync,
                 { file: file1.path }
             );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
 
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             host.renameFile(moduleFile.path, moduleFileNewPath);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations, errorTextArguments: ["./moduleFile"] }
-            ]);
+            session.executeCommand(getErrRequest);
 
             host.renameFile(moduleFileNewPath, moduleFile.path);
             host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
+            session.executeCommand(getErrRequest);
+            baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
         });
 
         it("should property handle missing config files", () => {
