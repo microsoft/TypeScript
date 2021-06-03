@@ -12023,8 +12023,29 @@ namespace ts {
 
         function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
             const indexInfos = getIndexInfosOfType(type);
-            return find(indexInfos, info => info.keyType !== stringType && isTypeAssignableTo(keyType, info.keyType)) ||
-                findIndexInfo(indexInfos, stringType);
+            let stringIndexInfo: IndexInfo | undefined;
+            let applicableInfo: IndexInfo | undefined;
+            let applicableInfos: IndexInfo[] | undefined;
+            for (const info of indexInfos) {
+                if (info.keyType === stringType) {
+                    stringIndexInfo = info;
+                }
+                else if (isTypeAssignableTo(keyType, info.keyType)) {
+                    if (!applicableInfo) {
+                        applicableInfo = info;
+                    }
+                    else {
+                        (applicableInfos || (applicableInfos = [applicableInfo])).push(info);
+                    }
+                }
+            }
+            // When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
+            // the intersected key type, we just use unknownType for the key type as nothing actually depends on the
+            // keyType property of the returned IndexInfo.
+            return applicableInfos ?
+                createIndexInfo(unknownType, getIntersectionType(map(applicableInfos, info => info.type)),
+                    /*isReadonly */ reduceLeft(applicableInfos, (isReadonly, info) => isReadonly && info.isReadonly, true)) :
+                applicableInfo || stringIndexInfo;
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -14645,7 +14666,7 @@ namespace ts {
                 }
                 const indexInfo = getApplicableIndexInfo(objectType, indexType);
                 if (indexInfo) {
-                    if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType === stringType) {
+                    if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                         if (accessExpression) {
                             error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
                         }
