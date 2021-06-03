@@ -633,6 +633,15 @@ namespace ts {
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
         },
         {
+            name: "useUnknownInCatchVariables",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Type_Checking,
+            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
+        },
+        {
             name: "alwaysStrict",
             type: "boolean",
             affectsSourceFile: true,
