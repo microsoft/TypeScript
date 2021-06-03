@@ -116,6 +116,9 @@ tsc: The Typescript Compiler - Version FakeTSVersion
               type: boolean
            default: `false`, unless `strict` is set
 
+[34m--strictOptionalProperties[39m: Enable strict checking of optional properties.
+                      type: boolean
+
 [34m--noImplicitThis[39m: Raise error on 'this' expressions with an implied 'any' type.
             type: boolean
          default: `false`, unless `strict` is set
