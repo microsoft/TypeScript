@@ -109,7 +109,7 @@ namespace ts {
         return `--${option.name}${option.shortName ? `, -${option.shortName}` : ""}`;
     }
 
-    function generateOptionOutput(option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
+    function generateOptionOutput(sys: System,option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
         interface ValueCandidate {
             // "one or more" or "any of"
             valueType: string;
@@ -256,7 +256,7 @@ namespace ts {
         }
     }
 
-    function generateGroupOptionOutput(optionsList: readonly CommandLineOption[]) {
+    function generateGroupOptionOutput(sys: System,optionsList: readonly CommandLineOption[]) {
         let maxLength = 0;
         for (const option of optionsList) {
             const curLength = getDisplayNameTextOfOption(option).length;
@@ -271,7 +271,7 @@ namespace ts {
         const leftAlignOfRightPart = rightAlignOfLeftPart + 2;
         let lines: string[] = [];
         for (const option of optionsList) {
-            const tmp = generateOptionOutput(option, rightAlignOfLeftPart, leftAlignOfRightPart);
+            const tmp = generateOptionOutput(sys, option, rightAlignOfLeftPart, leftAlignOfRightPart);
             lines = [...lines, ...tmp];
         }
         // make sure always a blank line in the end.
@@ -281,14 +281,14 @@ namespace ts {
         return lines;
     }
 
-    function generateSectionOptionsOutput(sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
+    function generateSectionOptionsOutput(sys: System, sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
         let res: string[] = [];
         res.push(bold(sectionName) + sys.newLine + sys.newLine);
         if (beforeOptionsDescription) {
             res.push(beforeOptionsDescription + sys.newLine + sys.newLine);
         }
         if (!subCategory) {
-            res = [...res, ...generateGroupOptionOutput(options)];
+            res = [...res, ...generateGroupOptionOutput(sys, options)];
             if (afterOptionsDescription) {
                 res.push(afterOptionsDescription + sys.newLine + sys.newLine);
             }
@@ -303,7 +303,7 @@ namespace ts {
         }
         categoryMap.forEach((value, key) => {
             res.push(`### ${key}${sys.newLine}${sys.newLine}`);
-            res = [...res, ...generateGroupOptionOutput(value)];
+            res = [...res, ...generateGroupOptionOutput(sys, value)];
         });
         if (afterOptionsDescription) {
             res.push(afterOptionsDescription + sys.newLine + sys.newLine);
@@ -329,7 +329,7 @@ namespace ts {
         output.push("  " + blue("tsc --noEmit" + sys.newLine));
         output.push("  " + blue("tsc --target esnext" + sys.newLine));
         output.push("  " + "Compiles the current project, with additional settings." + sys.newLine + sys.newLine);
-        output = [...output, ...generateSectionOptionsOutput("COMMON COMPILER OPTIONS", simpleOptions, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, "COMMON COMPILER OPTIONS", simpleOptions, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
         for (const line of output) {
             sys.write(line);
         }
@@ -337,9 +337,9 @@ namespace ts {
 
     function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
         let output: string[] = [...getHelpHeader(sys)];
-        output = [...output, ...generateSectionOptionsOutput("ALL COMPILER OPTIONS", compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
-        output = [...output, ...generateSectionOptionsOutput("WATCH OPTIONS", watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-        output = [...output, ...generateSectionOptionsOutput("BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, "ALL COMPILER OPTIONS", compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, "WATCH OPTIONS", watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
+        output = [...output, ...generateSectionOptionsOutput(sys, "BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }
@@ -347,7 +347,7 @@ namespace ts {
 
     function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
         let output: string[] = [...getHelpHeader(sys)];
-        output = [...output, ...generateSectionOptionsOutput("BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, "BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }

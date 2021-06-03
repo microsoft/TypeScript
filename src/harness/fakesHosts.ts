@@ -33,7 +33,8 @@ namespace fakes {
         }
 
         getWidthOfTerminal(): number {
-            return 0;
+            const testTerminalWidth = Number.parseInt(this.getEnvironmentVariable("TS_TEST_TERMINAL_WIDTH"));
+            return Number.isNaN(testTerminalWidth) ? 0 : testTerminalWidth;
         }
 
         // Pretty output

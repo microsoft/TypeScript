@@ -4,7 +4,8 @@ namespace ts {
             scenario: "runWithoutArgs",
             subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
             fs: () => loadProjectFromFiles({}),
-            commandLineArgs: []
+            commandLineArgs: [],
+            environmentVariables: { TS_TEST_TERMINAL_WIDTH: "120" }
         });
     });
 }
