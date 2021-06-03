@@ -566,6 +566,8 @@ namespace ts {
         {
             name: "strict",
             type: "boolean",
+            // Though this affects semantic diagnostics, affectsSemanticDiagnostics is not set here
+            // The value of each strictFlag depends on own strictFlag value or this and never accessed directly.
             showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_all_strict_type_checking_options
