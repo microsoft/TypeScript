@@ -10,7 +10,6 @@
     // "disableSolutionSearching": true,                 /* Projects */
     // "disableReferencedProjectLoad": true,             /* Disable loading referenced projects. */
 
-<<<<<<< HEAD
     /* Language and Environment */
     "target": "es5",                                     /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
     // "lib": [],                                        /* Specify library files to be included in the compilation. */
@@ -23,18 +22,6 @@
     // "reactNamespace": "",                             /* [Deprecated] Use '--jsxFactory' instead. Specify the object invoked for createElement when targeting 'react' JSX emit */
     // "noLib": true,                                    /* Do not include the default library file (lib.d.ts). */
     // "useDefineForClassFields": true,                  /* Emit class fields with Define instead of Set. */
-=======
-    /* Strict Type-Checking Options */
-    "strict": true,                                 /* Enable all strict type-checking options. */
-    // "noImplicitAny": true,                       /* Raise error on expressions and declarations with an implied 'any' type. */
-    // "strictNullChecks": true,                    /* Enable strict null checks. */
-    // "strictFunctionTypes": true,                 /* Enable strict checking of function types. */
-    // "strictBindCallApply": true,                 /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
-    // "strictPropertyInitialization": true,        /* Enable strict checking of property initialization in classes. */
-    // "strictOptionalProperties": true,            /* Enable strict checking of optional properties. */
-    // "noImplicitThis": true,                      /* Raise error on 'this' expressions with an implied 'any' type. */
-    // "alwaysStrict": true,                        /* Parse in strict mode and emit "use strict" for each source file. */
->>>>>>> d8e9f6951919a347bb155b938a5006f9efabb778
 
     /* Modules */
     "module": "commonjs",                                /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
@@ -92,6 +79,7 @@
     // "strictFunctionTypes": true,                      /* Enable strict checking of function types. */
     // "strictBindCallApply": true,                      /* Enable strict 'bind', 'call', and 'apply' methods on functions. */
     // "strictPropertyInitialization": true,             /* Enable strict checking of property initialization in classes. */
+    // "strictOptionalProperties": true,                 /* Enable strict checking of optional properties. */
     // "noImplicitThis": true,                           /* Raise error on 'this' expressions with an implied 'any' type. */
     // "alwaysStrict": true,                             /* Parse in strict mode and emit "use strict" for each source file. */
     "noUnusedLocals": true,                              /* Report errors on unused locals. */

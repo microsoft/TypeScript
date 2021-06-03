@@ -620,7 +620,7 @@ namespace ts {
             affectsSemanticDiagnostics: true,
             strictFlag: true,
             showInSimplifiedHelpView: true,
-            category: Diagnostics.Strict_Type_Checking_Options,
+            category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_checking_of_optional_properties
         },
         {

@@ -4856,59 +4856,59 @@
 
     "Modules": {
         "category": "Message",
-        "code": 6243
+        "code": 6244
     },
     "File Management": {
         "category": "Message",
-        "code": 6244
+        "code": 6245
     },
     "Emit": {
         "category": "Message",
-        "code": 6245
+        "code": 6246
     },
     "JavaScript Support": {
         "category": "Message",
-        "code": 6246
+        "code": 6247
     },
     "Type Checking": {
         "category": "Message",
-        "code": 6247
+        "code": 6248
     },
     "Editor Support": {
         "category": "Message",
-        "code": 6248
+        "code": 6249
     },
     "Watch and Build Modes": {
         "category": "Message",
-        "code": 6249
+        "code": 6250
     },
     "Compiler Diagnostics": {
         "category": "Message",
-        "code": 6250
+        "code": 6251
     },
     "Interop Constraints": {
         "category": "Message",
-        "code": 6251
+        "code": 6252
     },
     "Backwards Compatibility": {
         "category": "Message",
-        "code": 6252
+        "code": 6253
     },
     "Language and Environment": {
         "category": "Message",
-        "code": 6253
+        "code": 6254
     },
     "Projects": {
         "category": "Message",
-        "code": 6254
+        "code": 6255
     },
     "Output Formatting": {
         "category": "Message",
-        "code": 6255
+        "code": 6256
     },
     "Completeness": {
         "category": "Message",
-        "code": 6256
+        "code": 6257
     },
 
 
