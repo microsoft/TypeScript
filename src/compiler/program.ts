@@ -1804,26 +1804,25 @@ namespace ts {
 
         function getDiagnosticsHelper<T extends Diagnostic>(
             sourceFile: SourceFile | undefined,
-            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined) => readonly T[],
-            cancellationToken: CancellationToken | undefined,
-            includeUncheckedJS: boolean | undefined): readonly T[] {
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
+            cancellationToken: CancellationToken | undefined): readonly T[] {
             if (sourceFile) {
-                return getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
+                return getDiagnostics(sourceFile, cancellationToken);
             }
             return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
                 if (cancellationToken) {
                     cancellationToken.throwIfCancellationRequested();
                 }
-                return getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
+                return getDiagnostics(sourceFile, cancellationToken);
             }));
         }
 
         function getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
-            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken, /*includeUncheckedJS*/ undefined);
+            return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
         function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, includeUncheckedJS?: boolean): readonly Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken, includeUncheckedJS);
+            return getDiagnosticsHelper(sourceFile, (file, token) => getSemanticDiagnosticsForFile(file, token, includeUncheckedJS), cancellationToken);
         }
 
         function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -1856,7 +1855,7 @@ namespace ts {
                 return getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
             }
             else {
-                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken, /*includeUncheckedJS*/ undefined);
+                return getDiagnosticsHelper(sourceFile, getDeclarationDiagnosticsForFile, cancellationToken);
             }
         }
 
