@@ -1522,7 +1522,7 @@
         "category": "Error",
         "code": 2328
     },
-    "Index signature is missing in type '{0}'.": {
+    "Index signature for type '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2329
     },
