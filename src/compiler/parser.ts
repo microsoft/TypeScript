@@ -493,12 +493,12 @@ namespace ts {
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocPropertyLikeTag).isNameFirst
-                        ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
+                        ? visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
                             (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined))
-                        : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name)) ||
-                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined));
+                        : visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined)));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocText | JSDocLink> | undefined));
