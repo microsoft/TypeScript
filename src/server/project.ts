@@ -785,6 +785,7 @@ namespace ts.server {
             this.resolutionCache.clear();
             this.resolutionCache = undefined!;
             this.cachedUnresolvedImportsPerFile = undefined!;
+            this.moduleSpecifierCache = undefined!;
             this.directoryStructureHost = undefined!;
             this.projectErrors = undefined;
 
@@ -1733,14 +1734,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        watchNodeModulesDirectory(directoryPath: string, cb: DirectoryWatcherCallback) {
-            return this.projectService.watchFactory.watchDirectory(
-                directoryPath,
-                cb,
-                WatchDirectoryFlags.Recursive,
-                this.projectService.getWatchOptions(this),
-                WatchType.NodeModulesForClosedScriptInfo
-            );
+        watchNodeModulesForPackageJsonChanges(directoryPath: string) {
+            return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
         }
     }
 

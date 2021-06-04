@@ -589,8 +589,11 @@ namespace ts.server {
         );
     }
 
-    interface ScriptInfoInNodeModulesWatcher extends FileWatcher {
-        refCount: number;
+    interface NodeModulesWatcher extends FileWatcher {
+        /** How many watchers of this directory were for closed ScriptInfo */
+        refreshScriptInfoRefCount: number;
+        /** List of project names whose module specifier cache should be cleared when package.jsons change */
+        affectedModuleSpecifierCacheProjects: Set<string>;
     }
 
     function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
@@ -671,7 +674,7 @@ namespace ts.server {
          */
         /*@internal*/
         readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
-        private readonly scriptInfoInNodeModulesWatchers = new Map<string, ScriptInfoInNodeModulesWatcher>();
+        private readonly nodeModulesWatchers = new Map<string, NodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
@@ -2617,36 +2620,40 @@ namespace ts.server {
             }
         }
 
-        private watchClosedScriptInfoInNodeModules(dir: Path): ScriptInfoInNodeModulesWatcher {
-            // Watch only directory
-            const existing = this.scriptInfoInNodeModulesWatchers.get(dir);
-            if (existing) {
-                existing.refCount++;
-                return existing;
-            }
-
-            const watchDir = dir + "/node_modules" as Path;
+        private createNodeModulesWatcher(dir: Path, affectedModuleSpecifierCacheProject?: Project) {
             const watcher = this.watchFactory.watchDirectory(
-                watchDir,
+                dir,
                 fileOrDirectory => {
                     const fileOrDirectoryPath = removeIgnoredPath(this.toPath(fileOrDirectory));
                     if (!fileOrDirectoryPath) return;
 
-                    // Has extension
-                    Debug.assert(result.refCount > 0);
-                    if (watchDir === fileOrDirectoryPath) {
-                        this.refreshScriptInfosInDirectory(watchDir);
+                    // Clear module specifier cache for any projects whose cache was affected by
+                    // dependency package.jsons in this node_modules directory
+                    const basename = getBaseFileName(fileOrDirectoryPath);
+                    if (result.affectedModuleSpecifierCacheProjects.size && (
+                        basename === "package.json" || basename === "node_modules"
+                    )) {
+                        result.affectedModuleSpecifierCacheProjects.forEach(projectName => {
+                            this.findProject(projectName)?.getModuleSpecifierCache()?.clear();
+                        });
                     }
-                    else {
-                        const info = this.getScriptInfoForPath(fileOrDirectoryPath);
-                        if (info) {
-                            if (isScriptInfoWatchedFromNodeModules(info)) {
-                                this.refreshScriptInfo(info);
-                            }
+
+                    // Refresh closed script info after an npm install
+                    if (result.refreshScriptInfoRefCount) {
+                        if (dir === fileOrDirectoryPath) {
+                            this.refreshScriptInfosInDirectory(dir);
                         }
-                        // Folder
-                        else if (!hasExtension(fileOrDirectoryPath)) {
-                            this.refreshScriptInfosInDirectory(fileOrDirectoryPath);
+                        else {
+                            const info = this.getScriptInfoForPath(fileOrDirectoryPath);
+                            if (info) {
+                                if (isScriptInfoWatchedFromNodeModules(info)) {
+                                    this.refreshScriptInfo(info);
+                                }
+                            }
+                            // Folder
+                            else if (!hasExtension(fileOrDirectoryPath)) {
+                                this.refreshScriptInfosInDirectory(fileOrDirectoryPath);
+                            }
                         }
                     }
                 },
@@ -2654,20 +2661,61 @@ namespace ts.server {
                 this.hostConfiguration.watchOptions,
                 WatchType.NodeModulesForClosedScriptInfo
             );
-            const result: ScriptInfoInNodeModulesWatcher = {
+            const result: NodeModulesWatcher = {
+                refreshScriptInfoRefCount: affectedModuleSpecifierCacheProject ? 0 : 1,
+                affectedModuleSpecifierCacheProjects: new Set(
+                    affectedModuleSpecifierCacheProject
+                        ? [affectedModuleSpecifierCacheProject.getProjectName()]
+                        : emptyArray),
                 close: () => {
-                    if (result.refCount === 1) {
+                    watcher.close();
+                    this.nodeModulesWatchers.delete(dir);
+                },
+            };
+            this.nodeModulesWatchers.set(dir, result);
+            return result;
+        }
+
+        /*@internal*/
+        watchPackageJsonsInNodeModules(dir: Path, project: Project): FileWatcher {
+            const existing = this.nodeModulesWatchers.get(dir);
+            if (existing) {
+                existing.affectedModuleSpecifierCacheProjects.add(project.getProjectName());
+                return existing;
+            }
+
+            const watcher = this.createNodeModulesWatcher(dir, project);
+            return {
+                close: () => {
+                    if (watcher.refreshScriptInfoRefCount === 0 && watcher.affectedModuleSpecifierCacheProjects.size === 1) {
                         watcher.close();
-                        this.scriptInfoInNodeModulesWatchers.delete(dir);
                     }
                     else {
-                        result.refCount--;
+                        watcher.affectedModuleSpecifierCacheProjects.delete(project.getProjectName());
                     }
                 },
-                refCount: 1
             };
-            this.scriptInfoInNodeModulesWatchers.set(dir, result);
-            return result;
+        }
+
+        private watchClosedScriptInfoInNodeModules(dir: Path): FileWatcher {
+            const watchDir = dir + "/node_modules" as Path;
+            const existing = this.nodeModulesWatchers.get(watchDir);
+            if (existing) {
+                existing.refreshScriptInfoRefCount++;
+                return existing;
+            }
+
+            const watcher = this.createNodeModulesWatcher(watchDir);
+            return {
+                close: () => {
+                    if (watcher.refreshScriptInfoRefCount === 1 && watcher.affectedModuleSpecifierCacheProjects.size === 0) {
+                        watcher.close();
+                    }
+                    else {
+                        watcher.refreshScriptInfoRefCount--;
+                    }
+                },
+            };
         }
 
         private getModifiedTime(info: ScriptInfo) {

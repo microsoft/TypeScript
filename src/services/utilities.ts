@@ -3274,7 +3274,7 @@ namespace ts {
     }
 
     export interface ModuleSpecifierResolutionCacheHost {
-        watchNodeModulesDirectory(directoryPath: string, cb: DirectoryWatcherCallback): FileWatcher;
+        watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher;
     }
 
     export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
@@ -3301,11 +3301,12 @@ namespace ts {
                 if (cached.moduleSpecifiers) {
                     for (const p of cached.modulePaths) {
                         if (p.isInNodeModules) {
-                            const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length);
+                            // No trailing slash
+                            const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
                             if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
                                 (containedNodeModulesWatchers ||= new Map()).set(
                                     nodeModulesPath,
-                                    host.watchNodeModulesDirectory(nodeModulesPath, this.clear),
+                                    host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
                                 );
                             }
                         }
