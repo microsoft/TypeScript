@@ -44,6 +44,7 @@ Options:
  --strictPropertyInitialization                     Enable strict checking of property initialization in classes.
  --strictOptionalProperties                         Enable strict checking of optional properties.
  --noImplicitThis                                   Raise error on 'this' expressions with an implied 'any' type.
+ --useUnknownInCatchVariables                       Type catch clause variables as 'unknown' instead of 'any'.
  --alwaysStrict                                     Parse in strict mode and emit "use strict" for each source file.
  --noUnusedLocals                                   Report errors on unused locals.
  --noUnusedParameters                               Report errors on unused parameters.
