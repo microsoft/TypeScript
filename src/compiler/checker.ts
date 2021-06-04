@@ -30351,7 +30351,7 @@ namespace ts {
 
             const restType = getTypeOfSymbol(restParameter);
             if (isTupleType(restType)) {
-                const associatedNames = (<TupleType>(<TypeReference>restType).target).labeledElementDeclarations;
+                const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
                 const index = pos - paramCount;
                 return associatedNames ? getTupleElementLabel(associatedNames[index]) : undefined;
             }
