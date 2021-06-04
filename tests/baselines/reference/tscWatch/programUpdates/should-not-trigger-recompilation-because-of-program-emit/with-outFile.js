@@ -102,6 +102,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "strictPropertyInitialization": true,             /* Enable strict checking of property initialization in classes. */
     // "strictOptionalProperties": true,                 /* Enable strict checking of optional properties. */
     // "noImplicitThis": true,                           /* Raise error on 'this' expressions with an implied 'any' type. */
+    // "useUnknownInCatchVariables": true,               /* Type catch clause variables as 'unknown' instead of 'any'. */
     // "alwaysStrict": true,                             /* Parse in strict mode and emit "use strict" for each source file. */
     // "noUnusedLocals": true,                           /* Report errors on unused locals. */
     // "noUnusedParameters": true,                       /* Report errors on unused parameters. */

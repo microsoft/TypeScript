@@ -132,6 +132,9 @@ tsc: The Typescript Compiler - Version FakeTSVersion                            
                            type:  boolean
                         default:  `false`, unless `strict` is set
 
+[34m    --useUnknownInCatchVariables  [39mType catch clause variables as 'unknown' instead of 'any'.
+                           type:  boolean
+
 [34m                  --alwaysStrict  [39mParse in strict mode and emit "use strict" for each source file.
                            type:  boolean
                         default:  `false`, unless `strict` is set
