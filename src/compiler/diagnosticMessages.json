@@ -3344,6 +3344,10 @@
         "category": "Error",
         "code": 2814
     },
+    "'arguments' cannot be referenced in property initializers.": {
+        "category": "Error",
+        "code": 2815
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4919,7 +4923,6 @@
         "code": 6257
     },
 
-
     "Projects to reference": {
         "category": "Message",
         "code": 6300
@@ -5185,7 +5188,6 @@
         "code": 6506
     },
 
-
     "Include 'undefined' in index signature results": {
         "category": "Message",
         "code": 6800
@@ -5202,7 +5204,7 @@
         "category": "Message",
         "code": 6803
     },
- 
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

@@ -1,7 +1,7 @@
-tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(3,10): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
-tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(9,10): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
-tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(15,15): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
-tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(21,15): error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(3,10): error TS2815: 'arguments' cannot be referenced in property initializers.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(9,10): error TS2815: 'arguments' cannot be referenced in property initializers.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(15,15): error TS2815: 'arguments' cannot be referenced in property initializers.
+tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts(21,15): error TS2815: 'arguments' cannot be referenced in property initializers.
 
 
 ==== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts (4 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
       return class T {
          a = arguments
              ~~~~~~~~~
-!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers.
       }
     }
     
@@ -17,7 +17,7 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
       return new class T {
          a = arguments
              ~~~~~~~~~
-!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers.
       }
     }
     
@@ -25,7 +25,7 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
       return class T {
          a = { b: arguments }
                   ~~~~~~~~~
-!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers.
       }
     }
     
@@ -33,7 +33,7 @@ tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationB
       return new class T {
          a = { b: arguments }
                   ~~~~~~~~~
-!!! error TS2813: 'arguments' is not allowed in class field initializer or static initialization block.
+!!! error TS2815: 'arguments' cannot be referenced in property initializers.
       }
     }
     
