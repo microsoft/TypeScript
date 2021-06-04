@@ -109,7 +109,7 @@ console.log(foo_json_1.foo);
 
 
 //// [/src/main/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4395333385-{\n    \"foo\": \"bar baz\"\n}","affectsGlobalScope":true},"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);"],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4395333385-{\n    \"foo\": \"bar baz\"\n}","affectsGlobalScope":true},"-4651661680-import { foo } from '../strings/foo.json';\n\nconsole.log(foo);"],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
 
 //// [/src/main/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -145,6 +145,7 @@ console.log(foo_json_1.foo);
       "esModuleInterop": true,
       "module": 1,
       "rootDir": "..",
+      "strict": true,
       "target": 1
     },
     "referencedMap": {
@@ -164,11 +165,11 @@ console.log(foo_json_1.foo);
     ]
   },
   "version": "FakeTSVersion",
-  "size": 961
+  "size": 975
 }
 
 //// [/src/strings/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4395333385-{\n    \"foo\": \"bar baz\"\n}","affectsGlobalScope":true}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","target":1},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./foo.json"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"4395333385-{\n    \"foo\": \"bar baz\"\n}","affectsGlobalScope":true}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/src/strings/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -194,6 +195,7 @@ console.log(foo_json_1.foo);
       "esModuleInterop": true,
       "module": 1,
       "rootDir": "..",
+      "strict": true,
       "target": 1
     },
     "referencedMap": {},
@@ -204,7 +206,7 @@ console.log(foo_json_1.foo);
     ]
   },
   "version": "FakeTSVersion",
-  "size": 829
+  "size": 843
 }
 
 
