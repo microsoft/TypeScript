@@ -6041,12 +6041,14 @@ namespace ts {
         strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
+        strictOptionalProperties?: boolean;  // Always combine with strict property
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
         traceResolution?: boolean;
+        useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */

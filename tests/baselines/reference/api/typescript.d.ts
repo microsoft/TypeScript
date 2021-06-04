@@ -2913,11 +2913,13 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        strictOptionalProperties?: boolean;
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */

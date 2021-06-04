@@ -3336,6 +3336,14 @@
         "category": "Error",
         "code": 2812
     },
+    "Class declaration cannot implement overload list for '{0}'.": {
+        "category": "Error",
+        "code": 2813
+    },
+    "Function with bodies can only merge with classes that are ambient.": {
+        "category": "Error",
+        "code": 2814
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -4593,34 +4601,6 @@
         "category": "Message",
         "code": 6171
     },
-    "Basic Options": {
-        "category": "Message",
-        "code": 6172
-    },
-    "Strict Type-Checking Options": {
-        "category": "Message",
-        "code": 6173
-    },
-    "Module Resolution Options": {
-        "category": "Message",
-        "code": 6174
-    },
-    "Source Map Options": {
-        "category": "Message",
-        "code": 6175
-    },
-    "Additional Checks": {
-        "category": "Message",
-        "code": 6176
-    },
-    "Experimental Options": {
-        "category": "Message",
-        "code": 6177
-    },
-    "Advanced Options": {
-        "category": "Message",
-        "code": 6178
-    },
     "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
         "category": "Message",
         "code": 6179
@@ -4877,6 +4857,68 @@
         "category": "Message",
         "code": 6242
     },
+    "Enable strict checking of optional properties.": {
+        "category": "Message",
+        "code": 6243
+    },
+
+    "Modules": {
+        "category": "Message",
+        "code": 6244
+    },
+    "File Management": {
+        "category": "Message",
+        "code": 6245
+    },
+    "Emit": {
+        "category": "Message",
+        "code": 6246
+    },
+    "JavaScript Support": {
+        "category": "Message",
+        "code": 6247
+    },
+    "Type Checking": {
+        "category": "Message",
+        "code": 6248
+    },
+    "Editor Support": {
+        "category": "Message",
+        "code": 6249
+    },
+    "Watch and Build Modes": {
+        "category": "Message",
+        "code": 6250
+    },
+    "Compiler Diagnostics": {
+        "category": "Message",
+        "code": 6251
+    },
+    "Interop Constraints": {
+        "category": "Message",
+        "code": 6252
+    },
+    "Backwards Compatibility": {
+        "category": "Message",
+        "code": 6253
+    },
+    "Language and Environment": {
+        "category": "Message",
+        "code": 6254
+    },
+    "Projects": {
+        "category": "Message",
+        "code": 6255
+    },
+    "Output Formatting": {
+        "category": "Message",
+        "code": 6256
+    },
+    "Completeness": {
+        "category": "Message",
+        "code": 6257
+    },
+
 
     "Projects to reference": {
         "category": "Message",
@@ -5138,6 +5180,11 @@
         "category": "Message",
         "code": 6505
     },
+    "Consider adding a 'declare' modifier to this class.": {
+        "category": "Message",
+        "code": 6506
+    },
+
 
     "Include 'undefined' in index signature results": {
         "category": "Message",
@@ -5151,7 +5198,11 @@
         "category": "Message",
         "code": 6802
     },
-
+    "Type catch clause variables as 'unknown' instead of 'any'.": {
+        "category": "Message",
+        "code": 6803
+    },
+ 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
