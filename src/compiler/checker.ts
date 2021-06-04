@@ -19474,7 +19474,7 @@ namespace ts {
                     return membersRelatedToIndexInfo(source, targetInfo, reportErrors);
                 }
                 if (reportErrors) {
-                    reportError(Diagnostics.Index_signature_is_missing_in_type_0, typeToString(source));
+                    reportError(Diagnostics.Index_signature_for_type_0_is_missing_in_type_1, typeToString(targetInfo.keyType), typeToString(source));
                 }
                 return Ternary.False;
             }
