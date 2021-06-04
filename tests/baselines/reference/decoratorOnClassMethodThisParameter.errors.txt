@@ -19,3 +19,4 @@ tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethod
                                  ~~~~~~~~~~~~~
 !!! error TS2680: A 'this' parameter must be the first parameter.
     }
+    

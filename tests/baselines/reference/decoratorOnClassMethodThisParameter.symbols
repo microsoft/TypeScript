@@ -28,3 +28,4 @@ class C2 {
 >this : Symbol(this, Decl(decoratorOnClassMethodThisParameter.ts, 7, 28))
 >C2 : Symbol(C2, Decl(decoratorOnClassMethodThisParameter.ts, 4, 1))
 }
+

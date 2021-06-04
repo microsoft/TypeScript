@@ -23,3 +23,18 @@ class C {
 >["b"] : Symbol(C["b"], Decl(decoratorOnClassMethod13.ts, 3, 20))
 >"b" : Symbol(C["b"], Decl(decoratorOnClassMethod13.ts, 3, 20))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod13.ts, 7, 5))
+
+    @dec ["1"]() { }
+>dec : Symbol(dec, Decl(decoratorOnClassMethod13.ts, 0, 0))
+>["1"] : Symbol(C1["1"], Decl(decoratorOnClassMethod13.ts, 7, 18))
+>"1" : Symbol(C1["1"], Decl(decoratorOnClassMethod13.ts, 7, 18))
+
+    @dec ["b"]() { }
+>dec : Symbol(dec, Decl(decoratorOnClassMethod13.ts, 0, 0))
+>["b"] : Symbol(C1["b"], Decl(decoratorOnClassMethod13.ts, 8, 20))
+>"b" : Symbol(C1["b"], Decl(decoratorOnClassMethod13.ts, 8, 20))
+}
+

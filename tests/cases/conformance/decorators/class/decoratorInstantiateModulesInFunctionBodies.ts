@@ -1,4 +1,4 @@
-// @target:es5
+// @target: es5
 // @module:commonjs
 // @experimentaldecorators: true
 // @filename: a.ts
@@ -15,7 +15,14 @@ function filter(handler: any) {
     };
 }
 
-class Wat {
+class A {
+    @filter(() => test == 'abc')
+    static whatever() {
+        // ...
+    }
+}
+
+const A1 = class {
     @filter(() => test == 'abc')
     static whatever() {
         // ...

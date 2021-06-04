@@ -18,3 +18,13 @@ class C {
 >accessor : Symbol(C.accessor, Decl(decoratorOnClassAccessor4.ts, 2, 9))
 >value : Symbol(value, Decl(decoratorOnClassAccessor4.ts, 3, 22))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassAccessor4.ts, 6, 5))
+
+    @dec set accessor(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor4.ts, 0, 0))
+>accessor : Symbol(C1.accessor, Decl(decoratorOnClassAccessor4.ts, 6, 18))
+>value : Symbol(value, Decl(decoratorOnClassAccessor4.ts, 7, 22))
+}
+

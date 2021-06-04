@@ -25,4 +25,14 @@ class C {
 >method : () => void
 }
 
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec    method() {}} : typeof C1
+
+    @dec
+>dec : (t: any, k: any, d: any) => any
+
+    method() {}
+>method : () => void
+}
 

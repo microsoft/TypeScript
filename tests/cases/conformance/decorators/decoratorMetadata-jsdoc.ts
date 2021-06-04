@@ -12,3 +12,12 @@ class X {
     @decorator()
     c?: *;
 }
+
+const X1 = class {
+    @decorator()
+    a?: string?;
+    @decorator()
+    b?: string!;
+    @decorator()
+    c?: *;
+}

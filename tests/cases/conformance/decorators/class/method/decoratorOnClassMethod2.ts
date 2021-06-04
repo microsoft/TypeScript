@@ -5,3 +5,7 @@ declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPrope
 class C {
     @dec public method() {}
 }
+
+const C1 = class {
+    @dec public method() {}
+}

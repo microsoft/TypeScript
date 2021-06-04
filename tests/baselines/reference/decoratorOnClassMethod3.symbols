@@ -18,3 +18,13 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassMethod3.ts, 0, 0))
 >method : Symbol(C.method, Decl(decoratorOnClassMethod3.ts, 3, 10))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod3.ts, 6, 5))
+
+    public @dec method() {}
+>public : Symbol(C1.public, Decl(decoratorOnClassMethod3.ts, 6, 18))
+>dec : Symbol(dec, Decl(decoratorOnClassMethod3.ts, 0, 0))
+>method : Symbol(C1.method, Decl(decoratorOnClassMethod3.ts, 7, 10))
+}
+

@@ -20,3 +20,7 @@ class C {
     method() {}
 }
 
+const C1 = class {
+    @dec
+    method() {}
+}

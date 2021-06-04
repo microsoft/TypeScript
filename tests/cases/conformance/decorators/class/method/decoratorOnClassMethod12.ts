@@ -4,7 +4,13 @@ module M {
     class S {
         decorator(target: Object, key: string): void { }
     }
+
     class C extends S {
+        @super.decorator
+        method() { }
+    }
+
+    const C1 = class extends S {
         @super.decorator
         method() { }
     }

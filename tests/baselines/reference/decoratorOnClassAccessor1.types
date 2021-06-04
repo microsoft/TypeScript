@@ -13,3 +13,14 @@ class C {
 >accessor : number
 >1 : 1
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec get accessor() { return 1; }} : typeof C1
+
+    @dec get accessor() { return 1; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>accessor : number
+>1 : 1
+}
+

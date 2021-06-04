@@ -1,9 +1,12 @@
 tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(5,9): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(7,9): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(9,9): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(14,9): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(16,9): error TS8020: JSDoc types can only be used inside documentation comments.
+tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(18,9): error TS8020: JSDoc types can only be used inside documentation comments.
 
 
-==== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts (3 errors) ====
+==== tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts (6 errors) ====
     declare var decorator: any;
     
     class X {
@@ -20,3 +23,19 @@ tests/cases/conformance/decorators/decoratorMetadata-jsdoc.ts(9,9): error TS8020
             ~
 !!! error TS8020: JSDoc types can only be used inside documentation comments.
     }
+    
+    const X1 = class {
+        @decorator()
+        a?: string?;
+            ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+        @decorator()
+        b?: string!;
+            ~~~~~~~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+        @decorator()
+        c?: *;
+            ~
+!!! error TS8020: JSDoc types can only be used inside documentation comments.
+    }
+    

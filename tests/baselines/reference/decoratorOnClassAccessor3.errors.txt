@@ -1,7 +1,8 @@
 tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor3.ts(4,12): error TS1005: ';' expected.
+tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor3.ts(8,12): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor3.ts (1 errors) ====
+==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor3.ts (2 errors) ====
     declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
     
     class C {
@@ -9,3 +10,10 @@ tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor3.ts(4
                ~
 !!! error TS1005: ';' expected.
     }
+    
+    const C1 = class {
+        public @dec get accessor() { return 1; }
+               ~
+!!! error TS1005: ';' expected.
+    }
+    

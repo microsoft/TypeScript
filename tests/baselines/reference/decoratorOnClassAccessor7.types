@@ -90,3 +90,90 @@ class F {
 >x : number
 >0 : 0
 }
+
+const A1 = class {
+>A1 : typeof A1
+>class {    @dec1 get x() { return 0; }    set x(value: number) { }} : typeof A1
+
+    @dec1 get x() { return 0; }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const B1 = class {
+>B1 : typeof B1
+>class {    get x() { return 0; }    @dec2 set x(value: number) { }} : typeof B1
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+
+    @dec2 set x(value: number) { }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec1 set x(value: number) { }    get x() { return 0; }} : typeof C1
+
+    @dec1 set x(value: number) { }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+}
+
+const D1 = class {
+>D1 : typeof D1
+>class {    set x(value: number) { }    @dec2 get x() { return 0; }} : typeof D1
+
+    set x(value: number) { }
+>x : number
+>value : number
+
+    @dec2 get x() { return 0; }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}
+
+const E1 = class {
+>E1 : typeof E1
+>class {    @dec1 get x() { return 0; }    @dec2 set x(value: number) { }} : typeof E1
+
+    @dec1 get x() { return 0; }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    @dec2 set x(value: number) { }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+
+const F1 = class {
+>F1 : typeof F1
+>class {    @dec1 set x(value: number) { }    @dec2 get x() { return 0; }} : typeof F1
+
+    @dec1 set x(value: number) { }
+>dec1 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+
+    @dec2 get x() { return 0; }
+>dec2 : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}
+

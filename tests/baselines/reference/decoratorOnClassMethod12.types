@@ -10,6 +10,7 @@ module M {
 >target : Object
 >key : string
     }
+
     class C extends S {
 >C : C
 >S : S
@@ -22,4 +23,19 @@ module M {
         method() { }
 >method : () => void
     }
+
+    const C1 = class extends S {
+>C1 : typeof C1
+>class extends S {        @super.decorator        method() { }    } : typeof C1
+>S : S
+
+        @super.decorator
+>super.decorator : any
+>super : any
+>decorator : any
+
+        method() { }
+>method : () => void
+    }
 }
+

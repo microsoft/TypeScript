@@ -26,3 +26,30 @@ class X {
     c?: *;
 >c : any
 }
+
+const X1 = class {
+>X1 : typeof X1
+>class {    @decorator()    a?: string?;    @decorator()    b?: string!;    @decorator()    c?: *;} : typeof X1
+
+    @decorator()
+>decorator() : any
+>decorator : any
+
+    a?: string?;
+>a : string
+
+    @decorator()
+>decorator() : any
+>decorator : any
+
+    b?: string!;
+>b : string
+
+    @decorator()
+>decorator() : any
+>decorator : any
+
+    c?: *;
+>c : any
+}
+

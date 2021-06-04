@@ -5,6 +5,11 @@ class C {
     constructor(@dec p: number) {}
 }
 
+const C1 = class {
+    constructor(@dec p: number) {}
+}
+
+
 //// [decoratorOnClassConstructorParameter1.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -22,4 +27,9 @@ var C = /** @class */ (function () {
         __param(0, dec)
     ], C);
     return C;
+}());
+var C1 = /** @class */ (function () {
+    function class_1(p) {
+    }
+    return class_1;
 }());

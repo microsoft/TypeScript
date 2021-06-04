@@ -6,7 +6,15 @@ module M {
         @this.decorator
         method() { }
     }
+
+    const C1 = class {
+        decorator(target: Object, key: string): void { }
+
+        @this.decorator
+        method() { }
+    }
 }
+
 
 //// [decoratorOnClassMethod11.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -17,6 +25,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var M;
 (function (M) {
+    var _a;
     var C = /** @class */ (function () {
         function C() {
         }
@@ -27,4 +36,13 @@ var M;
         ], C.prototype, "method", null);
         return C;
     }());
+    var C1 = (_a = /** @class */ (function () {
+        function class_1() {
+        }
+        class_1.prototype.decorator = function (target, key) { };
+        class_1.prototype.method = function () { };
+        return class_1;
+    }()), __decorate([
+        this.decorator
+    ], _a.prototype, "method", null), _a);
 })(M || (M = {}));

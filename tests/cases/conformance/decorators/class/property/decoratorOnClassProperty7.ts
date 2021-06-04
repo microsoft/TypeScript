@@ -5,3 +5,7 @@ declare function dec(target: Function, propertyKey: string | symbol, paramIndex:
 class C {
     @dec prop;
 }
+
+const C1 = class {
+    @dec prop;
+}

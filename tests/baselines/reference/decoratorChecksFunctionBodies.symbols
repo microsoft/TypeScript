@@ -28,3 +28,28 @@ class A {
 
     }
 }
+
+const A1 = class {
+>A1 : Symbol(A1, Decl(decoratorChecksFunctionBodies.ts, 15, 5))
+
+    @((x, p) => {
+>x : Symbol(x, Decl(decoratorChecksFunctionBodies.ts, 16, 7))
+>p : Symbol(p, Decl(decoratorChecksFunctionBodies.ts, 16, 9))
+
+        var a = 3;
+>a : Symbol(a, Decl(decoratorChecksFunctionBodies.ts, 17, 11))
+
+        func(a);
+>func : Symbol(func, Decl(decoratorChecksFunctionBodies.ts, 0, 0))
+>a : Symbol(a, Decl(decoratorChecksFunctionBodies.ts, 17, 11))
+
+        return x; 
+>x : Symbol(x, Decl(decoratorChecksFunctionBodies.ts, 16, 7))
+
+    })
+    m() {
+>m : Symbol(A1.m, Decl(decoratorChecksFunctionBodies.ts, 15, 18))
+
+    }
+}
+

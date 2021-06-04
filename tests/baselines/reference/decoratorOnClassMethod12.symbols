@@ -11,12 +11,23 @@ module M {
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(decoratorOnClassMethod12.ts, 2, 33))
     }
+
     class C extends S {
 >C : Symbol(C, Decl(decoratorOnClassMethod12.ts, 3, 5))
 >S : Symbol(S, Decl(decoratorOnClassMethod12.ts, 0, 10))
 
         @super.decorator
         method() { }
->method : Symbol(C.method, Decl(decoratorOnClassMethod12.ts, 4, 23))
+>method : Symbol(C.method, Decl(decoratorOnClassMethod12.ts, 5, 23))
+    }
+
+    const C1 = class extends S {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod12.ts, 10, 9))
+>S : Symbol(S, Decl(decoratorOnClassMethod12.ts, 0, 10))
+
+        @super.decorator
+        method() { }
+>method : Symbol(C1.method, Decl(decoratorOnClassMethod12.ts, 10, 32))
     }
 }
+

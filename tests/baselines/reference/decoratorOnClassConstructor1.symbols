@@ -16,3 +16,11 @@ class C {
     @dec constructor() {}
 >dec : Symbol(dec, Decl(decoratorOnClassConstructor1.ts, 0, 0))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassConstructor1.ts, 6, 5))
+
+    @dec constructor() {}
+>dec : Symbol(dec, Decl(decoratorOnClassConstructor1.ts, 0, 0))
+}
+

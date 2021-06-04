@@ -3,11 +3,18 @@ module M {
     class S {
         decorator(target: Object, key: string): void { }
     }
+
     class C extends S {
         @super.decorator
         method() { }
     }
+
+    const C1 = class extends S {
+        @super.decorator
+        method() { }
+    }
 }
+
 
 //// [decoratorOnClassMethod12.js]
 var __extends = (this && this.__extends) || (function () {
@@ -33,6 +40,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var M;
 (function (M) {
+    var _a;
     var S = /** @class */ (function () {
         function S() {
         }
@@ -50,4 +58,14 @@ var M;
         ], C.prototype, "method", null);
         return C;
     }(S));
+    var C1 = (_a = /** @class */ (function (_super) {
+        __extends(class_1, _super);
+        function class_1() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        class_1.prototype.method = function () { };
+        return class_1;
+    }(S)), __decorate([
+        _super.decorator
+    ], _a.prototype, "method", null), _a);
 })(M || (M = {}));

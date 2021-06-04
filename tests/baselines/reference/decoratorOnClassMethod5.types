@@ -14,3 +14,15 @@ class C {
 >["method"] : () => void
 >"method" : "method"
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec() ["method"]() {}} : typeof C1
+
+    @dec() ["method"]() {}
+>dec() : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>["method"] : () => void
+>"method" : "method"
+}
+

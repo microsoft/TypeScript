@@ -15,7 +15,7 @@ import {base} from "./0.ts"
 import {foo} from "./0.ts"
 >foo : any
 
-export class C  extends base{
+export class C  extends base {
 >C : C
 >base : any
 
@@ -28,3 +28,19 @@ export class C  extends base{
 >super : any
     }
 }
+
+export const C1 = class extends base {
+>C1 : typeof C1
+>class extends base {    constructor(@foo prop: any) {        super();    }} : typeof C1
+>base : any
+
+    constructor(@foo prop: any) {
+>foo : any
+>prop : any
+
+        super();
+>super() : void
+>super : any
+    }
+}
+

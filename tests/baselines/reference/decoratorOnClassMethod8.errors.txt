@@ -1,9 +1,12 @@
 tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
 tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
   Type 'C' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(8,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(8,5): error TS1241: Unable to resolve signature of method decorator when called as an expression.
+  Type 'C1' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
 
 
-==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts (2 errors) ====
+==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts (4 errors) ====
     declare function dec<T>(target: T): T;
     
     class C {
@@ -14,3 +17,13 @@ tests/cases/conformance/decorators/class/method/decoratorOnClassMethod8.ts(4,5):
 !!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
 !!! error TS1241:   Type 'C' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
     }
+    
+    const C1 = class {
+        @dec method() {}
+        ~~~~
+!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
+        ~~~~
+!!! error TS1241: Unable to resolve signature of method decorator when called as an expression.
+!!! error TS1241:   Type 'C1' has no properties in common with type 'TypedPropertyDescriptor<() => void>'.
+    }
+    

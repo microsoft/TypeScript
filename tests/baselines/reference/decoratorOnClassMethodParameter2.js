@@ -5,6 +5,11 @@ class C {
     method(this: C, @dec p: number) {}
 }
 
+const C1 = class {
+    method(this: {}, @dec p: number) {}
+}
+
+
 //// [decoratorOnClassMethodParameter2.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -15,6 +20,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 var C = /** @class */ (function () {
     function C() {
     }
@@ -24,3 +30,11 @@ var C = /** @class */ (function () {
     ], C.prototype, "method", null);
     return C;
 }());
+var C1 = (_a = /** @class */ (function () {
+    function class_1() {
+    }
+    class_1.prototype.method = function (p) { };
+    return class_1;
+}()), __decorate([
+    __param(0, dec)
+], _a.prototype, "method", null), _a);

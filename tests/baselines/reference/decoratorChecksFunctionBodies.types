@@ -32,3 +32,33 @@ class A {
 
     }
 }
+
+const A1 = class {
+>A1 : typeof A1
+>class {    @((x, p) => {        var a = 3;        func(a);        return x;     })    m() {    }} : typeof A1
+
+    @((x, p) => {
+>((x, p) => {        var a = 3;        func(a);        return x;     }) : (x: any, p: any) => any
+>(x, p) => {        var a = 3;        func(a);        return x;     } : (x: any, p: any) => any
+>x : any
+>p : any
+
+        var a = 3;
+>a : number
+>3 : 3
+
+        func(a);
+>func(a) : void
+>func : (s: string) => void
+>a : number
+
+        return x; 
+>x : any
+
+    })
+    m() {
+>m : () => void
+
+    }
+}
+

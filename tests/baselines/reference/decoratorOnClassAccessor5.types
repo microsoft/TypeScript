@@ -13,3 +13,14 @@ class C {
 >accessor : number
 >value : number
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec public set accessor(value: number) { }} : typeof C1
+
+    @dec public set accessor(value: number) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>accessor : number
+>value : number
+}
+

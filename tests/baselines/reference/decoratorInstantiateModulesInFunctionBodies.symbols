@@ -19,16 +19,31 @@ function filter(handler: any) {
     };
 }
 
-class Wat {
->Wat : Symbol(Wat, Decl(b.ts, 6, 1))
+class A {
+>A : Symbol(A, Decl(b.ts, 6, 1))
 
     @filter(() => test == 'abc')
 >filter : Symbol(filter, Decl(b.ts, 0, 27))
 >test : Symbol(test, Decl(b.ts, 0, 8))
 
     static whatever() {
->whatever : Symbol(Wat.whatever, Decl(b.ts, 8, 11))
+>whatever : Symbol(A.whatever, Decl(b.ts, 8, 9))
 
         // ...
     }
 }
+
+const A1 = class {
+>A1 : Symbol(A1, Decl(b.ts, 15, 5))
+
+    @filter(() => test == 'abc')
+>filter : Symbol(filter, Decl(b.ts, 0, 27))
+>test : Symbol(test, Decl(b.ts, 0, 8))
+
+    static whatever() {
+>whatever : Symbol(A1.whatever, Decl(b.ts, 15, 18))
+
+        // ...
+    }
+}
+

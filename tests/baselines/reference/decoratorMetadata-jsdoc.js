@@ -10,6 +10,16 @@ class X {
     c?: *;
 }
 
+const X1 = class {
+    @decorator()
+    a?: string?;
+    @decorator()
+    b?: string!;
+    @decorator()
+    c?: *;
+}
+
+
 //// [decoratorMetadata-jsdoc.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -20,6 +30,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var _a;
 var X = /** @class */ (function () {
     function X() {
     }
@@ -37,3 +48,17 @@ var X = /** @class */ (function () {
     ], X.prototype, "c", void 0);
     return X;
 }());
+var X1 = (_a = /** @class */ (function () {
+    function class_1() {
+    }
+    return class_1;
+}()), __decorate([
+    decorator(),
+    __metadata("design:type", String)
+], _a.prototype, "a", void 0), __decorate([
+    decorator(),
+    __metadata("design:type", String)
+], _a.prototype, "b", void 0), __decorate([
+    decorator(),
+    __metadata("design:type", Object)
+], _a.prototype, "c", void 0), _a);

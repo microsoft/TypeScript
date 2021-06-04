@@ -23,3 +23,26 @@ class X {
     c?: *;
 >c : Symbol(X.c, Decl(decoratorMetadata-jsdoc.ts, 6, 16))
 }
+
+const X1 = class {
+>X1 : Symbol(X1, Decl(decoratorMetadata-jsdoc.ts, 11, 5))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    a?: string?;
+>a : Symbol(X1.a, Decl(decoratorMetadata-jsdoc.ts, 11, 18))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    b?: string!;
+>b : Symbol(X1.b, Decl(decoratorMetadata-jsdoc.ts, 13, 16))
+
+    @decorator()
+>decorator : Symbol(decorator, Decl(decoratorMetadata-jsdoc.ts, 0, 11))
+
+    c?: *;
+>c : Symbol(X1.c, Decl(decoratorMetadata-jsdoc.ts, 15, 16))
+}
+

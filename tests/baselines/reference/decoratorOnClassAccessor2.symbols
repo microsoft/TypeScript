@@ -17,3 +17,12 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassAccessor2.ts, 0, 0))
 >accessor : Symbol(C.accessor, Decl(decoratorOnClassAccessor2.ts, 2, 9))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassAccessor2.ts, 6, 5))
+
+    @dec public get accessor() { return 1; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor2.ts, 0, 0))
+>accessor : Symbol(C1.accessor, Decl(decoratorOnClassAccessor2.ts, 6, 18))
+}
+

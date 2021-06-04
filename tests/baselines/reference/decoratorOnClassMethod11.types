@@ -18,4 +18,23 @@ module M {
         method() { }
 >method : () => void
     }
+
+    const C1 = class {
+>C1 : typeof C1
+>class {        decorator(target: Object, key: string): void { }        @this.decorator        method() { }    } : typeof C1
+
+        decorator(target: Object, key: string): void { }
+>decorator : (target: Object, key: string) => void
+>target : Object
+>key : string
+
+        @this.decorator
+>this.decorator : any
+>this : any
+>decorator : any
+
+        method() { }
+>method : () => void
+    }
 }
+

@@ -13,3 +13,12 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassMethod8.ts, 0, 0))
 >method : Symbol(C.method, Decl(decoratorOnClassMethod8.ts, 2, 9))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod8.ts, 6, 5))
+
+    @dec method() {}
+>dec : Symbol(dec, Decl(decoratorOnClassMethod8.ts, 0, 0))
+>method : Symbol(C1.method, Decl(decoratorOnClassMethod8.ts, 6, 18))
+}
+

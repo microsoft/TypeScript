@@ -7,10 +7,23 @@ class C {
     method() { }
 }
 
+const C1 = class {
+    @dec
+    method()
+    method() { }
+}
+
+
 //// [decoratorOnClassMethodOverload1.js]
 var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () { };
     return C;
+}());
+var C1 = /** @class */ (function () {
+    function class_1() {
+    }
+    class_1.prototype.method = function () { };
+    return class_1;
 }());

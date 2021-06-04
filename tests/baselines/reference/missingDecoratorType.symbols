@@ -41,4 +41,13 @@ class C {
 >method : Symbol(C.method, Decl(b.ts, 2, 9))
 }
 
+const C1 = class {
+>C1 : Symbol(C1, Decl(b.ts, 7, 5))
+
+    @dec
+>dec : Symbol(dec, Decl(b.ts, 0, 0))
+
+    method() {}
+>method : Symbol(C1.method, Decl(b.ts, 7, 18))
+}
 

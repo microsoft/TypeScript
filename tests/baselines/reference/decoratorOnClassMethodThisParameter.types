@@ -24,3 +24,4 @@ class C2 {
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 >this : C2
 }
+

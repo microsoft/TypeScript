@@ -11,3 +11,13 @@ class C {
 >dec : (target: Function, paramIndex: number) => void
 >method : () => void
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec method() {}} : typeof C1
+
+    @dec method() {}
+>dec : (target: Function, paramIndex: number) => void
+>method : () => void
+}
+

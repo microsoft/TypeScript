@@ -14,3 +14,15 @@ class C {
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 >p : number
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    method(this: {}, @dec p: number) {}} : typeof C1
+
+    method(this: {}, @dec p: number) {}
+>method : (this: {}, p: number) => void
+>this : {}
+>dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>p : number
+}
+

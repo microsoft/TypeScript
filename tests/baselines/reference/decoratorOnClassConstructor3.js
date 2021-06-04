@@ -9,11 +9,18 @@ import {base} from "./0"
 import {foo} from "./0"
 
 /* Comment on the Class Declaration */
-export class C  extends base{
+export class C  extends base {
     constructor(@foo prop: any) {
         super();
     }
 }
+
+export const C1 = class extends base {
+    constructor(@foo prop: any) {
+        super();
+    }
+}
+
 
 //// [0.js]
 "use strict";
@@ -54,7 +61,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
+exports.C1 = exports.C = void 0;
 var _0_1 = require("./0");
 var _0_2 = require("./0");
 /* Comment on the Class Declaration */
@@ -69,3 +76,10 @@ var C = /** @class */ (function (_super) {
     return C;
 }(_0_1.base));
 exports.C = C;
+exports.C1 = /** @class */ (function (_super) {
+    __extends(class_1, _super);
+    function class_1(prop) {
+        return _super.call(this) || this;
+    }
+    return class_1;
+}(_0_1.base));

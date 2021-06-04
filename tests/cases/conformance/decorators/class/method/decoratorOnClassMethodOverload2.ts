@@ -7,3 +7,9 @@ class C {
     @dec
     method() { }
 }
+
+const C1 = class {
+    method()
+    @dec
+    method() { }
+}

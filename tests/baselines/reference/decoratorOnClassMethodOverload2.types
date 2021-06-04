@@ -17,3 +17,18 @@ class C {
     method() { }
 >method : () => any
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    method()    @dec    method() { }} : typeof C1
+
+    method()
+>method : () => any
+
+    @dec
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+
+    method() { }
+>method : () => any
+}
+

@@ -5,3 +5,7 @@ declare function dec(target: Function): void;
 class C {
     @dec prop;
 }
+
+const C1 = class {
+    @dec prop;
+}

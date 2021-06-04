@@ -74,3 +74,69 @@ class F {
 >x : Symbol(F.x, Decl(decoratorOnClassAccessor8.ts, 26, 9))
 >value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 27, 15))
 }
+
+const A1 = class {
+>A1 : Symbol(A1, Decl(decoratorOnClassAccessor8.ts, 30, 5))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(A1.x, Decl(decoratorOnClassAccessor8.ts, 30, 18), Decl(decoratorOnClassAccessor8.ts, 31, 30))
+
+    set x(value: number) { }
+>x : Symbol(A1.x, Decl(decoratorOnClassAccessor8.ts, 30, 18), Decl(decoratorOnClassAccessor8.ts, 31, 30))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 32, 10))
+}
+
+const B1 = class {
+>B1 : Symbol(B1, Decl(decoratorOnClassAccessor8.ts, 35, 5))
+
+    get x() { return 0; }
+>x : Symbol(B1.x, Decl(decoratorOnClassAccessor8.ts, 35, 18), Decl(decoratorOnClassAccessor8.ts, 36, 25))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(B1.x, Decl(decoratorOnClassAccessor8.ts, 35, 18), Decl(decoratorOnClassAccessor8.ts, 36, 25))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 37, 15))
+}
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassAccessor8.ts, 40, 5))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(C1.x, Decl(decoratorOnClassAccessor8.ts, 40, 18), Decl(decoratorOnClassAccessor8.ts, 41, 33))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 41, 15))
+
+    get x() { return 0; }
+>x : Symbol(C1.x, Decl(decoratorOnClassAccessor8.ts, 40, 18), Decl(decoratorOnClassAccessor8.ts, 41, 33))
+}
+
+const D1 = class {
+>D1 : Symbol(D1, Decl(decoratorOnClassAccessor8.ts, 45, 5))
+
+    set x(value: number) { }
+>x : Symbol(D1.x, Decl(decoratorOnClassAccessor8.ts, 45, 18), Decl(decoratorOnClassAccessor8.ts, 46, 28))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 46, 10))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(D1.x, Decl(decoratorOnClassAccessor8.ts, 45, 18), Decl(decoratorOnClassAccessor8.ts, 46, 28))
+}
+
+const E1 = class {
+>E1 : Symbol(E1, Decl(decoratorOnClassAccessor8.ts, 50, 5))
+
+    @dec get x() { return 0; }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(E1.x, Decl(decoratorOnClassAccessor8.ts, 50, 18))
+}
+
+const F1 = class {
+>F1 : Symbol(F1, Decl(decoratorOnClassAccessor8.ts, 54, 5))
+
+    @dec set x(value: number) { }
+>dec : Symbol(dec, Decl(decoratorOnClassAccessor8.ts, 0, 0))
+>x : Symbol(F1.x, Decl(decoratorOnClassAccessor8.ts, 54, 18))
+>value : Symbol(value, Decl(decoratorOnClassAccessor8.ts, 55, 15))
+}
+

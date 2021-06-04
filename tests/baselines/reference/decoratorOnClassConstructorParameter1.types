@@ -12,3 +12,13 @@ class C {
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
 >p : number
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    constructor(@dec p: number) {}} : typeof C1
+
+    constructor(@dec p: number) {}
+>dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
+>p : number
+}
+

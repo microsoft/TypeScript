@@ -13,12 +13,20 @@ function filter(handler: any) {
     };
 }
 
-class Wat {
+class A {
     @filter(() => test == 'abc')
     static whatever() {
         // ...
     }
 }
+
+const A1 = class {
+    @filter(() => test == 'abc')
+    static whatever() {
+        // ...
+    }
+}
+
 
 //// [a.js]
 "use strict";
@@ -34,6 +42,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 function filter(handler) {
@@ -41,14 +50,24 @@ function filter(handler) {
         // ...
     };
 }
-var Wat = /** @class */ (function () {
-    function Wat() {
+var A = /** @class */ (function () {
+    function A() {
     }
-    Wat.whatever = function () {
+    A.whatever = function () {
         // ...
     };
     __decorate([
         filter(function () { return a_1.test == 'abc'; })
-    ], Wat, "whatever", null);
-    return Wat;
+    ], A, "whatever", null);
+    return A;
 }());
+var A1 = (_a = /** @class */ (function () {
+    function class_1() {
+    }
+    class_1.whatever = function () {
+        // ...
+    };
+    return class_1;
+}()), __decorate([
+    filter(function () { return a_1.test == 'abc'; })
+], _a, "whatever", null), _a);

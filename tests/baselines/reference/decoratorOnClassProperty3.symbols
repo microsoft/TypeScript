@@ -12,3 +12,13 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassProperty3.ts, 0, 0))
 >prop : Symbol(C.prop, Decl(decoratorOnClassProperty3.ts, 3, 10))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassProperty3.ts, 6, 5))
+
+    public @dec prop;
+>public : Symbol(C1.public, Decl(decoratorOnClassProperty3.ts, 6, 18))
+>dec : Symbol(dec, Decl(decoratorOnClassProperty3.ts, 0, 0))
+>prop : Symbol(C1.prop, Decl(decoratorOnClassProperty3.ts, 7, 10))
+}
+

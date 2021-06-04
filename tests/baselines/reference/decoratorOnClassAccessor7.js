@@ -32,6 +32,37 @@ class F {
     @dec2 get x() { return 0; }
 }
 
+const A1 = class {
+    @dec1 get x() { return 0; }
+    set x(value: number) { }
+}
+
+const B1 = class {
+    get x() { return 0; }
+    @dec2 set x(value: number) { }
+}
+
+const C1 = class {
+    @dec1 set x(value: number) { }
+    get x() { return 0; }
+}
+
+const D1 = class {
+    set x(value: number) { }
+    @dec2 get x() { return 0; }
+}
+
+const E1 = class {
+    @dec1 get x() { return 0; }
+    @dec2 set x(value: number) { }
+}
+
+const F1 = class {
+    @dec1 set x(value: number) { }
+    @dec2 get x() { return 0; }
+}
+
+
 //// [decoratorOnClassAccessor7.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -39,6 +70,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var _a, _b, _c, _d, _e, _f;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -123,3 +155,81 @@ var F = /** @class */ (function () {
     ], F.prototype, "x", null);
     return F;
 }());
+var A1 = (_a = /** @class */ (function () {
+    function class_1() {
+    }
+    Object.defineProperty(class_1.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_1;
+}()), __decorate([
+    dec1
+], _a.prototype, "x", null), _a);
+var B1 = (_b = /** @class */ (function () {
+    function class_2() {
+    }
+    Object.defineProperty(class_2.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_2;
+}()), __decorate([
+    dec2
+], _b.prototype, "x", null), _b);
+var C1 = (_c = /** @class */ (function () {
+    function class_3() {
+    }
+    Object.defineProperty(class_3.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_3;
+}()), __decorate([
+    dec1
+], _c.prototype, "x", null), _c);
+var D1 = (_d = /** @class */ (function () {
+    function class_4() {
+    }
+    Object.defineProperty(class_4.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_4;
+}()), __decorate([
+    dec2
+], _d.prototype, "x", null), _d);
+var E1 = (_e = /** @class */ (function () {
+    function class_5() {
+    }
+    Object.defineProperty(class_5.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_5;
+}()), __decorate([
+    dec1
+], _e.prototype, "x", null), _e);
+var F1 = (_f = /** @class */ (function () {
+    function class_6() {
+    }
+    Object.defineProperty(class_6.prototype, "x", {
+        get: function () { return 0; },
+        set: function (value) { },
+        enumerable: false,
+        configurable: true
+    });
+    return class_6;
+}()), __decorate([
+    dec1
+], _f.prototype, "x", null), _f);

@@ -5,3 +5,7 @@ declare function dec(): <T>(target: any, propertyKey: string) => void;
 class C {
     @dec prop;
 }
+
+const C1 = class {
+    @dec prop;
+}

@@ -74,3 +74,80 @@ class F {
 >x : number
 >value : number
 }
+
+const A1 = class {
+>A1 : typeof A1
+>class {    @dec get x() { return 0; }    set x(value: number) { }} : typeof A1
+
+    @dec get x() { return 0; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+
+    set x(value: number) { }
+>x : number
+>value : number
+}
+
+const B1 = class {
+>B1 : typeof B1
+>class {    get x() { return 0; }    @dec set x(value: number) { }} : typeof B1
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+
+    @dec set x(value: number) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec set x(value: number) { }    get x() { return 0; }} : typeof C1
+
+    @dec set x(value: number) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+
+    get x() { return 0; }
+>x : number
+>0 : 0
+}
+
+const D1 = class {
+>D1 : typeof D1
+>class {    set x(value: number) { }    @dec get x() { return 0; }} : typeof D1
+
+    set x(value: number) { }
+>x : number
+>value : number
+
+    @dec get x() { return 0; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}
+
+const E1 = class {
+>E1 : typeof E1
+>class {    @dec get x() { return 0; }} : typeof E1
+
+    @dec get x() { return 0; }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>0 : 0
+}
+
+const F1 = class {
+>F1 : typeof F1
+>class {    @dec set x(value: number) { }} : typeof F1
+
+    @dec set x(value: number) { }
+>dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>x : number
+>value : number
+}
+

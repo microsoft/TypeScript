@@ -5,3 +5,7 @@ declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedP
 class C {
     @dec() ["method"]() {}
 }
+
+const C1 = class {
+    @dec() ["method"]() {}
+}

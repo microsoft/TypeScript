@@ -14,3 +14,13 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.ts, 0, 0))
 >p : Symbol(p, Decl(decoratorOnClassMethodParameter1.ts, 3, 11))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethodParameter1.ts, 6, 5))
+
+    method(@dec p: number) {}
+>method : Symbol(C1.method, Decl(decoratorOnClassMethodParameter1.ts, 6, 18))
+>dec : Symbol(dec, Decl(decoratorOnClassMethodParameter1.ts, 0, 0))
+>p : Symbol(p, Decl(decoratorOnClassMethodParameter1.ts, 7, 11))
+}
+

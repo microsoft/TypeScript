@@ -18,3 +18,13 @@ class C {
 >["method"] : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
 >"method" : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod6.ts, 6, 5))
+
+    @dec ["method"]() {}
+>dec : Symbol(dec, Decl(decoratorOnClassMethod6.ts, 0, 0))
+>["method"] : Symbol(C1["method"], Decl(decoratorOnClassMethod6.ts, 6, 18))
+>"method" : Symbol(C1["method"], Decl(decoratorOnClassMethod6.ts, 6, 18))
+}
+

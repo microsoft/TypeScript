@@ -13,8 +13,16 @@ tests/cases/conformance/decorators/class/constructor/2.ts(2,19): error TS2691: A
     import {foo} from "./0.ts"
                       ~~~~~~~~
 !!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './0' instead.
-    export class C  extends base{
+    
+    export class C  extends base {
         constructor(@foo prop: any) {
             super();
         }
     }
+    
+    export const C1 = class extends base {
+        constructor(@foo prop: any) {
+            super();
+        }
+    }
+    

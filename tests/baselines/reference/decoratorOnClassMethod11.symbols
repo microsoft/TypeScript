@@ -15,4 +15,19 @@ module M {
         method() { }
 >method : Symbol(C.method, Decl(decoratorOnClassMethod11.ts, 2, 56))
     }
+
+    const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassMethod11.ts, 8, 9))
+
+        decorator(target: Object, key: string): void { }
+>decorator : Symbol(C1.decorator, Decl(decoratorOnClassMethod11.ts, 8, 22))
+>target : Symbol(target, Decl(decoratorOnClassMethod11.ts, 9, 18))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(decoratorOnClassMethod11.ts, 9, 33))
+
+        @this.decorator
+        method() { }
+>method : Symbol(C1.method, Decl(decoratorOnClassMethod11.ts, 9, 56))
+    }
 }
+

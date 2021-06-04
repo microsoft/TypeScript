@@ -14,3 +14,13 @@ class C {
 >dec : Symbol(dec, Decl(decoratorOnClassConstructorParameter4.ts, 0, 0))
 >p : Symbol(p, Decl(decoratorOnClassConstructorParameter4.ts, 3, 22))
 }
+
+const C1 = class {
+>C1 : Symbol(C1, Decl(decoratorOnClassConstructorParameter4.ts, 6, 5))
+
+    constructor(public @dec p: number) {}
+>public : Symbol(public, Decl(decoratorOnClassConstructorParameter4.ts, 7, 16))
+>dec : Symbol(dec, Decl(decoratorOnClassConstructorParameter4.ts, 0, 0))
+>p : Symbol(p, Decl(decoratorOnClassConstructorParameter4.ts, 7, 22))
+}
+

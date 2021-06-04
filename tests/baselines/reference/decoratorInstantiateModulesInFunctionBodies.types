@@ -21,8 +21,8 @@ function filter(handler: any) {
     };
 }
 
-class Wat {
->Wat : Wat
+class A {
+>A : A
 
     @filter(() => test == 'abc')
 >filter(() => test == 'abc') : (target: any, propertyKey: string) => void
@@ -38,3 +38,23 @@ class Wat {
         // ...
     }
 }
+
+const A1 = class {
+>A1 : typeof A1
+>class {    @filter(() => test == 'abc')    static whatever() {        // ...    }} : typeof A1
+
+    @filter(() => test == 'abc')
+>filter(() => test == 'abc') : (target: any, propertyKey: string) => void
+>filter : (handler: any) => (target: any, propertyKey: string) => void
+>() => test == 'abc' : () => boolean
+>test == 'abc' : boolean
+>test : string
+>'abc' : "abc"
+
+    static whatever() {
+>whatever : () => void
+
+        // ...
+    }
+}
+

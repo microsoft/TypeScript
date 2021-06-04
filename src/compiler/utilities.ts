@@ -1803,23 +1803,23 @@ namespace ts {
                 return true;
 
             case SyntaxKind.PropertyDeclaration:
-                // property declarations are valid if their parent is a class declaration.
-                return parent!.kind === SyntaxKind.ClassDeclaration;
+                // property declarations are valid if their parent is a class declaration/expression.
+                return isClassLike(parent!);
 
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.MethodDeclaration:
-                // if this method has a body and its parent is a class declaration, this is a valid target.
+                // if this method has a body and its parent is a class declaration/expression, this is a valid target.
                 return (node as FunctionLikeDeclaration).body !== undefined
-                    && parent!.kind === SyntaxKind.ClassDeclaration;
+                    && isClassLike(parent!);
 
             case SyntaxKind.Parameter:
-                // if the parameter's parent has a body and its grandparent is a class declaration, this is a valid target;
+                // if the parameter's parent has a body and its grandparent is a class declaration/expression, this is a valid target;
                 return (parent as FunctionLikeDeclaration).body !== undefined
                     && (parent!.kind === SyntaxKind.Constructor
                         || parent!.kind === SyntaxKind.MethodDeclaration
                         || parent!.kind === SyntaxKind.SetAccessor)
-                    && grandparent!.kind === SyntaxKind.ClassDeclaration;
+                    && isClassLike(grandparent!);
         }
 
         return false;
@@ -1840,12 +1840,13 @@ namespace ts {
         return nodeIsDecorated(node, parent!, grandparent!) || childIsDecorated(node, parent!); // TODO: GH#18217
     }
 
-    export function childIsDecorated(node: ClassDeclaration): boolean;
+    export function childIsDecorated(node: ClassLikeDeclaration): boolean;
     export function childIsDecorated(node: Node, parent: Node): boolean;
     export function childIsDecorated(node: Node, parent?: Node): boolean {
         switch (node.kind) {
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.ClassDeclaration:
-                return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
+                return some((node as ClassDeclaration | ClassExpression).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
                 return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217

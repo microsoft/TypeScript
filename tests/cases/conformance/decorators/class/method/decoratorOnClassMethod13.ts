@@ -6,3 +6,8 @@ class C {
     @dec ["1"]() { }
     @dec ["b"]() { }
 }
+
+const C1 = class {
+    @dec ["1"]() { }
+    @dec ["b"]() { }
+}

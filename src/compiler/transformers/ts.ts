@@ -569,7 +569,7 @@ namespace ts {
         /**
          * Tests whether we should emit a __decorate call for a class declaration.
          */
-        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
+        function shouldEmitDecorateCallForClass(node: ClassDeclaration | ClassExpression) {
             if (node.decorators && node.decorators.length > 0) {
                 return true;
             }
@@ -589,7 +589,7 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
-        function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
+        function getClassFacts(node: ClassDeclaration | ClassExpression, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
@@ -635,8 +635,8 @@ namespace ts {
 
 
             // Write any decorators of the node.
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ false);
-            addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
+            addClassElementDecorationStatements(statements, createClassPrototype(factory.getDeclarationName(node)), node, /*isStatic*/ false);
+            addClassElementDecorationStatements(statements, factory.getDeclarationName(node), node, /*isStatic*/ true);
             addConstructorDecorationStatement(statements, node);
 
             if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
@@ -880,6 +880,9 @@ namespace ts {
                 return visitEachChild(node, visitor, context);
             }
 
+            const staticProperties = getProperties(node, /*requireInitializer*/ true, /*isStatic*/ true);
+            const facts = getClassFacts(node, staticProperties);
+
             const classExpression = factory.createClassExpression(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
@@ -888,6 +891,14 @@ namespace ts {
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
                 transformClassMembers(node)
             );
+
+            if (facts & ClassFacts.HasMemberDecorators) {
+                const temp = factory.createTempVariable(hoistVariableDeclaration);
+                const expressions: Expression[] = [factory.createAssignment(temp, classExpression)];
+                addClassElementDecorationExpressions(expressions, createClassPrototype(temp), node, /*isStatic*/ false);
+                addClassElementDecorationExpressions(expressions, temp, node, /*isStatic*/ true);
+                return factory.inlineExpressions([...expressions, temp]);
+            }
 
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, node);
@@ -1125,30 +1136,43 @@ namespace ts {
         }
 
         /**
+         * Generates expressions used to apply decorators to either the static or instance member of a class.
+         *
+         * @param target
+         * @param node The class node.
+         * @param isStatic A value indicating whether to generate expressions for static or instance members.
+         */
+        function addClassElementDecorationExpressions(expressions: Expression[], target: Identifier | PropertyAccessExpression, node: ClassLikeDeclaration, isStatic: boolean) {
+            addRange(expressions, map(generateClassElementDecorationExpressions(target, node, isStatic), expression => expression));
+        }
+
+        /**
          * Generates statements used to apply decorators to either the static or instance members
          * of a class.
          *
+         * @param target
          * @param node The class node.
          * @param isStatic A value indicating whether to generate statements for static or
          *                 instance members.
          */
-        function addClassElementDecorationStatements(statements: Statement[], node: ClassDeclaration, isStatic: boolean) {
-            addRange(statements, map(generateClassElementDecorationExpressions(node, isStatic), expressionToStatement));
+        function addClassElementDecorationStatements(statements: Statement[], target: Identifier | PropertyAccessExpression, node: ClassLikeDeclaration, isStatic: boolean) {
+            addRange(statements, map(generateClassElementDecorationExpressions(target, node, isStatic), expressionToStatement));
         }
 
         /**
          * Generates expressions used to apply decorators to either the static or instance members
          * of a class.
          *
+         * @param target
          * @param node The class node.
          * @param isStatic A value indicating whether to generate expressions for static or
          *                 instance members.
          */
-        function generateClassElementDecorationExpressions(node: ClassExpression | ClassDeclaration, isStatic: boolean) {
+        function generateClassElementDecorationExpressions(target: Identifier | PropertyAccessExpression, node: ClassExpression | ClassDeclaration, isStatic: boolean) {
             const members = getDecoratedClassElements(node, isStatic);
             let expressions: Expression[] | undefined;
             for (const member of members) {
-                const expression = generateClassElementDecorationExpression(node, member);
+                const expression = generateClassElementDecorationExpression(target, node, member);
                 if (expression) {
                     if (!expressions) {
                         expressions = [expression];
@@ -1164,10 +1188,11 @@ namespace ts {
         /**
          * Generates an expression used to evaluate class element decorators at runtime.
          *
+         * @param target
          * @param node The class node that contains the member.
          * @param member The class member.
          */
-        function generateClassElementDecorationExpression(node: ClassExpression | ClassDeclaration, member: ClassElement) {
+        function generateClassElementDecorationExpression(target: Identifier | PropertyAccessExpression, node: ClassExpression | ClassDeclaration, member: ClassElement) {
             const allDecorators = getAllDecoratorsOfClassElement(node, member);
             const decoratorExpressions = transformAllDecoratorsOfDeclaration(member, node, allDecorators);
             if (!decoratorExpressions) {
@@ -1205,7 +1230,6 @@ namespace ts {
             //   ], C.prototype, "prop");
             //
 
-            const prefix = getClassMemberPrefix(node, member);
             const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ true);
             const descriptor = languageVersion > ScriptTarget.ES3
                 ? member.kind === SyntaxKind.PropertyDeclaration
@@ -1220,7 +1244,7 @@ namespace ts {
 
             const helper = emitHelpers().createDecorateHelper(
                 decoratorExpressions,
-                prefix,
+                target,
                 memberName,
                 descriptor
             );
@@ -3152,14 +3176,8 @@ namespace ts {
             }
         }
 
-        function getClassPrototype(node: ClassExpression | ClassDeclaration) {
-            return factory.createPropertyAccessExpression(factory.getDeclarationName(node), "prototype");
-        }
-
-        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
-                ? factory.getDeclarationName(node)
-                : getClassPrototype(node);
+        function createClassPrototype(expression: Expression) {
+            return factory.createPropertyAccessExpression(expression, "prototype");
         }
 
         function enableSubstitutionForNonQualifiedEnumMembers() {

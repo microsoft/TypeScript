@@ -11,7 +11,13 @@ import {base} from "./0"
 import {foo} from "./0"
 
 /* Comment on the Class Declaration */
-export class C  extends base{
+export class C  extends base {
+    constructor(@foo prop: any) {
+        super();
+    }
+}
+
+export const C1 = class extends base {
     constructor(@foo prop: any) {
         super();
     }

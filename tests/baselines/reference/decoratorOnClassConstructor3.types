@@ -16,7 +16,7 @@ import {foo} from "./0"
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 
 /* Comment on the Class Declaration */
-export class C  extends base{
+export class C  extends base {
 >C : C
 >base : base
 
@@ -29,3 +29,19 @@ export class C  extends base{
 >super : typeof base
     }
 }
+
+export const C1 = class extends base {
+>C1 : typeof C1
+>class extends base {    constructor(@foo prop: any) {        super();    }} : typeof C1
+>base : base
+
+    constructor(@foo prop: any) {
+>foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>prop : any
+
+        super();
+>super() : void
+>super : typeof base
+    }
+}
+

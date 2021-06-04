@@ -17,7 +17,7 @@ import {foo} from "./0"
 >foo : Symbol(foo, Decl(2.ts, 1, 8))
 
 /* Comment on the Class Declaration */
-export class C  extends base{
+export class C  extends base {
 >C : Symbol(C, Decl(2.ts, 1, 23))
 >base : Symbol(base, Decl(2.ts, 0, 8))
 
@@ -29,3 +29,17 @@ export class C  extends base{
 >super : Symbol(base, Decl(0.ts, 0, 0))
     }
 }
+
+export const C1 = class extends base {
+>C1 : Symbol(C1, Decl(2.ts, 10, 12))
+>base : Symbol(base, Decl(2.ts, 0, 8))
+
+    constructor(@foo prop: any) {
+>foo : Symbol(foo, Decl(2.ts, 1, 8))
+>prop : Symbol(prop, Decl(2.ts, 11, 16))
+
+        super();
+>super : Symbol(base, Decl(0.ts, 0, 0))
+    }
+}
+

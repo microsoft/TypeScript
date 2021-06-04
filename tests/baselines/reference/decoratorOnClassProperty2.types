@@ -11,3 +11,13 @@ class C {
 >dec : (target: any, propertyKey: string) => void
 >prop : any
 }
+
+const C1 = class {
+>C1 : typeof C1
+>class {    @dec public prop;} : typeof C1
+
+    @dec public prop;
+>dec : (target: any, propertyKey: string) => void
+>prop : any
+}
+
