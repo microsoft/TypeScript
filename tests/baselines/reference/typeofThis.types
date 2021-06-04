@@ -277,56 +277,56 @@ class Test10 {
 >Test10 : Test10
 
     a?: { b?: string }
->a : { b?: string | undefined; } | undefined
+>a : { b?: string; } | undefined
 >b : string | undefined
 
     foo() {
 >foo : () => void
 
         let a: typeof this.a = undefined as any;
->a : { b?: string | undefined; } | undefined
->this.a : { b?: string | undefined; } | undefined
+>a : { b?: string; } | undefined
+>this.a : { b?: string; } | undefined
 >this : any
->a : { b?: string | undefined; } | undefined
+>a : { b?: string; } | undefined
 >undefined as any : any
 >undefined : undefined
 
         if (this.a) {
->this.a : { b?: string | undefined; } | undefined
+>this.a : { b?: string; } | undefined
 >this : this
->a : { b?: string | undefined; } | undefined
+>a : { b?: string; } | undefined
 
             let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
->a : { b?: string | undefined; }
->this.a : { b?: string | undefined; }
+>a : { b?: string; }
+>this.a : { b?: string; }
 >this : any
->a : { b?: string | undefined; }
+>a : { b?: string; }
 >undefined as any : any
 >undefined : undefined
 
             let b: typeof this.a.b = undefined as any;
 >b : string | undefined
 >this.a.b : string | undefined
->this.a : { b?: string | undefined; }
+>this.a : { b?: string; }
 >this : any
->a : { b?: string | undefined; }
+>a : { b?: string; }
 >b : string | undefined
 >undefined as any : any
 >undefined : undefined
 
             if (this.a.b) {
 >this.a.b : string | undefined
->this.a : { b?: string | undefined; }
+>this.a : { b?: string; }
 >this : this
->a : { b?: string | undefined; }
+>a : { b?: string; }
 >b : string | undefined
 
                 let b: typeof this.a.b = undefined as any;   // should narrow to string
 >b : string
 >this.a.b : string
->this.a : { b?: string | undefined; }
+>this.a : { b?: string; }
 >this : any
->a : { b?: string | undefined; }
+>a : { b?: string; }
 >b : string
 >undefined as any : any
 >undefined : undefined
@@ -339,7 +339,7 @@ class Test11 {
 >Test11 : Test11
 
     this?: { x?: string };
->this : { x?: string | undefined; } | undefined
+>this : { x?: string; } | undefined
 >x : string | undefined
     
     foo() {
@@ -350,29 +350,29 @@ class Test11 {
 >this : this
 
         let bar: typeof o.this = {};
->bar : { x?: string | undefined; } | undefined
->o.this : { x?: string | undefined; } | undefined
+>bar : { x?: string; } | undefined
+>o.this : { x?: string; } | undefined
 >o : this
->this : { x?: string | undefined; } | undefined
+>this : { x?: string; } | undefined
 >{} : {}
 
         if (o.this && o.this.x) {
 >o.this && o.this.x : string | undefined
->o.this : { x?: string | undefined; } | undefined
+>o.this : { x?: string; } | undefined
 >o : this
->this : { x?: string | undefined; } | undefined
+>this : { x?: string; } | undefined
 >o.this.x : string | undefined
->o.this : { x?: string | undefined; }
+>o.this : { x?: string; }
 >o : this
->this : { x?: string | undefined; }
+>this : { x?: string; }
 >x : string | undefined
 
             let y: string = o.this.x;   // should narrow to string
 >y : string
 >o.this.x : string
->o.this : { x?: string | undefined; }
+>o.this : { x?: string; }
 >o : this
->this : { x?: string | undefined; }
+>this : { x?: string; }
 >x : string
         }
     }
