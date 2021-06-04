@@ -2659,7 +2659,7 @@ namespace ts.server {
                 },
                 WatchDirectoryFlags.Recursive,
                 this.hostConfiguration.watchOptions,
-                WatchType.NodeModulesForClosedScriptInfo
+                WatchType.NodeModules
             );
             const result: NodeModulesWatcher = {
                 refreshScriptInfoRefCount: affectedModuleSpecifierCacheProject ? 0 : 1,
