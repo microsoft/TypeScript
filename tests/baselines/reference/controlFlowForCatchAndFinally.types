@@ -120,7 +120,7 @@ class Foo {
 >Aborter : typeof Aborter
 
         } catch (error) {
->error : any
+>error : unknown
 
             if (this.abortController !== undefined) {
 >this.abortController !== undefined : boolean
