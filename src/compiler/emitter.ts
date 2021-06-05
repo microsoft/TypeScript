@@ -1692,6 +1692,8 @@ namespace ts {
                         return emitElementAccessExpression(node as ElementAccessExpression);
                     case SyntaxKind.CallExpression:
                         return emitCallExpression(node as CallExpression);
+                    case SyntaxKind.DoExpression:
+                        return emitDoExpression(node as DoExpression);
                     case SyntaxKind.NewExpression:
                         return emitNewExpression(node as NewExpression);
                     case SyntaxKind.TaggedTemplateExpression:
@@ -2720,6 +2722,7 @@ namespace ts {
         function emitDoExpression(node: DoExpression) {
             if (node.async) emitTokenWithComment(SyntaxKind.AsyncKeyword, node.pos, writeKeyword, node);
             emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitBlock(node.block);
         }
 

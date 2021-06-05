@@ -3,6 +3,18 @@ namespace ts {
     export function transformDoExpression(context: TransformationContext, node: SourceFile) {
         const { factory } = context;
         const star = factory.createToken(SyntaxKind.AsteriskToken);
+        interface ReturnContext {
+            signal: Identifier
+            operand: Identifier
+        }
+        interface BreakContinueContext {
+            signal: Identifier
+            operand: Identifier
+            usedLabel: Set<string>
+        }
+        let currentReturnContext: ReturnContext | undefined;
+        let currentBreakContext: BreakContinueContext | undefined;
+        let currentContinueContext: BreakContinueContext | undefined;
         return transformSourceFile(node);
 
         function transformSourceFile(node: SourceFile) {
@@ -14,14 +26,116 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
-                return node;
-            }
+            if (
+                isFunctionExpression(node) ||
+                isFunctionDeclaration(node) ||
+                isConstructorDeclaration(node) ||
+                isArrowFunction(node) ||
+                isMethodOrAccessor(node)
+            ) return transformFunction(node);
             switch (node.kind) {
                 case SyntaxKind.DoExpression:
-                    return transformDoExpression(node as DoExpression);
+                    if ((node as DoExpression).async) {
+                        return transformDoExpression(node as DoExpression);
+                    }
+                    return visitEachChild(node, visitor, context);
+                case SyntaxKind.ReturnStatement:
+                case SyntaxKind.BreakStatement:
+                case SyntaxKind.ContinueStatement:
+                    return transformControlFlow(node);
                 default:
                     return visitEachChild(node, visitor, context);
+            }
+        }
+        function transformFunction<T extends FunctionExpression | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | ArrowFunction | AccessorDeclaration>(node: T): Node {
+            return startReturnBreakContinueBoundary(() => {
+                return visitEachChild(node, child => {
+                    if (child === node.body) return visitBody(node.body);
+                    return visitor(child);
+                }, context);
+            });
+            function visitBody(body: ConciseBody): ConciseBody {
+                let nextBody = visitEachChild(body, visitor, context);
+                if (currentReturnContext) {
+                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext], createSignalHandler);
+                }
+                return nextBody;
+            }
+            // if (signal === currentReturnContext.signal) return currentReturnContext.expr;
+            function createSignalHandler(signal: Identifier): readonly Statement[] {
+                if (!currentReturnContext) return [];
+                return [
+                    factory.createIfStatement(
+                        factory.createEquality(signal, currentReturnContext.signal),
+                        factory.createReturnStatement(currentReturnContext.operand),
+                    )
+                ];
+            }
+        }
+        // function transformFor() {}
+        // function transformWhile() {}
+        // function transformDoWhile() {}
+        // function transformSwitch() {}
+        // function transformClass<T extends ClassExpression | ClassDeclaration>(node: T): T {
+        //     return startReturnBreakContinueBoundary(() => visitEachChild(node, visitor, context));
+        // }
+
+        /**
+         * { Block }
+         * ==== transformed to ====
+         * {
+         *  var signal = {}, operand
+         *  try { Block }
+         *  catch(e) {
+         *      if (e === signal) return operand
+         *      throw e
+         *  }
+         * }
+         */
+        function wrapBlockToHandleSignal(node: ConciseBody, hoists: (ReturnContext | BreakContinueContext)[], f: (signal: Identifier) => readonly Statement[]) {
+            const temp = factory.createTempVariable(() => {});
+            return factory.createBlock([
+                // var signal = {}, operand
+                factory.createVariableStatement(/** modifiers */ undefined, factory.createVariableDeclarationList(
+                    flatMap(hoists, x => [
+                        factory.createVariableDeclaration(x.signal, /** ! */ undefined, /** type */ undefined, factory.createObjectLiteralExpression()),
+                        factory.createVariableDeclaration(x.operand),
+                    ])
+                )),
+                factory.createTryStatement(
+                    factory.converters.convertToFunctionBlock(node),
+                    factory.createCatchClause(factory.createVariableDeclaration(temp), factory.createBlock([
+                        ...f(temp),
+                        factory.createThrowStatement(temp),
+                    ])),
+                    /** finallyBlock */ undefined
+                )
+            ]);
+        }
+        function startReturnBreakContinueBoundary<T>(f: () => T) {
+            const old = [currentReturnContext, currentBreakContext, currentContinueContext] as const;
+            currentReturnContext = currentBreakContext = currentContinueContext = undefined;
+            const result = f();
+            [currentReturnContext, currentBreakContext, currentContinueContext] = old;
+            return result;
+        }
+
+        function transformControlFlow(node: Node) {
+            let shouldTransform = false;
+            if (isReturnStatement(node)) {
+                findAncestor(node, (parent): parent is SignatureDeclaration => {
+                    if (isDoExpression(parent)) shouldTransform = true;
+                    return isFunctionLike(parent);
+                });
+                if (!shouldTransform) return visitEachChild(node, visitor, context);
+                if (!currentReturnContext) {
+                    currentReturnContext = { signal: factory.createTempVariable(noop), operand: factory.createTempVariable(noop) };
+                }
+                const setOp = node.expression && factory.createBinaryExpression(currentReturnContext.operand, factory.createToken(SyntaxKind.EqualsToken), visitEachChild(node.expression, visitor, context));
+                const _throw = factory.createImmediatelyInvokedFunctionExpression([
+                    factory.createThrowStatement(currentReturnContext.signal),
+                ]);
+                return factory.createExpressionStatement(setOp ? factory.createCommaListExpression([setOp, _throw]): _throw);
             }
         }
 
