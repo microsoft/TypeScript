@@ -55,6 +55,7 @@
         "transformers/es2020.ts",
         "transformers/es2021.ts",
         "transformers/esnext.ts",
+        "transformers/doExpression.ts",
         "transformers/jsx.ts",
         "transformers/es2016.ts",
         "transformers/es2015.ts",
