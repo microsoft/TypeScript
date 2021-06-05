@@ -4008,26 +4008,26 @@ namespace ts {
 
     /*@internal*/
     export interface SourceFileOfProgramFromBuildInfo {
-        fileName: string;
-        originalFileName: string;
+        // fileName: string;
+        // originalFileName: string;
         path: Path;
-        resolvedPath: Path;
+        // resolvedPath: Path;
         // This currently is set to sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags but cant be set in type
         // Change this if it changes in reusing program
-        flags: NodeFlags;
-        version: string;
+        // flags: NodeFlags;
+        // version: string;
 
-        typeReferenceDirectives: readonly string[];
-        libReferenceDirectives: readonly string[];
-        referencedFiles: readonly string[];
-        imports: readonly StringLiteralLikeOfProgramFromBuildInfo[];
-        moduleAugmentations: readonly ModuleNameOfProgramFromBuildInfo[];
-        ambientModuleNames: readonly string[];
-        hasNoDefaultLib: boolean;
+        // typeReferenceDirectives: readonly string[];
+        // libReferenceDirectives: readonly string[];
+        // referencedFiles: readonly string[];
+        // imports: readonly StringLiteralLikeOfProgramFromBuildInfo[];
+        // moduleAugmentations: readonly ModuleNameOfProgramFromBuildInfo[];
+        // ambientModuleNames: readonly string[];
+        // hasNoDefaultLib: boolean;
 
         resolvedModules?: ESMap<string, ResolvedModuleWithFailedLookupLocations>;
-        resolvedTypeReferenceDirectiveNames?: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
-        redirectInfo?: RedirectInfoOfProgramFromBuildInfo;
+        // resolvedTypeReferenceDirectiveNames?: ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+        // redirectInfo?: RedirectInfoOfProgramFromBuildInfo;
     }
 
     /*@internal*/
@@ -4035,23 +4035,23 @@ namespace ts {
         programFromBuildInfo: true;
 
         getCompilerOptions(): CompilerOptions;
-        getRootFileNames(): readonly string[];
-        getSourceFiles(): readonly SourceFileOfProgramFromBuildInfo[];
+        // getRootFileNames(): readonly string[];
+        // getSourceFiles(): readonly SourceFileOfProgramFromBuildInfo[];
         getSourceFileByPath(path: Path): SourceFileOfProgramFromBuildInfo | undefined;
-        getProjectReferences(): readonly ProjectReference[] | undefined;
-        getResolvedProjectReferences(): readonly (ResolvedProjectReferenceOfProgramFromBuildInfo | undefined)[] | undefined;
-        getMissingFilePaths(): readonly Path[];
-        getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
-        getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
-        getAutomaticTypeDirectiveNames(): string[] | undefined;
-        getFilesByNameMap(): ReadonlyESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
-        isSourceFileFromExternalLibraryPath(path: Path): boolean;
-        getFileProcessingDiagnostics(): FilePreprocessingDiagnostic[] | undefined;
-        isSourceFileFromProjectReference(file: SourceFileOfProgramFromBuildInfo): boolean;
+        // getProjectReferences(): readonly ProjectReference[] | undefined;
+        // getResolvedProjectReferences(): readonly (ResolvedProjectReferenceOfProgramFromBuildInfo | undefined)[] | undefined;
+        // getMissingFilePaths(): readonly Path[];
+        // getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
+        // getResolvedTypeReferenceDirectives(): ESMap<string, ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+        // getAutomaticTypeDirectiveNames(): string[] | undefined;
+        // getFilesByNameMap(): ReadonlyESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
+        // isSourceFileFromExternalLibraryPath(path: Path): boolean;
+        // getFileProcessingDiagnostics(): FilePreprocessingDiagnostic[] | undefined;
+        // isSourceFileFromProjectReference(file: SourceFileOfProgramFromBuildInfo): boolean;
 
-        useSourceOfProjectReferenceRedirect: boolean;
-        redirectTargetsMap: MultiMap<Path, string>;
-        sourceFileToPackageName: ESMap<Path, string>;
+        // useSourceOfProjectReferenceRedirect: boolean;
+        // redirectTargetsMap: MultiMap<Path, string>;
+        // sourceFileToPackageName: ESMap<Path, string>;
     }
 
     /* @internal */

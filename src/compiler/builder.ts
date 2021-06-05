@@ -365,8 +365,8 @@ namespace ts {
             if (state.program!.isSourceFileFromExternalLibraryPath(sourceFile.path)) (sourceFileFromExternalLibraryPath ||= new Set()).add(sourceFile.path);
             if (sourceFile.resolvedPath !== sourceFile.path && state.program!.isSourceFileFromExternalLibraryPath(sourceFile.path)) (sourceFileFromExternalLibraryPath ||= new Set()).add(sourceFile.path);
             const file: SourceFileOfProgramFromBuildInfo = {
-                fileName: sourceFile.fileName,
-                originalFileName: sourceFile.originalFileName,
+                // fileName: sourceFile.fileName,
+                // originalFileName: sourceFile.originalFileName,
                 path: sourceFile.path,
                 resolvedPath: sourceFile.resolvedPath,
                 flags: sourceFile.flags,

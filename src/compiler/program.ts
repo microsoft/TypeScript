@@ -1091,7 +1091,7 @@ namespace ts {
                     oldProgram.getProjectReferences(),
                     oldProgram.getResolvedProjectReferences(),
                     (oldResolvedRef, parent, index) => {
-                        const oldReference = parent?.commandLine.projectReferences![index] || oldProgram!.getProjectReferences()![index];
+                        const oldReference = parent?.commandLine.projectReferences![index] || (oldProgram as Program).getProjectReferences()![index];
                         const oldRefPath = resolveProjectReferencePath(oldReference);
                         if (!projectReferenceRedirects?.has(toPath(oldRefPath))) {
                             host.onReleaseParsedCommandLine!(oldRefPath, oldResolvedRef, oldProgram!.getCompilerOptions());
@@ -1305,7 +1305,7 @@ namespace ts {
             }
 
             const oldSourceFile = oldProgram?.getSourceFileByPath(file.resolvedPath);
-            if (oldSourceFile?.version !== file.version && file.resolvedModules) {
+            if (oldProgram && !isProgramFromBuildInfo(oldProgram) && (oldSourceFile as SourceFile).version !== file.version && file.resolvedModules) {
                 // `file` was created for the new program.
                 //
                 // We only set `file.resolvedModules` via work from the current function,
@@ -1345,7 +1345,7 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged or persistResolutions and doesnt have invalidated resolution, reuse the module resolutions
                 if (oldSourceFile &&
-                    (options.persistResolutions || file.version === oldSourceFile.version) &&
+                    (options.persistResolutions || file.version === (oldSourceFile as SourceFile).version) &&
                     !hasInvalidatedResolution(oldSourceFile.path)) {
                     const oldResolvedModule = oldSourceFile.resolvedModules?.get(moduleName);
                     if (oldResolvedModule?.resolvedModule) {
@@ -1445,10 +1445,10 @@ namespace ts {
             }
         }
 
-        function canReuseProjectReferences(): boolean {
+        function canReuseProjectReferences(oldProgram: Program): boolean {
             return !forEachProjectReference(
-                oldProgram!.getProjectReferences(),
-                oldProgram!.getResolvedProjectReferences(),
+                oldProgram.getProjectReferences(),
+                oldProgram.getResolvedProjectReferences(),
                 (oldResolvedRef, parent, index) => {
                     const newRef = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                     const newResolvedRef = parseProjectReferenceConfigFile(newRef);
@@ -1483,6 +1483,10 @@ namespace ts {
                 return StructureIsReused.Not;
             }
 
+            if (isProgramFromBuildInfo(oldProgram)) {
+                return options.persistResolutions ? StructureIsReused.SafeModules : StructureIsReused.Not;
+            }
+
             // With persistResolutions its always to reuse strcture for safe module resolutions
             const result = tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram);
             return options.persistResolutions && result === StructureIsReused.Not ?
@@ -1491,7 +1495,7 @@ namespace ts {
 
         }
 
-        function tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram: Program | ProgramFromBuildInfo): StructureIsReused {
+        function tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram: Program): StructureIsReused {
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
@@ -1499,7 +1503,7 @@ namespace ts {
             }
 
             // Check if any referenced project tsconfig files are different
-            if (!canReuseProjectReferences()) {
+            if (!canReuseProjectReferences(oldProgram)) {
                 return StructureIsReused.Not;
             }
             if (projectReferences) {
