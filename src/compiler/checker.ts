@@ -12021,16 +12021,23 @@ namespace ts {
             return undefined;
         }
 
+        function isApplicableIndexType(source: Type, target: Type) {
+            // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
+            // signature applies to types assignable to 'number' or `${number}`.
+            return isTypeAssignableTo(source, target) ||
+                target === stringType && isTypeAssignableTo(source, numberType) ||
+                target === numberType && source.flags & TypeFlags.StringLiteral && isNumericLiteralName((source as StringLiteralType).value);
+        }
+
         function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
-            const indexInfos = getIndexInfosOfType(type);
             let stringIndexInfo: IndexInfo | undefined;
             let applicableInfo: IndexInfo | undefined;
             let applicableInfos: IndexInfo[] | undefined;
-            for (const info of indexInfos) {
+            for (const info of getIndexInfosOfType(type)) {
                 if (info.keyType === stringType) {
                     stringIndexInfo = info;
                 }
-                else if (isTypeAssignableTo(keyType, info.keyType)) {
+                else if (isApplicableIndexType(keyType, info.keyType)) {
                     if (!applicableInfo) {
                         applicableInfo = info;
                     }
@@ -12042,14 +12049,15 @@ namespace ts {
             // When more than one index signature is applicable we create a synthetic IndexInfo. Instead of computing
             // the intersected key type, we just use unknownType for the key type as nothing actually depends on the
             // keyType property of the returned IndexInfo.
-            return applicableInfos ?
-                createIndexInfo(unknownType, getIntersectionType(map(applicableInfos, info => info.type)),
+            return applicableInfos ? createIndexInfo(unknownType, getIntersectionType(map(applicableInfos, info => info.type)),
                     reduceLeft(applicableInfos, (isReadonly, info) => isReadonly && info.isReadonly, /*initial*/ true)) :
-                applicableInfo || stringIndexInfo;
+                applicableInfo ? applicableInfo :
+                stringIndexInfo && isApplicableIndexType(keyType, stringType) ? stringIndexInfo :
+                undefined;
         }
 
         function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
-            return isNumericLiteralName(name) && getIndexInfoOfType(type, numberType) || getApplicableIndexInfo(type, getLiteralType(unescapeLeadingUnderscores(name)));
+            return getApplicableIndexInfo(type, getLiteralType(unescapeLeadingUnderscores(name)));
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -14668,7 +14676,9 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
-                const indexInfo = getApplicableIndexInfo(objectType, indexType);
+                // If no index signature is applicable, we default to the string index signature. In effect, this means the string
+                // index signature applies even when accessing with a symbol-like type.
+                const indexInfo = getApplicableIndexInfo(objectType, indexType) || getIndexInfoOfType(objectType, stringType);
                 if (indexInfo) {
                     if (accessFlags & AccessFlags.NoIndexSignatures && indexInfo.keyType !== numberType) {
                         if (accessExpression) {
