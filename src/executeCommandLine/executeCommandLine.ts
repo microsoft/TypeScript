@@ -109,7 +109,7 @@ namespace ts {
         return `--${option.name}${option.shortName ? `, -${option.shortName}` : ""}`;
     }
 
-    function generateOptionOutput(sys: System,option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
+    function generateOptionOutput(sys: System, option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
         interface ValueCandidate {
             // "one or more" or "any of"
             valueType: string;
@@ -124,7 +124,7 @@ namespace ts {
         // value type and possible value
         const valueCandidates = getValueCandidate(option);
         const defaultValueDescription = typeof option.defaultValueDescription === "object" ? getDiagnosticText(option.defaultValueDescription) : option.defaultValueDescription;
-        const terminalWidth = sys.getWidthOfTerminal();
+        const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
         if (terminalWidth >= leftAlignOfRight + 20) {
@@ -156,7 +156,7 @@ namespace ts {
                     text.push(padLeft("", leftPad), `${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
                 }
                 if (defaultValueDescription) {
-                    if(valueCandidates) text.push(sys.newLine);
+                    if (valueCandidates) text.push(sys.newLine);
                     const diagType = getDiagnosticText(Diagnostics.default_Colon);
                     const leftPad = Math.max(name.length + 1 - diagType.length, 2);
                     text.push(padLeft("", leftPad), `${diagType} ${defaultValueDescription}`);
@@ -256,7 +256,7 @@ namespace ts {
         }
     }
 
-    function generateGroupOptionOutput(sys: System,optionsList: readonly CommandLineOption[]) {
+    function generateGroupOptionOutput(sys: System, optionsList: readonly CommandLineOption[]) {
         let maxLength = 0;
         for (const option of optionsList) {
             const curLength = getDisplayNameTextOfOption(option).length;
@@ -359,7 +359,7 @@ namespace ts {
     function getHelpHeader(sys: System) {
         const header: string[] = [];
         const tscexplaination = `tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}`;
-        const terminalWidth = sys.getWidthOfTerminal();
+        const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;;
         const tsIconLength = 5;
 
         const tsIconFirstLine = blueBackground(padLeft("", tsIconLength));
@@ -861,7 +861,7 @@ namespace ts {
 
         if (canTrace(system, compilerOptions)) {
             startTracing(isBuildMode ? "build" : "project",
-                         compilerOptions.generateTrace!, compilerOptions.configFilePath);
+                compilerOptions.generateTrace!, compilerOptions.configFilePath);
         }
     }
 
