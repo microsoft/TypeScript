@@ -24178,17 +24178,7 @@ namespace ts {
             }
         }
 
-        function checkGrammarIdentifierInClassStaticBlockContext(node: Identifier) {
-            if (node.flags & NodeFlags.ClassStaticBlockContext && (
-                node.originalKeywordKind === SyntaxKind.AwaitKeyword || node.escapedText === "await"
-            )) {
-                grammarErrorOnNode(node, Diagnostics.Identifier_await_cannot_be_used_inside_class_static_block);
-            }
-        }
-
         function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
-            checkGrammarIdentifierInClassStaticBlockContext(node);
-
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
                 return errorType;
@@ -31270,6 +31260,10 @@ namespace ts {
                     }
                 }
 
+                if (node.flags & NodeFlags.ClassStaticBlockContext) {
+                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_class_static_block);
+                }
+
                 if (isInParameterInitializerBeforeContainingFunction(node)) {
                     error(node, Diagnostics.await_expressions_cannot_be_used_in_a_parameter_initializer);
                 }
@@ -34728,9 +34722,6 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                if (node.name) {
-                    checkGrammarIdentifierInClassStaticBlockContext(node.name);
-                }
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
                 checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
@@ -35455,10 +35446,6 @@ namespace ts {
             // JSDoc `function(string, string): string` syntax results in parameters with no name
             if (!node.name) {
                 return;
-            }
-
-            if (node.name.kind === SyntaxKind.Identifier) {
-                checkGrammarIdentifierInClassStaticBlockContext(node.name);
             }
 
             // For a computed property, just check the initializer and exit
@@ -36697,7 +36684,6 @@ namespace ts {
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
             // Grammar checking
-            if (node.label) checkGrammarIdentifierInClassStaticBlockContext(node.label);
             if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
@@ -36841,7 +36827,6 @@ namespace ts {
                     return false;
                 });
             }
-            checkGrammarIdentifierInClassStaticBlockContext(node.label);
 
             // ensure that label is unique
             checkSourceElement(node.statement);
@@ -37164,9 +37149,6 @@ namespace ts {
             }
             if (!node.name && !hasSyntacticModifier(node, ModifierFlags.Default)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_class_declaration_without_the_default_modifier_must_have_a_name);
-            }
-            if (node.name) {
-                checkGrammarIdentifierInClassStaticBlockContext(node.name);
             }
             checkClassLikeDeclaration(node);
             forEach(node.members, checkSourceElement);

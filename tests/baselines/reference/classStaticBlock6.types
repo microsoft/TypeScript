@@ -27,6 +27,7 @@ class C extends B {
 
         await: if (true) {
 >await : any
+> : any
 >true : true
 
         }
@@ -35,7 +36,8 @@ class C extends B {
 >arguments : number
 
         await;
->await : number
+>await : any
+> : any
 
         super();
 >super() : void

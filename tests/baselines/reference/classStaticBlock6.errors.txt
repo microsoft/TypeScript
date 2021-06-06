@@ -1,12 +1,13 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(7,13): error TS18037: Identifier 'await' cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(8,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(9,13): error TS1210: Invalid use of 'eval'. Class definitions are automatically in strict mode.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(12,9): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(17,9): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(12,9): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(12,14): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(17,9): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(17,14): error TS1109: Expression expected.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (6 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts (7 errors) ====
     class B {
         static a = 1;
     }
@@ -14,8 +15,6 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,9): err
     class C extends B {
         static {
             var await = 1;
-                ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
             var arguments = 1;
                 ~~~~~~~~~
 !!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
@@ -26,14 +25,18 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock6.ts(18,9): err
     
             await: if (true) {
             ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+                 ~
+!!! error TS1109: Expression expected.
     
             }
     
             arguments;
             await;
             ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+                 ~
+!!! error TS1109: Expression expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.

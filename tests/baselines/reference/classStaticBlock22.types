@@ -7,7 +7,10 @@ class C {
 
   static {
     let await: any; // illegal, cannot declare a new binding for await
+>let : any
 >await : any
+> : any
+>any : any
   }
   static {
     let { await } = {} as any; // illegal, cannot declare a new binding for await
@@ -24,16 +27,19 @@ class C {
   }
   static {
     let await; // illegal, cannot declare a new binding for await
+>let : any
 >await : any
+> : any
   }
   static {
     await; // illegal
->await : "any"
+>await : any
+> : any
   }
   static {
     await(1); // illegal
->await(1) : any
->await : "any"
+>await(1) : 1
+>(1) : 1
 >1 : 1
   }
   static {
@@ -46,16 +52,18 @@ class C {
   }
   static {
     ({ await }); // illegal short-hand property reference
->({ await }) : { await: "any"; }
->{ await } : { await: "any"; }
->await : "any"
+>({ await }) : { await: any; }
+>{ await } : { await: any; }
+>await : any
+> : any
   }
   static {
     ({ [await]: 1 }); // illegal
->({ [await]: 1 }) : { any: number; }
->{ [await]: 1 } : { any: number; }
+>({ [await]: 1 }) : { [x: number]: number; }
+>{ [await]: 1 } : { [x: number]: number; }
 >[await] : number
->await : "any"
+>await : any
+> : any
 >1 : 1
   }
   static {
@@ -72,7 +80,8 @@ class C {
 
         [await] = 1; // illegal (computed property names are evaluated outside of a class body
 >[await] : number
->await : "any"
+>await : any
+> : any
 >1 : 1
 
       };
@@ -104,9 +113,12 @@ class C {
   static {
     await: // illegal, 'await' cannot be used as a label
 >await : any
+> : any
 
         break await; // illegal, 'await' cannot be used as a label
+> : any
 >await : any
+> : any
   }
   static {
     class E {
@@ -187,13 +199,14 @@ class C {
 >await : any
 
     const ff = (await) => {}
->ff : (await: any) => void
->(await) => {} : (await: any) => void
+>ff : any
+>(await) : any
 >await : any
+> : any
 
     const fff = await => {}
->fff : (await: any) => void
->await => {} : (await: any) => void
+>fff : any
 >await : any
+> : any
   }
 }

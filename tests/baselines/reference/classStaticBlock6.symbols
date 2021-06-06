@@ -29,8 +29,6 @@ class C extends B {
 >arguments : Symbol(arguments, Decl(classStaticBlock6.ts, 7, 11))
 
         await;
->await : Symbol(await, Decl(classStaticBlock6.ts, 6, 11))
-
         super();
     }
 }

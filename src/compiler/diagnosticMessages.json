@@ -6506,7 +6506,7 @@
         "category": "Error",
         "code": 18036
     },
-    "Identifier 'await' cannot be used inside class static block.": {
+    "Await expression cannot be used inside class static block.": {
         "category": "Error",
         "code": 18037
     }

@@ -55,9 +55,10 @@ _C__ = { value: (function () {
         var await = 1;
         var arguments = 1;
         var eval = 1;
-        await: if (true) {
+        yield ;
+        if (true) {
         }
         arguments;
-        await;
+        yield ;
         _this = _super.call(this) || this;
     })() };
