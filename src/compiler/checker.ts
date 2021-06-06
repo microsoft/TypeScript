@@ -12002,25 +12002,6 @@ namespace ts {
             return info1 ? info2 ? [info1, info2] : [info1] : info2 ? [info2] : emptyArray;
         }
 
-        function getImplicitIndexTypeOfType(type: Type, keyType: Type): Type | undefined {
-            if (isObjectTypeWithInferableIndex(type)) {
-                const propTypes: Type[] = [];
-                for (const prop of getPropertiesOfType(type)) {
-                    if (keyType === stringType || isNumericLiteralName(prop.escapedName)) {
-                        const propType = getTypeOfSymbol(prop);
-                        propTypes.push(prop.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType);
-                    }
-                }
-                if (keyType === stringType) {
-                    append(propTypes, getIndexTypeOfType(type, numberType));
-                }
-                if (propTypes.length) {
-                    return getUnionType(propTypes);
-                }
-            }
-            return undefined;
-        }
-
         function isApplicableIndexType(source: Type, target: Type) {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
             // signature applies to types assignable to 'number' and numeric string literal types.
@@ -21709,21 +21690,30 @@ namespace ts {
             function inferFromIndexTypes(source: Type, target: Type) {
                 // Inferences across mapped type index signatures are pretty much the same a inferences to homomorphic variables
                 const priority = (getObjectFlags(source) & getObjectFlags(target) & ObjectFlags.Mapped) ? InferencePriority.HomomorphicMappedType : 0;
-                const targetStringIndexType = getIndexTypeOfType(target, stringType);
-                if (targetStringIndexType) {
-                    const sourceIndexType = getIndexTypeOfType(source, stringType) ||
-                        getImplicitIndexTypeOfType(source, stringType);
-                    if (sourceIndexType) {
-                        inferWithPriority(sourceIndexType, targetStringIndexType, priority);
+                const indexInfos = getIndexInfosOfType(target);
+                if (isObjectTypeWithInferableIndex(source)) {
+                    for (const targetInfo of indexInfos) {
+                        const propTypes: Type[] = [];
+                        for (const prop of getPropertiesOfType(source)) {
+                            if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), targetInfo.keyType)) {
+                                const propType = getTypeOfSymbol(prop);
+                                propTypes.push(prop.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType);
+                            }
+                        }
+                        for (const info of getIndexInfosOfType(source)) {
+                            if (isApplicableIndexType(info.keyType, targetInfo.keyType)) {
+                                propTypes.push(info.type);
+                            }
+                        }
+                        if (propTypes.length) {
+                            inferWithPriority(getUnionType(propTypes), targetInfo.type, priority);
+                        }
                     }
                 }
-                const targetNumberIndexType = getIndexTypeOfType(target, numberType);
-                if (targetNumberIndexType) {
-                    const sourceIndexType = getIndexTypeOfType(source, numberType) ||
-                        getIndexTypeOfType(source, stringType) ||
-                        getImplicitIndexTypeOfType(source, numberType);
-                    if (sourceIndexType) {
-                        inferWithPriority(sourceIndexType, targetNumberIndexType, priority);
+                for (const targetInfo of indexInfos) {
+                    const sourceInfo = getApplicableIndexInfo(source, targetInfo.keyType);
+                    if (sourceInfo) {
+                        inferWithPriority(sourceInfo.type, targetInfo.type, priority);
                     }
                 }
             }
