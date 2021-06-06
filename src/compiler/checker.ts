@@ -26961,9 +26961,8 @@ namespace ts {
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
-                if (getIndexInfoOfStructuredType(targetType, stringType) ||
-                    getIndexInfoOfStructuredType(targetType, numberType) && isNumericLiteralName(name) ||
-                    getPropertyOfObjectType(targetType, name) ||
+                if (getPropertyOfObjectType(targetType, name) ||
+                    getApplicableIndexInfoForName(targetType, name) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
