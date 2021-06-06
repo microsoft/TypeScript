@@ -12023,10 +12023,14 @@ namespace ts {
 
         function isApplicableIndexType(source: Type, target: Type) {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
-            // signature applies to types assignable to 'number' or `${number}`.
+            // signature applies to types assignable to 'number' and numeric string literal types.
             return isTypeAssignableTo(source, target) ||
                 target === stringType && isTypeAssignableTo(source, numberType) ||
                 target === numberType && source.flags & TypeFlags.StringLiteral && isNumericLiteralName((source as StringLiteralType).value);
+        }
+
+        function getApplicableIndexInfos(type: Type, keyType: Type): IndexInfo[] {
+            return getIndexInfosOfType(type).filter(info => isApplicableIndexType(keyType, info.keyType));
         }
 
         function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
@@ -14369,8 +14373,8 @@ namespace ts {
             });
         }
 
-        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
-            if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
+        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags, includeNonPublic?: boolean) {
+            if (includeNonPublic || !(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
                 if (!type) {
                     if (prop.escapedName === InternalSymbolName.Default) {
@@ -36854,105 +36858,76 @@ namespace ts {
         }
 
         function checkIndexConstraints(type: Type, isStatic?: boolean) {
-            const symbolTable = isStatic ? type.symbol?.exports : type.symbol?.members;
-            const indexSymbol = symbolTable && getIndexSymbolFromSymbolTable(symbolTable);
-            const indexInfos = indexSymbol ? getIndexInfosOfIndexSymbol(indexSymbol) : emptyArray;
-            const declaredStringIndexer = findIndexInfo(indexInfos, stringType)?.declaration;
-            const declaredNumberIndexer = findIndexInfo(indexInfos, numberType)?.declaration;
-
-            const stringIndexType = getIndexTypeOfType(type, stringType);
-            const numberIndexType = getIndexTypeOfType(type, numberType);
-
-            if (stringIndexType || numberIndexType) {
-                forEach(getPropertiesOfObjectType(type), prop => {
-                    if (isStatic && prop.flags & SymbolFlags.Prototype) return;
-                    const propType = getTypeOfSymbol(prop);
-                    checkIndexConstraintForProperty(prop, propType, type, declaredStringIndexer, stringIndexType, stringType);
-                    checkIndexConstraintForProperty(prop, propType, type, declaredNumberIndexer, numberIndexType, numberType);
-                });
-
-                const classDeclaration = type.symbol.valueDeclaration;
-                if (getObjectFlags(type) & ObjectFlags.Class && classDeclaration && isClassLike(classDeclaration)) {
-                    for (const member of classDeclaration.members) {
-                        // Only process instance properties with computed names here.
-                        // Static properties cannot be in conflict with indexers,
-                        // and properties with literal names were already checked.
-                        if (!hasSyntacticModifier(member, ModifierFlags.Static) && !hasBindableName(member)) {
-                            const symbol = getSymbolOfNode(member);
-                            const propType = getTypeOfSymbol(symbol);
-                            checkIndexConstraintForProperty(symbol, propType, type, declaredStringIndexer, stringIndexType, stringType);
-                            checkIndexConstraintForProperty(symbol, propType, type, declaredNumberIndexer, numberIndexType, numberType);
-                        }
+            const indexInfos = getIndexInfosOfType(type);
+            if (indexInfos.length === 0) {
+                return;
+            }
+            for (const prop of getPropertiesOfObjectType(type)) {
+                if (!(isStatic && prop.flags & SymbolFlags.Prototype)) {
+                    checkIndexConstraintForProperty(type, prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*includeNonPublic*/ true), getTypeOfSymbol(prop));
+                }
+            }
+            const typeDeclaration = type.symbol.valueDeclaration;
+            if (typeDeclaration && isClassLike(typeDeclaration)) {
+                for (const member of typeDeclaration.members) {
+                    // Only process instance properties with computed names here. Static properties cannot be in conflict with indexers,
+                    // and properties with literal names were already checked.
+                    if (!hasSyntacticModifier(member, ModifierFlags.Static) && !hasBindableName(member)) {
+                        const symbol = getSymbolOfNode(member);
+                        checkIndexConstraintForProperty(type, symbol, getTypeOfExpression((member as DynamicNamedDeclaration).name.expression), getTypeOfSymbol(symbol));
                     }
                 }
             }
-
-            let errorNode: Node | undefined;
-            if (stringIndexType && numberIndexType) {
-                errorNode = declaredNumberIndexer || declaredStringIndexer;
-                // condition 'errorNode === undefined' may appear if types does not declare nor string neither number indexer
-                if (!errorNode && (getObjectFlags(type) & ObjectFlags.Interface)) {
-                    const someBaseTypeHasBothIndexers = forEach(getBaseTypes(type as InterfaceType), base => getIndexTypeOfType(base, stringType) && getIndexTypeOfType(base, numberType));
-                    errorNode = someBaseTypeHasBothIndexers || !type.symbol.declarations ? undefined : type.symbol.declarations[0];
+            if (indexInfos.length > 1) {
+                for (const info of indexInfos) {
+                    checkIndexConstraintForIndexSignature(type, info);
                 }
             }
+        }
 
-            if (errorNode && !isTypeAssignableTo(numberIndexType!, stringIndexType!)) { // TODO: GH#18217
-                error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
-                    typeToString(numberIndexType!), typeToString(stringIndexType!));
+        function checkIndexConstraintForProperty(type: Type, prop: Symbol, propNameType: Type, propType: Type) {
+            const declaration = prop.valueDeclaration;
+            const name = getNameOfDeclaration(declaration);
+            if (name && isPrivateIdentifier(name)) {
+                return;
             }
-
-            function checkIndexConstraintForProperty(
-                prop: Symbol,
-                propertyType: Type,
-                containingType: Type,
-                indexDeclaration: Declaration | undefined,
-                indexType: Type | undefined,
-                keyType: Type): void {
-
-                // ESSymbol properties apply to neither string nor numeric indexers.
-                if (!indexType || isKnownSymbol(prop)) {
-                    return;
-                }
-
-                const propDeclaration = prop.valueDeclaration;
-                const name = propDeclaration && getNameOfDeclaration(propDeclaration);
-
-                if (name && isPrivateIdentifier(name)) {
-                    return;
-                }
-
-                // index is numeric and property name is not valid numeric literal
-                if (keyType === numberType && !(name ? isNumericName(name) : isNumericLiteralName(prop.escapedName))) {
-                    return;
-                }
-
-                // perform property check if property or indexer is declared in 'type'
-                // this allows us to rule out cases when both property and indexer are inherited from the base class
-                let errorNode: Node | undefined;
-                if (propDeclaration && name &&
-                    (propDeclaration.kind === SyntaxKind.BinaryExpression ||
-                     name.kind === SyntaxKind.ComputedPropertyName ||
-                     prop.parent === containingType.symbol)) {
-                    errorNode = propDeclaration;
-                }
-                else if (indexDeclaration) {
-                    errorNode = indexDeclaration;
-                }
-                else if (getObjectFlags(containingType) & ObjectFlags.Interface) {
-                    // for interfaces property and indexer might be inherited from different bases
-                    // check if any base class already has both property and indexer.
-                    // check should be performed only if 'type' is the first type that brings property\indexer together
-                    const someBaseClassHasBothPropertyAndIndexer = forEach(getBaseTypes(containingType as InterfaceType), base => getPropertyOfObjectType(base, prop.escapedName) && getIndexTypeOfType(base, keyType));
-                    errorNode = someBaseClassHasBothPropertyAndIndexer || !containingType.symbol.declarations ? undefined : containingType.symbol.declarations[0];
-                }
-
-                if (errorNode && !isTypeAssignableTo(propertyType, indexType)) {
+            const indexInfos = getApplicableIndexInfos(type, propNameType);
+            const interfaceDeclaration = getObjectFlags(type) & ObjectFlags.Interface ? getDeclarationOfKind(type.symbol, SyntaxKind.InterfaceDeclaration) : undefined;
+            const localPropDeclaration = declaration && declaration.kind === SyntaxKind.BinaryExpression ||
+                name && name.kind === SyntaxKind.ComputedPropertyName || getParentOfSymbol(prop) === type.symbol ? declaration : undefined;
+            for (const info of indexInfos) {
+                const localIndexDeclaration = info.declaration && getParentOfSymbol(getSymbolOfNode(info.declaration)) === type.symbol ? info.declaration : undefined;
+                // We check only when (a) the property is declared in the containing type, or (b) the applicable index signature is declared
+                // in the containing type, or (c) the containing type is an interface and no base interface contains both the property and
+                // the index signature (i.e. property and index signature are declared in separate inherited interfaces).
+                const errorNode = localPropDeclaration || localIndexDeclaration ||
+                    (interfaceDeclaration && !some(getBaseTypes(type as InterfaceType), base => !!getPropertyOfObjectType(base, prop.escapedName) && !!getIndexTypeOfType(base, info.keyType)) ? interfaceDeclaration : undefined);
+                if (errorNode && !isTypeAssignableTo(propType, info.type)) {
                     const errorMessage =
-                        keyType === stringType
+                        info.keyType === stringType
                             ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
                             : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
-                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propertyType), typeToString(indexType));
+                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propType), typeToString(info.type));
+                }
+            }
+        }
+
+        function checkIndexConstraintForIndexSignature(type: Type, checkInfo: IndexInfo) {
+            const declaration = checkInfo.declaration;
+            const indexInfos = getApplicableIndexInfos(type, checkInfo.keyType);
+            const interfaceDeclaration = getObjectFlags(type) & ObjectFlags.Interface ? getDeclarationOfKind(type.symbol, SyntaxKind.InterfaceDeclaration) : undefined;
+            const localCheckDeclaration = declaration && getParentOfSymbol(getSymbolOfNode(declaration)) === type.symbol ? declaration : undefined;
+            for (const info of indexInfos) {
+                if (info === checkInfo) continue;
+                const localIndexDeclaration = info.declaration && getParentOfSymbol(getSymbolOfNode(info.declaration)) === type.symbol ? info.declaration : undefined;
+                // We check only when (a) the check index signature is declared in the containing type, or (b) the applicable index
+                // signature is declared in the containing type, or (c) the containing type is an interface and no base interface contains
+                // both index signatures (i.e. the index signatures are declared in separate inherited interfaces).
+                const errorNode = localCheckDeclaration || localIndexDeclaration ||
+                    (interfaceDeclaration && !some(getBaseTypes(type as InterfaceType), base => !!getIndexInfoOfType(base, checkInfo.keyType) && !!getIndexTypeOfType(base, info.keyType)) ? interfaceDeclaration : undefined);
+                if (errorNode && !isTypeAssignableTo(checkInfo.type, info.type)) {
+                    error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
+                        typeToString(checkInfo.type), typeToString(info.type));
                 }
             }
         }
