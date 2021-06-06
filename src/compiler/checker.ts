@@ -36903,11 +36903,8 @@ namespace ts {
                 const errorNode = localPropDeclaration || localIndexDeclaration ||
                     (interfaceDeclaration && !some(getBaseTypes(type as InterfaceType), base => !!getPropertyOfObjectType(base, prop.escapedName) && !!getIndexTypeOfType(base, info.keyType)) ? interfaceDeclaration : undefined);
                 if (errorNode && !isTypeAssignableTo(propType, info.type)) {
-                    const errorMessage =
-                        info.keyType === stringType
-                            ? Diagnostics.Property_0_of_type_1_is_not_assignable_to_string_index_type_2
-                            : Diagnostics.Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2;
-                    error(errorNode, errorMessage, symbolToString(prop), typeToString(propType), typeToString(info.type));
+                    error(errorNode, Diagnostics.Property_0_of_type_1_is_not_assignable_to_2_index_type_3,
+                        symbolToString(prop), typeToString(propType), typeToString(info.keyType), typeToString(info.type));
                 }
             }
         }
@@ -36926,8 +36923,8 @@ namespace ts {
                 const errorNode = localCheckDeclaration || localIndexDeclaration ||
                     (interfaceDeclaration && !some(getBaseTypes(type as InterfaceType), base => !!getIndexInfoOfType(base, checkInfo.keyType) && !!getIndexTypeOfType(base, info.keyType)) ? interfaceDeclaration : undefined);
                 if (errorNode && !isTypeAssignableTo(checkInfo.type, info.type)) {
-                    error(errorNode, Diagnostics.Numeric_index_type_0_is_not_assignable_to_string_index_type_1,
-                        typeToString(checkInfo.type), typeToString(info.type));
+                    error(errorNode, Diagnostics._0_index_type_1_is_not_assignable_to_2_index_type_3,
+                        typeToString(checkInfo.keyType), typeToString(checkInfo.type), typeToString(info.keyType), typeToString(info.type));
                 }
             }
         }
