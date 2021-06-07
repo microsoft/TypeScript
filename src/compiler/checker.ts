@@ -13791,7 +13791,7 @@ namespace ts {
                 const t = types[i];
                 const flags = t.flags;
                 const remove =
-                    flags & TypeFlags.StringLiteral && includes & TypeFlags.String ||
+                    flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && includes & TypeFlags.String ||
                     flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
@@ -13861,7 +13861,7 @@ namespace ts {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
-                if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
+                if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                     removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
                 }
                 if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
@@ -33276,31 +33276,27 @@ namespace ts {
             // 8.5: A class declaration can have at most one string index member declaration and one numeric index member declaration
             const indexSymbol = getIndexSymbol(getSymbolOfNode(node)!);
             if (indexSymbol?.declarations) {
-                let seenNumericIndexer = false;
-                let seenStringIndexer = false;
-                for (const decl of indexSymbol.declarations) {
-                    const declaration = decl as SignatureDeclaration;
+                const indexSignatureMap = new Map<TypeId, { type: Type, declarations: IndexSignatureDeclaration[] }>();
+                for (const declaration of (indexSymbol.declarations as IndexSignatureDeclaration[])) {
                     if (declaration.parameters.length === 1 && declaration.parameters[0].type) {
-                        switch (declaration.parameters[0].type.kind) {
-                            case SyntaxKind.StringKeyword:
-                                if (!seenStringIndexer) {
-                                    seenStringIndexer = true;
-                                }
-                                else {
-                                    error(declaration, Diagnostics.Duplicate_string_index_signature);
-                                }
-                                break;
-                            case SyntaxKind.NumberKeyword:
-                                if (!seenNumericIndexer) {
-                                    seenNumericIndexer = true;
-                                }
-                                else {
-                                    error(declaration, Diagnostics.Duplicate_number_index_signature);
-                                }
-                                break;
-                        }
+                        forEachType(getTypeFromTypeNode(declaration.parameters[0].type), type => {
+                            const entry = indexSignatureMap.get(getTypeId(type));
+                            if (entry) {
+                                entry.declarations.push(declaration);
+                            }
+                            else {
+                                indexSignatureMap.set(getTypeId(type), { type, declarations: [declaration] });
+                            }
+                        });
                     }
                 }
+                indexSignatureMap.forEach(entry => {
+                    if (entry.declarations.length > 1) {
+                        for (const declaration of entry.declarations) {
+                            error(declaration, Diagnostics.Duplicate_index_signature_for_type_0, typeToString(entry.type));
+                        }
+                    }
+                });
             }
         }
 

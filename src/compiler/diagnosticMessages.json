@@ -1698,13 +1698,9 @@
         "category": "Error",
         "code": 2373
     },
-    "Duplicate string index signature.": {
+    "Duplicate index signature for type '{0}'.": {
         "category": "Error",
         "code": 2374
-    },
-    "Duplicate number index signature.": {
-        "category": "Error",
-        "code": 2375
     },
     "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
