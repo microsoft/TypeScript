@@ -141,6 +141,7 @@
         "unittests/tsbuildWatch/noEmit.ts",
         "unittests/tsbuildWatch/noEmitOnError.ts",
         "unittests/tsbuildWatch/programUpdates.ts",
+        "unittests/tsbuildWatch/publicApi.ts",
         "unittests/tsbuildWatch/reexport.ts",
         "unittests/tsbuildWatch/watchEnvironment.ts",
         "unittests/tsc/composite.ts",
