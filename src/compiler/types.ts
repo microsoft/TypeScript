@@ -8109,9 +8109,9 @@ namespace ts {
     /* @internal */
     export interface ModuleSpecifierCache {
         getModulePaths(fromFileName: Path, toFileName: Path): boolean | readonly ModulePath[] | undefined;
-        setModulePaths(fromFileName: Path, toFileName: Path, modulePaths: boolean | readonly ModulePath[]): void;
-        get(fromFileName: Path, toFileName: Path): { modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[] } | boolean | undefined;
-        set(fromFileName: Path, toFileName: Path, cached: { modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[] }): void;
+        get(fromFileName: Path, toFileName: Path): { modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[] } | boolean | undefined;
+        set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[] | boolean): void;
+        set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[]): void;
         clear(): void;
         count(): number;
     }

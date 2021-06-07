@@ -593,7 +593,7 @@ namespace ts.server {
         /** How many watchers of this directory were for closed ScriptInfo */
         refreshScriptInfoRefCount: number;
         /** List of project names whose module specifier cache should be cleared when package.jsons change */
-        affectedModuleSpecifierCacheProjects: Set<string>;
+        affectedModuleSpecifierCacheProjects?: Set<string>;
     }
 
     function getDetailWatchInfo(watchType: WatchType, project: Project | NormalizedPath | undefined) {
@@ -2630,7 +2630,7 @@ namespace ts.server {
                     // Clear module specifier cache for any projects whose cache was affected by
                     // dependency package.jsons in this node_modules directory
                     const basename = getBaseFileName(fileOrDirectoryPath);
-                    if (result.affectedModuleSpecifierCacheProjects.size && (
+                    if (result.affectedModuleSpecifierCacheProjects?.size && (
                         basename === "package.json" || basename === "node_modules"
                     )) {
                         result.affectedModuleSpecifierCacheProjects.forEach(projectName => {
@@ -2668,8 +2668,10 @@ namespace ts.server {
                         ? [affectedModuleSpecifierCacheProject.getProjectName()]
                         : emptyArray),
                 close: () => {
-                    watcher.close();
-                    this.nodeModulesWatchers.delete(dir);
+                    if (!result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size) {
+                        watcher.close();
+                        this.nodeModulesWatchers.delete(dir);
+                    }
                 },
             };
             this.nodeModulesWatchers.set(dir, result);
@@ -2680,19 +2682,15 @@ namespace ts.server {
         watchPackageJsonsInNodeModules(dir: Path, project: Project): FileWatcher {
             const existing = this.nodeModulesWatchers.get(dir);
             if (existing) {
-                existing.affectedModuleSpecifierCacheProjects.add(project.getProjectName());
+                (existing.affectedModuleSpecifierCacheProjects ||= new Set()).add(project.getProjectName());
                 return existing;
             }
 
             const watcher = this.createNodeModulesWatcher(dir, project);
             return {
                 close: () => {
-                    if (watcher.refreshScriptInfoRefCount === 0 && watcher.affectedModuleSpecifierCacheProjects.size === 1) {
-                        watcher.close();
-                    }
-                    else {
-                        watcher.affectedModuleSpecifierCacheProjects.delete(project.getProjectName());
-                    }
+                    watcher.affectedModuleSpecifierCacheProjects?.delete(project.getProjectName());
+                    watcher.close();
                 },
             };
         }
@@ -2708,12 +2706,8 @@ namespace ts.server {
             const watcher = this.createNodeModulesWatcher(watchDir);
             return {
                 close: () => {
-                    if (watcher.refreshScriptInfoRefCount === 1 && watcher.affectedModuleSpecifierCacheProjects.size === 0) {
-                        watcher.close();
-                    }
-                    else {
-                        watcher.refreshScriptInfoRefCount--;
-                    }
+                    watcher.refreshScriptInfoRefCount--;
+                    watcher.close();
                 },
             };
         }

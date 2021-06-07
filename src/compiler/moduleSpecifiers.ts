@@ -132,7 +132,7 @@ namespace ts.moduleSpecifiers {
         ));
         if (existingSpecifier) {
             const moduleSpecifiers = [existingSpecifier];
-            cache?.set(importingSourceFile.path, moduleSourceFile.path, { modulePaths, moduleSpecifiers });
+            cache?.set(importingSourceFile.path, moduleSourceFile.path, modulePaths, moduleSpecifiers);
             return moduleSpecifiers;
         }
 
@@ -152,7 +152,7 @@ namespace ts.moduleSpecifiers {
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-                cache?.set(importingSourceFile.path, moduleSourceFile.path, { modulePaths, moduleSpecifiers: nodeModulesSpecifiers! });
+                cache?.set(importingSourceFile.path, moduleSourceFile.path, modulePaths, nodeModulesSpecifiers);
                 return nodeModulesSpecifiers!;
             }
 
@@ -179,7 +179,7 @@ namespace ts.moduleSpecifiers {
         const moduleSpecifiers = pathsSpecifiers?.length ? pathsSpecifiers :
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
             Debug.checkDefined(relativeSpecifiers);
-        cache?.set(importingSourceFile.path, moduleSourceFile.path, { modulePaths, moduleSpecifiers });
+        cache?.set(importingSourceFile.path, moduleSourceFile.path, modulePaths, moduleSpecifiers);
         return moduleSpecifiers;
     }
 
@@ -362,7 +362,7 @@ namespace ts.moduleSpecifiers {
         }
         const modulePaths = getAllModulePathsWorker(importingFilePath, importedFileName, host);
         if (cache) {
-            cache.setModulePaths(importingFilePath, importedFilePath, modulePaths);
+            cache.set(importingFilePath, importedFilePath, modulePaths);
         }
         return modulePaths;
     }

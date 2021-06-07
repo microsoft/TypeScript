@@ -3279,27 +3279,32 @@ namespace ts {
 
     export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
         let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
-        let cache: ESMap<Path, boolean | { modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[] }> | undefined;
+        let cache: ESMap<Path, boolean | readonly ModulePath[] | { modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[] }> | undefined;
         let importingFileName: Path | undefined;
         const wrapped: ModuleSpecifierCache = {
             get(fromFileName, toFileName) {
                 if (!cache || fromFileName !== importingFileName) return undefined;
-                return cache.get(toFileName);
+                const cached = cache.get(toFileName);
+                return isArray(cached) ? { modulePaths: cached, moduleSpecifiers: emptyArray } : cached;
             },
-            set(fromFileName, toFileName, cached) {
+            set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[] | boolean, moduleSpecifiers?: readonly string[]) {
                 if (cache && fromFileName !== importingFileName) {
                     this.clear();
                 }
                 importingFileName = fromFileName;
-                (cache ||= new Map()).set(toFileName, cached);
+                if (typeof modulePaths === "boolean") {
+                    (cache ||= new Map()).set(toFileName, modulePaths);
+                    return;
+                }
+                (cache ||= new Map()).set(toFileName, moduleSpecifiers ? { modulePaths, moduleSpecifiers } : modulePaths);
 
                 // If any module specifiers were generated based off paths in node_modules,
                 // a package.json file in that package was read and is an input to the cached.
                 // Instead of watching each individual package.json file, set up a wildcard
                 // directory watcher for any node_modules referenced and clear the cache when
                 // it sees any changes.
-                if (cached.moduleSpecifiers) {
-                    for (const p of cached.modulePaths) {
+                if (moduleSpecifiers) {
+                    for (const p of modulePaths) {
                         if (p.isInNodeModules) {
                             // No trailing slash
                             const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
@@ -3316,14 +3321,7 @@ namespace ts {
             getModulePaths(fromFileName, toFileName) {
                 if (!cache || fromFileName !== importingFileName) return undefined;
                 const cached = cache.get(toFileName);
-                return typeof cached === "object" ? cached.modulePaths : cached;
-            },
-            setModulePaths(fromFileName, toFileName, modulePaths) {
-                if (cache && fromFileName !== importingFileName) {
-                    this.clear();
-                }
-                importingFileName = fromFileName;
-                (cache ||= new Map()).set(toFileName, typeof modulePaths === "boolean" ? modulePaths : { modulePaths });
+                return (!cached || typeof cached === "boolean" || isArray(cached)) ? cached : cached.modulePaths;
             },
             clear() {
                 containedNodeModulesWatchers?.forEach(watcher => watcher.close());
@@ -3373,7 +3371,7 @@ namespace ts {
 
         if (packageJsonFilter) {
             const isImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setModulePaths(from.path, to.path, isImportable);
+            moduleSpecifierCache?.set(from.path, to.path, isImportable);
             return isImportable;
         }
 
