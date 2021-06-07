@@ -11966,59 +11966,15 @@ namespace ts {
             return getSignaturesOfStructuredType(getReducedApparentType(type), kind);
         }
 
-        function getIndexInfosOfStructuredType(type: Type): readonly IndexInfo[] {
-            if (type.flags & TypeFlags.StructuredType) {
-                const resolved = resolveStructuredTypeMembers(type as ObjectType);
-                return resolved.indexInfos;
-            }
-            return emptyArray;
-        }
-
         function findIndexInfo(indexInfos: readonly IndexInfo[], keyType: Type) {
             return find(indexInfos, info => info.keyType === keyType);
         }
 
-        function getIndexInfoOfStructuredType(type: Type, keyType: Type): IndexInfo | undefined {
-            return findIndexInfo(getIndexInfosOfStructuredType(type), keyType);
-        }
-
-        function getIndexInfosOfType(type: Type): readonly IndexInfo[] {
-            return getIndexInfosOfStructuredType(getReducedApparentType(type));
-        }
-
-        // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
-        // maps primitive types and type parameters are to their apparent types.
-        function getIndexInfoOfType(type: Type, keyType: Type): IndexInfo | undefined {
-            return getIndexInfoOfStructuredType(getReducedApparentType(type), keyType);
-        }
-
-        // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
-        // maps primitive types and type parameters are to their apparent types.
-        function getIndexTypeOfType(type: Type, keyType: Type): Type | undefined {
-            return getIndexInfoOfStructuredType(getReducedApparentType(type), keyType)?.type;
-        }
-
-        function createIndexInfoArray(info1: IndexInfo | undefined, info2: IndexInfo | undefined) {
-            return info1 ? info2 ? [info1, info2] : [info1] : info2 ? [info2] : emptyArray;
-        }
-
-        function isApplicableIndexType(source: Type, target: Type) {
-            // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
-            // signature applies to types assignable to 'number' and numeric string literal types.
-            return isTypeAssignableTo(source, target) ||
-                target === stringType && isTypeAssignableTo(source, numberType) ||
-                target === numberType && source.flags & TypeFlags.StringLiteral && isNumericLiteralName((source as StringLiteralType).value);
-        }
-
-        function getApplicableIndexInfos(type: Type, keyType: Type): IndexInfo[] {
-            return getIndexInfosOfType(type).filter(info => isApplicableIndexType(keyType, info.keyType));
-        }
-
-        function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
+        function findApplicableIndexInfo(indexInfos: readonly IndexInfo[], keyType: Type) {
             let stringIndexInfo: IndexInfo | undefined;
             let applicableInfo: IndexInfo | undefined;
             let applicableInfos: IndexInfo[] | undefined;
-            for (const info of getIndexInfosOfType(type)) {
+            for (const info of indexInfos) {
                 if (info.keyType === stringType) {
                     stringIndexInfo = info;
                 }
@@ -12039,6 +11995,46 @@ namespace ts {
                 applicableInfo ? applicableInfo :
                 stringIndexInfo && isApplicableIndexType(keyType, stringType) ? stringIndexInfo :
                 undefined;
+        }
+
+        function isApplicableIndexType(source: Type, target: Type) {
+            // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
+            // signature applies to types assignable to 'number' and numeric string literal types.
+            return isTypeAssignableTo(source, target) ||
+                target === stringType && isTypeAssignableTo(source, numberType) ||
+                target === numberType && source.flags & TypeFlags.StringLiteral && isNumericLiteralName((source as StringLiteralType).value);
+        }
+
+        function getIndexInfosOfStructuredType(type: Type): readonly IndexInfo[] {
+            if (type.flags & TypeFlags.StructuredType) {
+                const resolved = resolveStructuredTypeMembers(type as ObjectType);
+                return resolved.indexInfos;
+            }
+            return emptyArray;
+        }
+
+        function getIndexInfosOfType(type: Type): readonly IndexInfo[] {
+            return getIndexInfosOfStructuredType(getReducedApparentType(type));
+        }
+
+        // Return the indexing info of the given kind in the given type. Creates synthetic union index types when necessary and
+        // maps primitive types and type parameters are to their apparent types.
+        function getIndexInfoOfType(type: Type, keyType: Type): IndexInfo | undefined {
+            return findIndexInfo(getIndexInfosOfType(type), keyType);
+        }
+
+        // Return the index type of the given kind in the given type. Creates synthetic union index types when necessary and
+        // maps primitive types and type parameters are to their apparent types.
+        function getIndexTypeOfType(type: Type, keyType: Type): Type | undefined {
+            return getIndexInfoOfType(type, keyType)?.type;
+        }
+
+        function getApplicableIndexInfos(type: Type, keyType: Type): IndexInfo[] {
+            return getIndexInfosOfType(type).filter(info => isApplicableIndexType(keyType, info.keyType));
+        }
+
+        function getApplicableIndexInfo(type: Type, keyType: Type): IndexInfo | undefined {
+            return findApplicableIndexInfo(getIndexInfosOfType(type), keyType);
         }
 
         function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
@@ -25328,15 +25324,14 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return isNumericLiteralName(name) && getIndexTypeOfContextualType(t, numberType) ||
-                        getIndexTypeOfContextualType(t, stringType);
+                    return getIndexTypeOfContextualType(type, getLiteralType(unescapeLeadingUnderscores(name)));
                 }
                 return undefined;
             }, /*noReductions*/ true);
         }
 
         function getIndexTypeOfContextualType(type: Type, keyType: Type) {
-            return mapType(type, t => getIndexInfoOfStructuredType(t, keyType)?.type, /*noReductions*/ true);
+            return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), keyType)?.type, /*noReductions*/ true);
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -25369,8 +25364,7 @@ namespace ts {
                         return propertyType;
                     }
                 }
-                return isNumericName(element.name!) && getIndexTypeOfContextualType(type, numberType) ||
-                    getIndexTypeOfContextualType(type, stringType);
+                return element.name && getIndexTypeOfContextualType(type, getLiteralTypeFromPropertyName(element.name));
             }
             return undefined;
         }
@@ -26352,7 +26346,8 @@ namespace ts {
             function createObjectLiteralType() {
                 const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType) : undefined;
-                const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, createIndexInfoArray(stringIndexInfo, numberIndexInfo));
+                const indexInfos = stringIndexInfo ? numberIndexInfo ? [stringIndexInfo, numberIndexInfo] : [stringIndexInfo] : numberIndexInfo ? [numberIndexInfo] : emptyArray;
+                const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
                 result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
                 if (isJSObjectLiteral) {
                     result.objectFlags |= ObjectFlags.JSLiteral;
