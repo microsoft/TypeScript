@@ -11971,6 +11971,7 @@ namespace ts {
         }
 
         function findApplicableIndexInfo(indexInfos: readonly IndexInfo[], keyType: Type) {
+            // Index signatures for type 'string' are considered only when no other index signatures apply.
             let stringIndexInfo: IndexInfo | undefined;
             let applicableInfo: IndexInfo | undefined;
             let applicableInfos: IndexInfo[] | undefined;
@@ -12612,11 +12613,12 @@ namespace ts {
                     if (declaration.parameters.length === 1) {
                         const parameter = declaration.parameters[0];
                         if (parameter.type) {
-                            const keyType = getTypeFromTypeNode(parameter.type);
-                            if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
-                                indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
-                                    hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
-                            }
+                            forEachType(getTypeFromTypeNode(parameter.type), keyType => {
+                                if (isValidIndexKeyType(keyType) && !findIndexInfo(indexInfos, keyType)) {
+                                    indexInfos.push(createIndexInfo(keyType, declaration.type ? getTypeFromTypeNode(declaration.type) : anyType,
+                                        hasEffectiveModifier(declaration, ModifierFlags.Readonly), declaration));
+                                }
+                            });
                         }
                     }
                 }
@@ -14376,11 +14378,6 @@ namespace ts {
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
             return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
                 /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
-        }
-
-        function getNonEnumNumberIndexInfo(type: Type) {
-            const numberIndexInfo = getIndexInfoOfType(type, numberType);
-            return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
         }
 
         function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
@@ -21520,10 +21517,8 @@ namespace ts {
                     // If no inferences can be made to K's constraint, infer from a union of the property types
                     // in the source to the template type X.
                     const propTypes = map(getPropertiesOfType(source), getTypeOfSymbol);
-                    const stringIndexType = getIndexTypeOfType(source, stringType);
-                    const numberIndexInfo = getNonEnumNumberIndexInfo(source);
-                    const numberIndexType = numberIndexInfo && numberIndexInfo.type;
-                    inferFromTypes(getUnionType(append(append(propTypes, stringIndexType), numberIndexType)), getTemplateTypeFromMappedType(target));
+                    const indexTypes = map(getIndexInfosOfType(source), info => info !== enumNumberIndexInfo ? info.type : neverType);
+                    inferFromTypes(getUnionType(concatenate(propTypes, indexTypes)), getTemplateTypeFromMappedType(target));
                     return true;
                 }
                 return false;
@@ -23465,14 +23460,11 @@ namespace ts {
             }
 
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
-                if (getIndexInfoOfType(type, stringType)) {
-                    return true;
-                }
                 const prop = getPropertyOfType(type, propName);
                 if (prop) {
                     return prop.flags & SymbolFlags.Optional ? true : assumeTrue;
                 }
-                return !assumeTrue;
+                return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
             }
 
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
@@ -25331,6 +25323,7 @@ namespace ts {
         }
 
         function getIndexTypeOfContextualType(type: Type, keyType: Type) {
+            // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
             return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), keyType)?.type, /*noReductions*/ true);
         }
 
@@ -41145,14 +41138,11 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (!(type.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol | TypeFlags.TemplateLiteral))) {
-                if (type.flags & TypeFlags.Union && allTypesAssignableToKind(type, TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol, /*strict*/ true)) {
-                    return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead);
-                }
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
+            if (someType(type, t => !!(t.flags & (TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.Instantiable)) && !isPatternLiteralType(type))) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
-            if (type.flags & TypeFlags.TemplateLiteral && !isPatternLiteralType(type)) {
-                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_generic_type);
+            if (!everyType(type, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol | TypeFlags.TemplateLiteral)))) {
+                return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
             }
             if (!node.type) {
                 return grammarErrorOnNode(node, Diagnostics.An_index_signature_must_have_a_type_annotation);

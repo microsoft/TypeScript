@@ -141,6 +141,7 @@ namespace ts {
             function visitObjectType(type: ObjectType): void {
                 const resolved = resolveStructuredTypeMembers(type);
                 for (const info of resolved.indexInfos) {
+                    visitType(info.keyType);
                     visitType(info.type);
                 }
                 for (const signature of resolved.callSignatures) {

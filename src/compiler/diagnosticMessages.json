@@ -891,10 +891,6 @@
         "category": "Error",
         "code": 1268
     },
-    "An index signature parameter type cannot be a generic type.": {
-        "category": "Error",
-        "code": 1269
-    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1000,7 +996,7 @@
         "category": "Error",
         "code": 1335
     },
-    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
+    "An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.": {
         "category": "Error",
         "code": 1337
     },
