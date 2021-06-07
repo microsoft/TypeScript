@@ -597,11 +597,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile;
-    /*@internal*/
-    export function isReferencedFile(reason: FileIncludeReason | PersistedProgramFileIncludeReason | undefined): reason is PersistedProgramReferencedFile;
-    /*@internal*/
-    export function isReferencedFile(reason: FileIncludeReason | PersistedProgramFileIncludeReason | undefined): reason is ReferencedFile | PersistedProgramReferencedFile {
+    export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile {
         switch (reason?.kind) {
             case FileIncludeKind.Import:
             case FileIncludeKind.ReferenceFile:
@@ -833,6 +829,7 @@ namespace ts {
         const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
         const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
         let { oldProgram } = createProgramOptions;
+        const isOldProgramFromBuildInfo = !!oldProgram && isProgramFromBuildInfo(oldProgram);
 
         let processingDefaultLibFiles: SourceFile[] | undefined;
         let processingOtherFiles: SourceFile[] | undefined;
@@ -1305,7 +1302,7 @@ namespace ts {
             }
 
             const oldSourceFile = oldProgram?.getSourceFileByPath(file.resolvedPath);
-            if (oldProgram && !isProgramFromBuildInfo(oldProgram) && (oldSourceFile as SourceFile).version !== file.version && file.resolvedModules) {
+            if (oldSourceFile && !isOldProgramFromBuildInfo && (oldSourceFile as SourceFile).version !== file.version && file.resolvedModules) {
                 // `file` was created for the new program.
                 //
                 // We only set `file.resolvedModules` via work from the current function,
@@ -1345,8 +1342,8 @@ namespace ts {
                 const moduleName = moduleNames[i];
                 // If the source file is unchanged or persistResolutions and doesnt have invalidated resolution, reuse the module resolutions
                 if (oldSourceFile &&
-                    (options.persistResolutions || file.version === (oldSourceFile as SourceFile).version) &&
-                    !hasInvalidatedResolution(oldSourceFile.path)) {
+                    (options.persistResolutions || (oldSourceFile && !isOldProgramFromBuildInfo && file.version === (oldSourceFile as SourceFile).version)) &&
+                    (isOldProgramFromBuildInfo || (oldSourceFile && !hasInvalidatedResolution((oldSourceFile as SourceFile).path)))) {
                     const oldResolvedModule = oldSourceFile.resolvedModules?.get(moduleName);
                     if (oldResolvedModule?.resolvedModule) {
                         if (isTraceEnabled(options, host)) {
@@ -1483,12 +1480,12 @@ namespace ts {
                 return StructureIsReused.Not;
             }
 
-            if (isProgramFromBuildInfo(oldProgram)) {
+            if (isOldProgramFromBuildInfo) {
                 return options.persistResolutions ? StructureIsReused.SafeModules : StructureIsReused.Not;
             }
 
             // With persistResolutions its always to reuse strcture for safe module resolutions
-            const result = tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram);
+            const result = tryReuseStructureFromOldProgramWithOptionsReusingModuleResolution(oldProgram as Program);
             return options.persistResolutions && result === StructureIsReused.Not ?
                 StructureIsReused.SafeModules :
                 result;
@@ -1710,8 +1707,8 @@ namespace ts {
                 // Update file if its redirecting to different file
                 if (oldSourceFile.redirectInfo) {
                     const newRedirectTarget = filesByName.get(oldSourceFile.redirectInfo.redirectTarget.path) as SourceFile;
-                    const newRedirectSourceFile = !isProgramFromBuildInfo(oldProgram) && newRedirectTarget === oldSourceFile.redirectInfo.redirectTarget ?
-                        oldSourceFile as SourceFile :
+                    const newRedirectSourceFile = newRedirectTarget === oldSourceFile.redirectInfo.redirectTarget ?
+                        oldSourceFile :
                         // Create new redirect file
                         createRedirectSourceFile(newRedirectTarget, newSourceFile, oldSourceFile.fileName, oldSourceFile.path, oldSourceFile.resolvedPath, oldSourceFile.originalFileName);
                     newSourceFiles[index] = newRedirectSourceFile;
@@ -1724,21 +1721,20 @@ namespace ts {
                     newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
                 }
             }
-            const oldFilesByNameMap = oldProgram.getFilesByNameMap() as ESMap<Path, SourceFileOfProgramFromBuildInfo | Path | typeof missingSourceOfProjectReferenceRedirect | typeof missingFile>;
+            const oldFilesByNameMap = oldProgram.getFilesByNameMap();
             oldFilesByNameMap.forEach((oldFile, path) => {
                 if (!oldFile) {
-                    filesByName.set(path, oldFile as false | 0);
+                    filesByName.set(path, oldFile);
                     return;
                 }
-                const oldPath = !isString(oldFile) ? oldFile.path : oldFile;
-                if (oldPath === path) {
+                if (oldFile.path === path) {
                     // Set the file as found during node modules search if it was found that way in old progra,
-                    if (oldProgram.isSourceFileFromExternalLibraryPath(oldPath)) {
-                        sourceFilesFoundSearchingNodeModules.set(oldPath, true);
+                    if (oldProgram.isSourceFileFromExternalLibrary(oldFile)) {
+                        sourceFilesFoundSearchingNodeModules.set(oldFile.path, true);
                     }
                     return;
                 }
-                filesByName.set(path, filesByName.get(oldPath)!);
+                filesByName.set(path, filesByName.get(oldFile.path)!);
             });
 
             files = newSourceFiles;

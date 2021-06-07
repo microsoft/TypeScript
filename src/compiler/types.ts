@@ -4010,7 +4010,7 @@ namespace ts {
     export interface SourceFileOfProgramFromBuildInfo {
         // fileName: string;
         // originalFileName: string;
-        path: Path;
+        // path: Path;
         // resolvedPath: Path;
         // This currently is set to sourceFile.flags & NodeFlags.PermanentlySetIncrementalFlags but cant be set in type
         // Change this if it changes in reusing program

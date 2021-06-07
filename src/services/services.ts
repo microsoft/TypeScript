@@ -1276,7 +1276,7 @@ namespace ts {
             if (program) return program;
             if (!options.persistResolutions) return undefined;
             const buildInfoResult = readBuildInfoForProgram(options, compilerHost);
-            if (!buildInfoResult?.buildInfo.program?.peristedProgram) return undefined;
+            if (!buildInfoResult?.buildInfo.program?.persistedResolutions) return undefined;
             const result = createProgramFromBuildInfo(buildInfoResult.buildInfo.program, buildInfoResult.buildInfoPath, compilerHost);
             return result?.program;
         }

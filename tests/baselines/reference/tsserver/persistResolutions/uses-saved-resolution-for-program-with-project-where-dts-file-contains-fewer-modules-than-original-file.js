@@ -61,12 +61,14 @@ Config: /user/username/projects/myproject/core/tsconfig.json : {
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Config file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core 1 undefined Config: /user/username/projects/myproject/core/tsconfig.json WatchType: Wild card directory
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/myClass.d.ts 500 undefined WatchType: Closed Script info
 Reusing resolution of module '../logic' from '/user/username/projects/myproject/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/logic/index.ts'.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/logic/index.ts 500 undefined WatchType: Closed Script info
-Reusing resolution of module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/core/myClass.ts'.
-Reusing resolution of module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/core/anotherClass.ts'.
+======== Resolving module '../core/myClass' from '/user/username/projects/myproject/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/core/myClass', target file type 'TypeScript'.
+File '/user/username/projects/myproject/core/myClass.ts' exist - use it as a name resolution result.
+======== Module name '../core/myClass' was successfully resolved to '/user/username/projects/myproject/core/myClass.ts'. ========
 ======== Resolving module '../core' from '/user/username/projects/myproject/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
 Module resolution kind is not specified, using 'NodeJs'.
@@ -77,9 +79,16 @@ File '/user/username/projects/myproject/core.d.ts' does not exist.
 File '/user/username/projects/myproject/core/package.json' does not exist.
 File '/user/username/projects/myproject/core/index.ts' exist - use it as a name resolution result.
 ======== Module name '../core' was successfully resolved to '/user/username/projects/myproject/core/index.ts'. ========
+======== Resolving module '../core/anotherClass' from '/user/username/projects/myproject/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/myproject/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/core/anotherClass', target file type 'TypeScript'.
+File '/user/username/projects/myproject/core/anotherClass.ts' exist - use it as a name resolution result.
+======== Module name '../core/anotherClass' was successfully resolved to '/user/username/projects/myproject/core/anotherClass.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/myClass.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/index.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/anotherClass.ts 500 undefined WatchType: Closed Script info
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tests/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tests/tsconfig.json WatchType: Type roots

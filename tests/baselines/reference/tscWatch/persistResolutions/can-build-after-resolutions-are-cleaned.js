@@ -141,7 +141,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"11598859296-export function something() { return 10; }","5686005290-export function externalThing1(): number;","-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",{"version":"-12575322908-interface SomeType {}","affectsGlobalScope":true},"-6085631553-/// <reference path=\"./types.ts\"/>",{"version":"-5627034801-function globalSomething() { return 10; }","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n","affectsGlobalScope":true},"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","module":2,"persistResolutions":true,"project":"./","traceResolution":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"11598859296-export function something() { return 10; }","5686005290-export function externalThing1(): number;","-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",{"version":"-12575322908-interface SomeType {}","affectsGlobalScope":true},"-6085631553-/// <reference path=\"./types.ts\"/>",{"version":"-5627034801-function globalSomething() { return 10; }","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n","affectsGlobalScope":true},"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","module":2,"persistResolutions":true,"project":"./","traceResolution":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5]},"version":"FakeTSVersion"}
 
 
 /a/lib/tsc.js --p . -w --extendedDiagnostics
@@ -341,7 +341,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"11598859296-export function something() { return 10; }","5686005290-export function externalThing1(): number;","-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",{"version":"-12575322908-interface SomeType {}","affectsGlobalScope":true},"-6085631553-/// <reference path=\"./types.ts\"/>",{"version":"-5627034801-function globalSomething() { return 10; }","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n","affectsGlobalScope":true},"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":13,"originalFileName":13,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":10,"index":0},{"kind":3,"file":10,"index":1}]},{"fileName":14,"originalFileName":14,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":10,"index":3}]},{"fileName":15,"originalFileName":15,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":8}]},{"fileName":16,"originalFileName":16,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":17,"originalFileName":17,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":8,"index":0},{"kind":0,"index":5},{"kind":4,"file":9,"index":0}]},{"fileName":18,"originalFileName":18,"path":8,"resolvedPath":8,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":19,"originalFileName":19,"path":9,"resolvedPath":9,"version":"-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":10,"originalFileName":10,"path":10,"resolvedPath":10,"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":7}]},{"fileName":20,"originalFileName":20,"path":11,"resolvedPath":11,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[15,14,13,16,18,17,19,10,5],"filesByName":[[12,0]],"resolvedTypeReferenceDirectives":[["someType",5]],"automaticTypeDirectiveNames":["someType"],"fileProcessingDiagnostics":[{"kind":1,"fileProcessingReason":{"kind":4,"file":8,"index":1},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]},{"kind":1,"fileProcessingReason":{"kind":4,"file":9,"index":1},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]}],"resolutions":[{"resolvedModule":{"resolvedFileName":13,"extension":".ts"}},{"failedLookupLocations":[21,22,23,24,25]},{"resolvedModule":{"resolvedFileName":14,"extension":".d.ts"},"failedLookupLocations":[26,27]},{"failedLookupLocations":[28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":20,"isExternalLibraryImport":true},"failedLookupLocations":[76]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"11598859296-export function something() { return 10; }","5686005290-export function externalThing1(): number;","-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",{"version":"-12575322908-interface SomeType {}","affectsGlobalScope":true},"-6085631553-/// <reference path=\"./types.ts\"/>",{"version":"-5627034801-function globalSomething() { return 10; }","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","affectsGlobalScope":true},{"version":"-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n","affectsGlobalScope":true},"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[13,14,15,16,17]},{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[20,21]},{"failedLookupLocations":[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69]}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4]],"resolutionMap":[[4,[1,2,3,4]],[10,[1,2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -359,19 +359,13 @@ exitCode:: ExitStatus.undefined
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
       "./src/globalfilenotfound.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalMain.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -421,8 +415,7 @@ exitCode:: ExitStatus.undefined
       "../../../externalThingNotPresent.js",
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
-      "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "../../../../externalThingNotPresent.jsx"
     ],
     "fileNamesList": [
       [
@@ -593,502 +586,8 @@ exitCode:: ExitStatus.undefined
       ],
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-12326309214-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/main.ts",
-        "./src/types.ts"
-      ],
-      "filesByName": {
-        "./src/globalfilenotfound.ts": 0
-      },
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
-      "fileProcessingDiagnostics": [
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalanotherfilewithsamereferenes.ts",
-            "index": 1
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        },
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalmain.ts",
-            "index": 1
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        }
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -1097,6 +596,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -1159,22 +664,269 @@ exitCode:: ExitStatus.undefined
             "../../../../externalThingNotPresent.js",
             "../../../../externalThingNotPresent.jsx"
           ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 11105
+  "size": 6454
 }
 
 
@@ -1327,7 +1079,7 @@ globalSomething();
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-13665089706-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-5695225267-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();","signature":"-18175711127-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":13,"originalFileName":13,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":10,"index":0},{"kind":3,"file":10,"index":1}]},{"fileName":14,"originalFileName":14,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":10,"index":3}]},{"fileName":15,"originalFileName":15,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":8}]},{"fileName":16,"originalFileName":16,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":17,"originalFileName":17,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":8,"index":0},{"kind":0,"index":5},{"kind":4,"file":9,"index":0}]},{"fileName":18,"originalFileName":18,"path":8,"resolvedPath":8,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":19,"originalFileName":19,"path":9,"resolvedPath":9,"version":"-5695225267-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":10,"originalFileName":10,"path":10,"resolvedPath":10,"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":7}]},{"fileName":20,"originalFileName":20,"path":11,"resolvedPath":11,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[15,14,13,16,18,17,19,10,5],"filesByName":[[12,0]],"resolvedTypeReferenceDirectives":[["someType",5]],"automaticTypeDirectiveNames":["someType"],"fileProcessingDiagnostics":[{"kind":1,"fileProcessingReason":{"kind":4,"file":8,"index":1},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]},{"kind":1,"fileProcessingReason":{"kind":4,"file":9,"index":1},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]}],"resolutions":[{"resolvedModule":{"resolvedFileName":13,"extension":".ts"}},{"failedLookupLocations":[21,22,23,24,25]},{"resolvedModule":{"resolvedFileName":14,"extension":".d.ts"},"failedLookupLocations":[26,27]},{"failedLookupLocations":[28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":20,"isExternalLibraryImport":true},"failedLookupLocations":[76]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-13665089706-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"-5695225267-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();","signature":"-18175711127-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,12]],"referencedMap":[[4,1],[6,2],[8,3],[9,3],[10,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,11,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,9,[10,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[13,14,15,16,17]},{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[20,21]},{"failedLookupLocations":[22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69]}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4]],"resolutionMap":[[4,[1,2,3,4]],[10,[1,2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1345,19 +1097,13 @@ globalSomething();
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
       "./src/globalfilenotfound.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalMain.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -1407,8 +1153,7 @@ globalSomething();
       "../../../externalThingNotPresent.js",
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
-      "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "../../../../externalThingNotPresent.jsx"
     ],
     "fileNamesList": [
       [
@@ -1559,502 +1304,8 @@ globalSomething();
       ],
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-5695225267-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/main.ts",
-        "./src/types.ts"
-      ],
-      "filesByName": {
-        "./src/globalfilenotfound.ts": 0
-      },
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
-      "fileProcessingDiagnostics": [
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalanotherfilewithsamereferenes.ts",
-            "index": 1
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        },
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalmain.ts",
-            "index": 1
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        }
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -2063,6 +1314,12 @@ globalSomething();
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -2125,22 +1382,269 @@ globalSomething();
             "../../../../externalThingNotPresent.js",
             "../../../../externalThingNotPresent.jsx"
           ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 11758
+  "size": 7090
 }
 
 
@@ -2339,7 +1843,7 @@ declare function globalMain(): void;
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-13665089706-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"6306495272-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,13],[7,9,13]],"referencedMap":[[4,1],[6,2],[8,3],[10,4],[11,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,12,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,10,9,[11,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":11,"index":0},{"kind":3,"file":11,"index":1}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":11,"index":3}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":9}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":8,"index":0},{"kind":0,"index":5},{"kind":4,"file":10,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":0},{"kind":0,"index":7}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":11,"originalFileName":11,"path":11,"resolvedPath":11,"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":12,"resolvedPath":12,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[16,15,14,17,19,18,21,20,11,5],"filesByName":[[13,0]],"resolvedTypeReferenceDirectives":[["someType",5]],"automaticTypeDirectiveNames":["someType"],"fileProcessingDiagnostics":[{"kind":1,"fileProcessingReason":{"kind":4,"file":8,"index":1},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]},{"kind":1,"fileProcessingReason":{"kind":4,"file":10,"index":2},"diagnostic":"File_0_not_found","args":["/user/username/projects/myproject/src/globalFileNotFound.ts"]}],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"failedLookupLocations":[23,24,25,26,27]},{"resolvedModule":{"resolvedFileName":15,"extension":".d.ts"},"failedLookupLocations":[28,29]},{"failedLookupLocations":[30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":22,"isExternalLibraryImport":true},"failedLookupLocations":[78]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/globalfilenotfound.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-13665089706-/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"6306495272-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,13],[7,9,13]],"referencedMap":[[4,1],[6,2],[8,3],[10,4],[11,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,12,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,8,7,10,9,[11,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[14,15,16,17,18]},{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[21,22]},{"failedLookupLocations":[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70]}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4]],"resolutionMap":[[4,[1,2,3,4]],[11,[1,2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -2358,20 +1862,13 @@ declare function globalMain(): void;
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
       "./src/globalfilenotfound.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -2421,8 +1918,7 @@ declare function globalMain(): void;
       "../../../externalThingNotPresent.js",
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
-      "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "../../../../externalThingNotPresent.jsx"
     ],
     "fileNamesList": [
       [
@@ -2585,523 +2081,8 @@ declare function globalMain(): void;
       ],
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/types.ts"
-      ],
-      "filesByName": {
-        "./src/globalfilenotfound.ts": 0
-      },
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
-      "fileProcessingDiagnostics": [
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalanotherfilewithsamereferenes.ts",
-            "index": 1
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        },
-        {
-          "kind": "FilePreprocessingFileExplainingDiagnostic",
-          "fileProcessingReason": {
-            "kind": "ReferenceFile",
-            "file": "./src/globalmain.ts",
-            "index": 2
-          },
-          "diagnostic": "File_0_not_found",
-          "args": [
-            "/user/username/projects/myproject/src/globalFileNotFound.ts"
-          ]
-        }
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -3110,6 +2091,12 @@ declare function globalMain(): void;
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -3172,22 +2159,269 @@ declare function globalMain(): void;
             "../../../../externalThingNotPresent.js",
             "../../../../externalThingNotPresent.jsx"
           ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 12366
+  "size": 7383
 }
 
 //// [/user/username/projects/myproject/src/globalNewFile.js]
@@ -3375,7 +2609,7 @@ declare function globalMain(): void;
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[12,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,13,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[12,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":12,"index":0},{"kind":3,"file":12,"index":1}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":12,"index":3}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":10}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":12,"originalFileName":12,"path":12,"resolvedPath":12,"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":9}]},{"fileName":23,"originalFileName":23,"path":13,"resolvedPath":13,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[16,15,14,17,20,19,18,22,21,12,5],"resolvedTypeReferenceDirectives":[["someType",5]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"failedLookupLocations":[24,25,26,27,28]},{"resolvedModule":{"resolvedFileName":15,"extension":".d.ts"},"failedLookupLocations":[29,30]},{"failedLookupLocations":[31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":23,"isExternalLibraryImport":true},"failedLookupLocations":[79]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[12,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,13,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[12,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[14,15,16,17,18]},{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[21,22]},{"failedLookupLocations":[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70]}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4]],"resolutionMap":[[4,[1,2,3,4]],[12,[1,2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -3394,21 +2628,13 @@ declare function globalMain(): void;
       "./src/globalmain.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -3458,8 +2684,7 @@ declare function globalMain(): void;
       "../../../externalThingNotPresent.js",
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
-      "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "../../../../externalThingNotPresent.jsx"
     ],
     "fileNamesList": [
       [
@@ -3628,519 +2853,8 @@ declare function globalMain(): void;
       ],
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "-25594406519-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -4149,6 +2863,12 @@ declare function globalMain(): void;
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -4211,22 +2931,269 @@ declare function globalMain(): void;
             "../../../../externalThingNotPresent.js",
             "../../../../externalThingNotPresent.jsx"
           ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 12532
+  "size": 7659
 }
 
 //// [/user/username/projects/myproject/src/globalNewFile.js] file written with same contents
@@ -4367,7 +3334,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
 
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-22898386493-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[12,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,13,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[12,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":14,"originalFileName":14,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":12,"index":0},{"kind":3,"file":12,"index":1}]},{"fileName":15,"originalFileName":15,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":12,"index":3}]},{"fileName":16,"originalFileName":16,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":10}]},{"fileName":17,"originalFileName":17,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":18,"originalFileName":18,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":19,"originalFileName":19,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":20,"originalFileName":20,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":22,"originalFileName":22,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":12,"originalFileName":12,"path":12,"resolvedPath":12,"version":"-22898386493-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":9}]},{"fileName":23,"originalFileName":23,"path":13,"resolvedPath":13,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[16,15,14,17,20,19,18,22,21,12,5],"resolvedTypeReferenceDirectives":[["someType",5]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":14,"extension":".ts"}},{"failedLookupLocations":[24,25,26,27,28]},{"resolvedModule":{"resolvedFileName":15,"extension":".d.ts"},"failedLookupLocations":[29,30]},{"failedLookupLocations":[31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":23,"isExternalLibraryImport":true},"failedLookupLocations":[79]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"-22898386493-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[12,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,13,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[12,[{"file":"./src/main.ts","start":127,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":224,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[14,15,16,17,18]},{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[21,22]},{"failedLookupLocations":[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70]}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4]],"resolutionMap":[[4,[1,2,3,4]],[12,[1,2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -4386,21 +3353,13 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
       "./src/globalmain.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -4450,8 +3409,7 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
       "../../../externalThingNotPresent.js",
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
-      "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "../../../../externalThingNotPresent.jsx"
     ],
     "fileNamesList": [
       [
@@ -4620,519 +3578,8 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
       ],
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "-22898386493-import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -5141,6 +3588,12 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -5203,22 +3656,269 @@ define(["require", "exports", "./filePresent"], function (require, exports, file
             "../../../../externalThingNotPresent.js",
             "../../../../externalThingNotPresent.jsx"
           ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 12556
+  "size": 7671
 }
 
 
@@ -5375,7 +4075,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10],[2,3,12]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,14,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[13,[{"file":"./src/main.ts","start":159,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],12,5],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":15,"originalFileName":15,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":4,"index":0},{"kind":0,"index":2},{"kind":3,"file":13,"index":1},{"kind":3,"file":13,"index":2}]},{"fileName":16,"originalFileName":16,"path":3,"resolvedPath":3,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":4,"index":2},{"kind":0,"index":1},{"kind":3,"file":13,"index":4}]},{"fileName":17,"originalFileName":17,"path":4,"resolvedPath":4,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":5,"originalFileName":5,"path":5,"resolvedPath":5,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":6,"index":0},{"kind":0,"index":11}]},{"fileName":18,"originalFileName":18,"path":6,"resolvedPath":6,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":3}]},{"fileName":19,"originalFileName":19,"path":7,"resolvedPath":7,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":6},{"kind":4,"file":11,"index":1}]},{"fileName":20,"originalFileName":20,"path":8,"resolvedPath":8,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":9,"index":1},{"kind":0,"index":5},{"kind":4,"file":11,"index":2}]},{"fileName":21,"originalFileName":21,"path":9,"resolvedPath":9,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":22,"originalFileName":22,"path":10,"resolvedPath":10,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":8}]},{"fileName":23,"originalFileName":23,"path":11,"resolvedPath":11,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":7}]},{"fileName":24,"originalFileName":24,"path":12,"resolvedPath":12,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":13,"index":0},{"kind":0,"index":10}]},{"fileName":13,"originalFileName":13,"path":13,"resolvedPath":13,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":9}]},{"fileName":25,"originalFileName":25,"path":14,"resolvedPath":14,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[17,16,15,18,21,20,19,23,22,13,24,5],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":15,"extension":".ts"}},{"failedLookupLocations":[26,27,28,29,30]},{"resolvedModule":{"resolvedFileName":16,"extension":".d.ts"},"failedLookupLocations":[31,32]},{"failedLookupLocations":[33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]},{"resolvedModule":{"resolvedFileName":24,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":25,"isExternalLibraryImport":true},"failedLookupLocations":[81]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/fileNotFound.d.ts","./src/fileNotFound.js","./src/fileNotFound.jsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3],[5],[7,8],[7,8,10],[2,3,12]],"referencedMap":[[4,1],[6,2],[9,3],[11,4],[13,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,14,[4,[{"file":"./src/anotherfilereusingresolution.ts","start":70,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],3,2,6,9,8,7,11,10,[13,[{"file":"./src/main.ts","start":159,"length":16,"messageText":"Cannot find module './fileNotFound'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792},{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],12,5],"persistedResolutions":{"resolutions":[{"failedLookupLocations":[15,16,17,18,19]},{"resolvedModule":{"resolvedFileName":20,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":21,"extension":".d.ts"},"failedLookupLocations":[22,23]},{"failedLookupLocations":[24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71]},{"resolvedModule":{"resolvedFileName":72,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[4,[1,2,3,4]],[13,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -5395,22 +4095,13 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
       "./src/fileNotFound.d.ts",
       "./src/fileNotFound.js",
       "./src/fileNotFound.jsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -5461,7 +4152,7 @@ exitCode:: ExitStatus.undefined
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
       "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -5641,552 +4332,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 5
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 7
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx",
-                  "./src/fileNotFound.d.ts",
-                  "./src/fileNotFound.js",
-                  "./src/fileNotFound.jsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "failedLookupLocations": [
             "./src/fileNotFound.ts",
@@ -6195,6 +4342,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.js",
             "./src/fileNotFound.jsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -6263,22 +4416,285 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx",
+              "./src/fileNotFound.d.ts",
+              "./src/fileNotFound.js",
+              "./src/fileNotFound.jsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 13118
+  "size": 7963
 }
 
 //// [/user/username/projects/myproject/src/newFile.js]
@@ -6435,7 +4851,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[6],[8,9],[8,9,11],[2,3,4,13]],"referencedMap":[[5,1],[7,2],[10,3],[12,4],[14,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,15,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,7,10,9,8,12,11,[14,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],13,6],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":16,"originalFileName":16,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0},{"kind":0,"index":3},{"kind":3,"file":14,"index":1},{"kind":3,"file":14,"index":2}]},{"fileName":17,"originalFileName":17,"path":3,"resolvedPath":3,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":1},{"kind":0,"index":2},{"kind":3,"file":14,"index":3}]},{"fileName":18,"originalFileName":18,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":5,"index":2},{"kind":0,"index":1},{"kind":3,"file":14,"index":4}]},{"fileName":19,"originalFileName":19,"path":5,"resolvedPath":5,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":6,"originalFileName":6,"path":6,"resolvedPath":6,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":7,"index":0},{"kind":0,"index":12}]},{"fileName":20,"originalFileName":20,"path":7,"resolvedPath":7,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":8,"resolvedPath":8,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":0},{"kind":0,"index":7},{"kind":4,"file":12,"index":1}]},{"fileName":22,"originalFileName":22,"path":9,"resolvedPath":9,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":1},{"kind":0,"index":6},{"kind":4,"file":12,"index":2}]},{"fileName":23,"originalFileName":23,"path":10,"resolvedPath":10,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":24,"originalFileName":24,"path":11,"resolvedPath":11,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":9}]},{"fileName":25,"originalFileName":25,"path":12,"resolvedPath":12,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":8}]},{"fileName":26,"originalFileName":26,"path":13,"resolvedPath":13,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":14,"index":0},{"kind":0,"index":11}]},{"fileName":14,"originalFileName":14,"path":14,"resolvedPath":14,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":10}]},{"fileName":27,"originalFileName":27,"path":15,"resolvedPath":15,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[19,18,17,16,20,23,22,21,25,24,14,26,6],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":16,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":17,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[28,29]},{"failedLookupLocations":[30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77]},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":27,"isExternalLibraryImport":true},"failedLookupLocations":[78]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.ts","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},"5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[6],[8,9],[8,9,11],[2,3,4,13]],"referencedMap":[[5,1],[7,2],[10,3],[12,4],[14,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,15,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,7,10,9,8,12,11,[14,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],13,6],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":16,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":17,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[19,20]},{"failedLookupLocations":[21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68]},{"resolvedModule":{"resolvedFileName":69,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[5,[1,2,3,4]],[14,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -6456,18 +4872,9 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.ts",
+      "./src/filePresent.ts",
       "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -6518,7 +4925,7 @@ exitCode:: ExitStatus.undefined
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
       "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -6691,574 +5098,17 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 3
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
         {
           "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
+            "resolvedFileName": "./src/fileNotFound.ts",
             "extension": ".ts"
           }
         },
         {
           "resolvedModule": {
-            "resolvedFileName": "./src/fileNotFound.ts",
+            "resolvedFileName": "./src/filePresent.ts",
             "extension": ".ts"
           }
         },
@@ -7329,22 +5179,276 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.ts",
+              "extension": ".ts"
+            }
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.ts",
+              "extension": ".ts"
+            }
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 12981
+  "size": 7576
 }
 
 //// [/user/username/projects/myproject/src/fileNotFound.js]
@@ -7494,7 +5598,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[6],[8,9],[8,9,11],[2,3,4,13]],"referencedMap":[[5,1],[7,2],[10,3],[12,4],[14,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,15,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,7,10,9,8,12,11,[14,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],13,6],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":16,"originalFileName":16,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0},{"kind":0,"index":3},{"kind":3,"file":14,"index":1},{"kind":3,"file":14,"index":2}]},{"fileName":17,"originalFileName":17,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":5,"index":1},{"kind":0,"index":2},{"kind":3,"file":14,"index":3}]},{"fileName":18,"originalFileName":18,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":5,"index":2},{"kind":0,"index":1},{"kind":3,"file":14,"index":4}]},{"fileName":19,"originalFileName":19,"path":5,"resolvedPath":5,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":6,"originalFileName":6,"path":6,"resolvedPath":6,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":7,"index":0},{"kind":0,"index":12}]},{"fileName":20,"originalFileName":20,"path":7,"resolvedPath":7,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":21,"originalFileName":21,"path":8,"resolvedPath":8,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":0},{"kind":0,"index":7},{"kind":4,"file":12,"index":1}]},{"fileName":22,"originalFileName":22,"path":9,"resolvedPath":9,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":10,"index":1},{"kind":0,"index":6},{"kind":4,"file":12,"index":2}]},{"fileName":23,"originalFileName":23,"path":10,"resolvedPath":10,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":24,"originalFileName":24,"path":11,"resolvedPath":11,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":9}]},{"fileName":25,"originalFileName":25,"path":12,"resolvedPath":12,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":8}]},{"fileName":26,"originalFileName":26,"path":13,"resolvedPath":13,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":14,"index":0},{"kind":0,"index":11}]},{"fileName":14,"originalFileName":14,"path":14,"resolvedPath":14,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":10}]},{"fileName":27,"originalFileName":27,"path":15,"resolvedPath":15,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[19,18,17,16,20,23,22,21,25,24,14,26,6],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":16,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":17,"extension":".d.ts"},"failedLookupLocations":[28,29]},{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[30,31]},{"failedLookupLocations":[32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79]},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":27,"isExternalLibraryImport":true},"failedLookupLocations":[80]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[6],[8,9],[8,9,11],[2,3,4,13]],"referencedMap":[[5,1],[7,2],[10,3],[12,4],[14,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,15,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,7,10,9,8,12,11,[14,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],13,6],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":16,"extension":".d.ts"},"failedLookupLocations":[17,18]},{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[21,22]},{"failedLookupLocations":[23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70]},{"resolvedModule":{"resolvedFileName":71,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[5,[1,2,3,4]],[14,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -7515,20 +5619,11 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -7579,7 +5674,7 @@ exitCode:: ExitStatus.undefined
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
       "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -7752,579 +5847,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 3
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/fileNotFound.d.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -8334,6 +5858,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -8402,22 +5932,288 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 12993
+  "size": 7582
 }
 
 
@@ -8536,7 +6332,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[7],[9,10],[9,10,12],[2,3,4,14]],"referencedMap":[[5,1],[8,2],[11,3],[13,4],[15,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,16,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,8,11,10,9,13,12,[15,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],14,7],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":17,"originalFileName":17,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":5,"index":0},{"kind":0,"index":3},{"kind":3,"file":15,"index":1},{"kind":3,"file":15,"index":2}]},{"fileName":18,"originalFileName":18,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":5,"index":1},{"kind":3,"file":15,"index":3}]},{"fileName":19,"originalFileName":19,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":5,"index":2},{"kind":0,"index":1},{"kind":3,"file":15,"index":4}]},{"fileName":20,"originalFileName":20,"path":5,"resolvedPath":5,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":21,"originalFileName":21,"path":6,"resolvedPath":6,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":2}]},{"fileName":7,"originalFileName":7,"path":7,"resolvedPath":7,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":8,"index":0},{"kind":0,"index":12}]},{"fileName":22,"originalFileName":22,"path":8,"resolvedPath":8,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":4}]},{"fileName":23,"originalFileName":23,"path":9,"resolvedPath":9,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":0},{"kind":0,"index":7},{"kind":4,"file":13,"index":1}]},{"fileName":24,"originalFileName":24,"path":10,"resolvedPath":10,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":11,"index":1},{"kind":0,"index":6},{"kind":4,"file":13,"index":2}]},{"fileName":25,"originalFileName":25,"path":11,"resolvedPath":11,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":26,"originalFileName":26,"path":12,"resolvedPath":12,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":13,"index":0},{"kind":0,"index":9}]},{"fileName":27,"originalFileName":27,"path":13,"resolvedPath":13,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":8}]},{"fileName":28,"originalFileName":28,"path":14,"resolvedPath":14,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":15,"index":0},{"kind":0,"index":11}]},{"fileName":15,"originalFileName":15,"path":15,"resolvedPath":15,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":10}]},{"fileName":29,"originalFileName":29,"path":16,"resolvedPath":16,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[20,19,21,17,22,25,24,23,27,26,15,28,7],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":17,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[21,30]},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[31,32]},{"failedLookupLocations":[33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80]},{"resolvedModule":{"resolvedFileName":28,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":29,"isExternalLibraryImport":true},"failedLookupLocations":[81]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/externalThingNotPresent.tsx","./src/externalThingNotPresent.d.ts","./externalThingNotPresent.ts","./externalThingNotPresent.tsx","./externalThingNotPresent.d.ts","../externalThingNotPresent.ts","../externalThingNotPresent.tsx","../externalThingNotPresent.d.ts","../../externalThingNotPresent.ts","../../externalThingNotPresent.tsx","../../externalThingNotPresent.d.ts","../../../externalThingNotPresent.ts","../../../externalThingNotPresent.tsx","../../../externalThingNotPresent.d.ts","../../../../externalThingNotPresent.ts","../../../../externalThingNotPresent.tsx","../../../../externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/package.json","./src/node_modules/@types/externalThingNotPresent.d.ts","./src/node_modules/@types/externalThingNotPresent/index.d.ts","./node_modules/@types/externalThingNotPresent/package.json","./node_modules/@types/externalThingNotPresent.d.ts","./node_modules/@types/externalThingNotPresent/index.d.ts","../node_modules/@types/externalThingNotPresent/package.json","../node_modules/@types/externalThingNotPresent.d.ts","../node_modules/@types/externalThingNotPresent/index.d.ts","../../node_modules/@types/externalThingNotPresent/package.json","../../node_modules/@types/externalThingNotPresent.d.ts","../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../node_modules/@types/externalThingNotPresent/package.json","../../../node_modules/@types/externalThingNotPresent.d.ts","../../../node_modules/@types/externalThingNotPresent/index.d.ts","../../../../node_modules/@types/externalThingNotPresent/package.json","../../../../node_modules/@types/externalThingNotPresent.d.ts","../../../../node_modules/@types/externalThingNotPresent/index.d.ts","./src/externalThingNotPresent.js","./src/externalThingNotPresent.jsx","./externalThingNotPresent.js","./externalThingNotPresent.jsx","../externalThingNotPresent.js","../externalThingNotPresent.jsx","../../externalThingNotPresent.js","../../externalThingNotPresent.jsx","../../../externalThingNotPresent.js","../../../externalThingNotPresent.jsx","../../../../externalThingNotPresent.js","../../../../externalThingNotPresent.jsx","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4],[7],[9,10],[9,10,12],[2,3,4,14]],"referencedMap":[[5,1],[8,2],[11,3],[13,4],[15,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,16,[5,[{"file":"./src/anotherfilereusingresolution.ts","start":167,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],4,3,2,8,11,10,9,13,12,[15,[{"file":"./src/main.ts","start":256,"length":25,"messageText":"Cannot find module 'externalThingNotPresent'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?","category":1,"code":2792}]],14,7],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":17,"extension":".d.ts"},"failedLookupLocations":[18,19]},{"resolvedModule":{"resolvedFileName":20,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":21,"extension":".d.ts"},"failedLookupLocations":[22,23]},{"failedLookupLocations":[24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71]},{"resolvedModule":{"resolvedFileName":72,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[5,[1,2,3,4]],[15,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -8558,20 +6354,11 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
       "./src/externalThingNotPresent.ts",
@@ -8622,7 +6409,7 @@ exitCode:: ExitStatus.undefined
       "../../../externalThingNotPresent.jsx",
       "../../../../externalThingNotPresent.js",
       "../../../../externalThingNotPresent.jsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -8799,589 +6586,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 3
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 6
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 8
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "failedLookupLocations": [
-                  "./src/externalThingNotPresent.ts",
-                  "./src/externalThingNotPresent.tsx",
-                  "./src/externalThingNotPresent.d.ts",
-                  "./externalThingNotPresent.ts",
-                  "./externalThingNotPresent.tsx",
-                  "./externalThingNotPresent.d.ts",
-                  "../externalThingNotPresent.ts",
-                  "../externalThingNotPresent.tsx",
-                  "../externalThingNotPresent.d.ts",
-                  "../../externalThingNotPresent.ts",
-                  "../../externalThingNotPresent.tsx",
-                  "../../externalThingNotPresent.d.ts",
-                  "../../../externalThingNotPresent.ts",
-                  "../../../externalThingNotPresent.tsx",
-                  "../../../externalThingNotPresent.d.ts",
-                  "../../../../externalThingNotPresent.ts",
-                  "../../../../externalThingNotPresent.tsx",
-                  "../../../../externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/package.json",
-                  "./src/node_modules/@types/externalThingNotPresent.d.ts",
-                  "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/package.json",
-                  "./node_modules/@types/externalThingNotPresent.d.ts",
-                  "./node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/package.json",
-                  "../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/package.json",
-                  "../../../../node_modules/@types/externalThingNotPresent.d.ts",
-                  "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
-                  "./src/externalThingNotPresent.js",
-                  "./src/externalThingNotPresent.jsx",
-                  "./externalThingNotPresent.js",
-                  "./externalThingNotPresent.jsx",
-                  "../externalThingNotPresent.js",
-                  "../externalThingNotPresent.jsx",
-                  "../../externalThingNotPresent.js",
-                  "../../externalThingNotPresent.jsx",
-                  "../../../externalThingNotPresent.js",
-                  "../../../externalThingNotPresent.jsx",
-                  "../../../../externalThingNotPresent.js",
-                  "../../../../externalThingNotPresent.jsx"
-                ]
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -9391,6 +6597,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -9459,22 +6671,288 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "failedLookupLocations": [
+              "./src/externalThingNotPresent.ts",
+              "./src/externalThingNotPresent.tsx",
+              "./src/externalThingNotPresent.d.ts",
+              "./externalThingNotPresent.ts",
+              "./externalThingNotPresent.tsx",
+              "./externalThingNotPresent.d.ts",
+              "../externalThingNotPresent.ts",
+              "../externalThingNotPresent.tsx",
+              "../externalThingNotPresent.d.ts",
+              "../../externalThingNotPresent.ts",
+              "../../externalThingNotPresent.tsx",
+              "../../externalThingNotPresent.d.ts",
+              "../../../externalThingNotPresent.ts",
+              "../../../externalThingNotPresent.tsx",
+              "../../../externalThingNotPresent.d.ts",
+              "../../../../externalThingNotPresent.ts",
+              "../../../../externalThingNotPresent.tsx",
+              "../../../../externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/package.json",
+              "./src/node_modules/@types/externalThingNotPresent.d.ts",
+              "./src/node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./node_modules/@types/externalThingNotPresent/package.json",
+              "./node_modules/@types/externalThingNotPresent.d.ts",
+              "./node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../node_modules/@types/externalThingNotPresent/package.json",
+              "../node_modules/@types/externalThingNotPresent.d.ts",
+              "../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/package.json",
+              "../../../../node_modules/@types/externalThingNotPresent.d.ts",
+              "../../../../node_modules/@types/externalThingNotPresent/index.d.ts",
+              "./src/externalThingNotPresent.js",
+              "./src/externalThingNotPresent.jsx",
+              "./externalThingNotPresent.js",
+              "./externalThingNotPresent.jsx",
+              "../externalThingNotPresent.js",
+              "../externalThingNotPresent.jsx",
+              "../../externalThingNotPresent.js",
+              "../../externalThingNotPresent.jsx",
+              "../../../externalThingNotPresent.js",
+              "../../../externalThingNotPresent.jsx",
+              "../../../../externalThingNotPresent.js",
+              "../../../../externalThingNotPresent.jsx"
+            ]
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 13326
+  "size": 7753
 }
 
 //// [/user/username/projects/myproject/src/fileNotFound.js] file written with same contents
@@ -9614,7 +7092,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/src/main.js] file written with same contents
 //// [/user/username/projects/myproject/src/main.d.ts] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":18,"originalFileName":18,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":0},{"kind":0,"index":4},{"kind":3,"file":16,"index":1},{"kind":3,"file":16,"index":2}]},{"fileName":19,"originalFileName":19,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":6,"index":1},{"kind":3,"file":16,"index":3}]},{"fileName":20,"originalFileName":20,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":6,"index":2},{"kind":0,"index":1},{"kind":3,"file":16,"index":4}]},{"fileName":21,"originalFileName":21,"path":5,"resolvedPath":5,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":3},{"kind":0,"index":2},{"kind":3,"file":16,"index":5}]},{"fileName":22,"originalFileName":22,"path":6,"resolvedPath":6,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":23,"originalFileName":23,"path":7,"resolvedPath":7,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":3}]},{"fileName":8,"originalFileName":8,"path":8,"resolvedPath":8,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":13}]},{"fileName":24,"originalFileName":24,"path":9,"resolvedPath":9,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":25,"originalFileName":25,"path":10,"resolvedPath":10,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":8},{"kind":4,"file":14,"index":1}]},{"fileName":26,"originalFileName":26,"path":11,"resolvedPath":11,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":1},{"kind":0,"index":7},{"kind":4,"file":14,"index":2}]},{"fileName":27,"originalFileName":27,"path":12,"resolvedPath":12,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":28,"originalFileName":28,"path":13,"resolvedPath":13,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":14,"index":0},{"kind":0,"index":10}]},{"fileName":29,"originalFileName":29,"path":14,"resolvedPath":14,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":9}]},{"fileName":30,"originalFileName":30,"path":15,"resolvedPath":15,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":16,"index":0},{"kind":0,"index":12}]},{"fileName":16,"originalFileName":16,"path":16,"resolvedPath":16,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":11}]},{"fileName":31,"originalFileName":31,"path":17,"resolvedPath":17,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[22,20,21,23,18,24,27,26,25,29,28,16,30,8],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[23,32]},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[33,34]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":30,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":31,"isExternalLibraryImport":true},"failedLookupLocations":[35]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[19,20]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":22,"extension":".d.ts"},"failedLookupLocations":[23,24]},{"resolvedModule":{"resolvedFileName":25,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[6,[1,2,3,4]],[16,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -9637,24 +7115,15 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/externalThingNotPresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/externalThingNotPresent.ts",
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -9813,522 +7282,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 4
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThingNotPresent.ts",
-          "originalFileName": "./src/externalThingNotPresent.ts",
-          "path": "./src/externalthingnotpresent.ts",
-          "resolvedPath": "./src/externalthingnotpresent.ts",
-          "version": "5318862050-export function externalThing2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 3
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 13
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/externalThingNotPresent.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -10338,6 +7293,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -10360,22 +7321,150 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 10983
+  "size": 5158
 }
 
 //// [/user/username/projects/myproject/src/externalThingNotPresent.js]
@@ -10515,7 +7604,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/externalthing.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/externalThing.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.tsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"5618215488-export function externalThing1() { return 10; }","signature":"-13282660348-export declare function externalThing1(): number;\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[9],[11,12],[11,12,14],[2,3,4,5,16]],"referencedMap":[[6,1],[10,2],[13,3],[15,4],[17,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,18,4,3,2,10,13,12,11,15,14,16,9],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":19,"originalFileName":19,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":0},{"kind":0,"index":4},{"kind":3,"file":17,"index":1},{"kind":3,"file":17,"index":2}]},{"fileName":20,"originalFileName":20,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":6,"index":1},{"kind":3,"file":17,"index":3}]},{"fileName":21,"originalFileName":21,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":6,"index":2},{"kind":3,"file":17,"index":4}]},{"fileName":22,"originalFileName":22,"path":5,"resolvedPath":5,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":3},{"kind":0,"index":2},{"kind":3,"file":17,"index":5}]},{"fileName":23,"originalFileName":23,"path":6,"resolvedPath":6,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":24,"originalFileName":24,"path":7,"resolvedPath":7,"version":"5618215488-export function externalThing1() { return 10; }","flags":0,"includeReasons":[{"kind":0,"index":1}]},{"fileName":25,"originalFileName":25,"path":8,"resolvedPath":8,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":3}]},{"fileName":9,"originalFileName":9,"path":9,"resolvedPath":9,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":10,"index":0},{"kind":0,"index":13}]},{"fileName":26,"originalFileName":26,"path":10,"resolvedPath":10,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":27,"originalFileName":27,"path":11,"resolvedPath":11,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":13,"index":0},{"kind":0,"index":8},{"kind":4,"file":15,"index":1}]},{"fileName":28,"originalFileName":28,"path":12,"resolvedPath":12,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":13,"index":1},{"kind":0,"index":7},{"kind":4,"file":15,"index":2}]},{"fileName":29,"originalFileName":29,"path":13,"resolvedPath":13,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":30,"originalFileName":30,"path":14,"resolvedPath":14,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":15,"index":0},{"kind":0,"index":10}]},{"fileName":31,"originalFileName":31,"path":15,"resolvedPath":15,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":9}]},{"fileName":32,"originalFileName":32,"path":16,"resolvedPath":16,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":17,"index":0},{"kind":0,"index":12}]},{"fileName":17,"originalFileName":17,"path":17,"resolvedPath":17,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":11}]},{"fileName":33,"originalFileName":33,"path":18,"resolvedPath":18,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[23,24,22,25,19,26,29,28,27,31,30,17,32,9],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[25,34]},{"resolvedModule":{"resolvedFileName":21,"extension":".d.ts"},"failedLookupLocations":[24,35]},{"resolvedModule":{"resolvedFileName":22,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":32,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":33,"isExternalLibraryImport":true},"failedLookupLocations":[36]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/externalthing.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"5618215488-export function externalThing1() { return 10; }","signature":"-13282660348-export declare function externalThing1(): number;\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[9],[11,12],[11,12,14],[2,3,4,5,16]],"referencedMap":[[6,1],[10,2],[13,3],[15,4],[17,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,18,4,3,2,10,13,12,11,15,14,16,9],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[20,21]},{"resolvedModule":{"resolvedFileName":22,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":23,"extension":".d.ts"},"failedLookupLocations":[24,25]},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":27,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[6,[1,2,3,4]],[17,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -10539,24 +7628,15 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/externalThingNotPresent.ts",
-      "./src/anotherFileReusingResolution.ts",
-      "./src/externalThing.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
+      "./src/externalThing.ts",
       "./src/externalThing.tsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/externalThingNotPresent.ts",
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -10719,532 +7799,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 4
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThingNotPresent.ts",
-          "originalFileName": "./src/externalThingNotPresent.ts",
-          "path": "./src/externalthingnotpresent.ts",
-          "resolvedPath": "./src/externalthingnotpresent.ts",
-          "version": "5318862050-export function externalThing2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 3
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.ts",
-          "originalFileName": "./src/externalThing.ts",
-          "path": "./src/externalthing.ts",
-          "resolvedPath": "./src/externalthing.ts",
-          "version": "5618215488-export function externalThing1() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 13
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.ts",
-        "./src/externalThingNotPresent.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -11254,6 +7810,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -11276,22 +7838,150 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 11329
+  "size": 5337
 }
 
 //// [/user/username/projects/myproject/src/externalThing.js]
@@ -11419,7 +8109,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./node_modules/@types/someType/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":18,"originalFileName":18,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":0},{"kind":0,"index":4},{"kind":3,"file":16,"index":1},{"kind":3,"file":16,"index":2}]},{"fileName":19,"originalFileName":19,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":6,"index":1},{"kind":3,"file":16,"index":3}]},{"fileName":20,"originalFileName":20,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":6,"index":2},{"kind":0,"index":1},{"kind":3,"file":16,"index":4}]},{"fileName":21,"originalFileName":21,"path":5,"resolvedPath":5,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":3},{"kind":0,"index":2},{"kind":3,"file":16,"index":5}]},{"fileName":22,"originalFileName":22,"path":6,"resolvedPath":6,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":23,"originalFileName":23,"path":7,"resolvedPath":7,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":3}]},{"fileName":8,"originalFileName":8,"path":8,"resolvedPath":8,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":13}]},{"fileName":24,"originalFileName":24,"path":9,"resolvedPath":9,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":25,"originalFileName":25,"path":10,"resolvedPath":10,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":8},{"kind":4,"file":14,"index":1}]},{"fileName":26,"originalFileName":26,"path":11,"resolvedPath":11,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":1},{"kind":0,"index":7},{"kind":4,"file":14,"index":2}]},{"fileName":27,"originalFileName":27,"path":12,"resolvedPath":12,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":28,"originalFileName":28,"path":13,"resolvedPath":13,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":14,"index":0},{"kind":0,"index":10}]},{"fileName":29,"originalFileName":29,"path":14,"resolvedPath":14,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":9}]},{"fileName":30,"originalFileName":30,"path":15,"resolvedPath":15,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":16,"index":0},{"kind":0,"index":12}]},{"fileName":16,"originalFileName":16,"path":16,"resolvedPath":16,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":11}]},{"fileName":31,"originalFileName":31,"path":17,"resolvedPath":17,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[22,20,21,23,18,24,27,26,25,29,28,16,30,8],"resolvedTypeReferenceDirectives":[["someType",6]],"automaticTypeDirectiveNames":["someType"],"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[23,32]},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[33,34]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":30,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":31,"isExternalLibraryImport":true},"failedLookupLocations":[35]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[19,20]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":22,"extension":".d.ts"},"failedLookupLocations":[23,24]},{"resolvedModule":{"resolvedFileName":25,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[6,[1,2,3,4]],[16,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -11442,24 +8132,15 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/externalThingNotPresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
-      "./node_modules/@types/someType/package.json"
+      "./src/externalThingNotPresent.ts",
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -11618,522 +8299,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 4
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThingNotPresent.ts",
-          "originalFileName": "./src/externalThingNotPresent.ts",
-          "path": "./src/externalthingnotpresent.ts",
-          "resolvedPath": "./src/externalthingnotpresent.ts",
-          "version": "5318862050-export function externalThing2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 3
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 13
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/externalThingNotPresent.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -12143,6 +8310,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -12165,22 +8338,150 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 10983
+  "size": 5158
 }
 
 
@@ -12312,7 +8613,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./node_modules/@types/sometype2/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType/index.d.ts","./node_modules/@types/someType2/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./node_modules/@types/someType/package.json","./node_modules/@types/someType2/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;","5420646020-export function someType2(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":19,"originalFileName":19,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":0},{"kind":0,"index":4},{"kind":3,"file":16,"index":1},{"kind":3,"file":16,"index":2}]},{"fileName":20,"originalFileName":20,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":6,"index":1},{"kind":3,"file":16,"index":3}]},{"fileName":21,"originalFileName":21,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":6,"index":2},{"kind":0,"index":1},{"kind":3,"file":16,"index":4}]},{"fileName":22,"originalFileName":22,"path":5,"resolvedPath":5,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":3},{"kind":0,"index":2},{"kind":3,"file":16,"index":5}]},{"fileName":23,"originalFileName":23,"path":6,"resolvedPath":6,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":24,"originalFileName":24,"path":7,"resolvedPath":7,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":3}]},{"fileName":8,"originalFileName":8,"path":8,"resolvedPath":8,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":13}]},{"fileName":25,"originalFileName":25,"path":9,"resolvedPath":9,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":26,"originalFileName":26,"path":10,"resolvedPath":10,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":8},{"kind":4,"file":14,"index":1}]},{"fileName":27,"originalFileName":27,"path":11,"resolvedPath":11,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":1},{"kind":0,"index":7},{"kind":4,"file":14,"index":2}]},{"fileName":28,"originalFileName":28,"path":12,"resolvedPath":12,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":29,"originalFileName":29,"path":13,"resolvedPath":13,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":14,"index":0},{"kind":0,"index":10}]},{"fileName":30,"originalFileName":30,"path":14,"resolvedPath":14,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":9}]},{"fileName":31,"originalFileName":31,"path":15,"resolvedPath":15,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":16,"index":0},{"kind":0,"index":12}]},{"fileName":16,"originalFileName":16,"path":16,"resolvedPath":16,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":11}]},{"fileName":32,"originalFileName":32,"path":17,"resolvedPath":17,"version":"7070062898-export function someType(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType"}],"isSourceFileFromExternalLibraryPath":true},{"fileName":33,"originalFileName":33,"path":18,"resolvedPath":18,"version":"5420646020-export function someType2(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType2"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[23,21,22,24,19,25,28,27,26,30,29,16,31,8],"resolvedTypeReferenceDirectives":[["someType",6],["someType2",7]],"automaticTypeDirectiveNames":["someType","someType2"],"resolutions":[{"resolvedModule":{"resolvedFileName":19,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[24,34]},{"resolvedModule":{"resolvedFileName":21,"extension":".d.ts"},"failedLookupLocations":[35,36]},{"resolvedModule":{"resolvedFileName":22,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":31,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":32,"isExternalLibraryImport":true},"failedLookupLocations":[37]},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":33,"isExternalLibraryImport":true},"failedLookupLocations":[38]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype/index.d.ts","./node_modules/@types/sometype2/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"7070062898-export function someType(): number;","5420646020-export function someType2(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,17,4,3,2,9,12,11,10,14,13,15,8],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[20,21]},{"resolvedModule":{"resolvedFileName":22,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":23,"extension":".d.ts"},"failedLookupLocations":[24,25]},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":27,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[6,[1,2,3,4]],[16,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -12336,26 +8637,15 @@ exitCode:: ExitStatus.undefined
       "./src/main.ts",
       "./node_modules/@types/sometype/index.d.ts",
       "./node_modules/@types/sometype2/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/externalThingNotPresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType/index.d.ts",
-      "./node_modules/@types/someType2/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
-      "./node_modules/@types/someType/package.json",
-      "./node_modules/@types/someType2/package.json"
+      "./src/externalThingNotPresent.ts",
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -12518,551 +8808,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 4
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThingNotPresent.ts",
-          "originalFileName": "./src/externalThingNotPresent.ts",
-          "path": "./src/externalthingnotpresent.ts",
-          "resolvedPath": "./src/externalthingnotpresent.ts",
-          "version": "5318862050-export function externalThing2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 3
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 13
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType/index.d.ts",
-          "path": "./node_modules/@types/sometype/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype/index.d.ts",
-          "version": "7070062898-export function someType(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        },
-        {
-          "fileName": "./node_modules/@types/someType2/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType2/index.d.ts",
-          "path": "./node_modules/@types/sometype2/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype2/index.d.ts",
-          "version": "5420646020-export function someType2(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType2"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/externalThingNotPresent.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType/package.json"
-            ]
-          }
-        ],
-        [
-          "someType2",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType2/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType2/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType",
-        "someType2"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -13072,6 +8819,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -13094,32 +8847,150 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType/package.json"
-          ]
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType2/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType2/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 11569
+  "size": 5253
 }
 
 
@@ -13244,7 +9115,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype2/index.d.ts","./src/filePresent.ts","./src/fileNotFound.d.ts","./src/externalThing.d.ts","./src/externalThingNotPresent.ts","./src/anotherFileReusingResolution.ts","./src/fileNotFound.ts","./src/fileWithRef.ts","./src/globalFilePresent.ts","./src/globalFileNotFound.ts","./src/globalAnotherFileWithSameReferenes.ts","./src/globalNewFile.ts","./src/globalMain.ts","./src/newFile.ts","./node_modules/@types/someType2/index.d.ts","./src/fileNotFound.tsx","./src/externalThing.ts","./src/externalThing.tsx","./node_modules/@types/someType2/package.json"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"5420646020-export function someType2(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,9,12,11,10,14,13,15,8],"peristedProgram":{"files":[{"fileName":1,"originalFileName":1,"path":1,"resolvedPath":1,"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","flags":0,"hasNoDefaultLib":true,"includeReasons":[{"kind":6}]},{"fileName":18,"originalFileName":18,"path":2,"resolvedPath":2,"version":"11598859296-export function something() { return 10; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":0},{"kind":0,"index":4},{"kind":3,"file":16,"index":1},{"kind":3,"file":16,"index":2}]},{"fileName":19,"originalFileName":19,"path":3,"resolvedPath":3,"version":"-14992185226-export declare function something2(): number;\n","flags":0,"includeReasons":[{"kind":3,"file":6,"index":1},{"kind":3,"file":16,"index":3}]},{"fileName":20,"originalFileName":20,"path":4,"resolvedPath":4,"version":"5686005290-export function externalThing1(): number;","flags":0,"includeReasons":[{"kind":3,"file":6,"index":2},{"kind":0,"index":1},{"kind":3,"file":16,"index":4}]},{"fileName":21,"originalFileName":21,"path":5,"resolvedPath":5,"version":"5318862050-export function externalThing2() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":6,"index":3},{"kind":0,"index":2},{"kind":3,"file":16,"index":5}]},{"fileName":22,"originalFileName":22,"path":6,"resolvedPath":6,"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","flags":0,"imports":[{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":0}]},{"fileName":23,"originalFileName":23,"path":7,"resolvedPath":7,"version":"-497034637-export function something2() { return 20; }","flags":0,"includeReasons":[{"kind":0,"index":3}]},{"fileName":8,"originalFileName":8,"path":8,"resolvedPath":8,"version":"-12575322908-interface SomeType {}","flags":0,"includeReasons":[{"kind":4,"file":9,"index":0},{"kind":0,"index":13}]},{"fileName":24,"originalFileName":24,"path":9,"resolvedPath":9,"version":"-6085631553-/// <reference path=\"./types.ts\"/>","flags":0,"referencedFiles":["./types.ts"],"includeReasons":[{"kind":0,"index":5}]},{"fileName":25,"originalFileName":25,"path":10,"resolvedPath":10,"version":"-5627034801-function globalSomething() { return 10; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":0},{"kind":0,"index":8},{"kind":4,"file":14,"index":1}]},{"fileName":26,"originalFileName":26,"path":11,"resolvedPath":11,"version":"-6310824062-function globalSomething2() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":12,"index":1},{"kind":0,"index":7},{"kind":4,"file":14,"index":2}]},{"fileName":27,"originalFileName":27,"path":12,"resolvedPath":12,"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","flags":0,"referencedFiles":["./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":6}]},{"fileName":28,"originalFileName":28,"path":13,"resolvedPath":13,"version":"4916490342-function globalFoo() { return 20; }","flags":0,"includeReasons":[{"kind":4,"file":14,"index":0},{"kind":0,"index":10}]},{"fileName":29,"originalFileName":29,"path":14,"resolvedPath":14,"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","flags":0,"referencedFiles":["./globalNewFile.ts","./globalFilePresent.ts","./globalFileNotFound.ts"],"includeReasons":[{"kind":0,"index":9}]},{"fileName":30,"originalFileName":30,"path":15,"resolvedPath":15,"version":"4428918903-export function foo() { return 20; }","flags":0,"includeReasons":[{"kind":3,"file":16,"index":0},{"kind":0,"index":12}]},{"fileName":16,"originalFileName":16,"path":16,"resolvedPath":16,"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","flags":0,"imports":[{"kind":10,"text":"./newFile"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./filePresent"},{"kind":10,"text":"./fileNotFound"},{"kind":10,"text":"externalThing"},{"kind":10,"text":"externalThingNotPresent"}],"resolvedModules":[["./newFile",5],["./filePresent",1],["./fileNotFound",2],["externalThing",3],["externalThingNotPresent",4]],"includeReasons":[{"kind":0,"index":11}]},{"fileName":31,"originalFileName":31,"path":17,"resolvedPath":17,"version":"5420646020-export function someType2(): number;","flags":0,"includeReasons":[{"kind":8,"typeReference":"someType2"}],"isSourceFileFromExternalLibraryPath":true}],"rootFileNames":[22,20,21,23,18,24,27,26,25,29,28,16,30,8],"resolvedTypeReferenceDirectives":[["someType2",6]],"automaticTypeDirectiveNames":["someType2"],"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":19,"extension":".d.ts"},"failedLookupLocations":[23,32]},{"resolvedModule":{"resolvedFileName":20,"extension":".d.ts"},"failedLookupLocations":[33,34]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":30,"extension":".ts"}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":31,"isExternalLibraryImport":true},"failedLookupLocations":[35]}]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./src/filepresent.ts","./src/filenotfound.d.ts","./src/externalthing.d.ts","./src/externalthingnotpresent.ts","./src/anotherfilereusingresolution.ts","./src/filenotfound.ts","./src/types.ts","./src/filewithref.ts","./src/globalfilepresent.ts","./src/globalfilenotfound.ts","./src/globalanotherfilewithsamereferenes.ts","./src/globalnewfile.ts","./src/globalmain.ts","./src/newfile.ts","./src/main.ts","./node_modules/@types/sometype2/index.d.ts","./src/fileNotFound.d.ts","./src/fileNotFound.ts","./src/fileNotFound.tsx","./src/filePresent.ts","./src/externalThing.d.ts","./src/externalThing.ts","./src/externalThing.tsx","./src/externalThingNotPresent.ts","./src/newFile.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"11598859296-export function something() { return 10; }","signature":"-13601649692-export declare function something(): number;\n"},"-14992185226-export declare function something2(): number;\n","5686005290-export function externalThing1(): number;",{"version":"5318862050-export function externalThing2() { return 20; }","signature":"-16245999227-export declare function externalThing2(): number;\n"},{"version":"-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";","signature":"-3531856636-export {};\n"},{"version":"-497034637-export function something2() { return 20; }","signature":"-14992185226-export declare function something2(): number;\n"},{"version":"-12575322908-interface SomeType {}","signature":"-10760962856-interface SomeType {\n}\n","affectsGlobalScope":true},{"version":"-6085631553-/// <reference path=\"./types.ts\"/>","signature":"-1928648610-/// <reference path=\"types.d.ts\" />\n"},{"version":"-5627034801-function globalSomething() { return 10; }","signature":"-7731522637-declare function globalSomething(): number;\n","affectsGlobalScope":true},{"version":"-6310824062-function globalSomething2() { return 20; }","signature":"-5961586139-declare function globalSomething2(): number;\n","affectsGlobalScope":true},{"version":"-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n","signature":"-17196641480-/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalAnotherFileWithSameReferenes(): void;\n","affectsGlobalScope":true},{"version":"4916490342-function globalFoo() { return 20; }","signature":"4030514825-declare function globalFoo(): number;\n","affectsGlobalScope":true},{"version":"-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();","signature":"-15417052438-/// <reference path=\"globalNewFile.d.ts\" />\n/// <reference path=\"globalFilePresent.d.ts\" />\n/// <reference path=\"globalFileNotFound.d.ts\" />\ndeclare function globalMain(): void;\n","affectsGlobalScope":true},{"version":"4428918903-export function foo() { return 20; }","signature":"-4788605446-export declare function foo(): number;\n"},{"version":"6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();","signature":"-3531856636-export {};\n"},"5420646020-export function someType2(): number;"],"options":{"composite":true,"configFilePath":"./tsconfig.json","extendedDiagnostics":true,"module":2,"persistResolutions":true,"project":"./","traceResolution":true,"watch":true},"fileIdsList":[[2,3,4,5],[8],[10,11],[10,11,13],[2,3,4,5,15]],"referencedMap":[[6,1],[9,2],[12,3],[14,4],[16,5]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2,9,12,11,10,14,13,15,8],"persistedResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":18,"extension":".d.ts"},"failedLookupLocations":[19,20]},{"resolvedModule":{"resolvedFileName":21,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":22,"extension":".d.ts"},"failedLookupLocations":[23,24]},{"resolvedModule":{"resolvedFileName":25,"extension":".ts"}},{"resolvedModule":{"resolvedFileName":26,"extension":".ts"}}],"names":["./fileNotFound","./filePresent","externalThing","externalThingNotPresent","./newFile"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"resolutionMap":[[6,[1,2,3,4]],[16,[1,2,5,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -13267,24 +9138,15 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/main.ts",
       "./node_modules/@types/sometype2/index.d.ts",
-      "./src/filePresent.ts",
       "./src/fileNotFound.d.ts",
-      "./src/externalThing.d.ts",
-      "./src/externalThingNotPresent.ts",
-      "./src/anotherFileReusingResolution.ts",
       "./src/fileNotFound.ts",
-      "./src/fileWithRef.ts",
-      "./src/globalFilePresent.ts",
-      "./src/globalFileNotFound.ts",
-      "./src/globalAnotherFileWithSameReferenes.ts",
-      "./src/globalNewFile.ts",
-      "./src/globalMain.ts",
-      "./src/newFile.ts",
-      "./node_modules/@types/someType2/index.d.ts",
       "./src/fileNotFound.tsx",
+      "./src/filePresent.ts",
+      "./src/externalThing.d.ts",
       "./src/externalThing.ts",
       "./src/externalThing.tsx",
-      "./node_modules/@types/someType2/package.json"
+      "./src/externalThingNotPresent.ts",
+      "./src/newFile.ts"
     ],
     "fileNamesList": [
       [
@@ -13442,522 +9304,8 @@ exitCode:: ExitStatus.undefined
       "./src/newfile.ts",
       "./src/types.ts"
     ],
-    "peristedProgram": {
-      "files": [
-        {
-          "fileName": "../../../../a/lib/lib.d.ts",
-          "originalFileName": "../../../../a/lib/lib.d.ts",
-          "path": "../../../../a/lib/lib.d.ts",
-          "resolvedPath": "../../../../a/lib/lib.d.ts",
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "flags": 0,
-          "hasNoDefaultLib": true,
-          "includeReasons": [
-            {
-              "kind": "LibFile"
-            }
-          ]
-        },
-        {
-          "fileName": "./src/filePresent.ts",
-          "originalFileName": "./src/filePresent.ts",
-          "path": "./src/filepresent.ts",
-          "resolvedPath": "./src/filepresent.ts",
-          "version": "11598859296-export function something() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 4
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.d.ts",
-          "originalFileName": "./src/fileNotFound.d.ts",
-          "path": "./src/filenotfound.d.ts",
-          "resolvedPath": "./src/filenotfound.d.ts",
-          "version": "-14992185226-export declare function something2(): number;\n",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThing.d.ts",
-          "originalFileName": "./src/externalThing.d.ts",
-          "path": "./src/externalthing.d.ts",
-          "resolvedPath": "./src/externalthing.d.ts",
-          "version": "5686005290-export function externalThing1(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 2
-            },
-            {
-              "kind": "RootFile",
-              "index": 1
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 4
-            }
-          ]
-        },
-        {
-          "fileName": "./src/externalThingNotPresent.ts",
-          "originalFileName": "./src/externalThingNotPresent.ts",
-          "path": "./src/externalthingnotpresent.ts",
-          "resolvedPath": "./src/externalthingnotpresent.ts",
-          "version": "5318862050-export function externalThing2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/anotherfilereusingresolution.ts",
-              "index": 3
-            },
-            {
-              "kind": "RootFile",
-              "index": 2
-            },
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/anotherFileReusingResolution.ts",
-          "originalFileName": "./src/anotherFileReusingResolution.ts",
-          "path": "./src/anotherfilereusingresolution.ts",
-          "resolvedPath": "./src/anotherfilereusingresolution.ts",
-          "version": "-26029945158-import { something } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 0
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileNotFound.ts",
-          "originalFileName": "./src/fileNotFound.ts",
-          "path": "./src/filenotfound.ts",
-          "resolvedPath": "./src/filenotfound.ts",
-          "version": "-497034637-export function something2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 3
-            }
-          ]
-        },
-        {
-          "fileName": "./src/types.ts",
-          "originalFileName": "./src/types.ts",
-          "path": "./src/types.ts",
-          "resolvedPath": "./src/types.ts",
-          "version": "-12575322908-interface SomeType {}",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/filewithref.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 13
-            }
-          ]
-        },
-        {
-          "fileName": "./src/fileWithRef.ts",
-          "originalFileName": "./src/fileWithRef.ts",
-          "path": "./src/filewithref.ts",
-          "resolvedPath": "./src/filewithref.ts",
-          "version": "-6085631553-/// <reference path=\"./types.ts\"/>",
-          "flags": 0,
-          "referencedFiles": [
-            "./types.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 5
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFilePresent.ts",
-          "originalFileName": "./src/globalFilePresent.ts",
-          "path": "./src/globalfilepresent.ts",
-          "resolvedPath": "./src/globalfilepresent.ts",
-          "version": "-5627034801-function globalSomething() { return 10; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 8
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 1
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalFileNotFound.ts",
-          "originalFileName": "./src/globalFileNotFound.ts",
-          "path": "./src/globalfilenotfound.ts",
-          "resolvedPath": "./src/globalfilenotfound.ts",
-          "version": "-6310824062-function globalSomething2() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalanotherfilewithsamereferenes.ts",
-              "index": 1
-            },
-            {
-              "kind": "RootFile",
-              "index": 7
-            },
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 2
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "originalFileName": "./src/globalAnotherFileWithSameReferenes.ts",
-          "path": "./src/globalanotherfilewithsamereferenes.ts",
-          "resolvedPath": "./src/globalanotherfilewithsamereferenes.ts",
-          "version": "-4448253777-/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalAnotherFileWithSameReferenes() { }\n",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 6
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalNewFile.ts",
-          "originalFileName": "./src/globalNewFile.ts",
-          "path": "./src/globalnewfile.ts",
-          "resolvedPath": "./src/globalnewfile.ts",
-          "version": "4916490342-function globalFoo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "ReferenceFile",
-              "file": "./src/globalmain.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 10
-            }
-          ]
-        },
-        {
-          "fileName": "./src/globalMain.ts",
-          "originalFileName": "./src/globalMain.ts",
-          "path": "./src/globalmain.ts",
-          "resolvedPath": "./src/globalmain.ts",
-          "version": "-7686833800-/// <reference path=\"./globalNewFile.ts\"/>\n/// <reference path=\"./globalFilePresent.ts\"/>\n/// <reference path=\"./globalFileNotFound.ts\"/>\nfunction globalMain() { }\nglobalSomething();globalFoo();",
-          "flags": 0,
-          "referencedFiles": [
-            "./globalNewFile.ts",
-            "./globalFilePresent.ts",
-            "./globalFileNotFound.ts"
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 9
-            }
-          ]
-        },
-        {
-          "fileName": "./src/newFile.ts",
-          "originalFileName": "./src/newFile.ts",
-          "path": "./src/newfile.ts",
-          "resolvedPath": "./src/newfile.ts",
-          "version": "4428918903-export function foo() { return 20; }",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "Import",
-              "file": "./src/main.ts",
-              "index": 0
-            },
-            {
-              "kind": "RootFile",
-              "index": 12
-            }
-          ]
-        },
-        {
-          "fileName": "./src/main.ts",
-          "originalFileName": "./src/main.ts",
-          "path": "./src/main.ts",
-          "resolvedPath": "./src/main.ts",
-          "version": "6810735860-import { foo } from \"./newFile\";import { something } from \"./filePresent\";\nimport { something as something1 } from \"./filePresent\";\nimport { something2 } from \"./fileNotFound\";\nimport { externalThing1 } from \"externalThing\";\nimport { externalThing2 } from \"externalThingNotPresent\";something();",
-          "flags": 0,
-          "imports": [
-            {
-              "kind": 10,
-              "text": "./newFile"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./filePresent"
-            },
-            {
-              "kind": 10,
-              "text": "./fileNotFound"
-            },
-            {
-              "kind": 10,
-              "text": "externalThing"
-            },
-            {
-              "kind": 10,
-              "text": "externalThingNotPresent"
-            }
-          ],
-          "resolvedModules": [
-            [
-              "./newFile",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/newFile.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./filePresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/filePresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ],
-            [
-              "./fileNotFound",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/fileNotFound.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/fileNotFound.ts",
-                  "./src/fileNotFound.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThing",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThing.d.ts",
-                  "extension": ".d.ts"
-                },
-                "failedLookupLocations": [
-                  "./src/externalThing.ts",
-                  "./src/externalThing.tsx"
-                ]
-              }
-            ],
-            [
-              "externalThingNotPresent",
-              {
-                "resolvedModule": {
-                  "resolvedFileName": "./src/externalThingNotPresent.ts",
-                  "extension": ".ts"
-                }
-              }
-            ]
-          ],
-          "includeReasons": [
-            {
-              "kind": "RootFile",
-              "index": 11
-            }
-          ]
-        },
-        {
-          "fileName": "./node_modules/@types/someType2/index.d.ts",
-          "originalFileName": "./node_modules/@types/someType2/index.d.ts",
-          "path": "./node_modules/@types/sometype2/index.d.ts",
-          "resolvedPath": "./node_modules/@types/sometype2/index.d.ts",
-          "version": "5420646020-export function someType2(): number;",
-          "flags": 0,
-          "includeReasons": [
-            {
-              "kind": "AutomaticTypeDirectiveFile",
-              "typeReference": "someType2"
-            }
-          ],
-          "isSourceFileFromExternalLibraryPath": true
-        }
-      ],
-      "rootFileNames": [
-        "./src/anotherFileReusingResolution.ts",
-        "./src/externalThing.d.ts",
-        "./src/externalThingNotPresent.ts",
-        "./src/fileNotFound.ts",
-        "./src/filePresent.ts",
-        "./src/fileWithRef.ts",
-        "./src/globalAnotherFileWithSameReferenes.ts",
-        "./src/globalFileNotFound.ts",
-        "./src/globalFilePresent.ts",
-        "./src/globalMain.ts",
-        "./src/globalNewFile.ts",
-        "./src/main.ts",
-        "./src/newFile.ts",
-        "./src/types.ts"
-      ],
-      "resolvedTypeReferenceDirectives": [
-        [
-          "someType2",
-          {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/someType2/index.d.ts",
-              "isExternalLibraryImport": true
-            },
-            "failedLookupLocations": [
-              "./node_modules/@types/someType2/package.json"
-            ]
-          }
-        ]
-      ],
-      "automaticTypeDirectiveNames": [
-        "someType2"
-      ],
+    "persistedResolutions": {
       "resolutions": [
-        {
-          "resolvedModule": {
-            "resolvedFileName": "./src/filePresent.ts",
-            "extension": ".ts"
-          }
-        },
         {
           "resolvedModule": {
             "resolvedFileName": "./src/fileNotFound.d.ts",
@@ -13967,6 +9315,12 @@ exitCode:: ExitStatus.undefined
             "./src/fileNotFound.ts",
             "./src/fileNotFound.tsx"
           ]
+        },
+        {
+          "resolvedModule": {
+            "resolvedFileName": "./src/filePresent.ts",
+            "extension": ".ts"
+          }
         },
         {
           "resolvedModule": {
@@ -13989,21 +9343,149 @@ exitCode:: ExitStatus.undefined
             "resolvedFileName": "./src/newFile.ts",
             "extension": ".ts"
           }
-        },
-        {
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/someType2/index.d.ts",
-            "isExternalLibraryImport": true
-          },
-          "failedLookupLocations": [
-            "./node_modules/@types/someType2/package.json"
-          ]
         }
-      ]
+      ],
+      "names": [
+        "./fileNotFound",
+        "./filePresent",
+        "externalThing",
+        "externalThingNotPresent",
+        "./newFile"
+      ],
+      "resolutionEntries": [
+        [
+          "./fileNotFound",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          }
+        ],
+        [
+          "./filePresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "externalThing",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          }
+        ],
+        [
+          "externalThingNotPresent",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        ],
+        [
+          "./newFile",
+          {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          }
+        ]
+      ],
+      "resolutionMap": {
+        "./src/anotherfilereusingresolution.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        },
+        "./src/main.ts": {
+          "./fileNotFound": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/fileNotFound.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/fileNotFound.ts",
+              "./src/fileNotFound.tsx"
+            ]
+          },
+          "./filePresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/filePresent.ts",
+              "extension": ".ts"
+            }
+          },
+          "./newFile": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/newFile.ts",
+              "extension": ".ts"
+            }
+          },
+          "externalThing": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThing.d.ts",
+              "extension": ".d.ts"
+            },
+            "failedLookupLocations": [
+              "./src/externalThing.ts",
+              "./src/externalThing.tsx"
+            ]
+          },
+          "externalThingNotPresent": {
+            "resolvedModule": {
+              "resolvedFileName": "./src/externalThingNotPresent.ts",
+              "extension": ".ts"
+            }
+          }
+        }
+      }
     }
   },
   "version": "FakeTSVersion",
-  "size": 10988
+  "size": 5157
 }
 

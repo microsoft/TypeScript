@@ -33,9 +33,8 @@ namespace ts {
         if (!content) return emitSkippedWithNoDiagnostics;
         const buildInfo = getBuildInfo(content);
         if (buildInfo.version !== version) return emitSkippedWithNoDiagnostics;
-        if (!buildInfo.program?.peristedProgram) return emitSkippedWithNoDiagnostics;
-        const { program: { peristedProgram, ...program } } = buildInfo;
-        buildInfo.program = program;
+        if (!buildInfo.program?.persistedResolutions) return emitSkippedWithNoDiagnostics;
+        buildInfo.program.persistedResolutions = undefined;
 
         // Actual writeFile with new program
         const emitDiagnostics = createDiagnosticCollection();

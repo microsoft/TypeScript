@@ -36,13 +36,79 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFil
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalMain.ts 500 undefined WatchType: Closed Script info
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/types.ts 500 undefined WatchType: Closed Script info
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
+======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
+Module resolution kind is not specified, using 'Classic'.
+File '/user/username/projects/myproject/src/fileNotFound.ts' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.tsx' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.d.ts' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.js' does not exist.
+File '/user/username/projects/myproject/src/fileNotFound.jsx' does not exist.
+======== Module name './fileNotFound' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+======== Resolving module 'externalThingNotPresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
+Module resolution kind is not specified, using 'Classic'.
+File '/user/username/projects/myproject/src/externalThingNotPresent.ts' does not exist.
+File '/user/username/projects/myproject/src/externalThingNotPresent.tsx' does not exist.
+File '/user/username/projects/myproject/src/externalThingNotPresent.d.ts' does not exist.
+File '/user/username/projects/myproject/externalThingNotPresent.ts' does not exist.
+File '/user/username/projects/myproject/externalThingNotPresent.tsx' does not exist.
+File '/user/username/projects/myproject/externalThingNotPresent.d.ts' does not exist.
+File '/user/username/projects/externalThingNotPresent.ts' does not exist.
+File '/user/username/projects/externalThingNotPresent.tsx' does not exist.
+File '/user/username/projects/externalThingNotPresent.d.ts' does not exist.
+File '/user/username/externalThingNotPresent.ts' does not exist.
+File '/user/username/externalThingNotPresent.tsx' does not exist.
+File '/user/username/externalThingNotPresent.d.ts' does not exist.
+File '/user/externalThingNotPresent.ts' does not exist.
+File '/user/externalThingNotPresent.tsx' does not exist.
+File '/user/externalThingNotPresent.d.ts' does not exist.
+File '/externalThingNotPresent.ts' does not exist.
+File '/externalThingNotPresent.tsx' does not exist.
+File '/externalThingNotPresent.d.ts' does not exist.
+Directory '/user/username/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+File '/user/username/projects/myproject/node_modules/@types/externalThingNotPresent.d.ts' does not exist.
+Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
+Directory '/user/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File '/user/username/projects/myproject/src/externalThingNotPresent.js' does not exist.
+File '/user/username/projects/myproject/src/externalThingNotPresent.jsx' does not exist.
+File '/user/username/projects/myproject/externalThingNotPresent.js' does not exist.
+File '/user/username/projects/myproject/externalThingNotPresent.jsx' does not exist.
+File '/user/username/projects/externalThingNotPresent.js' does not exist.
+File '/user/username/projects/externalThingNotPresent.jsx' does not exist.
+File '/user/username/externalThingNotPresent.js' does not exist.
+File '/user/username/externalThingNotPresent.jsx' does not exist.
+File '/user/externalThingNotPresent.js' does not exist.
+File '/user/externalThingNotPresent.jsx' does not exist.
+File '/externalThingNotPresent.js' does not exist.
+File '/externalThingNotPresent.jsx' does not exist.
+======== Module name 'externalThingNotPresent' was not resolved. ========
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
+Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
+Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
+======== Resolving type reference directive 'someType', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
+Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
+File '/user/username/projects/myproject/node_modules/@types/someType/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts' exist - use it as a name resolution result.
+Resolving real path for '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts', result '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts'.
+======== Type reference directive 'someType' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts', primary: true. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos in them
+FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalFileNotFound.ts 500 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Missing file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Completely Elapsed:: *ms
+Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (11)
 	/a/lib/lib.d.ts
@@ -246,6 +312,9 @@ DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNe
 Scheduled: /user/username/projects/myproject/tsconfig.json
 Scheduled: *ensureProjectForOpenFiles*
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Scheduled: /user/username/projects/myproject/tsconfig.jsonFailedLookupInvalidation
+Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/globalNewFile.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/src/globalMain.ts","line":1,"offset":1,"endLine":1,"endOffset":1,"insertString":"/// <reference path=\"./globalNewFile.ts\"/>\n"},"seq":2,"type":"request"}
 response:{"responseRequired":false}
 request:{"command":"change","arguments":{"file":"/user/username/projects/myproject/src/globalMain.ts","line":6,"offset":1,"endLine":6,"endOffset":1,"insertString":"globalFoo();\n"},"seq":3,"type":"request"}
@@ -255,70 +324,14 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/globalNew
 Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
-======== Resolving module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/fileNotFound.ts' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.tsx' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.d.ts' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.js' does not exist.
-File '/user/username/projects/myproject/src/fileNotFound.jsx' does not exist.
-======== Module name './fileNotFound' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-======== Resolving module 'externalThingNotPresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts'. ========
-Module resolution kind is not specified, using 'Classic'.
-File '/user/username/projects/myproject/src/externalThingNotPresent.ts' does not exist.
-File '/user/username/projects/myproject/src/externalThingNotPresent.tsx' does not exist.
-File '/user/username/projects/myproject/src/externalThingNotPresent.d.ts' does not exist.
-File '/user/username/projects/myproject/externalThingNotPresent.ts' does not exist.
-File '/user/username/projects/myproject/externalThingNotPresent.tsx' does not exist.
-File '/user/username/projects/myproject/externalThingNotPresent.d.ts' does not exist.
-File '/user/username/projects/externalThingNotPresent.ts' does not exist.
-File '/user/username/projects/externalThingNotPresent.tsx' does not exist.
-File '/user/username/projects/externalThingNotPresent.d.ts' does not exist.
-File '/user/username/externalThingNotPresent.ts' does not exist.
-File '/user/username/externalThingNotPresent.tsx' does not exist.
-File '/user/username/externalThingNotPresent.d.ts' does not exist.
-File '/user/externalThingNotPresent.ts' does not exist.
-File '/user/externalThingNotPresent.tsx' does not exist.
-File '/user/externalThingNotPresent.d.ts' does not exist.
-File '/externalThingNotPresent.ts' does not exist.
-File '/externalThingNotPresent.tsx' does not exist.
-File '/externalThingNotPresent.d.ts' does not exist.
-Directory '/user/username/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
-File '/user/username/projects/myproject/node_modules/@types/externalThingNotPresent.d.ts' does not exist.
-Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
-Directory '/user/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-File '/user/username/projects/myproject/src/externalThingNotPresent.js' does not exist.
-File '/user/username/projects/myproject/src/externalThingNotPresent.jsx' does not exist.
-File '/user/username/projects/myproject/externalThingNotPresent.js' does not exist.
-File '/user/username/projects/myproject/externalThingNotPresent.jsx' does not exist.
-File '/user/username/projects/externalThingNotPresent.js' does not exist.
-File '/user/username/projects/externalThingNotPresent.jsx' does not exist.
-File '/user/username/externalThingNotPresent.js' does not exist.
-File '/user/username/externalThingNotPresent.jsx' does not exist.
-File '/user/externalThingNotPresent.js' does not exist.
-File '/user/externalThingNotPresent.jsx' does not exist.
-File '/externalThingNotPresent.js' does not exist.
-File '/externalThingNotPresent.jsx' does not exist.
-======== Module name 'externalThingNotPresent' was not resolved. ========
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
+Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/anotherFileReusingResolution.ts' of old program, it was not resolved.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module './filePresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/filePresent.ts'.
 Reusing resolution of module 'externalThing' from '/user/username/projects/myproject/src/main.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/src/externalThing.d.ts'.
-Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
-Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/main.ts' found in cache from location '/user/username/projects/myproject/src', it was not resolved.
-======== Resolving type reference directive 'someType', containing file '/user/username/projects/myproject/__inferred type names__.ts', root directory '/user/username/projects/myproject/node_modules/@types'. ========
-Resolving with primary search path '/user/username/projects/myproject/node_modules/@types'.
-File '/user/username/projects/myproject/node_modules/@types/someType/package.json' does not exist.
-File '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts', result '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts'.
-======== Type reference directive 'someType' was successfully resolved to '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts', primary: true. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Reusing resolution of module './fileNotFound' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Reusing resolution of module 'externalThingNotPresent' from '/user/username/projects/myproject/src/main.ts' of old program, it was not resolved.
+Reusing resolution of type reference directive 'someType' from '/user/username/projects/myproject/__inferred type names__.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/node_modules/@types/someType/index.d.ts'.
 Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 	Files (12)
