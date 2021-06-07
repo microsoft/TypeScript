@@ -138,6 +138,7 @@
         "unittests/tsbuildWatch/configFileErrors.ts",
         "unittests/tsbuildWatch/demo.ts",
         "unittests/tsbuildWatch/moduleResolution.ts",
+        "unittests/tsbuildWatch/noEmit.ts",
         "unittests/tsbuildWatch/noEmitOnError.ts",
         "unittests/tsbuildWatch/programUpdates.ts",
         "unittests/tsbuildWatch/reexport.ts",

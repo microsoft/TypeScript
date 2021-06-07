@@ -55,44 +55,79 @@ namespace ts.projectSystem {
         readonly callback: TI.RequestCompletedAction;
     }
 
-    export const nullLogger: server.Logger = {
-        close: noop,
-        hasLevel: returnFalse,
-        loggingEnabled: returnFalse,
-        perftrc: noop,
-        info: noop,
-        msg: noop,
-        startGroup: noop,
-        endGroup: noop,
-        getLogFileName: returnUndefined,
-    };
-
-    export function createHasErrorMessageLogger() {
-        let hasErrorMsg = false;
-        const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
-        const logger: server.Logger = {
-            close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-            msg: (s, type) => {
-                Debug.fail(`Error: ${s}, type: ${type}`);
-                hasErrorMsg = true;
-            }
-        };
-        return { logger, hasErrorMsg: () => hasErrorMsg };
+    export interface Logger extends server.Logger {
+        logs: string[];
     }
 
-    export function createLoggerWritingToConsole(): server.Logger {
-        const { close, startGroup, endGroup, getLogFileName } = nullLogger;
+    export function nullLogger(): Logger {
         return {
-            close,
+            close: noop,
+            hasLevel: returnFalse,
+            loggingEnabled: returnFalse,
+            perftrc: noop,
+            info: noop,
+            msg: noop,
+            startGroup: noop,
+            endGroup: noop,
+            getLogFileName: returnUndefined,
+            logs: [],
+        };
+    }
+
+    export function createHasErrorMessageLogger(): Logger {
+        return {
+            ...nullLogger(),
+            msg: (s, type) => Debug.fail(`Error: ${s}, type: ${type}`),
+        };
+    }
+
+    export function createLoggerWritingToConsole(): Logger {
+        return {
+            ...nullLogger(),
             hasLevel: returnTrue,
             loggingEnabled: returnTrue,
             perftrc: s => console.log(s),
             info: s => console.log(s),
             msg: (s, type) => console.log(`${type}:: ${s}`),
-            startGroup,
-            endGroup,
-            getLogFileName
         };
+    }
+
+    export function createLoggerWithInMemoryLogs(): Logger {
+        const logger = createHasErrorMessageLogger();
+        return {
+            ...logger,
+            hasLevel: returnTrue,
+            loggingEnabled: returnTrue,
+            info: s => logger.logs.push(
+                s.replace(/Elapsed::?\s*\d+(?:\.\d+)?ms/g, "Elapsed:: *ms")
+                    .replace(/\"updateGraphDurationMs\"\:\d+(?:\.\d+)?/g, `"updateGraphDurationMs":*`)
+                    .replace(/\"createAutoImportProviderProgramDurationMs\"\:\d+(?:\.\d+)?/g, `"createAutoImportProviderProgramDurationMs":*`)
+                    .replace(`"version":"${version}"`, `"version":"FakeVersion"`)
+            )
+        };
+    }
+
+    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService) {
+        Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
+        Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
+    }
+
+    export function appendAllScriptInfos(service: server.ProjectService, logs: string[]) {
+        logs.push("");
+        logs.push(`ScriptInfos:`);
+        service.filenameToScriptInfo.forEach(info => logs.push(`path: ${info.path} fileName: ${info.fileName}`));
+        logs.push("");
+    }
+
+    export function appendProjectFileText(project: server.Project, logs: string[]) {
+        logs.push("");
+        logs.push(`Project: ${project.getProjectName()}`);
+        project.getCurrentProgram()?.getSourceFiles().forEach(f => {
+            logs.push(JSON.stringify({ fileName: f.fileName, version: f.version }));
+            logs.push(f.text);
+            logs.push("");
+        });
+        logs.push("");
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
@@ -196,19 +231,6 @@ namespace ts.projectSystem {
         return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
     }
 
-    export interface ConfigFileDiagnostic {
-        fileName: string | undefined;
-        start: number | undefined;
-        length: number | undefined;
-        messageText: string;
-        category: DiagnosticCategory;
-        code: number;
-        reportsUnnecessary?: {};
-        reportsDeprecated?: {};
-        source?: string;
-        relatedInformation?: DiagnosticRelatedInformation[];
-    }
-
     export class TestServerEventManager {
         private events: server.ProjectServiceEvent[] = [];
         readonly session: TestSession;
@@ -249,16 +271,6 @@ namespace ts.projectSystem {
             this.events.forEach(event => assert.notEqual(event.eventName, eventName));
         }
 
-        checkSingleConfigFileDiagEvent(configFileName: string, triggerFile: string, errors: readonly ConfigFileDiagnostic[]) {
-            const eventData = this.getEvent<server.ConfigFileDiagEvent>(server.ConfigFileDiagEvent);
-            assert.equal(eventData.configFileName, configFileName);
-            assert.equal(eventData.triggerFile, triggerFile);
-            const actual = eventData.diagnostics.map(({ file, messageText, ...rest }) => ({ fileName: file && file.fileName, messageText: isString(messageText) ? messageText : "", ...rest }));
-            if (errors) {
-                assert.deepEqual(actual, errors);
-            }
-        }
-
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>, configFile = "/tsconfig.json"): void {
             assert.deepEqual<server.ProjectInfoTelemetryEventData>(this.getEvent<server.ProjectInfoTelemetryEvent>(server.ProjectInfoTelemetryEvent), {
                 projectId: sys.createSHA256Hash!(configFile),
@@ -290,10 +302,20 @@ namespace ts.projectSystem {
         }
     }
 
+    export interface TestSessionOptions extends server.SessionOptions {
+        logger: Logger;
+    }
+
     export class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
         public testhost: TestServerHost = this.host as TestServerHost;
+        public logger: Logger;
+
+        constructor(opts: TestSessionOptions) {
+            super(opts);
+            this.logger = opts.logger;
+        }
 
         getProjectService() {
             return this.projectService;
@@ -305,6 +327,14 @@ namespace ts.projectSystem {
 
         public getNextSeq() {
             return this.seq + 1;
+        }
+
+        public executeCommand(request: protocol.Request) {
+            const verboseLogging = this.logger.hasLevel(server.LogLevel.verbose);
+            if (verboseLogging) this.logger.info(`request:${JSON.stringify(request)}`);
+            const result = super.executeCommand(request);
+            if (verboseLogging) this.logger.info(`response:${JSON.stringify(result)}`);
+            return result;
         }
 
         public executeCommandSeq<T extends server.protocol.Request>(request: Partial<T>) {
@@ -325,7 +355,7 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createSession(host: server.ServerHost, opts: Partial<server.SessionOptions> = {}) {
+    export function createSession(host: server.ServerHost, opts: Partial<TestSessionOptions> = {}) {
         if (opts.typingsInstaller === undefined) {
             opts.typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
         }
@@ -334,7 +364,7 @@ namespace ts.projectSystem {
             opts.canUseEvents = true;
         }
 
-        const sessionOptions: server.SessionOptions = {
+        const sessionOptions: TestSessionOptions = {
             host,
             cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: false,
@@ -342,7 +372,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || createHasErrorMessageLogger().logger,
+            logger: opts.logger || createHasErrorMessageLogger(),
             canUseEvents: false
         };
 
@@ -362,7 +392,7 @@ namespace ts.projectSystem {
         return { session, events };
     }
 
-    export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
+    export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
         const session = createSession(host, { canUseEvents: true, ...opts });
 
         return {
@@ -383,9 +413,13 @@ namespace ts.projectSystem {
         }
     }
 
+    export interface TestProjectServiceOptions extends server.ProjectServiceOptions {
+        logger: Logger;
+    }
+
     export class TestProjectService extends server.ProjectService {
-        constructor(host: server.ServerHost, logger: server.Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
-            typingsInstaller: server.ITypingsInstaller, opts: Partial<server.ProjectServiceOptions> = {}) {
+        constructor(host: server.ServerHost, public logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean,
+            typingsInstaller: server.ITypingsInstaller, opts: Partial<TestProjectServiceOptions> = {}) {
             super({
                 host,
                 logger,
@@ -403,9 +437,9 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createProjectService(host: server.ServerHost, options?: Partial<server.ProjectServiceOptions>) {
+    export function createProjectService(host: server.ServerHost, options?: Partial<TestProjectServiceOptions>) {
         const cancellationToken = options?.cancellationToken || server.nullCancellationToken;
-        const logger = options?.logger || createHasErrorMessageLogger().logger;
+        const logger = options?.logger || createHasErrorMessageLogger();
         const useSingleInferredProject = options?.useSingleInferredProject !== undefined ? options.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, options?.typingsInstaller || server.nullTypingsInstaller, options);
     }
@@ -677,153 +711,6 @@ namespace ts.projectSystem {
         }
     }
 
-    export interface ErrorInformation {
-        diagnosticMessage: DiagnosticMessage;
-        errorTextArguments?: string[];
-    }
-
-    function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
-        return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
-    }
-
-    export function verifyDiagnostics(actual: readonly server.protocol.Diagnostic[], expected: readonly ErrorInformation[]) {
-        const expectedErrors = expected.map(getProtocolDiagnosticMessage);
-        assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
-    }
-
-    export function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
-        verifyDiagnostics(actual, []);
-    }
-
-    export function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
-        checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
-    }
-
-    interface DiagnosticChainText {
-        message: DiagnosticMessage;
-        args?: readonly string[];
-        next?: DiagnosticChainText[];
-    }
-
-    function isDiagnosticMessage(diagnostic: DiagnosticMessage | DiagnosticChainText): diagnostic is DiagnosticMessage {
-        return !!diagnostic && isString((diagnostic as DiagnosticMessage).message);
-    }
-    function getTextForDiagnostic(diag: DiagnosticMessage | DiagnosticChainText | undefined, args?: readonly string[], indent = 0) {
-        if (diag === undefined) return "";
-        if (isDiagnosticMessage(diag)) return formatStringFromArgs(diag.message, args || emptyArray);
-        let result = "";
-        if (indent) {
-            result += "\n";
-
-            for (let i = 0; i < indent; i++) {
-                result += "  ";
-            }
-        }
-        result += formatStringFromArgs(diag.message.message, diag.args || emptyArray);
-        indent++;
-        if (diag.next) {
-            for (const kid of diag.next) {
-                result += getTextForDiagnostic(kid, /*args*/ undefined, indent);
-            }
-        }
-        return result;
-    }
-
-    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage | DiagnosticChainText, args?: readonly string[], category?: string, reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[], reportsDeprecated?: {}): protocol.Diagnostic {
-        const diag = isDiagnosticMessage(message) ? message : message.message;
-        return { start, end, text: getTextForDiagnostic(message, args), code: diag.code, category: category || diagnosticCategoryName(diag), reportsUnnecessary, reportsDeprecated, relatedInformation, source: undefined };
-    }
-
-    export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
-        checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
-    }
-
-    export function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
-        checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
-    }
-
-    export function checkNoDiagnosticEvents(session: TestSession) {
-        for (const event of session.events) {
-            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
-        }
-    }
-    export function projectLoadingStartEvent(projectName: string, reason: string, seq?: number): protocol.ProjectLoadingStartEvent {
-        return {
-            seq: seq || 0,
-            type: "event",
-            event: server.ProjectLoadingStartEvent,
-            body: { projectName, reason }
-        };
-    }
-
-    export function projectLoadingFinishEvent(projectName: string, seq?: number): protocol.ProjectLoadingFinishEvent {
-        return {
-            seq: seq || 0,
-            type: "event",
-            event: server.ProjectLoadingFinishEvent,
-            body: { projectName }
-        };
-    }
-
-    export function projectInfoTelemetryEvent(seq?: number): protocol.TelemetryEvent {
-        return telemetryEvent(server.ProjectInfoTelemetryEvent, "", seq);
-    }
-
-    function telemetryEvent(telemetryEventName: string, payload: any, seq?: number): protocol.TelemetryEvent {
-        return {
-            seq: seq || 0,
-            type: "event",
-            event: "telemetry",
-            body: {
-                telemetryEventName,
-                payload
-            }
-        };
-    }
-
-    export function configFileDiagEvent(triggerFile: string, configFile: string, diagnostics: protocol.DiagnosticWithFileName[], seq?: number): protocol.ConfigFileDiagnosticEvent {
-        return {
-            seq: seq || 0,
-            type: "event",
-            event: server.ConfigFileDiagEvent,
-            body: {
-                triggerFile,
-                configFile,
-                diagnostics
-            }
-        };
-    }
-
-    export function checkEvents(session: TestSession, expectedEvents: protocol.Event[]) {
-        const events = session.events;
-        assert.equal(events.length, expectedEvents.length, `Actual:: ${JSON.stringify(session.events, /*replacer*/ undefined, " ")}`);
-        expectedEvents.forEach((expectedEvent, index) => {
-            if (expectedEvent.event === "telemetry") {
-                // Ignore payload
-                const { body, ...actual } = events[index] as protocol.TelemetryEvent;
-                const { body: expectedBody, ...expected } = expectedEvent as protocol.TelemetryEvent;
-                assert.deepEqual(actual, expected, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
-                assert.equal(body.telemetryEventName, expectedBody.telemetryEventName, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
-            }
-            else {
-                checkNthEvent(session, expectedEvent, index, index === expectedEvents.length);
-            }
-        });
-    }
-
-    export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
-        const events = session.events;
-        assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
-
-        const outputs = session.testhost.getOutput();
-        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.testhost.newLine));
-
-        if (isMostRecent) {
-            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
-            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
-        }
-    }
-
     export interface MakeReferenceItem extends DocumentSpanFromSubstring {
         isDefinition: boolean;
         isWriteAccess?: boolean;
@@ -839,218 +726,121 @@ namespace ts.projectSystem {
         };
     }
 
-    export interface GetErrDiagnostics {
-        file: string | File;
-        syntax?: protocol.Diagnostic[];
-        semantic?: protocol.Diagnostic[];
-        suggestion?: protocol.Diagnostic[];
-    }
     export interface VerifyGetErrRequestBase {
         session: TestSession;
         host: TestServerHost;
-        onErrEvent?: () => void;
         existingTimeouts?: number;
     }
     export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
-        expected: readonly GetErrDiagnostics[];
+        files: readonly (string | File)[];
+        skip?: CheckAllErrors["skip"];
     }
     export function verifyGetErrRequest(request: VerifyGetErrRequest) {
-        const { session, expected } = request;
-        session.clearMessages();
-        const expectedSequenceId = session.getNextSeq();
+        const { session, files } = request;
         session.executeCommandSeq<protocol.GeterrRequest>({
             command: protocol.CommandTypes.Geterr,
-            arguments: {
-                delay: 0,
-                files: expected.map(f => filePath(f.file))
+            arguments: { delay: 0, files: files.map(filePath) }
+        });
+        checkAllErrors(request);
+    }
+
+    interface SkipErrors { semantic?: true; suggestion?: true };
+    export interface CheckAllErrors extends VerifyGetErrRequestBase {
+        files: readonly any[];
+        skip?: readonly (SkipErrors | undefined)[];
+    }
+    function checkAllErrors({ session, host, existingTimeouts, files, skip }: CheckAllErrors) {
+        Debug.assert(session.logger.logs.length);
+        for (let i = 0; i < files.length; i++) {
+            if (existingTimeouts !== undefined) {
+                host.checkTimeoutQueueLength(existingTimeouts + 1);
+                host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
             }
-        });
-        checkAllErrors({ ...request, expectedSequenceId });
-    }
-
-    export interface VerifyGetErrRequestNoErrors extends VerifyGetErrRequestBase {
-        files: readonly (string | File)[];
-    }
-    export function verifyGetErrRequestNoErrors(request: VerifyGetErrRequestNoErrors) {
-        verifyGetErrRequest({
-            ...request,
-            expected: request.files.map(file => ({ file, syntax: [], semantic: [], suggestion: [] }))
-        });
-    }
-
-    export interface CheckAllErrors extends VerifyGetErrRequest {
-        expectedSequenceId: number;
-    }
-    function checkAllErrors({ expected, expectedSequenceId, ...rest }: CheckAllErrors) {
-        for (let i = 0; i < expected.length; i++) {
-            checkErrorsInFile({
-                ...rest,
-                expected: expected[i],
-                expectedSequenceId: i === expected.length - 1 ? expectedSequenceId : undefined,
-            });
+            else {
+                host.checkTimeoutQueueLengthAndRun(1);
+            }
+            if (!skip?.[i]?.semantic) host.runQueuedImmediateCallbacks(1);
+            if (!skip?.[i]?.suggestion) host.runQueuedImmediateCallbacks(1);
         }
     }
 
     function filePath(file: string | File) {
         return isString(file) ? file : file.path;
     }
-    interface CheckErrorsInFile extends VerifyGetErrRequestBase {
-        expected: GetErrDiagnostics;
-        expectedSequenceId?: number;
-    }
-    function checkErrorsInFile({
-        session, host, onErrEvent, existingTimeouts, expectedSequenceId,
-        expected: { file, syntax, semantic, suggestion },
-    }: CheckErrorsInFile) {
-        onErrEvent = onErrEvent || noop;
-        if (existingTimeouts !== undefined) {
-            host.checkTimeoutQueueLength(existingTimeouts + 1);
-            host.runQueuedTimeoutCallbacks(host.getNextTimeoutId() - 1);
-        }
-        else {
-            host.checkTimeoutQueueLengthAndRun(1);
-        }
-        if (syntax) {
-            onErrEvent();
-            checkErrorMessage(session, "syntaxDiag", { file: filePath(file), diagnostics: syntax });
-        }
-        if (semantic) {
-            session.clearMessages();
 
-            host.runQueuedImmediateCallbacks(1);
-            onErrEvent();
-            checkErrorMessage(session, "semanticDiag", { file: filePath(file), diagnostics: semantic });
-        }
-        if (suggestion) {
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-            onErrEvent();
-            checkErrorMessage(session, "suggestionDiag", { file: filePath(file), diagnostics: suggestion });
-        }
-        if (expectedSequenceId !== undefined) {
-            checkCompleteEvent(session, syntax || semantic || suggestion ? 2 : 1, expectedSequenceId);
-        }
-        session.clearMessages();
-    }
-
-    function verifyErrorsUsingGeterr({ allFiles, openFiles, expectedGetErr }: VerifyGetErrScenario) {
+    function verifyErrorsUsingGeterr({scenario, subScenario, allFiles, openFiles, getErrRequest }: VerifyGetErrScenario) {
         it("verifies the errors in open file", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host, { canUseEvents: true, });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession(openFiles(), session);
 
-            verifyGetErrRequest({ session, host, expected: expectedGetErr() });
+            verifyGetErrRequest({ session, host, files: getErrRequest() });
+            baselineTsserverLogs(scenario, `${subScenario} getErr`, session);
         });
     }
 
-    function verifyErrorsUsingGeterrForProject({ allFiles, openFiles, expectedGetErrForProject }: VerifyGetErrScenario) {
+    function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, openFiles, getErrForProjectRequest }: VerifyGetErrScenario) {
         it("verifies the errors in projects", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host, { canUseEvents: true, });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
             openFilesForSession(openFiles(), session);
 
-            session.clearMessages();
-            for (const expected of expectedGetErrForProject()) {
-                const expectedSequenceId = session.getNextSeq();
+            for (const expected of getErrForProjectRequest()) {
                 session.executeCommandSeq<protocol.GeterrForProjectRequest>({
                     command: protocol.CommandTypes.GeterrForProject,
-                    arguments: {
-                        delay: 0,
-                        file: expected.project
-                    }
+                    arguments: { delay: 0, file: filePath(expected.project) }
                 });
-
-                checkAllErrors({ session, host, expected: expected.errors, expectedSequenceId });
+                checkAllErrors({ session, host, files: expected.files });
             }
+            baselineTsserverLogs(scenario, `${subScenario} geterrForProject`, session);
         });
     }
 
-    function verifyErrorsUsingSyncMethods({ allFiles, openFiles, expectedSyncDiagnostics }: VerifyGetErrScenario) {
+    function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFiles, syncDiagnostics }: VerifyGetErrScenario) {
         it("verifies the errors using sync commands", () => {
             const host = createServerHost([...allFiles(), libFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession(openFiles(), session);
-            for (const { file, project, syntax, semantic, suggestion } of expectedSyncDiagnostics()) {
-                const actualSyntax = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+            for (const { file, project } of syncDiagnostics()) {
+                const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
+                session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
                     command: protocol.CommandTypes.SyntacticDiagnosticsSync,
-                    arguments: {
-                        file: filePath(file),
-                        projectFileName: project
-                    }
-                }).response as protocol.Diagnostic[];
-                assert.deepEqual(actualSyntax, syntax, `Syntax diagnostics for file: ${filePath(file)}, project: ${project}`);
-                const actualSemantic = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                    arguments: reqArgs
+                });
+                session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
                     command: protocol.CommandTypes.SemanticDiagnosticsSync,
-                    arguments: {
-                        file: filePath(file),
-                        projectFileName: project
-                    }
-                }).response as protocol.Diagnostic[];
-                assert.deepEqual(actualSemantic, semantic, `Semantic diagnostics for file: ${filePath(file)}, project: ${project}`);
-                const actualSuggestion = session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
+                    arguments: reqArgs
+                });
+                session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
                     command: protocol.CommandTypes.SuggestionDiagnosticsSync,
-                    arguments: {
-                        file: filePath(file),
-                        projectFileName: project
-                    }
-                }).response as protocol.Diagnostic[];
-                assert.deepEqual(actualSuggestion, suggestion, `Suggestion diagnostics for file: ${filePath(file)}, project: ${project}`);
-            }
-        });
-    }
-
-    function verifyConfigFileErrors({ allFiles, openFiles, expectedConfigFileDiagEvents }: VerifyGetErrScenario) {
-        it("verify config file errors", () => {
-            const host = createServerHost([...allFiles(), libFile]);
-            const { session, events } = createSessionWithEventTracking<server.ConfigFileDiagEvent>(host, server.ConfigFileDiagEvent);
-
-            for (const file of openFiles()) {
-                session.executeCommandSeq<protocol.OpenRequest>({
-                    command: protocol.CommandTypes.Open,
-                    arguments: { file: file.path }
+                    arguments: reqArgs
                 });
             }
-
-            assert.deepEqual(events, expectedConfigFileDiagEvents().map(data => ({
-                eventName: server.ConfigFileDiagEvent,
-                data
-            })));
+            baselineTsserverLogs(scenario, `${subScenario} gerErr with sync commands`, session);
         });
     }
 
     export interface GetErrForProjectDiagnostics {
-        project: string;
-        errors: readonly GetErrDiagnostics[];
+        project: string | File;
+        files: readonly (string | File)[];
+        skip?: CheckAllErrors["skip"];
     }
-    export interface SyncDiagnostics extends GetErrDiagnostics {
-        project?: string;
+    export interface SyncDiagnostics {
+        file: string | File;
+        project?: string | File;
     }
     export interface VerifyGetErrScenario {
+        scenario: string;
+        subScenario: string;
         allFiles: () => readonly File[];
         openFiles: () => readonly File[];
-        expectedGetErr: () => readonly GetErrDiagnostics[];
-        expectedGetErrForProject: () => readonly GetErrForProjectDiagnostics[];
-        expectedSyncDiagnostics: () => readonly SyncDiagnostics[];
-        expectedConfigFileDiagEvents: () => readonly server.ConfigFileDiagEvent["data"][];
+        getErrRequest: () => VerifyGetErrRequest["files"];
+        getErrForProjectRequest: () => readonly GetErrForProjectDiagnostics[];
+        syncDiagnostics: () => readonly SyncDiagnostics[];
     }
     export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
         verifyErrorsUsingGeterr(scenario);
         verifyErrorsUsingGeterrForProject(scenario);
         verifyErrorsUsingSyncMethods(scenario);
-        verifyConfigFileErrors(scenario);
-    }
-
-    export function emptyDiagnostics(file: File): GetErrDiagnostics {
-        return {
-            file,
-            syntax: emptyArray,
-            semantic: emptyArray,
-            suggestion: emptyArray
-        };
-    }
-
-    export function syncDiagnostics(diagnostics: GetErrDiagnostics, project: string): SyncDiagnostics {
-        return { project, ...diagnostics };
     }
 }

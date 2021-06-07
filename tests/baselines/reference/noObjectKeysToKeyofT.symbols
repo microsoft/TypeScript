@@ -1,0 +1,13 @@
+=== tests/cases/compiler/noObjectKeysToKeyofT.ts ===
+// Do not change Object.keys to return keyof T.
+// The current return type (string[]) is intentional.
+Object.keys({ a: 0 }).push("b");
+>Object.keys({ a: 0 }).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>a : Symbol(a, Decl(noObjectKeysToKeyofT.ts, 2, 13))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+// See also
+// https://stackoverflow.com/questions/55012174/why-doesnt-object-keys-return-a-keyof-type-in-typescript
