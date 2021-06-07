@@ -3785,7 +3785,7 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: string | NodeArray<JSDocText | JSDocLink> | undefined) {
+        function emitJSDocComment(comment: string | NodeArray<JSDocComment> | undefined) {
             const text = getTextOfJSDocComment(comment);
             if (text) {
                 writeSpace();

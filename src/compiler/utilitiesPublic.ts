@@ -901,9 +901,10 @@ namespace ts {
     }
 
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocText | JSDocLink>) {
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
         return typeof comment === "string" ? comment
             : comment?.map(c =>
+                // TODO: Other kinds here
                 c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
     }
 
@@ -1875,7 +1876,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
-            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocLinkLike(node)
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)
             || isJSDocSignature(node);
@@ -1968,5 +1969,8 @@ namespace ts {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    }
     // #endregion
 }

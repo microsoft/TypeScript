@@ -367,3 +367,41 @@ function get<K extends keyof A>(key: K, obj: A): number {
     return 0;
 };
 
+// Repro from #44093
+
+class EventEmitter<ET> {
+>EventEmitter : Symbol(EventEmitter, Decl(controlFlowGenericTypes.ts, 128, 2))
+>ET : Symbol(ET, Decl(controlFlowGenericTypes.ts, 132, 19))
+
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+>off : Symbol(EventEmitter.off, Decl(controlFlowGenericTypes.ts, 132, 24))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 133, 8))
+>ET : Symbol(ET, Decl(controlFlowGenericTypes.ts, 132, 19))
+>args : Symbol(args, Decl(controlFlowGenericTypes.ts, 133, 28))
+>K : Symbol(K, Decl(controlFlowGenericTypes.ts, 133, 8))
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+>once : Symbol(once, Decl(controlFlowGenericTypes.ts, 134, 1))
+>ET : Symbol(ET, Decl(controlFlowGenericTypes.ts, 135, 14))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 135, 17))
+>EventEmitter : Symbol(EventEmitter, Decl(controlFlowGenericTypes.ts, 128, 2))
+>ET : Symbol(ET, Decl(controlFlowGenericTypes.ts, 135, 14))
+>emittingObject : Symbol(emittingObject, Decl(controlFlowGenericTypes.ts, 135, 46))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 135, 17))
+>eventName : Symbol(eventName, Decl(controlFlowGenericTypes.ts, 135, 64))
+>ET : Symbol(ET, Decl(controlFlowGenericTypes.ts, 135, 14))
+
+    emittingObject.off(eventName, 0);
+>emittingObject.off : Symbol(EventEmitter.off, Decl(controlFlowGenericTypes.ts, 132, 24))
+>emittingObject : Symbol(emittingObject, Decl(controlFlowGenericTypes.ts, 135, 46))
+>off : Symbol(EventEmitter.off, Decl(controlFlowGenericTypes.ts, 132, 24))
+>eventName : Symbol(eventName, Decl(controlFlowGenericTypes.ts, 135, 64))
+
+    emittingObject.off(eventName as typeof eventName, 0);
+>emittingObject.off : Symbol(EventEmitter.off, Decl(controlFlowGenericTypes.ts, 132, 24))
+>emittingObject : Symbol(emittingObject, Decl(controlFlowGenericTypes.ts, 135, 46))
+>off : Symbol(EventEmitter.off, Decl(controlFlowGenericTypes.ts, 132, 24))
+>eventName : Symbol(eventName, Decl(controlFlowGenericTypes.ts, 135, 64))
+>eventName : Symbol(eventName, Decl(controlFlowGenericTypes.ts, 135, 64))
+}
+

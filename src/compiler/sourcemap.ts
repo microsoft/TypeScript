@@ -322,7 +322,7 @@ namespace ts {
     }
 
     // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
+    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)$/;
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
     export interface LineInfo {
@@ -345,7 +345,7 @@ namespace ts {
             const line = lineInfo.getLineText(index);
             const comment = sourceMapCommentRegExp.exec(line);
             if (comment) {
-                return comment[1];
+                return trimStringEnd(comment[1]);
             }
             // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
             else if (!line.match(whitespaceOrMapCommentRegExp)) {

@@ -129,6 +129,16 @@ function get<K extends keyof A>(key: K, obj: A): number {
     return 0;
 };
 
+// Repro from #44093
+
+class EventEmitter<ET> {
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+    emittingObject.off(eventName, 0);
+    emittingObject.off(eventName as typeof eventName, 0);
+}
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
@@ -220,3 +230,19 @@ function get(key, obj) {
     return 0;
 }
 ;
+// Repro from #44093
+var EventEmitter = /** @class */ (function () {
+    function EventEmitter() {
+    }
+    EventEmitter.prototype.off = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
+    return EventEmitter;
+}());
+function once(emittingObject, eventName) {
+    emittingObject.off(eventName, 0);
+    emittingObject.off(eventName, 0);
+}

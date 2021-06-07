@@ -131,7 +131,7 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: string | readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
         if (typeof comment === "string") {
             return [textPart(comment)];
         }

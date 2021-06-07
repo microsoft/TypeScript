@@ -1401,6 +1401,10 @@ namespace ts.FindAllReferences {
             // Compare the length so we filter out strict superstrings of the symbol we are looking for
             switch (node.kind) {
                 case SyntaxKind.PrivateIdentifier:
+                    if (isJSDocMemberName(node.parent)) {
+                        return true;
+                    }
+                    // falls through I guess
                 case SyntaxKind.Identifier:
                     return (node as PrivateIdentifier | Identifier).text.length === searchSymbolName.length;
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
