@@ -2919,6 +2919,7 @@ declare namespace ts {
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
@@ -9718,7 +9719,6 @@ declare namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     class InferredProject extends Project {
-        private static readonly newName;
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
@@ -9732,7 +9732,6 @@ declare namespace ts.server {
     }
     class AutoImportProviderProject extends Project {
         private hostProject;
-        private static readonly newName;
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;
