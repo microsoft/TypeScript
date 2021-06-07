@@ -3284,8 +3284,7 @@ namespace ts {
         const wrapped: ModuleSpecifierCache = {
             get(fromFileName, toFileName) {
                 if (!cache || fromFileName !== importingFileName) return undefined;
-                const cached = cache.get(toFileName);
-                return isArray(cached) ? { modulePaths: cached, moduleSpecifiers: emptyArray } : cached;
+                return cache.get(toFileName);
             },
             set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[] | boolean, moduleSpecifiers?: readonly string[]) {
                 if (cache && fromFileName !== importingFileName) {

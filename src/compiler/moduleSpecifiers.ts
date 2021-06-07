@@ -111,8 +111,8 @@ namespace ts.moduleSpecifiers {
         const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path);
         let modulePaths;
         if (typeof cached === "object") {
-            if (cached.moduleSpecifiers) return cached.moduleSpecifiers;
-            modulePaths = cached.modulePaths;
+            if (!isArray(cached)) return cached.moduleSpecifiers;
+            modulePaths = cached;
         }
         else {
             modulePaths = getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
@@ -357,8 +357,8 @@ namespace ts.moduleSpecifiers {
     ) {
         const cache = host.getModuleSpecifierCache?.();
         if (cache) {
-            const cached = cache.get(importingFilePath, importedFilePath);
-            if (typeof cached === "object") return cached.modulePaths;
+            const cached = cache.getModulePaths(importingFilePath, importedFilePath);
+            if (typeof cached === "object") return cached;
         }
         const modulePaths = getAllModulePathsWorker(importingFilePath, importedFileName, host);
         if (cache) {

@@ -8109,7 +8109,14 @@ namespace ts {
     /* @internal */
     export interface ModuleSpecifierCache {
         getModulePaths(fromFileName: Path, toFileName: Path): boolean | readonly ModulePath[] | undefined;
-        get(fromFileName: Path, toFileName: Path): { modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[] } | boolean | undefined;
+        /**
+         * @returns
+         * - true if it's known that at least one module path is importable but the full array hasn't been computed ({@see isImportableFile})
+         * - false if it's known that no module paths are importable
+         * - an array of ModulePaths if module paths have been computed but final module specifiers have not
+         * - an object containing ModulePaths and module specifiers if they've both been computed
+         */
+        get(fromFileName: Path, toFileName: Path): readonly ModulePath[] | { modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[] } | boolean | undefined;
         set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[] | boolean): void;
         set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[], moduleSpecifiers?: readonly string[]): void;
         clear(): void;
