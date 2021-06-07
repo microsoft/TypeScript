@@ -19647,7 +19647,7 @@ declare function removeEventListener<K extends keyof WindowEventMap>(type: K, li
 declare function removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 type HeadersInit = Headers | string[][] | Record<string, string>;
 type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
-type RequestInfo = Request | string;
+type RequestInfo = Request | string | URL;
 type BlobPart = BufferSource | Blob | string;
 type DOMHighResTimeStamp = number;
 type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
