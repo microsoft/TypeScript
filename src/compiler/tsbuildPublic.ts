@@ -85,6 +85,7 @@ namespace ts {
          * writeFileCallback
          */
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        getCustomTransformers?: (project: string) => CustomTransformers | undefined;
 
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
@@ -785,7 +786,7 @@ namespace ts {
                 emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
                     if (targetSourceFile || emitOnlyDtsFiles) {
                         return withProgramOrUndefined(
-                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+                            program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project))
                         );
                     }
                     executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
@@ -921,7 +922,7 @@ namespace ts {
                 (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
                 cancellationToken,
                 /*emitOnlyDts*/ false,
-                customTransformers
+                customTransformers || state.host.getCustomTransformers?.(project)
             );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
@@ -1060,7 +1061,7 @@ namespace ts {
                     const refName = resolveProjectName(state, ref.path);
                     return parseConfigFile(state, refName, toResolvedConfigFilePath(state, refName));
                 },
-                customTransformers
+                customTransformers || state.host.getCustomTransformers?.(project)
             );
 
             if (isString(outputFiles)) {
