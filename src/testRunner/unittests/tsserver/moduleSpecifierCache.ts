@@ -35,7 +35,7 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         it("caches importability within a file", () => {
             const { moduleSpecifierCache } = setup();
-            assert.isTrue(moduleSpecifierCache.getModulePaths(bTs.path as Path, aTs.path as Path));
+            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path)?.isAutoImportable);
         });
 
         it("caches module specifiers within a file", () => {
@@ -49,7 +49,8 @@ namespace ts.projectSystem {
                     isInNodeModules: true,
                     isRedirect: false
                 }],
-                moduleSpecifiers: ["mobx"]
+                moduleSpecifiers: ["mobx"],
+                isAutoImportable: true,
             });
         });
 
@@ -67,7 +68,7 @@ namespace ts.projectSystem {
             const { host, moduleSpecifierCache } = setup();
             host.writeFile("/src/a2.ts", aTs.content);
             host.runQueuedTimeoutCallbacks();
-            assert.isTrue(moduleSpecifierCache.getModulePaths(bTs.path as Path, aTs.path as Path));
+            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path)?.isAutoImportable);
         });
 
         it("invalidates the cache when symlinks are added or removed", () => {

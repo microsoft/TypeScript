@@ -110,14 +110,12 @@ namespace ts.moduleSpecifiers {
         const cache = host.getModuleSpecifierCache?.();
         const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path);
         let modulePaths;
-        if (typeof cached === "object") {
-            if (!isArray(cached)) return cached.moduleSpecifiers;
-            modulePaths = cached;
-        }
-        else {
-            modulePaths = getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        if (cached) {
+            if (cached.moduleSpecifiers) return cached.moduleSpecifiers;
+            modulePaths = cached.modulePaths;
         }
 
+        modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
@@ -152,7 +150,7 @@ namespace ts.moduleSpecifiers {
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-                cache?.set(importingSourceFile.path, moduleSourceFile.path, modulePaths, nodeModulesSpecifiers);
+                cache?.set(importingSourceFile.path, moduleSourceFile.path, modulePaths, nodeModulesSpecifiers!);
                 return nodeModulesSpecifiers!;
             }
 
@@ -357,12 +355,12 @@ namespace ts.moduleSpecifiers {
     ) {
         const cache = host.getModuleSpecifierCache?.();
         if (cache) {
-            const cached = cache.getModulePaths(importingFilePath, importedFilePath);
-            if (typeof cached === "object") return cached;
+            const cached = cache.get(importingFilePath, importedFilePath);
+            if (cached?.modulePaths) return cached.modulePaths;
         }
         const modulePaths = getAllModulePathsWorker(importingFilePath, importedFileName, host);
         if (cache) {
-            cache.set(importingFilePath, importedFilePath, modulePaths);
+            cache.setModulePaths(importingFilePath, importedFilePath, modulePaths);
         }
         return modulePaths;
     }
