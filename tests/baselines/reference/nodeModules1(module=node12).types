@@ -1,0 +1,36 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/subfolder2/index.ts ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/subfolder2/another/index.ts ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+

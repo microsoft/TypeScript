@@ -113,6 +113,7 @@ namespace ts {
         typesVersions?: MapLike<MapLike<string[]>>;
         main?: string;
         tsconfig?: string;
+        type?: string;
     }
 
     interface PackageJson extends PackageJsonPathFields {
@@ -816,7 +817,20 @@ namespace ts {
         else {
             let moduleResolution = compilerOptions.moduleResolution;
             if (moduleResolution === undefined) {
-                moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+                switch (getEmitModuleKind(compilerOptions)) {
+                    case ModuleKind.CommonJS:
+                        moduleResolution = ModuleResolutionKind.NodeJs;
+                        break;
+                    case ModuleKind.Node12:
+                        moduleResolution = ModuleResolutionKind.Node12;
+                        break;
+                    case ModuleKind.NodeNext:
+                        moduleResolution = ModuleResolutionKind.NodeNext;
+                        break;
+                    default:
+                        moduleResolution = ModuleResolutionKind.Classic;
+                        break;
+                }
                 if (traceEnabled) {
                     trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
                 }
@@ -829,6 +843,8 @@ namespace ts {
 
             perfLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
             switch (moduleResolution) {
+                case ModuleResolutionKind.Node12:
+                case ModuleResolutionKind.NodeNext: // TODO: Implement node12/nodenext resolution rules
                 case ModuleResolutionKind.NodeJs:
                     result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                     break;
@@ -1310,7 +1326,8 @@ namespace ts {
         versionPaths: VersionPaths | undefined;
     }
 
-    function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
+    /*@internal*/
+    export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PackageJsonInfo | undefined {
         const { host, traceEnabled } = state;
         const packageJsonPath = combinePaths(packageDirectory, "package.json");
         if (onlyRecordFailures) {

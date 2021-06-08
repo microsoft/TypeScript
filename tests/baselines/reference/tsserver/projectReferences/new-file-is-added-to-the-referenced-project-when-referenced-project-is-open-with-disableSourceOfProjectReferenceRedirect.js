@@ -55,7 +55,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -92,7 +92,7 @@ Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	class1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -136,7 +136,7 @@ Project '/user/username/projects/myproject/projects/project1/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	class1.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	class3.ts
@@ -193,7 +193,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts
@@ -257,7 +257,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -314,7 +314,7 @@ Project '/user/username/projects/myproject/projects/project2/tsconfig.json' (Con
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts

@@ -32,7 +32,7 @@ Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts
@@ -117,7 +117,7 @@ Project '/user/username/projects/solution/services/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../compiler/types.ts
 	  Source from referenced project '../compiler/tsconfig.json' included because '--module' is specified as 'none'
 	../compiler/program.ts

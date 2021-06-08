@@ -1989,6 +1989,18 @@ declare namespace ts {
          */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
+        /**
+         * When `module` is `Node12` or `NodeNext`, this field controls weather the
+         * source file in question is an ESNext-output-format file, or a CommonJS-output-format
+         * module. This is derived by the module resolver as it looks up the file, since
+         * it is derived from either the file extension of the module, or the containing
+         * `package.json` context, and affects both checking and emit.
+         *
+         * It is _public_ so that (pre)transformers can set this field,
+         * since it switches the builtin `node` module transform. Generally speaking, if unset,
+         * the field is treated as though it is `ModuleKind.CommonJS`.
+         */
+        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
     }
     export interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
@@ -2803,7 +2815,9 @@ declare namespace ts {
     }
     export enum ModuleResolutionKind {
         Classic = 1,
-        NodeJs = 2
+        NodeJs = 2,
+        Node12 = 3,
+        NodeNext = 99
     }
     export interface PluginImport {
         name: string;
@@ -2964,7 +2978,9 @@ declare namespace ts {
         System = 4,
         ES2015 = 5,
         ES2020 = 6,
-        ESNext = 99
+        ESNext = 99,
+        Node12 = 100,
+        NodeNext = 199
     }
     export enum JsxEmit {
         None = 0,
@@ -3109,7 +3125,13 @@ declare namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        TsBuildInfo = ".tsbuildinfo"
+        TsBuildInfo = ".tsbuildinfo",
+        Mjs = ".mjs",
+        Mts = ".mts",
+        Dmts = ".d.mts",
+        Cjs = ".cjs",
+        Cts = ".cts",
+        Dcts = ".d.cts"
     }
     export interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
@@ -4756,6 +4778,14 @@ declare namespace ts {
     export {};
 }
 declare namespace ts {
+    interface ModuleResolutionState {
+        host: ModuleResolutionHost;
+        compilerOptions: CompilerOptions;
+        traceEnabled: boolean;
+        failedLookupLocations: Push<string>;
+        resultFromCache?: ResolvedModuleWithFailedLookupLocations;
+        packageJsonInfoCache: PackageJsonInfoCache | undefined;
+    }
     export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffectiveTypeRootsHost): string[] | undefined;
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
@@ -4918,6 +4948,17 @@ declare namespace ts {
     export function formatDiagnosticsWithColorAndContext(diagnostics: readonly Diagnostic[], host: FormatDiagnosticsHost): string;
     export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent?: number): string;
     export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
+    /**
+     * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
+     * `options` parameter.
+     *
+     * @param fileName The normalized absolute path to check the format of (it need not exist on disk)
+     * @param packageJsonInfoCache (Optional) A cache for package file lookups - it's best to have a cache when this function is called often
+     * @param host The ModuleResolutionHost which can perform the filesystem lookups for package json data
+     * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
+     * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
+     */
+    export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
      * that represent a compilation unit.
@@ -6501,7 +6542,13 @@ declare namespace ts {
         tsxModifier = ".tsx",
         jsModifier = ".js",
         jsxModifier = ".jsx",
-        jsonModifier = ".json"
+        jsonModifier = ".json",
+        dmtsModifier = ".d.mts",
+        mtsModifier = ".mts",
+        mjsModifier = ".mjs",
+        dctsModifier = ".d.cts",
+        ctsModifier = ".cts",
+        cjsModifier = ".cjs"
     }
     enum ClassificationTypeNames {
         comment = "comment",

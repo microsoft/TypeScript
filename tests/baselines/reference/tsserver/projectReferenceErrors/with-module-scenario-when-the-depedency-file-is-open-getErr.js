@@ -55,7 +55,7 @@ Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -99,7 +99,7 @@ Project '/user/username/projects/myproject/dependency/tsconfig.json' (Configured
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	fns.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 

@@ -63,6 +63,7 @@
         "transformers/module/module.ts",
         "transformers/module/system.ts",
         "transformers/module/esnextAnd2015.ts",
+        "transformers/module/node.ts",
         "transformers/declarations/diagnostics.ts",
         "transformers/declarations.ts",
         "transformer.ts",

@@ -2374,7 +2374,7 @@ namespace ts {
 
         function checkStrictModeLabeledStatement(node: LabeledStatement) {
             // Grammar checking for labeledStatement
-            if (inStrictMode && options.target! >= ScriptTarget.ES2015) {
+            if (inStrictMode && getEmitScriptTarget(options) >= ScriptTarget.ES2015) {
                 if (isDeclarationStatement(node.statement) || isVariableStatement(node.statement)) {
                     errorOnFirstToken(node.label, Diagnostics.A_label_is_not_allowed_here);
                 }

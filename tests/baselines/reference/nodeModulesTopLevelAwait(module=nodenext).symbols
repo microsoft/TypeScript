@@ -1,0 +1,22 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const x = await 1;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+for await (const y of []) {}
+>y : Symbol(y, Decl(index.ts, 3, 16))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+const x = await 1;
+>x : Symbol(x, Decl(index.ts, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.ts, 2, 8))
+
+for await (const y of []) {}
+>y : Symbol(y, Decl(index.ts, 3, 16))
+

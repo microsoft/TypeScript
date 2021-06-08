@@ -5112,6 +5112,7 @@ namespace ts {
             node.transformFlags =
                 propagateChildrenFlags(node.statements) |
                 propagateChildFlags(node.endOfFileToken);
+            node.impliedNodeFormat = source.impliedNodeFormat;
             return node;
         }
 

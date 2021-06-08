@@ -67,7 +67,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~[0m
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/src/hello.json
   Imported via "./hello.json" from file 'src/src/index.ts'
 src/src/index.ts

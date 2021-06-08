@@ -159,7 +159,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'esnext'.",
+                        messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'esnext', 'node12', 'nodenext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 

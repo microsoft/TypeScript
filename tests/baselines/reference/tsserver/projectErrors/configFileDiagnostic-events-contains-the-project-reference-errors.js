@@ -42,7 +42,7 @@ Project '/a/b/tsconfig.json' (Configured)
 
 
 	../lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 

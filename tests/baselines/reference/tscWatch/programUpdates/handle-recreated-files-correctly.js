@@ -28,7 +28,7 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
@@ -96,7 +96,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts
@@ -159,7 +159,7 @@ Output::
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 [[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
@@ -211,7 +211,7 @@ Output::
 [[90m12:00:41 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/commonFile1.ts
   Matched by include pattern '**/*' in 'a/b/tsconfig.json'
 a/b/commonFile2.ts

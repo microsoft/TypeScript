@@ -292,7 +292,7 @@ namespace ts {
                 // When there are no attributes, React wants "null"
             }
             else {
-                const target = compilerOptions.target;
+                const target = getEmitScriptTarget(compilerOptions);
                 if (target && target >= ScriptTarget.ES2018) {
                     objectProperties = factory.createObjectLiteralExpression(
                         flatten<SpreadAssignment | PropertyAssignment>(

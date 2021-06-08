@@ -3547,6 +3547,20 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+
+        /**
+         * When `module` is `Node12` or `NodeNext`, this field controls weather the
+         * source file in question is an ESNext-output-format file, or a CommonJS-output-format
+         * module. This is derived by the module resolver as it looks up the file, since
+         * it is derived from either the file extension of the module, or the containing
+         * `package.json` context, and affects both checking and emit.
+         *
+         * It is _public_ so that (pre)transformers can set this field,
+         * since it switches the builtin `node` module transform. Generally speaking, if unset,
+         * the field is treated as though it is `ModuleKind.CommonJS`.
+         */
+        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+
         /* @internal */ scriptKind: ScriptKind;
 
         /**
@@ -5914,7 +5928,13 @@ namespace ts {
 
     export enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs   = 2
+        NodeJs   = 2,
+        // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
+        // to better support ecmascript modules and their use within node - more features are still being added, so
+        // we can expect it co change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
+        // version-anchored resolution target
+        Node12   = 3,
+        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
     export interface PluginImport {
@@ -6067,7 +6087,7 @@ namespace ts {
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
-        target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
+        target?: ScriptTarget;
         traceResolution?: boolean;
         useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
@@ -6119,7 +6139,11 @@ namespace ts {
         //       module kind).
         ES2015 = 5,
         ES2020 = 6,
-        ESNext = 99
+        ESNext = 99,
+
+        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
+        Node12 = 100,
+        NodeNext = 199,
     }
 
     export const enum JsxEmit {
@@ -6514,7 +6538,13 @@ namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        TsBuildInfo = ".tsbuildinfo"
+        TsBuildInfo = ".tsbuildinfo",
+        Mjs = ".mjs",
+        Mts = ".mts",
+        Dmts = ".d.mts",
+        Cjs = ".cjs",
+        Cts = ".cts",
+        Dcts = ".d.cts",
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

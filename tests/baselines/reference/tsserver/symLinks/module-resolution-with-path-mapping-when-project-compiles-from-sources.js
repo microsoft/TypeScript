@@ -57,7 +57,7 @@ Project '/users/username/projects/myproject/javascript/packages/recognizers-date
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/datetime/baseDate.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -128,7 +128,7 @@ Project '/users/username/projects/myproject/javascript/packages/recognizers-date
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../recognizers-text/dist/types/recognizers-text.d.ts
 	  Imported via "@microsoft/recognizers-text" from file 'src/datetime/baseDate.ts'
 	src/datetime/baseDate.ts

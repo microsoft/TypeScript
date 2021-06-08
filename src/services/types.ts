@@ -1481,6 +1481,12 @@ namespace ts {
         jsModifier = ".js",
         jsxModifier = ".jsx",
         jsonModifier = ".json",
+        dmtsModifier = ".d.mts",
+        mtsModifier = ".mts",
+        mjsModifier = ".mjs",
+        dctsModifier = ".d.cts",
+        ctsModifier = ".cts",
+        cjsModifier = ".cjs",
     }
 
     export const enum ClassificationTypeNames {

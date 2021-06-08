@@ -791,8 +791,12 @@ namespace ts {
         return symbol.declarations?.find(d => !isExternalModuleAugmentation(d) && !(isModuleDeclaration(d) && isGlobalScopeAugmentation(d)));
     }
 
+    function isCommonJSContainingModuleKind(kind: ModuleKind) {
+        return kind === ModuleKind.CommonJS || kind === ModuleKind.Node12 || kind === ModuleKind.NodeNext;
+    }
+
     export function isEffectiveExternalModule(node: SourceFile, compilerOptions: CompilerOptions) {
-        return isExternalModule(node) || compilerOptions.isolatedModules || ((getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS) && !!node.commonJsModuleIndicator);
+        return isExternalModule(node) || compilerOptions.isolatedModules || (isCommonJSContainingModuleKind(getEmitModuleKind(compilerOptions)) && !!node.commonJsModuleIndicator);
     }
 
     /**
@@ -6070,8 +6074,11 @@ namespace ts {
         return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
+    export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+        return compilerOptions.target ||
+            (compilerOptions.module === ModuleKind.Node12 && ScriptTarget.ES2020) ||
+            (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
+            ScriptTarget.ES3;
     }
 
     export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
@@ -6083,7 +6090,20 @@ namespace ts {
     export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
         let moduleResolution = compilerOptions.moduleResolution;
         if (moduleResolution === undefined) {
-            moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+            switch (getEmitModuleKind(compilerOptions)) {
+                case ModuleKind.CommonJS:
+                    moduleResolution = ModuleResolutionKind.NodeJs;
+                    break;
+                case ModuleKind.Node12:
+                    moduleResolution = ModuleResolutionKind.Node12;
+                    break;
+                case ModuleKind.NodeNext:
+                    moduleResolution = ModuleResolutionKind.NodeNext;
+                    break;
+                default:
+                    moduleResolution = ModuleResolutionKind.Classic;
+                    break;
+            }
         }
         return moduleResolution;
     }
@@ -6113,11 +6133,23 @@ namespace ts {
         return !!(getEmitDeclarations(options) && options.declarationMap);
     }
 
+    export function getESModuleInterop(compilerOptions: CompilerOptions) {
+        if (compilerOptions.esModuleInterop !== undefined) {
+            return compilerOptions.esModuleInterop;
+        }
+        switch (getEmitModuleKind(compilerOptions)) {
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
+                return true;
+        }
+        return undefined;
+    }
+
     export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : compilerOptions.esModuleInterop ||
+            : getESModuleInterop(compilerOptions) ||
             moduleKind === ModuleKind.System;
     }
 
@@ -6153,7 +6185,7 @@ namespace ts {
     }
 
     export function getUseDefineForClassFields(compilerOptions: CompilerOptions): boolean {
-        return compilerOptions.useDefineForClassFields === undefined ? compilerOptions.target === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
+        return compilerOptions.useDefineForClassFields === undefined ? getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext : compilerOptions.useDefineForClassFields;
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {

@@ -1,0 +1,28 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const x = await 1;
+>x : 1
+>await 1 : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+for await (const y of []) {}
+>y : any
+>[] : undefined[]
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+const x = await 1;
+>x : 1
+>await 1 : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+for await (const y of []) {}
+>y : any
+>[] : undefined[]
+

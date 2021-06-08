@@ -279,7 +279,7 @@ namespace ts {
                 );
             case FileIncludeKind.LibFile:
                 if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
-                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
                 return chainDiagnosticMessages(
                     /*details*/ undefined,
                     target ?

@@ -33,7 +33,7 @@ Project '/user/username/projects/solution/compiler/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts

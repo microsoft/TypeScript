@@ -763,6 +763,14 @@ namespace ts.moduleSpecifiers {
             case Extension.Jsx:
             case Extension.Json:
                 return ext;
+            case Extension.Dmts:
+            case Extension.Mts:
+            case Extension.Mjs:
+                return Extension.Mjs;
+            case Extension.Dcts:
+            case Extension.Cts:
+            case Extension.Cjs:
+                return Extension.Cjs;
             default:
                 return undefined;
         }

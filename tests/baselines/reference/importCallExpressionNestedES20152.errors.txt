@@ -1,5 +1,5 @@
-tests/cases/conformance/dynamicImport/index.ts(2,18): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.
-tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.
+tests/cases/conformance/dynamicImport/index.ts(2,18): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
+tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
 
 
 ==== tests/cases/conformance/dynamicImport/foo.ts (0 errors) ====
@@ -9,7 +9,7 @@ tests/cases/conformance/dynamicImport/index.ts(2,32): error TS1323: Dynamic impo
     async function foo() {
         return await import((await import("./foo")).default);
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
                                    ~~~~~~~~~~~~~~~
-!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.
+!!! error TS1323: Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.
     }

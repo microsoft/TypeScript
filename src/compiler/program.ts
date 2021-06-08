@@ -739,6 +739,55 @@ namespace ts {
     }
 
     /**
+     * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
+     * `options` parameter.
+     *
+     * @param fileName The normalized absolute path to check the format of (it need not exist on disk)
+     * @param packageJsonInfoCache (Optional) A cache for package file lookups - it's best to have a cache when this function is called often
+     * @param host The ModuleResolutionHost which can perform the filesystem lookups for package json data
+     * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
+     * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
+     */
+    export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+        switch (getEmitModuleResolutionKind(options)) {
+            case ModuleResolutionKind.Node12:
+            case ModuleResolutionKind.NodeNext:
+                return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
+                    fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
+                    fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+                    undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
+            default:
+                return undefined;
+        }
+        function lookupFromPackageJson(): ModuleKind.ESNext | ModuleKind.CommonJS {
+            const state: {
+                host: ModuleResolutionHost;
+                compilerOptions: CompilerOptions;
+                traceEnabled: boolean;
+                failedLookupLocations: Push<string>;
+                resultFromCache?: ResolvedModuleWithFailedLookupLocations;
+                packageJsonInfoCache: PackageJsonInfoCache | undefined;
+            } = {
+                host,
+                compilerOptions: options,
+                traceEnabled: isTraceEnabled(options, host),
+                failedLookupLocations: [],
+                packageJsonInfoCache
+            };
+            const parts = getPathComponents(fileName);
+            parts.pop();
+            while (parts.length > 0) {
+                const pkg = getPackageJsonInfo(getPathFromPathComponents(parts), /*onlyRecordFailures*/ false, state);
+                if (pkg) {
+                    return pkg.packageJsonContent?.type === "module" ? ModuleKind.ESNext : ModuleKind.CommonJS;
+                }
+                parts.pop();
+            }
+            return ModuleKind.CommonJS;
+        }
+    }
+
+    /**
      * Determine if source file needs to be re-created even if its text hasn't changed
      */
     function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOptions: CompilerOptions): boolean {
@@ -1453,8 +1502,8 @@ namespace ts {
 
             for (const oldSourceFile of oldSourceFiles) {
                 let newSourceFile = host.getSourceFileByPath
-                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile)
-                    : host.getSourceFile(oldSourceFile.fileName, options.target!, /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
+                    ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.resolvedPath, getEmitScriptTarget(options), /*onError*/ undefined, shouldCreateNewSourceFile)
+                    : host.getSourceFile(oldSourceFile.fileName, getEmitScriptTarget(options), /*onError*/ undefined, shouldCreateNewSourceFile); // TODO: GH#18217
 
                 if (!newSourceFile) {
                     return StructureIsReused.Not;
@@ -2609,7 +2658,7 @@ namespace ts {
             // We haven't looked for this file, do so now and cache result
             const file = host.getSourceFile(
                 fileName,
-                options.target!,
+                getEmitScriptTarget(options),
                 hostErrorMessage => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_read_file_0_Colon_1, [fileName, hostErrorMessage]),
                 shouldCreateNewSourceFile
             );
@@ -2642,6 +2691,10 @@ namespace ts {
                 file.path = path;
                 file.resolvedPath = toPath(fileName);
                 file.originalFileName = originalFileName;
+                // It's a _little odd_ that we can't set `impliedNodeFormat` until the program step - but it's the first and only time we have a resolution cache
+                // and a freshly made source file node on hand at the same time, and we need both to set the field. Persisting the resolution cache all the way
+                // to the check and emit steps would be bad - so we much prefer detecting and storing the format information on the source file node upfront.
+                file.impliedNodeFormat = getImpliedNodeFormatForFile(file.resolvedPath, moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
                 addFileIncludeReason(file, reason);
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -3176,7 +3229,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
-            const languageVersion = options.target || ScriptTarget.ES3;
+            const languageVersion = getEmitScriptTarget(options);
 
             const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
             if (options.isolatedModules) {
@@ -3461,7 +3514,7 @@ namespace ts {
                         message = Diagnostics.File_is_library_specified_here;
                         break;
                     }
-                    const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
+                    const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
                     configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
                     message = Diagnostics.File_is_default_library_for_target_specified_here;
                     break;

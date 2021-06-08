@@ -259,7 +259,7 @@ namespace ts.codefix {
         }
 
         if (isStringLiteralLike(propName)) {
-            return isIdentifierText(propName.text, compilerOptions.target) ? factory.createIdentifier(propName.text)
+            return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(propName.text)
                 : isNoSubstitutionTemplateLiteral(propName) ? factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
                 : propName;
         }

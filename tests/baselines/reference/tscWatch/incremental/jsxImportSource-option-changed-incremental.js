@@ -58,7 +58,7 @@ export const App = () => <div propA={true}></div>;
 /a/lib/tsc.js -i --explainFiles
 Output::
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -172,7 +172,7 @@ Output::
 [7m [0m [91m                              ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
