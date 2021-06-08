@@ -41134,7 +41134,7 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (someType(type, t => !!(t.flags & (TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.Instantiable)) && !isPatternLiteralType(type))) {
+            if (someType(type, t => !!(t.flags & (TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.Instantiable)) && !isPatternLiteralType(t))) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
             if (!everyType(type, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol | TypeFlags.TemplateLiteral)))) {
