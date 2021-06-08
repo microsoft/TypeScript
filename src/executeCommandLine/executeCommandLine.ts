@@ -89,20 +89,35 @@ namespace ts {
         sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
     }
 
-    function bold(str: string) {
-        return `\x1b[1m${str}\x1b[22m`;
-    }
+    function createColors(sys: System) {
+        const showColors = defaultIsPretty(sys);
+        if (!showColors) {
+            return {
+                bold: (str: string) => str,
+                blue: (str: string) => str,
+                blueBackground: (str: string) => str,
+                white: (str: string) => str
+            };
+        }
 
-    function blue(str: string) {
-        return `\x1b[34m${str}\x1b[39m`;
-    }
-
-    function blueBackground(str: string) {
-        return `\x1b[44m${str}\x1b[49m`;
-    }
-
-    function white(str: string) {
-        return `\x1b[37m${str}\x1b[39m`;
+        function bold(str: string) {
+            return `\x1b[1m${str}\x1b[22m`;
+        }
+        function blue(str: string) {
+            return `\x1b[34m${str}\x1b[39m`;
+        }
+        function blueBackground(str: string) {
+            return `\x1b[44m${str}\x1b[49m`;
+        }
+        function white(str: string) {
+            return `\x1b[37m${str}\x1b[39m`;
+        }
+        return {
+            bold,
+            blue,
+            white,
+            blueBackground
+        };
     }
 
     function getDisplayNameTextOfOption(option: CommandLineOption) {
@@ -117,6 +132,7 @@ namespace ts {
         }
 
         const text: string[] = [];
+        const colors = createColors(sys);
 
         // name and description
         const name = getDisplayNameTextOfOption(option);
@@ -127,39 +143,37 @@ namespace ts {
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
-        if (terminalWidth >= leftAlignOfRight + 20) {
+        if (terminalWidth >= 60) {
             let description = "";
             if (option.description) {
                 description = getDiagnosticText(option.description);
             }
             text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
-            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+            if (showAdditionalInfoOutput(valueCandidates, option)) {
                 if (valueCandidates) {
                     text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
                 }
                 if (defaultValueDescription) {
                     text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
                 }
-                text.push(sys.newLine);
             }
+            text.push(sys.newLine);
         }
         else {
-            text.push(blue(name), ": ");
+            text.push(colors.blue(name), sys.newLine);
             if (option.description) {
                 const description = getDiagnosticText(option.description);
                 text.push(description);
             }
             text.push(sys.newLine);
-            if (showAdditionalInfoOutput(valueCandidates, option.defaultValueDescription)) {
+            if (showAdditionalInfoOutput(valueCandidates, option)) {
                 if (valueCandidates) {
-                    const leftPad = Math.max(name.length + 1 - valueCandidates.valueType.length, 2);
-                    text.push(padLeft("", leftPad), `${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
+                    text.push(`${valueCandidates.valueType} ${valueCandidates.possibleValues}`);
                 }
                 if (defaultValueDescription) {
                     if (valueCandidates) text.push(sys.newLine);
                     const diagType = getDiagnosticText(Diagnostics.default_Colon);
-                    const leftPad = Math.max(name.length + 1 - diagType.length, 2);
-                    text.push(padLeft("", leftPad), `${diagType} ${defaultValueDescription}`);
+                    text.push(`${diagType} ${defaultValueDescription}`);
                 }
 
                 text.push(sys.newLine);
@@ -168,9 +182,12 @@ namespace ts {
         }
         return text;
 
-        function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, defaultValueDescription: string | DiagnosticMessage | undefined): boolean {
+        function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, option: CommandLineOption): boolean {
             const ignoreValues = ["string"];
             const ignoredDescriptions = [undefined, "false", "n/a"];
+            const defaultValueDescription = option.defaultValueDescription;
+            if (option.category === Diagnostics.Command_line_Options) return false;
+
             if (contains(ignoreValues, valueCandidates?.possibleValues) && contains(ignoredDescriptions, defaultValueDescription)) {
                 return false;
             }
@@ -187,7 +204,7 @@ namespace ts {
                 if (isFirstLine) {
                     curLeft = padLeft(left, rightAlignOfLeft);
                     curLeft = padRight(curLeft, leftAlignOfRight);
-                    curLeft = colorLeft ? blue(curLeft) : curLeft;
+                    curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
                 }
                 else {
                     curLeft = padLeft("", leftAlignOfRight);
@@ -283,7 +300,7 @@ namespace ts {
 
     function generateSectionOptionsOutput(sys: System, sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
         let res: string[] = [];
-        res.push(bold(sectionName) + sys.newLine + sys.newLine);
+        res.push(createColors(sys).bold(sectionName) + sys.newLine + sys.newLine);
         if (beforeOptionsDescription) {
             res.push(beforeOptionsDescription + sys.newLine + sys.newLine);
         }
@@ -315,34 +332,45 @@ namespace ts {
     }
 
     function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
+        const colors = createColors(sys);
         let output: string[] = [...getHelpHeader(sys)];
-        output.push(bold("COMMON COMMANDS") + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc") + sys.newLine);
-        output.push("  " + "Compiles the current project (tsconfig.json in the working diirectory.)" + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc app.ts util.ts" + sys.newLine));
-        output.push("  " + "Ignoring tsconfig.json, compiles the specified files with default compiler options" + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc -b" + sys.newLine));
-        output.push("  " + "Build a composite project in the working directory." + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc --init" + sys.newLine));
-        output.push("  " + "Creates a tsconfig.json with the recommended settings in the working directory." + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc -p .path/to/tsconfig.json" + sys.newLine));
-        output.push("  " + "compiles the Typescript project located at the specified path" + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc --help --all" + sys.newLine));
-        output.push("  " + "An expanded version of this information, showing all possible compiler options" + sys.newLine + sys.newLine);
-        output.push("  " + blue("tsc --noEmit" + sys.newLine));
-        output.push("  " + blue("tsc --target esnext" + sys.newLine));
-        output.push("  " + "Compiles the current project, with additional settings." + sys.newLine + sys.newLine);
-        output = [...output, ...generateSectionOptionsOutput(sys, "COMMON COMPILER OPTIONS", simpleOptions, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
+
+        example("tsc", Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
+        example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
+        example("tsc -b", Diagnostics.Build_a_composite_project_in_the_working_directory);
+        example("tsc --init", Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
+        example("tsc -p .path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
+        example("tsc --help --all", Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
+        example(["tsc --noEmit", "tsc --target esnext"], Diagnostics.Compiles_the_current_project_with_additional_settings);
+
+        const cliCommands = simpleOptions.filter(opt => opt.isCommandLineOnly || opt.category === Diagnostics.Command_line_Options);
+        const configOpts = simpleOptions.filter(opt => !contains(cliCommands, opt));
+
+        output = [
+            ...output,
+            ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, /* afterOptionsDescription*/ undefined),
+            ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))
+        ];
+
         for (const line of output) {
             sys.write(line);
+        }
+
+        function example(ex: string | string[], desc: DiagnosticMessage) {
+            const examples = typeof ex === "string" ? [ex] : ex;
+            for (const example of examples) {
+                output.push("  " + colors.blue(example) + sys.newLine);
+            }
+            output.push("  " + getDiagnosticText(desc) + sys.newLine + sys.newLine);
         }
     }
 
     function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
         let output: string[] = [...getHelpHeader(sys)];
-        output = [...output, ...generateSectionOptionsOutput(sys, "ALL COMPILER OPTIONS", compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
-        output = [...output, ...generateSectionOptionsOutput(sys, "WATCH OPTIONS", watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-        output = [...output, ...generateSectionOptionsOutput(sys, "BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsconfig-reference"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
+        output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }
@@ -350,30 +378,31 @@ namespace ts {
 
     function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
         let output: string[] = [...getHelpHeader(sys)];
-        output = [...output, ...generateSectionOptionsOutput(sys, "BUILD OPTIONS", buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+        output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
         for (const line of output) {
             sys.write(line);
         }
     }
 
     function getHelpHeader(sys: System) {
+        const colors = createColors(sys);
         const header: string[] = [];
-        const tscexplaination = `tsc: The Typescript Compiler - ${getDiagnosticText(Diagnostics.Version_0, version)}`;
+        const tscExplanation = `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`;
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;;
         const tsIconLength = 5;
 
-        const tsIconFirstLine = blueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = blueBackground(white(padLeft("TS ", tsIconLength)));
+        const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
+        const tsIconSecondLine = colors.blueBackground(colors.white(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
-        if (terminalWidth >= tscexplaination.length + tsIconLength) {
+        if (terminalWidth >= tscExplanation.length + tsIconLength) {
             // right align of the icon is 120 at most.
             const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
             const leftAlign = rightAlign - tsIconLength;
-            header.push(padRight(tscexplaination, leftAlign) + tsIconFirstLine + sys.newLine);
+            header.push(padRight(tscExplanation, leftAlign) + tsIconFirstLine + sys.newLine);
             header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
         }
         else {
-            header.push(tscexplaination + sys.newLine);
+            header.push(tscExplanation + sys.newLine);
             header.push(sys.newLine);
         }
         return header;

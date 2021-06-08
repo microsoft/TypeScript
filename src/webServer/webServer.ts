@@ -122,7 +122,6 @@ namespace ts.server {
                 const webPath = getWebPath(path);
                 return webPath && host.readFile(webPath);
             },
-            getWidthOfTerminal: () => Number.MAX_VALUE, // TODO: could we assume this is infinate? or this is zero?
             write: host.writeMessage.bind(host),
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,

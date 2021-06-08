@@ -726,10 +726,6 @@ namespace Harness.LanguageService {
             this.newLine = this.host.getNewLine();
         }
 
-        getWidthOfTerminal(): number {
-            return 0;
-        }
-
         onMessage = ts.noop;
         writeMessage = ts.noop; // overridden
         write(message: string): void {

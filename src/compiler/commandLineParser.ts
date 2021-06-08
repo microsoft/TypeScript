@@ -427,6 +427,7 @@ namespace ts {
         {
             name: "checkJs",
             type: "boolean",
+            showInSimplifiedHelpView: true,
             category: Diagnostics.JavaScript_Support,
             description: Diagnostics.Report_errors_in_js_files,
             defaultValueDescription: "false"
@@ -468,6 +469,8 @@ namespace ts {
             name: "emitDeclarationOnly",
             type: "boolean",
             affectsEmit: true,
+            showInSimplifiedHelpView: true,
+
             category: Diagnostics.Emit,
             description: Diagnostics.Only_emit_d_ts_declaration_files,
             transpileOptionValue: undefined,
@@ -607,7 +610,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -617,7 +619,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_null_checks,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -625,9 +626,7 @@ namespace ts {
         {
             name: "strictFunctionTypes",
             type: "boolean",
-            affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_checking_of_function_types,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -636,7 +635,6 @@ namespace ts {
             name: "strictBindCallApply",
             type: "boolean",
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_bind_call_and_apply_methods_on_functions,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -646,7 +644,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_checking_of_property_initialization_in_classes,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -656,7 +653,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_strict_checking_of_optional_properties
         },
@@ -665,7 +661,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Raise_error_on_this_expressions_with_an_implied_any_type,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -675,7 +670,6 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
         },
@@ -684,7 +678,6 @@ namespace ts {
             type: "boolean",
             affectsSourceFile: true,
             strictFlag: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Parse_in_strict_mode_and_emit_use_strict_for_each_source_file,
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
@@ -695,7 +688,6 @@ namespace ts {
             name: "noUnusedLocals",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Report_errors_on_unused_locals,
             defaultValueDescription: "false"
@@ -704,7 +696,6 @@ namespace ts {
             name: "noUnusedParameters",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Report_errors_on_unused_parameters,
             defaultValueDescription: "false"
@@ -713,7 +704,6 @@ namespace ts {
             name: "noImplicitReturns",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Report_error_when_not_all_code_paths_in_function_return_a_value,
             defaultValueDescription: "false"
@@ -723,7 +713,6 @@ namespace ts {
             type: "boolean",
             affectsBindDiagnostics: true,
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Report_errors_for_fallthrough_cases_in_switch_statement
         },
@@ -731,7 +720,6 @@ namespace ts {
             name: "noUncheckedIndexedAccess",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Include_undefined_in_index_signature_results
         },
@@ -739,7 +727,6 @@ namespace ts {
             name: "noImplicitOverride",
             type: "boolean",
             affectsSemanticDiagnostics: true,
-            showInSimplifiedHelpView: false,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },

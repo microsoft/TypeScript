@@ -5267,6 +5267,62 @@
         "category": "Message",
         "code": 6915
     },
+    "COMMON COMMANDS": {
+        "category": "Message",
+        "code": 6916
+    },
+    "ALL COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6917
+    },
+    "WATCH OPTIONS": {
+        "category": "Message",
+        "code": 6918
+    },
+    "BUILD OPTIONS": {
+        "category": "Message",
+        "code": 6919
+    },
+    "COMMON COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6920
+    },
+    "COMMAND LINE FLAGS": {
+        "category": "Message",
+        "code": 6921
+    },
+    "tsc: The TypeScript Compiler": {
+        "category": "Message",
+        "code": 6922
+    },
+    "Compiles the current project (tsconfig.json in the working directory.)": {
+        "category": "Message",
+        "code": 6923
+    },
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options": {
+        "category": "Message",
+        "code": 6924
+    },
+    "Build a composite project in the working directory.": {
+        "category": "Message",
+        "code": 6925
+    },
+    "Creates a tsconfig.json with the recommended settings in the working directory.": {
+        "category": "Message",
+        "code": 6926
+    },
+    "Compiles the TypeScript project located at the specified path": {
+        "category": "Message",
+        "code": 6927
+    },
+    "An expanded version of this information, showing all possible compiler options": {
+        "category": "Message",
+        "code": 6928
+    },
+    "Compiles the current project, with additional settings": {
+        "category": "Message",
+        "code": 6929
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
