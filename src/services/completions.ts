@@ -1753,7 +1753,7 @@ namespace ts.Completions {
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
-            const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, host);
+            const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             exportInfo.forEach((info, key) => {
                 const symbolName = key.substring(0, key.indexOf("|"));
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
@@ -1802,6 +1802,7 @@ namespace ts.Completions {
                     info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                     sourceFile,
                     moduleFile,
+                    preferences,
                     packageJsonFilter,
                     getModuleSpecifierResolutionHost(info.isFromPackageJson),
                     moduleSpecifierCache);

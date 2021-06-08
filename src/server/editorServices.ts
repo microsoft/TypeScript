@@ -2988,8 +2988,6 @@ namespace ts.server {
                     const {
                         lazyConfiguredProjectsFromExternalProject,
                         includePackageJsonAutoImports,
-                        importModuleSpecifierEnding,
-                        importModuleSpecifierPreference,
                     } = this.hostConfiguration.preferences;
 
                     this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
@@ -3005,11 +3003,6 @@ namespace ts.server {
                     }
                     if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
                         this.invalidateProjectPackageJson(/*packageJsonPath*/ undefined);
-                    }
-                    if (importModuleSpecifierEnding !== args.preferences.importModuleSpecifierEnding || importModuleSpecifierPreference !== args.preferences.importModuleSpecifierPreference) {
-                        this.configuredProjects.forEach(p => p.getModuleSpecifierCache().clear());
-                        this.inferredProjects.forEach(p => p.getModuleSpecifierCache().clear());
-                        this.externalProjects.forEach(p => p.getModuleSpecifierCache().clear());
                     }
                 }
                 if (args.extraFileExtensions) {

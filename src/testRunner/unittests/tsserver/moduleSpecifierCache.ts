@@ -35,14 +35,14 @@ namespace ts.projectSystem {
     describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         it("caches importability within a file", () => {
             const { moduleSpecifierCache } = setup();
-            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path)?.isAutoImportable);
+            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {})?.isAutoImportable);
         });
 
         it("caches module specifiers within a file", () => {
             const { moduleSpecifierCache, triggerCompletions } = setup();
             // Completion at an import statement will calculate and cache module specifiers
             triggerCompletions({ file: cTs.path, line: 1, offset: cTs.content.length + 1 });
-            const mobxCache = moduleSpecifierCache.get(cTs.path as Path, mobxDts.path as Path);
+            const mobxCache = moduleSpecifierCache.get(cTs.path as Path, mobxDts.path as Path, {});
             assert.deepEqual(mobxCache, {
                 modulePaths: [{
                     path: mobxDts.path,
@@ -68,7 +68,7 @@ namespace ts.projectSystem {
             const { host, moduleSpecifierCache } = setup();
             host.writeFile("/src/a2.ts", aTs.content);
             host.runQueuedTimeoutCallbacks();
-            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path)?.isAutoImportable);
+            assert.isTrue(moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, {})?.isAutoImportable);
         });
 
         it("invalidates the cache when symlinks are added or removed", () => {
@@ -94,20 +94,28 @@ namespace ts.projectSystem {
 
         it("invalidates the cache when user preferences change", () => {
             const { moduleSpecifierCache, session, triggerCompletions } = setup();
-            executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, {
-                preferences: { importModuleSpecifierPreference: "project-relative" },
-            });
-            assert.equal(moduleSpecifierCache.count(), 0);
+            const preferences: UserPreferences = { importModuleSpecifierPreference: "project-relative" };
 
-            // Reset
+            assert.ok(getWithPreferences({}));
+            executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, { preferences });
+            // Nothing changes yet
+            assert.ok(getWithPreferences({}));
+            assert.isUndefined(getWithPreferences(preferences));
+            // Completions will request (getting nothing) and set the cache with new preferences
             triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
-            assert.equal(moduleSpecifierCache.count(), 1);
+            assert.isUndefined(getWithPreferences({}));
+            assert.ok(getWithPreferences(preferences));
 
             // Test other affecting preference
             executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, {
                 preferences: { importModuleSpecifierEnding: "js" },
             });
-            assert.equal(moduleSpecifierCache.count(), 0);
+            triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
+            assert.isUndefined(getWithPreferences(preferences));
+
+            function getWithPreferences(preferences: UserPreferences) {
+                return moduleSpecifierCache.get(bTs.path as Path, aTs.path as Path, preferences);
+            }
         });
     });
 

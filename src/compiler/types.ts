@@ -8164,10 +8164,10 @@ namespace ts {
 
     /* @internal */
     export interface ModuleSpecifierCache {
-        get(fromFileName: Path, toFileName: Path): Readonly<ResolvedModuleSpecifierInfo> | undefined;
-        set(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
-        setIsAutoImportable(fromFileName: Path, toFileName: Path, isAutoImportable: boolean): void;
-        setModulePaths(fromFileName: Path, toFileName: Path, modulePaths: readonly ModulePath[]): void;
+        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences): Readonly<ResolvedModuleSpecifierInfo> | undefined;
+        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
+        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, isAutoImportable: boolean): void;
+        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
     }
