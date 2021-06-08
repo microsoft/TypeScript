@@ -2629,7 +2629,7 @@ namespace ts.server {
             }
         }
 
-        private createNodeModulesWatcher(dir: Path, affectedModuleSpecifierCacheProject?: Project) {
+        private createNodeModulesWatcher(dir: Path) {
             const watcher = this.watchFactory.watchDirectory(
                 dir,
                 fileOrDirectory => {
@@ -2671,11 +2671,8 @@ namespace ts.server {
                 WatchType.NodeModules
             );
             const result: NodeModulesWatcher = {
-                refreshScriptInfoRefCount: affectedModuleSpecifierCacheProject ? 0 : 1,
-                affectedModuleSpecifierCacheProjects: new Set(
-                    affectedModuleSpecifierCacheProject
-                        ? [affectedModuleSpecifierCacheProject.getProjectName()]
-                        : emptyArray),
+                refreshScriptInfoRefCount: 0,
+                affectedModuleSpecifierCacheProjects: undefined,
                 close: () => {
                     if (!result.refreshScriptInfoRefCount && !result.affectedModuleSpecifierCacheProjects?.size) {
                         watcher.close();
@@ -2689,13 +2686,9 @@ namespace ts.server {
 
         /*@internal*/
         watchPackageJsonsInNodeModules(dir: Path, project: Project): FileWatcher {
-            const existing = this.nodeModulesWatchers.get(dir);
-            if (existing) {
-                (existing.affectedModuleSpecifierCacheProjects ||= new Set()).add(project.getProjectName());
-                return existing;
-            }
+            const watcher = this.nodeModulesWatchers.get(dir) || this.createNodeModulesWatcher(dir);
+            (watcher.affectedModuleSpecifierCacheProjects ||= new Set()).add(project.getProjectName());
 
-            const watcher = this.createNodeModulesWatcher(dir, project);
             return {
                 close: () => {
                     watcher.affectedModuleSpecifierCacheProjects?.delete(project.getProjectName());
@@ -2706,13 +2699,9 @@ namespace ts.server {
 
         private watchClosedScriptInfoInNodeModules(dir: Path): FileWatcher {
             const watchDir = dir + "/node_modules" as Path;
-            const existing = this.nodeModulesWatchers.get(watchDir);
-            if (existing) {
-                existing.refreshScriptInfoRefCount++;
-                return existing;
-            }
+            const watcher = this.nodeModulesWatchers.get(watchDir) || this.createNodeModulesWatcher(watchDir);
+            watcher.refreshScriptInfoRefCount++;
 
-            const watcher = this.createNodeModulesWatcher(watchDir);
             return {
                 close: () => {
                     watcher.refreshScriptInfoRefCount--;
