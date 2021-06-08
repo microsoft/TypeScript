@@ -531,12 +531,8 @@ namespace ts.codefix {
         return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, allowsImportingSpecifier));
     }
 
-<<<<<<< HEAD
-    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences): T {
-=======
-    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, host: LanguageServiceHost): T | undefined {
+    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, host: LanguageServiceHost, preferences: UserPreferences): T | undefined {
         if (!some(fixes)) return;
->>>>>>> main
         // These will always be placed first if available, and are better than other kinds
         if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {
             return fixes[0];
