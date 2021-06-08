@@ -1821,8 +1821,8 @@ namespace ts {
             return getDiagnosticsHelper(sourceFile, getSyntacticDiagnosticsForFile, cancellationToken);
         }
 
-        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken, includeUncheckedJS?: boolean): readonly Diagnostic[] {
-            return getDiagnosticsHelper(sourceFile, (file, token) => getSemanticDiagnosticsForFile(file, token, includeUncheckedJS), cancellationToken);
+        function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
+            return getDiagnosticsHelper(sourceFile, getSemanticDiagnosticsForFile, cancellationToken);
         }
 
         function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
@@ -1832,7 +1832,7 @@ namespace ts {
         }
 
         function getBindAndCheckDiagnostics(sourceFile: SourceFile, cancellationToken?: CancellationToken): readonly Diagnostic[] {
-            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, /*includeUncheckedJS*/ undefined);
+            return getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken);
         }
 
         function getProgramDiagnostics(sourceFile: SourceFile): readonly Diagnostic[] {
@@ -1894,18 +1894,18 @@ namespace ts {
             }
         }
 
-        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
+        function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return concatenate(
-                filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken, includeUncheckedJS), options),
+                filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
                 getProgramDiagnostics(sourceFile)
             );
         }
 
-        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, includeUncheckedJS, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
+        function getBindAndCheckDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedBindAndCheckDiagnosticsForFile, getBindAndCheckDiagnosticsForFileNoCache);
         }
 
-        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined): readonly Diagnostic[] {
+        function getBindAndCheckDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return runWithCancellationToken(() => {
                 if (skipTypeChecking(sourceFile, options, program)) {
                     return emptyArray;
@@ -1915,27 +1915,15 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
 
-                const isCheckJsTrue = isCheckJsEnabledForFile(sourceFile, options);
-                const isCheckJsUndefined = includeUncheckedJS
-                    && sourceFile.checkJsDirective === undefined && options.checkJs === undefined
-                    && (sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX);
+                const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck &&
-                    (sourceFile.scriptKind === ScriptKind.TS
-                    || sourceFile.scriptKind === ScriptKind.TSX
-                    || isCheckJsTrue
-                    || isCheckJsUndefined
-                    || sourceFile.scriptKind === ScriptKind.External
-                    || sourceFile.scriptKind === ScriptKind.Deferred);
-                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics && !isCheckJsUndefined ? sourceFile.bindDiagnostics : emptyArray;
-                let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
-                if (isCheckJsUndefined) {
-                    checkDiagnostics = checkDiagnostics.filter(d =>
-                        d.code === Diagnostics.Cannot_find_name_0_Did_you_mean_1.code
-                        || d.code === Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code);
-                }
-                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJsTrue ? sourceFile.jsDocDiagnostics : undefined);
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                    || isCheckJs || sourceFile.scriptKind === ScriptKind.External || sourceFile.scriptKind === ScriptKind.Deferred);
+                const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
+                const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+
+                return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
             });
         }
 
@@ -2199,7 +2187,7 @@ namespace ts {
         }
 
         function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
-            return getAndCacheDiagnostics(sourceFile, cancellationToken, /*includeUncheckedJS*/ undefined, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
         }
 
         function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken | undefined): readonly DiagnosticWithLocation[] {
@@ -2213,9 +2201,8 @@ namespace ts {
         function getAndCacheDiagnostics<T extends SourceFile | undefined, U extends Diagnostic>(
             sourceFile: T,
             cancellationToken: CancellationToken | undefined,
-            includeUncheckedJS: boolean | undefined,
             cache: DiagnosticCache<U>,
-            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined, includeUncheckedJS: boolean | undefined) => readonly U[],
+            getDiagnostics: (sourceFile: T, cancellationToken: CancellationToken | undefined) => readonly U[],
         ): readonly U[] {
 
             const cachedResult = sourceFile
@@ -2225,7 +2212,7 @@ namespace ts {
             if (cachedResult) {
                 return cachedResult;
             }
-            const result = getDiagnostics(sourceFile, cancellationToken, includeUncheckedJS);
+            const result = getDiagnostics(sourceFile, cancellationToken);
             if (sourceFile) {
                 (cache.perFile || (cache.perFile = new Map())).set(sourceFile.path, result);
             }

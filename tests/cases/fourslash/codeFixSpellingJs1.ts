@@ -10,6 +10,7 @@
 ////     return locals
 //// }
 
+verify.noErrors()
 verify.codeFixAvailable([
     { description: "Change spelling to 'locals'" },
     { description: "Ignore this error message" },

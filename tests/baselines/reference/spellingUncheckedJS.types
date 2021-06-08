@@ -47,7 +47,7 @@ class Classe {
 
         // no error on 'this' references
         return this.none
->this.none : any
+>this.none : error
 >this : this
 >none : any
     }
@@ -61,7 +61,7 @@ class Derivee extends Classe {
 
         // no error on 'super' references
         return super.none
->super.none : any
+>super.none : error
 >super : Classe
 >none : any
     }
@@ -101,8 +101,8 @@ other.puuuce // OK, from another file
 >puuuce : any
 
 new Date().getGMTDate() // OK, from another file
->new Date().getGMTDate() : any
->new Date().getGMTDate : any
+>new Date().getGMTDate() : error
+>new Date().getGMTDate : error
 >new Date() : Date
 >Date : DateConstructor
 >getGMTDate : any
