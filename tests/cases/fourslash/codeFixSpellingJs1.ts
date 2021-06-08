@@ -13,8 +13,6 @@
 verify.noErrors()
 verify.codeFixAvailable([
     { description: "Change spelling to 'locals'" },
-    { description: "Ignore this error message" },
-    { description: "Disable checking for this file" },
 ]);
 
 verify.codeFix({
