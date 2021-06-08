@@ -3397,6 +3397,7 @@ namespace ts {
         if (packageJsonFilter) {
             const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
             moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, isAutoImportable);
+            return isAutoImportable;
         }
 
         return hasImportablePath;
