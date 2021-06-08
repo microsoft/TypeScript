@@ -7142,6 +7142,28 @@ namespace ts {
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
+                function getSomeTargetNameFromDeclarations(declarations: Declaration[] | undefined) {
+                    return firstDefined(declarations, d => {
+                        if (isImportSpecifier(d) || isExportSpecifier(d)) {
+                            return idText(d.propertyName || d.name);
+                        }
+                        if (isBinaryExpression(d) || isExportAssignment(d)) {
+                            const expression = isExportAssignment(d) ? d.expression : d.right;
+                            if (isPropertyAccessExpression(expression)) {
+                                return idText(expression.name);
+                            }
+                        }
+                        if (isAliasSymbolDeclaration(d)) {
+                            // This is... heuristic, at best. But it's probably better than always printing the name of the shorthand ambient module.
+                            const name = getNameOfDeclaration(d);
+                            if (name && isIdentifier(name)) {
+                                return idText(name);
+                            }
+                        }
+                        return undefined;
+                    });
+                }
+
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
                     // need to mark the alias `symbol` points at
@@ -7152,7 +7174,9 @@ namespace ts {
                     if (!target) {
                         return;
                     }
-                    let verbatimTargetName = unescapeLeadingUnderscores(target.escapedName);
+                    // If `target` refers to a shorthand module symbol, the name we're trying to pull out isn;t recoverable from the target symbol
+                    // In such a scenario, we must fall back to looking for an alias declaration on `symbol` and pulling the target name from that
+                    let verbatimTargetName = isShorthandAmbientModuleSymbol(target) && getSomeTargetNameFromDeclarations(symbol.declarations) || unescapeLeadingUnderscores(target.escapedName);
                     if (verbatimTargetName === InternalSymbolName.ExportEquals && (getESModuleInterop(compilerOptions) || compilerOptions.allowSyntheticDefaultImports)) {
                         // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
                         verbatimTargetName = InternalSymbolName.Default;

@@ -52,3 +52,9 @@ async function f() {
     (0, index_js_1.h)();
 }
 exports.f = f;
+
+
+//// [index.d.ts]
+export declare function h(): Promise<void>;
+//// [index.d.ts]
+export declare function f(): Promise<void>;

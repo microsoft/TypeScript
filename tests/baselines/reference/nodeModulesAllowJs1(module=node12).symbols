@@ -1,0 +1,32 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.js ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.js ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+

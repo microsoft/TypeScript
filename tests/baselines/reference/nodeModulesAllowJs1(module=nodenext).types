@@ -1,0 +1,36 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.js ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.js ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+

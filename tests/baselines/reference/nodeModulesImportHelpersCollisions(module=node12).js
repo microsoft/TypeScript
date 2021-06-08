@@ -44,3 +44,9 @@ import { default as _fs } from "fs";
 _fs.readFile;
 import * as fs from "fs";
 fs.readFile;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.ts]
+export {};

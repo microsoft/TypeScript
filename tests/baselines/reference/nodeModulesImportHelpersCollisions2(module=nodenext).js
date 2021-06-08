@@ -37,3 +37,11 @@ exports.fs = (0, tslib_1.__importStar)(require("fs"));
 // esm format file
 export * from "fs";
 export * as fs from "fs";
+
+
+//// [index.d.ts]
+export * from "fs";
+export * as fs from "fs";
+//// [index.d.ts]
+export * from "fs";
+export * as fs from "fs";

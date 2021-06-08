@@ -37,3 +37,9 @@ exports.main = main;
 export async function main() {
     const { readFile } = await import("fs");
 }
+
+
+//// [index.d.ts]
+export declare function main(): Promise<void>;
+//// [index.d.ts]
+export declare function main(): Promise<void>;

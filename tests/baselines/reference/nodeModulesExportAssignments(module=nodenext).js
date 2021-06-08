@@ -28,3 +28,11 @@ module.exports = a;
 // esm format file
 const a = {};
 export {};
+
+
+//// [index.d.ts]
+declare const a: {};
+export = a;
+//// [index.d.ts]
+declare const a: {};
+export = a;

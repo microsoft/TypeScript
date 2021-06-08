@@ -1,0 +1,24 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+const x = import.meta.url;
+>x : string
+>import.meta.url : string
+>import.meta : ImportMeta
+>meta : any
+>url : string
+
+export {x};
+>x : string
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+const x = import.meta.url;
+>x : string
+>import.meta.url : string
+>import.meta : ImportMeta
+>meta : any
+>url : string
+
+export {x};
+>x : string
+

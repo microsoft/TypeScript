@@ -1,4 +1,5 @@
 // @module: node12,nodenext
+// @declaration: true
 // @filename: subfolder/index.ts
 // cjs format file
 const x = import.meta.url;

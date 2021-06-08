@@ -34,3 +34,11 @@ for await (const y of []) { }
 const x = await 1;
 export { x };
 for await (const y of []) { }
+
+
+//// [index.d.ts]
+declare const x = 1;
+export { x };
+//// [index.d.ts]
+declare const x = 1;
+export { x };

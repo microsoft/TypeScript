@@ -56,3 +56,17 @@ export { x };
 // esm format file
 const x = 1;
 export { x };
+
+
+//// [index.d.ts]
+declare const x = 1;
+export { x };
+//// [index.d.ts]
+declare const x = 1;
+export { x };
+//// [index.d.ts]
+declare const x = 1;
+export { x };
+//// [index.d.ts]
+declare const x = 1;
+export { x };

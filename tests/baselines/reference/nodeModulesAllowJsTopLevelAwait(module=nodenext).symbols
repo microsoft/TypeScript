@@ -1,0 +1,22 @@
+=== tests/cases/conformance/node/allowJs/subfolder/index.js ===
+// cjs format file
+const x = await 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+for await (const y of []) {}
+>y : Symbol(y, Decl(index.js, 3, 16))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+// esm format file
+const x = await 1;
+>x : Symbol(x, Decl(index.js, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.js, 2, 8))
+
+for await (const y of []) {}
+>y : Symbol(y, Decl(index.js, 3, 16))
+

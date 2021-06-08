@@ -30,3 +30,11 @@ exports.x = x;
 // esm format file
 const x = import.meta.url;
 export { x };
+
+
+//// [index.d.ts]
+declare const x: string;
+export { x };
+//// [index.d.ts]
+declare const x: string;
+export { x };
