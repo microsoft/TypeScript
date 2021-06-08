@@ -1522,7 +1522,7 @@
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible.": {
+    "'{0}' and '{1}' index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -2673,6 +2673,10 @@
     "JSX property access expressions cannot include JSX namespace names": {
         "category": "Error",
         "code": 2633
+    },
+    "'{0}' index signatures are incompatible.": {
+        "category": "Error",
+        "code": 2634
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {

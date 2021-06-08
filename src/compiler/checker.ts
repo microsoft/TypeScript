@@ -19393,14 +19393,9 @@ namespace ts {
                     if (isIgnoredJsxProperty(source, prop)) {
                         continue;
                     }
-                    const nameType = getSymbolLinks(prop).nameType;
-                    if (nameType && nameType.flags & TypeFlags.UniqueESSymbol) {
-                        continue;
-                    }
-                    if (keyType === stringType || keyType === numberType && isNumericLiteralName(prop.escapedName) ||
-                        isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
+                    if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
                         const propType = getTypeOfSymbol(prop);
-                        const type = propType.flags & TypeFlags.Undefined || !(keyType === stringType && prop.flags & SymbolFlags.Optional)
+                        const type = propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                             ? propType
                             : getTypeWithFacts(propType, TypeFacts.NEUndefined);
                         const related = isRelatedTo(type, targetInfo.type, reportErrors);
@@ -19414,8 +19409,8 @@ namespace ts {
                     }
                 }
                 for (const info of getIndexInfosOfType(source)) {
-                    if (isTypeAssignableTo(info.keyType, keyType)) {
-                        const related = indexTypeRelatedTo(info.type, targetInfo.type, reportErrors);
+                    if (isApplicableIndexType(info.keyType, keyType)) {
+                        const related = indexInfoRelatedTo(info, targetInfo, reportErrors);
                         if (!related) {
                             return Ternary.False;
                         }
@@ -19425,10 +19420,15 @@ namespace ts {
                 return result;
             }
 
-            function indexTypeRelatedTo(sourceType: Type, targetType: Type, reportErrors: boolean) {
-                const related = isRelatedTo(sourceType, targetType, reportErrors);
+            function indexInfoRelatedTo(sourceInfo: IndexInfo, targetInfo: IndexInfo, reportErrors: boolean) {
+                const related = isRelatedTo(sourceInfo.type, targetInfo.type, reportErrors);
                 if (!related && reportErrors) {
-                    reportError(Diagnostics.Index_signatures_are_incompatible);
+                    if (sourceInfo.keyType === targetInfo.keyType) {
+                        reportError(Diagnostics._0_index_signatures_are_incompatible, typeToString(sourceInfo.keyType));
+                    }
+                    else {
+                        reportError(Diagnostics._0_and_1_index_signatures_are_incompatible, typeToString(sourceInfo.keyType), typeToString(targetInfo.keyType));
+                    }
                 }
                 return related;
             }
@@ -19455,7 +19455,7 @@ namespace ts {
             function typeRelatedToIndexInfo(source: Type, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
                 const sourceInfo = getApplicableIndexInfo(source, targetInfo.keyType);
                 if (sourceInfo) {
-                    return indexTypeRelatedTo(sourceInfo.type, targetInfo.type, reportErrors);
+                    return indexInfoRelatedTo(sourceInfo, targetInfo, reportErrors);
                 }
                 if (!(intersectionState & IntersectionState.Source) && isObjectTypeWithInferableIndex(source)) {
                     // Intersection constituents are never considered to have an inferred index signature
