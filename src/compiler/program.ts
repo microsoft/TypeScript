@@ -1919,7 +1919,7 @@ namespace ts {
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
                 const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                    || isCheckJs || sourceFile.scriptKind === ScriptKind.External || sourceFile.scriptKind === ScriptKind.Deferred);
+                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
