@@ -1845,7 +1845,6 @@ namespace ts {
             getSymlinkCache: maybeBind(host, host.getSymlinkCache) || program.getSymlinkCache,
             getModuleSpecifierCache: maybeBind(host, host.getModuleSpecifierCache),
             getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
-            getSourceFiles: () => program.getSourceFiles(),
             redirectTargetsMap: program.redirectTargetsMap,
             getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
             isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),

@@ -500,8 +500,8 @@ namespace ts {
                             visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
                             (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
                         : visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
-                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name)) ||
-                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined)));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));

@@ -2913,11 +2913,13 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
+        strictOptionalProperties?: boolean;
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         target?: ScriptTarget;
         traceResolution?: boolean;
+        useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
@@ -5238,6 +5240,7 @@ declare namespace ts {
          * writeFileCallback
          */
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+        getCustomTransformers?: (project: string) => CustomTransformers | undefined;
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
@@ -9717,7 +9720,6 @@ declare namespace ts.server {
      * the file and its imports/references are put into an InferredProject.
      */
     class InferredProject extends Project {
-        private static readonly newName;
         private _isJsInferredProject;
         toggleJsInferredProject(isJsInferredProject: boolean): void;
         setCompilerOptions(options?: CompilerOptions): void;
@@ -9731,7 +9733,6 @@ declare namespace ts.server {
     }
     class AutoImportProviderProject extends Project {
         private hostProject;
-        private static readonly newName;
         private rootFileNames;
         isOrphan(): boolean;
         updateGraph(): boolean;

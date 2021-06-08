@@ -1,0 +1,402 @@
+=== tests/cases/compiler/strictOptionalProperties1.ts ===
+function f1(obj: { a?: string, b?: string | undefined }) {
+>f1 : Symbol(f1, Decl(strictOptionalProperties1.ts, 0, 0))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+
+    let a = obj.a;  // string | undefined
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 1, 7))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+
+    let b = obj.b;  // string | undefined
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 2, 7))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+
+    obj.a = 'hello';
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+
+    obj.b = 'hello';
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+
+    obj.a = undefined;  // Error
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 0, 18))
+>undefined : Symbol(undefined)
+
+    obj.b = undefined;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 0, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 0, 30))
+>undefined : Symbol(undefined)
+}
+
+function f2(obj: { a?: string, b?: string | undefined }) {
+>f2 : Symbol(f2, Decl(strictOptionalProperties1.ts, 7, 1))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+    obj = obj;
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+
+    obj.a = obj.a;  // Error
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+
+    obj.b = obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+    if ('a' in obj) {
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+
+        obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+
+        obj.a = obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+    }
+    else {
+        obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+
+        obj.a = obj.a;  // Error
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+    }
+    if (obj.hasOwnProperty('a')) {
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+        obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+
+        obj.a = obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+    }
+    else {
+        obj.a;
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+
+        obj.a = obj.a;  // Error
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 9, 18))
+    }
+    if ('b' in obj) {
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+
+        obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+        obj.b = obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+    }
+    else {
+        obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+        obj.b = obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+    }
+    if (obj.hasOwnProperty('b')) {
+>obj.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+
+        obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+        obj.b = obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+    }
+    else {
+        obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+
+        obj.b = obj.b;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 9, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 9, 30))
+    }
+}
+
+function f3(obj: Partial<{ a: string, b: string | undefined }>) {
+>f3 : Symbol(f3, Decl(strictOptionalProperties1.ts, 45, 1))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+
+    let a = obj.a;  // string | undefined
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 48, 7))
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+
+    let b = obj.b;  // string | undefined
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 49, 7))
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+
+    obj.a = 'hello';
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+
+    obj.b = 'hello';
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+
+    obj.a = undefined;  // Error
+>obj.a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 47, 26))
+>undefined : Symbol(undefined)
+
+    obj.b = undefined;
+>obj.b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+>obj : Symbol(obj, Decl(strictOptionalProperties1.ts, 47, 12))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 47, 37))
+>undefined : Symbol(undefined)
+}
+
+function f4(t: [string?]) {
+>f4 : Symbol(f4, Decl(strictOptionalProperties1.ts, 54, 1))
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
+
+    let x = t[0];  // string | undefined
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 57, 7))
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
+>0 : Symbol(0)
+
+    t[0] = 'hello';
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
+>0 : Symbol(0)
+
+    t[0] = undefined;  // Error
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 56, 12))
+>0 : Symbol(0)
+>undefined : Symbol(undefined)
+}
+
+function f4a(t1: [number, string?], t2: [number, string?, string?]) {
+>f4a : Symbol(f4a, Decl(strictOptionalProperties1.ts, 60, 1))
+>t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 62, 13))
+>t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 62, 35))
+
+    t1 = t2;  // Wasn't an error, but should be
+>t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 62, 13))
+>t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 62, 35))
+}
+
+function f5(t: [number, string?, boolean?]) {
+>f5 : Symbol(f5, Decl(strictOptionalProperties1.ts, 64, 1))
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42];
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, 'abc'];
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, 'abc', true];
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, ,];
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, , ,];
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, , , ,];  // Error
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [, , true];  // Error
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+
+    t = [42, undefined, true];  // Error
+>t : Symbol(t, Decl(strictOptionalProperties1.ts, 66, 12))
+>undefined : Symbol(undefined)
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(strictOptionalProperties1.ts, 75, 1))
+
+    const t1 = [1, 2] as const;
+>t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 78, 9))
+
+    const t2 = [1, 2, ,] as const;
+>t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 79, 9))
+
+    const t3 = [1, 2, , ,] as const;
+>t3 : Symbol(t3, Decl(strictOptionalProperties1.ts, 80, 9))
+
+    const t4 = [1, , 2] as const;
+>t4 : Symbol(t4, Decl(strictOptionalProperties1.ts, 81, 9))
+
+    const t5 = [1, , , 2] as const;
+>t5 : Symbol(t5, Decl(strictOptionalProperties1.ts, 82, 9))
+}
+
+// Example from #13195
+
+type Props = {
+>Props : Symbol(Props, Decl(strictOptionalProperties1.ts, 83, 1))
+
+    foo: string;
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 87, 14))
+
+    bar: string
+>bar : Symbol(bar, Decl(strictOptionalProperties1.ts, 88, 16))
+}
+
+type InputProps = {
+>InputProps : Symbol(InputProps, Decl(strictOptionalProperties1.ts, 90, 1))
+
+    foo?: string;
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 92, 19))
+
+    bar: string;
+>bar : Symbol(bar, Decl(strictOptionalProperties1.ts, 93, 17))
+}
+
+const defaultProps: Pick<Props, 'foo'> = { foo: 'foo' };
+>defaultProps : Symbol(defaultProps, Decl(strictOptionalProperties1.ts, 97, 5))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Props : Symbol(Props, Decl(strictOptionalProperties1.ts, 83, 1))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 97, 42))
+
+const inputProps: InputProps = { foo: undefined, bar: 'bar' };
+>inputProps : Symbol(inputProps, Decl(strictOptionalProperties1.ts, 98, 5))
+>InputProps : Symbol(InputProps, Decl(strictOptionalProperties1.ts, 90, 1))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 98, 32))
+>undefined : Symbol(undefined)
+>bar : Symbol(bar, Decl(strictOptionalProperties1.ts, 98, 48))
+
+const completeProps: Props = { ...defaultProps, ...inputProps };
+>completeProps : Symbol(completeProps, Decl(strictOptionalProperties1.ts, 99, 5))
+>Props : Symbol(Props, Decl(strictOptionalProperties1.ts, 83, 1))
+>defaultProps : Symbol(defaultProps, Decl(strictOptionalProperties1.ts, 97, 5))
+>inputProps : Symbol(inputProps, Decl(strictOptionalProperties1.ts, 98, 5))
+
+// Example from #13195
+
+const t1: [number, string?, boolean?] = [1];
+>t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 103, 5))
+
+const t2: [number, string?, boolean?] = [1, undefined];
+>t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 104, 5))
+>undefined : Symbol(undefined)
+
+const t3: [number, string?, boolean?] = [1, "string", undefined];
+>t3 : Symbol(t3, Decl(strictOptionalProperties1.ts, 105, 5))
+>undefined : Symbol(undefined)
+
+const t4: [number, string?, boolean?] = [1, undefined, undefined];
+>t4 : Symbol(t4, Decl(strictOptionalProperties1.ts, 106, 5))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// Example from #13195
+
+const x: { foo?: number } = { foo: undefined };
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 110, 5))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 110, 10))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 110, 29))
+>undefined : Symbol(undefined)
+
+const y: { foo: number } = { foo: 123, ...x };
+>y : Symbol(y, Decl(strictOptionalProperties1.ts, 111, 5))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 111, 10))
+>foo : Symbol(foo, Decl(strictOptionalProperties1.ts, 111, 28))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 110, 5))
+
+// Index signatures and strict optional properties
+
+interface Test {
+>Test : Symbol(Test, Decl(strictOptionalProperties1.ts, 111, 46))
+
+    [key: string]: string;
+>key : Symbol(key, Decl(strictOptionalProperties1.ts, 116, 5))
+
+    foo?: string;  // Should be ok
+>foo : Symbol(Test.foo, Decl(strictOptionalProperties1.ts, 116, 26))
+
+    bar?: string | undefined;  // Error
+>bar : Symbol(Test.bar, Decl(strictOptionalProperties1.ts, 117, 17))
+}
+

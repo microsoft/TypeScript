@@ -150,6 +150,24 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
             }, errors);
         });
     }
-    ts.supportedLocaleDirectories.forEach(locale => verifyValidateLocale(locale, /*expctedToReadFile*/ true));
-    ["en", "en-us"].forEach(locale => verifyValidateLocale(locale, /*expctedToReadFile*/ false));
+    ts.supportedLocaleDirectories.forEach(locale => verifyValidateLocale(locale, /*expectedToReadFile*/ true));
+    ["en", "en-us"].forEach(locale => verifyValidateLocale(locale, /*expectedToReadFile*/ false));
+});
+
+describe("unittests:: Public APIs :: forEachChild of @param comments in JSDoc", () => {
+    const content = `
+/**
+ * @param The {@link TypeReferencesInAedoc}.
+ */
+var x
+`;
+    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+    const paramTag = sourceFile.getChildren()[0].getChildren()[0].getChildren()[0].getChildren()[0];
+    const kids = paramTag.getChildren();
+    const seen: Set<ts.Node> = new Set();
+    ts.forEachChild(paramTag, n => {
+        assert.strictEqual(/*actual*/ false, seen.has(n), "Found a duplicate-added child");
+        seen.add(n);
+    });
+    assert.equal(5, kids.length);
 });
