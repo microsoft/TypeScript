@@ -213,6 +213,7 @@
         "unittests/tsserver/session.ts",
         "unittests/tsserver/skipLibCheck.ts",
         "unittests/tsserver/smartSelection.ts",
+        "unittests/tsserver/symlinkCache.ts",
         "unittests/tsserver/symLinks.ts",
         "unittests/tsserver/syntacticServer.ts",
         "unittests/tsserver/syntaxOperations.ts",

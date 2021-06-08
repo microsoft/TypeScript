@@ -196,18 +196,16 @@ namespace ts.server {
             // Not passing along 'preferences' because server should already have those from the 'configure' command
             const args: protocol.CompletionsRequestArgs = this.createFileLocationRequestArgs(fileName, position);
 
-            const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.Completions, args);
-            const response = this.processResponse<protocol.CompletionsResponse>(request);
+            const request = this.processRequest<protocol.CompletionsRequest>(CommandNames.CompletionInfo, args);
+            const response = this.processResponse<protocol.CompletionInfoResponse>(request);
 
             return {
-                isGlobalCompletion: false,
-                isMemberCompletion: false,
-                isNewIdentifierLocation: false,
-                entries: response.body!.map<CompletionEntry>(entry => { // TODO: GH#18217
+                isGlobalCompletion: response.body!.isGlobalCompletion,
+                isMemberCompletion: response.body!.isMemberCompletion,
+                isNewIdentifierLocation: response.body!.isNewIdentifierLocation,
+                entries: response.body!.entries.map<CompletionEntry>(entry => { // TODO: GH#18217
                     if (entry.replacementSpan !== undefined) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, source, data, isRecommended } = entry;
-                        // TODO: GH#241
-                        const res: CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: this.decodeSpan(replacementSpan, fileName), hasAction, source, data: data as any, isRecommended };
+                        const res: CompletionEntry = { ...entry, data: entry.data as any, replacementSpan: this.decodeSpan(entry.replacementSpan, fileName) };
                         return res;
                     }
 
