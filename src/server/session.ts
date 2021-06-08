@@ -759,7 +759,7 @@ namespace ts.server {
                 isCancellationRequested: () => this.cancellationToken.isCancellationRequested()
             };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
-            const settings: ProjectServiceOptions<TMessage> = {
+            const settings: ProjectServiceOptions = {
                 host: this.host,
                 logger: this.logger,
                 cancellationToken: this.cancellationToken,

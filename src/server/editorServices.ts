@@ -394,7 +394,7 @@ namespace ts.server {
         config?: ParsedConfig;
     }
 
-    export interface ProjectServiceOptions<TMessage = string> {
+    export interface ProjectServiceOptions {
         host: ServerHost;
         logger: Logger;
         cancellationToken: HostCancellationToken;
@@ -411,7 +411,7 @@ namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
-        session: Session<TMessage> | undefined;
+        session: Session<unknown> | undefined;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -790,7 +790,7 @@ namespace ts.server {
 
         private performanceEventHandler?: PerformanceEventHandler;
 
-        constructor(opts: ProjectServiceOptions<unknown>) {
+        constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
             this.logger = opts.logger;
             this.cancellationToken = opts.cancellationToken;
