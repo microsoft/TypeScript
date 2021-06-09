@@ -12014,6 +12014,25 @@ namespace ts {
                 undefined;
         }
 
+        function findApplicableIndexInfoForName(indexInfos: readonly IndexInfo[], name: __String) {
+            // We optimize for cases where we have no template literal index signatures as it is somewhat expensive
+            // to obtain the literal type for a name and check for assignability.
+            let stringIndexInfo: IndexInfo | undefined;
+            for (const info of indexInfos) {
+                const keyType = info.keyType;
+                if (keyType === stringType) {
+                    stringIndexInfo = info;
+                }
+                else if (keyType === numberType && isNumericLiteralName(name)) {
+                    return info;
+                }
+                else if (keyType.flags & TypeFlags.TemplateLiteral) {
+                    return findApplicableIndexInfo(indexInfos, getLiteralType(unescapeLeadingUnderscores(name)));
+                }
+            }
+            return stringIndexInfo;
+        }
+
         function isApplicableIndexType(source: Type, target: Type) {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
             // signature applies to types assignable to 'number' and numeric string literal types.
@@ -12055,7 +12074,7 @@ namespace ts {
         }
 
         function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
-            return getApplicableIndexInfo(type, getLiteralType(unescapeLeadingUnderscores(name)));
+            return findApplicableIndexInfoForName(getIndexInfosOfType(type), name);
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -25331,15 +25350,10 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return getIndexTypeOfContextualType(type, getLiteralType(unescapeLeadingUnderscores(name)));
+                    return findApplicableIndexInfoForName(getIndexInfosOfStructuredType(t), name)?.type;
                 }
                 return undefined;
             }, /*noReductions*/ true);
-        }
-
-        function getIndexTypeOfContextualType(type: Type, keyType: Type) {
-            // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
-            return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), keyType)?.type, /*noReductions*/ true);
         }
 
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
@@ -25366,13 +25380,13 @@ namespace ts {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
-                    const symbolName = getSymbolOfNode(element).escapedName;
-                    const propertyType = getTypeOfPropertyOfContextualType(type, symbolName);
-                    if (propertyType) {
-                        return propertyType;
-                    }
+                    return getTypeOfPropertyOfContextualType(type, getSymbolOfNode(element).escapedName);
                 }
-                return element.name && getIndexTypeOfContextualType(type, getLiteralTypeFromPropertyName(element.name));
+                if (element.name) {
+                    const nameType = getLiteralTypeFromPropertyName(element.name);
+                    // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
+                    return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, /*noReductions*/ true);
+                }
             }
             return undefined;
         }
