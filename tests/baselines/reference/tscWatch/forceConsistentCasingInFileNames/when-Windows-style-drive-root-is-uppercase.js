@@ -121,7 +121,7 @@ project/a.ts
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
   Matched by include pattern '**/*' in 'project/tsconfig.json'
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -135,6 +135,7 @@ C:/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
 C:/project/a.ts
+C:/project/b.ts
 
 WatchedFiles::
 c:/project/tsconfig.json:
@@ -165,3 +166,4 @@ exports.a = 1;
 exports.b = 2;
 
 
+//// [C:/project/b.js] file written with same contents

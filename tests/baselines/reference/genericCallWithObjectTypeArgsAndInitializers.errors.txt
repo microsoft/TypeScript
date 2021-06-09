@@ -4,8 +4,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericC
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts(8,56): error TS2322: Type 'U' is not assignable to type 'V'.
   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-    Type 'T' is not assignable to type 'V'.
-      'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts (3 errors) ====
@@ -26,6 +24,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericC
                                                            ~~~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-!!! error TS2322:     Type 'T' is not assignable to type 'V'.
-!!! error TS2322:       'V' could be instantiated with an arbitrary type which could be unrelated to 'T'.
     function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok

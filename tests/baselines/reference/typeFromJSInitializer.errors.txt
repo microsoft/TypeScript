@@ -1,12 +1,16 @@
 tests/cases/conformance/salsa/a.js(3,5): error TS7008: Member 'unknown' implicitly has an 'any' type.
 tests/cases/conformance/salsa/a.js(4,5): error TS7008: Member 'unknowable' implicitly has an 'any' type.
 tests/cases/conformance/salsa/a.js(5,5): error TS7008: Member 'empty' implicitly has an 'any[]' type.
-tests/cases/conformance/salsa/a.js(25,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 tests/cases/conformance/salsa/a.js(25,29): error TS7006: Parameter 'l' implicitly has an 'any[]' type.
+tests/cases/conformance/salsa/a.js(27,5): error TS2322: Type 'undefined' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(29,5): error TS2322: Type '1' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
+tests/cases/conformance/salsa/a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
 tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not assignable to type 'number | undefined'.
 
 
-==== tests/cases/conformance/salsa/a.js (6 errors) ====
+==== tests/cases/conformance/salsa/a.js (10 errors) ====
     function A () {
         // should get any on this-assignments in constructor
         this.unknown = null
@@ -38,17 +42,25 @@ tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not as
     
     // should get any on parameter initialisers
     function f(a = null, b = n, l = []) {
-               ~~~~~~~~
-!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
                                 ~~~~~~
 !!! error TS7006: Parameter 'l' implicitly has an 'any[]' type.
-        // a should be any
+        // a should be null in strict mode
         a = undefined
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'null'.
         a = null
         a = 1
+        ~
+!!! error TS2322: Type '1' is not assignable to type 'null'.
         a = true
+        ~
+!!! error TS2322: Type 'true' is not assignable to type 'null'.
         a = {}
+        ~
+!!! error TS2322: Type '{}' is not assignable to type 'null'.
         a = 'ok'
+        ~
+!!! error TS2322: Type '"ok"' is not assignable to type 'null'.
     
         // b should be number | undefined, not any
         b = 1
@@ -77,6 +89,6 @@ tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not as
     const isUndef = v => v === undefined;
     const e = [1, undefined];
     
-    // should be  undefined[]
+    // should be undefined[]
     const g = e.filter(isUndef);
     

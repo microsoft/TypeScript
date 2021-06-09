@@ -54,7 +54,7 @@ namespace Utils {
     export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
         const cache = new ts.Map<string, any>();
 
-        return <any>(function (this: any, ...args: any[]) {
+        return (function (this: any, ...args: any[]) {
             const key = memoKey(...args);
             if (cache.has(key)) {
                 return cache.get(key);
@@ -64,7 +64,7 @@ namespace Utils {
                 cache.set(key, value);
                 return value;
             }
-        });
+        } as any);
     }
 
     export const canonicalizeForHarness = ts.createGetCanonicalFileName(/*caseSensitive*/ false); // This is done so tests work on windows _and_ linux
@@ -121,10 +121,10 @@ namespace Utils {
                         childName === "jsDocComment" || childName === "checkJsDirective" || childName === "commonJsModuleIndicator") {
                         continue;
                     }
-                    const child = (<any>node)[childName];
+                    const child = (node as any)[childName];
                     if (isNodeOrArray(child)) {
                         assert.isFalse(childNodesAndArrays.indexOf(child) < 0,
-                            "Missing child when forEach'ing over node: " + (<any>ts).SyntaxKind[node.kind] + "-" + childName);
+                            "Missing child when forEach'ing over node: " + (ts as any).SyntaxKind[node.kind] + "-" + childName);
                     }
                 }
             }
@@ -159,18 +159,18 @@ namespace Utils {
 
             // For some markers in SyntaxKind, we should print its original syntax name instead of
             // the marker name in tests.
-            if (k === (<any>ts).SyntaxKind.FirstJSDocNode ||
-                k === (<any>ts).SyntaxKind.LastJSDocNode ||
-                k === (<any>ts).SyntaxKind.FirstJSDocTagNode ||
-                k === (<any>ts).SyntaxKind.LastJSDocTagNode) {
-                for (const kindName in (<any>ts).SyntaxKind) {
-                    if ((<any>ts).SyntaxKind[kindName] === k) {
+            if (k === (ts as any).SyntaxKind.FirstJSDocNode ||
+                k === (ts as any).SyntaxKind.LastJSDocNode ||
+                k === (ts as any).SyntaxKind.FirstJSDocTagNode ||
+                k === (ts as any).SyntaxKind.LastJSDocTagNode) {
+                for (const kindName in (ts as any).SyntaxKind) {
+                    if ((ts as any).SyntaxKind[kindName] === k) {
                         return kindName;
                     }
                 }
             }
 
-            return (<any>ts).SyntaxKind[k];
+            return (ts as any).SyntaxKind[k];
         }
 
         function getFlagName(flags: any, f: number): any {
@@ -198,7 +198,7 @@ namespace Utils {
             return result;
         }
 
-        function getNodeFlagName(f: number) { return getFlagName((<any>ts).NodeFlags, f); }
+        function getNodeFlagName(f: number) { return getFlagName((ts as any).NodeFlags, f); }
 
         function serializeNode(n: ts.Node): any {
             const o: any = { kind: getKindName(n.kind) };
@@ -222,7 +222,7 @@ namespace Utils {
                         break;
 
                     case "originalKeywordKind":
-                        o[propertyName] = getKindName((<any>n)[propertyName]);
+                        o[propertyName] = getKindName((n as any)[propertyName]);
                         break;
 
                     case "flags":
@@ -236,7 +236,7 @@ namespace Utils {
                         break;
 
                     case "parseDiagnostics":
-                        o[propertyName] = convertDiagnostics((<any>n)[propertyName]);
+                        o[propertyName] = convertDiagnostics((n as any)[propertyName]);
                         break;
 
                     case "nextContainer":
@@ -248,12 +248,12 @@ namespace Utils {
                     case "text":
                         // Include 'text' field for identifiers/literals, but not for source files.
                         if (n.kind !== ts.SyntaxKind.SourceFile) {
-                            o[propertyName] = (<any>n)[propertyName];
+                            o[propertyName] = (n as any)[propertyName];
                         }
                         break;
 
                     default:
-                        o[propertyName] = (<any>n)[propertyName];
+                        o[propertyName] = (n as any)[propertyName];
                 }
             }
 
@@ -304,13 +304,13 @@ namespace Utils {
         ts.forEachChild(node1,
             child1 => {
                 const childName = findChildName(node1, child1);
-                const child2: ts.Node = (<any>node2)[childName];
+                const child2: ts.Node = (node2 as any)[childName];
 
                 assertStructuralEquals(child1, child2);
             },
             array1 => {
                 const childName = findChildName(node1, array1);
-                const array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
+                const array2: ts.NodeArray<ts.Node> = (node2 as any)[childName];
 
                 assertArrayStructuralEquals(array1, array2);
             });
@@ -345,7 +345,7 @@ namespace Utils {
     const maxHarnessFrames = 1;
 
     export function filterStack(error: Error, stackTraceLimit = Infinity) {
-        const stack = <string>(<any>error).stack;
+        const stack = (error as any).stack as string;
         if (stack) {
             const lines = stack.split(/\r\n?|\n/g);
             const filtered: string[] = [];
@@ -374,7 +374,7 @@ namespace Utils {
                 filtered.push(line);
             }
 
-            (<any>error).stack = filtered.join(Harness.IO.newLine());
+            (error as any).stack = filtered.join(Harness.IO.newLine());
         }
 
         return error;

@@ -40,8 +40,15 @@ exports.x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-10726455937-export const x = 10;"],"options":{"outDir":"./dist","rootDir":"./src"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../lib/lib.d.ts",
+      "./src/main.ts"
+    ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
@@ -50,16 +57,12 @@ exports.x = 10;
       },
       "./src/main.ts": {
         "version": "-10726455937-export const x = 10;",
-        "signature": "-6057683066-export declare const x = 10;\r\n",
-        "affectsGlobalScope": false
+        "signature": "-10726455937-export const x = 10;"
       }
     },
     "options": {
-      "incremental": true,
       "outDir": "./dist",
-      "project": "./",
-      "rootDir": "./src",
-      "configFilePath": "./tsconfig.json"
+      "rootDir": "./src"
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -68,7 +71,8 @@ exports.x = 10;
       "./src/main.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 745
 }
 
 

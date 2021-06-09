@@ -103,6 +103,9 @@ namespace ts.moduleSpecifiers {
 
         const info = getInfo(importingSourceFile.path, host);
         const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
+        if (!moduleSourceFile) {
+            return [];
+        }
         const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
 
@@ -178,14 +181,13 @@ namespace ts.moduleSpecifiers {
     function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, { ending, relativePreference }: Preferences): string {
         const { baseUrl, paths, rootDirs } = compilerOptions;
         const { sourceDirectory, getCanonicalFileName } = info;
-
         const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
             removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
         if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
             return relativePath;
         }
 
-        const baseDirectory = getPathsBasePath(compilerOptions, host) || baseUrl!;
+        const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
         const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
         if (!relativeToBaseUrl) {
             return relativePath;
@@ -203,7 +205,9 @@ namespace ts.moduleSpecifiers {
         }
 
         if (relativePreference === RelativePreference.ExternalNonRelative) {
-            const projectDirectory = host.getCurrentDirectory();
+            const projectDirectory = compilerOptions.configFilePath ?
+                toPath(getDirectoryPath(compilerOptions.configFilePath), host.getCurrentDirectory(), info.getCanonicalFileName) :
+                info.getCanonicalFileName(host.getCurrentDirectory());
             const modulePath = toPath(moduleFileName, projectDirectory, getCanonicalFileName);
             const sourceIsInternal = startsWith(sourceDirectory, projectDirectory);
             const targetIsInternal = startsWith(modulePath, projectDirectory);
@@ -282,17 +286,16 @@ namespace ts.moduleSpecifiers {
         const redirects = host.redirectTargetsMap.get(importedPath) || emptyArray;
         const importedFileNames = [...(referenceRedirect ? [referenceRedirect] : emptyArray), importedFileName, ...redirects];
         const targets = importedFileNames.map(f => getNormalizedAbsolutePath(f, cwd));
+        let shouldFilterIgnoredPaths = !every(targets, containsIgnoredPath);
+
         if (!preferSymlinks) {
             // Symlinks inside ignored paths are already filtered out of the symlink cache,
             // so we only need to remove them from the realpath filenames.
-            const result = forEach(targets, p => !containsIgnoredPath(p) && cb(p, referenceRedirect === p));
+            const result = forEach(targets, p => !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) && cb(p, referenceRedirect === p));
             if (result) return result;
         }
-        const links = host.getSymlinkCache
-            ? host.getSymlinkCache()
-            : discoverProbableSymlinks(host.getSourceFiles(), getCanonicalFileName, cwd);
 
-        const symlinkedDirectories = links.getSymlinkedDirectoriesByRealpath();
+        const symlinkedDirectories = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
         const fullImportedFileName = getNormalizedAbsolutePath(importedFileName, cwd);
         const result = symlinkedDirectories && forEachAncestorDirectory(getDirectoryPath(fullImportedFileName), realPathDirectory => {
             const symlinkDirectories = symlinkedDirectories.get(ensureTrailingDirectorySeparator(toPath(realPathDirectory, cwd, getCanonicalFileName)));
@@ -312,28 +315,27 @@ namespace ts.moduleSpecifiers {
                 for (const symlinkDirectory of symlinkDirectories) {
                     const option = resolvePath(symlinkDirectory, relative);
                     const result = cb(option, target === referenceRedirect);
+                    shouldFilterIgnoredPaths = true; // We found a non-ignored path in symlinks, so we can reject ignored-path realpaths
                     if (result) return result;
                 }
             });
         });
         return result || (preferSymlinks
-            ? forEach(targets, p => containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
+            ? forEach(targets, p => shouldFilterIgnoredPaths && containsIgnoredPath(p) ? undefined : cb(p, p === referenceRedirect))
             : undefined);
-    }
-
-    interface ModulePath {
-        path: string;
-        isInNodeModules: boolean;
-        isRedirect: boolean;
     }
 
     /**
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
-    function getAllModulePaths(importingFileName: string, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
-        const cwd = host.getCurrentDirectory();
+    function getAllModulePaths(importingFileName: Path, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+        const cache = host.getModuleSpecifierCache?.();
         const getCanonicalFileName = hostGetCanonicalFileName(host);
+        if (cache) {
+            const cached = cache.get(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName));
+            if (typeof cached === "object") return cached;
+        }
         const allFileNames = new Map<string, { path: string, isRedirect: boolean, isInNodeModules: boolean }>();
         let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
@@ -352,7 +354,7 @@ namespace ts.moduleSpecifiers {
         // Sort by paths closest to importing file Name directory
         const sortedPaths: ModulePath[] = [];
         for (
-            let directory = getDirectoryPath(toPath(importingFileName, cwd, getCanonicalFileName));
+            let directory = getDirectoryPath(importingFileName);
             allFileNames.size !== 0;
         ) {
             const directoryStart = ensureTrailingDirectorySeparator(directory);
@@ -378,11 +380,15 @@ namespace ts.moduleSpecifiers {
             if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
             sortedPaths.push(...remainingPaths);
         }
+
+        if (cache) {
+            cache.set(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName), sortedPaths);
+        }
         return sortedPaths;
     }
 
     function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
-        const decl = find(moduleSymbol.declarations,
+        const decl = moduleSymbol.declarations?.find(
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
         if (decl) {
@@ -438,7 +444,7 @@ namespace ts.moduleSpecifiers {
                         startsWith(relativeToBaseUrl, prefix) &&
                         endsWith(relativeToBaseUrl, suffix) ||
                         !suffix && relativeToBaseUrl === removeTrailingDirectorySeparator(prefix)) {
-                        const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
+                        const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length - prefix.length);
                         return key.replace("*", matchedStar);
                     }
                 }

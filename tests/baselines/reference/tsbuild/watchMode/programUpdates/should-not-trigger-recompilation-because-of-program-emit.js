@@ -45,7 +45,7 @@ Output::
 
 [[90m12:00:30 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:00:45 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:47 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -113,8 +113,16 @@ export declare function multiply(a: number, b: number): number;
 //# sourceMappingURL=index.d.ts.map
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-2676574883-export const World = \"hello\";\r\n","-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./anothermodule.ts",
+      "./index.ts"
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -123,22 +131,18 @@ export declare function multiply(a: number, b: number): number;
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
-        "affectsGlobalScope": false
+        "signature": "-2676574883-export const World = \"hello\";\r\n"
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
-        "affectsGlobalScope": false
+        "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
       }
     },
     "options": {
       "composite": true,
       "declaration": true,
       "declarationMap": true,
-      "skipDefaultLibCheck": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "skipDefaultLibCheck": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -148,7 +152,8 @@ export declare function multiply(a: number, b: number): number;
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 964
 }
 
 
@@ -184,15 +189,15 @@ export const y = 10;
 
 Output::
 >> Screen clear
-[[90m12:00:48 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:50 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:49 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because oldest output 'sample1/core/anotherModule.js' is older than newest input 'sample1/core/file3.ts'
+[[90m12:00:51 AM[0m] Project 'sample1/core/tsconfig.json' is out of date because oldest output 'sample1/core/anotherModule.js' is older than newest input 'sample1/core/file3.ts'
 
-[[90m12:00:50 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90m12:00:52 AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:01 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/sample1/core/tsconfig.json'...
+[[90m12:01:03 AM[0m] Updating unchanged output timestamps of project '/user/username/projects/sample1/core/tsconfig.json'...
 
-[[90m12:01:02 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:07 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -233,8 +238,17 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/sample1/core/index.d.ts.map] file changed its modified time
 //// [/user/username/projects/sample1/core/index.d.ts] file changed its modified time
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./anothermodule.ts","./file3.ts","./index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-2676574883-export const World = \"hello\";\r\n",{"version":"-13729955264-export const y = 10;","signature":"-7152472870-export declare const y = 10;\n"},"-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"],"options":{"composite":true,"declaration":true,"declarationMap":true,"skipDefaultLibCheck":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../../a/lib/lib.d.ts",
+      "./anothermodule.ts",
+      "./file3.ts",
+      "./index.ts"
+    ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -243,27 +257,22 @@ exitCode:: ExitStatus.undefined
       },
       "./anothermodule.ts": {
         "version": "-2676574883-export const World = \"hello\";\r\n",
-        "signature": "-4454971016-export declare const World = \"hello\";\n//# sourceMappingURL=anotherModule.d.ts.map",
-        "affectsGlobalScope": false
+        "signature": "-2676574883-export const World = \"hello\";\r\n"
       },
       "./file3.ts": {
         "version": "-13729955264-export const y = 10;",
-        "signature": "-2095538994-export declare const y = 10;\n//# sourceMappingURL=file3.d.ts.map",
-        "affectsGlobalScope": false
+        "signature": "-7152472870-export declare const y = 10;\n"
       },
       "./index.ts": {
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
-        "signature": "-9047123202-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n//# sourceMappingURL=index.d.ts.map",
-        "affectsGlobalScope": false
+        "signature": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
       }
     },
     "options": {
       "composite": true,
       "declaration": true,
       "declarationMap": true,
-      "skipDefaultLibCheck": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "skipDefaultLibCheck": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -274,7 +283,8 @@ exitCode:: ExitStatus.undefined
       "./index.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 1084
 }
 
 //// [/user/username/projects/sample1/core/file3.js]

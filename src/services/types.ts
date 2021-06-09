@@ -43,7 +43,7 @@ namespace ts {
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         /* @internal */
         getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[]
-        getJsDocTags(): JSDocTagInfo[];
+        getJsDocTags(checker?: TypeChecker): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -305,7 +305,9 @@ namespace ts {
         /* @internal */
         getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */
-        getImportSuggestionsCache?(): Completions.ImportSuggestionsForFileCache;
+        getExportMapCache?(): ExportMapCache;
+        /* @internal */
+        getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */
         setCompilerHost?(host: CompilerHost): void;
         /* @internal */
@@ -314,6 +316,8 @@ namespace ts {
         getPackageJsonAutoImportProvider?(): Program | undefined;
         /* @internal */
         sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
+        /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
     }
 
     /* @internal */
@@ -424,10 +428,11 @@ namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero based index of the character where you want the entries
-         * @param entryName The name from an existing completion which came from `getCompletionsAtPosition`
+         * @param entryName The `name` from an existing completion which came from `getCompletionsAtPosition`
          * @param formatOptions How should code samples in the completions be formatted, can be undefined for backwards compatibility
-         * @param source Source code for the current file, can be undefined for backwards compatibility
+         * @param source `source` property from the completion entry
          * @param preferences User settings, can be undefined for backwards compatibility
+         * @param data `data` property from the completion entry
          */
         getCompletionEntryDetails(
             fileName: string,
@@ -436,6 +441,7 @@ namespace ts {
             formatOptions: FormatCodeOptions | FormatCodeSettings | undefined,
             source: string | undefined,
             preferences: UserPreferences | undefined,
+            data: CompletionEntryData | undefined,
         ): CompletionEntryDetails | undefined;
 
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
@@ -522,7 +528,7 @@ namespace ts {
 
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences | undefined, triggerReason?: RefactorTriggerReason, kind?: string): ApplicableRefactorInfo[];
         getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string, preferences: UserPreferences | undefined): RefactorEditInfo | undefined;
-        organizeImports(scope: OrganizeImportsScope, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
+        organizeImports(args: OrganizeImportsArgs, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
         getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences | undefined): readonly FileTextChanges[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
@@ -546,9 +552,11 @@ namespace ts {
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
-    export type OrganizeImportsScope = CombinedCodeFixScope;
+    export interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        skipDestructiveCodeActions?: boolean;
+    }
 
-    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
@@ -989,6 +997,7 @@ namespace ts {
         name: string;
         containerKind: ScriptElementKind;
         containerName: string;
+        unverified?: boolean;
         /* @internal */ isLocal?: boolean;
     }
 
@@ -1029,6 +1038,9 @@ namespace ts {
         enumMemberName,
         functionName,
         regularExpressionLiteral,
+        link,
+        linkName,
+        linkText,
     }
 
     export interface SymbolDisplayPart {
@@ -1036,9 +1048,13 @@ namespace ts {
         kind: string;
     }
 
+    export interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        target: DocumentSpan;
+    }
+
     export interface JSDocTagInfo {
         name: string;
-        text?: string;
+        text?: SymbolDisplayPart[];
     }
 
     export interface QuickInfo {
@@ -1128,12 +1144,33 @@ namespace ts {
          * must be used to commit that completion entry.
          */
         optionalReplacementSpan?: TextSpan;
-
         /**
          * true when the current location also allows for a new identifier
          */
         isNewIdentifierLocation: boolean;
+        /**
+         * Indicates to client to continue requesting completions on subsequent keystrokes.
+         */
+        isIncomplete?: true;
         entries: CompletionEntry[];
+    }
+
+    export interface CompletionEntryData {
+        /** The file name declaring the export's module symbol, if it was an external module */
+        fileName?: string;
+        /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
+        ambientModuleName?: string;
+        /** True if the export was found in the package.json AutoImportProvider */
+        isPackageJsonImport?: true;
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
+        exportName: string;
+        /**
+         * Set for auto imports with eagerly resolved module specifiers.
+         */
+        moduleSpecifier?: string;
     }
 
     // see comments in protocol.ts
@@ -1143,6 +1180,7 @@ namespace ts {
         kindModifiers?: string; // see ScriptElementKindModifier, comma separated
         sortText: string;
         insertText?: string;
+        isSnippet?: true;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
@@ -1151,9 +1189,20 @@ namespace ts {
         replacementSpan?: TextSpan;
         hasAction?: true;
         source?: string;
+        sourceDisplay?: SymbolDisplayPart[];
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
+        isImportStatementCompletion?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name. Currently only defined for auto-import completions, but the type is
+         * `unknown` in the protocol, so it can be changed as needed to support other kinds of completions.
+         * The presence of this property should generally not be used to assume that this completion entry
+         * is an auto-import.
+         */
+        data?: CompletionEntryData;
     }
 
     export interface CompletionEntryDetails {
@@ -1164,7 +1213,9 @@ namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
         codeActions?: CodeAction[];
+        /** @deprecated Use `sourceDisplay` instead. */
         source?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     export interface OutliningSpan {
@@ -1365,6 +1416,15 @@ namespace ts {
 
         /** String literal */
         string = "string",
+
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        link = "link",
+
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text",
     }
 
     export const enum ScriptElementKindModifier {

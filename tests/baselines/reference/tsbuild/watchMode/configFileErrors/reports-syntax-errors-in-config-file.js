@@ -222,7 +222,7 @@ Output::
 >> Screen clear
 [[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:54 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:56 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -278,8 +278,16 @@ export declare function bar(): void;
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-3260843409-export function fooBar() { }","signature":"-6611919720-export declare function fooBar(): void;\n"},{"version":"1045484683-export function bar() { }","signature":"-2904461644-export declare function bar(): void;\n"}],"options":{"composite":true,"declaration":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+
+//// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./a.ts",
+      "./b.ts"
+    ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
@@ -288,20 +296,16 @@ export declare function bar(): void;
       },
       "./a.ts": {
         "version": "-3260843409-export function fooBar() { }",
-        "signature": "-6611919720-export declare function fooBar(): void;\n",
-        "affectsGlobalScope": false
+        "signature": "-6611919720-export declare function fooBar(): void;\n"
       },
       "./b.ts": {
         "version": "1045484683-export function bar() { }",
-        "signature": "-2904461644-export declare function bar(): void;\n",
-        "affectsGlobalScope": false
+        "signature": "-2904461644-export declare function bar(): void;\n"
       }
     },
     "options": {
       "composite": true,
-      "declaration": true,
-      "watch": true,
-      "configFilePath": "./tsconfig.json"
+      "declaration": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -311,6 +315,7 @@ export declare function bar(): void;
       "./b.ts"
     ]
   },
-  "version": "FakeTSVersion"
+  "version": "FakeTSVersion",
+  "size": 880
 }
 

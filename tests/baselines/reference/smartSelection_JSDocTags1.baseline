@@ -16,7 +16,8 @@ function foo() { return [] }
              Array<{ value: string }> 
 
 
-   @returns {Array<{ value: string }>}
+   @returns {Array<{ value: string }>}↲
+•  
 
 
 /**

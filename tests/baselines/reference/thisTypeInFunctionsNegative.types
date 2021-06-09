@@ -733,14 +733,13 @@ function optional(this?: C): number { return this.n; }
 >n : any
 
 function decorated(@deco() this: C): number { return this.n; }
->decorated : (: any, this: C) => number
+>decorated : (this: C) => number
 >deco() : any
 >deco : any
-> : any
 >this : C
->this.n : any
->this : any
->n : any
+>this.n : number
+>this : C
+>n : number
 
 function initializer(this: C = new C()): number { return this.n; }
 >initializer : (this: C, : any, C: any) => any
