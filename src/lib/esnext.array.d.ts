@@ -86,3 +86,19 @@ interface Float64Array {
      */
     at(index: number): number | undefined;
 }
+
+interface BigInt64Array {
+    /**
+     * Access item by relative indexing.
+     * @param index index to access.
+     */
+    at(index: number): bigint | undefined;
+}
+
+interface BigUint64Array {
+    /**
+     * Access item by relative indexing.
+     * @param index index to access.
+     */
+     at(index: number): bigint | undefined;
+}
