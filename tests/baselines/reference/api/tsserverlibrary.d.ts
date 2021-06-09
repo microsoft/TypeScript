@@ -9931,7 +9931,7 @@ declare namespace ts.server {
         configFileName?: NormalizedPath;
         configFileErrors?: readonly Diagnostic[];
     }
-    export interface ProjectServiceOptions<TMessage = string> {
+    export interface ProjectServiceOptions {
         host: ServerHost;
         logger: Logger;
         cancellationToken: HostCancellationToken;
@@ -9948,7 +9948,7 @@ declare namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
-        session: Session<TMessage> | undefined;
+        session: Session<unknown> | undefined;
     }
     export interface WatchOptionsAndErrors {
         watchOptions: WatchOptions;
@@ -10024,7 +10024,7 @@ declare namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
         private performanceEventHandler?;
-        constructor(opts: ProjectServiceOptions<unknown>);
+        constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
         updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
