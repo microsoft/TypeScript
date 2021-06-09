@@ -85,6 +85,10 @@ The TypeScript repository is relatively large. To save some time, you might want
 
 Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
+### Avoiding problems with long paths
+
+Some of the baseline test files have very long names. If your repository is cloned to a directory with a long path, the total path might exceed 260 characters and not function properly on Windows. It is therefore recommended to clone into a location with short path such as `D:\TypeScript`.
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog milestone") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
