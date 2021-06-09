@@ -21,7 +21,7 @@ const myTypes = {
 /** @typedef {myTypes.typeB|Function} myTypes.typeC */
 
 export {myTypes};
->myTypes : Symbol(myTypes, Decl(file.js, 19, 8))
+>myTypes : Symbol(myTypes, Decl(file.js, 19, 8), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
 
 === tests/cases/conformance/jsdoc/declarations/file2.js ===
 import {myTypes} from './file.js';
@@ -63,5 +63,5 @@ function testFn(input) {
 
 export {testFn, testFnTypes};
 >testFn : Symbol(testFn, Decl(file2.js, 27, 8))
->testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 15))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 15), Decl(file2.js, 11, 37))
 

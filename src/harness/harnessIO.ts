@@ -72,6 +72,7 @@ namespace Harness {
 
                 for (const file of fs.readdirSync(folder)) {
                     const pathToFile = pathModule.join(folder, file);
+                    if (!fs.existsSync(pathToFile)) continue; // ignore invalid symlinks
                     const stat = fs.statSync(pathToFile);
                     if (options.recursive && stat.isDirectory()) {
                         paths = paths.concat(filesInFolder(pathToFile));
@@ -364,7 +365,7 @@ namespace Harness {
                 case "list":
                     return ts.parseListTypeOption(option, value, errors);
                 default:
-                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
+                    return ts.parseCustomTypeOption(option as ts.CommandLineOptionOfCustomType, value, errors);
             }
         }
 
@@ -1381,7 +1382,7 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
-                if (require && opts && opts.PrintDiff) {
+                if (!!require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
                     throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
@@ -1481,5 +1482,5 @@ namespace Harness {
         return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 100;
+    if (Error) (Error as any).stackTraceLimit = 100;
 }

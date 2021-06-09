@@ -205,6 +205,37 @@ type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 
 type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];  // Error
 
+// Repro from #40863
+
+type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+
+type AA<T extends number, Q extends number> =
+    [true, true] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+
+type BB = AA<-2, -2>;
+
+// Repro from #40970
+
+type PathKeys<T> =
+    T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> :
+    T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> :
+    never;
+
+type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+
+const obj2 = {
+    name: 'John',
+    age: 42,
+    cars: [
+        { make: 'Ford', age: 10 },
+        { make: 'Trabant', age: 35 }
+    ]
+} as const;
+
+let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
+
 
 //// [templateLiteralTypes1.js]
 "use strict";
@@ -234,6 +265,15 @@ getPropValue(obj, 'a.b'); // {c: number, d: string }
 getPropValue(obj, 'a.b.d'); // string
 getPropValue(obj, 'a.b.x'); // unknown
 getPropValue(obj, s); // unknown
+var obj2 = {
+    name: 'John',
+    age: 42,
+    cars: [
+        { make: 'Ford', age: 10 },
+        { make: 'Trabant', age: 35 }
+    ]
+};
+var make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 
 
 //// [templateLiteralTypes1.d.ts]
@@ -453,3 +493,24 @@ declare type Digits = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 declare type D100000 = `${Digits}${Digits}${Digits}${Digits}${Digits}`;
 declare type TDigits = [0] | [1] | [2] | [3] | [4] | [5] | [6] | [7] | [8] | [9];
 declare type T100000 = [...TDigits, ...TDigits, ...TDigits, ...TDigits, ...TDigits];
+declare type IsNegative<T extends number> = `${T}` extends `-${string}` ? true : false;
+declare type AA<T extends number, Q extends number> = [
+    true,
+    true
+] extends [IsNegative<T>, IsNegative<Q>] ? 'Every thing is ok!' : ['strange', IsNegative<T>, IsNegative<Q>];
+declare type BB = AA<-2, -2>;
+declare type PathKeys<T> = T extends readonly any[] ? Extract<keyof T, `${number}`> | SubKeys<T, Extract<keyof T, `${number}`>> : T extends object ? Extract<keyof T, string> | SubKeys<T, Extract<keyof T, string>> : never;
+declare type SubKeys<T, K extends string> = K extends keyof T ? `${K}.${PathKeys<T[K]>}` : never;
+declare function getProp2<T, P extends PathKeys<T>>(obj: T, path: P): PropType<T, P>;
+declare const obj2: {
+    readonly name: "John";
+    readonly age: 42;
+    readonly cars: readonly [{
+        readonly make: "Ford";
+        readonly age: 10;
+    }, {
+        readonly make: "Trabant";
+        readonly age: 35;
+    }];
+};
+declare let make: "Trabant";

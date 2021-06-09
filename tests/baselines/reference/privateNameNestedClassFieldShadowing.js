@@ -16,29 +16,28 @@ class Base {
 
 
 //// [privateNameNestedClassFieldShadowing.js]
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _x;
+var _Base_x;
 class Base {
     constructor() {
-        var _x_1;
-        _x.set(this, void 0);
+        var _Derived_x;
+        _Base_x.set(this, void 0);
         class Derived {
             constructor() {
-                _x_1.set(this, void 0);
+                _Derived_x.set(this, void 0);
             }
             testBase(x) {
-                console.log(__classPrivateFieldGet(x, _x_1));
+                console.log(__classPrivateFieldGet(x, _Derived_x, "f"));
             }
             testDerived(x) {
-                console.log(__classPrivateFieldGet(x, _x_1));
+                console.log(__classPrivateFieldGet(x, _Derived_x, "f"));
             }
         }
-        _x_1 = new WeakMap();
+        _Derived_x = new WeakMap();
     }
 }
-_x = new WeakMap();
+_Base_x = new WeakMap();

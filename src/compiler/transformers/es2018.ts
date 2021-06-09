@@ -119,11 +119,11 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            return visitorWorker(node, /*noDestructuringValue*/ false);
+            return visitorWorker(node, /*expressionResultIsUnused*/ false);
         }
 
-        function visitorNoDestructuringValue(node: Node): VisitResult<Node> {
-            return visitorWorker(node, /*noDestructuringValue*/ true);
+        function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
+            return visitorWorker(node, /*expressionResultIsUnused*/ true);
         }
 
         function visitorNoAsyncModifier(node: Node): VisitResult<Node> {
@@ -147,7 +147,11 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
+        /**
+         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * expression of an `ExpressionStatement`).
+         */
+        function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
             if ((node.transformFlags & TransformFlags.ContainsES2018) === 0) {
                 return node;
             }
@@ -163,7 +167,9 @@ namespace ts {
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
-                    return visitBinaryExpression(node as BinaryExpression, noDestructuringValue);
+                    return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
+                case SyntaxKind.CommaListExpression:
+                    return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
                 case SyntaxKind.CatchClause:
                     return visitCatchClause(node as CatchClause);
                 case SyntaxKind.VariableStatement:
@@ -235,7 +241,7 @@ namespace ts {
                 case SyntaxKind.ExpressionStatement:
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
-                    return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
+                    return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.PropertyAccessExpression:
@@ -244,7 +250,7 @@ namespace ts {
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.ElementAccessExpression:
-                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                    if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
@@ -336,8 +342,8 @@ namespace ts {
         function visitLabeledStatement(node: LabeledStatement) {
             if (enclosingFunctionFlags & FunctionFlags.Async) {
                 const statement = unwrapInnermostStatementOfLabel(node);
-                if (statement.kind === SyntaxKind.ForOfStatement && (<ForOfStatement>statement).awaitModifier) {
-                    return visitForOfStatement(<ForOfStatement>statement, node);
+                if (statement.kind === SyntaxKind.ForOfStatement && (statement as ForOfStatement).awaitModifier) {
+                    return visitForOfStatement(statement as ForOfStatement, node);
                 }
                 return factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node);
             }
@@ -411,11 +417,15 @@ namespace ts {
         }
 
         function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
-            return visitEachChild(node, visitorNoDestructuringValue, context);
+            return visitEachChild(node, visitorWithUnusedExpressionResult, context);
         }
 
-        function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
-            return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        /**
+         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * expression of an `ExpressionStatement`).
+         */
+        function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
+            return visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
         }
 
         function visitSourceFile(node: SourceFile): SourceFile {
@@ -450,26 +460,49 @@ namespace ts {
          * Visits a BinaryExpression that contains a destructuring assignment.
          *
          * @param node A BinaryExpression node.
+         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * expression of an `ExpressionStatement`).
          */
-        function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
+        function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
             if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringAssignment(
                     node,
                     visitor,
                     context,
                     FlattenLevel.ObjectRest,
-                    !noDestructuringValue
+                    !expressionResultIsUnused
                 );
             }
-            else if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+            if (node.operatorToken.kind === SyntaxKind.CommaToken) {
                 return factory.updateBinaryExpression(
                     node,
-                    visitNode(node.left, visitorNoDestructuringValue, isExpression),
+                    visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
                     node.operatorToken,
-                    visitNode(node.right, noDestructuringValue ? visitorNoDestructuringValue : visitor, isExpression)
+                    visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
                 );
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        /**
+         * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
+         * expression of an `ExpressionStatement`).
+         */
+        function visitCommaListExpression(node: CommaListExpression, expressionResultIsUnused: boolean): Expression {
+            if (expressionResultIsUnused) {
+                return visitEachChild(node, visitorWithUnusedExpressionResult, context);
+            }
+            let result: Expression[] | undefined;
+            for (let i = 0; i < node.elements.length; i++) {
+                const element = node.elements[i];
+                const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
+                if (result || visited !== element) {
+                    result ||= node.elements.slice(0, i);
+                    result.push(visited);
+                }
+            }
+            const elements = result ? setTextRange(factory.createNodeArray(result), node.elements) : node.elements;
+            return factory.updateCommaListExpression(node, elements);
         }
 
         function visitCatchClause(node: CatchClause) {
@@ -539,15 +572,15 @@ namespace ts {
         function visitForStatement(node: ForStatement): VisitResult<Statement> {
             return factory.updateForStatement(
                 node,
-                visitNode(node.initializer, visitorNoDestructuringValue, isForInitializer),
+                visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
                 visitNode(node.condition, visitor, isExpression),
-                visitNode(node.incrementor, visitor, isExpression),
-                visitNode(node.statement, visitor, isStatement)
+                visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
+                visitIterationBody(node.statement, visitor, context)
             );
         }
 
         function visitVoidExpression(node: VoidExpression) {
-            return visitEachChild(node, visitorNoDestructuringValue, context);
+            return visitEachChild(node, visitorWithUnusedExpressionResult, context);
         }
 
         /**
@@ -615,7 +648,7 @@ namespace ts {
             let bodyLocation: TextRange | undefined;
             let statementsLocation: TextRange | undefined;
             const statements: Statement[] = [visitNode(binding, visitor, isStatement)];
-            const statement = visitNode(node.statement, visitor, isStatement);
+            const statement = visitIterationBody(node.statement, visitor, context);
             if (isBlock(statement)) {
                 addRange(statements, statement.statements);
                 bodyLocation = statement;
@@ -1074,7 +1107,7 @@ namespace ts {
         function onSubstituteNode(hint: EmitHint, node: Node) {
             node = previousOnSubstituteNode(hint, node);
             if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
             return node;
         }
@@ -1082,11 +1115,11 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.PropertyAccessExpression:
-                    return substitutePropertyAccessExpression(<PropertyAccessExpression>node);
+                    return substitutePropertyAccessExpression(node as PropertyAccessExpression);
                 case SyntaxKind.ElementAccessExpression:
-                    return substituteElementAccessExpression(<ElementAccessExpression>node);
+                    return substituteElementAccessExpression(node as ElementAccessExpression);
                 case SyntaxKind.CallExpression:
-                    return substituteCallExpression(<CallExpression>node);
+                    return substituteCallExpression(node as CallExpression);
             }
             return node;
         }

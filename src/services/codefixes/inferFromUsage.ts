@@ -128,7 +128,7 @@ namespace ts.codefix {
                     const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode), /*comment*/ undefined);
                         addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     importAdder.writeFixes(changes);
@@ -222,7 +222,7 @@ namespace ts.codefix {
         importAdder: ImportAdder,
         sourceFile: SourceFile,
         parameterDeclaration: ParameterDeclaration,
-        containingFunction: FunctionLike,
+        containingFunction: SignatureDeclaration,
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
@@ -268,7 +268,7 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode) {
+    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
         addJSDocTags(changes, sourceFile, containingFunction, [
             factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
         ]);
@@ -282,6 +282,7 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -307,7 +308,7 @@ namespace ts.codefix {
                     return;
                 }
                 const typeExpression = factory.createJSDocTypeExpression(typeNode);
-                const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, "") : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, "");
+                const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined) : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
                 addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
             else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
@@ -337,28 +338,57 @@ namespace ts.codefix {
         if (!signature) {
             return;
         }
-        const paramTags = mapDefined(parameterInferences, inference => {
+
+        const inferences = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
             // only infer parameters that have (1) no type and (2) an accessible inferred type
-            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
-
+            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) {
+                return;
+            }
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            const name = factory.cloneNode(param.name);
-            setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
-            return typeNode && factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!inference.isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, "");
+            if (typeNode) {
+                const name = factory.cloneNode(param.name);
+                setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+                return { name: factory.cloneNode(param.name), param, isOptional: !!inference.isOptional, typeNode };
+            }
         });
-        addJSDocTags(changes, sourceFile, signature, paramTags);
+
+        if (!inferences.length) {
+            return;
+        }
+
+        if (isArrowFunction(signature) || isFunctionExpression(signature)) {
+            const needParens = isArrowFunction(signature) && !findChildOfKind(signature, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) {
+                changes.insertNodeBefore(sourceFile, first(signature.parameters), factory.createToken(SyntaxKind.OpenParenToken));
+            }
+
+            forEach(inferences, ({ typeNode, param }) => {
+                const typeTag = factory.createJSDocTypeTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode));
+                const jsDoc = factory.createJSDocComment(/*comment*/ undefined, [typeTag]);
+                changes.insertNodeAt(sourceFile, param.getStart(sourceFile), jsDoc, { suffix: " " });
+            });
+
+            if (needParens) {
+                changes.insertNodeAfter(sourceFile, last(signature.parameters), factory.createToken(SyntaxKind.CloseParenToken));
+            }
+        }
+        else {
+            const paramTags = map(inferences, ({ name, typeNode, isOptional }) =>
+                factory.createJSDocParameterTag(/*tagName*/ undefined, name, /*isBracketed*/ !!isOptional, factory.createJSDocTypeExpression(typeNode), /* isNameFirst */ false, /*comment*/ undefined));
+            addJSDocTags(changes, sourceFile, signature, paramTags);
+        }
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = mapDefined(parent.jsDoc, j => j.comment);
+        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);
             if (merged) oldTags[i] = merged;
             return !!merged;
         }));
-        const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        const tag = factory.createJSDocComment(factory.createNodeArray(intersperse(comments, factory.createJSDocText("\n"))), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
         const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
         jsDocNode.jsDoc = parent.jsDoc;
         jsDocNode.jsDocCache = parent.jsDocCache;
@@ -367,9 +397,9 @@ namespace ts.codefix {
 
     function getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
         if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
-            return <HasJSDoc>signature.parent;
+            return signature.parent as HasJSDoc;
         }
-        return <HasJSDoc>signature.parent.parent;
+        return signature.parent.parent as HasJSDoc;
     }
 
     function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
@@ -409,7 +439,7 @@ namespace ts.codefix {
             }));
     }
 
-    function getFunctionReferences(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
+    function getFunctionReferences(containingFunction: SignatureDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): readonly Identifier[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
@@ -418,12 +448,13 @@ namespace ts.codefix {
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
-                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                searchToken = (isVariableDeclaration(parent) || isPropertyDeclaration(parent)) && isIdentifier(parent.name) ?
                     parent.name :
                     containingFunction.name;
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.MethodSignature:
                 searchToken = containingFunction.name;
                 break;
         }
@@ -534,7 +565,7 @@ namespace ts.codefix {
             return combineTypes(inferTypesFromReferencesSingle(references));
         }
 
-        function parameters(declaration: FunctionLike): ParameterInference[] | undefined {
+        function parameters(declaration: SignatureDeclaration): ParameterInference[] | undefined {
             if (references.length === 0 || !declaration.parameters) {
                 return undefined;
             }
@@ -597,7 +628,7 @@ namespace ts.codefix {
 
         function calculateUsageOfNode(node: Expression, usage: Usage): void {
             while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
-                node = <Expression>node.parent;
+                node = node.parent as Expression;
             }
 
             switch (node.parent.kind) {
@@ -608,36 +639,36 @@ namespace ts.codefix {
                     usage.isNumber = true;
                     break;
                 case SyntaxKind.PrefixUnaryExpression:
-                    inferTypeFromPrefixUnaryExpression(<PrefixUnaryExpression>node.parent, usage);
+                    inferTypeFromPrefixUnaryExpression(node.parent as PrefixUnaryExpression, usage);
                     break;
                 case SyntaxKind.BinaryExpression:
-                    inferTypeFromBinaryExpression(node, <BinaryExpression>node.parent, usage);
+                    inferTypeFromBinaryExpression(node, node.parent as BinaryExpression, usage);
                     break;
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                    inferTypeFromSwitchStatementLabel(<CaseOrDefaultClause>node.parent, usage);
+                    inferTypeFromSwitchStatementLabel(node.parent as CaseOrDefaultClause, usage);
                     break;
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    if ((<CallExpression | NewExpression>node.parent).expression === node) {
-                        inferTypeFromCallExpression(<CallExpression | NewExpression>node.parent, usage);
+                    if ((node.parent as CallExpression | NewExpression).expression === node) {
+                        inferTypeFromCallExpression(node.parent as CallExpression | NewExpression, usage);
                     }
                     else {
                         inferTypeFromContextualType(node, usage);
                     }
                     break;
                 case SyntaxKind.PropertyAccessExpression:
-                    inferTypeFromPropertyAccessExpression(<PropertyAccessExpression>node.parent, usage);
+                    inferTypeFromPropertyAccessExpression(node.parent as PropertyAccessExpression, usage);
                     break;
                 case SyntaxKind.ElementAccessExpression:
-                    inferTypeFromPropertyElementExpression(<ElementAccessExpression>node.parent, node, usage);
+                    inferTypeFromPropertyElementExpression(node.parent as ElementAccessExpression, node, usage);
                     break;
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.ShorthandPropertyAssignment:
-                    inferTypeFromPropertyAssignment(<PropertyAssignment | ShorthandPropertyAssignment>node.parent, usage);
+                    inferTypeFromPropertyAssignment(node.parent as PropertyAssignment | ShorthandPropertyAssignment, usage);
                     break;
                 case SyntaxKind.PropertyDeclaration:
-                    inferTypeFromPropertyDeclaration(<PropertyDeclaration>node.parent, usage);
+                    inferTypeFromPropertyDeclaration(node.parent as PropertyDeclaration, usage);
                     break;
                 case SyntaxKind.VariableDeclaration: {
                     const { name, initializer } = node.parent as VariableDeclaration;
@@ -920,7 +951,7 @@ namespace ts.codefix {
             const props = createMultiMap<Type>();
             for (const anon of anons) {
                 for (const p of checker.getPropertiesOfType(anon)) {
-                    props.add(p.name, checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration));
+                    props.add(p.name, p.valueDeclaration ? checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration) : checker.getAnyType());
                 }
                 calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
                 constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
@@ -1074,12 +1105,13 @@ namespace ts.codefix {
                 if (!usageParam) {
                     break;
                 }
-                let genericParamType = checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration);
+                let genericParamType = genericParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(genericParam, genericParam.valueDeclaration) : checker.getAnyType();
                 const elementType = isRest && checker.getElementTypeOfArrayType(genericParamType);
                 if (elementType) {
                     genericParamType = elementType;
                 }
-                const targetType = (usageParam as SymbolLinks).type || checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration);
+                const targetType = (usageParam as SymbolLinks).type
+                    || (usageParam.valueDeclaration ? checker.getTypeOfSymbolAtLocation(usageParam, usageParam.valueDeclaration) : checker.getAnyType());
                 types.push(...inferTypeParameters(genericParamType, targetType, typeParameter));
             }
             const genericReturn = checker.getReturnTypeOfSignature(genericSig);
@@ -1104,8 +1136,7 @@ namespace ts.codefix {
                 parameters.push(symbol);
             }
             const returnType = combineFromUsage(combineUsages(calls.map(call => call.return_)));
-            // TODO: GH#18217
-            return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
+            return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
         }
 
         function addCandidateType(usage: Usage, type: Type | undefined) {

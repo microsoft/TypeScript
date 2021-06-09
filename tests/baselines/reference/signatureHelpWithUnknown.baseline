@@ -1,0 +1,117 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpWithUnknown.ts",
+      "position": 6,
+      "name": "1"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "eval",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "x",
+              "documentation": [
+                {
+                  "text": "A String value that contains valid JavaScript code.",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "x",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Evaluates JavaScript code and executes it.",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "x",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A String value that contains valid JavaScript code.",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 5,
+        "length": 1
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  }
+]

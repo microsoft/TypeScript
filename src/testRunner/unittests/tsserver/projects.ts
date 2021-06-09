@@ -118,7 +118,7 @@ namespace ts.projectSystem {
             const projName = "proj1";
 
             const host = createServerHost([file1, file2]);
-            const projectService = createProjectService(host, { useSingleInferredProject: true }, { eventHandler: noop });
+            const projectService = createProjectService(host, { useSingleInferredProject: true, eventHandler: noop });
 
             projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path, file2.path]), options: {}, projectFileName: projName });
             const proj1 = projectService.findProject(projName)!;
@@ -145,7 +145,7 @@ namespace ts.projectSystem {
 
                 const externalProjectName = "externalproject";
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.openExternalProject({
                     rootFiles: toExternalFiles([file1.path, config1.path]),
                     options: {},
@@ -175,7 +175,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.openClientFile(file1.path, file1.content);
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -201,7 +201,7 @@ namespace ts.projectSystem {
                 };
 
                 const host = createServerHost([file1, config1]);
-                const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+                const projectService = createProjectService(host, { useSingleInferredProject: true, syntaxOnly: true });
                 projectService.applyChangesInOpenFiles(singleIterator({ fileName: file1.path, content: file1.content }));
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
@@ -419,7 +419,7 @@ namespace ts.projectSystem {
                 unresolvedImports: response.unresolvedImports,
             });
 
-            host.checkTimeoutQueueLengthAndRun(2);
+            host.checkTimeoutQueueLength(0);
             assert.isUndefined(request);
         });
 
@@ -1022,25 +1022,25 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f1, libFile, config]);
             const session = createSession(host, { logger });
-            session.executeCommandSeq(<protocol.OpenRequest>{
+            session.executeCommandSeq({
                 command: server.CommandNames.Open,
                 arguments: {
                     file: f1.path
                 }
-            });
-            session.executeCommandSeq(<protocol.CloseRequest>{
+            } as protocol.OpenRequest);
+            session.executeCommandSeq({
                 command: server.CommandNames.Close,
                 arguments: {
                     file: f1.path
                 }
-            });
-            session.executeCommandSeq(<protocol.GeterrRequest>{
+            } as protocol.CloseRequest);
+            session.executeCommandSeq({
                 command: server.CommandNames.Geterr,
                 arguments: {
                     delay: 0,
                     files: [f1.path]
                 }
-            });
+            } as protocol.GeterrRequest);
             assert.isFalse(hasErrorMsg());
         });
 
@@ -1478,6 +1478,48 @@ namespace ts.projectSystem {
                     fileName: fileB2.path,
                     isSourceOfProjectReferenceRedirect: true
                 }
+            ]);
+        });
+
+        it("synchronizeProjectList returns correct information when base configuration file cannot be resolved", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/index.ts`,
+                content: "export const foo = 5;"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+            };
+            const host = createServerHost([file, config, libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ false);
+            assert.deepEqual(knownProjects[0].files, [
+                libFile.path,
+                file.path,
+                config.path,
+                `${tscWatch.projectRoot}/tsconfig_base.json`,
+            ]);
+        });
+
+        it("synchronizeProjectList returns correct information when base configuration file cannot be resolved and redirect info is requested", () => {
+            const file: File = {
+                path: `${tscWatch.projectRoot}/index.ts`,
+                content: "export const foo = 5;"
+            };
+            const config: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: JSON.stringify({ extends: "./tsconfig_base.json" })
+            };
+            const host = createServerHost([file, config, libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path);
+            const knownProjects = projectService.synchronizeProjectList([], /*includeProjectReferenceRedirectInfo*/ true);
+            assert.deepEqual(knownProjects[0].files, [
+                { fileName: libFile.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: file.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: config.path, isSourceOfProjectReferenceRedirect: false },
+                { fileName: `${tscWatch.projectRoot}/tsconfig_base.json`, isSourceOfProjectReferenceRedirect: false },
             ]);
         });
 

@@ -72,6 +72,26 @@ namespace ts.projectSystem {
                 verifyEvent(project, `Change in config file detected`);
             });
 
+            it("when change is detected in an extended config file", () => {
+                const bTs: File = {
+                    path: bTsPath,
+                    content: "export class B {}"
+                };
+                const configB: File = {
+                    path: configBPath,
+                    content: JSON.stringify({
+                        extends: "../a/tsconfig.json",
+                    })
+                };
+                const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionToVerifyEvent(files.concat(bTs, configB));
+                verifyEventWithOpenTs(bTs, configB.path, 1);
+
+                host.writeFile(configA.path, configA.content);
+                host.checkTimeoutQueueLengthAndRun(2);
+                const project = service.configuredProjects.get(configB.path)!;
+                verifyEvent(project, `Change in extended config file ${configA.path} detected`);
+            });
+
             describe("when opening original location project", () => {
                 it("with project references", () => {
                     verify();
@@ -138,11 +158,11 @@ namespace ts.projectSystem {
                 function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
                     const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);
                     service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
-                    service.openExternalProject(<protocol.ExternalProject>{
+                    service.openExternalProject({
                         projectFileName,
                         rootFiles: toExternalFiles([aTs.path, configA.path]),
                         options: {}
-                    });
+                    } as protocol.ExternalProject);
                     checkNumberOfProjects(service, { configuredProjects: 1 });
                     return { session, service, verifyEvent, getNumberOfEvents };
 

@@ -13,12 +13,13 @@ namespace ts.OrganizeImports {
         host: LanguageServiceHost,
         program: Program,
         preferences: UserPreferences,
+        skipDestructiveCodeActions?: boolean
     ) {
 
         const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
 
         const coalesceAndOrganizeImports = (importGroup: readonly ImportDeclaration[]) => stableSort(
-            coalesceImports(removeUnusedImports(importGroup, sourceFile, program)),
+            coalesceImports(removeUnusedImports(importGroup, sourceFile, program, skipDestructiveCodeActions)),
             (s1, s2) => compareImportsOrRequireStatements(s1, s2));
 
         // All of the old ImportDeclarations in the file, in syntactic order.
@@ -63,29 +64,39 @@ namespace ts.OrganizeImports {
                     ? coalesce(importGroup)
                     : importGroup);
 
-            // Delete or replace the first import.
+            // Delete all nodes if there are no imports.
             if (newImportDecls.length === 0) {
-                changeTracker.delete(sourceFile, oldImportDecls[0]);
+                // Consider the first node to have trailingTrivia as we want to exclude the
+                // "header" comment.
+                changeTracker.deleteNodes(sourceFile, oldImportDecls, {
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                }, /*hasTrailingComment*/ true);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
-                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
+                const replaceOptions = {
                     leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
                     trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
-                });
-            }
-
-            // Delete any subsequent imports.
-            for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                };
+                changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, replaceOptions);
+                const hasTrailingComment = changeTracker.nodeHasTrailingComment(sourceFile, oldImportDecls[0], replaceOptions);
+                changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                }, hasTrailingComment);
             }
         }
     }
 
-    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program) {
+    function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFile: SourceFile, program: Program, skipDestructiveCodeActions: boolean | undefined) {
+        // As a precaution, consider unused import detection to be destructive (GH #43051)
+        if (skipDestructiveCodeActions) {
+            return oldImports;
+        }
+
         const typeChecker = program.getTypeChecker();
         const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
+        const jsxFragmentFactory = typeChecker.getJsxFragmentFactory(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
@@ -150,7 +161,8 @@ namespace ts.OrganizeImports {
 
         function isDeclarationUsed(identifier: Identifier) {
             // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
-            return jsxElementsPresent && (identifier.text === jsxNamespace) || FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+            return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) ||
+                FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
         }
     }
 

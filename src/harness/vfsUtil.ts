@@ -863,7 +863,7 @@ namespace vfs {
         private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
         private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
         private _mknod(dev: number, type: number, mode: number, time = this.time()) {
-            return <Inode>{
+            return {
                 dev,
                 ino: ++inoCount,
                 mode: (mode & ~S_IFMT & ~0o022 & 0o7777) | (type & S_IFMT),
@@ -872,7 +872,7 @@ namespace vfs {
                 ctimeMs: time,
                 birthtimeMs: time,
                 nlink: 0
-            };
+            } as Inode;
         }
 
         private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
@@ -956,7 +956,7 @@ namespace vfs {
 
             let shadow = shadows.get(root.ino);
             if (!shadow) {
-                shadow = <Inode>{
+                shadow = {
                     dev: root.dev,
                     ino: root.ino,
                     mode: root.mode,
@@ -966,9 +966,9 @@ namespace vfs {
                     birthtimeMs: root.birthtimeMs,
                     nlink: root.nlink,
                     shadowRoot: root
-                };
+                } as Inode;
 
-                if (isSymlink(root)) (<SymlinkInode>shadow).symlink = root.symlink;
+                if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
                 shadows.set(shadow.ino, shadow);
             }
 
@@ -1036,8 +1036,12 @@ namespace vfs {
             while (true) {
                 if (depth >= 40) throw createIOError("ELOOP");
                 const lastStep = step === components.length - 1;
-                const basename = components[step];
-                const node = links.get(basename);
+                let basename = components[step];
+                const linkEntry = links.getEntry(basename);
+                if (linkEntry) {
+                    components[step] = basename = linkEntry[0];
+                }
+                const node = linkEntry?.[1];
                 if (lastStep && (noFollow || !isSymlink(node))) {
                     return { realpath: vpath.format(components), basename, parent, links, node };
                 }

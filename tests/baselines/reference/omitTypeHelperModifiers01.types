@@ -17,55 +17,55 @@ type A = {
 };
 
 type B = Omit<A, 'a'>;
->B : Pick<A, "b" | "c" | "d">
+>B : B
 
 function f(x: B) {
 >f : (x: B) => void
->x : Pick<A, "b" | "c" | "d">
+>x : B
 
     const b = x.b;
 >b : string | undefined
 >x.b : string | undefined
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >b : string | undefined
 
     x.b = "hello";
 >x.b = "hello" : "hello"
 >x.b : string | undefined
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >b : string | undefined
 >"hello" : "hello"
 
     x.b = undefined;
 >x.b = undefined : undefined
 >x.b : string | undefined
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >b : string | undefined
 >undefined : undefined
 
     const c = x.c;
 >c : boolean
 >x.c : boolean
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >c : boolean
 
     x.c = true;
 >x.c = true : true
 >x.c : any
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >c : any
 >true : true
 
     const d = x.d;
 >d : unknown
 >x.d : unknown
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >d : unknown
 
     x.d = d;
 >x.d = d : unknown
 >x.d : unknown
->x : Pick<A, "b" | "c" | "d">
+>x : B
 >d : unknown
 >d : unknown
 }

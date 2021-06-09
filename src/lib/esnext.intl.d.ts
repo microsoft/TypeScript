@@ -1,5 +1,5 @@
 declare namespace Intl {
-    type NumberFormatPartTypes = "currency" | "decimal" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign";
+    type NumberFormatPartTypes = "compact" | "currency" | "decimal" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign" | "unit" | "unknown";
 
     interface NumberFormatPart {
         type: NumberFormatPartTypes;
@@ -7,6 +7,6 @@ declare namespace Intl {
     }
 
     interface NumberFormat {
-        formatToParts(number?: number): NumberFormatPart[];
+        formatToParts(number?: number | bigint): NumberFormatPart[];
     }
 }

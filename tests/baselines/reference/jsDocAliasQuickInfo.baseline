@@ -1,0 +1,180 @@
+[
+  {
+    "marker": {
+      "fileName": "/jsDocAliasQuickInfo.ts",
+      "position": 44,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 44,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Comment",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/test.ts",
+      "position": 9,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "property",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 9,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "default",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "10",
+          "kind": "stringLiteral"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Comment",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/test.ts",
+      "position": 20,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "alias",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 20,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "test",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Comment",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{number}",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

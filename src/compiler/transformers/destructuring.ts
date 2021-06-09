@@ -5,6 +5,7 @@ namespace ts {
         level: FlattenLevel;
         downlevelIteration: boolean;
         hoistTempVariables: boolean;
+        hasTransformedPriorElement?: boolean; // indicates whether we've transformed a prior declaration
         emitExpression: (value: Expression) => void;
         emitBindingOrAssignment: (target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node | undefined) => void;
         createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
@@ -113,9 +114,9 @@ namespace ts {
         function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange, original: Node) {
             Debug.assertNode(target, createAssignmentCallback ? isIdentifier : isExpression);
             const expression = createAssignmentCallback
-                ? createAssignmentCallback(<Identifier>target, value, location)
+                ? createAssignmentCallback(target as Identifier, value, location)
                 : setTextRange(
-                    context.factory.createAssignment(visitNode(<Expression>target, visitor, isExpression), value),
+                    context.factory.createAssignment(visitNode(target as Expression, visitor, isExpression), value),
                     location
                 );
             expression.original = original;
@@ -198,7 +199,7 @@ namespace ts {
                 bindingOrAssignmentElementContainsNonLiteralComputedName(node))) {
                 // If the right-hand value of the assignment is also an assignment target then
                 // we need to cache the right-hand value.
-                initializer = ensureIdentifier(flattenContext, initializer, /*reuseIdentifierExpressions*/ false, initializer);
+                initializer = ensureIdentifier(flattenContext, visitNode(initializer, flattenContext.visitor), /*reuseIdentifierExpressions*/ false, initializer);
                 node = context.factory.updateVariableDeclaration(node, node.name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
             }
         }
@@ -265,18 +266,27 @@ namespace ts {
         value: Expression | undefined,
         location: TextRange,
         skipInitializer?: boolean) {
+        const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
         if (!skipInitializer) {
             const initializer = visitNode(getInitializerOfBindingOrAssignmentElement(element), flattenContext.visitor, isExpression);
             if (initializer) {
                 // Combine value and initializer
-                value = value ? createDefaultValueCheck(flattenContext, value, initializer, location) : initializer;
+                if (value) {
+                    value = createDefaultValueCheck(flattenContext, value, initializer, location);
+                    // If 'value' is not a simple expression, it could contain side-effecting code that should evaluate before an object or array binding pattern.
+                    if (!isSimpleInlineableExpression(initializer) && isBindingOrAssignmentPattern(bindingTarget)) {
+                        value = ensureIdentifier(flattenContext, value, /*reuseIdentifierExpressions*/ true, location);
+                    }
+                }
+                else {
+                    value = initializer;
+                }
             }
             else if (!value) {
                 // Use 'void 0' in absence of value and initializer
                 value = flattenContext.context.factory.createVoidZero();
             }
         }
-        const bindingTarget = getTargetOfBindingOrAssignmentElement(element)!; // TODO: GH#18217
         if (isObjectBindingOrAssignmentPattern(bindingTarget)) {
             flattenObjectBindingOrAssignmentPattern(flattenContext, element, bindingTarget, value!, location);
         }
@@ -393,13 +403,14 @@ namespace ts {
             if (flattenContext.level >= FlattenLevel.ObjectRest) {
                 // If an array pattern contains an ObjectRest, we must cache the result so that we
                 // can perform the ObjectRest destructuring in a different declaration
-                if (element.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+                if (element.transformFlags & TransformFlags.ContainsObjectRestOrSpread || flattenContext.hasTransformedPriorElement && !isSimpleBindingOrAssignmentElement(element)) {
+                    flattenContext.hasTransformedPriorElement = true;
                     const temp = flattenContext.context.factory.createTempVariable(/*recordTempVariable*/ undefined);
                     if (flattenContext.hoistTempVariables) {
                         flattenContext.context.hoistVariableDeclaration(temp);
                     }
 
-                    restContainingElements = append(restContainingElements, <[Identifier, BindingOrAssignmentElement]>[temp, element]);
+                    restContainingElements = append(restContainingElements, [temp, element] as [Identifier, BindingOrAssignmentElement]);
                     bindingElements = append(bindingElements, flattenContext.createArrayBindingOrAssignmentElement(temp));
                 }
                 else {
@@ -426,6 +437,17 @@ namespace ts {
                 flattenBindingOrAssignmentElement(flattenContext, element, id, element);
             }
         }
+    }
+
+    function isSimpleBindingOrAssignmentElement(element: BindingOrAssignmentElement): boolean {
+        const target = getTargetOfBindingOrAssignmentElement(element);
+        if (!target || isOmittedExpression(target)) return true;
+        const propertyName = tryGetPropertyNameOfBindingOrAssignmentElement(element);
+        if (propertyName && !isPropertyNameLiteral(propertyName)) return false;
+        const initializer = getInitializerOfBindingOrAssignmentElement(element);
+        if (initializer && !isSimpleInlineableExpression(initializer)) return false;
+        if (isBindingOrAssignmentPattern(target)) return every(getElementsOfBindingOrAssignmentPattern(target), isSimpleBindingOrAssignmentElement);
+        return isIdentifier(target);
     }
 
     /**
@@ -496,7 +518,7 @@ namespace ts {
 
     function makeArrayBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isArrayBindingElement);
-        return factory.createArrayBindingPattern(<ArrayBindingElement[]>elements);
+        return factory.createArrayBindingPattern(elements as ArrayBindingElement[]);
     }
 
     function makeArrayAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
@@ -505,7 +527,7 @@ namespace ts {
 
     function makeObjectBindingPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {
         Debug.assertEachNode(elements, isBindingElement);
-        return factory.createObjectBindingPattern(<BindingElement[]>elements);
+        return factory.createObjectBindingPattern(elements as BindingElement[]);
     }
 
     function makeObjectAssignmentPattern(factory: NodeFactory, elements: BindingOrAssignmentElement[]) {

@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: false
 class MyTestClass {
     private canary: number;
     static staticCanary: number;

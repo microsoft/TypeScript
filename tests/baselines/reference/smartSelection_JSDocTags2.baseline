@@ -1,0 +1,22 @@
+/**
+ * @type {/**/string}
+ */
+const foo;
+
+
+          string 
+
+
+   @type {string}↲
+•  
+
+
+/**
+ * @type {string}
+ */
+
+
+/**
+ * @type {string}
+ */
+const foo;

@@ -1,0 +1,44 @@
+tests/cases/conformance/jsdoc/declarations/file.js(1,5): error TS4084: Exported type alias 'BaseFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+tests/cases/conformance/jsdoc/declarations/file.js(3,4): error TS4084: Exported type alias 'BaseFactoryFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+tests/cases/conformance/jsdoc/declarations/file.js(6,5): error TS4084: Exported type alias 'couldntThinkOfAny' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+
+
+==== tests/cases/conformance/jsdoc/declarations/base.js (0 errors) ====
+    class Base {
+        constructor() {}
+    }
+    
+    const BaseFactory = () => {
+        return new Base();
+    };
+    
+    BaseFactory.Base = Base;
+    
+    module.exports = BaseFactory;
+    
+==== tests/cases/conformance/jsdoc/declarations/file.js (3 errors) ====
+    /** @typedef {import('./base')} BaseFactory */
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4084: Exported type alias 'BaseFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+    /**
+     * @callback BaseFactoryFactory
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     * @param {import('./base')} factory
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     */
+    ~
+!!! error TS4084: Exported type alias 'BaseFactoryFactory' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+    /** @enum {import('./base')} */
+        ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS4084: Exported type alias 'couldntThinkOfAny' has or is using private name 'Base' from module "tests/cases/conformance/jsdoc/declarations/base".
+    const couldntThinkOfAny = {}
+    
+    /**
+     *
+     * @param {InstanceType<BaseFactory["Base"]>} base
+     * @returns {InstanceType<BaseFactory["Base"]>}
+     */
+    const test = (base) => {
+        return base;
+    };
+    

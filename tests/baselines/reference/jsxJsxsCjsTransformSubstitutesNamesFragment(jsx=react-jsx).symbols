@@ -4,13 +4,13 @@ const a = <>
 >a : Symbol(a, Decl(jsxJsxsCjsTransformSubstitutesNamesFragment.tsx, 1, 5))
 
   <p></p>
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2467, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
+>p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 
   text
   <div></div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 
 </>
 
