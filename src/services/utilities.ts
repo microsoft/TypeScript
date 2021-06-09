@@ -2377,9 +2377,14 @@ namespace ts {
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-        const visited = replaceNode ?
-            visitEachChild(node, n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode), nullTransformationContext) :
-            visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        const nodeClone: (n: T) => T = replaceNode
+            ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+            : getSynthesizedDeepClone;
+        const nodesClone: (ns: NodeArray<T>) => NodeArray<T> = replaceNode
+            ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+            : ns => ns && getSynthesizedDeepClones(ns);
+        const visited =
+            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -2390,8 +2395,8 @@ namespace ts {
             return setTextRange(clone, node);
         }
 
-        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
-        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
+        // the new node created by visitEachChild with the extra changes factory.cloneNode
         // would have made.
         (visited as Mutable<T>).parent = undefined!;
         return visited;
