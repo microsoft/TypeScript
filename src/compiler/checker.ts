@@ -11748,7 +11748,7 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
-                        const indexInfo = !isLateBoundName(name) && getApplicableIndexInfo(type, getLiteralType(isNumericLiteralName(name) ? +name : unescapeLeadingUnderscores(name)));
+                        const indexInfo = !isLateBoundName(name) && getApplicableIndexInfoForName(type, name);
                         if (indexInfo) {
                             checkFlags |= CheckFlags.WritePartial | (indexInfo.isReadonly ? CheckFlags.Readonly : 0);
                             indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
