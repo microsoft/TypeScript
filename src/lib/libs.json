@@ -51,8 +51,9 @@
         "es2021.string",
         "es2021.promise",
         "es2021.weakref",
-        "esnext.array",
         "esnext.intl",
+        "esnext.array",
+        "esnext.string",
         // Default libraries
         "es5.full",
         "es2015.full",
