@@ -778,7 +778,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -818,7 +818,7 @@ function secondsecond_part1Spread() {
     }
 }
 var secondsecond_part1_ar = [20, 30];
-secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar)));
+secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar), false));
 var C = (function () {
     function C() {
     }
@@ -835,7 +835,7 @@ function forthirdthird_part1Rest() {
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;ACXtC,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,IAAE;ACdvD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB,KAAK,CAAC;ACXtC,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED,SAAS,wBAAwB;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AACrD,IAAM,qBAAqB,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AACvC,wBAAwB,8BAAC,EAAE,UAAK,qBAAqB,WAAE;ACdvD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;AAChD,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -865,7 +865,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>    return ar;
 >>>};
 >>>var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
->>>    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+>>>    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 >>>        if (ar || !(i in from)) {
 >>>            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 >>>            ar[i] = from[i];
@@ -1243,7 +1243,7 @@ sourceFile:../../../second/second_part1.ts
 8 >                                 ^^
 9 >                                   ^
 10>                                    ^
-11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1266,14 +1266,14 @@ sourceFile:../../../second/second_part1.ts
 9 >Emitted(57, 37) Source(14, 39) + SourceIndex(3)
 10>Emitted(57, 38) Source(14, 40) + SourceIndex(3)
 ---
->>>secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar)));
+>>>secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar), false));
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^
 3 >                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                                      ^^
 5 >                                                        ^^^^^^^^^^
 6 >                                                                  ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                       ^^^^
+7 >                                                                                       ^^^^^^^^^^^
 1->
   >
 2 >secondsecond_part1Spread
@@ -1288,7 +1288,7 @@ sourceFile:../../../second/second_part1.ts
 4 >Emitted(58, 57) Source(15, 28) + SourceIndex(3)
 5 >Emitted(58, 67) Source(15, 33) + SourceIndex(3)
 6 >Emitted(58, 88) Source(15, 54) + SourceIndex(3)
-7 >Emitted(58, 92) Source(15, 56) + SourceIndex(3)
+7 >Emitted(58, 99) Source(15, 56) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -1553,7 +1553,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":840,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":842,"end":1342,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1344,"end":1494,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1344,"end":1494,"kind":"text"}]},{"pos":1494,"end":2062,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1494,"end":2062,"kind":"text"}]},{"pos":2062,"end":2215,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":1520,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1370,"end":1520,"kind":"text"}]},{"pos":1520,"end":2095,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1520,"end":2095,"kind":"text"}]},{"pos":2095,"end":2248,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1577,9 +1577,9 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-840):: typescript:spreadArray
+emitHelpers: (506-866):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -1588,7 +1588,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || from);
 };
 ----------------------------------------------------------------------
-emitHelpers: (842-1342):: typescript:rest
+emitHelpers: (868-1368):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1601,9 +1601,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1344-1494):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1370-1520):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1344-1494)
+text: (1370-1520)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -1613,9 +1613,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1494-2062):: ../../../2/second-output.js texts:: 1
+prepend: (1520-2095):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1494-2062)
+text: (1520-2095)
 var N;
 (function (N) {
     function f() {
@@ -1630,7 +1630,7 @@ function secondsecond_part1Spread() {
     }
 }
 var secondsecond_part1_ar = [20, 30];
-secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar)));
+secondsecond_part1Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part1_ar), false));
 var C = (function () {
     function C() {
     }
@@ -1641,7 +1641,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (2062-2215)
+text: (2095-2248)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -1703,45 +1703,45 @@ declare function forthirdthird_part1Rest(): void;
         },
         {
           "pos": 506,
-          "end": 840,
+          "end": 866,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 842,
-          "end": 1342,
+          "pos": 868,
+          "end": 1368,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1344,
-          "end": 1494,
+          "pos": 1370,
+          "end": 1520,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1344,
-              "end": 1494,
+              "pos": 1370,
+              "end": 1520,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1494,
-          "end": 2062,
+          "pos": 1520,
+          "end": 2095,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1494,
-              "end": 2062,
+              "pos": 1520,
+              "end": 2095,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2062,
-          "end": 2215,
+          "pos": 2095,
+          "end": 2248,
           "kind": "text"
         }
       ],

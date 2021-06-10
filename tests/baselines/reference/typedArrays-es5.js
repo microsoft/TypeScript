@@ -34,7 +34,7 @@ const uint8ClampedArray = new Uint8ClampedArray(1);
 
 //// [typedArrays-es5.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];

@@ -43,7 +43,7 @@ var {h: {h1 = [undefined, null]}}: { h: { h1: number[] } } = { h: { h1: [1, 2] }
 
 //// [destructuringVariableDeclaration1ES5.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];

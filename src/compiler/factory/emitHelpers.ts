@@ -287,7 +287,7 @@ namespace ts {
             return factory.createCallExpression(
                 getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                packFrom ? [to, from, factory.createTrue()] : [to, from]
+                [to, from, packFrom ? factory.createTrue() : factory.createFalse()]
             );
         }
 
@@ -638,7 +638,7 @@ namespace ts {
         scoped: false,
         text: `
             var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-                if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+                if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
                     if (ar || !(i in from)) {
                         if (!ar) ar = Array.prototype.slice.call(from, 0, i);
                         ar[i] = from[i];

@@ -63,7 +63,7 @@ var d9 = [[...temp1], ...["hello"]];
 //      ElementList, Elisionopt   AssignmentExpression
 //      ElementList, Elisionopt   SpreadElement
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -75,10 +75,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 //      ...   AssignmentExpression
 var a0 = [, , 2, 3, 4];
 var a1 = ["hello", "world"];
-var a2 = __spreadArray(__spreadArray([, , ,], a0, true), ["hello"]);
+var a2 = __spreadArray(__spreadArray([, , ,], a0, true), ["hello"], false);
 var a3 = __spreadArray([, ,], a0, true);
 var a4 = [function () { return 1; },];
-var a5 = __spreadArray(__spreadArray([], a0, true), [,]);
+var a5 = __spreadArray(__spreadArray([], a0, true), [,], false);
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
 //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -110,4 +110,4 @@ var d5 = __spreadArray([], temp3, true);
 var d6 = __spreadArray([], temp4, true);
 var d7 = __spreadArray([], temp1, true);
 var d8 = [__spreadArray([], temp1, true)];
-var d9 = __spreadArray([__spreadArray([], temp1, true)], ["hello"]);
+var d9 = __spreadArray([__spreadArray([], temp1, true)], ["hello"], false);

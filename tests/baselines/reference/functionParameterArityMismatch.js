@@ -18,7 +18,7 @@ f2(...[1], 2, 3, 4, 5, 6);
 
 //// [functionParameterArityMismatch.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -33,4 +33,4 @@ f2(1);
 f2(1, 2, 3);
 f2(1, 2, 3, 4, 5);
 f2(1, 2, 3, 4, 5, 6, 7);
-f2.apply(void 0, __spreadArray(__spreadArray([], [1]), [2, 3, 4, 5, 6]));
+f2.apply(void 0, __spreadArray(__spreadArray([], [1], false), [2, 3, 4, 5, 6], false));

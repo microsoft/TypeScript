@@ -675,7 +675,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -962,7 +962,7 @@ function f1(thing) {
     var x1 = path(thing, 'a'); // { x: number, y: string }
     var x2 = path(thing, 'a', 'y'); // string
     var x3 = path(thing, 'b'); // boolean
-    var x4 = path.apply(void 0, __spreadArray([thing], ['a', 'x'])); // any
+    var x4 = path.apply(void 0, __spreadArray([thing], ['a', 'x'], false)); // any
 }
 // Repro from comment in #12114
 var assignTo2 = function (object, key1, key2) {

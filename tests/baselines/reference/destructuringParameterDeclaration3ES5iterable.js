@@ -65,7 +65,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -114,8 +114,8 @@ function a11(_a) {
 }
 var array = [1, 2, 3];
 var array2 = [true, false, "hello"];
-a2(__spreadArray([], __read(array)));
-a1.apply(void 0, __spreadArray([], __read(array)));
+a2(__spreadArray([], __read(array), false));
+a1.apply(void 0, __spreadArray([], __read(array), false));
 a9([1, 2, [["string"]], false, true]); // Parameter type is [any, any, [[any]]]
 a10([1, 2, [["string"]], false, true]); // Parameter type is any[]
 a10([1, 2, 3, false, true]); // Parameter type is any[]

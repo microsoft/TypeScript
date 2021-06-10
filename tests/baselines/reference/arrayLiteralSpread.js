@@ -25,7 +25,7 @@ function f2() {
 
 //// [arrayLiteralSpread.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -38,15 +38,15 @@ function f0() {
     var a1 = __spreadArray([], a, true);
     var a2 = __spreadArray([1], a, true);
     var a3 = __spreadArray([1, 2], a, true);
-    var a4 = __spreadArray(__spreadArray([], a, true), [1]);
-    var a5 = __spreadArray(__spreadArray([], a, true), [1, 2]);
-    var a6 = __spreadArray(__spreadArray([1, 2], a, true), [1, 2]);
-    var a7 = __spreadArray(__spreadArray(__spreadArray([1], a, true), [2]), a, true);
+    var a4 = __spreadArray(__spreadArray([], a, true), [1], false);
+    var a5 = __spreadArray(__spreadArray([], a, true), [1, 2], false);
+    var a6 = __spreadArray(__spreadArray([1, 2], a, true), [1, 2], false);
+    var a7 = __spreadArray(__spreadArray(__spreadArray([1], a, true), [2], false), a, true);
     var a8 = __spreadArray(__spreadArray(__spreadArray([], a, true), a, true), a, true);
 }
 function f1() {
     var a = [1, 2, 3];
-    var b = __spreadArray(__spreadArray(["hello"], a, true), [true]);
+    var b = __spreadArray(__spreadArray(["hello"], a, true), [true], false);
     var b;
 }
 function f2() {

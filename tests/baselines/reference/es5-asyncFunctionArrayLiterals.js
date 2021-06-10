@@ -70,7 +70,7 @@ function arrayLiteral2() {
                     _a = [[]];
                     return [4 /*yield*/, y];
                 case 1:
-                    x = __spreadArray.apply(void 0, [__spreadArray.apply(void 0, _a.concat([(_b.sent()), true])), [z]]);
+                    x = __spreadArray.apply(void 0, [__spreadArray.apply(void 0, _a.concat([(_b.sent()), true])), [z], false]);
                     return [2 /*return*/];
             }
         });
@@ -85,7 +85,7 @@ function arrayLiteral3() {
                     _a = [__spreadArray([], y, true)];
                     return [4 /*yield*/, z];
                 case 1:
-                    x = __spreadArray.apply(void 0, _a.concat([[_b.sent()]]));
+                    x = __spreadArray.apply(void 0, _a.concat([[_b.sent()], false]));
                     return [2 /*return*/];
             }
         });

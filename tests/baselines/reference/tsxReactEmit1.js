@@ -43,7 +43,7 @@ var whitespace3 = <div>
 
 //// [file.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -70,10 +70,10 @@ var SomeClass = /** @class */ (function () {
     SomeClass.prototype.f = function () {
         var _this = this;
         var rewrites1 = React.createElement("div", null, function () { return _this; });
-        var rewrites2 = React.createElement("div", null, __spreadArray(__spreadArray([p], p, true), [p]));
+        var rewrites2 = React.createElement("div", null, __spreadArray(__spreadArray([p], p, true), [p], false));
         var rewrites3 = React.createElement("div", null, { p: p });
         var rewrites4 = React.createElement("div", { a: function () { return _this; } });
-        var rewrites5 = React.createElement("div", { a: __spreadArray(__spreadArray([p], p, true), [p]) });
+        var rewrites5 = React.createElement("div", { a: __spreadArray(__spreadArray([p], p, true), [p], false) });
         var rewrites6 = React.createElement("div", { a: { p: p } });
     };
     return SomeClass;

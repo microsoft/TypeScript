@@ -13,7 +13,7 @@ withRest(...n);
 
 //// [callOverload.js]
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -25,6 +25,6 @@ var n;
 fn(1); // no error
 fn(1, 2, 3, 4);
 takeTwo(1, 2, 3, 4);
-withRest.apply(void 0, __spreadArray(['a'], n)); // no error
+withRest.apply(void 0, __spreadArray(['a'], n, false)); // no error
 withRest();
 withRest.apply(void 0, n);

@@ -41,7 +41,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -68,7 +68,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -100,11 +100,11 @@ function appfile4Spread() {
     }
 }
 var appfile4_ar = [20, 30];
-appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -134,7 +134,7 @@ sourceFile:../lib/file0.ts
 >>>    return ar;
 >>>};
 >>>var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
->>>    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+>>>    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 >>>        if (ar || !(i in from)) {
 >>>            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 >>>            ar[i] = from[i];
@@ -244,7 +244,7 @@ sourceFile:../lib/file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -267,14 +267,14 @@ sourceFile:../lib/file0.ts
 9 >Emitted(44, 27) Source(3, 29) + SourceIndex(0)
 10>Emitted(44, 28) Source(3, 30) + SourceIndex(0)
 ---
->>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+>>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >libfile0Spread
@@ -289,7 +289,7 @@ sourceFile:../lib/file0.ts
 4 >Emitted(45, 47) Source(4, 18) + SourceIndex(0)
 5 >Emitted(45, 57) Source(4, 23) + SourceIndex(0)
 6 >Emitted(45, 68) Source(4, 34) + SourceIndex(0)
-7 >Emitted(45, 72) Source(4, 36) + SourceIndex(0)
+7 >Emitted(45, 79) Source(4, 36) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -617,7 +617,7 @@ sourceFile:file4.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -640,14 +640,14 @@ sourceFile:file4.ts
 9 >Emitted(76, 27) Source(3, 29) + SourceIndex(5)
 10>Emitted(76, 28) Source(3, 30) + SourceIndex(5)
 ---
->>>appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+>>>appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >appfile4Spread
@@ -662,12 +662,12 @@ sourceFile:file4.ts
 4 >Emitted(77, 47) Source(4, 18) + SourceIndex(5)
 5 >Emitted(77, 57) Source(4, 23) + SourceIndex(5)
 6 >Emitted(77, 68) Source(4, 34) + SourceIndex(5)
-7 >Emitted(77, 72) Source(4, 36) + SourceIndex(5)
+7 >Emitted(77, 79) Source(4, 36) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":840,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":842,"end":1342,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1344,"end":2082,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1344,"end":2082,"kind":"text"}]},{"pos":2082,"end":2672,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":2115,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1370,"end":2115,"kind":"text"}]},{"pos":2115,"end":2712,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -691,9 +691,9 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-840):: typescript:spreadArray
+emitHelpers: (506-866):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -702,7 +702,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || from);
 };
 ----------------------------------------------------------------------
-emitHelpers: (842-1342):: typescript:rest
+emitHelpers: (868-1368):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -715,9 +715,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1344-2082):: ../lib/module.js texts:: 1
+prepend: (1370-2115):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1344-2082)
+text: (1370-2115)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -726,7 +726,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -743,7 +743,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2082-2672)
+text: (2115-2712)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -761,7 +761,7 @@ function appfile4Spread() {
     }
 }
 var appfile4_ar = [20, 30];
-appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 
 ======================================================================
 ======================================================================
@@ -810,32 +810,32 @@ declare const appfile4_ar: number[];
         },
         {
           "pos": 506,
-          "end": 840,
+          "end": 866,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 842,
-          "end": 1342,
+          "pos": 868,
+          "end": 1368,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1344,
-          "end": 2082,
+          "pos": 1370,
+          "end": 2115,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1344,
-              "end": 2082,
+              "pos": 1370,
+              "end": 2115,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2082,
-          "end": 2672,
+          "pos": 2115,
+          "end": 2712,
           "kind": "text"
         }
       ],
@@ -895,7 +895,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -911,7 +911,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -929,7 +929,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe,KAAK,CAAC;;;;;;ICArC,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -959,7 +959,7 @@ sourceFile:file0.ts
 >>>    return ar;
 >>>};
 >>>var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
->>>    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+>>>    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
 >>>        if (ar || !(i in from)) {
 >>>            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
 >>>            ar[i] = from[i];
@@ -1058,7 +1058,7 @@ sourceFile:file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1081,14 +1081,14 @@ sourceFile:file0.ts
 9 >Emitted(33, 27) Source(3, 29) + SourceIndex(0)
 10>Emitted(33, 28) Source(3, 30) + SourceIndex(0)
 ---
->>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+>>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >libfile0Spread
@@ -1103,7 +1103,7 @@ sourceFile:file0.ts
 4 >Emitted(34, 47) Source(4, 18) + SourceIndex(0)
 5 >Emitted(34, 57) Source(4, 23) + SourceIndex(0)
 6 >Emitted(34, 68) Source(4, 34) + SourceIndex(0)
-7 >Emitted(34, 72) Source(4, 36) + SourceIndex(0)
+7 >Emitted(34, 79) Source(4, 36) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1209,7 +1209,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":840,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":842,"end":1580,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1613,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1233,9 +1233,9 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-840):: typescript:spreadArray
+emitHelpers: (506-866):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
             if (!ar) ar = Array.prototype.slice.call(from, 0, i);
             ar[i] = from[i];
@@ -1244,7 +1244,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || from);
 };
 ----------------------------------------------------------------------
-text: (842-1580)
+text: (868-1613)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1253,7 +1253,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1307,13 +1307,13 @@ declare const globalConst = 10;
         },
         {
           "pos": 506,
-          "end": 840,
+          "end": 866,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 842,
-          "end": 1580,
+          "pos": 868,
+          "end": 1613,
           "kind": "text"
         }
       ],
