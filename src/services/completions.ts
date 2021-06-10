@@ -1245,6 +1245,7 @@ namespace ts.Completions {
                         break;
 
                     case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxSpreadAttribute:
                         // For `<div foo={true} [||] ></div>`, `parent` will be `{true}` and `previousToken` will be `}`
                         if (previousToken.kind === SyntaxKind.CloseBraceToken && currentToken.kind === SyntaxKind.GreaterThanToken) {
                             isJsxIdentifierExpected = true;
