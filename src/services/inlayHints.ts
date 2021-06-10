@@ -8,7 +8,6 @@ namespace ts.InlayHints {
 
         const checker = program.getTypeChecker();
         const result: InlayHint[] = [];
-        const callExpressionHintableCache = program.inlayHintsCallExpressionHintableCache ??= new Map<CallExpression, boolean>();
 
         visitor(file);
         return result;
@@ -48,12 +47,9 @@ namespace ts.InlayHints {
             else if (preferences.includeInlayEnumMemberValueHints && isEnumMember(node)) {
                 visitEnumMember(node);
             }
-            else if (isCallExpression(node) || isNewExpression(node)) {
+            else if (preferences.includeInlayParameterNameHints && isCallExpression(node) || isNewExpression(node)) {
                 if (preferences.includeInlayParameterNameHints) {
                     visitCallOrNewExpression(node);
-                }
-                if (preferences.includeInlayCallChainsHints && isCallExpression(node)) {
-                    visitCallChains(node);
                 }
             }
             else {
@@ -100,42 +96,6 @@ namespace ts.InlayHints {
                 kind: InlayHintKind.Other,
                 whitespaceBefore: true,
             });
-        }
-
-        function visitCallChains(call: CallExpression) {
-            if (!shouldCallExpressionHint(call)) {
-                return;
-            }
-
-            const candidates: Signature[] = [];
-            const signature = checker.getResolvedSignature(call, candidates);
-            if (!signature || !candidates.length) {
-                return;
-            }
-
-            const returnType = checker.getReturnTypeOfSignature(signature);
-            const typeDisplayString = printTypeInSingleLine(returnType);
-            if (!typeDisplayString) {
-                return;
-            }
-
-            addTypeHints(typeDisplayString, call.end);
-        }
-
-        function shouldCallExpressionHint(call: CallExpression) {
-            if (!callExpressionHintableCache.has(call)) {
-                let current = call;
-                while (true) {
-                    if (!isAccessExpression(current.parent) || !isCallExpression(current.parent.parent)) {
-                        callExpressionHintableCache.set(current, false);
-                        break;
-                    }
-
-                    callExpressionHintableCache.set(current, true);
-                    current = current.parent.parent;
-                }
-            }
-            return callExpressionHintableCache.get(call);
         }
 
         function visitEnumMember(member: EnumMember) {

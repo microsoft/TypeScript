@@ -3967,7 +3967,6 @@ namespace ts {
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
          */
         /*@internal*/ fileExists(fileName: string): boolean;
-        /*@internal*/ inlayHintsCallExpressionHintableCache?: ESMap<CallExpression, boolean>
     }
 
     /*@internal*/
@@ -8473,7 +8472,6 @@ namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
-        readonly includeInlayCallChainsHints?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

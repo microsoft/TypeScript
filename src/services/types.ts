@@ -582,7 +582,6 @@ namespace ts {
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
-        readonly includeInlayCallChainsHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
