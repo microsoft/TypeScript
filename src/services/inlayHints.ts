@@ -47,10 +47,8 @@ namespace ts.InlayHints {
             else if (preferences.includeInlayEnumMemberValueHints && isEnumMember(node)) {
                 visitEnumMember(node);
             }
-            else if (preferences.includeInlayParameterNameHints && isCallExpression(node) || isNewExpression(node)) {
-                if (preferences.includeInlayParameterNameHints) {
-                    visitCallOrNewExpression(node);
-                }
+            else if (preferences.includeInlayParameterNameHints && (isCallExpression(node) || isNewExpression(node))) {
+                visitCallOrNewExpression(node);
             }
             else {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionExpressionLike(node)) {
