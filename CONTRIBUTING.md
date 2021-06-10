@@ -87,7 +87,7 @@ Run `gulp` to build a version of the compiler/language service that reflects cha
 
 ### Avoiding problems with long paths
 
-Some of the baseline test files have very long names. If your repository is cloned to a directory with a long path, the total path might exceed 260 characters and not function properly on Windows. It is therefore recommended to clone into a location with short path such as `D:\TypeScript`.
+Some of the baseline test files have very long names. If your repository is cloned to a directory with a long path, the total path might exceed 260 characters and not function properly on Windows. It is therefore recommended to keep the code in a location with a short path, such as `D:\TypeScript`.
 
 ## Contributing bug fixes
 
