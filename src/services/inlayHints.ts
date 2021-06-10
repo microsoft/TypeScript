@@ -108,7 +108,8 @@ namespace ts.InlayHints {
         }
 
         function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-            if (decl.type || !decl.initializer) {
+            const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(decl);
+            if (effectiveTypeAnnotation || !decl.initializer) {
                 return;
             }
 
@@ -155,7 +156,8 @@ namespace ts.InlayHints {
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
-            if (decl.type || !decl.body) {
+            const effectiveTypeAnnotation = getEffectiveReturnTypeNode(decl);
+            if (effectiveTypeAnnotation || !decl.body) {
                 return;
             }
 
@@ -184,7 +186,7 @@ namespace ts.InlayHints {
         }
 
         function visitFunctionExpressionLikeForParameterType(expr: ArrowFunction | FunctionExpression) {
-            if (!expr.parameters.length || expr.parameters.every(param => param.type)) {
+            if (!expr.parameters.length || expr.parameters.every(param => !!getEffectiveTypeAnnotationNode(param))) {
                 return;
             }
 
@@ -201,7 +203,9 @@ namespace ts.InlayHints {
 
             for (let i = 0; i < expr.parameters.length && i < signature.parameters.length; ++i) {
                 const param = expr.parameters[i];
-                if (param.type) {
+                const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
+
+                if (effectiveTypeAnnotation) {
                     continue;
                 }
 
