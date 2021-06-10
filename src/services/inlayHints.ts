@@ -69,9 +69,9 @@ namespace ts.InlayHints {
             return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node);
         }
 
-        function addParameterHints(text: string, position: number) {
+        function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
             result.push({
-                text: `${truncation(text, maxHintsLength)}:`,
+                text: `${isFirstVariadicArgument ? "..." : ""}${truncation(text, maxHintsLength)}:`,
                 position,
                 kind: InlayHintKind.Parameter,
                 whitespaceAfter: true,
@@ -142,10 +142,11 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                const parameterName = checker.getParameterIdentifierNameAtPosition(signature, i);
-                if (parameterName) {
-                    if (preferences.includeInlayDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
-                        addParameterHints(unescapeLeadingUnderscores(parameterName), args[i].getStart());
+                const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
+                if (identifierNameInfo) {
+                    const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
+                    if (isFirstVariadicArgument || preferences.includeInlayDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
+                        addParameterHints(unescapeLeadingUnderscores(parameterName), args[i].getStart(), isFirstVariadicArgument);
                     }
                 }
             }

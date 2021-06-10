@@ -12,7 +12,7 @@ verify.getInlayHints([
         whitespaceAfter: true
     },
     {
-        text: 'b:',
+        text: '...b:',
         position: markers[1].position,
         kind: ts.InlayHintKind.Parameter,
         whitespaceAfter: true

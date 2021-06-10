@@ -30337,11 +30337,11 @@ namespace ts {
             return restParameter.escapedName;
         }
 
-        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): __String | undefined {
+        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [__String, boolean] | undefined {
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
                 const param = signature.parameters[pos];
-                return isParameterDeclarationWithIdentifierName(param) ? param.escapedName : undefined;
+                return isParameterDeclarationWithIdentifierName(param) ? [param.escapedName, false] : undefined;
             }
 
             const restParameter = signature.parameters[paramCount] || unknownSymbol;
@@ -30353,11 +30353,16 @@ namespace ts {
             if (isTupleType(restType)) {
                 const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
                 const index = pos - paramCount;
-                return associatedNames ? getTupleElementLabel(associatedNames[index]) : undefined;
+                const associatedName = associatedNames?.[index];
+                const isRestTupleElement = !!associatedName?.dotDotDotToken;
+                return associatedName ? [
+                    getTupleElementLabel(associatedName),
+                    isRestTupleElement
+                ] : undefined;
             }
 
             if (pos === paramCount) {
-                return restParameter.escapedName;
+                return [restParameter.escapedName, true];
             }
             return undefined;
         }

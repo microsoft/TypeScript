@@ -4100,7 +4100,7 @@ namespace ts {
          * Returns `any` if the index is not valid.
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
-        /* @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): __String | undefined;
+        /* @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [__String, boolean] | undefined;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
         /* @internal */ getNonOptionalType(type: Type): Type;
