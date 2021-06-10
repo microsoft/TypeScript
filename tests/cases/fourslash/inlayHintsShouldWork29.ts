@@ -14,7 +14,7 @@ verify.getInlayHints([
         whitespaceAfter: true
     },
     {
-        text: ':(c: (d: 2 | 3) => void) => ...',
+        text: ': (c: (d: 2 | 3) => void) => ...',
         position: markers[1].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true
@@ -26,7 +26,7 @@ verify.getInlayHints([
         whitespaceAfter: true
     },
     {
-        text: ':2 | 3',
+        text: ': 2 | 3',
         position: markers[3].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true

@@ -5,7 +5,7 @@
 const markers = test.markers();
 verify.getInlayHints([
     {
-        text: `:"I'm very very very very ve...`,
+        text: `: "I'm very very very very ve...`,
         position: markers[0].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true

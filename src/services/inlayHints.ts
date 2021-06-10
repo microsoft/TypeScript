@@ -80,7 +80,7 @@ namespace ts.InlayHints {
 
         function addTypeHints(text: string, position: number) {
             result.push({
-                text: `:${truncation(text, maxHintsLength)}`,
+                text: `: ${truncation(text, maxHintsLength)}`,
                 position,
                 kind: InlayHintKind.Type,
                 whitespaceBefore: true,

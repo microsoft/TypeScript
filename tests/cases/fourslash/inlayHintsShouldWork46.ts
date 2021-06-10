@@ -13,7 +13,7 @@ goTo.file('/b.js')
 const markers = test.markers();
 verify.getInlayHints([
     {
-        text: ':typeof import("/a")',
+        text: ': typeof import("/a")',
         position: markers[0].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true

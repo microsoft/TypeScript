@@ -6,7 +6,7 @@
 const markers = test.markers();
 verify.getInlayHints([
     {
-        text: ':2 | 3',
+        text: ': 2 | 3',
         position: markers[0].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true
