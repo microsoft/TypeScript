@@ -14396,13 +14396,12 @@ namespace ts {
             if (includeNonPublic || !(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
                 if (!type) {
-                    if (prop.escapedName === InternalSymbolName.Default) {
-                        type = getLiteralType("default");
+                    const name = getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
+                    if (name && (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral) && !(include & TypeFlags.StringLiteral)) {
+                        return neverType;
                     }
-                    else {
-                        const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
-                        type = name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getLiteralType(symbolName(prop)) : undefined);
-                    }
+                    type = prop.escapedName === InternalSymbolName.Default ? getLiteralType("default") :
+                        name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getLiteralType(symbolName(prop)) : undefined);
                 }
                 if (type && type.flags & include) {
                     return type;
@@ -14413,7 +14412,8 @@ namespace ts {
 
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean) {
             const origin = includeOrigin && (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference) || type.aliasSymbol) ? createOriginIndexType(type) : undefined;
-            const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, include));
+            const propInclude = include & TypeFlags.String && getIndexInfoOfType(type, stringType) ? include & ~TypeFlags.StringLiteral : include;
+            const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, propInclude));
             const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && info.keyType.flags & include ?
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
             return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
