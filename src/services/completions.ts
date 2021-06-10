@@ -494,10 +494,11 @@ namespace ts.Completions {
         }
 
         if (originIsResolvedExport(origin)) {
-            Debug.assertIsDefined(importCompletionNode);
-            ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, useSemicolons, options, preferences));
             sourceDisplay = [textPart(origin.moduleSpecifier)];
-            isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
+            if (importCompletionNode) {
+                ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, useSemicolons, options, preferences));
+                isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
+            }
         }
 
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
