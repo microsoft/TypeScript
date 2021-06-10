@@ -38,6 +38,9 @@ namespace ts {
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
         const factory = context.factory;
+        const immutableTrue = memoize(() => setEmitFlags(factory.createTrue(), EmitFlags.Immutable));
+        const immutableFalse = memoize(() => setEmitFlags(factory.createFalse(), EmitFlags.Immutable));
+
         return {
             getUnscopedHelperName,
             // TypeScript Helpers
@@ -287,7 +290,7 @@ namespace ts {
             return factory.createCallExpression(
                 getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                [to, from, packFrom ? factory.createTrue() : factory.createFalse()]
+                [to, from, packFrom ? immutableTrue() : immutableFalse()]
             );
         }
 
