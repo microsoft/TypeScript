@@ -405,25 +405,29 @@ type U3 = [...[string, number], boolean];
 //// [variadicTuples1.js]
 "use strict";
 // Variadics in tuple types
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 // Variadics in array literals
 function tup2(t, u) {
-    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t), [2]), u), [3]);
+    return __spreadArray(__spreadArray(__spreadArray(__spreadArray([1], t, true), [2]), u, true), [3]);
 }
 var t2 = tup2(['hello'], [10, true]);
 function concat(t, u) {
-    return __spreadArray(__spreadArray([], t), u);
+    return __spreadArray(__spreadArray([], t, true), u, true);
 }
 var tc1 = concat([], []);
 var tc2 = concat(['hello'], [42]);
 var tc3 = concat([1, 2, 3], sa);
 var tc4 = concat(sa, [1, 2, 3]); // Ideally would be [...string[], number, number, number]
 function concat2(t, u) {
-    return __spreadArray(__spreadArray([], t), u); // (T[number] | U[number])[]
+    return __spreadArray(__spreadArray([], t, true), u, true); // (T[number] | U[number])[]
 }
 var tc5 = concat2([1, 2, 3], [4, 5, 6]); // (1 | 2 | 3 | 4 | 5 | 6)[]
 function foo2(t1, t2, a1) {

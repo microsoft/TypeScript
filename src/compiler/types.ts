@@ -999,10 +999,13 @@ namespace ts {
         ;
 
     /* @internal */
-    export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
+    export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
+        hasTrailingComma: boolean;
+        /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
+    }
 
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, ReadonlyTextRange {
-        hasTrailingComma?: boolean;
+        readonly hasTrailingComma: boolean;
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
