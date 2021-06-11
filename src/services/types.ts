@@ -1054,7 +1054,7 @@ namespace ts {
 
     export interface JSDocTagInfo {
         name: string;
-        text?: SymbolDisplayPart[];
+        text?: string | SymbolDisplayPart[];
     }
 
     export interface QuickInfo {
