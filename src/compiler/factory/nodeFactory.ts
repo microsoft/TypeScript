@@ -5040,10 +5040,17 @@ namespace ts {
             libReferences: readonly FileReference[]
         ) {
             const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
-            for (const p in source) {
-                if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
-                (node as any)[p] = (source as any)[p];
+
+            // Climb the prototype chain to clone `SourceFile`s created by createRedirectSourceFile
+            let sourceNode = source;
+            while (isSourceFile(sourceNode)) {
+                for (const p in sourceNode) {
+                    if (p === "emitNode" || hasProperty(node, p) || !hasProperty(sourceNode, p)) continue;
+                    (node as any)[p] = (sourceNode as any)[p];
+                }
+                sourceNode = Object.getPrototypeOf(sourceNode);
             }
+
             node.flags |= source.flags;
             node.statements = createNodeArray(statements);
             node.endOfFileToken = source.endOfFileToken;
