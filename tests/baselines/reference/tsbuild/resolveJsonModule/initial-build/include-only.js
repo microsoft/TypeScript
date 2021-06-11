@@ -79,7 +79,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
 //// [/src/dist/tsconfig_withInclude.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6651571919-{\n  \"hello\": \"world\"\n}","signature":"6651571919-{\n  \"hello\": \"world\"\n}","affectsGlobalScope":true},{"version":"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello","signature":"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello","affectsGlobalScope":false}],"options":{"allowSyntheticDefaultImports":true,"composite":true,"configFilePath":"../tsconfig_withInclude.json","esModuleInterop":true,"explainFiles":true,"module":1,"moduleResolution":2,"outDir":"./","resolveJsonModule":true,"skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/hello.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"6651571919-{\n  \"hello\": \"world\"\n}","affectsGlobalScope":true},"-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"affectedFilesPendingEmit":[[2,1],[3,1]]},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig_withInclude.tsbuildinfo.readable.baseline.txt]
 {
@@ -107,20 +107,15 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
       },
       "../src/index.ts": {
         "version": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
-        "signature": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
-        "affectsGlobalScope": false
+        "signature": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello"
       }
     },
     "options": {
       "allowSyntheticDefaultImports": true,
       "composite": true,
-      "configFilePath": "../tsconfig_withInclude.json",
       "esModuleInterop": true,
-      "explainFiles": true,
       "module": 1,
-      "moduleResolution": 2,
       "outDir": "./",
-      "resolveJsonModule": true,
       "skipDefaultLibCheck": true
     },
     "referencedMap": {
@@ -150,6 +145,6 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1808
+  "size": 1056
 }
 

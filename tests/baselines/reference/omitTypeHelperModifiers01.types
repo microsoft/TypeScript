@@ -31,16 +31,16 @@ function f(x: B) {
 
     x.b = "hello";
 >x.b = "hello" : "hello"
->x.b : string | undefined
+>x.b : string
 >x : B
->b : string | undefined
+>b : string
 >"hello" : "hello"
 
     x.b = undefined;
 >x.b = undefined : undefined
->x.b : string | undefined
+>x.b : string
 >x : B
->b : string | undefined
+>b : string
 >undefined : undefined
 
     const c = x.c;

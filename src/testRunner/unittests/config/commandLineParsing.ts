@@ -532,7 +532,7 @@ namespace ts {
                                 name: "optionName",
                                 type: type(),
                                 isTSConfigOnly: true,
-                                category: Diagnostics.Basic_Options,
+                                category: Diagnostics.Backwards_Compatibility,
                                 description: Diagnostics.Enable_project_compilation,
                             }
                         ];

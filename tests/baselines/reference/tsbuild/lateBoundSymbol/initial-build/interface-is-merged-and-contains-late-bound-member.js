@@ -71,7 +71,7 @@ var x = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","signature":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},{"version":"675797797-export interface HKT<T> { }","signature":"675797797-export interface HKT<T> { }","affectsGlobalScope":false},{"version":"-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];","signature":"-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","incremental":true,"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},"675797797-export interface HKT<T> { }","-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];"],"options":{"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -100,18 +100,14 @@ var x = 10;
       },
       "./src/hkt.ts": {
         "version": "675797797-export interface HKT<T> { }",
-        "signature": "675797797-export interface HKT<T> { }",
-        "affectsGlobalScope": false
+        "signature": "675797797-export interface HKT<T> { }"
       },
       "./src/main.ts": {
         "version": "-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];",
-        "signature": "-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];",
-        "affectsGlobalScope": false
+        "signature": "-28387946490-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\nconst x = 10;\r\ntype A = HKT<number>[typeof sym];"
       }
     },
     "options": {
-      "configFilePath": "./tsconfig.json",
-      "incremental": true,
       "rootDir": "./src"
     },
     "referencedMap": {
@@ -132,7 +128,7 @@ var x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2207
+  "size": 1191
 }
 
 
@@ -175,7 +171,7 @@ var sym = Symbol();
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","signature":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},{"version":"675797797-export interface HKT<T> { }","signature":"675797797-export interface HKT<T> { }","affectsGlobalScope":false},{"version":"-27494779858-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];","signature":"-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","incremental":true,"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-27494779858-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];","signature":"-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n"}],"options":{"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -204,18 +200,14 @@ var sym = Symbol();
       },
       "./src/hkt.ts": {
         "version": "675797797-export interface HKT<T> { }",
-        "signature": "675797797-export interface HKT<T> { }",
-        "affectsGlobalScope": false
+        "signature": "675797797-export interface HKT<T> { }"
       },
       "./src/main.ts": {
         "version": "-27494779858-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];",
-        "signature": "-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n",
-        "affectsGlobalScope": false
+        "signature": "-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n"
       }
     },
     "options": {
-      "configFilePath": "./tsconfig.json",
-      "incremental": true,
       "rootDir": "./src"
     },
     "referencedMap": {
@@ -236,7 +228,7 @@ var sym = Symbol();
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2163
+  "size": 1393
 }
 
 
@@ -280,7 +272,7 @@ var x = 10;
 
 
 //// [/src/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","signature":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},{"version":"675797797-export interface HKT<T> { }","signature":"675797797-export interface HKT<T> { }","affectsGlobalScope":false},{"version":"-20682988154-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];const x = 10;","signature":"-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n","affectsGlobalScope":false}],"options":{"configFilePath":"./tsconfig.json","incremental":true,"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./src/globals.d.ts","./src/hkt.ts","./src/main.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-1994196675-interface SymbolConstructor {\n    (description?: string | number): symbol;\n}\ndeclare var Symbol: SymbolConstructor;","affectsGlobalScope":true},"675797797-export interface HKT<T> { }",{"version":"-20682988154-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];const x = 10;","signature":"-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n"}],"options":{"rootDir":"./src"},"fileIdsList":[[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4]},"version":"FakeTSVersion"}
 
 //// [/src/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -309,18 +301,14 @@ var x = 10;
       },
       "./src/hkt.ts": {
         "version": "675797797-export interface HKT<T> { }",
-        "signature": "675797797-export interface HKT<T> { }",
-        "affectsGlobalScope": false
+        "signature": "675797797-export interface HKT<T> { }"
       },
       "./src/main.ts": {
         "version": "-20682988154-import { HKT } from \"./hkt\";\r\n\r\nconst sym = Symbol();\r\n\r\ndeclare module \"./hkt\" {\r\n  interface HKT<T> {\r\n    [sym]: { a: T }\r\n  }\r\n}\r\n\r\ntype A = HKT<number>[typeof sym];const x = 10;",
-        "signature": "-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n",
-        "affectsGlobalScope": false
+        "signature": "-7779857705-declare const sym: unique symbol;\r\ndeclare module \"./hkt\" {\r\n    interface HKT<T> {\r\n        [sym]: {\r\n            a: T;\r\n        };\r\n    }\r\n}\r\nexport {};\r\n"
       }
     },
     "options": {
-      "configFilePath": "./tsconfig.json",
-      "incremental": true,
       "rootDir": "./src"
     },
     "referencedMap": {
@@ -341,6 +329,6 @@ var x = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2176
+  "size": 1406
 }
 
