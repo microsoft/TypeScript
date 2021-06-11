@@ -12017,25 +12017,6 @@ namespace ts {
                 undefined;
         }
 
-        function findApplicableIndexInfoForName(indexInfos: readonly IndexInfo[], name: __String) {
-            // We optimize for cases where we have no template literal index signatures as it is somewhat expensive
-            // to obtain the literal type for a name and check for assignability.
-            let stringIndexInfo: IndexInfo | undefined;
-            for (const info of indexInfos) {
-                const keyType = info.keyType;
-                if (keyType === stringType) {
-                    stringIndexInfo = info;
-                }
-                else if (keyType === numberType && isNumericLiteralName(name)) {
-                    return info;
-                }
-                else if (keyType.flags & TypeFlags.TemplateLiteral) {
-                    return findApplicableIndexInfo(indexInfos, getStringLiteralType(unescapeLeadingUnderscores(name)));
-                }
-            }
-            return stringIndexInfo;
-        }
-
         function isApplicableIndexType(source: Type, target: Type) {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
             // signature applies to types assignable to 'number' and numeric string literal types.
@@ -12077,7 +12058,7 @@ namespace ts {
         }
 
         function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
-            return findApplicableIndexInfoForName(getIndexInfosOfType(type), name);
+            return getApplicableIndexInfo(type, getStringLiteralType(unescapeLeadingUnderscores(name)));
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -14393,9 +14374,6 @@ namespace ts {
                 let type = getSymbolLinks(getLateBoundSymbol(prop)).nameType;
                 if (!type) {
                     const name = getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
-                    if (name && (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral) && !(include & TypeFlags.StringLiteral)) {
-                        return neverType;
-                    }
                     type = prop.escapedName === InternalSymbolName.Default ? getStringLiteralType("default") :
                         name && getLiteralTypeFromPropertyName(name) || (!isKnownSymbol(prop) ? getStringLiteralType(symbolName(prop)) : undefined);
                 }
@@ -14408,8 +14386,7 @@ namespace ts {
 
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean) {
             const origin = includeOrigin && (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference) || type.aliasSymbol) ? createOriginIndexType(type) : undefined;
-            const propInclude = include & TypeFlags.String && getIndexInfoOfType(type, stringType) ? include & ~TypeFlags.StringLiteral : include;
-            const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, propInclude));
+            const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, include));
             const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && info.keyType.flags & include ?
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
             return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
@@ -25354,7 +25331,7 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return findApplicableIndexInfoForName(getIndexInfosOfStructuredType(t), name)?.type;
+                    return findApplicableIndexInfo(getIndexInfosOfStructuredType(t), getStringLiteralType(unescapeLeadingUnderscores(name)))?.type;
                 }
                 return undefined;
             }, /*noReductions*/ true);
