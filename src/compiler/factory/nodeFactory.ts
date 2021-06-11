@@ -525,12 +525,25 @@ namespace ts {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
-                // Ensure the transform flags have been aggregated for this NodeArray
-                if (elements.transformFlags === undefined) {
-                    aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
+                    // Ensure the transform flags have been aggregated for this NodeArray
+                    if (elements.transformFlags === undefined) {
+                        aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                    }
+                    Debug.attachNodeArrayDebugInfo(elements);
+                    return elements;
                 }
-                Debug.attachNodeArrayDebugInfo(elements);
-                return elements;
+
+                // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
+                // array with the same elements, text range, and transform flags but with the updated
+                // value for `hasTrailingComma`
+                const array = elements.slice() as MutableNodeArray<T>;
+                array.pos = elements.pos;
+                array.end = elements.end;
+                array.hasTrailingComma = hasTrailingComma;
+                array.transformFlags = elements.transformFlags;
+                Debug.attachNodeArrayDebugInfo(array);
+                return array;
             }
 
             // Since the element list of a node array is typically created by starting with an empty array and
@@ -2184,7 +2197,12 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
+            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
+            // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
+            // a trailing comma.
+            const lastElement = elements && lastOrUndefined(elements);
+            const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
+            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             return node;
@@ -6479,7 +6497,7 @@ namespace ts {
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-        if (flags) destEmitNode.flags = flags;
+        if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);

@@ -33,28 +33,32 @@ const uint8ClampedArray = new Uint8ClampedArray(1);
 
 
 //// [typedArrays-es5.js]
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var float32Array = new Float32Array(1);
-__spreadArray([], float32Array);
+__spreadArray([], float32Array, true);
 var float64Array = new Float64Array(1);
-__spreadArray([], float64Array);
+__spreadArray([], float64Array, true);
 var int16Array = new Int16Array(1);
-__spreadArray([], int16Array);
+__spreadArray([], int16Array, true);
 var int32Array = new Int32Array(1);
-__spreadArray([], int32Array);
+__spreadArray([], int32Array, true);
 var int8Array = new Int8Array(1);
-__spreadArray([], int8Array);
+__spreadArray([], int8Array, true);
 var nodeList = new NodeList();
-__spreadArray([], nodeList);
+__spreadArray([], nodeList, true);
 var uint16Array = new Uint16Array(1);
-__spreadArray([], uint16Array);
+__spreadArray([], uint16Array, true);
 var uint32Array = new Uint32Array(1);
-__spreadArray([], uint32Array);
+__spreadArray([], uint32Array, true);
 var uint8Array = new Uint8Array(1);
-__spreadArray([], uint8Array);
+__spreadArray([], uint8Array, true);
 var uint8ClampedArray = new Uint8ClampedArray(1);
-__spreadArray([], uint8ClampedArray);
+__spreadArray([], uint8ClampedArray, true);

@@ -40,25 +40,29 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 function f0() {
     var a = [1, 2, 3];
-    var a1 = __spreadArray([], __read(a));
-    var a2 = __spreadArray([1], __read(a));
-    var a3 = __spreadArray([1, 2], __read(a));
-    var a4 = __spreadArray(__spreadArray([], __read(a)), [1]);
-    var a5 = __spreadArray(__spreadArray([], __read(a)), [1, 2]);
-    var a6 = __spreadArray(__spreadArray([1, 2], __read(a)), [1, 2]);
-    var a7 = __spreadArray(__spreadArray(__spreadArray([1], __read(a)), [2]), __read(a));
-    var a8 = __spreadArray(__spreadArray(__spreadArray([], __read(a)), __read(a)), __read(a));
+    var a1 = __spreadArray([], __read(a), false);
+    var a2 = __spreadArray([1], __read(a), false);
+    var a3 = __spreadArray([1, 2], __read(a), false);
+    var a4 = __spreadArray(__spreadArray([], __read(a), false), [1], false);
+    var a5 = __spreadArray(__spreadArray([], __read(a), false), [1, 2], false);
+    var a6 = __spreadArray(__spreadArray([1, 2], __read(a), false), [1, 2], false);
+    var a7 = __spreadArray(__spreadArray(__spreadArray([1], __read(a), false), [2], false), __read(a), false);
+    var a8 = __spreadArray(__spreadArray(__spreadArray([], __read(a), false), __read(a), false), __read(a), false);
 }
 function f1() {
     var a = [1, 2, 3];
-    var b = __spreadArray(__spreadArray(["hello"], __read(a)), [true]);
+    var b = __spreadArray(__spreadArray(["hello"], __read(a), false), [true], false);
     var b;
 }
 function f2() {
