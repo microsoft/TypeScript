@@ -5,9 +5,9 @@ class B {
 
 class C extends B {
     static {
-        var await = 1;
-        var arguments = 1;
-        var eval = 1;
+        let await = 1;
+        let arguments = 1;
+        let eval = 1;
 
 
         await: if (true) {
@@ -52,13 +52,15 @@ var C = /** @class */ (function (_super) {
     return C;
 }(B));
 _C__ = { value: (function () {
-        var await = 1;
-        var arguments = 1;
-        var eval = 1;
+        let;
+        yield ;
+        1;
+        var arguments_1 = 1;
+        var eval_1 = 1;
         yield ;
         if (true) {
         }
-        arguments;
+        arguments_1;
         yield ;
         _this = _super.call(this) || this;
     })() };

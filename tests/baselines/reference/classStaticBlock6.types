@@ -12,15 +12,17 @@ class C extends B {
 >B : B
 
     static {
-        var await = 1;
->await : number
+        let await = 1;
+>let : any
+>await : any
+> : any
 >1 : 1
 
-        var arguments = 1;
+        let arguments = 1;
 >arguments : number
 >1 : 1
 
-        var eval = 1;
+        let eval = 1;
 >eval : number
 >1 : 1
 
