@@ -35871,6 +35871,10 @@ namespace ts {
             checkGrammarForInOrForOfStatement(node);
 
             if (node.awaitModifier) {
+                if (node.flags & NodeFlags.ClassStaticBlockContext) {
+                    grammarErrorOnNode(node.awaitModifier, Diagnostics.For_await_loops_cannot_be_used_inside_class_static_block);
+                }
+
                 const functionFlags = getFunctionFlags(getContainingFunction(node));
                 if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
                     // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
@@ -36754,6 +36758,9 @@ namespace ts {
                 return;
             }
 
+            if(node.flags & NodeFlags.ClassStaticBlockContext) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_inside_class_static_block);
+            }
             const func = getContainingFunction(node);
             if (!func) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);

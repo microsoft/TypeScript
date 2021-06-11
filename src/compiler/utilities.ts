@@ -1573,6 +1573,15 @@ namespace ts {
         return findAncestor(node.parent, isClassLike);
     }
 
+    export function getContainingClassStaticBlock(node: Node): Node | undefined {
+        return findAncestor(node.parent, n => {
+            if (isClassLike(n) || isFunctionLike(n)) {
+                return "quit";
+            }
+            return isClassStaticBlockDeclaration(n);
+        });
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {
