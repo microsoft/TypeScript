@@ -96,7 +96,15 @@ namespace ts {
     }
 
     export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
-        return moduleResolutionOptionDeclarations.some(o =>
+        return optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
+    }
+
+    export function changesAffectingProgramStructure(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
+        return optionsHaveChanges(oldOptions, newOptions, optionsAffectingProgramStructure);
+    }
+
+    export function optionsHaveChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions, optionDeclarations: readonly CommandLineOption[]) {
+        return oldOptions !== newOptions && optionDeclarations.some(o =>
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
@@ -521,37 +529,6 @@ namespace ts {
         }
 
         return text;
-    }
-
-    /**
-     * Removes the leading and trailing white space and line terminator characters from a string.
-     */
-    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
-
-    /**
-     * Returns a copy with trailing whitespace removed.
-     */
-    export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
-
-
-    /**
-     * Returns a copy with leading whitespace removed.
-     */
-     export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
-
-    /**
-     * https://jsbench.me/gjkoxld4au/1
-     * The simple regex for this, /\s+$/g is O(n^2) in v8.
-     * The native .trimEnd method is by far best, but since that's technically ES2019,
-     * we provide a (still much faster than the simple regex) fallback.
-     */
-    function trimEndImpl(s: string) {
-        let end = s.length - 1;
-        while (end >= 0) {
-            if (!isWhiteSpaceLike(s.charCodeAt(end))) break;
-            end--;
-        }
-        return s.slice(0, end + 1);
     }
 
     export function getTextOfNode(node: Node, includeTrivia = false): string {
@@ -6110,7 +6087,9 @@ namespace ts {
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"
+        | "strictOptionalProperties"
         | "alwaysStrict"
+        | "useUnknownInCatchVariables"
         ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
@@ -6126,13 +6105,11 @@ namespace ts {
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
-        return oldOptions !== newOptions &&
-            semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(oldOptions, newOptions, semanticDiagnosticsOptionDeclarations);
     }
 
     export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
-        return oldOptions !== newOptions &&
-            affectsEmitOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(oldOptions, newOptions, affectsEmitOptionDeclarations);
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
@@ -6191,12 +6168,25 @@ namespace ts {
         setSymlinkedFile(symlinkPath: Path, real: string): void;
         /*@internal*/
         setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
+        /**
+         * @internal
+         * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
+         * don't include automatic type reference directives. Must be called only when
+         * `hasProcessedResolutions` returns false (once per cache instance).
+         */
+        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        /**
+         * @internal
+         * Whether `setSymlinksFromResolutions` has already been called.
+         */
+        hasProcessedResolutions(): boolean;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
         let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
+        let hasProcessedResolutions = false;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
@@ -6225,28 +6215,28 @@ namespace ts {
                     });
                 }
             },
+            setSymlinksFromResolutions(files, typeReferenceDirectives) {
+                Debug.assert(!hasProcessedResolutions);
+                hasProcessedResolutions = true;
+                for (const file of files) {
+                    file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                }
+                typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            },
+            hasProcessedResolutions: () => hasProcessedResolutions,
         };
-    }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatMap(files, sf => {
-            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
-                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
-            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
-                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
-        });
-
-        for (const [resolvedPath, originalPath] of symlinks) {
-            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+        function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
+            if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
+            const { resolvedFileName, originalPath } = resolution;
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
-        return cache;
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
@@ -6770,14 +6760,25 @@ namespace ts {
         return changeAnyExtension(path, newExtension, extensionsToRemove, /*ignoreCase*/ false) as T;
     }
 
-    export function tryParsePattern(pattern: string): Pattern | undefined {
-        // This should be verified outside of here and a proper error thrown.
-        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+    /**
+     * Returns the input if there are no stars, a pattern if there is exactly one,
+     * and undefined if there are more.
+     */
+    export function tryParsePattern(pattern: string): string | Pattern | undefined {
         const indexOfStar = pattern.indexOf("*");
-        return indexOfStar === -1 ? undefined : {
-            prefix: pattern.substr(0, indexOfStar),
-            suffix: pattern.substr(indexOfStar + 1)
-        };
+        if (indexOfStar === -1) {
+            return pattern;
+        }
+        return pattern.indexOf("*", indexOfStar + 1) !== -1
+            ? undefined
+            : {
+                prefix: pattern.substr(0, indexOfStar),
+                suffix: pattern.substr(indexOfStar + 1)
+            };
+    }
+
+    export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
+        return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
     }
 
     export function positionIsSynthesized(pos: number): boolean {
@@ -6823,21 +6824,19 @@ namespace ts {
 
 
     /**
-     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * patternOrStrings contains both patterns (containing "*") and regular strings.
      * Return an exact match if possible, or a pattern match, or undefined.
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
-    export function matchPatternOrExact(patternStrings: readonly string[], candidate: string): string | Pattern | undefined {
+    export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
-        for (const patternString of patternStrings) {
-            if (!hasZeroOrOneAsteriskCharacter(patternString)) continue;
-            const pattern = tryParsePattern(patternString);
-            if (pattern) {
-                patterns.push(pattern);
+        for (const patternOrString of patternOrStrings) {
+            if (patternOrString === candidate) {
+                return candidate;
             }
-            else if (patternString === candidate) {
-                // pattern was matched as is - no need to search further
-                return patternString;
+
+            if (!isString(patternOrString)) {
+                patterns.push(patternOrString);
             }
         }
 
