@@ -43,10 +43,10 @@ var SyntaxKind;
 "use strict";
 exports.__esModule = true;
 SyntaxKind.ImportClause;
-"Type" /* Type */;
+"Type" /* SymbolFlags.Type */;
 var kind;
 var flags;
 //// [c.js]
 "use strict";
 exports.__esModule = true;
-var flags = "Type" /* Type */;
+var flags = "Type" /* SymbolFlags.Type */;

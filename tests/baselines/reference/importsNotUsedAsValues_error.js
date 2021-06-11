@@ -109,9 +109,9 @@ require("./a"); // noUnusedLocals error only
 "use strict";
 exports.__esModule = true;
 require("./a");
-0 /* One */;
-var c = 1 /* Two */;
-var d = 1 /* Two */;
+0 /* C.One */;
+var c = 1 /* C.Two */;
+var d = 1 /* C.Two */;
 console.log(c, d);
 //// [g.js]
 "use strict";
@@ -141,4 +141,4 @@ exports.__esModule = true;
 //// [l.js]
 "use strict";
 exports.__esModule = true;
-0 /* One */;
+0 /* K.One */;

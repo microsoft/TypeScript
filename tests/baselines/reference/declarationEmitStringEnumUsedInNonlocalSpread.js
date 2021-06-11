@@ -41,8 +41,8 @@ var A = /** @class */ (function () {
     A.prototype.getA = function () {
         var _a;
         return _a = {},
-            _a["123123" /* Test1 */] = '123',
-            _a["12312312312" /* Test2 */] = '123',
+            _a["123123" /* TestEnum.Test1 */] = '123',
+            _a["12312312312" /* TestEnum.Test2 */] = '123',
             _a;
     };
     return A;

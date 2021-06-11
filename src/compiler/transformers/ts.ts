@@ -3350,13 +3350,8 @@ namespace ts {
                 const substitute = typeof constantValue === "string" ? factory.createStringLiteral(constantValue) : factory.createNumericLiteral(constantValue);
                 if (!compilerOptions.removeComments) {
                     const originalNode = getOriginalNode(node, isAccessExpression);
-                    const propertyName = isPropertyAccessExpression(originalNode)
-                        ? declarationNameToString(originalNode.name)
-                        : getTextOfNode(originalNode.argumentExpression);
-
-                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${propertyName} `);
+                    addSyntheticTrailingComment(substitute, SyntaxKind.MultiLineCommentTrivia, ` ${getTextOfNode(originalNode)} `);
                 }
-
                 return substitute;
             }
 

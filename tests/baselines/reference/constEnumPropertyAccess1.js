@@ -37,15 +37,15 @@ class C {
 var o = {
     1: true
 };
-var a = 1 /* A */;
-var a1 = 1 /* "A" */;
-var g = o[1 /* A */];
+var a = 1 /* G.A */;
+var a1 = 1 /* G["A"] */;
+var g = o[1 /* G.A */];
 class C {
-    [1 /* A */]() { }
-    get [2 /* B */]() {
+    [1 /* G.A */]() { }
+    get [2 /* G.B */]() {
         return true;
     }
-    set [2 /* B */](x) { }
+    set [2 /* G.B */](x) { }
 }
 
 

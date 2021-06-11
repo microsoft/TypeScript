@@ -40,7 +40,7 @@ var SomeOther;
         var Foo = /** @class */ (function () {
             function Foo() {
                 Internal.getThing();
-                0 /* A */ ? "foo" : "bar";
+                0 /* Internal.WhichThing.A */ ? "foo" : "bar";
             }
             return Foo;
         }());

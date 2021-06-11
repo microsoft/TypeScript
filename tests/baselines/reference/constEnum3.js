@@ -14,7 +14,7 @@ f2('bar')
 //// [constEnum3.js]
 function f1(f) { }
 function f2(f) { }
-f1(0 /* foo */);
-f1(1 /* bar */);
+f1(0 /* TestType.foo */);
+f1(1 /* TestType.bar */);
 f2('foo');
 f2('bar');
