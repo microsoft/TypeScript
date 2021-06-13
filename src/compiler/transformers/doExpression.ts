@@ -16,6 +16,8 @@ namespace ts {
             type: ControlFlow.Break | ControlFlow.Continue
             signal?: Identifier
             label: Label
+            // For IterationStatement and Switch, it's true; For LabelledStatement, it's false;
+            allowAmbientJump: boolean
             parent: BreakContinueContext | undefined
         }
         let currentReturnContext: ReturnContext | undefined;
@@ -82,7 +84,7 @@ namespace ts {
         }
         function transformIterationStatement<T extends IterationStatement>(node: T): Node {
             const label = isLabeledStatement(node.parent) ? node.parent.label : undefined;
-            return startBreakAndContinueContext(label, () => {
+            return startBreakAndContinueContext(label, /** allowAmbientJump */ true, () => {
                 return visitEachChild(node, child => {
                     if (child === node.statement) return visitStatement(node.statement);
                     return visitor(child);
@@ -165,22 +167,22 @@ namespace ts {
             [currentReturnContext, currentBreakContext, currentContinueContext] = old;
             return result;
         }
-        function startBreakContext<T>(label: Label, f: () => T) {
+        function startBreakContext<T>(label: Label, allowAmbientJump: boolean, f: () => T) {
             const parent = currentBreakContext;
-            currentBreakContext = { type: ControlFlow.Break, label, parent, signal: undefined };
+            currentBreakContext = { type: ControlFlow.Break, allowAmbientJump, label, parent, signal: undefined };
             const result = f();
             currentBreakContext = parent;
             return result;
         }
-        function startContinueContext<T>(label: Label, f: () => T) {
+        function startContinueContext<T>(label: Label, allowAmbientJump: boolean, f: () => T) {
             const parent = currentContinueContext;
-            currentContinueContext = { type: ControlFlow.Continue, label, parent, signal: undefined };
+            currentContinueContext = { type: ControlFlow.Continue, allowAmbientJump, label, parent, signal: undefined };
             const result = f();
             currentContinueContext = parent;
             return result;
         }
-        function startBreakAndContinueContext<T>(label: Label, f: () => T) {
-            return startBreakContext(label, () => startContinueContext(label, f));
+        function startBreakAndContinueContext<T>(label: Label, allowAmbientJump: boolean, f: () => T) {
+            return startBreakContext(label, allowAmbientJump, () => startContinueContext(label, allowAmbientJump, f));
         }
 
         function transformControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
@@ -225,6 +227,7 @@ namespace ts {
                 if (!shouldTransform) return visitEachChild(node, visitor, context);
                 const findLabel = (label: Identifier | undefined, context: BreakContinueContext | undefined) => {
                     while (context) {
+                        if (!label && context.allowAmbientJump) return context;
                         if (label?.escapedText === context.label?.escapedText) return context;
                         context = context.parent;
                     }
