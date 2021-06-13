@@ -52,10 +52,7 @@ namespace ts {
         return transformSourceFile(node);
 
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile) {
-                return node;
-            }
-
+            if (node.isDeclarationFile) return node;
             return visitEachChild(node, visitor, context);
         }
 
@@ -70,6 +67,8 @@ namespace ts {
                         return transformDoExpression(node as DoExpression);
                     }
                     return visitEachChild(node, visitor, context);
+                case SyntaxKind.LabeledStatement:
+                    return transformLabelledStatement(node as LabeledStatement);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -138,8 +137,27 @@ namespace ts {
         function transformClassLike<T extends ClassExpression | ClassDeclaration>(node: T): T {
             return startControlFlowContext(() => visitEachChild(node, visitor, context));
         }
+        function transformLabelledStatement(node: LabeledStatement): Node {
+            if (isIterationStatement(node.statement, false)) return visitEachChild(node, visitor, context);
+            return startBreakContext(node.label, /** allowAmbientBreak */ false, () => visitEachChild(node, child => {
+                if (child === node.statement) {
+                    let nextChild = visitEachChild(child, visitor, context);
+                    const signal = currentBreakContext?.signal;
+                    if (signal) {
+                        if (!isStatement(nextChild)) Debug.fail();
+                        nextChild = wrapBlockToHandleSignal(isBlock(nextChild) ? nextChild : factory.createBlock([nextChild]), [currentBreakContext!], signal => [
+                            factory.createIfStatement(
+                                factory.createEquality(signal, signal),
+                                factory.createBreakStatement(currentBreakContext!.label),
+                            )
+                        ]);
+                    }
+                    return nextChild;
+                }
+                return child;
+            }, context));
+        }
         // function transformSwitch() {}
-        // function transformLabelledStatement() {}
 
         function transformControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
             if (isReturnStatement(node)) {
@@ -161,10 +179,9 @@ namespace ts {
                     currentReturnContext = { type: ControlFlow.Return, signal: factory.createTempVariable(noop), value: factory.createTempVariable(noop) };
                 }
                 const setReturnValue = node.expression && factory.createBinaryExpression(currentReturnContext.value, factory.createToken(SyntaxKind.EqualsToken), visitEachChild(node.expression, visitor, context));
-                const throwSignal = factory.createImmediatelyInvokedFunctionExpression([
-                    factory.createThrowStatement(currentReturnContext.signal),
-                ]);
-                return factory.createExpressionStatement(setReturnValue ? factory.createCommaListExpression([setReturnValue, throwSignal]): throwSignal);
+                return factory.createThrowStatement(
+                    setReturnValue ? factory.createCommaListExpression([setReturnValue, currentReturnContext.signal]) : currentReturnContext.signal
+                );
             }
             else {
                 let shouldTransform = false;
@@ -192,9 +209,7 @@ namespace ts {
                 };
                 const jump = findJumpContext(node.label, node.kind === SyntaxKind.BreakStatement ? currentBreakContext : currentContinueContext);
                 if (!jump) return visitEachChild(node, visitor, context);
-                if (!jump.signal) jump.signal = factory.createTempVariable(noop);
-                const throwSignal = factory.createImmediatelyInvokedFunctionExpression([factory.createThrowStatement(jump.signal)]);
-                return factory.createExpressionStatement(throwSignal);
+                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop))
             }
         }
 
