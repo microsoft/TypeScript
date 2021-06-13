@@ -91,6 +91,8 @@ namespace ts {
                     return transfromCatchClause(node as CatchClause);
                 case SyntaxKind.ExpressionStatement:
                     return transformExpressionStatement(node as ExpressionStatement);
+                case SyntaxKind.Block:
+                    return transformBlock(node as Block);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -268,9 +270,9 @@ namespace ts {
             const localContext = currentDoContext = {
                 completionValue: context.factory.createTempVariable(context.hoistVariableDeclaration, /** reservedInNestedScopes */ true),
                 isAsync: node.async,
-                shouldTrack: true,
+                shouldTrack: false,
             };
-            const nextBlock = visitEachChild(node.block, visitor, context);
+            const nextBlock = transformBlock(node.block);
             currentDoContext = oldContext;
             if (node.async) return createAsyncDoExpressionExecutor(nextBlock, localContext.completionValue);
             return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAsync, hasYield);
@@ -280,6 +282,29 @@ namespace ts {
             const result = visitEachChild(node, visitor, context);
             if (!currentDoContext?.shouldTrack) return result;
             return factory.updateExpressionStatement(result, factory.createAssignment(currentDoContext.completionValue, result.expression));
+        }
+        function transformBlock(node: Block) {
+            if (!currentDoContext) return visitEachChild(node, visitor, context);
+            const lastMeaningfulNode = findLast(node.statements, (node) =>
+                node.kind === SyntaxKind.ExpressionStatement ||
+                node.kind === SyntaxKind.Block ||
+                node.kind === SyntaxKind.IfStatement ||
+                node.kind === SyntaxKind.SwitchStatement ||
+                // TODO: ban with
+                node.kind === SyntaxKind.WithStatement ||
+                (isLabeledStatement(node) && !isIterationStatement(node.statement, true)) ||
+                node.kind === SyntaxKind.TryStatement
+            );
+            const shouldTrackOld = currentDoContext!.shouldTrack;
+            const shouldTrack = shouldTrackOld || node.parent.kind === SyntaxKind.DoExpression;
+            return visitEachChild(node, child => {
+                const isDirectChild = node.statements.includes(child as Statement);
+                if (!shouldTrack || !isDirectChild) return visitor(child);
+                currentDoContext!.shouldTrack = child === lastMeaningfulNode;
+                const result = visitor(child);
+                currentDoContext!.shouldTrack = shouldTrackOld;
+                return result;
+            }, context);
         }
         /**
          * ```js
@@ -325,8 +350,6 @@ namespace ts {
                 )
             ]);
         }
-
-        // TODO: clean completion value before If, Switch, Try
 
         /**
          * Try to generate arrow function if possible.
