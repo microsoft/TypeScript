@@ -387,10 +387,6 @@ namespace ts {
             return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
         }
 
-        export function formatControlFlowChangesInExpression(flags: ControlFlowChangesInExpression | undefined): string {
-            return formatEnum(flags, (ts as any).ControlFlowChangesInExpression, /*isFlags*/ true);
-        }
-
         let isDebugInfoEnabled = false;
 
         interface ExtendedDebugModule {
@@ -671,8 +667,7 @@ namespace ts {
                                 }
                                 return text;
                             }
-                        },
-                        __debugControlFlowChangesInExpression: { get(this: Node) { return formatControlFlowChangesInExpression((this as any)._controlFlowInExpr); } }
+                        }
                     });
                 }
             }
