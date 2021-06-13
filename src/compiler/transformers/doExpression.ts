@@ -127,7 +127,7 @@ namespace ts {
             }
         }
         function transformIterationStatement<T extends IterationStatement>(node: T): Node {
-            const label = isLabeledStatement(node.parent) ? node.parent.label : undefined;
+            const label = node.parent && isLabeledStatement(node.parent) ? node.parent.label : undefined;
             return startIterationContext(label, () => {
                 return visitEachChild(node, child => {
                     if (child === node.statement) return visitStatement(node.statement);
@@ -164,6 +164,8 @@ namespace ts {
             return startControlFlowContext(() => visitEachChild(node, visitor, context));
         }
         function transformLabelledStatement(node: LabeledStatement): Node {
+            // why it will be undefined?
+            if (!node.statement) return visitEachChild(node, visitor, context);
             if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) return visitEachChild(node, visitor, context);
             return startBreakContext(node.label, /** allowAmbientBreak */ false, () => visitEachChild(node, child => {
                 if (child === node.statement) {
@@ -180,7 +182,7 @@ namespace ts {
                     }
                     return nextChild;
                 }
-                return child;
+                return visitEachChild(child, visitor, context);
             }, context));
         }
         /**
