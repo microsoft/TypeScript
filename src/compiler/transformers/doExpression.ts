@@ -77,7 +77,7 @@ namespace ts {
 
         function visitor(node: Node): VisitResult<Node> {
             if (isFunctionLikeDeclaration(node)) return transformFunctionLikeDeclaration(node);
-            if (isIterationStatement(node, false)) return transformIterationStatement(node);
+            if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return transformIterationStatement(node);
             if (isClassLike(node)) return transformClassLike(node);
 
             switch (node.kind) {
@@ -164,7 +164,7 @@ namespace ts {
             return startControlFlowContext(() => visitEachChild(node, visitor, context));
         }
         function transformLabelledStatement(node: LabeledStatement): Node {
-            if (isIterationStatement(node.statement, false)) return visitEachChild(node, visitor, context);
+            if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) return visitEachChild(node, visitor, context);
             return startBreakContext(node.label, /** allowAmbientBreak */ false, () => visitEachChild(node, child => {
                 if (child === node.statement) {
                     let nextChild = visitEachChild(child, visitor, context);
@@ -259,7 +259,7 @@ namespace ts {
                 };
                 const jump = findJumpContext(node.label, node.kind === SyntaxKind.BreakStatement ? currentBreakContext : currentContinueContext);
                 if (!jump) return visitEachChild(node, visitor, context);
-                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop, /** reservedInNestedScopes */ true))
+                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop, /** reservedInNestedScopes */ true));
             }
         }
 
@@ -292,10 +292,10 @@ namespace ts {
                 node.kind === SyntaxKind.SwitchStatement ||
                 // TODO: ban with
                 node.kind === SyntaxKind.WithStatement ||
-                (isLabeledStatement(node) && !isIterationStatement(node.statement, true)) ||
+                (isLabeledStatement(node) && !isIterationStatement(node.statement, /** lookInLabeledStatements */ true)) ||
                 node.kind === SyntaxKind.TryStatement
             );
-            const shouldTrackOld = currentDoContext!.shouldTrack;
+            const shouldTrackOld = currentDoContext.shouldTrack;
             const shouldTrack = shouldTrackOld || node.parent.kind === SyntaxKind.DoExpression;
             return visitEachChild(node, child => {
                 const isDirectChild = node.statements.includes(child as Statement);
@@ -381,13 +381,15 @@ namespace ts {
         function createDoExpressionExecutor(body: ConciseBody, completionValueContainer: Identifier, hasAsync: boolean, hasYield: boolean) {
             const f = createFunctionExpression(body, hasAsync, hasYield);
             // yield* expr.call(this)
-            if (hasYield) return factory.createCommaListExpression([
-                factory.createYieldExpression(
-                    factory.createToken(SyntaxKind.AsteriskToken),
-                    createCall(factory.createPropertyAccessExpression(f, "call"), [factory.createThis()])
-                ),
-                completionValueContainer
-            ]);
+            if (hasYield) {
+                return factory.createCommaListExpression([
+                    factory.createYieldExpression(
+                        factory.createToken(SyntaxKind.AsteriskToken),
+                        createCall(factory.createPropertyAccessExpression(f, "call"), [factory.createThis()])
+                    ),
+                    completionValueContainer
+                ]);
+            }
             // await expr()
             if (hasAsync) return factory.createCommaListExpression([factory.createAwaitExpression(createCall(f, [])), completionValueContainer]);
             // expr()
