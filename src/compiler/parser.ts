@@ -840,17 +840,10 @@ namespace ts {
 
         // for do expression
         let controlFlowChangesInExpression = ControlFlowChangesInExpression.None;
-        let labelSet: (__String | undefined)[] = [];
-        let currentLabel: __String | undefined;
         function startFunctionBoundaryOfControlFlow() {
             const old = controlFlowChangesInExpression;
-            const oldLabels = labelSet;
             controlFlowChangesInExpression = ControlFlowChangesInExpression.AllowReturn;
-            labelSet = [];
-            return () => {
-                controlFlowChangesInExpression = old;
-                labelSet = oldLabels;
-            };
+            return () => controlFlowChangesInExpression = old;
         }
         function setControlFlowChangeFlag(node: { _controlFlowInExpr?: ControlFlowChangesInExpression }) {
             const result = controlFlowChangesInExpression & ControlFlowChangesInExpression.HasControlFlowChange;
@@ -1480,7 +1473,6 @@ namespace ts {
             const saveParseDiagnosticsLength = parseDiagnostics.length;
             const saveParseErrorBeforeNextFinishedNode = parseErrorBeforeNextFinishedNode;
             const saveControlFlowChangesInExpression = controlFlowChangesInExpression;
-            const saveLabelSet = [...labelSet];
 
             // Note: it is not actually necessary to save/restore the context flags here.  That's
             // because the saving/restoring of these flags happens naturally through the recursive
@@ -1502,7 +1494,6 @@ namespace ts {
             if (!result || speculationKind !== SpeculationKind.TryParse) {
                 currentToken = saveToken;
                 controlFlowChangesInExpression = saveControlFlowChangesInExpression;
-                labelSet = saveLabelSet;
                 if (speculationKind !== SpeculationKind.Reparse) {
                     parseDiagnostics.length = saveParseDiagnosticsLength;
                 }
@@ -5792,7 +5783,6 @@ namespace ts {
 
         function parseDoStatement(): DoStatement {
             const pos = getNodePos();
-            labelSet.push(currentLabel, undefined);
             const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
             const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -5812,14 +5802,11 @@ namespace ts {
             setControlFlowChangeFlag(node);
             restoreContinueFlag();
             restoreBreakFlag();
-            labelSet.pop();
-            labelSet.pop();
             return withJSDoc(node, hasJSDoc);
         }
 
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
-            labelSet.push(currentLabel, undefined);
             const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
             const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -5832,14 +5819,11 @@ namespace ts {
             setControlFlowChangeFlag(node);
             restoreContinueFlag();
             restoreBreakFlag();
-            labelSet.pop();
-            labelSet.pop();
             return withJSDoc(node, hasJSDoc);
         }
 
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
-            labelSet.push(currentLabel, undefined);
             const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
             const restoreContinueFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowContinue);
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -5883,8 +5867,6 @@ namespace ts {
             setControlFlowChangeFlag(node);
             restoreContinueFlag();
             restoreBreakFlag();
-            labelSet.pop();
-            labelSet.pop();
             return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
         }
 
@@ -5899,7 +5881,7 @@ namespace ts {
             const node = kind === SyntaxKind.BreakStatement
                 ? factory.createBreakStatement(label)
                 : factory.createContinueStatement(label);
-            if ((controlFlowChangesInExpression & ControlFlowChangesInExpression.InExpressionContext) && (labelSet.includes(label?.escapedText))) {
+            if (controlFlowChangesInExpression & ControlFlowChangesInExpression.InExpressionContext) {
                 if (kind === SyntaxKind.BreakStatement) {
                     if (controlFlowChangesInExpression & ControlFlowChangesInExpression.AllowBreak) controlFlowChangesInExpression |= ControlFlowChangesInExpression.HasBreak;
                 }
@@ -5964,7 +5946,6 @@ namespace ts {
 
         function parseSwitchStatement(): SwitchStatement {
             const pos = getNodePos();
-            labelSet.push(currentLabel, undefined);
             const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
             const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SwitchKeyword);
@@ -5975,8 +5956,6 @@ namespace ts {
             const node = finishNode(factory.createSwitchStatement(expression, caseBlock), pos);
             setControlFlowChangeFlag(node);
             restoreBreakFlag();
-            labelSet.pop();
-            labelSet.pop();
             return withJSDoc(node, hasJSDoc);
         }
 
@@ -6058,21 +6037,10 @@ namespace ts {
             const hasParen = token() === SyntaxKind.OpenParenToken;
             const expression = allowInAnd(parseExpression);
             if (ts.isIdentifier(expression) && parseOptional(SyntaxKind.ColonToken)) {
-                const isLabelledBreakableStatement = token() === SyntaxKind.DoKeyword || token() === SyntaxKind.WhileKeyword || token() === SyntaxKind.ForKeyword || token() === SyntaxKind.SwitchKeyword;
-
-                const newLabel = expression.escapedText;
-                const oldLabel = currentLabel;
-                if (isLabelledBreakableStatement) currentLabel = newLabel;
-                // labelled statement cannot be breaked without identifier, so not push(newLabel, undefined)
-                else labelSet.push(newLabel);
-
                 const restoreBreakFlag = addControlFlowChangeFlag(ControlFlowChangesInExpression.AllowBreak);
                 node = factory.createLabeledStatement(expression, parseStatement());
                 setControlFlowChangeFlag(node);
                 restoreBreakFlag();
-
-                if (isLabelledBreakableStatement) currentLabel = oldLabel;
-                else labelSet.pop();
             }
             else {
                 parseSemicolon();
