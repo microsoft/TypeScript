@@ -757,12 +757,7 @@ namespace ts {
         falseType.freshType = falseType;
         regularFalseType.regularType = regularFalseType;
         regularFalseType.freshType = falseType;
-        const booleanType = createBooleanType([regularFalseType, regularTrueType]);
-        // Also mark all combinations of fresh/regular booleans as "Boolean" so they print as `boolean` instead of `true | false`
-        // (The union is cached, so simply doing the marking here is sufficient)
-        createBooleanType([regularFalseType, trueType]);
-        createBooleanType([falseType, regularTrueType]);
-        createBooleanType([falseType, trueType]);
+        const booleanType = getUnionType([regularFalseType, regularTrueType]);
         const esSymbolType = createIntrinsicType(TypeFlags.ESSymbol, "symbol");
         const voidType = createIntrinsicType(TypeFlags.Void, "void");
         const neverType = createIntrinsicType(TypeFlags.Never, "never");
@@ -3837,13 +3832,6 @@ namespace ts {
             return type;
         }
 
-        function createBooleanType(trueFalseTypes: readonly Type[]): IntrinsicType & UnionType {
-            const type = getUnionType(trueFalseTypes) as IntrinsicType & UnionType;
-            type.flags |= TypeFlags.Boolean;
-            type.intrinsicName = "boolean";
-            return type;
-        }
-
         function createObjectType(objectFlags: ObjectFlags, symbol?: Symbol): ObjectType {
             const type = createType(TypeFlags.Object) as ObjectType;
             type.objectFlags = objectFlags;
@@ -4584,7 +4572,7 @@ namespace ts {
                     context.approximateLength += 6;
                     return factory.createKeywordTypeNode(SyntaxKind.BigIntKeyword);
                 }
-                if (type.flags & TypeFlags.Boolean) {
+                if (type.flags & TypeFlags.Boolean && !type.aliasSymbol) {
                     context.approximateLength += 7;
                     return factory.createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
@@ -13975,16 +13963,6 @@ namespace ts {
             return a.kind === b.kind && a.parameterIndex === b.parameterIndex;
         }
 
-        function createUnionType(types: Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type) {
-            const result = createType(TypeFlags.Union) as UnionType;
-            result.objectFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-            result.types = types;
-            result.origin = origin;
-            result.aliasSymbol = aliasSymbol;
-            result.aliasTypeArguments = aliasTypeArguments;
-            return result;
-        }
-
         // This function assumes the constituent type list is sorted and deduplicated.
         function getUnionTypeFromSortedList(types: Type[], objectFlags: ObjectFlags, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], origin?: Type): Type {
             if (types.length === 0) {
@@ -14000,8 +13978,16 @@ namespace ts {
             const id = typeKey + getAliasId(aliasSymbol, aliasTypeArguments);
             let type = unionTypes.get(id);
             if (!type) {
-                type = createUnionType(types, aliasSymbol, aliasTypeArguments, origin);
-                type.objectFlags |= objectFlags;
+                type = createType(TypeFlags.Union) as UnionType;
+                type.objectFlags = objectFlags | getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
+                type.types = types;
+                type.origin = origin;
+                type.aliasSymbol = aliasSymbol;
+                type.aliasTypeArguments = aliasTypeArguments;
+                if (types.length === 2 && types[0].flags & TypeFlags.BooleanLiteral && types[1].flags & TypeFlags.BooleanLiteral) {
+                    type.flags |= TypeFlags.Boolean;
+                    (type as UnionType & IntrinsicType).intrinsicName = "boolean";
+                }
                 unionTypes.set(id, type);
             }
             return type;
@@ -17329,8 +17315,8 @@ namespace ts {
                 }
             }
             else {
-                if (!(source.flags & TypeFlags.UnionOrIntersection) && !(target.flags & TypeFlags.UnionOrIntersection) &&
-                    source.flags !== target.flags && !(source.flags & TypeFlags.Substructure)) return false;
+                if (source.flags !== target.flags) return false;
+                if (source.flags & TypeFlags.Singleton) return true;
             }
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
                 const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
@@ -17932,12 +17918,10 @@ namespace ts {
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
-                const flags = source.flags & target.flags;
-                if (!(flags & TypeFlags.Substructure)) {
-                    return Ternary.False;
-                }
+                if (source.flags !== target.flags) return Ternary.False;
+                if (source.flags & TypeFlags.Singleton) return Ternary.True;
                 traceUnionsOrIntersectionsTooLarge(source, target);
-                if (flags & TypeFlags.UnionOrIntersection) {
+                if (source.flags & TypeFlags.UnionOrIntersection) {
                     let result = eachTypeRelatedToSomeType(source as UnionOrIntersectionType, target as UnionOrIntersectionType);
                     if (result) {
                         result &= eachTypeRelatedToSomeType(target as UnionOrIntersectionType, source as UnionOrIntersectionType);
@@ -21132,7 +21116,6 @@ namespace ts {
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type): void {
-
                 if (!couldContainTypeVariables(target)) {
                     return;
                 }
@@ -21750,7 +21733,8 @@ namespace ts {
         }
 
         function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
-            return isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral);
+            return strictOptionalProperties && t === missingType ? s === t :
+                (isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral));
         }
 
         function isTypeCloselyMatchedBy(s: Type, t: Type) {
