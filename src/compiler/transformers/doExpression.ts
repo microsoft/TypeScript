@@ -2,15 +2,13 @@
 namespace ts {
     export function transformDoExpression(context: TransformationContext, node: SourceFile) {
         const { factory } = context;
-        const star = factory.createToken(SyntaxKind.AsteriskToken);
-        //#region ControlFlow
+        //#region contexts
         const enum ControlFlow {
             Return, Break, Continue,
         }
         interface ReturnContext {
             type: ControlFlow.Return
-            signal: Identifier
-            value: Identifier
+            signal?: [signal: Identifier, returnValue: Identifier]
         }
         type Label = Identifier | undefined;
         interface BreakContinueContext {
@@ -21,14 +19,20 @@ namespace ts {
             allowAmbientBreak: boolean
             parent: BreakContinueContext | undefined
         }
+        interface DoExpressionContext {
+            completionValue: Identifier
+            isAsync: boolean
+            shouldTrack: boolean
+        }
         let currentReturnContext: ReturnContext | undefined;
         let currentBreakContext: BreakContinueContext | undefined;
         let currentContinueContext: BreakContinueContext | undefined;
+        let currentDoContext: DoExpressionContext | undefined;
         function startControlFlowContext<T>(f: () => T) {
-            const old = [currentReturnContext, currentBreakContext, currentContinueContext] as const;
-            currentReturnContext = currentBreakContext = currentContinueContext = undefined;
+            const old = [currentReturnContext, currentBreakContext, currentContinueContext, currentDoContext] as const;
+            currentReturnContext = currentBreakContext = currentContinueContext = currentDoContext = undefined;
             const result = f();
-            [currentReturnContext, currentBreakContext, currentContinueContext] = old;
+            [currentReturnContext, currentBreakContext, currentContinueContext, currentDoContext] = old;
             return result;
         }
         function startBreakContext<T>(label: Label, allowAmbientBreak: boolean, f: () => T) {
@@ -78,14 +82,15 @@ namespace ts {
 
             switch (node.kind) {
                 case SyntaxKind.DoExpression:
-                    if ((node as DoExpression).async) {
-                        return transformDoExpression(node as DoExpression);
-                    }
-                    return visitEachChild(node, visitor, context);
+                    return transformDoExpression(node as DoExpression);
                 case SyntaxKind.LabeledStatement:
                     return transformLabelledStatement(node as LabeledStatement);
+                case SyntaxKind.TryStatement:
+                    return transformTryStatement(node as TryStatement);
                 case SyntaxKind.CatchClause:
                     return transfromCatchClause(node as CatchClause);
+                case SyntaxKind.ExpressionStatement:
+                    return transformExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -96,6 +101,7 @@ namespace ts {
         }
         function transformFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): Node {
             return startControlFlowContext(() => {
+                currentReturnContext = { type: ControlFlow.Return, signal: undefined };
                 return visitEachChild(node, child => {
                     if (child === node.body) {
                         return visitBody(node.body);
@@ -105,12 +111,13 @@ namespace ts {
             });
             function visitBody(child: ConciseBody): ConciseBody {
                 let nextBody = visitEachChild(child, visitor, context);
-                if (currentReturnContext) {
+                const sig = currentReturnContext?.signal;
+                if (sig) {
                     // if (signal == currentReturnContext.signal) return operand
-                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext], (signal) => [
+                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext!], (signal) => [
                         factory.createIfStatement(
-                            factory.createEquality(signal, currentReturnContext!.signal),
-                            factory.createReturnStatement(currentReturnContext!.value),
+                            factory.createEquality(signal, sig[0]),
+                            factory.createReturnStatement(sig[1]),
                         )
                     ]);
                 }
@@ -192,13 +199,13 @@ namespace ts {
          * ```
          */
         function transfromCatchClause(node: CatchClause): CatchClause {
-            if (!currentReturnContext && !hasSignal(currentBreakContext) && !hasSignal(currentContinueContext)) return visitEachChild(node, visitor, context);
+            if (!currentReturnContext?.signal && !hasSignal(currentBreakContext) && !hasSignal(currentContinueContext)) return visitEachChild(node, visitor, context);
             node = visitEachChild(node, visitor, context);
 
             const catch_e = factory.createTempVariable(noop);
             const newStatements = [...node.block.statements];
             const signals = getSignals(currentBreakContext).concat(getSignals(currentContinueContext));
-            if (currentReturnContext) signals.push(currentReturnContext.signal);
+            if (currentReturnContext?.signal) signals.push(currentReturnContext.signal[0]);
             const oldCatch_e = node.variableDeclaration;
             if (oldCatch_e) {
                 // catch(e = 1) is syntax error. no need to worry the original initializer
@@ -212,48 +219,34 @@ namespace ts {
             });
             return factory.updateCatchClause(node, factory.createVariableDeclaration(catch_e), factory.updateBlock(node.block, newStatements));
         }
+        function transformTryStatement(node: TryStatement): TryStatement {
+            if (!currentDoContext) return visitEachChild(node, visitor, context);
+            return visitEachChild(node, child => {
+                if (child === node.finallyBlock) {
+                    const old = currentDoContext!.shouldTrack;
+                    currentDoContext!.shouldTrack = false;
+                    const result = visitor(child);
+                    currentDoContext!.shouldTrack = old;
+                    return result;
+                }
+                return visitor(child);
+            }, context);
+        }
         // function transformSwitch() {}
 
         function transformControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
+            if (!currentDoContext || currentDoContext.isAsync) return visitEachChild(node, visitor, context);
             if (isReturnStatement(node)) {
-                let shouldTransform = false;
-                {
-                    let current = node.parent;
-                    while (current) {
-                        if (current.kind === SyntaxKind.DoExpression) shouldTransform = true;
-                        if (isClassLike(current)) {
-                            shouldTransform = false;
-                            break;
-                        }
-                        if (isFunctionLike(current)) break;
-                        current = current.parent;
-                    }
-                }
-                if (!shouldTransform) return visitEachChild(node, visitor, context);
-                if (!currentReturnContext) {
-                    currentReturnContext = { type: ControlFlow.Return, signal: factory.createTempVariable(noop), value: factory.createTempVariable(noop) };
-                }
-                const setReturnValue = node.expression && factory.createBinaryExpression(currentReturnContext.value, factory.createToken(SyntaxKind.EqualsToken), visitEachChild(node.expression, visitor, context));
-                return factory.createThrowStatement(
-                    setReturnValue ? factory.createCommaListExpression([setReturnValue, currentReturnContext.signal]) : currentReturnContext.signal
-                );
+                if (!currentReturnContext) return visitEachChild(node, visitor, context);
+                const [signal, returnValue] = currentReturnContext.signal ??= [factory.createTempVariable(noop, /** reservedInNestedScopes */ true), factory.createTempVariable(noop, /** reservedInNestedScopes */ true)];
+                const setReturnValue = node.expression && factory.createBinaryExpression(returnValue, factory.createToken(SyntaxKind.EqualsToken), visitEachChild(node.expression, visitor, context));
+                return factory.createThrowStatement(setReturnValue ? factory.createCommaListExpression([setReturnValue, signal]) : signal);
             }
             else {
-                let shouldTransform = false;
-                check: {
-                    if (node.kind === SyntaxKind.BreakStatement && !currentBreakContext) break check;
-                    if (node.kind === SyntaxKind.ContinueStatement && !currentContinueContext) break check;
-
-                    let current = node.parent;
-                    while (current) {
-                        if (current.kind === SyntaxKind.DoExpression) {
-                            shouldTransform = true;
-                            break;
-                        }
-                        current = current.parent;
-                    }
-                }
-                if (!shouldTransform) return visitEachChild(node, visitor, context);
+                if (
+                    (node.kind === SyntaxKind.BreakStatement && !currentBreakContext)
+                    || (node.kind === SyntaxKind.ContinueStatement && !currentContinueContext)
+                ) return visitEachChild(node, visitor, context);
                 const findJumpContext = (label: Identifier | undefined, context: BreakContinueContext | undefined) => {
                     while (context) {
                         if (!label && context.allowAmbientBreak && node.kind === SyntaxKind.BreakStatement) return context;
@@ -264,10 +257,30 @@ namespace ts {
                 };
                 const jump = findJumpContext(node.label, node.kind === SyntaxKind.BreakStatement ? currentBreakContext : currentContinueContext);
                 if (!jump) return visitEachChild(node, visitor, context);
-                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop))
+                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop, /** reservedInNestedScopes */ true))
             }
         }
 
+        function transformDoExpression(node: DoExpression) {
+            const hasAsync = Boolean(node.transformFlags & TransformFlags.ContainsAwait);
+            const hasYield = Boolean(node.transformFlags & TransformFlags.ContainsYield);
+            const oldContext = currentDoContext;
+            const localContext = currentDoContext = {
+                completionValue: context.factory.createTempVariable(context.hoistVariableDeclaration, /** reservedInNestedScopes */ true),
+                isAsync: node.async,
+                shouldTrack: true,
+            };
+            const nextBlock = visitEachChild(node.block, visitor, context);
+            currentDoContext = oldContext;
+            if (node.async) return createAsyncDoExpressionExecutor(nextBlock, localContext.completionValue);
+            return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAsync, hasYield);
+        }
+
+        function transformExpressionStatement(node: ExpressionStatement) {
+            const result = visitEachChild(node, visitor, context);
+            if (!currentDoContext?.shouldTrack) return result;
+            return factory.updateExpressionStatement(result, factory.createAssignment(currentDoContext.completionValue, result.expression));
+        }
         /**
          * ```js
          * { Block }
@@ -287,15 +300,15 @@ namespace ts {
          * ```
          */
         function wrapBlockToHandleSignal(node: ConciseBody, hoists: (ReturnContext | BreakContinueContext)[], handler: (signal: Identifier) => readonly Statement[]) {
-            const catch_e = factory.createTempVariable(() => {});
+            const catch_e = factory.createTempVariable(noop);
             return factory.createBlock([
                 // var signal = {}, operand
                 factory.createVariableStatement(/** modifiers */ undefined, factory.createVariableDeclarationList(
                     flatMap(hoists, x => {
                         if (!x.signal) Debug.fail();
-                        const signal = factory.createVariableDeclaration(x.signal, /** ! */ undefined, /** type */ undefined, factory.createObjectLiteralExpression());
+                        const signal = factory.createVariableDeclaration(x.type === ControlFlow.Return ? x.signal[0] : x.signal, /** ! */ undefined, /** type */ undefined, factory.createObjectLiteralExpression());
                         if (x.type === ControlFlow.Return) {
-                            return [signal, factory.createVariableDeclaration(x.value)];
+                            return [signal, factory.createVariableDeclaration(x.signal[1])];
                         }
                         else {
                             return [signal];
@@ -313,56 +326,12 @@ namespace ts {
             ]);
         }
 
-        function transformDoExpression(expr: DoExpression): VisitResult<Node> {
-            const hasAsync = Boolean(expr.transformFlags & TransformFlags.ContainsAwait);
-            const hasYield = Boolean(expr.transformFlags & TransformFlags.ContainsYield);
-            const temp = context.factory.createTempVariable(context.hoistVariableDeclaration);
-            function do_visit<T extends Block | CaseBlock | CatchClause | Statement | Expression>(node: T): T;
-            function do_visit(node: Node): Node {
-                if (isFunctionLike(node) || isClassLike(node) || isNamespaceBody(node)) return node;
-                if (isExpressionStatement(node)) {
-                    return factory.createExpressionStatement(
-                        factory.createAssignment(temp, visitEachChild(node.expression, visitor, context))
-                    );
-                }
-                const cleanPreviousCompletionValue = factory.createAssignment(temp, factory.createVoidZero());
-                if (isIfStatement(node) && !isIfStatement(node.parent)) {
-                    return factory.createIfStatement(
-                        factory.createCommaListExpression([cleanPreviousCompletionValue, do_visit(node.expression)]),
-                        do_visit(node.thenStatement),
-                        node.elseStatement && do_visit(node.elseStatement)
-                    );
-                }
-                else if (isSwitchStatement(node)) {
-                    return factory.createSwitchStatement(
-                        factory.createCommaListExpression([cleanPreviousCompletionValue, node.expression]),
-                        do_visit(node.caseBlock)
-                    );
-                }
-                else if (isTryStatement(node)) {
-                    return factory.createTryStatement(
-                        factory.createBlock([
-                            factory.createExpressionStatement(cleanPreviousCompletionValue),
-                            ...do_visit(node.tryBlock).statements,
-                        ], node.tryBlock.multiLine),
-                        node.catchClause && do_visit(node.catchClause),
-                        // completion value of finally is ignored
-                        visitEachChild(node.finallyBlock, visitor, context),
-                    );
-                }
-                return visitEachChild(visitEachChild(node, do_visit, context), visitor, context);
-            }
-            const block = visitEachChild(expr.block, do_visit, context);
-            if (expr.async) return createAsyncDoExpressionResult(block, temp);
-            const f = functionOf(block, hasAsync, hasYield);
-            const exec = createDoBlockExecutor(f, hasAsync, hasYield);
-            return factory.createCommaListExpression([exec, temp]);
-        }
+        // TODO: clean completion value before If, Switch, Try
 
         /**
          * Try to generate arrow function if possible.
          */
-        function functionOf(block: ConciseBody, hasAsync: boolean, hasYield: boolean) {
+        function createFunctionExpression(block: ConciseBody, hasAsync: boolean, hasYield: boolean) {
             const modifiers = hasAsync ? [factory.createModifier(SyntaxKind.AsyncKeyword)] : undefined;
             if (!hasYield) {
                 return factory.createArrowFunction(
@@ -375,31 +344,46 @@ namespace ts {
             }
             return factory.createFunctionExpression(
                 modifiers,
-                hasYield ? star : undefined,
+                hasYield ? factory.createToken(SyntaxKind.AsteriskToken) : undefined,
                 /* name */ undefined, /* typeParam */ undefined, /** param */[], /** type */ undefined,
                 isBlock(block) ? block : factory.createBlock([factory.createReturnStatement(block)])
             );
         }
-        function createDoBlockExecutor(f: ArrowFunction | FunctionExpression, hasAsync: boolean, hasYield: boolean) {
+        /**
+         * For async do expression, we generate code like this:
+         * ```js
+         * (() => { Block })(), _completion_value_container_
+         * ```
+         */
+        function createDoExpressionExecutor(body: ConciseBody, completionValueContainer: Identifier, hasAsync: boolean, hasYield: boolean) {
+            const f = createFunctionExpression(body, hasAsync, hasYield);
             // yield* expr.call(this)
-            if (hasYield) return factory.createYieldExpression(star, call(factory.createPropertyAccessExpression(f, "call"), [factory.createThis()]));
+            if (hasYield) return factory.createCommaListExpression([
+                factory.createYieldExpression(
+                    factory.createToken(SyntaxKind.AsteriskToken),
+                    createCall(factory.createPropertyAccessExpression(f, "call"), [factory.createThis()])
+                ),
+                completionValueContainer
+            ]);
             // await expr()
-            if (hasAsync) return factory.createAwaitExpression(call(f, []));
+            if (hasAsync) return factory.createCommaListExpression([factory.createAwaitExpression(createCall(f, [])), completionValueContainer]);
             // expr()
-            return call(f, []);
+            return factory.createCommaListExpression([createCall(f, []), completionValueContainer]);
         }
         /**
          * For async do expression, we generate code like this:
+         * ```js
          * (async () => { _block })().then(() => _completion_value_container_)
+         * ```
          */
-        function createAsyncDoExpressionResult(block: Block, completionValueContainer: Identifier) {
-            const f = functionOf(block, /** await */ true, /** yield */ false);
-            const invoke = call(f, []);
+        function createAsyncDoExpressionExecutor(block: Block, completionValueContainer: Identifier) {
+            const f = createFunctionExpression(block, /** await */ true, /** yield */ false);
+            const invoke = createCall(f, []);
             const then = factory.createPropertyAccessExpression(invoke, "then");
-            const thenBody = functionOf(completionValueContainer, /** await */ false, /** yield */ false);
-            return call(then, [thenBody]);
+            const thenBody = createFunctionExpression(completionValueContainer, /** await */ false, /** yield */ false);
+            return createCall(then, [thenBody]);
         }
-        function call(expr: Expression, args: Expression[]) {
+        function createCall(expr: Expression, args: Expression[]) {
             return factory.createCallExpression(expr, /** generics */ undefined, args);
         }
     }
