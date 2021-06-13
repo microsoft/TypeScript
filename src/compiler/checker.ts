@@ -15109,11 +15109,11 @@ namespace ts {
         }
 
         function isTypicalNondistributiveConditional(root: ConditionalRoot) {
-            return !root.isDistributive
-                && root.node.checkType.kind === SyntaxKind.TupleType
-                && length((root.node.checkType as TupleTypeNode).elements) === 1
-                && root.node.extendsType.kind === SyntaxKind.TupleType
-                && length((root.node.extendsType as TupleTypeNode).elements) === 1;
+            return !root.isDistributive && isSingletonTupleType(root.node.checkType) && isSingletonTupleType(root.node.extendsType);
+        }
+
+        function isSingletonTupleType(node: TypeNode) {
+            return isTupleTypeNode(node) && length(node.elements) === 1 && !isOptionalTypeNode(node.elements[0]) && !isRestTypeNode(node.elements[0]);
         }
 
         /**
@@ -15132,12 +15132,11 @@ namespace ts {
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
             // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
             while (true) {
-                const checkType = instantiateType(getActualTypeVariable(root.checkType), mapper);
-                const unwrappedCheckType = unwrapNondistributiveConditionalTuple(root, checkType);
-                const checkTypeInstantiable = isGenericObjectType(unwrappedCheckType) || isGenericIndexType(unwrappedCheckType);
-                const extendsType = instantiateType(root.extendsType, mapper);
-                const unwrappedExtendsType = unwrapNondistributiveConditionalTuple(root, extendsType)
-                if (unwrappedCheckType === wildcardType || unwrappedExtendsType === wildcardType) {
+                const isUnwrapped = isTypicalNondistributiveConditional(root);
+                const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
+                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
+                if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
                 }
                 let combinedMapper: TypeMapper | undefined;
@@ -15155,17 +15154,16 @@ namespace ts {
                     combinedMapper = mapper ? combineTypeMappers(context.mapper, mapper) : context.mapper;
                 }
                 // Instantiate the extends type including inferences for 'infer T' type parameters
-                const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
-                const unwrappedInferredExtendsType = unwrapNondistributiveConditionalTuple(root, inferredExtendsType)
+                const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
-                if (!checkTypeInstantiable && !isGenericObjectType(unwrappedInferredExtendsType) && !isGenericIndexType(unwrappedInferredExtendsType)) {
+                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
                     // then no instantiations will be and we can just return the false branch type.
-                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                    if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any && !isUnwrapped) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                         // Return union of trueType and falseType for 'any' since it matches anything
-                        if (checkType.flags & TypeFlags.Any) {
+                        if (checkType.flags & TypeFlags.Any && !isUnwrapped) {
                             (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                         }
                         // If falseType is an immediately nested conditional type that isn't distributive or has an
