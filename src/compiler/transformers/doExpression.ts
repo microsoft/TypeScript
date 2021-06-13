@@ -48,6 +48,21 @@ namespace ts {
         function startIterationContext<T>(label: Label, f: () => T) {
             return startBreakContext(label, /* allowAmbientBreak */ true, () => startContinueContext(label, f));
         }
+        function hasSignal(context: undefined | BreakContinueContext) {
+            while (context) {
+                if (context.signal) return true;
+                context = context.parent;
+            }
+            return false;
+        }
+        function getSignals(context: undefined | BreakContinueContext) {
+            const signals: Identifier[] = [];
+            while (context) {
+                if (context.signal) signals.push(context.signal);
+                context = context.parent;
+            }
+            return signals;
+        }
         //#endregion
         return transformSourceFile(node);
 
@@ -69,6 +84,8 @@ namespace ts {
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.LabeledStatement:
                     return transformLabelledStatement(node as LabeledStatement);
+                case SyntaxKind.CatchClause:
+                    return transfromCatchClause(node as CatchClause);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -156,6 +173,44 @@ namespace ts {
                 }
                 return child;
             }, context));
+        }
+        /**
+         * To avoid the return/continue/break signal being caught by the user
+         *
+         * ```js
+         * catch(e) { Block }
+         * ```
+         *
+         * into
+         *
+         * ```js
+         * catch(_a) {
+         *     if (_a == signal) throw _a
+         *     var e = _a
+         *     Block
+         * }
+         * ```
+         */
+        function transfromCatchClause(node: CatchClause): CatchClause {
+            if (!currentReturnContext && !hasSignal(currentBreakContext) && !hasSignal(currentContinueContext)) return visitEachChild(node, visitor, context);
+            node = visitEachChild(node, visitor, context);
+
+            const catch_e = factory.createTempVariable(noop);
+            const newStatements = [...node.block.statements];
+            const signals = getSignals(currentBreakContext).concat(getSignals(currentContinueContext));
+            if (currentReturnContext) signals.push(currentReturnContext.signal);
+            const oldCatch_e = node.variableDeclaration;
+            if (oldCatch_e) {
+                // catch(e = 1) is syntax error. no need to worry the original initializer
+                const decl = factory.updateVariableDeclaration(oldCatch_e, oldCatch_e.name, oldCatch_e.exclamationToken, oldCatch_e.type, catch_e);
+                newStatements.unshift(
+                    factory.createVariableStatement(/** modifiers */ undefined, factory.createVariableDeclarationList([decl]))
+                );
+            }
+            forEach(signals, signal => {
+                newStatements.unshift(factory.createIfStatement(factory.createEquality(catch_e, signal), factory.createThrowStatement(catch_e)));
+            });
+            return factory.updateCatchClause(node, factory.createVariableDeclaration(catch_e), factory.updateBlock(node.block, newStatements));
         }
         // function transformSwitch() {}
 
