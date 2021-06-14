@@ -107,6 +107,10 @@ namespace ts.InlayHints {
             }
         }
 
+        function isModuleReferenceType(type: Type) {
+            return type.symbol && (type.symbol.flags & SymbolFlags.Module);
+        }
+
         function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
             const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(decl);
             if (effectiveTypeAnnotation || !decl.initializer) {
@@ -114,7 +118,7 @@ namespace ts.InlayHints {
             }
 
             const declarationType = checker.getTypeAtLocation(decl);
-            if (!preferences.includeInlayRequireAssignedVariableTypeHints && declarationType.symbol && (declarationType.symbol.flags & SymbolFlags.Module)) {
+            if (isModuleReferenceType(declarationType)) {
                 return;
             }
 
@@ -170,6 +174,10 @@ namespace ts.InlayHints {
             }
 
             const returnType = checker.getReturnTypeOfSignature(signature);
+            if (isModuleReferenceType(returnType)) {
+                return;
+            }
+
             const typeDisplayString = printTypeInSingleLine(returnType);
             if (!typeDisplayString) {
                 return;
@@ -226,6 +234,10 @@ namespace ts.InlayHints {
             }
 
             const signatureParamType = checker.getTypeOfSymbolAtLocation(symbol, valueDeclaration);
+            if (isModuleReferenceType(signatureParamType)) {
+                return undefined;
+            }
+
             return printTypeInSingleLine(signatureParamType);
         }
 

@@ -7,18 +7,27 @@
 //// module.exports.a = 1
 
 // @Filename: /b.js
-//// const a/*a*/ = require('./a');
+//// function foo () { return require('./a'); }
+//// function bar ()/*a*/ { return require('./a').a; }
+//// const c = foo()
+//// const d/*b*/ = bar()
 
 goTo.file('/b.js')
 const markers = test.markers();
 verify.getInlayHints([
     {
-        text: ': typeof import("/a")',
+        text: ': number',
         position: markers[0].position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true
-    }
+    },
+    {
+        text: ': number',
+        position: markers[1].position,
+        kind: ts.InlayHintKind.Type,
+        whitespaceBefore: true
+    },
 ], undefined, {
     includeInlayVariableTypeHints: true,
-    includeInlayRequireAssignedVariableTypeHints: true
+    includeInlayFunctionLikeReturnTypeHints: true
 });
