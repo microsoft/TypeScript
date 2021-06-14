@@ -25,3 +25,20 @@ const b1a = async do {
         3
     }
 }
+
+const c1 = do {
+    if (a2) 1; else 2
+}
+const c2 = do {
+    // only track the last expr
+    if (a2) 1; else 2
+
+    try {
+        if (a2) 1; else 2
+        if (a2) 1; else 2
+    } catch (e) {
+        {
+            e
+        }
+    } finally {}
+}

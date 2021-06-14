@@ -1,0 +1,23 @@
+=== tests/cases/compiler/doExpressionReturn.ts ===
+function x() {
+>x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0), Decl(doExpressionReturn.ts, 2, 1))
+
+    const y = do { return }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 1, 9))
+}
+
+function x() {
+>x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0), Decl(doExpressionReturn.ts, 2, 1))
+
+    const y = do {
+>y : Symbol(y, Decl(doExpressionReturn.ts, 5, 9))
+
+        function z() {
+>z : Symbol(z, Decl(doExpressionReturn.ts, 5, 18))
+
+            return
+        }
+        1
+     }
+}
+

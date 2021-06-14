@@ -44,3 +44,32 @@ const b1a = async do {
     }
 }
 
+const c1 = do {
+>c1 : Symbol(c1, Decl(doExpressionBasic.ts, 26, 5))
+
+    if (a2) 1; else 2
+>a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
+}
+const c2 = do {
+>c2 : Symbol(c2, Decl(doExpressionBasic.ts, 29, 5))
+
+    // only track the last expr
+    if (a2) 1; else 2
+>a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
+
+    try {
+        if (a2) 1; else 2
+>a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
+
+        if (a2) 1; else 2
+>a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
+
+    } catch (e) {
+>e : Symbol(e, Decl(doExpressionBasic.ts, 36, 13))
+        {
+            e
+>e : Symbol(e, Decl(doExpressionBasic.ts, 36, 13))
+        }
+    } finally {}
+}
+

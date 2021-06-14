@@ -25,15 +25,32 @@ const b1a = async do {
     }
 }
 
+const c1 = do {
+    if (a2) 1; else 2
+}
+const c2 = do {
+    // only track the last expr
+    if (a2) 1; else 2
+
+    try {
+        if (a2) 1; else 2
+        if (a2) 1; else 2
+    } catch (e) {
+        {
+            e
+        }
+    } finally {}
+}
+
 
 //// [doExpressionBasic.js]
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 const a1 = ((() => { })(), _a);
 const a1a = (async () => { })().then(() => _b);
 const a2 = ((() => { _c = 1; })(), _c);
 const a2a = (async () => { _d = 1; })().then(() => _d);
-const a3 = () => { var _g; return (() => { throw 1; })(), _g; };
-const a3a = () => { var _g; return (async () => { throw 1; })().then(() => _g); };
+const a3 = () => { var _j; return (() => { throw 1; })(), _j; };
+const a3a = () => { var _j; return (async () => { throw 1; })().then(() => _j); };
 const b1 = ((() => {
     try {
         _e = 1;
@@ -56,3 +73,32 @@ const b1a = (async () => {
         3;
     }
 })().then(() => _f);
+const c1 = ((() => {
+    if (a2)
+        _g = 1;
+    else
+        _g = 2;
+})(), _g);
+const c2 = ((() => {
+    // only track the last expr
+    if (a2)
+        1;
+    else
+        2;
+    try {
+        if (a2)
+            1;
+        else
+            2;
+        if (a2)
+            _h = 1;
+        else
+            _h = 2;
+    }
+    catch (e) {
+        {
+            _h = e;
+        }
+    }
+    finally { }
+})(), _h);

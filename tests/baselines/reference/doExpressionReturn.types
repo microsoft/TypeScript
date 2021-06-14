@@ -1,0 +1,26 @@
+=== tests/cases/compiler/doExpressionReturn.ts ===
+function x() {
+>x : () => void
+
+    const y = do { return }
+>y : never
+>do { return } : never
+}
+
+function x() {
+>x : () => void
+
+    const y = do {
+>y : 1
+>do {        function z() {            return        }        1     } : 1
+
+        function z() {
+>z : () => void
+
+            return
+        }
+        1
+>1 : 1
+     }
+}
+
