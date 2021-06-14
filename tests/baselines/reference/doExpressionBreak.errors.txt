@@ -1,0 +1,38 @@
+tests/cases/compiler/doExpressionBreak.ts(3,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionBreak.ts(12,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionBreak.ts(21,13): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/doExpressionBreak.ts (3 errors) ====
+    for (const i of [1]) {
+        (do {
+            if (i === 1) break;
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+            1;
+        })
+    }
+    
+    
+    for (const i of [1]) {
+        for (const i of [1]) {
+            (do {
+                if (i === 1) break;
+                ~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                1;
+            })
+        }
+    }
+    
+    a: for (const i of [1]) {
+        for (const i of [1]) {
+            (do {
+                if (i === 1) break a;
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                1;
+            })
+        }
+    }
+    

@@ -1,0 +1,43 @@
+=== tests/cases/compiler/doExpressionBreak.ts ===
+for (const i of [1]) {
+>i : Symbol(i, Decl(doExpressionBreak.ts, 0, 10))
+
+    (do {
+        if (i === 1) break;
+>i : Symbol(i, Decl(doExpressionBreak.ts, 0, 10))
+
+        1;
+    })
+}
+
+
+for (const i of [1]) {
+>i : Symbol(i, Decl(doExpressionBreak.ts, 8, 10))
+
+    for (const i of [1]) {
+>i : Symbol(i, Decl(doExpressionBreak.ts, 9, 14))
+
+        (do {
+            if (i === 1) break;
+>i : Symbol(i, Decl(doExpressionBreak.ts, 9, 14))
+
+            1;
+        })
+    }
+}
+
+a: for (const i of [1]) {
+>i : Symbol(i, Decl(doExpressionBreak.ts, 17, 13))
+
+    for (const i of [1]) {
+>i : Symbol(i, Decl(doExpressionBreak.ts, 18, 14))
+
+        (do {
+            if (i === 1) break a;
+>i : Symbol(i, Decl(doExpressionBreak.ts, 18, 14))
+
+            1;
+        })
+    }
+}
+

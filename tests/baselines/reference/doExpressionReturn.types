@@ -7,8 +7,8 @@ function x() {
 >do { return } : never
 }
 
-function x() {
->x : () => void
+function w() {
+>w : () => void
 
     const y = do {
 >y : 1
@@ -22,5 +22,66 @@ function x() {
         1
 >1 : 1
      }
+}
+
+function z() {
+>z : () => void
+
+    try {
+        const y = do { return }
+>y : never
+>do { return } : never
+
+    } catch {}
+    try {
+        const y = do { return }
+>y : never
+>do { return } : never
+
+    } catch(e) {}
+>e : any
+
+    try {
+        const y = do { return }
+>y : never
+>do { return } : never
+
+    } catch ({ a = 1 }) {}
+>a : any
+>1 : 1
+}
+
+function q() {
+>q : () => void
+
+    (do {
+>(do {        try {            return        } catch {}    }) : void
+>do {        try {            return        } catch {}    } : void
+
+        try {
+            return
+        } catch {}
+    });
+    (do {
+>(do {        try {            return        } catch(d) {}    }) : void
+>do {        try {            return        } catch(d) {}    } : void
+
+        try {
+            return
+        } catch(d) {}
+>d : any
+
+    });
+    (do {
+>(do {        try {            return        } catch({a = 1}) {}    }) : void
+>do {        try {            return        } catch({a = 1}) {}    } : void
+
+        try {
+            return
+        } catch({a = 1}) {}
+>a : any
+>1 : 1
+
+    });
 }
 

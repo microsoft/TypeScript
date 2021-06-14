@@ -1,0 +1,100 @@
+tests/cases/compiler/doExpressionReturn.ts(15,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(17,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(18,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(20,16): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(21,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(23,25): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(27,5): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(30,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(32,5): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(35,20): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(37,5): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(40,26): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/doExpressionReturn.ts (12 errors) ====
+    function x() {
+        const y = do { return }
+    }
+    
+    function w() {
+        const y = do {
+            function z() {
+                return
+            }
+            1
+         }
+    }
+    
+    function z() {
+        try {
+            ~
+            const y = do { return }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        } catch {}
+    ~~~~~
+!!! error TS7030: Not all code paths return a value.
+                ~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            ~
+            const y = do { return }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        } catch(e) {}
+    ~~~~~
+!!! error TS7030: Not all code paths return a value.
+                   ~~
+!!! error TS7030: Not all code paths return a value.
+        try {
+            ~
+            const y = do { return }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        } catch ({ a = 1 }) {}
+    ~~~~~
+!!! error TS7030: Not all code paths return a value.
+                            ~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    
+    function q() {
+        (do {
+        ~~~~~
+            try {
+    ~~~~~~~~~~~~~
+                return
+    ~~~~~~~~~~~~~~~~~~
+            } catch {}
+    ~~~~~~~~~~~~~~~~~~
+                    ~~
+!!! error TS7030: Not all code paths return a value.
+        });
+    ~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        (do {
+        ~~~~~
+            try {
+    ~~~~~~~~~~~~~
+                return
+    ~~~~~~~~~~~~~~~~~~
+            } catch(d) {}
+    ~~~~~~~~~~~~~~~~~~~~~
+                       ~~
+!!! error TS7030: Not all code paths return a value.
+        });
+    ~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        (do {
+        ~~~~~
+            try {
+    ~~~~~~~~~~~~~
+                return
+    ~~~~~~~~~~~~~~~~~~
+            } catch({a = 1}) {}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                             ~~
+!!! error TS7030: Not all code paths return a value.
+        });
+    ~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+    }
+    

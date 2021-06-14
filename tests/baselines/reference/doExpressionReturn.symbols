@@ -1,13 +1,13 @@
 === tests/cases/compiler/doExpressionReturn.ts ===
 function x() {
->x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0), Decl(doExpressionReturn.ts, 2, 1))
+>x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0))
 
     const y = do { return }
 >y : Symbol(y, Decl(doExpressionReturn.ts, 1, 9))
 }
 
-function x() {
->x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0), Decl(doExpressionReturn.ts, 2, 1))
+function w() {
+>w : Symbol(w, Decl(doExpressionReturn.ts, 2, 1))
 
     const y = do {
 >y : Symbol(y, Decl(doExpressionReturn.ts, 5, 9))
@@ -19,5 +19,52 @@ function x() {
         }
         1
      }
+}
+
+function z() {
+>z : Symbol(z, Decl(doExpressionReturn.ts, 11, 1))
+
+    try {
+        const y = do { return }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 15, 13))
+
+    } catch {}
+    try {
+        const y = do { return }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 18, 13))
+
+    } catch(e) {}
+>e : Symbol(e, Decl(doExpressionReturn.ts, 19, 12))
+
+    try {
+        const y = do { return }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 21, 13))
+
+    } catch ({ a = 1 }) {}
+>a : Symbol(a, Decl(doExpressionReturn.ts, 22, 14))
+}
+
+function q() {
+>q : Symbol(q, Decl(doExpressionReturn.ts, 23, 1))
+
+    (do {
+        try {
+            return
+        } catch {}
+    });
+    (do {
+        try {
+            return
+        } catch(d) {}
+>d : Symbol(d, Decl(doExpressionReturn.ts, 34, 16))
+
+    });
+    (do {
+        try {
+            return
+        } catch({a = 1}) {}
+>a : Symbol(a, Decl(doExpressionReturn.ts, 39, 17))
+
+    });
 }
 
