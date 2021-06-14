@@ -30,28 +30,15 @@ const b1 = do {
         3
     }
 }
-const b1a = async do {
->b1a : Symbol(b1a, Decl(doExpressionBasic.ts, 16, 5))
-
-    try {
-        1
-    } catch (e) {
->e : Symbol(e, Decl(doExpressionBasic.ts, 19, 13))
-
-        2
-    } finally {
-        3
-    }
-}
 
 const c1 = do {
->c1 : Symbol(c1, Decl(doExpressionBasic.ts, 26, 5))
+>c1 : Symbol(c1, Decl(doExpressionBasic.ts, 17, 5))
 
     if (a2) 1; else 2
 >a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
 }
 const c2 = do {
->c2 : Symbol(c2, Decl(doExpressionBasic.ts, 29, 5))
+>c2 : Symbol(c2, Decl(doExpressionBasic.ts, 20, 5))
 
     // only track the last expr
     if (a2) 1; else 2
@@ -65,11 +52,11 @@ const c2 = do {
 >a2 : Symbol(a2, Decl(doExpressionBasic.ts, 2, 5))
 
     } catch (e) {
->e : Symbol(e, Decl(doExpressionBasic.ts, 36, 13))
-        {
-            e
->e : Symbol(e, Decl(doExpressionBasic.ts, 36, 13))
-        }
+>e : Symbol(e, Decl(doExpressionBasic.ts, 27, 13))
+
+        { e as "" }
+>e : Symbol(e, Decl(doExpressionBasic.ts, 27, 13))
+
     } finally {}
 }
 

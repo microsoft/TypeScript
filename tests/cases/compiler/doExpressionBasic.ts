@@ -16,15 +16,6 @@ const b1 = do {
         3
     }
 }
-const b1a = async do {
-    try {
-        1
-    } catch (e) {
-        2
-    } finally {
-        3
-    }
-}
 
 const c1 = do {
     if (a2) 1; else 2
@@ -37,8 +28,6 @@ const c2 = do {
         if (a2) 1; else 2
         if (a2) 1; else 2
     } catch (e) {
-        {
-            e
-        }
+        { e as "" }
     } finally {}
 }

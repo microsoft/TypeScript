@@ -41,3 +41,7 @@ a: for (const i of [1]) {
     }
 }
 
+a: {
+    (do { break a })
+}
+

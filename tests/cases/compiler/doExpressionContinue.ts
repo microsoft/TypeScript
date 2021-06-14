@@ -1,7 +1,7 @@
 //@target: ES2021
 for (const i of [1]) {
     (do {
-        if (i === 1) break;
+        if (i === 1) continue;
         1;
     })
 }
@@ -10,7 +10,7 @@ for (const i of [1]) {
 for (const i of [1]) {
     for (const i of [1]) {
         (do {
-            if (i === 1) break;
+            if (i === 1) continue;
             1;
         })
     }
@@ -19,12 +19,8 @@ for (const i of [1]) {
 a: for (const i of [1]) {
     for (const i of [1]) {
         (do {
-            if (i === 1) break a;
+            if (i === 1) continue a;
             1;
         })
     }
-}
-
-a: {
-    (do { break a })
 }

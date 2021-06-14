@@ -1,7 +1,7 @@
-//// [doExpressionBreak.ts]
+//// [doExpressionContinue.ts]
 for (const i of [1]) {
     (do {
-        if (i === 1) break;
+        if (i === 1) continue;
         1;
     })
 }
@@ -10,7 +10,7 @@ for (const i of [1]) {
 for (const i of [1]) {
     for (const i of [1]) {
         (do {
-            if (i === 1) break;
+            if (i === 1) continue;
             1;
         })
     }
@@ -19,76 +19,61 @@ for (const i of [1]) {
 a: for (const i of [1]) {
     for (const i of [1]) {
         (do {
-            if (i === 1) break a;
+            if (i === 1) continue a;
             1;
         })
     }
 }
 
-a: {
-    (do { break a })
-}
 
-
-//// [doExpressionBreak.js]
-var _a, _b, _c, _d;
+//// [doExpressionContinue.js]
+var _a, _b, _c;
 for (const i of [1]) {
-    var _e = {};
+    var _d = {};
     try {
         ((() => {
             if (i === 1)
-                throw _e;
+                throw _d;
             _a = 1;
         })(), _a);
     }
-    catch (_f) {
-        if (_f == _e)
-            break;
-        throw _f;
+    catch (_e) {
+        if (_e == _d)
+            continue;
+        throw _e;
     }
 }
 for (const i of [1]) {
     for (const i of [1]) {
-        var _g = {};
+        var _f = {};
         try {
             ((() => {
                 if (i === 1)
-                    throw _g;
+                    throw _f;
                 _b = 1;
             })(), _b);
         }
-        catch (_h) {
-            if (_h == _g)
-                break;
-            throw _h;
+        catch (_g) {
+            if (_g == _f)
+                continue;
+            throw _g;
         }
     }
 }
 a: for (const i of [1]) {
-    var _j = {};
+    var _h = {};
     try {
         for (const i of [1]) {
             ((() => {
                 if (i === 1)
-                    throw _j;
+                    throw _h;
                 _c = 1;
             })(), _c);
         }
     }
-    catch (_k) {
-        if (_k == _j)
-            break;
-        throw _k;
-    }
-}
-a: {
-    var _l = {};
-    try {
-        ((() => { throw _l; })(), _d);
-    }
-    catch (_m) {
-        if (_m == _m)
-            break a;
-        throw _m;
+    catch (_j) {
+        if (_j == _h)
+            continue;
+        throw _j;
     }
 }

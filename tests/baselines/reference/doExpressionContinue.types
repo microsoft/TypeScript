@@ -1,14 +1,14 @@
-=== tests/cases/compiler/doExpressionBreak.ts ===
+=== tests/cases/compiler/doExpressionContinue.ts ===
 for (const i of [1]) {
 >i : number
 >[1] : number[]
 >1 : 1
 
     (do {
->(do {        if (i === 1) break;        1;    }) : 1
->do {        if (i === 1) break;        1;    } : 1
+>(do {        if (i === 1) continue;        1;    }) : 1
+>do {        if (i === 1) continue;        1;    } : 1
 
-        if (i === 1) break;
+        if (i === 1) continue;
 >i === 1 : boolean
 >i : number
 >1 : 1
@@ -31,10 +31,10 @@ for (const i of [1]) {
 >1 : 1
 
         (do {
->(do {            if (i === 1) break;            1;        }) : 1
->do {            if (i === 1) break;            1;        } : 1
+>(do {            if (i === 1) continue;            1;        }) : 1
+>do {            if (i === 1) continue;            1;        } : 1
 
-            if (i === 1) break;
+            if (i === 1) continue;
 >i === 1 : boolean
 >i : number
 >1 : 1
@@ -58,10 +58,10 @@ a: for (const i of [1]) {
 >1 : 1
 
         (do {
->(do {            if (i === 1) break a;            1;        }) : 1
->do {            if (i === 1) break a;            1;        } : 1
+>(do {            if (i === 1) continue a;            1;        }) : 1
+>do {            if (i === 1) continue a;            1;        } : 1
 
-            if (i === 1) break a;
+            if (i === 1) continue a;
 >i === 1 : boolean
 >i : number
 >1 : 1
@@ -72,14 +72,5 @@ a: for (const i of [1]) {
 
         })
     }
-}
-
-a: {
->a : any
-
-    (do { break a })
->(do { break a }) : never
->do { break a } : never
->a : any
 }
 

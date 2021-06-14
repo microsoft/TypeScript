@@ -48,25 +48,6 @@ const b1 = do {
 >3 : 3
     }
 }
-const b1a = async do {
->b1a : Promise<1 | 2>
->async do {    try {        1    } catch (e) {        2    } finally {        3    }} : Promise<1 | 2>
-
-    try {
-        1
->1 : 1
-
-    } catch (e) {
->e : any
-
-        2
->2 : 2
-
-    } finally {
-        3
->3 : 3
-    }
-}
 
 const c1 = do {
 >c1 : 1 | 2
@@ -78,8 +59,8 @@ const c1 = do {
 >2 : 2
 }
 const c2 = do {
->c2 : any
->do {    // only track the last expr    if (a2) 1; else 2    try {        if (a2) 1; else 2        if (a2) 1; else 2    } catch (e) {        {            e        }    } finally {}} : any
+>c2 : "" | 1 | 2
+>do {    // only track the last expr    if (a2) 1; else 2    try {        if (a2) 1; else 2        if (a2) 1; else 2    } catch (e) {        { e as "" }    } finally {}} : "" | 1 | 2
 
     // only track the last expr
     if (a2) 1; else 2
@@ -100,10 +81,11 @@ const c2 = do {
 
     } catch (e) {
 >e : any
-        {
-            e
+
+        { e as "" }
+>e as "" : ""
 >e : any
-        }
+
     } finally {}
 }
 
