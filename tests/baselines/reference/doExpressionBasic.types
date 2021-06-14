@@ -1,0 +1,70 @@
+=== tests/cases/compiler/doExpressionBasic.ts ===
+const a1 = do { };
+>a1 : void
+>do { } : void
+
+const a1a = async do { };
+>a1a : Promise<void>
+>async do { } : Promise<void>
+
+const a2 = do { 1 };
+>a2 : 1
+>do { 1 } : 1
+>1 : 1
+
+const a2a = async do { 1 };
+>a2a : Promise<1>
+>async do { 1 } : Promise<1>
+>1 : 1
+
+const a3 = () => do { throw 1 };
+>a3 : () => never
+>() => do { throw 1 } : () => never
+>do { throw 1 } : never
+>1 : 1
+
+const a3a = () => async do { throw 1 };
+>a3a : () => Promise<never>
+>() => async do { throw 1 } : () => Promise<never>
+>async do { throw 1 } : Promise<never>
+>1 : 1
+
+const b1 = do {
+>b1 : 1 | 2
+>do {    try {        1    } catch (e) {        2    } finally {        3    }} : 1 | 2
+
+    try {
+        1
+>1 : 1
+
+    } catch (e) {
+>e : any
+
+        2
+>2 : 2
+
+    } finally {
+        3
+>3 : 3
+    }
+}
+const b1a = async do {
+>b1a : Promise<1 | 2>
+>async do {    try {        1    } catch (e) {        2    } finally {        3    }} : Promise<1 | 2>
+
+    try {
+        1
+>1 : 1
+
+    } catch (e) {
+>e : any
+
+        2
+>2 : 2
+
+    } finally {
+        3
+>3 : 3
+    }
+}
+

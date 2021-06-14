@@ -72,9 +72,16 @@ namespace ts {
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) return node;
+            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+                return node;
+            }
             return visitEachChild(node, visitor, context);
         }
 
+        function visitor(node: Expression): Expression
+        function visitor(node: Statement): Statement
+        function visitor(node: ConciseBody): ConciseBody
+        function visitor(node: Node): VisitResult<Node>
         function visitor(node: Node): VisitResult<Node> {
             if (isFunctionLikeDeclaration(node)) return transformFunctionLikeDeclaration(node);
             if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return transformIterationStatement(node);
@@ -112,10 +119,10 @@ namespace ts {
                 }, context);
             });
             function visitBody(child: ConciseBody): ConciseBody {
-                let nextBody = visitEachChild(child, visitor, context);
+                let nextBody = visitor(child);
                 const sig = currentReturnContext?.signal;
                 if (sig) {
-                    // if (signal == currentReturnContext.signal) return operand
+                    // to code: if (signal == currentReturnContext.signal) return operand
                     nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext!], (signal) => [
                         factory.createIfStatement(
                             factory.createEquality(signal, sig[0]),
@@ -135,7 +142,7 @@ namespace ts {
                 }, context);
             });
             function visitStatement(node: Statement) {
-                let nextNode = visitEachChild(node, visitor, context);
+                let nextNode = visitor(node);
                 const controlFlow = [currentBreakContext, currentContinueContext].filter(nonNullable).filter(x => x.signal);
                 if (controlFlow.length){
                     nextNode = wrapBlockToHandleSignal(isBlock(nextNode) ? nextNode : factory.createBlock([nextNode]), controlFlow, createSignalHandler);
@@ -169,7 +176,7 @@ namespace ts {
             if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) return visitEachChild(node, visitor, context);
             return startBreakContext(node.label, /** allowAmbientBreak */ false, () => visitEachChild(node, child => {
                 if (child === node.statement) {
-                    let nextChild = visitEachChild(child, visitor, context);
+                    let nextChild = visitor(node.statement);
                     const signal = currentBreakContext?.signal;
                     if (signal) {
                         if (!isStatement(nextChild)) Debug.fail();
@@ -182,7 +189,7 @@ namespace ts {
                     }
                     return nextChild;
                 }
-                return visitEachChild(child, visitor, context);
+                return visitor(child);
             }, context));
         }
         /**
@@ -243,7 +250,7 @@ namespace ts {
             if (isReturnStatement(node)) {
                 if (!currentReturnContext) return visitEachChild(node, visitor, context);
                 const [signal, returnValue] = currentReturnContext.signal ??= [factory.createTempVariable(noop, /** reservedInNestedScopes */ true), factory.createTempVariable(noop, /** reservedInNestedScopes */ true)];
-                const setReturnValue = node.expression && factory.createBinaryExpression(returnValue, factory.createToken(SyntaxKind.EqualsToken), visitEachChild(node.expression, visitor, context));
+                const setReturnValue = node.expression && factory.createBinaryExpression(returnValue, factory.createToken(SyntaxKind.EqualsToken), visitor(node.expression));
                 return factory.createThrowStatement(setReturnValue ? factory.createCommaListExpression([setReturnValue, signal]) : signal);
             }
             else {
@@ -298,7 +305,8 @@ namespace ts {
                 node.kind === SyntaxKind.TryStatement
             );
             const shouldTrackOld = currentDoContext.shouldTrack;
-            const shouldTrack = shouldTrackOld || node.parent.kind === SyntaxKind.DoExpression;
+            const shouldTrack =
+                shouldTrackOld || node.parent?.kind === SyntaxKind.DoExpression;
             return visitEachChild(node, child => {
                 const isDirectChild = node.statements.includes(child as Statement);
                 if (!shouldTrack || !isDirectChild) return visitor(child);
