@@ -36,3 +36,92 @@ const templateStrUnion = `union with number ${symbolUnionNumber} and union with 
 >symbolUnionNumber : number | symbol
 >symbolUnionString : string | symbol
 
+
+// Fix #44462
+
+type StringOrSymbol = string | symbol;
+>StringOrSymbol : StringOrSymbol
+
+function getKey<S extends StringOrSymbol>(key: S) {
+>getKey : <S extends StringOrSymbol>(key: S) => string
+>key : S
+
+    return `${key} is the key`;
+>`${key} is the key` : string
+>key : S
+}
+
+function getKey1<S extends symbol>(key: S) {
+>getKey1 : <S extends symbol>(key: S) => void
+>key : S
+
+    let s1!: S;
+>s1 : S
+
+    `${s1}`;
+>`${s1}` : string
+>s1 : S
+
+    s1 + '';
+>s1 + '' : string
+>s1 : S
+>'' : ""
+
+    +s1;
+>+s1 : number
+>s1 : S
+
+    let s2!: S | string;
+>s2 : string | S
+
+    `${s2}`;
+>`${s2}` : string
+>s2 : string | S
+
+    s2 + '';
+>s2 + '' : string
+>s2 : string | S
+>'' : ""
+
+    +s2;
+>+s2 : number
+>s2 : string | S
+}
+
+function getKey2<S extends string>(key: S) {
+>getKey2 : <S extends string>(key: S) => void
+>key : S
+
+    let s1!: S;
+>s1 : S
+
+    `${s1}`;
+>`${s1}` : string
+>s1 : S
+
+    s1 + '';
+>s1 + '' : string
+>s1 : S
+>'' : ""
+
+    +s1;
+>+s1 : number
+>s1 : S
+
+    let s2!: S | symbol;
+>s2 : symbol | S
+
+    `${s2}`;
+>`${s2}` : string
+>s2 : symbol | S
+
+    s2 + '';
+>s2 + '' : string
+>s2 : symbol | S
+>'' : ""
+
+    +s2;
+>+s2 : number
+>s2 : symbol | S
+}
+
