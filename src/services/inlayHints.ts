@@ -5,6 +5,7 @@ namespace ts.InlayHints {
 
     export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const { file, program, span, cancellationToken, preferences } = context;
+        const sourceFileText = file.text;
 
         const checker = program.getTypeChecker();
         const result: InlayHint[] = [];
@@ -149,11 +150,25 @@ namespace ts.InlayHints {
                 const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (identifierNameInfo) {
                     const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
-                    if (isFirstVariadicArgument || preferences.includeInlayDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName) {
-                        addParameterHints(unescapeLeadingUnderscores(parameterName), args[i].getStart(), isFirstVariadicArgument);
+                    const isParameterNameNotSameAsArgument = preferences.includeInlayDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName;
+                    if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
+                        continue;
                     }
+
+                    const name = unescapeLeadingUnderscores(parameterName);
+                    const commentRanges = getLeadingCommentRanges(sourceFileText, arg.pos);
+                    if (leadingCommentsHasParameterName(commentRanges, name)) {
+                        continue;
+                    }
+
+                    addParameterHints(name, args[i].getStart(), isFirstVariadicArgument);
                 }
             }
+        }
+
+        function leadingCommentsHasParameterName(commentRanges: CommentRange[] | undefined, name: string) {
+            if (!commentRanges?.length) return false;
+            return commentRanges.some(range => stringContains(sourceFileText.substring(range.pos, range.end), name));
         }
 
         function isHintableExpression(node: Node) {
