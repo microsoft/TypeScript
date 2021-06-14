@@ -78,10 +78,10 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function visitor(node: Expression): Expression
-        function visitor(node: Statement): Statement
-        function visitor(node: ConciseBody): ConciseBody
-        function visitor(node: Node): VisitResult<Node>
+        function visitor(node: Expression): Expression;
+        function visitor(node: Statement): Statement;
+        function visitor(node: ConciseBody): ConciseBody;
+        function visitor(node: Node): VisitResult<Node>;
         function visitor(node: Node): VisitResult<Node> {
             if (isFunctionLikeDeclaration(node)) return transformFunctionLikeDeclaration(node);
             if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return transformIterationStatement(node);
