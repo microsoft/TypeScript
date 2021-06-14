@@ -5986,6 +5986,9 @@ namespace ts {
                     case SyntaxKind.FunctionKeyword:
                     case SyntaxKind.ClassKeyword:
                     case SyntaxKind.EnumKeyword:
+                    // Include 'default' for error recovery.
+                    // falls through
+                    case SyntaxKind.DefaultKeyword:
                         return true;
 
                     // 'declare', 'module', 'namespace', 'interface'* and 'type' are all legal JavaScript identifiers;
@@ -6084,9 +6087,10 @@ namespace ts {
                 case SyntaxKind.ThrowKeyword:
                 case SyntaxKind.TryKeyword:
                 case SyntaxKind.DebuggerKeyword:
-                // 'catch' and 'finally' do not actually indicate that the code is part of a statement,
+                // 'default', 'catch' and 'finally' do not actually indicate that the code is part of a statement,
                 // however, we say they are here so that we may gracefully parse them and error later.
                 // falls through
+                case SyntaxKind.DefaultKeyword:
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
                     return true;
@@ -6197,6 +6201,9 @@ namespace ts {
                 case SyntaxKind.StaticKeyword:
                 case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.GlobalKeyword:
+                // Include 'default' for error recovery.
+                // falls through
+                case SyntaxKind.DefaultKeyword:
                     if (isStartOfDeclaration()) {
                         return parseDeclaration();
                     }

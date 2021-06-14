@@ -1,5 +1,5 @@
 === tests/cases/compiler/defaultKeywordWithoutExport2.ts ===
 default function () {
-> : () => void
-
-}
+No type information for this code.
+No type information for this code.}
+No type information for this code.
