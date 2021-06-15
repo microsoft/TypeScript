@@ -25,20 +25,24 @@ k6 = [1, ...sbb_];
 
 
 //// [spliceTuples.js]
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var k1;
-k1 = __spreadArray([1], sb);
+k1 = __spreadArray([1], sb, true);
 var k2;
-k2 = __spreadArray(__spreadArray([1], sb), [1]);
+k2 = __spreadArray(__spreadArray([1], sb, true), [1], false);
 var k3;
-k3 = __spreadArray([1], sb_);
+k3 = __spreadArray([1], sb_, true);
 var k4;
-k4 = __spreadArray([1], sbb_);
+k4 = __spreadArray([1], sbb_, true);
 var k5;
-k5 = __spreadArray([1], sbb_);
+k5 = __spreadArray([1], sbb_, true);
 var k6;
-k6 = __spreadArray([1], sbb_);
+k6 = __spreadArray([1], sbb_, true);

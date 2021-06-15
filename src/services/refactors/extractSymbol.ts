@@ -215,7 +215,6 @@ namespace ts.refactor.extractSymbol {
         export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
         export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
         export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
-        export const cannotExtractToOtherFunctionLike = createMessage("Cannot extract method to a function-like scope that is not a function");
         export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
         export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
     }
@@ -1624,10 +1623,7 @@ namespace ts.refactor.extractSymbol {
             usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
             substitutionsPerScope.push(new Map<string, Expression>());
 
-            functionErrorsPerScope.push(
-                isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
-                    ? [createDiagnosticForNode(scope, Messages.cannotExtractToOtherFunctionLike)]
-                    : []);
+            functionErrorsPerScope.push([]);
 
             const constantErrors = [];
             if (expressionDiagnostic) {

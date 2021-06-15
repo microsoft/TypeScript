@@ -9,8 +9,9 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(149,5): error TS2322: Typ
 tests/cases/conformance/types/tuple/variadicTuples1.ts(151,5): error TS2322: Type '[string, ...unknown[]]' is not assignable to type '[string, ...U]'.
   Target requires 2 element(s) but source may have fewer.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(152,5): error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
-  Type 'T' is not assignable to type 'U'.
-    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'T' is not assignable to type 'U'.
+      'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(160,5): error TS2322: Type 'readonly [...T]' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'readonly [...T]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(162,5): error TS4104: The type 'readonly [...T]' is 'readonly' and cannot be assigned to the mutable type '[...T]'.
@@ -212,8 +213,9 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
         z = y;  // Error
         ~
 !!! error TS2322: Type '[string, ...T]' is not assignable to type '[string, ...U]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+!!! error TS2322:       'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'string[]'.
     }
     
     // For a generic type T, [...T] is assignable to T, T is assignable to readonly [...T], and T is assignable
