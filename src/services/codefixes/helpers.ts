@@ -127,7 +127,7 @@ namespace ts.codefix {
                 }
 
                 for (const signature of signatures) {
-                    // Need to ensure nodes are fresh each time so they can have different positions.
+                    // Ensure nodes are fresh so they can have different positions when going through formatting.
                     outputMethod(quotePreference, signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
                 }
 
@@ -310,15 +310,16 @@ namespace ts.codefix {
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-        const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+        let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
             if (importableReference) {
                 importSymbols(importAdder, importableReference.symbols);
-                return importableReference.typeNode;
+                typeNode = importableReference.typeNode;
             }
         }
-        return typeNode;
+        // Ensure nodes are fresh so they can have different positions when going through formatting.
+        return getSynthesizedDeepClone(typeNode);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {

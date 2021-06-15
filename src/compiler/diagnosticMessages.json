@@ -2438,9 +2438,17 @@
         "category": "Error",
         "code": 2567
     },
+    "Property '{0}' may not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2568
+    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
+    },
+    "Could not find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2570
     },
     "Object is of type 'unknown'.": {
         "category": "Error",
@@ -3331,6 +3339,14 @@
     "Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.": {
         "category": "Error",
         "code": 2812
+    },
+    "Class declaration cannot implement overload list for '{0}'.": {
+        "category": "Error",
+        "code": 2813
+    },
+    "Function with bodies can only merge with classes that are ambient.": {
+        "category": "Error",
+        "code": 2814
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -5151,6 +5167,11 @@
         "category": "Message",
         "code": 6505
     },
+    "Consider adding a 'declare' modifier to this class.": {
+        "category": "Message",
+        "code": 6506
+    },
+
 
     "Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.": {
         "category": "Message",
@@ -5612,7 +5633,11 @@
         "category": "Message",
         "code": 6718
     },
-
+    "Type catch clause variables as 'unknown' instead of 'any'.": {
+        "category": "Message",
+        "code": 6803
+    },
+ 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

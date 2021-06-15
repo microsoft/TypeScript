@@ -90,7 +90,7 @@ ${logText.trim()}`;
         base: process.env.TARGET_BRANCH,
         body:
     `This cherry-pick was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE}
-Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included seperately from the base change.` : ""}
+Please review the diff and merge if no changes are unexpected.${produceLKG ? ` An LKG update commit is included separately from the base change.` : ""}
 You can view the cherry-pick log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,

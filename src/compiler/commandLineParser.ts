@@ -566,6 +566,8 @@ namespace ts {
         {
             name: "strict",
             type: "boolean",
+            // Though this affects semantic diagnostics, affectsSemanticDiagnostics is not set here
+            // The value of each strictFlag depends on own strictFlag value or this and never accessed directly.
             showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_all_strict_type_checking_options
@@ -631,6 +633,15 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
+        },
+        {
+            name: "useUnknownInCatchVariables",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            strictFlag: true,
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Type_Checking,
+            description: Diagnostics.Type_catch_clause_variables_as_unknown_instead_of_any,
         },
         {
             name: "alwaysStrict",

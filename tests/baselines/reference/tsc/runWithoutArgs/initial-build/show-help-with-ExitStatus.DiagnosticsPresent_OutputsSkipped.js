@@ -44,6 +44,7 @@ Options:
  --strictPropertyInitialization                     Check for class properties that are declared but not set in the constructor.
  --strictOptionalProperties                         Enable strict checking of optional properties.
  --noImplicitThis                                   Enable error reporting when `this` is given the type `any`.
+ --useUnknownInCatchVariables                       Type catch clause variables as 'unknown' instead of 'any'.
  --alwaysStrict                                     Ensure 'use strict' is always emitted.
  --noUnusedLocals                                   Enable error reporting when a local variables aren't read.
  --noUnusedParameters                               Raise an error when a function parameter isn't read

@@ -177,7 +177,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function convertToBlock(body: ConciseBody): Block {
         if (isExpression(body)) {
-            return factory.createBlock([factory.createReturnStatement(body)], /* multiLine */ true);
+            const returnStatement = factory.createReturnStatement(body);
+            const file = body.getSourceFile();
+            suppressLeadingAndTrailingTrivia(returnStatement);
+            copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
+            return factory.createBlock([returnStatement], /* multiLine */ true);
         }
         else {
             return body;
