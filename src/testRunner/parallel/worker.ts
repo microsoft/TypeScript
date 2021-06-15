@@ -223,7 +223,7 @@ namespace Harness.Parallel.Worker {
                 })
                 .on("end", () => {
                     hookUncaughtExceptions();
-                    (runner as any).dispose();
+                    runner.dispose();
                 })
                 .run(() => {
                     fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
