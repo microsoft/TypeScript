@@ -371,7 +371,7 @@ namespace ts.Completions.StringCompletions {
         return flatMap(baseDirectories, baseDirectory => getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude));
     }
 
-    enum IncludeExtensionsOption {
+    const enum IncludeExtensionsOption {
         Exclude,
         Include,
         ModuleSpecifierCompletion,
