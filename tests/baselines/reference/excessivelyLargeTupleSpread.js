@@ -41,23 +41,27 @@ const a14 = [...a13, ...a13] as const; // 2^14 > 10,000
 
 //// [excessivelyLargeTupleSpread.js]
 // #41771
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var a0 = [0];
-var a1 = __spreadArray(__spreadArray([], a0), a0);
-var a2 = __spreadArray(__spreadArray([], a1), a1);
-var a3 = __spreadArray(__spreadArray([], a2), a2);
-var a4 = __spreadArray(__spreadArray([], a3), a3);
-var a5 = __spreadArray(__spreadArray([], a4), a4);
-var a6 = __spreadArray(__spreadArray([], a5), a5);
-var a7 = __spreadArray(__spreadArray([], a6), a6);
-var a8 = __spreadArray(__spreadArray([], a7), a7);
-var a9 = __spreadArray(__spreadArray([], a8), a8);
-var a10 = __spreadArray(__spreadArray([], a9), a9);
-var a11 = __spreadArray(__spreadArray([], a10), a10);
-var a12 = __spreadArray(__spreadArray([], a11), a11);
-var a13 = __spreadArray(__spreadArray([], a12), a12);
-var a14 = __spreadArray(__spreadArray([], a13), a13); // 2^14 > 10,000
+var a1 = __spreadArray(__spreadArray([], a0, true), a0, true);
+var a2 = __spreadArray(__spreadArray([], a1, true), a1, true);
+var a3 = __spreadArray(__spreadArray([], a2, true), a2, true);
+var a4 = __spreadArray(__spreadArray([], a3, true), a3, true);
+var a5 = __spreadArray(__spreadArray([], a4, true), a4, true);
+var a6 = __spreadArray(__spreadArray([], a5, true), a5, true);
+var a7 = __spreadArray(__spreadArray([], a6, true), a6, true);
+var a8 = __spreadArray(__spreadArray([], a7, true), a7, true);
+var a9 = __spreadArray(__spreadArray([], a8, true), a8, true);
+var a10 = __spreadArray(__spreadArray([], a9, true), a9, true);
+var a11 = __spreadArray(__spreadArray([], a10, true), a10, true);
+var a12 = __spreadArray(__spreadArray([], a11, true), a11, true);
+var a13 = __spreadArray(__spreadArray([], a12, true), a12, true);
+var a14 = __spreadArray(__spreadArray([], a13, true), a13, true); // 2^14 > 10,000

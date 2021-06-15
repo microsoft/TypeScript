@@ -491,8 +491,6 @@ namespace ts {
                 }
             }
         }
-
-        return false;
     }
 
     /**
@@ -517,7 +515,7 @@ namespace ts {
     /**
      * Iterate on referencing modules that export entities from affected file
      */
-    function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+    function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => void) {
         // If there was change in signature (dts output) for the changed file,
         // then only we need to handle pending file emit
         if (!state.exportedModulesMap || !state.changedFilesSet.has(affectedFile.resolvedPath)) {
@@ -536,8 +534,8 @@ namespace ts {
                 const currentPath = queue.pop()!;
                 if (!seenFileNamesMap.has(currentPath)) {
                     seenFileNamesMap.set(currentPath, true);
-                    const result = fn(state, currentPath);
-                    if (result && isChangedSignature(state, currentPath)) {
+                    fn(state, currentPath);
+                    if (isChangedSignature(state, currentPath)) {
                         const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                         queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
                     }
@@ -549,13 +547,11 @@ namespace ts {
         const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(affectedFile.resolvedPath) &&
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
@@ -568,8 +564,8 @@ namespace ts {
     /**
      * Iterate on files referencing referencedPath
      */
-    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
-        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
+    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void) {
+        forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
             referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath, seenFileAndExportsOfFile, fn)
         );
     }
@@ -577,38 +573,32 @@ namespace ts {
     /**
      * fn on file and iterate on anything that exports this file
      */
-    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Set<string>, fn: (state: BuilderProgramState, filePath: Path) => void) {
         if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) {
-            return false;
+            return;
         }
 
-        if (fn(state, filePath)) {
-            // If there are no more diagnostics from old cache, done
-            return true;
-        }
+        fn(state, filePath);
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.currentAffectedFilesExportedModulesMap, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(filePath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+        forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(filePath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
-        )) {
-            return true;
-        }
+        );
 
         // Remove diagnostics of files that import this file (without going to exports of referencing files)
-        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
+
+        forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
             referencesInFile.has(filePath) &&
             !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
             fn(state, referencingFilePath) // Dont add to seen since this is not yet done with the export removal
