@@ -43,8 +43,8 @@ let a3 = foo(x3);  // string | number
 >x3 : { a: string; b?: number; }
 
 let a4 = foo(x4);  // string | number
->a4 : string | number
->foo(x4) : string | number
+>a4 : string | number | undefined
+>foo(x4) : string | number | undefined
 >foo : <T>(obj: { [x: string]: T; }) => T
 >x4 : { a: string; b?: number | undefined; }
 

@@ -11181,7 +11181,7 @@ namespace ts {
                 // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                 // mode, if the underlying property is optional we remove 'undefined' from the type.
                 let type = strictNullChecks && symbol.flags & SymbolFlags.Optional && !maybeTypeOfKind(propType, TypeFlags.Undefined | TypeFlags.Void) ? getOptionalType(propType, /*isProperty*/ true) :
-                    symbol.checkFlags & CheckFlags.StripOptional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
+                    symbol.checkFlags & CheckFlags.StripOptional ? removeMissingOrUndefinedType(propType) :
                     propType;
                 if (!popTypeResolution()) {
                     error(currentNode, Diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, symbolToString(symbol), typeToString(mappedType));
@@ -12045,7 +12045,7 @@ namespace ts {
                 for (const prop of getPropertiesOfType(type)) {
                     if (kind === IndexKind.String || isNumericLiteralName(prop.escapedName)) {
                         const propType = getTypeOfSymbol(prop);
-                        propTypes.push(prop.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType);
+                        propTypes.push(prop.flags & SymbolFlags.Optional ? removeMissingOrUndefinedType(propType) : propType);
                     }
                 }
                 if (kind === IndexKind.String) {
@@ -20331,12 +20331,8 @@ namespace ts {
             return strictNullChecks ? getUnionType([type, optionalType]) : type;
         }
 
-        function isNotOptionalTypeMarker(type: Type) {
-            return type !== optionalType;
-        }
-
         function removeOptionalTypeMarker(type: Type): Type {
-            return strictNullChecks ? filterType(type, isNotOptionalTypeMarker) : type;
+            return strictNullChecks ? removeType(type, optionalType) : type;
         }
 
         function propagateOptionalTypeMarker(type: Type, node: OptionalChain, wasOptional: boolean) {
@@ -20350,11 +20346,15 @@ namespace ts {
         }
 
         function removeMissingType(type: Type, isOptional: boolean) {
-            return strictOptionalProperties && isOptional ? filterType(type, t => t !== missingType) : type;
+            return strictOptionalProperties && isOptional ? removeType(type, missingType) : type;
         }
 
         function containsMissingType(type: Type) {
             return strictOptionalProperties && (type === missingType || type.flags & TypeFlags.Union && containsType((type as UnionType).types, missingType));
+        }
+
+        function removeMissingOrUndefinedType(type: Type): Type {
+            return strictOptionalProperties ? removeType(type, missingType) : getTypeWithFacts(type, TypeFacts.NEUndefined);
         }
 
         /**
@@ -22562,6 +22562,10 @@ namespace ts {
             return type.flags & TypeFlags.Never || f(type) ? type : neverType;
         }
 
+        function removeType(type: Type, targetType: Type) {
+            return filterType(type, t => t !== targetType);
+        }
+
         function countTypes(type: Type) {
             return type.flags & TypeFlags.Union ? (type as UnionType).types.length : 1;
         }
@@ -23460,7 +23464,7 @@ namespace ts {
                         const candidate = getConstituentTypeForKeyType(type as UnionType, getTypeOfExpression(value));
                         if (candidate) {
                             return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ? candidate :
-                                isUnitType(getTypeOfPropertyOfType(candidate, keyPropertyName) || unknownType) ? filterType(type, t => t !== candidate) :
+                                isUnitType(getTypeOfPropertyOfType(candidate, keyPropertyName) || unknownType) ? removeType(type, candidate) :
                                 type;
                         }
                     }
