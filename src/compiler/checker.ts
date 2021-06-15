@@ -1072,15 +1072,19 @@ namespace ts {
             return diagnostic;
         }
 
-        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
-            const diagnostic = location
+        function createError(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+            return location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
                 : createCompilerDiagnostic(message, arg0, arg1, arg2, arg3);
+        }
+
+        function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
+            const diagnostic = createError(location, message, arg0, arg1, arg2, arg3);
             diagnostics.add(diagnostic);
             return diagnostic;
         }
 
-        function addErrorOrSuggestion(isError: boolean, diagnostic: DiagnosticWithLocation) {
+        function addErrorOrSuggestion(isError: boolean, diagnostic: Diagnostic) {
             if (isError) {
                 diagnostics.add(diagnostic);
             }
@@ -1704,8 +1708,8 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals = false,
-            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, suggestedNameNotFoundMessage);
+            issueSuggestions?: boolean): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, issueSuggestions);
         }
 
         function resolveNameHelper(
@@ -1716,8 +1720,7 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
-            lookup: typeof getSymbol,
-            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
+            lookup: typeof getSymbol, issueSuggestions?: boolean): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2054,15 +2057,19 @@ namespace ts {
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                         let suggestion: Symbol | undefined;
-                        if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
+                        if (issueSuggestions && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
-                            const isGlobalScopeAugmentationDeclaration = suggestion && suggestion.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
+                            const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                             if (isGlobalScopeAugmentationDeclaration) {
                                 suggestion = undefined;
                             }
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
-                                const diagnostic = error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg!), suggestionName);
+                                const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
+                                const message = isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1 : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
+                                const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
+                                addErrorOrSuggestion(!isUncheckedJS, diagnostic);
+
                                 if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
@@ -21923,7 +21930,7 @@ namespace ts {
                         node,
                         !isWriteOnlyAccess(node),
                         /*excludeGlobals*/ false,
-                        Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
+                        /*issueSuggestions*/ true) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -27437,7 +27444,8 @@ namespace ts {
             if (!prop) {
                 const indexInfo = !isPrivateIdentifier(right) && (assignmentKind === AssignmentKind.None || !isGenericObjectType(leftType) || isThisTypeParameter(leftType)) ? getIndexInfoOfType(apparentType, IndexKind.String) : undefined;
                 if (!(indexInfo && indexInfo.type)) {
-                    if (isJSLiteralType(leftType)) {
+                    const isUncheckedJS = isUncheckedJSSuggestion(node, leftType.symbol, /*excludeClasses*/ true);
+                    if (!isUncheckedJS && isJSLiteralType(leftType)) {
                         return anyType;
                     }
                     if (leftType.symbol === globalThisSymbol) {
@@ -27450,7 +27458,7 @@ namespace ts {
                         return anyType;
                     }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
-                        reportNonexistentProperty(right, isThisTypeParameter(leftType) ? apparentType : leftType);
+                        reportNonexistentProperty(right, isThisTypeParameter(leftType) ? apparentType : leftType, isUncheckedJS);
                     }
                     return errorType;
                 }
@@ -27481,6 +27489,26 @@ namespace ts {
             }
 
             return getFlowTypeOfAccessExpression(node, prop, propType, right, checkMode);
+        }
+
+        /**
+         * Determines whether a did-you-mean error should be a suggestion in an unchecked JS file.
+         * Only applies to unchecked JS files without checkJS, // @ts-check or // @ts-nocheck
+         * It does not suggest when the suggestion:
+         * - Is from a global file that is different from the reference file, or
+         * - (optionally) Is a class, or is a this.x property access expression
+         */
+        function isUncheckedJSSuggestion(node: Node | undefined, suggestion: Symbol | undefined, excludeClasses: boolean): boolean {
+            const file = getSourceFileOfNode(node);
+            if (file) {
+                if (compilerOptions.checkJs === undefined && file.checkJsDirective === undefined && (file.scriptKind === ScriptKind.JS || file.scriptKind === ScriptKind.JSX)) {
+                    const declarationFile = forEach(suggestion?.declarations, getSourceFileOfNode);
+                    return !(file !== declarationFile && !!declarationFile && isGlobalSourceFile(declarationFile))
+                        && !(excludeClasses && suggestion && suggestion.flags & SymbolFlags.Class)
+                        && !(!!node && excludeClasses && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword);
+                }
+            }
+            return false;
         }
 
         function getFlowTypeOfAccessExpression(node: ElementAccessExpression | PropertyAccessExpression | QualifiedName, prop: Symbol | undefined, propType: Type, errorNode: Node, checkMode: CheckMode | undefined) {
@@ -27614,7 +27642,7 @@ namespace ts {
             return getIntersectionType(x);
         }
 
-        function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type) {
+        function reportNonexistentProperty(propNode: Identifier | PrivateIdentifier, containingType: Type, isUncheckedJS: boolean) {
             let errorInfo: DiagnosticMessageChain | undefined;
             let relatedInfo: Diagnostic | undefined;
             if (!isPrivateIdentifier(propNode) && containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
@@ -27647,7 +27675,8 @@ namespace ts {
                         const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType);
                         if (suggestion !== undefined) {
                             const suggestedName = symbolName(suggestion);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, missingProperty, container, suggestedName);
+                            const message = isUncheckedJS ? Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2 : Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2;
+                            errorInfo = chainDiagnosticMessages(errorInfo, message, missingProperty, container, suggestedName);
                             relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                         }
                         else {
@@ -27663,7 +27692,7 @@ namespace ts {
             if (relatedInfo) {
                 addRelatedInfo(resultDiagnostic, relatedInfo);
             }
-            diagnostics.add(resultDiagnostic);
+            addErrorOrSuggestion(!isUncheckedJS, resultDiagnostic);
         }
 
         function containerSeemsToBeEmptyDomElement(containingType: Type) {
@@ -34582,7 +34611,7 @@ namespace ts {
 
             const rootName = getFirstIdentifier(typeName);
             const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
-            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isRefernce*/ true);
+            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isReference*/ true);
             if (rootSymbol
                 && rootSymbol.flags & SymbolFlags.Alias
                 && symbolIsValue(rootSymbol)

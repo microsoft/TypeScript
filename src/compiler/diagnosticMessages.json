@@ -2442,9 +2442,17 @@
         "category": "Error",
         "code": 2567
     },
+    "Property '{0}' may not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2568
+    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
+    },
+    "Could not find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2570
     },
     "Object is of type 'unknown'.": {
         "category": "Error",
