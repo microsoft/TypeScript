@@ -254,7 +254,7 @@ namespace ts.server {
         /*@internal*/
         private changedFilesForExportMapCache: Set<Path> | undefined;
         /*@internal*/
-        private moduleSpecifierCache = createModuleSpecifierCache();
+        private moduleSpecifierCache = createModuleSpecifierCache(this);
         /*@internal*/
         private symlinks: SymlinkCache | undefined;
         /*@internal*/
@@ -353,10 +353,15 @@ namespace ts.server {
 
         /*@internal*/
         getSymlinkCache(): SymlinkCache {
-            return this.symlinks || (this.symlinks = discoverProbableSymlinks(
-                this.program?.getSourceFiles() || emptyArray,
-                this.getCanonicalFileName,
-                this.getCurrentDirectory()));
+            if (!this.symlinks) {
+                this.symlinks = createSymlinkCache(this.getCurrentDirectory(), this.getCanonicalFileName);
+            }
+            if (this.program && !this.symlinks.hasProcessedResolutions()) {
+                this.symlinks.setSymlinksFromResolutions(
+                    this.program.getSourceFiles(),
+                    this.program.getResolvedTypeReferenceDirectives());
+            }
+            return this.symlinks;
         }
 
         // Method of LanguageServiceHost
@@ -785,6 +790,7 @@ namespace ts.server {
             this.resolutionCache.clear();
             this.resolutionCache = undefined!;
             this.cachedUnresolvedImportsPerFile = undefined!;
+            this.moduleSpecifierCache = undefined!;
             this.directoryStructureHost = undefined!;
             this.projectErrors = undefined;
 
@@ -1389,6 +1395,7 @@ namespace ts.server {
                     this.cachedUnresolvedImportsPerFile.clear();
                     this.lastCachedUnresolvedImportsList = undefined;
                     this.resolutionCache.clear();
+                    this.moduleSpecifierCache.clear();
                 }
                 this.markAsDirty();
             }
@@ -1729,6 +1736,11 @@ namespace ts.server {
             return !!forEachEntry(
                 this.projectService.openFiles,
                 (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this);
+        }
+
+        /*@internal*/
+        watchNodeModulesForPackageJsonChanges(directoryPath: string) {
+            return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
         }
     }
 

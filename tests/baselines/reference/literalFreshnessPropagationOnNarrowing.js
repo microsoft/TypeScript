@@ -62,10 +62,14 @@ function f5() {
 }
 
 //// [literalFreshnessPropagationOnNarrowing.js]
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 function f1() {
     var b = true;
@@ -88,7 +92,7 @@ function f2() {
     // Desired: OK
     // 3.0: Error
     // 3.1: OK
-    var a5 = __spreadArray([], Array.isArray(elOrA) ? elOrA : [elOrA]);
+    var a5 = __spreadArray([], Array.isArray(elOrA) ? elOrA : [elOrA], true);
 }
 function f3() {
     var x = 'x';

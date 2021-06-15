@@ -62,71 +62,71 @@ Print the final configuration instead of building.
 [1mCOMMON COMPILER OPTIONS[22m
 
 [34m--pretty[39m
-Stylize errors and messages using color and context (experimental).
+Enable color and formatting in output to make compiler errors easier to read
 type: boolean
 default: true
 
 [34m--target, -t[39m
-Specify ECMAScript target version.
+Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
 one of: es3, es5, es6, es2015, es2016, es2017, es2018, es2019, es2020, es2021, esnext
 default: ES3
 
 [34m--module, -m[39m
-Specify module code generation.
+Specify what module code is generated.
 one of: none, commonjs, amd, system, umd, es6, es2015, es2020, esnext
 
 [34m--lib[39m
-Specify library files to be included in the compilation.
+Specify a set of bundled library declaration files that describe the target runtime environment.
 one or more: es5, es6, es2015, es7, es2016, es2017, es2018, es2019, es2020, es2021, esnext, dom, dom.iterable, webworker, webworker.importscripts, webworker.iterable, scripthost, es2015.core, es2015.collection, es2015.generator, es2015.iterable, es2015.promise, es2015.proxy, es2015.reflect, es2015.symbol, es2015.symbol.wellknown, es2016.array.include, es2017.object, es2017.sharedmemory, es2017.string, es2017.intl, es2017.typedarrays, es2018.asyncgenerator, es2018.asynciterable, es2018.intl, es2018.promise, es2018.regexp, es2019.array, es2019.object, es2019.string, es2019.symbol, es2020.bigint, es2020.promise, es2020.sharedmemory, es2020.string, es2020.symbol.wellknown, es2020.intl, es2021.promise, es2021.string, es2021.weakref, esnext.array, esnext.symbol, esnext.asynciterable, esnext.intl, esnext.bigint, esnext.string, esnext.promise, esnext.weakref
 
 [34m--allowJs[39m
-Allow javascript files to be compiled.
+Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.
 type: boolean
 default: false
 
 [34m--checkJs[39m
-Report errors in .js files.
+Enable error reporting in type-checked JavaScript files.
 type: boolean
 default: false
 
 [34m--jsx[39m
-Specify JSX code generation.
+Specify what JSX code is generated.
 one of: preserve, react-native, react, react-jsx, react-jsxdev
 default: undefined
 
 [34m--declaration, -d[39m
-Generates corresponding '.d.ts' file.
+Generate .d.ts files from TypeScript and JavaScript files in your project.
 type: boolean
 default: `false`, unless `composite` is set
 
 [34m--declarationMap[39m
-Generates a sourcemap for each corresponding '.d.ts' file.
+Create sourcemaps for d.ts files.
 type: boolean
 default: false
 
 [34m--emitDeclarationOnly[39m
-Only emit '.d.ts' declaration files.
+Only output d.ts files and not JavaScript files.
 type: boolean
 default: false
 
 [34m--sourceMap[39m
-Generates corresponding '.map' file.
+Create source map files for emitted JavaScript files.
 type: boolean
 default: false
 
 [34m--outFile[39m
-Concatenate and emit output to single file.
+Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.
 
 [34m--outDir[39m
-Redirect output structure to the directory.
+Specify an output folder for all emitted files.
 
 [34m--removeComments[39m
-Do not emit comments to output.
+Disable emitting comments.
 type: boolean
 default: false
 
 [34m--noEmit[39m
-Do not emit outputs.
+Disable emitting file from a compilation.
 type: boolean
 default: false
 
@@ -136,10 +136,10 @@ type: boolean
 default: false
 
 [34m--types[39m
-Type declaration files to be included in compilation.
+Specify type package names to be included without being referenced in a source file.
 
 [34m--esModuleInterop[39m
-Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'.
+Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.
 type: boolean
 default: false
 
