@@ -13,13 +13,12 @@ namespace ts.InlayHints {
         visitor(file);
         return result;
 
-        function visitor(node: Node): true | undefined | void {
+        function visitor(node: Node): true | undefined {
             if (!node || node.getFullWidth() === 0) {
                 return;
             }
 
             switch (node.kind) {
-
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
@@ -29,10 +28,10 @@ namespace ts.InlayHints {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.ArrowFunction:
                     cancellationToken.throwIfCancellationRequested();
+            }
 
-                    if (!textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
-                        return;
-                    }
+            if (!textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
+                return;
             }
 
             if (isTypeNode(node)) {
@@ -263,29 +262,16 @@ namespace ts.InlayHints {
             return text;
         }
 
-        function createSignleLineWriter(writer: DisplayPartsSymbolWriter): DisplayPartsSymbolWriter {
-            return {
-                ...writer,
-                writeLine: () => writer.writeSpace(" ")
-            };
-        }
-
         function printTypeInSingleLine(type: Type) {
             const flags = NodeBuilderFlags.IgnoreErrors | TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
-            const displayParts = mapToDisplayParts(writer => {
-                const singleLineWriter = createSignleLineWriter(writer);
-                const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, singleLineWriter);
-                Debug.assertIsDefined(typeNode, "should always get typenode");
-
-                writeNodeInSignleLine(typeNode, singleLineWriter);
-            });
-            return displayPartsToString(displayParts);
-        }
-
-        function writeNodeInSignleLine(node: Node, writer: DisplayPartsSymbolWriter) {
             const options: PrinterOptions = { removeComments: true };
             const printer = createPrinter(options);
-            printer.writeNode(EmitHint.Unspecified, node, /*sourceFile*/ file, writer);
+
+            return usingSingleLineStringWriter(writer => {
+                const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, writer);
+                Debug.assertIsDefined(typeNode, "should always get typenode");
+                printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
+            });
         }
     }
 }
