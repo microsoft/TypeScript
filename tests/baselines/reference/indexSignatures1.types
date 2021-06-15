@@ -96,6 +96,52 @@ const x3 = combo['foo-test-bar'];  // 'b' (('a' | 'b') & ('b' | 'c'))
 >combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
 >'foo-test-bar' : "foo-test-bar"
 
+declare var str: string;
+>str : string
+
+const x4 = combo[`foo-${str}`];
+>x4 : "a" | "b"
+>combo[`foo-${str}`] : "a" | "b"
+>combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>`foo-${str}` : `foo-${string}`
+>str : string
+
+const x5 = combo[`${str}-bar`];
+>x5 : "b" | "c"
+>combo[`${str}-bar`] : "b" | "c"
+>combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>`${str}-bar` : `${string}-bar`
+>str : string
+
+const x6 = combo[`foo-${str}-bar`];
+>x6 : "b"
+>combo[`foo-${str}-bar`] : "b"
+>combo : { [x: `foo-${string}`]: "a" | "b"; } & { [x: `${string}-bar`]: "b" | "c"; }
+>`foo-${str}-bar` : `foo-${string}-bar`
+>str : string
+
+declare let combo2: { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string };
+>combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>x : `${string}xxx${string}` & `${string}yyy${string}`
+
+const x7 = combo2['axxxbyyyc'];
+>x7 : string
+>combo2['axxxbyyyc'] : string
+>combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>'axxxbyyyc' : "axxxbyyyc"
+
+const x8 = combo2['ayyyxxxbc'];
+>x8 : string
+>combo2['ayyyxxxbc'] : string
+>combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>'ayyyxxxbc' : "ayyyxxxbc"
+
+const x9 = combo2['axxxbbbyc'];  // Error
+>x9 : any
+>combo2['axxxbbbyc'] : any
+>combo2 : { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string; }
+>'axxxbbbyc' : "axxxbbbyc"
+
 // Property access on template pattern index signature
 
 declare let dom: { [x: `data${string}`]: string };
@@ -211,7 +257,157 @@ type Invalid<T extends string> = {
 
     [key: Error]: string;  // Error
 >key : Error
+
+    [key: T & string]: string;  // Error
+>key : T & string
 }
+
+// Intersections in index signatures
+
+type Tag1 = { __tag1__: void };
+>Tag1 : Tag1
+>__tag1__ : void
+
+type Tag2 = { __tag2__: void };
+>Tag2 : Tag2
+>__tag2__ : void
+
+type TaggedString1 = string & Tag1;
+>TaggedString1 : TaggedString1
+
+type TaggedString2 = string & Tag2;
+>TaggedString2 : TaggedString2
+
+declare let obj1: { [key: TaggedString1]: string };
+>obj1 : { [key: TaggedString1]: string; }
+>key : TaggedString1
+
+declare let obj2: { [key: TaggedString2]: string };
+>obj2 : { [key: TaggedString2]: string; }
+>key : TaggedString2
+
+declare let obj3: { [key: TaggedString1 | TaggedString2]: string };
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>key : TaggedString1 | TaggedString2
+
+declare let obj4: { [key: TaggedString1 & TaggedString2]: string };
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>key : string & Tag1 & Tag2
+
+declare let s0: string;
+>s0 : string
+
+declare let s1: TaggedString1;
+>s1 : TaggedString1
+
+declare let s2: TaggedString2;
+>s2 : TaggedString2
+
+declare let s3: TaggedString1 | TaggedString2;
+>s3 : TaggedString1 | TaggedString2
+
+declare let s4: TaggedString1 & TaggedString2;
+>s4 : string & Tag1 & Tag2
+
+obj1[s0];  // Error
+>obj1[s0] : any
+>obj1 : { [key: TaggedString1]: string; }
+>s0 : string
+
+obj1[s1];
+>obj1[s1] : string
+>obj1 : { [key: TaggedString1]: string; }
+>s1 : TaggedString1
+
+obj1[s2];  // Error
+>obj1[s2] : any
+>obj1 : { [key: TaggedString1]: string; }
+>s2 : TaggedString2
+
+obj1[s3];  // Error
+>obj1[s3] : any
+>obj1 : { [key: TaggedString1]: string; }
+>s3 : TaggedString1 | TaggedString2
+
+obj1[s4];
+>obj1[s4] : string
+>obj1 : { [key: TaggedString1]: string; }
+>s4 : string & Tag1 & Tag2
+
+obj2[s0];  // Error
+>obj2[s0] : any
+>obj2 : { [key: TaggedString2]: string; }
+>s0 : string
+
+obj2[s1];
+>obj2[s1] : any
+>obj2 : { [key: TaggedString2]: string; }
+>s1 : TaggedString1
+
+obj2[s2];
+>obj2[s2] : string
+>obj2 : { [key: TaggedString2]: string; }
+>s2 : TaggedString2
+
+obj2[s3];  // Error
+>obj2[s3] : any
+>obj2 : { [key: TaggedString2]: string; }
+>s3 : TaggedString1 | TaggedString2
+
+obj2[s4];
+>obj2[s4] : string
+>obj2 : { [key: TaggedString2]: string; }
+>s4 : string & Tag1 & Tag2
+
+obj3[s0];  // Error
+>obj3[s0] : any
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>s0 : string
+
+obj3[s1];
+>obj3[s1] : string
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>s1 : TaggedString1
+
+obj3[s2];
+>obj3[s2] : string
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>s2 : TaggedString2
+
+obj3[s3];
+>obj3[s3] : string
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>s3 : TaggedString1 | TaggedString2
+
+obj3[s4];
+>obj3[s4] : string
+>obj3 : { [key: TaggedString1]: string; [key: TaggedString2]: string; }
+>s4 : string & Tag1 & Tag2
+
+obj4[s0];  // Error
+>obj4[s0] : any
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>s0 : string
+
+obj4[s1];  // Error
+>obj4[s1] : any
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>s1 : TaggedString1
+
+obj4[s2];  // Error
+>obj4[s2] : any
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>s2 : TaggedString2
+
+obj4[s3];  // Error
+>obj4[s3] : any
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>s3 : TaggedString1 | TaggedString2
+
+obj4[s4];
+>obj4[s4] : string
+>obj4 : { [key: string & Tag1 & Tag2]: string; }
+>s4 : string & Tag1 & Tag2
 
 // Repros from #1863
 

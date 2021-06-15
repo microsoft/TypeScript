@@ -30,6 +30,18 @@ const x1 = combo['foo-test'];  // 'a' | 'b'
 const x2 = combo['test-bar'];  // 'b' | 'c'
 const x3 = combo['foo-test-bar'];  // 'b' (('a' | 'b') & ('b' | 'c'))
 
+declare var str: string;
+
+const x4 = combo[`foo-${str}`];
+const x5 = combo[`${str}-bar`];
+const x6 = combo[`foo-${str}-bar`];
+
+declare let combo2: { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string };
+
+const x7 = combo2['axxxbyyyc'];
+const x8 = combo2['ayyyxxxbc'];
+const x9 = combo2['axxxbbbyc'];  // Error
+
 // Property access on template pattern index signature
 
 declare let dom: { [x: `data${string}`]: string };
@@ -76,7 +88,51 @@ type Invalid<T extends string> = {
     [key: 'a' | 'b' | 'c']: string;  // Error
     [key: T | number]: string;  // Error
     [key: Error]: string;  // Error
+    [key: T & string]: string;  // Error
 }
+
+// Intersections in index signatures
+
+type Tag1 = { __tag1__: void };
+type Tag2 = { __tag2__: void };
+
+type TaggedString1 = string & Tag1;
+type TaggedString2 = string & Tag2;
+
+declare let obj1: { [key: TaggedString1]: string };
+declare let obj2: { [key: TaggedString2]: string };
+declare let obj3: { [key: TaggedString1 | TaggedString2]: string };
+declare let obj4: { [key: TaggedString1 & TaggedString2]: string };
+
+declare let s0: string;
+declare let s1: TaggedString1;
+declare let s2: TaggedString2;
+declare let s3: TaggedString1 | TaggedString2;
+declare let s4: TaggedString1 & TaggedString2;
+
+obj1[s0];  // Error
+obj1[s1];
+obj1[s2];  // Error
+obj1[s3];  // Error
+obj1[s4];
+
+obj2[s0];  // Error
+obj2[s1];
+obj2[s2];
+obj2[s3];  // Error
+obj2[s4];
+
+obj3[s0];  // Error
+obj3[s1];
+obj3[s2];
+obj3[s3];
+obj3[s4];
+
+obj4[s0];  // Error
+obj4[s1];  // Error
+obj4[s2];  // Error
+obj4[s3];  // Error
+obj4[s4];
 
 // Repros from #1863
 
@@ -171,6 +227,12 @@ function gg2(x, y) {
 const x1 = combo['foo-test']; // 'a' | 'b'
 const x2 = combo['test-bar']; // 'b' | 'c'
 const x3 = combo['foo-test-bar']; // 'b' (('a' | 'b') & ('b' | 'c'))
+const x4 = combo[`foo-${str}`];
+const x5 = combo[`${str}-bar`];
+const x6 = combo[`foo-${str}-bar`];
+const x7 = combo2['axxxbyyyc'];
+const x8 = combo2['ayyyxxxbc'];
+const x9 = combo2['axxxbbbyc']; // Error
 const y1 = dom['data123'];
 const y2 = dom.data123;
 // Excess property checking for template pattern index signature
@@ -180,6 +242,26 @@ const funcs = {
     sfoo: x => x.length,
     nfoo: x => x * 2, // n: number
 };
+obj1[s0]; // Error
+obj1[s1];
+obj1[s2]; // Error
+obj1[s3]; // Error
+obj1[s4];
+obj2[s0]; // Error
+obj2[s1];
+obj2[s2];
+obj2[s3]; // Error
+obj2[s4];
+obj3[s0]; // Error
+obj3[s1];
+obj3[s2];
+obj3[s3];
+obj3[s4];
+obj4[s0]; // Error
+obj4[s1]; // Error
+obj4[s2]; // Error
+obj4[s3]; // Error
+obj4[s4];
 // Repros from #1863
 const system = Symbol('system');
 const SomeSytePlugin = Symbol('SomeSytePlugin');
@@ -251,6 +333,16 @@ declare let combo: {
 declare const x1: "a" | "b";
 declare const x2: "b" | "c";
 declare const x3: "b";
+declare var str: string;
+declare const x4: "a" | "b";
+declare const x5: "b" | "c";
+declare const x6: "b";
+declare let combo2: {
+    [x: `${string}xxx${string}` & `${string}yyy${string}`]: string;
+};
+declare const x7: string;
+declare const x8: string;
+declare const x9: any;
 declare let dom: {
     [x: `data${string}`]: string;
 };
@@ -276,7 +368,33 @@ declare type Invalid<T extends string> = {
     [key: 'a' | 'b' | 'c']: string;
     [key: T | number]: string;
     [key: Error]: string;
+    [key: T & string]: string;
 };
+declare type Tag1 = {
+    __tag1__: void;
+};
+declare type Tag2 = {
+    __tag2__: void;
+};
+declare type TaggedString1 = string & Tag1;
+declare type TaggedString2 = string & Tag2;
+declare let obj1: {
+    [key: TaggedString1]: string;
+};
+declare let obj2: {
+    [key: TaggedString2]: string;
+};
+declare let obj3: {
+    [key: TaggedString1 | TaggedString2]: string;
+};
+declare let obj4: {
+    [key: TaggedString1 & TaggedString2]: string;
+};
+declare let s0: string;
+declare let s1: TaggedString1;
+declare let s2: TaggedString2;
+declare let s3: TaggedString1 | TaggedString2;
+declare let s4: TaggedString1 & TaggedString2;
 declare const system: unique symbol;
 declare const SomeSytePlugin: unique symbol;
 interface Plugs {

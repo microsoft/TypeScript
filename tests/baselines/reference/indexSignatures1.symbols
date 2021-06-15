@@ -87,317 +87,496 @@ const x3 = combo['foo-test-bar'];  // 'b' (('a' | 'b') & ('b' | 'c'))
 >x3 : Symbol(x3, Decl(indexSignatures1.ts, 29, 5))
 >combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
 
+declare var str: string;
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x4 = combo[`foo-${str}`];
+>x4 : Symbol(x4, Decl(indexSignatures1.ts, 33, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x5 = combo[`${str}-bar`];
+>x5 : Symbol(x5, Decl(indexSignatures1.ts, 34, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+const x6 = combo[`foo-${str}-bar`];
+>x6 : Symbol(x6, Decl(indexSignatures1.ts, 35, 5))
+>combo : Symbol(combo, Decl(indexSignatures1.ts, 26, 11))
+>str : Symbol(str, Decl(indexSignatures1.ts, 31, 11))
+
+declare let combo2: { [x: `${string}xxx${string}` & `${string}yyy${string}`]: string };
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+>x : Symbol(x, Decl(indexSignatures1.ts, 37, 23))
+
+const x7 = combo2['axxxbyyyc'];
+>x7 : Symbol(x7, Decl(indexSignatures1.ts, 39, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
+const x8 = combo2['ayyyxxxbc'];
+>x8 : Symbol(x8, Decl(indexSignatures1.ts, 40, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
+const x9 = combo2['axxxbbbyc'];  // Error
+>x9 : Symbol(x9, Decl(indexSignatures1.ts, 41, 5))
+>combo2 : Symbol(combo2, Decl(indexSignatures1.ts, 37, 11))
+
 // Property access on template pattern index signature
 
 declare let dom: { [x: `data${string}`]: string };
->dom : Symbol(dom, Decl(indexSignatures1.ts, 33, 11))
->x : Symbol(x, Decl(indexSignatures1.ts, 33, 20))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>x : Symbol(x, Decl(indexSignatures1.ts, 45, 20))
 
 const y1 = dom['data123'];
->y1 : Symbol(y1, Decl(indexSignatures1.ts, 34, 5))
->dom : Symbol(dom, Decl(indexSignatures1.ts, 33, 11))
+>y1 : Symbol(y1, Decl(indexSignatures1.ts, 46, 5))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
 
 const y2 = dom.data123;
->y2 : Symbol(y2, Decl(indexSignatures1.ts, 35, 5))
->dom : Symbol(dom, Decl(indexSignatures1.ts, 33, 11))
+>y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
 
 // Excess property checking for template pattern index signature
 
 dom = { data123: 'hello' };
->dom : Symbol(dom, Decl(indexSignatures1.ts, 33, 11))
->data123 : Symbol(data123, Decl(indexSignatures1.ts, 39, 7))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>data123 : Symbol(data123, Decl(indexSignatures1.ts, 51, 7))
 
 dom = { date123: 'hello' };  // Error
->dom : Symbol(dom, Decl(indexSignatures1.ts, 33, 11))
->date123 : Symbol(date123, Decl(indexSignatures1.ts, 40, 7))
+>dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
+>date123 : Symbol(date123, Decl(indexSignatures1.ts, 52, 7))
 
 // Contextual typing by index signature with template literal pattern
 
 type Funcs = {
->Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 40, 27))
+>Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 52, 27))
 
     [key: `s${string}`]: (x: string) => void,
->key : Symbol(key, Decl(indexSignatures1.ts, 45, 5))
->x : Symbol(x, Decl(indexSignatures1.ts, 45, 26))
+>key : Symbol(key, Decl(indexSignatures1.ts, 57, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 57, 26))
 
     [key: `n${string}`]: (x: number) => void,
->key : Symbol(key, Decl(indexSignatures1.ts, 46, 5))
->x : Symbol(x, Decl(indexSignatures1.ts, 46, 26))
+>key : Symbol(key, Decl(indexSignatures1.ts, 58, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 58, 26))
 }
 
 const funcs: Funcs = {
->funcs : Symbol(funcs, Decl(indexSignatures1.ts, 49, 5))
->Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 40, 27))
+>funcs : Symbol(funcs, Decl(indexSignatures1.ts, 61, 5))
+>Funcs : Symbol(Funcs, Decl(indexSignatures1.ts, 52, 27))
 
     sfoo: x => x.length,  // x: string
->sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 49, 22))
->x : Symbol(x, Decl(indexSignatures1.ts, 50, 9))
+>sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 61, 22))
+>x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
 >x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(indexSignatures1.ts, 50, 9))
+>x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     nfoo: x => x * 2,     // n: number
->nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 50, 24))
->x : Symbol(x, Decl(indexSignatures1.ts, 51, 9))
->x : Symbol(x, Decl(indexSignatures1.ts, 51, 9))
+>nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 62, 24))
+>x : Symbol(x, Decl(indexSignatures1.ts, 63, 9))
+>x : Symbol(x, Decl(indexSignatures1.ts, 63, 9))
 }
 
 // Duplicate index signature checking
 
 type Duplicates = {
->Duplicates : Symbol(Duplicates, Decl(indexSignatures1.ts, 52, 1))
+>Duplicates : Symbol(Duplicates, Decl(indexSignatures1.ts, 64, 1))
 
     [key: string | number]: any;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 57, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 69, 5))
 
     [key: number | symbol]: any;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 58, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 70, 5))
 
     [key: symbol | `foo${string}`]: any;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 59, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 71, 5))
 
     [key: `foo${string}`]: any;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 60, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 72, 5))
 }
 
 // Conflicting index signature checking
 
 type Conflicting = {
->Conflicting : Symbol(Conflicting, Decl(indexSignatures1.ts, 61, 1))
+>Conflicting : Symbol(Conflicting, Decl(indexSignatures1.ts, 73, 1))
 
     [key: `a${string}`]: 'a';
->key : Symbol(key, Decl(indexSignatures1.ts, 66, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 78, 5))
 
     [key: `${string}a`]: 'b';
->key : Symbol(key, Decl(indexSignatures1.ts, 67, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 79, 5))
 
     [key: `a${string}a`]: 'c';  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 68, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 80, 5))
 }
 
 // Invalid index signatures
 
 type Invalid<T extends string> = {
->Invalid : Symbol(Invalid, Decl(indexSignatures1.ts, 69, 1))
->T : Symbol(T, Decl(indexSignatures1.ts, 73, 13))
+>Invalid : Symbol(Invalid, Decl(indexSignatures1.ts, 81, 1))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
 
     [key: 'a' | 'b' | 'c']: string;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 74, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 86, 5))
 
     [key: T | number]: string;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 75, 5))
->T : Symbol(T, Decl(indexSignatures1.ts, 73, 13))
+>key : Symbol(key, Decl(indexSignatures1.ts, 87, 5))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
 
     [key: Error]: string;  // Error
->key : Symbol(key, Decl(indexSignatures1.ts, 76, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 88, 5))
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [key: T & string]: string;  // Error
+>key : Symbol(key, Decl(indexSignatures1.ts, 89, 5))
+>T : Symbol(T, Decl(indexSignatures1.ts, 85, 13))
 }
+
+// Intersections in index signatures
+
+type Tag1 = { __tag1__: void };
+>Tag1 : Symbol(Tag1, Decl(indexSignatures1.ts, 90, 1))
+>__tag1__ : Symbol(__tag1__, Decl(indexSignatures1.ts, 94, 13))
+
+type Tag2 = { __tag2__: void };
+>Tag2 : Symbol(Tag2, Decl(indexSignatures1.ts, 94, 31))
+>__tag2__ : Symbol(__tag2__, Decl(indexSignatures1.ts, 95, 13))
+
+type TaggedString1 = string & Tag1;
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>Tag1 : Symbol(Tag1, Decl(indexSignatures1.ts, 90, 1))
+
+type TaggedString2 = string & Tag2;
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+>Tag2 : Symbol(Tag2, Decl(indexSignatures1.ts, 94, 31))
+
+declare let obj1: { [key: TaggedString1]: string };
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 100, 21))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+
+declare let obj2: { [key: TaggedString2]: string };
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 101, 21))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let obj3: { [key: TaggedString1 | TaggedString2]: string };
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 102, 21))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let obj4: { [key: TaggedString1 & TaggedString2]: string };
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>key : Symbol(key, Decl(indexSignatures1.ts, 103, 21))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let s0: string;
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 105, 11))
+
+declare let s1: TaggedString1;
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 106, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+
+declare let s2: TaggedString2;
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 107, 11))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let s3: TaggedString1 | TaggedString2;
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 108, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+declare let s4: TaggedString1 & TaggedString2;
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 109, 11))
+>TaggedString1 : Symbol(TaggedString1, Decl(indexSignatures1.ts, 95, 31))
+>TaggedString2 : Symbol(TaggedString2, Decl(indexSignatures1.ts, 97, 35))
+
+obj1[s0];  // Error
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 105, 11))
+
+obj1[s1];
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 106, 11))
+
+obj1[s2];  // Error
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 107, 11))
+
+obj1[s3];  // Error
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 108, 11))
+
+obj1[s4];
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 100, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 109, 11))
+
+obj2[s0];  // Error
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 105, 11))
+
+obj2[s1];
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 106, 11))
+
+obj2[s2];
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 107, 11))
+
+obj2[s3];  // Error
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 108, 11))
+
+obj2[s4];
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 101, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 109, 11))
+
+obj3[s0];  // Error
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 105, 11))
+
+obj3[s1];
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 106, 11))
+
+obj3[s2];
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 107, 11))
+
+obj3[s3];
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 108, 11))
+
+obj3[s4];
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 102, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 109, 11))
+
+obj4[s0];  // Error
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>s0 : Symbol(s0, Decl(indexSignatures1.ts, 105, 11))
+
+obj4[s1];  // Error
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>s1 : Symbol(s1, Decl(indexSignatures1.ts, 106, 11))
+
+obj4[s2];  // Error
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>s2 : Symbol(s2, Decl(indexSignatures1.ts, 107, 11))
+
+obj4[s3];  // Error
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>s3 : Symbol(s3, Decl(indexSignatures1.ts, 108, 11))
+
+obj4[s4];
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 103, 11))
+>s4 : Symbol(s4, Decl(indexSignatures1.ts, 109, 11))
 
 // Repros from #1863
 
 const system = Symbol('system');
->system : Symbol(system, Decl(indexSignatures1.ts, 81, 5))
+>system : Symbol(system, Decl(indexSignatures1.ts, 137, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 const SomeSytePlugin = Symbol('SomeSytePlugin');
->SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 82, 5))
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 138, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 interface Plugs {
->Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 82, 48))
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 138, 48))
 
     [key: symbol]: (...args: any) => unknown;
->key : Symbol(key, Decl(indexSignatures1.ts, 85, 5))
->args : Symbol(args, Decl(indexSignatures1.ts, 85, 20))
+>key : Symbol(key, Decl(indexSignatures1.ts, 141, 5))
+>args : Symbol(args, Decl(indexSignatures1.ts, 141, 20))
 }
 
 const plugins = {
->plugins : Symbol(plugins, Decl(indexSignatures1.ts, 88, 5))
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 144, 5))
 
     "user": {} as Plugs,
->"user" : Symbol("user", Decl(indexSignatures1.ts, 88, 17))
->Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 82, 48))
+>"user" : Symbol("user", Decl(indexSignatures1.ts, 144, 17))
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 138, 48))
 
     [system]: {} as Plugs
->[system] : Symbol([system], Decl(indexSignatures1.ts, 89, 24))
->system : Symbol(system, Decl(indexSignatures1.ts, 81, 5))
->Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 82, 48))
+>[system] : Symbol([system], Decl(indexSignatures1.ts, 145, 24))
+>system : Symbol(system, Decl(indexSignatures1.ts, 137, 5))
+>Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 138, 48))
 
 };
 
 plugins[system][SomeSytePlugin] = () => console.log('awsome');
->plugins : Symbol(plugins, Decl(indexSignatures1.ts, 88, 5))
->system : Symbol(system, Decl(indexSignatures1.ts, 81, 5))
->SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 82, 5))
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 144, 5))
+>system : Symbol(system, Decl(indexSignatures1.ts, 137, 5))
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 138, 5))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
 plugins[system][SomeSytePlugin]();
->plugins : Symbol(plugins, Decl(indexSignatures1.ts, 88, 5))
->system : Symbol(system, Decl(indexSignatures1.ts, 81, 5))
->SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 82, 5))
+>plugins : Symbol(plugins, Decl(indexSignatures1.ts, 144, 5))
+>system : Symbol(system, Decl(indexSignatures1.ts, 137, 5))
+>SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 138, 5))
 
 var theAnswer: symbol = Symbol('secret');
->theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 96, 3))
+>theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 152, 3))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 var obj = {} as Record<symbol, number>;
->obj : Symbol(obj, Decl(indexSignatures1.ts, 97, 3))
+>obj : Symbol(obj, Decl(indexSignatures1.ts, 153, 3))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
 obj[theAnswer] = 42;
->obj : Symbol(obj, Decl(indexSignatures1.ts, 97, 3))
->theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 96, 3))
+>obj : Symbol(obj, Decl(indexSignatures1.ts, 153, 3))
+>theAnswer : Symbol(theAnswer, Decl(indexSignatures1.ts, 152, 3))
 
 // Repro from #26470
 
 const directive = Symbol('directive');
->directive : Symbol(directive, Decl(indexSignatures1.ts, 102, 5))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 158, 5))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
->foo : Symbol(foo, Decl(indexSignatures1.ts, 102, 38))
->TArg : Symbol(TArg, Decl(indexSignatures1.ts, 103, 21))
->TRet : Symbol(TRet, Decl(indexSignatures1.ts, 103, 26))
->TDir : Symbol(TDir, Decl(indexSignatures1.ts, 103, 32))
->options : Symbol(options, Decl(indexSignatures1.ts, 103, 39))
->x : Symbol(x, Decl(indexSignatures1.ts, 103, 51))
->arg : Symbol(arg, Decl(indexSignatures1.ts, 103, 66))
->TArg : Symbol(TArg, Decl(indexSignatures1.ts, 103, 21))
->TRet : Symbol(TRet, Decl(indexSignatures1.ts, 103, 26))
->[directive] : Symbol([directive], Decl(indexSignatures1.ts, 103, 90))
->directive : Symbol(directive, Decl(indexSignatures1.ts, 102, 5))
->TDir : Symbol(TDir, Decl(indexSignatures1.ts, 103, 32))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 158, 38))
+>TArg : Symbol(TArg, Decl(indexSignatures1.ts, 159, 21))
+>TRet : Symbol(TRet, Decl(indexSignatures1.ts, 159, 26))
+>TDir : Symbol(TDir, Decl(indexSignatures1.ts, 159, 32))
+>options : Symbol(options, Decl(indexSignatures1.ts, 159, 39))
+>x : Symbol(x, Decl(indexSignatures1.ts, 159, 51))
+>arg : Symbol(arg, Decl(indexSignatures1.ts, 159, 66))
+>TArg : Symbol(TArg, Decl(indexSignatures1.ts, 159, 21))
+>TRet : Symbol(TRet, Decl(indexSignatures1.ts, 159, 26))
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 159, 90))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 158, 5))
+>TDir : Symbol(TDir, Decl(indexSignatures1.ts, 159, 32))
 
 let case1 = foo({
->case1 : Symbol(case1, Decl(indexSignatures1.ts, 105, 3))
->foo : Symbol(foo, Decl(indexSignatures1.ts, 102, 38))
+>case1 : Symbol(case1, Decl(indexSignatures1.ts, 161, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 158, 38))
 
     [directive]: (x: string) => 'str',
->[directive] : Symbol([directive], Decl(indexSignatures1.ts, 105, 17))
->directive : Symbol(directive, Decl(indexSignatures1.ts, 102, 5))
->x : Symbol(x, Decl(indexSignatures1.ts, 106, 18))
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 161, 17))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 158, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 162, 18))
 
     addOne: (x: number) => x + 1,
->addOne : Symbol(addOne, Decl(indexSignatures1.ts, 106, 38))
->x : Symbol(x, Decl(indexSignatures1.ts, 107, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 107, 13))
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 162, 38))
+>x : Symbol(x, Decl(indexSignatures1.ts, 163, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 163, 13))
 
     double: (x: number) => x + x,
->double : Symbol(double, Decl(indexSignatures1.ts, 107, 33))
->x : Symbol(x, Decl(indexSignatures1.ts, 108, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 108, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 108, 13))
+>double : Symbol(double, Decl(indexSignatures1.ts, 163, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 164, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 164, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 164, 13))
 
 });
 
 let case2 = foo({
->case2 : Symbol(case2, Decl(indexSignatures1.ts, 111, 3))
->foo : Symbol(foo, Decl(indexSignatures1.ts, 102, 38))
+>case2 : Symbol(case2, Decl(indexSignatures1.ts, 167, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 158, 38))
 
     addOne: (x: number) => x + 1,
->addOne : Symbol(addOne, Decl(indexSignatures1.ts, 111, 17))
->x : Symbol(x, Decl(indexSignatures1.ts, 112, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 112, 13))
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 167, 17))
+>x : Symbol(x, Decl(indexSignatures1.ts, 168, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 168, 13))
 
     double: (x: number) => x + x,
->double : Symbol(double, Decl(indexSignatures1.ts, 112, 33))
->x : Symbol(x, Decl(indexSignatures1.ts, 113, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 113, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 113, 13))
+>double : Symbol(double, Decl(indexSignatures1.ts, 168, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 169, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 169, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 169, 13))
 
     [directive]: (x: string) => 'str',
->[directive] : Symbol([directive], Decl(indexSignatures1.ts, 113, 33))
->directive : Symbol(directive, Decl(indexSignatures1.ts, 102, 5))
->x : Symbol(x, Decl(indexSignatures1.ts, 114, 18))
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 169, 33))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 158, 5))
+>x : Symbol(x, Decl(indexSignatures1.ts, 170, 18))
 
 });
 
 let case3 = foo({
->case3 : Symbol(case3, Decl(indexSignatures1.ts, 117, 3))
->foo : Symbol(foo, Decl(indexSignatures1.ts, 102, 38))
+>case3 : Symbol(case3, Decl(indexSignatures1.ts, 173, 3))
+>foo : Symbol(foo, Decl(indexSignatures1.ts, 158, 38))
 
     [directive]: 'str',
->[directive] : Symbol([directive], Decl(indexSignatures1.ts, 117, 17))
->directive : Symbol(directive, Decl(indexSignatures1.ts, 102, 5))
+>[directive] : Symbol([directive], Decl(indexSignatures1.ts, 173, 17))
+>directive : Symbol(directive, Decl(indexSignatures1.ts, 158, 5))
 
     addOne: (x: number) => x + 1,
->addOne : Symbol(addOne, Decl(indexSignatures1.ts, 118, 23))
->x : Symbol(x, Decl(indexSignatures1.ts, 119, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 119, 13))
+>addOne : Symbol(addOne, Decl(indexSignatures1.ts, 174, 23))
+>x : Symbol(x, Decl(indexSignatures1.ts, 175, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 175, 13))
 
     double: (x: number) => x + x,
->double : Symbol(double, Decl(indexSignatures1.ts, 119, 33))
->x : Symbol(x, Decl(indexSignatures1.ts, 120, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 120, 13))
->x : Symbol(x, Decl(indexSignatures1.ts, 120, 13))
+>double : Symbol(double, Decl(indexSignatures1.ts, 175, 33))
+>x : Symbol(x, Decl(indexSignatures1.ts, 176, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 176, 13))
+>x : Symbol(x, Decl(indexSignatures1.ts, 176, 13))
 
 });
 
 // Repros from #42192
 
 type Pseudo = `&:${string}`;
->Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 121, 3))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 177, 3))
 
 const AmIPseudo1: Pseudo = '&:test';
->AmIPseudo1 : Symbol(AmIPseudo1, Decl(indexSignatures1.ts, 127, 5))
->Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 121, 3))
+>AmIPseudo1 : Symbol(AmIPseudo1, Decl(indexSignatures1.ts, 183, 5))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 177, 3))
 
 const AmIPseudo: Pseudo = '&';  // Error
->AmIPseudo : Symbol(AmIPseudo, Decl(indexSignatures1.ts, 128, 5))
->Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 121, 3))
+>AmIPseudo : Symbol(AmIPseudo, Decl(indexSignatures1.ts, 184, 5))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 177, 3))
 
 type PseudoDeclaration = { [key in Pseudo]: string };
->PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 128, 30))
->key : Symbol(key, Decl(indexSignatures1.ts, 130, 28))
->Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 121, 3))
+>PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 184, 30))
+>key : Symbol(key, Decl(indexSignatures1.ts, 186, 28))
+>Pseudo : Symbol(Pseudo, Decl(indexSignatures1.ts, 177, 3))
 
 const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
->test : Symbol(test, Decl(indexSignatures1.ts, 132, 5))
->PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 128, 30))
->'someKey' : Symbol('someKey', Decl(indexSignatures1.ts, 132, 33))
+>test : Symbol(test, Decl(indexSignatures1.ts, 188, 5))
+>PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 184, 30))
+>'someKey' : Symbol('someKey', Decl(indexSignatures1.ts, 188, 33))
 
 type FieldPattern = `/${string}`;
->FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 132, 60))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 188, 60))
 
 const path1: FieldPattern = '/one';
->path1 : Symbol(path1, Decl(indexSignatures1.ts, 136, 5))
->FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 132, 60))
+>path1 : Symbol(path1, Decl(indexSignatures1.ts, 192, 5))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 188, 60))
 
 const path2: FieldPattern = 'two';  // Error
->path2 : Symbol(path2, Decl(indexSignatures1.ts, 137, 5))
->FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 132, 60))
+>path2 : Symbol(path2, Decl(indexSignatures1.ts, 193, 5))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 188, 60))
 
 type PathsObject = { [P in FieldPattern]: object; };
->PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 137, 34))
->P : Symbol(P, Decl(indexSignatures1.ts, 139, 22))
->FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 132, 60))
+>PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 193, 34))
+>P : Symbol(P, Decl(indexSignatures1.ts, 195, 22))
+>FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 188, 60))
 
 const pathObject: PathsObject = 123;  // Error
->pathObject : Symbol(pathObject, Decl(indexSignatures1.ts, 140, 5))
->PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 137, 34))
+>pathObject : Symbol(pathObject, Decl(indexSignatures1.ts, 196, 5))
+>PathsObject : Symbol(PathsObject, Decl(indexSignatures1.ts, 193, 34))
 
 type IdType = `${number}-${number}-${number}-${number}`
->IdType : Symbol(IdType, Decl(indexSignatures1.ts, 140, 36))
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 196, 36))
 
 const id: IdType = '0000-0000-0000-0001';
->id : Symbol(id, Decl(indexSignatures1.ts, 143, 5))
->IdType : Symbol(IdType, Decl(indexSignatures1.ts, 140, 36))
+>id : Symbol(id, Decl(indexSignatures1.ts, 199, 5))
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 196, 36))
 
 type A = Record<IdType, string>;
->A : Symbol(A, Decl(indexSignatures1.ts, 143, 41))
+>A : Symbol(A, Decl(indexSignatures1.ts, 199, 41))
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
->IdType : Symbol(IdType, Decl(indexSignatures1.ts, 140, 36))
+>IdType : Symbol(IdType, Decl(indexSignatures1.ts, 196, 36))
 
 const a: A = { [id]: 'test' }
->a : Symbol(a, Decl(indexSignatures1.ts, 147, 5))
->A : Symbol(A, Decl(indexSignatures1.ts, 143, 41))
->[id] : Symbol([id], Decl(indexSignatures1.ts, 147, 14))
->id : Symbol(id, Decl(indexSignatures1.ts, 143, 5))
+>a : Symbol(a, Decl(indexSignatures1.ts, 203, 5))
+>A : Symbol(A, Decl(indexSignatures1.ts, 199, 41))
+>[id] : Symbol([id], Decl(indexSignatures1.ts, 203, 14))
+>id : Symbol(id, Decl(indexSignatures1.ts, 199, 5))
 
 let aid = a[id];
->aid : Symbol(aid, Decl(indexSignatures1.ts, 149, 3))
->a : Symbol(a, Decl(indexSignatures1.ts, 147, 5))
->id : Symbol(id, Decl(indexSignatures1.ts, 143, 5))
+>aid : Symbol(aid, Decl(indexSignatures1.ts, 205, 3))
+>a : Symbol(a, Decl(indexSignatures1.ts, 203, 5))
+>id : Symbol(id, Decl(indexSignatures1.ts, 199, 5))
 
