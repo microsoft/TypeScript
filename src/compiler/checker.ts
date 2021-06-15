@@ -11126,7 +11126,7 @@ namespace ts {
                         members.set(propName, prop);
                     }
                 }
-                else if (propNameType.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number | TypeFlags.Enum | TypeFlags.ESSymbol) || isPatternLiteralType(propNameType)) {
+                else if (isValidIndexKeyType(propNameType) || propNameType.flags & (TypeFlags.Any | TypeFlags.Enum)) {
                     const indexKeyType = propNameType.flags & (TypeFlags.Any | TypeFlags.String) ? stringType :
                         propNameType.flags & (TypeFlags.Number | TypeFlags.Enum) ? numberType :
                         propNameType;
@@ -12646,8 +12646,9 @@ namespace ts {
             return emptyArray;
         }
 
-        function isValidIndexKeyType(type: Type) {
-            return !!(type.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol)) || isPatternLiteralType(type);
+        function isValidIndexKeyType(type: Type): boolean {
+            return !!(type.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol)) || isPatternLiteralType(type) ||
+                !!(type.flags & TypeFlags.Intersection) && !isGenericIndexType(type) && !isGenericObjectType(type) && some((type as IntersectionType).types, isValidIndexKeyType);
         }
 
         function getConstraintDeclaration(type: TypeParameter): TypeNode | undefined {
@@ -41166,10 +41167,10 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (someType(type, t => !!(t.flags & (TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.Instantiable)) && !isPatternLiteralType(t))) {
+            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericIndexType(type) || isGenericObjectType(type)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
-            if (!everyType(type, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol | TypeFlags.TemplateLiteral)))) {
+            if (!everyType(type, isValidIndexKeyType)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type);
             }
             if (!node.type) {
