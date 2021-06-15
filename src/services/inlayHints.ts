@@ -155,8 +155,7 @@ namespace ts.InlayHints {
                     }
 
                     const name = unescapeLeadingUnderscores(parameterName);
-                    const commentRanges = getLeadingCommentRanges(sourceFileText, arg.pos);
-                    if (leadingCommentsHasParameterName(commentRanges, name)) {
+                    if (leadingCommentsContainsParameterName(arg, name)) {
                         continue;
                     }
 
@@ -165,9 +164,15 @@ namespace ts.InlayHints {
             }
         }
 
-        function leadingCommentsHasParameterName(commentRanges: CommentRange[] | undefined, name: string) {
-            if (!commentRanges?.length) return false;
-            return commentRanges.some(range => stringContains(sourceFileText.substring(range.pos, range.end), name));
+        function leadingCommentsContainsParameterName(node: Node, name: string) {
+            const fullStart = node.getFullStart();
+            const start = node.getStart();
+            if (start === fullStart) {
+                return false;
+            }
+
+            // leading comments contains parameter name
+            return stringContains(sourceFileText.substring(fullStart, start), name);
         }
 
         function isHintableExpression(node: Node) {
