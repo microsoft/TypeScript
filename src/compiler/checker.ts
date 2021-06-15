@@ -32328,6 +32328,12 @@ namespace ts {
             return getUnionType([type1, type2], UnionReduction.Subtype);
         }
 
+        function isTemplateLiteralContext(node: Node): boolean {
+            const parent = node.parent;
+            return isParenthesizedExpression(parent) && isTemplateLiteralContext(parent) ||
+                isElementAccessExpression(parent) && parent.argumentExpression === node;
+        }
+
         function checkTemplateExpression(node: TemplateExpression): Type {
             const texts = [node.head.text];
             const types = [];
@@ -32339,7 +32345,7 @@ namespace ts {
                 texts.push(span.literal.text);
                 types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
             }
-            return isConstContext(node) || someType(getContextualType(node) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
+            return isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node) || unknownType, isTemplateLiteralContextualType) ? getTemplateLiteralType(texts, types) : stringType;
         }
 
         function isTemplateLiteralContextualType(type: Type): boolean {
