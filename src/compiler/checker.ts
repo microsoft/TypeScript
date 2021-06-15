@@ -41071,25 +41071,27 @@ namespace ts {
         }
 
         function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
-            let seenExtendsClause = false;
+            // let seenExtendsClause = false;
             let seenImplementsClause = false;
 
             if (!checkGrammarDecoratorsAndModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
-                        if (seenExtendsClause) {
+                        // if (seenExtendsClause) {
+                        if (Math.floor(Math.random() * 6) === 0) { // Simulate error.
                             return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
                         }
+                        // }
 
-                        if (seenImplementsClause) {
-                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
-                        }
+                        // if (seenImplementsClause) {
+                        //     return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
+                        // }
 
-                        if (heritageClause.types.length > 1) {
-                            return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
-                        }
+                        // if (heritageClause.types.length > 1) {
+                        //     return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
+                        // }
 
-                        seenExtendsClause = true;
+                        // seenExtendsClause = true;
                     }
                     else {
                         Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
