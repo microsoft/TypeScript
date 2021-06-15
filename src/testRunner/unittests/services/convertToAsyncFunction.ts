@@ -1700,5 +1700,23 @@ function [#|f|](x?: number): Promise<void> | number {
 }
 `);
 
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInGetters", `
+class Foo {
+    get [#|m|](): Promise<number> {
+        return Promise.resolve(1).then(n => n);
+    }
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionForGeneratorCallbacks", `
+function [#|foo|](p: Promise<string[]>) {
+    return p.then(function* (strings) {
+        for (const s of strings) {
+            yield s.toUpperCase();
+        }
+    });
+}
+`);
+
     });
 }

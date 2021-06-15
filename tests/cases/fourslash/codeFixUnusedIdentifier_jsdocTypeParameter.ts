@@ -10,6 +10,7 @@
 
 verify.codeFix({
     description: "Remove type parameters",
+    index: 0,
     newFileContent:
 `/**
  * @type {() => void}

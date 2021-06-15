@@ -10,6 +10,7 @@
 //// import style/**/
 
 verify.completions({
+  isNewIdentifierLocation: true,
   marker: "",
   exact: [],
   preferences: {

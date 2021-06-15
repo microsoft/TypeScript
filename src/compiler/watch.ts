@@ -1,16 +1,16 @@
 /*@internal*/
 namespace ts {
-    const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
+    const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
         getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
-    } : undefined!; // TODO: GH#18217
+    } : undefined;
 
     /**
      * Create a function that reports error by writing to the system and handles the formating of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
-        const host: FormatDiagnosticsHost = system === sys ? sysFormatDiagnosticsHost : {
+        const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
             getCurrentDirectory: () => system.getCurrentDirectory(),
             getNewLine: () => system.newLine,
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),
@@ -90,7 +90,7 @@ namespace ts {
 
     /** Parses config file using System interface */
     export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter) {
-        const host: ParseConfigFileHost = <any>system;
+        const host: ParseConfigFileHost = system as any;
         host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
         const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
         host.onUnRecoverableConfigFileDiagnostic = undefined!; // TODO: GH#18217
@@ -113,8 +113,8 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
-    export function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T {
-        return !!(program as T).getState;
+    export function isBuilderProgram(program: Program | BuilderProgram): program is BuilderProgram {
+        return !!(program as BuilderProgram).getState;
     }
 
     export function listFiles<T extends BuilderProgram>(program: Program | T, write: (s: string) => void) {

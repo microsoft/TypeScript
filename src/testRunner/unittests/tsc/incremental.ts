@@ -400,5 +400,23 @@ declare global {
                 },
             ]
         });
+
+
+        verifyTscSerializedIncrementalEdits({
+            scenario: "incremental",
+            subScenario: "when project has strict true",
+            commandLineArgs: ["-noEmit", "-p", `src/project`],
+            fs: () => loadProjectFromFiles({
+                "/src/project/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        incremental: true,
+                        strict: true,
+                    },
+                }),
+                "/src/project/class1.ts": `export class class1 {}`,
+            }),
+            incrementalScenarios: noChangeOnlyRuns,
+            baselinePrograms: true
+        });
     });
 }

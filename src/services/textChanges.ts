@@ -6,25 +6,25 @@ namespace ts.textChanges {
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
     function getPos(n: TextRange): number {
-        const result = (<any>n).__pos;
+        const result = (n as any).__pos;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setPos(n: TextRange, pos: number): void {
         Debug.assert(typeof pos === "number");
-        (<any>n).__pos = pos;
+        (n as any).__pos = pos;
     }
 
     function getEnd(n: TextRange): number {
-        const result = (<any>n).__end;
+        const result = (n as any).__end;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setEnd(n: TextRange, end: number): void {
         Debug.assert(typeof end === "number");
-        (<any>n).__end = end;
+        (n as any).__end = end;
     }
 
     export interface ConfigurableStart {
@@ -168,7 +168,7 @@ namespace ts.textChanges {
         return { pos: getAdjustedStartPosition(sourceFile, startNode, options), end: getAdjustedEndPosition(sourceFile, endNode, options) };
     }
 
-    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart) {
+    function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd, hasTrailingComment = false) {
         const { leadingTriviaOption } = options;
         if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
@@ -199,6 +199,17 @@ namespace ts.textChanges {
             // when b is deleted - we delete it
             return leadingTriviaOption === LeadingTriviaOption.IncludeAll ? fullStart : start;
         }
+
+        // if node has a trailing comments, use comment end position as the text has already been included.
+        if (hasTrailingComment) {
+            // Check first for leading comments as if the node is the first import, we want to exclude the trivia;
+            // otherwise we get the trailing comments.
+            const comment = getLeadingCommentRanges(sourceFile.text, fullStart)?.[0] || getTrailingCommentRanges(sourceFile.text, fullStart)?.[0];
+            if (comment) {
+                return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+            }
+        }
+
         // get start position of the line following the line that contains fullstart position
         // (but only if the fullstart isn't the very beginning of the file)
         const nextLineStart = fullStart > 0 ? 1 : 0;
@@ -208,7 +219,38 @@ namespace ts.textChanges {
         return getStartPositionOfLine(getLineOfLocalPosition(sourceFile, adjustedStartPosition), sourceFile);
     }
 
-    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
+    /** Return the end position of a multiline comment of it is on another line; otherwise returns `undefined`; */
+    function getEndPositionOfMultilineTrailingComment(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number | undefined {
+        const { end } = node;
+        const { trailingTriviaOption } = options;
+        if (trailingTriviaOption === TrailingTriviaOption.Include) {
+            // If the trailing comment is a multiline comment that extends to the next lines,
+            // return the end of the comment and track it for the next nodes to adjust.
+            const comments = getTrailingCommentRanges(sourceFile.text, end);
+            if (comments) {
+                const nodeEndLine = getLineOfLocalPosition(sourceFile, node.end);
+                for (const comment of comments) {
+                    // Single line can break the loop as trivia will only be this line.
+                    // Comments on subsequest lines are also ignored.
+                    if (comment.kind === SyntaxKind.SingleLineCommentTrivia || getLineOfLocalPosition(sourceFile, comment.pos) > nodeEndLine) {
+                        break;
+                    }
+
+                    // Get the end line of the comment and compare against the end line of the node.
+                    // If the comment end line position and the multiline comment extends to multiple lines,
+                    // then is safe to return the end position.
+                    const commentEndLine = getLineOfLocalPosition(sourceFile, comment.end);
+                    if (commentEndLine > nodeEndLine) {
+                        return skipTrivia(sourceFile.text, comment.end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ true);
+                    }
+                }
+            }
+        }
+
+        return undefined;
+    }
+
+    function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd): number {
         const { end } = node;
         const { trailingTriviaOption } = options;
         if (trailingTriviaOption === TrailingTriviaOption.Exclude) {
@@ -222,6 +264,12 @@ namespace ts.textChanges {
             }
             return end;
         }
+
+        const multilineEndPosition = getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
+        if (multilineEndPosition) {
+            return multilineEndPosition;
+        }
+
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
 
         return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
@@ -293,6 +341,18 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, getAdjustedRange(sourceFile, node, node, options));
         }
 
+        public deleteNodes(sourceFile: SourceFile, nodes: readonly Node[], options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }, hasTrailingComment: boolean): void {
+            // When deleting multiple nodes we need to track if the end position is including multiline trailing comments.
+            for (const node of nodes) {
+                const pos = getAdjustedStartPosition(sourceFile, node, options, hasTrailingComment);
+                const end = getAdjustedEndPosition(sourceFile, node, options);
+
+                this.deleteRange(sourceFile, { pos, end });
+
+                hasTrailingComment = !!getEndPositionOfMultilineTrailingComment(sourceFile, node, options);
+            }
+        }
+
         public deleteModifier(sourceFile: SourceFile, modifier: Modifier): void {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
@@ -335,6 +395,10 @@ namespace ts.textChanges {
 
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: readonly Node[], options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
             this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
+        }
+
+        public nodeHasTrailingComment(sourceFile: SourceFile, oldNode: Node, configurableEnd: ConfigurableEnd = useNonAdjustedPositions): boolean {
+            return !!getEndPositionOfMultilineTrailingComment(sourceFile, oldNode, configurableEnd);
         }
 
         private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {
@@ -927,7 +991,7 @@ namespace ts.textChanges {
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
-                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
+                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
@@ -990,7 +1054,7 @@ namespace ts.textChanges {
     }
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         setTextRangePosEnd(newNode, getPos(node), getEnd(node));
@@ -1289,8 +1353,9 @@ namespace ts.textChanges {
                 case SyntaxKind.ImportEqualsDeclaration:
                     const isFirstImport = sourceFile.imports.length && node === first(sourceFile.imports).parent || node === find(sourceFile.statements, isAnyImportSyntax);
                     // For first import, leave header comment in place, otherwise only delete JSDoc comments
-                    deleteNode(changes, sourceFile, node,
-                        { leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine });
+                    deleteNode(changes, sourceFile, node, {
+                        leadingTriviaOption: isFirstImport ? LeadingTriviaOption.Exclude : hasJSDocNodes(node) ? LeadingTriviaOption.JSDoc : LeadingTriviaOption.StartLine,
+                    });
                     break;
 
                 case SyntaxKind.BindingElement:
