@@ -1,11 +1,11 @@
-tests/cases/conformance/jsdoc/b.js(4,13): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-tests/cases/conformance/jsdoc/b.js(45,16): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(4,20): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(45,23): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
-tests/cases/conformance/jsdoc/b.js(49,19): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(49,26): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
-tests/cases/conformance/jsdoc/b.js(51,17): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(51,24): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
-tests/cases/conformance/jsdoc/b.js(52,17): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/conformance/jsdoc/b.js(52,24): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
 tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBase'.
   Types of property 'p' are incompatible.
@@ -26,7 +26,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     var W = /** @type {string} */(/** @type {*} */ (4));
     
     var W = /** @type {string} */(4); // Error
-                ~~~~~~~~~~~~~~~
+                       ~~~~~~
 !!! error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     
     /** @type {*} */
@@ -69,7 +69,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     someBase = /** @type {SomeBase} */(someDerived);
     someBase = /** @type {SomeBase} */(someBase);
     someBase = /** @type {SomeBase} */(someOther); // Error
-                   ~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 !!! related TS2728 tests/cases/conformance/jsdoc/b.js:17:9: 'p' is declared here.
@@ -77,17 +77,17 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     someDerived = /** @type {SomeDerived} */(someDerived);
     someDerived = /** @type {SomeDerived} */(someBase);
     someDerived = /** @type {SomeDerived} */(someOther); // Error
-                      ~~~~~~~~~~~~~~~~~~~~
+                             ~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
     
     someOther = /** @type {SomeOther} */(someDerived); // Error
-                    ~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
 !!! related TS2728 tests/cases/conformance/jsdoc/b.js:28:9: 'q' is declared here.
     someOther = /** @type {SomeOther} */(someBase); // Error
-                    ~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
 !!! related TS2728 tests/cases/conformance/jsdoc/b.js:28:9: 'q' is declared here.

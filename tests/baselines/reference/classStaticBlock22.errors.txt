@@ -1,72 +1,94 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(7,11): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,5): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS2349: This expression is not callable.
-  Type 'String' has no call signatures.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(22,14): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(25,11): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(28,8): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,9): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,10): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,5): error TS18037: Identifier 'await' cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS18037: Identifier 'await' cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,5): error TS2304: Cannot find name 'let'.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS1005: ';' expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,14): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,16): error TS2693: 'any' only refers to a type, but is being used as a value here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,5): error TS2304: Cannot find name 'let'.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS1005: ';' expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,14): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,5): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,10): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(28,14): error TS1005: ':' expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,9): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,14): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,10): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,15): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,5): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,10): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS1003: Identifier expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,20): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,17): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,22): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,24): error TS1005: ';' expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,17): error TS18037: Await expression cannot be used inside class static block.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (13 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (27 errors) ====
     let await: "any";
     class C {
       static {
         let await: any; // illegal, cannot declare a new binding for await
+        ~~~
+!!! error TS2304: Cannot find name 'let'.
             ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS1005: ';' expected.
+            ~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
+                 ~
+!!! error TS1109: Expression expected.
+                   ~~~
+!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
       }
       static {
         let { await } = {} as any; // illegal, cannot declare a new binding for await
-              ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
       }
       static {
         let { await: other } = {} as any; // legal
       }
       static {
         let await; // illegal, cannot declare a new binding for await
+        ~~~
+!!! error TS2304: Cannot find name 'let'.
             ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS1005: ';' expected.
+            ~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
+                 ~
+!!! error TS1109: Expression expected.
       }
       static {
         await; // illegal
         ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+             ~
+!!! error TS1109: Expression expected.
       }
       static {
         await(1); // illegal
-        ~~~~~
-!!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type 'String' has no call signatures.
-        ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+        ~~~~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
       }
       static {
         function await() {}; // illegal
-                 ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
       }
       static {
         class await {}; // illegal
-              ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
       }
       static {
         ({ await }); // illegal short-hand property reference
-           ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+                 ~
+!!! error TS1005: ':' expected.
       }
       static {
         ({ [await]: 1 }); // illegal
             ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+                 ~
+!!! error TS1109: Expression expected.
       }
       static {
         class D {
@@ -74,7 +96,9 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): e
             x = await; // legal (initializers have an implicit function boundary)
             [await] = 1; // illegal (computed property names are evaluated outside of a class body
              ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+                  ~
+!!! error TS1109: Expression expected.
           };
       }
       static {
@@ -92,10 +116,16 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): e
       static {
         await: // illegal, 'await' cannot be used as a label
         ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS18037: Await expression cannot be used inside class static block.
+             ~
+!!! error TS1109: Expression expected.
             break await; // illegal, 'await' cannot be used as a label
                   ~~~~~
-!!! error TS18037: Identifier 'await' cannot be used inside class static block.
+!!! error TS1003: Identifier expected.
+                  ~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
+                       ~
+!!! error TS1109: Expression expected.
       }
       static {
         class E {
@@ -129,6 +159,16 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): e
       static {
         function f (await) {}
         const ff = (await) => {}
+                    ~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
+                         ~
+!!! error TS1109: Expression expected.
+                           ~~
+!!! error TS1005: ';' expected.
         const fff = await => {}
+                    ~~~~~
+!!! error TS18037: Await expression cannot be used inside class static block.
+                          ~~
+!!! error TS1109: Expression expected.
       }
     }

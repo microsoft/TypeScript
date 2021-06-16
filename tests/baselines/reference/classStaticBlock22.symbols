@@ -7,7 +7,6 @@ class C {
 
   static {
     let await: any; // illegal, cannot declare a new binding for await
->await : Symbol(await, Decl(classStaticBlock22.ts, 3, 7))
   }
   static {
     let { await } = {} as any; // illegal, cannot declare a new binding for await
@@ -19,15 +18,12 @@ class C {
   }
   static {
     let await; // illegal, cannot declare a new binding for await
->await : Symbol(await, Decl(classStaticBlock22.ts, 12, 7))
   }
   static {
     await; // illegal
->await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
   }
   static {
     await(1); // illegal
->await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
   }
   static {
     function await() {}; // illegal
@@ -44,7 +40,6 @@ class C {
   static {
     ({ [await]: 1 }); // illegal
 >[await] : Symbol([await], Decl(classStaticBlock22.ts, 30, 6))
->await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
   }
   static {
     class D {
@@ -59,7 +54,6 @@ class C {
 
         [await] = 1; // illegal (computed property names are evaluated outside of a class body
 >[await] : Symbol(D[await], Decl(classStaticBlock22.ts, 35, 18))
->await : Symbol(await, Decl(classStaticBlock22.ts, 0, 3))
 
       };
   }
@@ -157,10 +151,8 @@ class C {
 
     const ff = (await) => {}
 >ff : Symbol(ff, Decl(classStaticBlock22.ts, 86, 9))
->await : Symbol(await, Decl(classStaticBlock22.ts, 86, 16))
 
     const fff = await => {}
 >fff : Symbol(fff, Decl(classStaticBlock22.ts, 87, 9))
->await : Symbol(await, Decl(classStaticBlock22.ts, 87, 15))
   }
 }

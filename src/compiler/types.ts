@@ -3954,9 +3954,9 @@ namespace ts {
         /* @internal */ getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         /** Given a source file, get the name of the package it was imported from. */
-        /* @internal */ sourceFileToPackageName: ESMap<string, string>;
+        /* @internal */ sourceFileToPackageName: ESMap<Path, string>;
         /** Set of all source files that some other source file redirects to. */
-        /* @internal */ redirectTargetsMap: MultiMap<string, string>;
+        /* @internal */ redirectTargetsMap: MultiMap<Path, string>;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
@@ -3984,7 +3984,7 @@ namespace ts {
     }
 
     /* @internal */
-    export type RedirectTargetsMap = ReadonlyESMap<string, readonly string[]>;
+    export type RedirectTargetsMap = ReadonlyESMap<Path, readonly string[]>;
 
     export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
@@ -4228,6 +4228,7 @@ namespace ts {
         /* @internal */ getSuggestedSymbolForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
         /* @internal */ getSuggestedSymbolForNonexistentModule(node: Identifier, target: Symbol): Symbol | undefined;
+        /* @internal */ getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined;
         /* @internal */ getSuggestionForNonexistentExport(node: Identifier, target: Symbol): string | undefined;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
@@ -6051,12 +6052,14 @@ namespace ts {
         strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
+        strictOptionalProperties?: boolean;  // Always combine with strict property
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
         target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
         traceResolution?: boolean;
+        useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
         /** Paths used to compute primary types search locations */
@@ -6205,6 +6208,7 @@ namespace ts {
         validatedFilesSpec: readonly string[] | undefined;
         validatedIncludeSpecs: readonly string[] | undefined;
         validatedExcludeSpecs: readonly string[] | undefined;
+        pathPatterns: readonly (string | Pattern)[] | undefined;
     }
 
     /* @internal */
@@ -6239,6 +6243,7 @@ namespace ts {
         affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
         affectsEmit?: true;                                     // true if the options affects emit
+        affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
@@ -8149,7 +8154,6 @@ namespace ts {
         getGlobalTypingsCacheLocation?(): string | undefined;
         getNearestAncestorDirectoryWithPackageJson?(fileName: string, rootDir?: string): string | undefined;
 
-        getSourceFiles(): readonly SourceFile[];
         readonly redirectTargetsMap: RedirectTargetsMap;
         getProjectReferenceRedirect(fileName: string): string | undefined;
         isSourceOfProjectReferenceRedirect(fileName: string): boolean;
@@ -8163,10 +8167,19 @@ namespace ts {
         isRedirect: boolean;
     }
 
+    /*@internal*/
+    export interface ResolvedModuleSpecifierInfo {
+        modulePaths: readonly ModulePath[] | undefined;
+        moduleSpecifiers: readonly string[] | undefined;
+        isAutoImportable: boolean | undefined;
+    }
+
     /* @internal */
     export interface ModuleSpecifierCache {
-        get(fromFileName: Path, toFileName: Path): boolean | readonly ModulePath[] | undefined;
-        set(fromFileName: Path, toFileName: Path, moduleSpecifiers: boolean | readonly ModulePath[]): void;
+        get(fromFileName: Path, toFileName: Path, preferences: UserPreferences): Readonly<ResolvedModuleSpecifierInfo> | undefined;
+        set(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[], moduleSpecifiers: readonly string[]): void;
+        setIsAutoImportable(fromFileName: Path, toFileName: Path, preferences: UserPreferences, isAutoImportable: boolean): void;
+        setModulePaths(fromFileName: Path, toFileName: Path, preferences: UserPreferences, modulePaths: readonly ModulePath[]): void;
         clear(): void;
         count(): number;
     }

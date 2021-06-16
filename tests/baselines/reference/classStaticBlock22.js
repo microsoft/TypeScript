@@ -94,7 +94,9 @@ class C {
 let await;
 class C {
     static {
-        let await; // illegal, cannot declare a new binding for await
+        let;
+        await ;
+        any; // illegal, cannot declare a new binding for await
     }
     static {
         let { await } = {}; // illegal, cannot declare a new binding for await
@@ -103,13 +105,14 @@ class C {
         let { await: other } = {}; // legal
     }
     static {
-        let await; // illegal, cannot declare a new binding for await
+        let;
+        await ; // illegal, cannot declare a new binding for await
     }
     static {
-        await; // illegal
+        await ; // illegal
     }
     static {
-        await(1); // illegal
+        await (1); // illegal
     }
     static {
         function await() { }
@@ -121,16 +124,16 @@ class C {
         ; // illegal
     }
     static {
-        ({ await }); // illegal short-hand property reference
+        ({ await:  }); // illegal short-hand property reference
     }
     static {
-        ({ [await]: 1 }); // illegal
+        ({ [await ]: 1 }); // illegal
     }
     static {
         class D {
             await = 1; // legal
             x = await; // legal (initializers have an implicit function boundary)
-            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
         }
         ;
     }
@@ -148,8 +151,9 @@ class C {
         (() => await); // legal, 'await' is inside of a new function boundary
     }
     static {
-        await: // illegal, 'await' cannot be used as a label
-         break await; // illegal, 'await' cannot be used as a label
+        await ;
+        break ;
+        await ; // illegal, 'await' cannot be used as a label
     }
     static {
         class E {
@@ -182,7 +186,9 @@ class C {
     }
     static {
         function f(await) { }
-        const ff = (await) => { };
-        const fff = await => { };
+        const ff = (await );
+        { }
+        const fff = await ;
+        { }
     }
 }

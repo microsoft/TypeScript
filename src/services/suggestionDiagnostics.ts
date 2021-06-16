@@ -174,6 +174,11 @@ namespace ts {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through

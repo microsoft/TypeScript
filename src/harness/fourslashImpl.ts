@@ -879,7 +879,13 @@ namespace FourSlash {
                     nameToEntries.set(entry.name, [entry]);
                 }
                 else {
-                    if (entries.some(e => e.source === entry.source && this.deepEqual(e.data, entry.data))) {
+                    if (entries.some(e =>
+                        e.source === entry.source &&
+                        e.data?.exportName === entry.data?.exportName &&
+                        e.data?.fileName === entry.data?.fileName &&
+                        e.data?.moduleSpecifier === entry.data?.moduleSpecifier &&
+                        e.data?.ambientModuleName === entry.data?.ambientModuleName
+                    )) {
                         this.raiseError(`Duplicate completions for ${entry.name}`);
                     }
                     entries.push(entry);
@@ -1278,16 +1284,6 @@ namespace FourSlash {
             }
             recur(fullActual, fullExpected, "");
 
-        }
-
-        private deepEqual(a: unknown, b: unknown) {
-            try {
-                this.assertObjectsEqual(a, b);
-                return true;
-            }
-            catch {
-                return false;
-            }
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
