@@ -35062,7 +35062,7 @@ namespace ts {
                         // Can't be private
                         break;
                     default:
-                        Debug.fail();
+                        Debug.fail("Unexpected class member");
                 }
             }
         }
