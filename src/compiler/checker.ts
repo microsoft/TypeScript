@@ -11148,7 +11148,7 @@ namespace ts {
                         prop.keyType = keyType;
                         if (modifiersProp) {
                             prop.syntheticOrigin = modifiersProp;
-                            // If the mapped type as an 'as XXX' clause, the property name likely won't match the declaration name and
+                            // If the mapped type has an `as XXX` clause, the property name likely won't match the declaration name and
                             // multiple properties may map to the same name. Thus, we attach no declarations to the symbol.
                             prop.declarations = nameType ? undefined : modifiersProp.declarations;
                         }
