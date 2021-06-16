@@ -365,6 +365,93 @@ namespace ts {
 
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+        const fail = (name: string) => () => Debug.fail("Unit kind expected for " + name)
+        // boolean, bigint, number, string, symbol [literal], boolean, bigint, number, string, symbol, object, union (recursive?!), ..., unknown, never, null, void, undefined, any
+        const ordre: Array<[TypeFlags, (t1: Type, t2: Type) => Comparison]> = [
+            [TypeFlags.BooleanLiteral, t1 => t1 === trueType ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.BigIntLiteral, (t1, t2) => (t1 as BigIntLiteralType).value < (t2 as BigIntLiteralType).value ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.EnumLiteral, (t1, t2) => {
+                Debug.assert(t1.flags & (TypeFlags.Union | TypeFlags.StringLiteral | TypeFlags.NumberLiteral))
+                Debug.assert(t2.flags & (TypeFlags.Union | TypeFlags.StringLiteral | TypeFlags.NumberLiteral))
+                if (t1.flags & TypeFlags.Union) {
+                    if (t2.flags & TypeFlags.Union) {
+                        return t1.symbol.escapedName < t2.symbol.escapedName ? Comparison.LessThan : Comparison.GreaterThan
+                    }
+                    return Comparison.LessThan
+                }
+                else if (t1.flags & TypeFlags.NumberLiteral) {
+                    if (t2.flags & TypeFlags.Union)
+                        return Comparison.GreaterThan
+                    else if (t2.flags & TypeFlags.StringLiteral)
+                        return Comparison.LessThan
+                    else
+                        return (t1 as NumberLiteralType).value < (t2 as NumberLiteralType).value ? Comparison.LessThan : Comparison.GreaterThan
+                }
+                else if (t1.flags & TypeFlags.StringLiteral) {
+                    if (t2.flags & (TypeFlags.Union | TypeFlags.NumberLiteral))
+                        return Comparison.GreaterThan
+                    else
+                        return (t1 as StringLiteralType).value < (t2 as StringLiteralType).value ? Comparison.LessThan : Comparison.GreaterThan
+                }
+                Debug.fail("I was lied to!")
+            }],
+            [TypeFlags.NumberLiteral, (t1, t2) => (t1 as NumberLiteralType).value < (t2 as NumberLiteralType).value ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.StringLiteral, (t1, t2) => (t1 as StringLiteralType).value < (t2 as StringLiteralType).value ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.TemplateLiteral, (t1, t2) => (t1 as TemplateLiteralType).texts[0] < (t2 as TemplateLiteralType).texts[0] ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.UniqueESSymbol, (t1, t2) => (t1 as UniqueESSymbolType).escapedName < (t2 as UniqueESSymbolType).escapedName ? Comparison.LessThan : Comparison.GreaterThan],
+            [TypeFlags.Boolean, fail("boolean")],
+            [TypeFlags.BigInt, fail("bigint")],
+            [TypeFlags.Number, fail("number")],
+            [TypeFlags.String, fail("string")],
+            [TypeFlags.ESSymbol, fail("essymbol")],
+            [TypeFlags.Enum, (t1, t2) => {
+                Debug.assert(t1.symbol && t2.symbol)
+                return t1.symbol.escapedName < t2.symbol.escapedName ? Comparison.LessThan : Comparison.GreaterThan
+            }],
+            [TypeFlags.NonPrimitive, fail("object")],
+            [TypeFlags.Object, () => Comparison.EqualTo], // TODO: Lots more work to be done here
+            // Class            = 1 << 0,  // Class
+            // Interface        = 1 << 1,  // Interface
+            // Reference        = 1 << 2,  // Generic type reference
+            // Tuple            = 1 << 3,  // Synthesized generic tuple type
+            // Anonymous        = 1 << 4,  // Anonymous
+            // Mapped           = 1 << 5,  // Mapped
+            // Instantiated     = 1 << 6,  // Instantiated anonymous or mapped type
+            // ObjectLiteral    = 1 << 7,  // Originates in an object literal
+            // EvolvingArray    = 1 << 8,  // Evolving array type
+            // ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
+            // ReverseMapped    = 1 << 10, // Object contains a property from a reverse-mapped type
+            // JsxAttributes    = 1 << 11, // Jsx attributes type
+            // MarkerType       = 1 << 12, // Marker type used for variance probing
+            // JSLiteral        = 1 << 13, // Object type declared in JS - disables errors on read/write of nonexisting members
+            // FreshLiteral     = 1 << 14, // Fresh object literal
+            // ArrayLiteral     = 1 << 15, // Originates in an array literal
+            // /* @internal */
+            // PrimitiveUnion   = 1 << 16, // Union of only primitive types
+            // /* @internal */
+            // ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+            // /* @internal */
+            // ContainsObjectOrArrayLiteral = 1 << 18, // Type is or contains object literal type
+            // /* @internal */
+            // NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
+            // /* @internal */
+            // CouldContainTypeVariablesComputed = 1 << 20, // CouldContainTypeVariables flag has been computed
+            // /* @internal */
+            // CouldContainTypeVariables = 1 << 21, // Type could contain a type variable
+
+            [TypeFlags.Union, () => Comparison.EqualTo], // TODO: Recur? Should this even be possible?
+            [TypeFlags.Intersection, () => Comparison.EqualTo], // TODO: Recur?
+            // TODO: Everything else
+            // TemplateLiteral = 1 << 27,  // Template literal type
+            [TypeFlags.Index | TypeFlags.IndexedAccess | TypeFlags.Conditional | TypeFlags.Substitution | TypeFlags.TypeParameter | TypeFlags.StringMapping, () => Comparison.EqualTo],
+            // TODO: Unit types (and unit kinds) should Debug.fail in their functions.
+            [TypeFlags.Never, () => Comparison.EqualTo],
+            [TypeFlags.Unknown, () => Comparison.EqualTo],
+            [TypeFlags.Null, () => Comparison.EqualTo],
+            [TypeFlags.Void, () => Comparison.EqualTo],
+            [TypeFlags.Undefined, () => Comparison.EqualTo],
+            [TypeFlags.Any, () => Comparison.EqualTo],
+        ]
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -4710,11 +4797,11 @@ namespace ts {
                     type = (type as UnionType).origin!;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types;
+                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types.slice();
                     if (length(types) === 1) {
                         return typeToTypeNodeHelper(types[0], context);
                     }
-                    const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
+                    const typeNodes = mapToTypeNodes(types.sort(typeDisplayComparison), context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
                         return type.flags & TypeFlags.Union ? factory.createUnionTypeNode(typeNodes) : factory.createIntersectionTypeNode(typeNodes);
                     }
@@ -7766,7 +7853,27 @@ namespace ts {
             }
             if (flags & TypeFlags.Null) result.push(nullType);
             if (flags & TypeFlags.Undefined) result.push(undefinedType);
-            return result || types;
+            return result;
+        }
+
+        function typeDisplayComparison(t1: Type, t2: Type) {
+            Debug.assert(t1 !== t2, "shouldn't display the same type twice (or have a union/intersection with duped types)")
+            let prev: TypeFlags = 0
+            for (const [kind, predicate] of ordre) {
+                if (t1.flags & kind) {
+                    if (t2.flags & prev) {
+                        return Comparison.LessThan
+                    }
+                    else if (t2.flags & kind) {
+                        return predicate(t1, t2)
+                    }
+                    else {
+                        return Comparison.GreaterThan
+                    }
+                }
+                prev |= kind
+            }
+            return Comparison.EqualTo
         }
 
         function visibilityToString(flags: ModifierFlags): string | undefined {
