@@ -7284,26 +7284,4 @@ namespace ts {
                 return (parent as SourceFile).statements;
         }
     }
-
-    export function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
-        let set = map.get(k);
-        if (!set) {
-            set = new Set<V>();
-            map.set(k, set);
-        }
-        set.add(v);
-    }
-
-    export function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V, removeEmpty = true): boolean {
-        const set = map.get(k);
-
-        if (set?.delete(v)) {
-            if (removeEmpty && !set.size) {
-                map.delete(k);
-            }
-            return true;
-        }
-
-        return false;
-    }
 }

@@ -21,12 +21,12 @@ namespace ts {
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap?: BuilderState.TwoWayMap<Path, Path> | undefined;
+        readonly referencedMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
-        readonly exportedModulesMap?: BuilderState.TwoWayMap<Path, Path> | undefined;
+        readonly exportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
     }
 
     export interface BuilderState {
@@ -39,14 +39,14 @@ namespace ts {
          * Otherwise undefined
          * Thus non undefined value indicates, module emit
          */
-        readonly referencedMap: BuilderState.TwoWayMap<Path, Path> | undefined;
+        readonly referencedMap: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          *
          * This is equivalent to referencedMap, but for the emitted .d.ts file.
          */
-        readonly exportedModulesMap: BuilderState.TwoWayMap<Path, Path> | undefined;
+        readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
 
         /**
          * true if file version is used as signature
@@ -79,14 +79,19 @@ namespace ts {
             affectsGlobalScope: boolean | undefined;
         }
 
-        export interface TwoWayMap<K, V> extends ESMap<K, ReadonlySet<V>> {
-            getKeys(v: V): ReadonlySet<K> | undefined;
-            clone(): TwoWayMap<K, V>;
+        export interface ReadonlyManyToManyPathMap extends ReadonlyESMap<Path, ReadonlySet<Path>> {
+            getKeys(v: Path): ReadonlySet<Path> | undefined;
+            clone(): ManyToManyPathMap;
         }
 
-        export function createTwoWayMap<K, V>(): TwoWayMap<K, V> {
-            function create(forward: ESMap<K, ReadonlySet<V>>, reverse: ESMap<V, Set<K>>): TwoWayMap<K, V> {
-                const map: TwoWayMap<K, V> = {
+        export interface ManyToManyPathMap extends ESMap<Path, ReadonlySet<Path>> {
+            getKeys(v: Path): ReadonlySet<Path> | undefined;
+            clone(): ManyToManyPathMap;
+        }
+
+        export function createManyToManyPathMap(): ManyToManyPathMap {
+            function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>): ManyToManyPathMap {
+                const map: ManyToManyPathMap = {
                     clear: () => {
                         forward.clear();
                         reverse.clear();
@@ -134,7 +139,29 @@ namespace ts {
                 return map;
             }
 
-            return create(new Map<K, Set<V>>(), new Map<V, Set<K>>());
+            return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>());
+        }
+
+        function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
+            let set = map.get(k);
+            if (!set) {
+                set = new Set<V>();
+                map.set(k, set);
+            }
+            set.add(v);
+        }
+
+        function deleteFromMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V, removeEmpty = true): boolean {
+            const set = map.get(k);
+
+            if (set?.delete(v)) {
+                if (removeEmpty && !set.size) {
+                    map.delete(k);
+                }
+                return true;
+            }
+
+            return false;
         }
 
         /**
@@ -147,7 +174,7 @@ namespace ts {
          * Entries in `nonExporting` indicate that there are no exported module(types from other modules) for the file
          */
         export interface ComputingExportedModulesMap {
-             exporting: TwoWayMap<Path, Path>;
+             exporting: ManyToManyPathMap;
              nonExporting: Set<Path>;
         }
 
@@ -261,7 +288,7 @@ namespace ts {
         /**
          * Returns true if oldState is reusable, that is the emitKind = module/non module has not changed
          */
-        export function canReuseOldState(newReferencedMap: TwoWayMap<Path, Path> | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
+        export function canReuseOldState(newReferencedMap: ReadonlyManyToManyPathMap | undefined, oldState: Readonly<ReusableBuilderState> | undefined) {
             return oldState && !oldState.referencedMap === !newReferencedMap;
         }
 
@@ -270,8 +297,8 @@ namespace ts {
          */
         export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
-            const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createTwoWayMap<Path, Path>() : undefined;
-            const exportedModulesMap = referencedMap ? createTwoWayMap<Path, Path>() : undefined;
+            const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? createManyToManyPathMap() : undefined;
+            const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
             const hasCalledUpdateShapeSignature = new Set<Path>();
             const useOldState = canReuseOldState(referencedMap, oldState);
 

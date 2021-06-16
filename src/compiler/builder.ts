@@ -388,7 +388,7 @@ namespace ts {
             if (state.exportedModulesMap) {
                 if (!state.currentAffectedFilesExportedModulesMap) {
                     state.currentAffectedFilesExportedModulesMap = {
-                        exporting: BuilderState.createTwoWayMap<Path, Path>(),
+                        exporting: BuilderState.createManyToManyPathMap(),
                         nonExporting: new Set<Path>(),
                     };
                 }
@@ -1263,8 +1263,8 @@ namespace ts {
         const state: ReusableBuilderProgramState = {
             fileInfos,
             compilerOptions: program.options ? convertToOptionsWithAbsolutePaths(program.options, toAbsolutePath) : {},
-            referencedMap: toTwoWayMap(program.referencedMap),
-            exportedModulesMap: toTwoWayMap(program.exportedModulesMap),
+            referencedMap: toManyToManyPathMap(program.referencedMap),
+            exportedModulesMap: toManyToManyPathMap(program.exportedModulesMap),
             semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => toFilePath(isNumber(value) ? value : value[0]), value => isNumber(value) ? emptyArray : value[1]),
             hasReusableDiagnostic: true,
             affectedFilesPendingEmit: map(program.affectedFilesPendingEmit, value => toFilePath(value[0])),
@@ -1312,12 +1312,12 @@ namespace ts {
             return filePathsSetList![fileIdsListId - 1];
         }
 
-        function toTwoWayMap(referenceMap: ProgramBuildInfoReferencedMap | undefined): BuilderState.TwoWayMap<Path, Path> | undefined {
+        function toManyToManyPathMap(referenceMap: ProgramBuildInfoReferencedMap | undefined): BuilderState.ManyToManyPathMap | undefined {
             if (!referenceMap) {
                 return undefined;
             }
 
-            const map = BuilderState.createTwoWayMap<Path, Path>();
+            const map = BuilderState.createManyToManyPathMap();
             referenceMap.forEach(([fileId, fileIdListId]) =>
                 map.set(toFilePath(fileId), toFilePathsSet(fileIdListId))
             );
