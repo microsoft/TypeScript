@@ -79,24 +79,31 @@ namespace ts {
             affectsGlobalScope: boolean | undefined;
         }
 
-        export interface ReadonlyManyToManyPathMap extends ReadonlyESMap<Path, ReadonlySet<Path>> {
-            getKeys(v: Path): ReadonlySet<Path> | undefined;
+        export interface ReadonlyManyToManyPathMap {
             clone(): ManyToManyPathMap;
+            forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
+            getKeys(v: Path): ReadonlySet<Path> | undefined;
+            getValues(k: Path): ReadonlySet<Path> | undefined;
+            hasKey(k: Path): boolean;
+            keys(): Iterator<Path>;
         }
 
-        export interface ManyToManyPathMap extends ESMap<Path, ReadonlySet<Path>> {
-            getKeys(v: Path): ReadonlySet<Path> | undefined;
-            clone(): ManyToManyPathMap;
+        export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
+            deleteKey(k: Path): boolean;
+            set(k: Path, v: ReadonlySet<Path>): void;
         }
 
         export function createManyToManyPathMap(): ManyToManyPathMap {
             function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>): ManyToManyPathMap {
                 const map: ManyToManyPathMap = {
-                    clear: () => {
-                        forward.clear();
-                        reverse.clear();
-                    },
-                    delete: k => {
+                    clone: () => create(new Map(forward), new Map(reverse)),
+                    forEach: fn => forward.forEach(fn),
+                    getKeys: v => reverse.get(v),
+                    getValues: k => forward.get(k),
+                    hasKey: k => forward.has(k),
+                    keys: () => forward.keys(),
+
+                    deleteKey: k => {
                         const set = forward.get(k);
                         if (!set) {
                             return false;
@@ -106,11 +113,6 @@ namespace ts {
                         forward.delete(k);
                         return true;
                     },
-                    entries: () => forward.entries(),
-                    forEach: fn => forward.forEach(fn),
-                    get: k => forward.get(k),
-                    has: k => forward.has(k),
-                    keys: () => forward.keys(),
                     set: (k, vSet) => {
                         const existingVSet = forward.get(k);
                         forward.set(k, vSet);
@@ -129,11 +131,6 @@ namespace ts {
 
                         return map;
                     },
-                    get size() { return forward.size; },
-                    values: () => forward.values(),
-
-                    getKeys: v => reverse.get(v),
-                    clone: () => create(new Map(forward), new Map(reverse)),
                 };
 
                 return map;
@@ -316,7 +313,7 @@ namespace ts {
                     }
                     // Copy old visible to outside files map
                     if (useOldState) {
-                        const exportedModules = oldState!.exportedModulesMap!.get(sourceFile.resolvedPath);
+                        const exportedModules = oldState!.exportedModulesMap!.getValues(sourceFile.resolvedPath);
                         if (exportedModules) {
                             exportedModulesMap!.set(sourceFile.resolvedPath, exportedModules);
                         }
@@ -435,7 +432,7 @@ namespace ts {
                 latestSignature = sourceFile.version;
                 if (exportedModulesMapCache && latestSignature !== prevSignature) {
                     // All the references in this file are exported
-                    const references = state.referencedMap ? state.referencedMap.get(sourceFile.resolvedPath) : undefined;
+                    const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
                     if (references) {
                         exportedModulesMapCache.exporting.set(sourceFile.resolvedPath, references);
                     }
@@ -483,7 +480,7 @@ namespace ts {
         export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
             if (exportedModulesMapCache) {
                 Debug.assert(!!state.exportedModulesMap);
-                exportedModulesMapCache.nonExporting.forEach(path => state.exportedModulesMap!.delete(path));
+                exportedModulesMapCache.nonExporting.forEach(path => state.exportedModulesMap!.deleteKey(path));
                 exportedModulesMapCache.exporting.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
             }
         }
@@ -510,7 +507,7 @@ namespace ts {
                 const path = queue.pop()!;
                 if (!seenMap.has(path)) {
                     seenMap.add(path);
-                    const references = state.referencedMap.get(path);
+                    const references = state.referencedMap.getValues(path);
                     if (references) {
                         const iterator = references.keys();
                         for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {

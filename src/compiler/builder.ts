@@ -223,7 +223,7 @@ namespace ts {
                 // versions dont match
                 oldInfo.version !== info.version ||
                 // Referenced files changed
-                !hasSameKeys(newReferences = referencedMap && referencedMap.get(sourceFilePath), oldReferencedMap && oldReferencedMap.get(sourceFilePath)) ||
+                !hasSameKeys(newReferences = referencedMap && referencedMap.getValues(sourceFilePath), oldReferencedMap && oldReferencedMap.getValues(sourceFilePath)) ||
                 // Referenced file was deleted in the new program
                 newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))) {
                 // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
@@ -562,7 +562,7 @@ namespace ts {
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
             // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.exporting.has(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.exporting.hasKey(exportedFromPath) &&
             !state.currentAffectedFilesExportedModulesMap!.nonExporting.has(exportedFromPath) &&
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
@@ -597,7 +597,7 @@ namespace ts {
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
             // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.exporting.has(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.exporting.hasKey(exportedFromPath) &&
             !state.currentAffectedFilesExportedModulesMap!.nonExporting.has(exportedFromPath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
@@ -760,7 +760,7 @@ namespace ts {
         if (state.referencedMap) {
             referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
                 toFileId(key),
-                toFileIdListId(state.referencedMap!.get(key)!)
+                toFileIdListId(state.referencedMap!.getValues(key)!)
             ]);
         }
 
@@ -772,14 +772,14 @@ namespace ts {
                         return undefined;
                     }
 
-                    const newValue = state.currentAffectedFilesExportedModulesMap.exporting.get(key);
+                    const newValue = state.currentAffectedFilesExportedModulesMap.exporting.getValues(key);
                     if (newValue) {
                         return [toFileId(key), toFileIdListId(newValue)];
                     }
                 }
 
                 // Not in temporary cache, use existing value
-                return [toFileId(key), toFileIdListId(state.exportedModulesMap!.get(key)!)];
+                return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
             });
         }
 
