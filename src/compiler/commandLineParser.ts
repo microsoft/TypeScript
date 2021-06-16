@@ -1173,7 +1173,7 @@ namespace ts {
             name: "noErasingImportedNames",
             type: "boolean",
             affectsEmit: true,
-            category: Diagnostics.Advanced_Options,
+            category: Diagnostics.Emit,
             description: Diagnostics.Disable_the_removal_of_unused_imported_identifiers_from_the_JavaScript_output
         },
 
