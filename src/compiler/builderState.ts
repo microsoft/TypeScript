@@ -86,6 +86,13 @@ namespace ts {
             getValues(k: Path): ReadonlySet<Path> | undefined;
             hasKey(k: Path): boolean;
             keys(): Iterator<Path>;
+
+            /**
+             * The set of arguments to {@link deleteKeys} which have not subsequently
+             * been arguments to {@link set}.  Note that a key does not have to have
+             * ever been in the map to appear in this set.
+             */
+            deletedKeys(): ReadonlySet<Path> | undefined;
         }
 
         export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -94,16 +101,19 @@ namespace ts {
         }
 
         export function createManyToManyPathMap(): ManyToManyPathMap {
-            function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>): ManyToManyPathMap {
+            function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
                 const map: ManyToManyPathMap = {
-                    clone: () => create(new Map(forward), new Map(reverse)),
+                    clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
                     forEach: fn => forward.forEach(fn),
                     getKeys: v => reverse.get(v),
                     getValues: k => forward.get(k),
                     hasKey: k => forward.has(k),
                     keys: () => forward.keys(),
 
+                    deletedKeys: () => deleted,
                     deleteKey: k => {
+                        (deleted ||= new Set<Path>()).add(k);
+
                         const set = forward.get(k);
                         if (!set) {
                             return false;
@@ -114,6 +124,8 @@ namespace ts {
                         return true;
                     },
                     set: (k, vSet) => {
+                        deleted?.delete(k);
+
                         const existingVSet = forward.get(k);
                         forward.set(k, vSet);
 
@@ -136,7 +148,7 @@ namespace ts {
                 return map;
             }
 
-            return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>());
+            return create(new Map<Path, Set<Path>>(), new Map<Path, Set<Path>>(), /*deleted*/ undefined);
         }
 
         function addToMultimap<K, V>(map: ESMap<K, Set<V>>, k: K, v: V): void {
@@ -165,15 +177,6 @@ namespace ts {
          * Compute the hash to store the shape of the file
          */
         export type ComputeHash = ((data: string) => string) | undefined;
-
-        /**
-         * Exported modules to from declaration emit being computed.
-         * Entries in `nonExporting` indicate that there are no exported module(types from other modules) for the file
-         */
-        export interface ComputingExportedModulesMap {
-             exporting: ManyToManyPathMap;
-             nonExporting: Set<Path>;
-        }
 
         /**
          * Get the referencedFile from the imported module symbol
@@ -356,7 +359,7 @@ namespace ts {
         /**
          * Gets the files affected by the path from the program
          */
-        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string>, exportedModulesMapCache?: ComputingExportedModulesMap): readonly SourceFile[] {
+        export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: ESMap<Path, string>, exportedModulesMapCache?: ManyToManyPathMap): readonly SourceFile[] {
             // Since the operation could be cancelled, the signatures are always stored in the cache
             // They will be committed once it is safe to use them
             // eg when calling this api from tsserver, if there is no cancellation of the operation
@@ -395,7 +398,7 @@ namespace ts {
         /**
          * Returns if the shape of the signature has changed since last emit
          */
-        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ComputingExportedModulesMap) {
+        export function updateShapeSignature(state: Readonly<BuilderState>, programOfThisState: Program, sourceFile: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache?: ManyToManyPathMap) {
             Debug.assert(!!sourceFile);
             Debug.assert(!exportedModulesMapCache || !!state.exportedModulesMap, "Compute visible to outside map only if visibleToOutsideReferencedMap present in the state");
 
@@ -434,10 +437,10 @@ namespace ts {
                     // All the references in this file are exported
                     const references = state.referencedMap ? state.referencedMap.getValues(sourceFile.resolvedPath) : undefined;
                     if (references) {
-                        exportedModulesMapCache.exporting.set(sourceFile.resolvedPath, references);
+                        exportedModulesMapCache.set(sourceFile.resolvedPath, references);
                     }
                     else {
-                        exportedModulesMapCache.nonExporting.add(sourceFile.resolvedPath);
+                        exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
                     }
                 }
             }
@@ -448,19 +451,19 @@ namespace ts {
         /**
          * Coverts the declaration emit result into exported modules map
          */
-        function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ComputingExportedModulesMap) {
+        function updateExportedModules(sourceFile: SourceFile, exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined, exportedModulesMapCache: ManyToManyPathMap) {
             if (!exportedModulesFromDeclarationEmit) {
-                exportedModulesMapCache.nonExporting.add(sourceFile.resolvedPath);
+                exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
                 return;
             }
 
             let exportedModules: Set<Path> | undefined;
             exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
             if (exportedModules) {
-                exportedModulesMapCache.exporting.set(sourceFile.resolvedPath, exportedModules);
+                exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules);
             }
             else {
-                exportedModulesMapCache.nonExporting.add(sourceFile.resolvedPath);
+                exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
             }
 
             function addExportedModule(exportedModulePath: Path | undefined) {
@@ -477,11 +480,11 @@ namespace ts {
          * Updates the exported modules from cache into state's exported modules map
          * This should be called whenever it is safe to commit the state of the builder
          */
-        export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ManyToManyPathMap | undefined) {
             if (exportedModulesMapCache) {
                 Debug.assert(!!state.exportedModulesMap);
-                exportedModulesMapCache.nonExporting.forEach(path => state.exportedModulesMap!.deleteKey(path));
-                exportedModulesMapCache.exporting.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
+                exportedModulesMapCache.deletedKeys()?.forEach(path => state.exportedModulesMap!.deleteKey(path));
+                exportedModulesMapCache.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
             }
         }
 
@@ -612,7 +615,7 @@ namespace ts {
         /**
          * When program emits modular code, gets the files affected by the sourceFile whose shape has changed
          */
-        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ComputingExportedModulesMap | undefined) {
+        function getFilesAffectedByUpdatedShapeWhenModuleEmit(state: BuilderState, programOfThisState: Program, sourceFileWithUpdatedShape: SourceFile, cacheToUpdateSignature: ESMap<Path, string>, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, exportedModulesMapCache: ManyToManyPathMap | undefined) {
             if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
                 return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
             }

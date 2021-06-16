@@ -45,7 +45,7 @@ namespace ts {
         /**
          * Newly computed visible to outside referencedSet
          */
-        currentAffectedFilesExportedModulesMap?: Readonly<BuilderState.ComputingExportedModulesMap> | undefined;
+        currentAffectedFilesExportedModulesMap?: BuilderState.ReadonlyManyToManyPathMap | undefined;
         /**
          * True if the semantic diagnostics were copied from the old state
          */
@@ -116,7 +116,7 @@ namespace ts {
          * We need to store the updates separately in case the in-progress build is cancelled
          * and we need to roll back.
          */
-        currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
+        currentAffectedFilesExportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
         /**
          * Already seen affected files
          */
@@ -313,7 +313,7 @@ namespace ts {
         newState.affectedFilesIndex = state.affectedFilesIndex;
         newState.currentChangedFilePath = state.currentChangedFilePath;
         newState.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures && new Map(state.currentAffectedFilesSignatures);
-        newState.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap && { exporting: state.currentAffectedFilesExportedModulesMap.exporting.clone(), nonExporting: new Set(state.currentAffectedFilesExportedModulesMap.nonExporting) };
+        newState.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap?.clone();
         newState.seenAffectedFiles = state.seenAffectedFiles && new Set(state.seenAffectedFiles);
         newState.cleanedDiagnosticsOfLibFiles = state.cleanedDiagnosticsOfLibFiles;
         newState.semanticDiagnosticsFromOldState = state.semanticDiagnosticsFromOldState && new Set(state.semanticDiagnosticsFromOldState);
@@ -386,12 +386,7 @@ namespace ts {
             // Get next batch of affected files
             if (!state.currentAffectedFilesSignatures) state.currentAffectedFilesSignatures = new Map();
             if (state.exportedModulesMap) {
-                if (!state.currentAffectedFilesExportedModulesMap) {
-                    state.currentAffectedFilesExportedModulesMap = {
-                        exporting: BuilderState.createManyToManyPathMap(),
-                        nonExporting: new Set<Path>(),
-                    };
-                }
+                state.currentAffectedFilesExportedModulesMap ||= BuilderState.createManyToManyPathMap();
             }
             state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value;
@@ -555,15 +550,15 @@ namespace ts {
         const seenFileAndExportsOfFile = new Set<string>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        state.currentAffectedFilesExportedModulesMap.exporting.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
+        state.currentAffectedFilesExportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath =>
             // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.exporting.hasKey(exportedFromPath) &&
-            !state.currentAffectedFilesExportedModulesMap!.nonExporting.has(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
             forEachFilesReferencingPath(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
     }
@@ -590,15 +585,15 @@ namespace ts {
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
-        state.currentAffectedFilesExportedModulesMap.exporting.getKeys(filePath)?.forEach(exportedFromPath =>
+        state.currentAffectedFilesExportedModulesMap.getKeys(filePath)?.forEach(exportedFromPath =>
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
         state.exportedModulesMap!.getKeys(filePath)?.forEach(exportedFromPath =>
             // If the cache had an updated value, skip
-            !state.currentAffectedFilesExportedModulesMap!.exporting.hasKey(exportedFromPath) &&
-            !state.currentAffectedFilesExportedModulesMap!.nonExporting.has(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.hasKey(exportedFromPath) &&
+            !state.currentAffectedFilesExportedModulesMap!.deletedKeys()?.has(exportedFromPath) &&
             forEachFileAndExportsOfFile(state, exportedFromPath, seenFileAndExportsOfFile, fn)
         );
 
@@ -768,11 +763,11 @@ namespace ts {
         if (state.exportedModulesMap) {
             exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
                 if (state.currentAffectedFilesExportedModulesMap) {
-                    if (state.currentAffectedFilesExportedModulesMap.nonExporting.has(key)) {
+                    if (state.currentAffectedFilesExportedModulesMap.deletedKeys()?.has(key)) {
                         return undefined;
                     }
 
-                    const newValue = state.currentAffectedFilesExportedModulesMap.exporting.getValues(key);
+                    const newValue = state.currentAffectedFilesExportedModulesMap.getValues(key);
                     if (newValue) {
                         return [toFileId(key), toFileIdListId(newValue)];
                     }
