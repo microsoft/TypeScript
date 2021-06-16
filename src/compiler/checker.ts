@@ -35023,6 +35023,7 @@ namespace ts {
                         break;
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.SemicolonClassElement:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Can't be private
                         break;
                     default:
