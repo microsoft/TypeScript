@@ -8,6 +8,7 @@
 //// [|import f/**/|]
 
 verify.completions({
+  isNewIdentifierLocation: true,
   marker: "",
   exact: [{
     name: "foo",

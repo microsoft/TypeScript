@@ -64,3 +64,15 @@ class C3 extends Base {
 >p1 : "hello"
 }
 
+class C4 extends Base {
+>C4 : C4
+>Base : Base
+
+  constructor(public override p2: string) {
+>p2 : string
+
+    super();
+>super() : void
+>super : typeof Base
+  }
+}

@@ -26,3 +26,9 @@ class C3 extends Base {
 
   m(override p1: "hello") {}
 }
+
+class C4 extends Base {
+  constructor(public override p2: string) {
+    super();
+  }
+}
