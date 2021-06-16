@@ -20082,6 +20082,14 @@ namespace ts {
             }
             (type as TypeReference).objectFlags |= ObjectFlags.IdenticalBaseTypeCalculated;
             const target = (type as TypeReference).target as InterfaceType;
+            if (getObjectFlags(target) & ObjectFlags.Class) {
+                const baseTypeNode = getBaseTypeNodeOfClass(target);
+                // A base type expression may circularly reference the class itself (e.g. as an argument to function call), so we only
+                // check for base types specified as simple qualified names.
+                if (baseTypeNode && baseTypeNode.expression.kind !== SyntaxKind.Identifier && baseTypeNode.expression.kind !== SyntaxKind.PropertyAccessExpression) {
+                    return undefined;
+                }
+            }
             const bases = getBaseTypes(target);
             if (bases.length !== 1) {
                 return undefined;
