@@ -462,11 +462,6 @@ namespace ts {
                     // A symbol already exists, so don't add this as a declaration.
                     return symbol;
                 }
-                else if(!isReplaceableByMethod && symbol.isReplaceableByMethod) {
-                    // A symbol already exists, but needs to be replaced
-                    const symbolFlags = includes & SymbolFlags.Property ? SymbolFlags.Property : SymbolFlags.None;
-                    symbolTable.set(name, symbol = createSymbol(symbolFlags, name));
-                }
                 else if (symbol.flags & excludes) {
                     if (symbol.isReplaceableByMethod) {
                         // Javascript constructor-declared symbols can be discarded in favor of
