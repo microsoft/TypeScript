@@ -2803,7 +2803,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve' or 'preserve-exact'.
+         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve' and `noErasingImportedNames` is not set.
          *
          * @param node The import declaration node.
          */
@@ -2821,8 +2821,8 @@ namespace ts {
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
             return importClause ||
+                compilerOptions.noErasingImportedNames ||
                 importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact ||
                 importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? factory.updateImportDeclaration(
                     node,
@@ -2834,13 +2834,13 @@ namespace ts {
         }
 
         /**
-         * Visits an import clause, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve-exact'.
+         * Visits an import clause, eliding it if it is not referenced and `noErasingImportedNames` is not set.
          *
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
             Debug.assert(!node.isTypeOnly);
-            if (importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact) {
+            if (compilerOptions.noErasingImportedNames) {
                 return node;
             }
             // Elide the import clause if we elide both its name and its named bindings.
@@ -2891,7 +2891,7 @@ namespace ts {
 
         /**
          * Visits an export declaration, eliding it if it does not contain a clause that resolves
-         * to a value and if `importsNotUsedAsValues` is not 'preserve-exact'.
+         * to a value and if `noErasingImportedNames` is not set.
          *
          * @param node The export declaration node.
          */
@@ -2900,7 +2900,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (!node.exportClause || isNamespaceExport(node.exportClause) || importsNotUsedAsValues === ImportsNotUsedAsValues.PreserveExact) {
+            if (!node.exportClause || isNamespaceExport(node.exportClause) || compilerOptions.noErasingImportedNames) {
                 // never elide `export <whatever> from <whereever>` declarations -
                 // they should be kept for sideffects/untyped exports, even when the
                 // type checker doesn't know about any exports

@@ -1364,25 +1364,21 @@
         "category": "Error",
         "code": 1433
     },
-    "'{0}' is a type and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+    "'{0}' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1434
     },
-    "'{0}' is a type and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
-        "category": "Error",
-        "code": 1435
-    },
-    "'{0}' resolves to a type-only declaration and must be imported with a type-only import when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
+    "'{0}' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1436
-    },
-    "'{0}' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'importsNotUsedAsValues' is set to 'preserve-exact'.": {
-        "category": "Error",
-        "code": 1437
     },
     "'{0}' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 1438
+    },
+    "Disable the removal of unused imported identifiers from the JavaScript output.": {
+        "category": "Message",
+        "code": 1439
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3962,7 +3958,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'importsNotUsedAsValues' may be set to 'preserve-exact' only when 'module' is set to 'es2015' or later.": {
+    "Option 'noErasingImportedNames' may be enabled only when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },

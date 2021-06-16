@@ -1,4 +1,5 @@
-// @importsNotUsedAsValues: preserve-exact
+// @noErasingImportedNames: true
+// @isolatedModules: true,false
 // @module: esnext
 
 // @Filename: a.ts

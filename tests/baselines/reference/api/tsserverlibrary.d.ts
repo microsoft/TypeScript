@@ -2850,6 +2850,7 @@ declare namespace ts {
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
+        noErasingImportedNames?: boolean;
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
@@ -2946,8 +2947,7 @@ declare namespace ts {
     export enum ImportsNotUsedAsValues {
         Remove = 0,
         Preserve = 1,
-        Error = 2,
-        PreserveExact = 3
+        Error = 2
     }
     export enum NewLineKind {
         CarriageReturnLineFeed = 0,

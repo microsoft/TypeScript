@@ -5954,6 +5954,7 @@ namespace ts {
         /*@internal*/noEmitForJsFiles?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
+        noErasingImportedNames?: boolean;
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;  // Always combine with strict property
@@ -6071,7 +6072,6 @@ namespace ts {
         Remove,
         Preserve,
         Error,
-        PreserveExact,
     }
 
     export const enum NewLineKind {

@@ -539,7 +539,6 @@ namespace ts {
                 "remove": ImportsNotUsedAsValues.Remove,
                 "preserve": ImportsNotUsedAsValues.Preserve,
                 "error": ImportsNotUsedAsValues.Error,
-                "preserve-exact": ImportsNotUsedAsValues.PreserveExact,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -1084,6 +1083,13 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_class_fields_with_Define_instead_of_Set,
+        },
+        {
+            name: "noErasingImportedNames",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_the_removal_of_unused_imported_identifiers_from_the_JavaScript_output
         },
 
         {
