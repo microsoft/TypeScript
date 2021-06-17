@@ -17,4 +17,4 @@ exports.exist = exist;
 "use strict";
 exports.__esModule = true;
 var utils_js_1 = require("./utils.js");
-utils_js_1.exit();
+(0, utils_js_1.exit)();

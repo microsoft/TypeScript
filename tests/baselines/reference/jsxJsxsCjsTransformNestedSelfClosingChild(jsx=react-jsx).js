@@ -25,6 +25,6 @@ console.log(
 "use strict";
 exports.__esModule = true;
 var jsx_runtime_1 = require("react/jsx-runtime");
-console.log(jsx_runtime_1.jsx("div", { children: jsx_runtime_1.jsx("div", {}, void 0) }, void 0));
-console.log(jsx_runtime_1.jsxs("div", { children: [jsx_runtime_1.jsx("div", {}, void 0), jsx_runtime_1.jsx("div", {}, void 0)] }, void 0));
-console.log(jsx_runtime_1.jsx("div", { children: [1, 2].map(function (i) { return jsx_runtime_1.jsx("div", { children: i }, i); }) }, void 0));
+console.log((0, jsx_runtime_1.jsx)("div", { children: (0, jsx_runtime_1.jsx)("div", {}, void 0) }, void 0));
+console.log((0, jsx_runtime_1.jsxs)("div", { children: [(0, jsx_runtime_1.jsx)("div", {}, void 0), (0, jsx_runtime_1.jsx)("div", {}, void 0)] }, void 0));
+console.log((0, jsx_runtime_1.jsx)("div", { children: [1, 2].map(function (i) { return (0, jsx_runtime_1.jsx)("div", { children: i }, i); }) }, void 0));

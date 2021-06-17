@@ -72,7 +72,7 @@ define("Class", ["require", "exports", "Configurable"], function (require, expor
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return ActualClass;
-    }(Configurable_1.Configurable(HiddenClass)));
+    }((0, Configurable_1.Configurable)(HiddenClass)));
     exports.ActualClass = ActualClass;
 });
 
