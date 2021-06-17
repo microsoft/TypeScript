@@ -6417,12 +6417,12 @@ interface HTMLCanvasElement extends HTMLElement {
     getContext(contextId: "webgl", options?: WebGLContextAttributes): WebGLRenderingContext | null;
     getContext(contextId: "webgl2", options?: WebGLContextAttributes): WebGL2RenderingContext | null;
     getContext(contextId: string, options?: any): RenderingContext | null;
-    toBlob(callback: BlobCallback, type?: string, quality?: any): void;
+    toBlob(callback: BlobCallback, type?: string, quality?: number): void;
     /**
      * Returns the content of the current canvas as an image that you can use as a source for another canvas or an HTML element.
      * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
      */
-    toDataURL(type?: string, quality?: any): string;
+    toDataURL(type?: string, quality?: number): string;
     transferControlToOffscreen(): OffscreenCanvas;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
