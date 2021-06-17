@@ -1,6 +1,6 @@
 === tests/cases/compiler/intersectionsAndOptionalProperties.ts ===
 declare let x: { a?: number, b: string };
->x : { a?: number; b: string; }
+>x : { a?: number | undefined; b: string; }
 >a : number | undefined
 >b : string
 
@@ -18,12 +18,12 @@ declare let z: { a: null } & { b: string };
 
 x = y;  // Error
 >x = y : { a: null; b: string; }
->x : { a?: number; b: string; }
+>x : { a?: number | undefined; b: string; }
 >y : { a: null; b: string; }
 
 x = z;  // Error
 >x = z : { a: null; } & { b: string; }
->x : { a?: number; b: string; }
+>x : { a?: number | undefined; b: string; }
 >z : { a: null; } & { b: string; }
 
 // Repro from #36604
@@ -55,9 +55,9 @@ function foo(v: From) {
 
     x.field = v.field; // Error
 >x.field = v.field : null
->x.field : number
+>x.field : number | undefined
 >x : To
->field : number
+>field : number | undefined
 >v.field : null
 >v : From
 >field : null
