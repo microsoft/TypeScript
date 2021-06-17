@@ -81,7 +81,7 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8566332115-export class A {}\r\n","signature":"-8728835846-export declare class A {\n}\n","affectsGlobalScope":false}],"options":{"composite":true,"configFilePath":"./tsconfig.a.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8566332115-export class A {}\r\n"],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
@@ -97,7 +97,7 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8728835846-export declare class A {\n}\n","signature":"-8728835846-export declare class A {\n}\n","affectsGlobalScope":false},{"version":"-13104686224-import {A} from '@ref/a';\r\nexport const b = new A();\r\n","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n","affectsGlobalScope":false}],"options":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["./*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","configFilePath":"./tsconfig.b.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n","-13104686224-import {A} from '@ref/a';\r\nexport const b = new A();\r\n"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/c.js]
 "use strict";
@@ -210,7 +210,7 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-8728835846-export declare class A {\n}\n","signature":"-8728835846-export declare class A {\n}\n","affectsGlobalScope":false},{"version":"-23418138964-import {A} from '@ref/a';\r\nexport const b = new A();\r\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n","affectsGlobalScope":false}],"options":{"composite":true,"baseUrl":"./","paths":{"@ref/*":["./*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","configFilePath":"./tsconfig.b.json"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-23418138964-import {A} from '@ref/a';\r\nexport const b = new A();\r\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 
 Output::
@@ -648,6 +648,8 @@ Dependencies for::
 WatchedFiles::
 /user/username/projects/transitivereferences/tsconfig.c.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.c.json","pollingInterval":250}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
 /user/username/projects/transitivereferences/c.ts:
   {"fileName":"/user/username/projects/transitiveReferences/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
@@ -656,8 +658,6 @@ WatchedFiles::
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/b.ts:
   {"fileName":"/user/username/projects/transitiveReferences/b.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {"fileName":"/user/username/projects/transitivereferences/tsconfig.b.json","pollingInterval":250}
 
 FsWatches::
 
@@ -736,14 +736,14 @@ Dependencies for::
 WatchedFiles::
 /user/username/projects/transitivereferences/tsconfig.c.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.c.json","pollingInterval":250}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
 /user/username/projects/transitivereferences/c.ts:
   {"fileName":"/user/username/projects/transitiveReferences/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
 /user/username/projects/transitivereferences/tsconfig.a.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.a.json","pollingInterval":250}
 /user/username/projects/transitivereferences/b.d.ts:
@@ -818,20 +818,20 @@ Dependencies for::
 WatchedFiles::
 /user/username/projects/transitivereferences/tsconfig.c.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.c.json","pollingInterval":250}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
 /user/username/projects/transitivereferences/c.ts:
   {"fileName":"/user/username/projects/transitiveReferences/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
+/user/username/projects/transitivereferences/tsconfig.a.json:
+  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.a.json","pollingInterval":250}
 /user/username/projects/transitivereferences/b.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/b.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/a.ts:
   {"fileName":"/user/username/projects/transitiveReferences/a.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.a.json:
-  {"fileName":"/user/username/projects/transitivereferences/tsconfig.a.json","pollingInterval":250}
 
 FsWatches::
 
@@ -899,18 +899,18 @@ Dependencies for::
 WatchedFiles::
 /user/username/projects/transitivereferences/tsconfig.c.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.c.json","pollingInterval":250}
+/user/username/projects/transitivereferences/tsconfig.b.json:
+  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
 /user/username/projects/transitivereferences/c.ts:
   {"fileName":"/user/username/projects/transitiveReferences/c.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/refs/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/refs/a.d.ts","pollingInterval":250}
-/user/username/projects/transitivereferences/tsconfig.b.json:
-  {"fileName":"/user/username/projects/transitiveReferences/tsconfig.b.json","pollingInterval":250}
-/user/username/projects/transitivereferences/b.d.ts:
-  {"fileName":"/user/username/projects/transitiveReferences/b.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/tsconfig.a.json:
   {"fileName":"/user/username/projects/transitiveReferences/tsconfig.a.json","pollingInterval":250}
+/user/username/projects/transitivereferences/b.d.ts:
+  {"fileName":"/user/username/projects/transitiveReferences/b.d.ts","pollingInterval":250}
 /user/username/projects/transitivereferences/a.d.ts:
   {"fileName":"/user/username/projects/transitiveReferences/a.d.ts","pollingInterval":250}
 

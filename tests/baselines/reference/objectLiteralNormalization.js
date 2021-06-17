@@ -104,12 +104,12 @@ var e4 = f({ a: 2 }, data);
 //// [objectLiteralNormalization.d.ts]
 declare let a1: {
     a: number;
-    b?: undefined;
-    c?: undefined;
+    b?: never;
+    c?: never;
 } | {
     a: number;
     b: string;
-    c?: undefined;
+    c?: never;
 } | {
     a: number;
     b: string;
@@ -120,10 +120,10 @@ declare let a2: {
     b: number;
 } | {
     a: string;
-    b?: undefined;
+    b?: never;
 } | {
-    a?: undefined;
-    b?: undefined;
+    a?: never;
+    b?: never;
 };
 declare let b1: {
     a: string;
@@ -156,25 +156,25 @@ declare let opts: {
     baz?: boolean;
 };
 declare let c1: {
-    foo?: string | undefined;
-    bar?: string | undefined;
-    baz?: boolean | undefined;
+    foo?: string;
+    bar?: string;
+    baz?: boolean;
 };
 declare let c2: {
-    foo?: string | undefined;
-    bar?: string | undefined;
-    baz?: boolean | undefined;
+    foo?: string;
+    bar?: string;
+    baz?: boolean;
 };
 declare let c3: {
     a: number;
     b: number;
 } | {
-    a?: undefined;
-    b?: undefined;
+    a?: never;
+    b?: never;
 };
 declare let c4: {
-    a?: undefined;
-    b?: undefined;
+    a?: never;
+    b?: never;
 } | {
     a: number;
     b: number;
@@ -184,21 +184,21 @@ declare let d1: {
     pos: {
         x: number;
         y: number;
-        a?: undefined;
-        b?: undefined;
+        a?: never;
+        b?: never;
     };
 } | {
     kind: string;
     pos: {
         a: string;
-        x?: undefined;
-        y?: undefined;
-        b?: undefined;
+        x?: never;
+        y?: never;
+        b?: never;
     } | {
         b: number;
-        x?: undefined;
-        y?: undefined;
-        a?: undefined;
+        x?: never;
+        y?: never;
+        a?: never;
     };
 };
 declare function f<T>(...items: T[]): T;
@@ -212,17 +212,17 @@ declare let e1: {
     b: number;
 } | {
     a: string;
-    b?: undefined;
+    b?: never;
 } | {
-    a?: undefined;
-    b?: undefined;
+    a?: never;
+    b?: never;
 };
 declare let e2: {
-    a?: undefined;
-    b?: undefined;
+    a?: never;
+    b?: never;
 } | {
     a: string;
-    b?: undefined;
+    b?: never;
 } | {
     a: number;
     b: number;

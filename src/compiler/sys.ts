@@ -1207,6 +1207,7 @@ namespace ts {
         /*@internal*/ bufferFrom?(input: string, encoding?: string): Buffer;
         // For testing
         /*@internal*/ now?(): Date;
+        /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ require?(baseDir: string, moduleName: string): RequireResult;
         /*@internal*/ defaultWatchFileKind?(): WatchFileKind | undefined;
     }
@@ -1264,7 +1265,6 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
-            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -1277,6 +1277,8 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
+            const realpathSync = useCaseSensitiveFileNames ? (_fs.realpathSync.native ?? _fs.realpathSync) : _fs.realpathSync;
+
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
             const { watchFile, watchDirectory } = createSystemWatchFunctions({
@@ -1368,7 +1370,7 @@ namespace ts {
                 disableCPUProfiler,
                 cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
-                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();

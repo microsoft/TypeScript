@@ -1,6 +1,7 @@
 // @target: esnext
 // @module: esnext
 // @experimentalDecorators: true
+// @useDefineForClassFields: false
 
 // Angular-style Input/Output API:
 declare function Input(bindingPropertyName?: string): any;

@@ -89,7 +89,7 @@ namespace ts.server {
     }
 
     export function initializeNodeSystem(): StartInput {
-        const sys = <ServerHost>Debug.checkDefined(ts.sys);
+        const sys = Debug.checkDefined(ts.sys) as ServerHost;
         const childProcess: {
             execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
         } = require("child_process");
@@ -743,7 +743,7 @@ namespace ts.server {
             exit() {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
-                tracing?.stopTracing(ts.emptyArray);
+                tracing?.stopTracing();
                 process.exit(0);
             }
 

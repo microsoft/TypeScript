@@ -79,66 +79,66 @@ namespace ts {
         }
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
-                return visitNode(cbNode, (<QualifiedName>node).left) ||
-                    visitNode(cbNode, (<QualifiedName>node).right);
+                return visitNode(cbNode, (node as QualifiedName).left) ||
+                    visitNode(cbNode, (node as QualifiedName).right);
             case SyntaxKind.TypeParameter:
-                return visitNode(cbNode, (<TypeParameterDeclaration>node).name) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).constraint) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).default) ||
-                    visitNode(cbNode, (<TypeParameterDeclaration>node).expression);
+                return visitNode(cbNode, (node as TypeParameterDeclaration).name) ||
+                    visitNode(cbNode, (node as TypeParameterDeclaration).constraint) ||
+                    visitNode(cbNode, (node as TypeParameterDeclaration).default) ||
+                    visitNode(cbNode, (node as TypeParameterDeclaration).expression);
             case SyntaxKind.ShorthandPropertyAssignment:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).name) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).questionToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).exclamationToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).equalsToken) ||
-                    visitNode(cbNode, (<ShorthandPropertyAssignment>node).objectAssignmentInitializer);
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).name) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).questionToken) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).exclamationToken) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).equalsToken) ||
+                    visitNode(cbNode, (node as ShorthandPropertyAssignment).objectAssignmentInitializer);
             case SyntaxKind.SpreadAssignment:
-                return visitNode(cbNode, (<SpreadAssignment>node).expression);
+                return visitNode(cbNode, (node as SpreadAssignment).expression);
             case SyntaxKind.Parameter:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).name) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).type) ||
-                    visitNode(cbNode, (<ParameterDeclaration>node).initializer);
+                    visitNode(cbNode, (node as ParameterDeclaration).dotDotDotToken) ||
+                    visitNode(cbNode, (node as ParameterDeclaration).name) ||
+                    visitNode(cbNode, (node as ParameterDeclaration).questionToken) ||
+                    visitNode(cbNode, (node as ParameterDeclaration).type) ||
+                    visitNode(cbNode, (node as ParameterDeclaration).initializer);
             case SyntaxKind.PropertyDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).name) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).exclamationToken) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).type) ||
-                    visitNode(cbNode, (<PropertyDeclaration>node).initializer);
+                    visitNode(cbNode, (node as PropertyDeclaration).name) ||
+                    visitNode(cbNode, (node as PropertyDeclaration).questionToken) ||
+                    visitNode(cbNode, (node as PropertyDeclaration).exclamationToken) ||
+                    visitNode(cbNode, (node as PropertyDeclaration).type) ||
+                    visitNode(cbNode, (node as PropertyDeclaration).initializer);
             case SyntaxKind.PropertySignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertySignature>node).name) ||
-                    visitNode(cbNode, (<PropertySignature>node).questionToken) ||
-                    visitNode(cbNode, (<PropertySignature>node).type) ||
-                    visitNode(cbNode, (<PropertySignature>node).initializer);
+                    visitNode(cbNode, (node as PropertySignature).name) ||
+                    visitNode(cbNode, (node as PropertySignature).questionToken) ||
+                    visitNode(cbNode, (node as PropertySignature).type) ||
+                    visitNode(cbNode, (node as PropertySignature).initializer);
             case SyntaxKind.PropertyAssignment:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).name) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).questionToken) ||
-                    visitNode(cbNode, (<PropertyAssignment>node).initializer);
+                    visitNode(cbNode, (node as PropertyAssignment).name) ||
+                    visitNode(cbNode, (node as PropertyAssignment).questionToken) ||
+                    visitNode(cbNode, (node as PropertyAssignment).initializer);
             case SyntaxKind.VariableDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).name) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).exclamationToken) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).type) ||
-                    visitNode(cbNode, (<VariableDeclaration>node).initializer);
+                    visitNode(cbNode, (node as VariableDeclaration).name) ||
+                    visitNode(cbNode, (node as VariableDeclaration).exclamationToken) ||
+                    visitNode(cbNode, (node as VariableDeclaration).type) ||
+                    visitNode(cbNode, (node as VariableDeclaration).initializer);
             case SyntaxKind.BindingElement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<BindingElement>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<BindingElement>node).propertyName) ||
-                    visitNode(cbNode, (<BindingElement>node).name) ||
-                    visitNode(cbNode, (<BindingElement>node).initializer);
+                    visitNode(cbNode, (node as BindingElement).dotDotDotToken) ||
+                    visitNode(cbNode, (node as BindingElement).propertyName) ||
+                    visitNode(cbNode, (node as BindingElement).name) ||
+                    visitNode(cbNode, (node as BindingElement).initializer);
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.CallSignature:
@@ -146,9 +146,9 @@ namespace ts {
             case SyntaxKind.IndexSignature:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<SignatureDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<SignatureDeclaration>node).type);
+                    visitNodes(cbNode, cbNodes, (node as SignatureDeclaration).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as SignatureDeclaration).parameters) ||
+                    visitNode(cbNode, (node as SignatureDeclaration).type);
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -159,243 +159,243 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).asteriskToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).name) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).questionToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).exclamationToken) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<FunctionLikeDeclaration>node).parameters) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).type) ||
-                    visitNode(cbNode, (<ArrowFunction>node).equalsGreaterThanToken) ||
-                    visitNode(cbNode, (<FunctionLikeDeclaration>node).body);
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).asteriskToken) ||
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).name) ||
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).questionToken) ||
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).exclamationToken) ||
+                    visitNodes(cbNode, cbNodes, (node as FunctionLikeDeclaration).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as FunctionLikeDeclaration).parameters) ||
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).type) ||
+                    visitNode(cbNode, (node as ArrowFunction).equalsGreaterThanToken) ||
+                    visitNode(cbNode, (node as FunctionLikeDeclaration).body);
             case SyntaxKind.TypeReference:
-                return visitNode(cbNode, (<TypeReferenceNode>node).typeName) ||
-                    visitNodes(cbNode, cbNodes, (<TypeReferenceNode>node).typeArguments);
+                return visitNode(cbNode, (node as TypeReferenceNode).typeName) ||
+                    visitNodes(cbNode, cbNodes, (node as TypeReferenceNode).typeArguments);
             case SyntaxKind.TypePredicate:
-                return visitNode(cbNode, (<TypePredicateNode>node).assertsModifier) ||
-                    visitNode(cbNode, (<TypePredicateNode>node).parameterName) ||
-                    visitNode(cbNode, (<TypePredicateNode>node).type);
+                return visitNode(cbNode, (node as TypePredicateNode).assertsModifier) ||
+                    visitNode(cbNode, (node as TypePredicateNode).parameterName) ||
+                    visitNode(cbNode, (node as TypePredicateNode).type);
             case SyntaxKind.TypeQuery:
-                return visitNode(cbNode, (<TypeQueryNode>node).exprName);
+                return visitNode(cbNode, (node as TypeQueryNode).exprName);
             case SyntaxKind.TypeLiteral:
-                return visitNodes(cbNode, cbNodes, (<TypeLiteralNode>node).members);
+                return visitNodes(cbNode, cbNodes, (node as TypeLiteralNode).members);
             case SyntaxKind.ArrayType:
-                return visitNode(cbNode, (<ArrayTypeNode>node).elementType);
+                return visitNode(cbNode, (node as ArrayTypeNode).elementType);
             case SyntaxKind.TupleType:
-                return visitNodes(cbNode, cbNodes, (<TupleTypeNode>node).elements);
+                return visitNodes(cbNode, cbNodes, (node as TupleTypeNode).elements);
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
-                return visitNodes(cbNode, cbNodes, (<UnionOrIntersectionTypeNode>node).types);
+                return visitNodes(cbNode, cbNodes, (node as UnionOrIntersectionTypeNode).types);
             case SyntaxKind.ConditionalType:
-                return visitNode(cbNode, (<ConditionalTypeNode>node).checkType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).extendsType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).trueType) ||
-                    visitNode(cbNode, (<ConditionalTypeNode>node).falseType);
+                return visitNode(cbNode, (node as ConditionalTypeNode).checkType) ||
+                    visitNode(cbNode, (node as ConditionalTypeNode).extendsType) ||
+                    visitNode(cbNode, (node as ConditionalTypeNode).trueType) ||
+                    visitNode(cbNode, (node as ConditionalTypeNode).falseType);
             case SyntaxKind.InferType:
-                return visitNode(cbNode, (<InferTypeNode>node).typeParameter);
+                return visitNode(cbNode, (node as InferTypeNode).typeParameter);
             case SyntaxKind.ImportType:
-                return visitNode(cbNode, (<ImportTypeNode>node).argument) ||
-                    visitNode(cbNode, (<ImportTypeNode>node).qualifier) ||
-                    visitNodes(cbNode, cbNodes, (<ImportTypeNode>node).typeArguments);
+                return visitNode(cbNode, (node as ImportTypeNode).argument) ||
+                    visitNode(cbNode, (node as ImportTypeNode).qualifier) ||
+                    visitNodes(cbNode, cbNodes, (node as ImportTypeNode).typeArguments);
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.TypeOperator:
-                return visitNode(cbNode, (<ParenthesizedTypeNode | TypeOperatorNode>node).type);
+                return visitNode(cbNode, (node as ParenthesizedTypeNode | TypeOperatorNode).type);
             case SyntaxKind.IndexedAccessType:
-                return visitNode(cbNode, (<IndexedAccessTypeNode>node).objectType) ||
-                    visitNode(cbNode, (<IndexedAccessTypeNode>node).indexType);
+                return visitNode(cbNode, (node as IndexedAccessTypeNode).objectType) ||
+                    visitNode(cbNode, (node as IndexedAccessTypeNode).indexType);
             case SyntaxKind.MappedType:
-                return visitNode(cbNode, (<MappedTypeNode>node).readonlyToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).typeParameter) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).nameType) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).questionToken) ||
-                    visitNode(cbNode, (<MappedTypeNode>node).type);
+                return visitNode(cbNode, (node as MappedTypeNode).readonlyToken) ||
+                    visitNode(cbNode, (node as MappedTypeNode).typeParameter) ||
+                    visitNode(cbNode, (node as MappedTypeNode).nameType) ||
+                    visitNode(cbNode, (node as MappedTypeNode).questionToken) ||
+                    visitNode(cbNode, (node as MappedTypeNode).type);
             case SyntaxKind.LiteralType:
-                return visitNode(cbNode, (<LiteralTypeNode>node).literal);
+                return visitNode(cbNode, (node as LiteralTypeNode).literal);
             case SyntaxKind.NamedTupleMember:
-                return visitNode(cbNode, (<NamedTupleMember>node).dotDotDotToken) ||
-                    visitNode(cbNode, (<NamedTupleMember>node).name) ||
-                    visitNode(cbNode, (<NamedTupleMember>node).questionToken) ||
-                    visitNode(cbNode, (<NamedTupleMember>node).type);
+                return visitNode(cbNode, (node as NamedTupleMember).dotDotDotToken) ||
+                    visitNode(cbNode, (node as NamedTupleMember).name) ||
+                    visitNode(cbNode, (node as NamedTupleMember).questionToken) ||
+                    visitNode(cbNode, (node as NamedTupleMember).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-                return visitNodes(cbNode, cbNodes, (<BindingPattern>node).elements);
+                return visitNodes(cbNode, cbNodes, (node as BindingPattern).elements);
             case SyntaxKind.ArrayLiteralExpression:
-                return visitNodes(cbNode, cbNodes, (<ArrayLiteralExpression>node).elements);
+                return visitNodes(cbNode, cbNodes, (node as ArrayLiteralExpression).elements);
             case SyntaxKind.ObjectLiteralExpression:
-                return visitNodes(cbNode, cbNodes, (<ObjectLiteralExpression>node).properties);
+                return visitNodes(cbNode, cbNodes, (node as ObjectLiteralExpression).properties);
             case SyntaxKind.PropertyAccessExpression:
-                return visitNode(cbNode, (<PropertyAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<PropertyAccessExpression>node).questionDotToken) ||
-                    visitNode(cbNode, (<PropertyAccessExpression>node).name);
+                return visitNode(cbNode, (node as PropertyAccessExpression).expression) ||
+                    visitNode(cbNode, (node as PropertyAccessExpression).questionDotToken) ||
+                    visitNode(cbNode, (node as PropertyAccessExpression).name);
             case SyntaxKind.ElementAccessExpression:
-                return visitNode(cbNode, (<ElementAccessExpression>node).expression) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).questionDotToken) ||
-                    visitNode(cbNode, (<ElementAccessExpression>node).argumentExpression);
+                return visitNode(cbNode, (node as ElementAccessExpression).expression) ||
+                    visitNode(cbNode, (node as ElementAccessExpression).questionDotToken) ||
+                    visitNode(cbNode, (node as ElementAccessExpression).argumentExpression);
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                return visitNode(cbNode, (<CallExpression>node).expression) ||
-                    visitNode(cbNode, (<CallExpression>node).questionDotToken) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).typeArguments) ||
-                    visitNodes(cbNode, cbNodes, (<CallExpression>node).arguments);
+                return visitNode(cbNode, (node as CallExpression).expression) ||
+                    visitNode(cbNode, (node as CallExpression).questionDotToken) ||
+                    visitNodes(cbNode, cbNodes, (node as CallExpression).typeArguments) ||
+                    visitNodes(cbNode, cbNodes, (node as CallExpression).arguments);
             case SyntaxKind.TaggedTemplateExpression:
-                return visitNode(cbNode, (<TaggedTemplateExpression>node).tag) ||
-                    visitNode(cbNode, (<TaggedTemplateExpression>node).questionDotToken) ||
-                    visitNodes(cbNode, cbNodes, (<TaggedTemplateExpression>node).typeArguments) ||
-                    visitNode(cbNode, (<TaggedTemplateExpression>node).template);
+                return visitNode(cbNode, (node as TaggedTemplateExpression).tag) ||
+                    visitNode(cbNode, (node as TaggedTemplateExpression).questionDotToken) ||
+                    visitNodes(cbNode, cbNodes, (node as TaggedTemplateExpression).typeArguments) ||
+                    visitNode(cbNode, (node as TaggedTemplateExpression).template);
             case SyntaxKind.TypeAssertionExpression:
-                return visitNode(cbNode, (<TypeAssertion>node).type) ||
-                    visitNode(cbNode, (<TypeAssertion>node).expression);
+                return visitNode(cbNode, (node as TypeAssertion).type) ||
+                    visitNode(cbNode, (node as TypeAssertion).expression);
             case SyntaxKind.ParenthesizedExpression:
-                return visitNode(cbNode, (<ParenthesizedExpression>node).expression);
+                return visitNode(cbNode, (node as ParenthesizedExpression).expression);
             case SyntaxKind.DeleteExpression:
-                return visitNode(cbNode, (<DeleteExpression>node).expression);
+                return visitNode(cbNode, (node as DeleteExpression).expression);
             case SyntaxKind.TypeOfExpression:
-                return visitNode(cbNode, (<TypeOfExpression>node).expression);
+                return visitNode(cbNode, (node as TypeOfExpression).expression);
             case SyntaxKind.VoidExpression:
-                return visitNode(cbNode, (<VoidExpression>node).expression);
+                return visitNode(cbNode, (node as VoidExpression).expression);
             case SyntaxKind.PrefixUnaryExpression:
-                return visitNode(cbNode, (<PrefixUnaryExpression>node).operand);
+                return visitNode(cbNode, (node as PrefixUnaryExpression).operand);
             case SyntaxKind.YieldExpression:
-                return visitNode(cbNode, (<YieldExpression>node).asteriskToken) ||
-                    visitNode(cbNode, (<YieldExpression>node).expression);
+                return visitNode(cbNode, (node as YieldExpression).asteriskToken) ||
+                    visitNode(cbNode, (node as YieldExpression).expression);
             case SyntaxKind.AwaitExpression:
-                return visitNode(cbNode, (<AwaitExpression>node).expression);
+                return visitNode(cbNode, (node as AwaitExpression).expression);
             case SyntaxKind.PostfixUnaryExpression:
-                return visitNode(cbNode, (<PostfixUnaryExpression>node).operand);
+                return visitNode(cbNode, (node as PostfixUnaryExpression).operand);
             case SyntaxKind.BinaryExpression:
-                return visitNode(cbNode, (<BinaryExpression>node).left) ||
-                    visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
-                    visitNode(cbNode, (<BinaryExpression>node).right);
+                return visitNode(cbNode, (node as BinaryExpression).left) ||
+                    visitNode(cbNode, (node as BinaryExpression).operatorToken) ||
+                    visitNode(cbNode, (node as BinaryExpression).right);
             case SyntaxKind.AsExpression:
-                return visitNode(cbNode, (<AsExpression>node).expression) ||
-                    visitNode(cbNode, (<AsExpression>node).type);
+                return visitNode(cbNode, (node as AsExpression).expression) ||
+                    visitNode(cbNode, (node as AsExpression).type);
             case SyntaxKind.NonNullExpression:
-                return visitNode(cbNode, (<NonNullExpression>node).expression);
+                return visitNode(cbNode, (node as NonNullExpression).expression);
             case SyntaxKind.MetaProperty:
-                return visitNode(cbNode, (<MetaProperty>node).name);
+                return visitNode(cbNode, (node as MetaProperty).name);
             case SyntaxKind.ConditionalExpression:
-                return visitNode(cbNode, (<ConditionalExpression>node).condition) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).questionToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenTrue) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).colonToken) ||
-                    visitNode(cbNode, (<ConditionalExpression>node).whenFalse);
+                return visitNode(cbNode, (node as ConditionalExpression).condition) ||
+                    visitNode(cbNode, (node as ConditionalExpression).questionToken) ||
+                    visitNode(cbNode, (node as ConditionalExpression).whenTrue) ||
+                    visitNode(cbNode, (node as ConditionalExpression).colonToken) ||
+                    visitNode(cbNode, (node as ConditionalExpression).whenFalse);
             case SyntaxKind.SpreadElement:
-                return visitNode(cbNode, (<SpreadElement>node).expression);
+                return visitNode(cbNode, (node as SpreadElement).expression);
             case SyntaxKind.Block:
             case SyntaxKind.ModuleBlock:
-                return visitNodes(cbNode, cbNodes, (<Block>node).statements);
+                return visitNodes(cbNode, cbNodes, (node as Block).statements);
             case SyntaxKind.SourceFile:
-                return visitNodes(cbNode, cbNodes, (<SourceFile>node).statements) ||
-                    visitNode(cbNode, (<SourceFile>node).endOfFileToken);
+                return visitNodes(cbNode, cbNodes, (node as SourceFile).statements) ||
+                    visitNode(cbNode, (node as SourceFile).endOfFileToken);
             case SyntaxKind.VariableStatement:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<VariableStatement>node).declarationList);
+                    visitNode(cbNode, (node as VariableStatement).declarationList);
             case SyntaxKind.VariableDeclarationList:
-                return visitNodes(cbNode, cbNodes, (<VariableDeclarationList>node).declarations);
+                return visitNodes(cbNode, cbNodes, (node as VariableDeclarationList).declarations);
             case SyntaxKind.ExpressionStatement:
-                return visitNode(cbNode, (<ExpressionStatement>node).expression);
+                return visitNode(cbNode, (node as ExpressionStatement).expression);
             case SyntaxKind.IfStatement:
-                return visitNode(cbNode, (<IfStatement>node).expression) ||
-                    visitNode(cbNode, (<IfStatement>node).thenStatement) ||
-                    visitNode(cbNode, (<IfStatement>node).elseStatement);
+                return visitNode(cbNode, (node as IfStatement).expression) ||
+                    visitNode(cbNode, (node as IfStatement).thenStatement) ||
+                    visitNode(cbNode, (node as IfStatement).elseStatement);
             case SyntaxKind.DoStatement:
-                return visitNode(cbNode, (<DoStatement>node).statement) ||
-                    visitNode(cbNode, (<DoStatement>node).expression);
+                return visitNode(cbNode, (node as DoStatement).statement) ||
+                    visitNode(cbNode, (node as DoStatement).expression);
             case SyntaxKind.WhileStatement:
-                return visitNode(cbNode, (<WhileStatement>node).expression) ||
-                    visitNode(cbNode, (<WhileStatement>node).statement);
+                return visitNode(cbNode, (node as WhileStatement).expression) ||
+                    visitNode(cbNode, (node as WhileStatement).statement);
             case SyntaxKind.ForStatement:
-                return visitNode(cbNode, (<ForStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForStatement>node).condition) ||
-                    visitNode(cbNode, (<ForStatement>node).incrementor) ||
-                    visitNode(cbNode, (<ForStatement>node).statement);
+                return visitNode(cbNode, (node as ForStatement).initializer) ||
+                    visitNode(cbNode, (node as ForStatement).condition) ||
+                    visitNode(cbNode, (node as ForStatement).incrementor) ||
+                    visitNode(cbNode, (node as ForStatement).statement);
             case SyntaxKind.ForInStatement:
-                return visitNode(cbNode, (<ForInStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForInStatement>node).expression) ||
-                    visitNode(cbNode, (<ForInStatement>node).statement);
+                return visitNode(cbNode, (node as ForInStatement).initializer) ||
+                    visitNode(cbNode, (node as ForInStatement).expression) ||
+                    visitNode(cbNode, (node as ForInStatement).statement);
             case SyntaxKind.ForOfStatement:
-                return visitNode(cbNode, (<ForOfStatement>node).awaitModifier) ||
-                    visitNode(cbNode, (<ForOfStatement>node).initializer) ||
-                    visitNode(cbNode, (<ForOfStatement>node).expression) ||
-                    visitNode(cbNode, (<ForOfStatement>node).statement);
+                return visitNode(cbNode, (node as ForOfStatement).awaitModifier) ||
+                    visitNode(cbNode, (node as ForOfStatement).initializer) ||
+                    visitNode(cbNode, (node as ForOfStatement).expression) ||
+                    visitNode(cbNode, (node as ForOfStatement).statement);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
-                return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
+                return visitNode(cbNode, (node as BreakOrContinueStatement).label);
             case SyntaxKind.ReturnStatement:
-                return visitNode(cbNode, (<ReturnStatement>node).expression);
+                return visitNode(cbNode, (node as ReturnStatement).expression);
             case SyntaxKind.WithStatement:
-                return visitNode(cbNode, (<WithStatement>node).expression) ||
-                    visitNode(cbNode, (<WithStatement>node).statement);
+                return visitNode(cbNode, (node as WithStatement).expression) ||
+                    visitNode(cbNode, (node as WithStatement).statement);
             case SyntaxKind.SwitchStatement:
-                return visitNode(cbNode, (<SwitchStatement>node).expression) ||
-                    visitNode(cbNode, (<SwitchStatement>node).caseBlock);
+                return visitNode(cbNode, (node as SwitchStatement).expression) ||
+                    visitNode(cbNode, (node as SwitchStatement).caseBlock);
             case SyntaxKind.CaseBlock:
-                return visitNodes(cbNode, cbNodes, (<CaseBlock>node).clauses);
+                return visitNodes(cbNode, cbNodes, (node as CaseBlock).clauses);
             case SyntaxKind.CaseClause:
-                return visitNode(cbNode, (<CaseClause>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<CaseClause>node).statements);
+                return visitNode(cbNode, (node as CaseClause).expression) ||
+                    visitNodes(cbNode, cbNodes, (node as CaseClause).statements);
             case SyntaxKind.DefaultClause:
-                return visitNodes(cbNode, cbNodes, (<DefaultClause>node).statements);
+                return visitNodes(cbNode, cbNodes, (node as DefaultClause).statements);
             case SyntaxKind.LabeledStatement:
-                return visitNode(cbNode, (<LabeledStatement>node).label) ||
-                    visitNode(cbNode, (<LabeledStatement>node).statement);
+                return visitNode(cbNode, (node as LabeledStatement).label) ||
+                    visitNode(cbNode, (node as LabeledStatement).statement);
             case SyntaxKind.ThrowStatement:
-                return visitNode(cbNode, (<ThrowStatement>node).expression);
+                return visitNode(cbNode, (node as ThrowStatement).expression);
             case SyntaxKind.TryStatement:
-                return visitNode(cbNode, (<TryStatement>node).tryBlock) ||
-                    visitNode(cbNode, (<TryStatement>node).catchClause) ||
-                    visitNode(cbNode, (<TryStatement>node).finallyBlock);
+                return visitNode(cbNode, (node as TryStatement).tryBlock) ||
+                    visitNode(cbNode, (node as TryStatement).catchClause) ||
+                    visitNode(cbNode, (node as TryStatement).finallyBlock);
             case SyntaxKind.CatchClause:
-                return visitNode(cbNode, (<CatchClause>node).variableDeclaration) ||
-                    visitNode(cbNode, (<CatchClause>node).block);
+                return visitNode(cbNode, (node as CatchClause).variableDeclaration) ||
+                    visitNode(cbNode, (node as CatchClause).block);
             case SyntaxKind.Decorator:
-                return visitNode(cbNode, (<Decorator>node).expression);
+                return visitNode(cbNode, (node as Decorator).expression);
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ClassLikeDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<ClassLikeDeclaration>node).members);
+                    visitNode(cbNode, (node as ClassLikeDeclaration).name) ||
+                    visitNodes(cbNode, cbNodes, (node as ClassLikeDeclaration).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as ClassLikeDeclaration).heritageClauses) ||
+                    visitNodes(cbNode, cbNodes, (node as ClassLikeDeclaration).members);
             case SyntaxKind.InterfaceDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<InterfaceDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (<ClassDeclaration>node).heritageClauses) ||
-                    visitNodes(cbNode, cbNodes, (<InterfaceDeclaration>node).members);
+                    visitNode(cbNode, (node as InterfaceDeclaration).name) ||
+                    visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).typeParameters) ||
+                    visitNodes(cbNode, cbNodes, (node as ClassDeclaration).heritageClauses) ||
+                    visitNodes(cbNode, cbNodes, (node as InterfaceDeclaration).members);
             case SyntaxKind.TypeAliasDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<TypeAliasDeclaration>node).typeParameters) ||
-                    visitNode(cbNode, (<TypeAliasDeclaration>node).type);
+                    visitNode(cbNode, (node as TypeAliasDeclaration).name) ||
+                    visitNodes(cbNode, cbNodes, (node as TypeAliasDeclaration).typeParameters) ||
+                    visitNode(cbNode, (node as TypeAliasDeclaration).type);
             case SyntaxKind.EnumDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<EnumDeclaration>node).name) ||
-                    visitNodes(cbNode, cbNodes, (<EnumDeclaration>node).members);
+                    visitNode(cbNode, (node as EnumDeclaration).name) ||
+                    visitNodes(cbNode, cbNodes, (node as EnumDeclaration).members);
             case SyntaxKind.EnumMember:
-                return visitNode(cbNode, (<EnumMember>node).name) ||
-                    visitNode(cbNode, (<EnumMember>node).initializer);
+                return visitNode(cbNode, (node as EnumMember).name) ||
+                    visitNode(cbNode, (node as EnumMember).initializer);
             case SyntaxKind.ModuleDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).name) ||
-                    visitNode(cbNode, (<ModuleDeclaration>node).body);
+                    visitNode(cbNode, (node as ModuleDeclaration).name) ||
+                    visitNode(cbNode, (node as ModuleDeclaration).body);
             case SyntaxKind.ImportEqualsDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).name) ||
-                    visitNode(cbNode, (<ImportEqualsDeclaration>node).moduleReference);
+                    visitNode(cbNode, (node as ImportEqualsDeclaration).name) ||
+                    visitNode(cbNode, (node as ImportEqualsDeclaration).moduleReference);
             case SyntaxKind.ImportDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).importClause) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).moduleSpecifier) ||
-                    visitNode(cbNode, (<ImportDeclaration>node).assertClause);
+                    visitNode(cbNode, (node as ImportDeclaration).importClause) ||
+                    visitNode(cbNode, (node as ImportDeclaration).moduleSpecifier) ||
+                    visitNode(cbNode, (node as ImportDeclaration).assertClause);
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (<ImportClause>node).name) ||
                     visitNode(cbNode, (<ImportClause>node).namedBindings);
@@ -404,77 +404,79 @@ namespace ts {
             case SyntaxKind.AssertEntry:
                 return visitNode(cbNode, (<AssertEntry>node).name) ||
                     visitNode(cbNode, (<AssertEntry>node).value);
+            case SyntaxKind.ImportClause:
+                return visitNode(cbNode, (node as ImportClause).name) ||
+                    visitNode(cbNode, (node as ImportClause).namedBindings);
             case SyntaxKind.NamespaceExportDeclaration:
-                return visitNode(cbNode, (<NamespaceExportDeclaration>node).name);
-
+                return visitNode(cbNode, (node as NamespaceExportDeclaration).name);
             case SyntaxKind.NamespaceImport:
-                return visitNode(cbNode, (<NamespaceImport>node).name);
+                return visitNode(cbNode, (node as NamespaceImport).name);
             case SyntaxKind.NamespaceExport:
-                return visitNode(cbNode, (<NamespaceExport>node).name);
+                return visitNode(cbNode, (node as NamespaceExport).name);
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
-                return visitNodes(cbNode, cbNodes, (<NamedImportsOrExports>node).elements);
+                return visitNodes(cbNode, cbNodes, (node as NamedImportsOrExports).elements);
             case SyntaxKind.ExportDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).exportClause) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).moduleSpecifier) ||
-                    visitNode(cbNode, (<ExportDeclaration>node).assertClause);
+                    visitNode(cbNode, (node as ExportDeclaration).exportClause) ||
+                    visitNode(cbNode, (node as ExportDeclaration).moduleSpecifier) ||
+                    visitNode(cbNode, (node as ExportDeclaration).assertClause);
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                return visitNode(cbNode, (<ImportOrExportSpecifier>node).propertyName) ||
-                    visitNode(cbNode, (<ImportOrExportSpecifier>node).name);
+                return visitNode(cbNode, (node as ImportOrExportSpecifier).propertyName) ||
+                    visitNode(cbNode, (node as ImportOrExportSpecifier).name);
             case SyntaxKind.ExportAssignment:
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    visitNode(cbNode, (<ExportAssignment>node).expression);
+                    visitNode(cbNode, (node as ExportAssignment).expression);
             case SyntaxKind.TemplateExpression:
-                return visitNode(cbNode, (<TemplateExpression>node).head) || visitNodes(cbNode, cbNodes, (<TemplateExpression>node).templateSpans);
+                return visitNode(cbNode, (node as TemplateExpression).head) || visitNodes(cbNode, cbNodes, (node as TemplateExpression).templateSpans);
             case SyntaxKind.TemplateSpan:
-                return visitNode(cbNode, (<TemplateSpan>node).expression) || visitNode(cbNode, (<TemplateSpan>node).literal);
+                return visitNode(cbNode, (node as TemplateSpan).expression) || visitNode(cbNode, (node as TemplateSpan).literal);
             case SyntaxKind.TemplateLiteralType:
-                return visitNode(cbNode, (<TemplateLiteralTypeNode>node).head) || visitNodes(cbNode, cbNodes, (<TemplateLiteralTypeNode>node).templateSpans);
+                return visitNode(cbNode, (node as TemplateLiteralTypeNode).head) || visitNodes(cbNode, cbNodes, (node as TemplateLiteralTypeNode).templateSpans);
             case SyntaxKind.TemplateLiteralTypeSpan:
-                return visitNode(cbNode, (<TemplateLiteralTypeSpan>node).type) || visitNode(cbNode, (<TemplateLiteralTypeSpan>node).literal);
+                return visitNode(cbNode, (node as TemplateLiteralTypeSpan).type) || visitNode(cbNode, (node as TemplateLiteralTypeSpan).literal);
             case SyntaxKind.ComputedPropertyName:
-                return visitNode(cbNode, (<ComputedPropertyName>node).expression);
+                return visitNode(cbNode, (node as ComputedPropertyName).expression);
             case SyntaxKind.HeritageClause:
-                return visitNodes(cbNode, cbNodes, (<HeritageClause>node).types);
+                return visitNodes(cbNode, cbNodes, (node as HeritageClause).types);
             case SyntaxKind.ExpressionWithTypeArguments:
-                return visitNode(cbNode, (<ExpressionWithTypeArguments>node).expression) ||
-                    visitNodes(cbNode, cbNodes, (<ExpressionWithTypeArguments>node).typeArguments);
+                return visitNode(cbNode, (node as ExpressionWithTypeArguments).expression) ||
+                    visitNodes(cbNode, cbNodes, (node as ExpressionWithTypeArguments).typeArguments);
             case SyntaxKind.ExternalModuleReference:
-                return visitNode(cbNode, (<ExternalModuleReference>node).expression);
+                return visitNode(cbNode, (node as ExternalModuleReference).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators);
             case SyntaxKind.CommaListExpression:
-                return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
+                return visitNodes(cbNode, cbNodes, (node as CommaListExpression).elements);
 
             case SyntaxKind.JsxElement:
-                return visitNode(cbNode, (<JsxElement>node).openingElement) ||
-                    visitNodes(cbNode, cbNodes, (<JsxElement>node).children) ||
-                    visitNode(cbNode, (<JsxElement>node).closingElement);
+                return visitNode(cbNode, (node as JsxElement).openingElement) ||
+                    visitNodes(cbNode, cbNodes, (node as JsxElement).children) ||
+                    visitNode(cbNode, (node as JsxElement).closingElement);
             case SyntaxKind.JsxFragment:
-                return visitNode(cbNode, (<JsxFragment>node).openingFragment) ||
-                    visitNodes(cbNode, cbNodes, (<JsxFragment>node).children) ||
-                    visitNode(cbNode, (<JsxFragment>node).closingFragment);
+                return visitNode(cbNode, (node as JsxFragment).openingFragment) ||
+                    visitNodes(cbNode, cbNodes, (node as JsxFragment).children) ||
+                    visitNode(cbNode, (node as JsxFragment).closingFragment);
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
-                return visitNode(cbNode, (<JsxOpeningLikeElement>node).tagName) ||
-                    visitNodes(cbNode, cbNodes, (<JsxOpeningLikeElement>node).typeArguments) ||
-                    visitNode(cbNode, (<JsxOpeningLikeElement>node).attributes);
+                return visitNode(cbNode, (node as JsxOpeningLikeElement).tagName) ||
+                    visitNodes(cbNode, cbNodes, (node as JsxOpeningLikeElement).typeArguments) ||
+                    visitNode(cbNode, (node as JsxOpeningLikeElement).attributes);
             case SyntaxKind.JsxAttributes:
-                return visitNodes(cbNode, cbNodes, (<JsxAttributes>node).properties);
+                return visitNodes(cbNode, cbNodes, (node as JsxAttributes).properties);
             case SyntaxKind.JsxAttribute:
-                return visitNode(cbNode, (<JsxAttribute>node).name) ||
-                    visitNode(cbNode, (<JsxAttribute>node).initializer);
+                return visitNode(cbNode, (node as JsxAttribute).name) ||
+                    visitNode(cbNode, (node as JsxAttribute).initializer);
             case SyntaxKind.JsxSpreadAttribute:
-                return visitNode(cbNode, (<JsxSpreadAttribute>node).expression);
+                return visitNode(cbNode, (node as JsxSpreadAttribute).expression);
             case SyntaxKind.JsxExpression:
                 return visitNode(cbNode, (node as JsxExpression).dotDotDotToken) ||
                     visitNode(cbNode, (node as JsxExpression).expression);
             case SyntaxKind.JsxClosingElement:
-                return visitNode(cbNode, (<JsxClosingElement>node).tagName);
+                return visitNode(cbNode, (node as JsxClosingElement).tagName);
 
             case SyntaxKind.OptionalType:
             case SyntaxKind.RestType:
@@ -483,72 +485,78 @@ namespace ts {
             case SyntaxKind.JSDocNullableType:
             case SyntaxKind.JSDocOptionalType:
             case SyntaxKind.JSDocVariadicType:
-                return visitNode(cbNode, (<OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode>node).type);
+                return visitNode(cbNode, (node as OptionalTypeNode | RestTypeNode | JSDocTypeExpression | JSDocTypeReferencingNode).type);
             case SyntaxKind.JSDocFunctionType:
-                return visitNodes(cbNode, cbNodes, (<JSDocFunctionType>node).parameters) ||
-                    visitNode(cbNode, (<JSDocFunctionType>node).type);
+                return visitNodes(cbNode, cbNodes, (node as JSDocFunctionType).parameters) ||
+                    visitNode(cbNode, (node as JSDocFunctionType).type);
             case SyntaxKind.JSDocComment:
-                return visitNodes(cbNode, cbNodes, (node as JSDoc).comment)
+                return (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
                     || visitNodes(cbNode, cbNodes, (node as JSDoc).tags);
             case SyntaxKind.JSDocSeeTag:
                 return visitNode(cbNode, (node as JSDocSeeTag).tagName) ||
                     visitNode(cbNode, (node as JSDocSeeTag).name) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocNameReference:
                 return visitNode(cbNode, (node as JSDocNameReference).name);
+            case SyntaxKind.JSDocMemberName:
+                return visitNode(cbNode, (node as JSDocMemberName).left) ||
+                    visitNode(cbNode, (node as JSDocMemberName).right);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocPropertyLikeTag).isNameFirst
-                        ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment)
-                        : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name)) ||
-                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                        ? visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
+                        : visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined)));
             case SyntaxKind.JSDocAuthorTag:
-                return visitNode(cbNode, (node as JSDocTag).tagName);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocImplementsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocImplementsTag>node).class) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    visitNode(cbNode, (node as JSDocImplementsTag).class) ||
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocAugmentsTag>node).class) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    visitNode(cbNode, (node as JSDocAugmentsTag).class) ||
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocTemplateTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
-                    visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
-                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    visitNode(cbNode, (node as JSDocTemplateTag).constraint) ||
+                    visitNodes(cbNode, cbNodes, (node as JSDocTemplateTag).typeParameters) ||
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocTypedefTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocTypedefTag).typeExpression &&
                         (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
-                        ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment)
-                        : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression)) ||
-                            visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                        ? visitNode(cbNode, (node as JSDocTypedefTag).typeExpression) ||
+                            visitNode(cbNode, (node as JSDocTypedefTag).fullName) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
+                        : visitNode(cbNode, (node as JSDocTypedefTag).fullName) ||
+                            visitNode(cbNode, (node as JSDocTypedefTag).typeExpression)) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
             case SyntaxKind.JSDocEnumTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression) ||
-                    visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                    (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.JSDocSignature:
-                return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
-                    forEach((<JSDocSignature>node).parameters, cbNode) ||
-                    visitNode(cbNode, (<JSDocSignature>node).type);
+                return forEach((node as JSDocSignature).typeParameters, cbNode) ||
+                    forEach((node as JSDocSignature).parameters, cbNode) ||
+                    visitNode(cbNode, (node as JSDocSignature).type);
             case SyntaxKind.JSDocLink:
-                return visitNode(cbNode, (node as JSDocLink).name);
+            case SyntaxKind.JSDocLinkCode:
+            case SyntaxKind.JSDocLinkPlain:
+                return visitNode(cbNode, (node as JSDocLink | JSDocLinkCode | JSDocLinkPlain).name);
             case SyntaxKind.JSDocTypeLiteral:
                 return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
             case SyntaxKind.JSDocTag:
@@ -557,10 +565,11 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag:
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocReadonlyTag:
+            case SyntaxKind.JSDocDeprecatedTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName)
-                 || visitNodes(cbNode, cbNodes, (node as JSDocTag).comment);
+                 || (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
             case SyntaxKind.PartiallyEmittedExpression:
-                return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
+                return visitNode(cbNode, (node as PartiallyEmittedExpression).expression);
         }
     }
 
@@ -1020,7 +1029,7 @@ namespace ts {
             jsDocDiagnostics = undefined!;
             parsingContext = 0;
             identifiers = undefined!;
-            notParenthesizedArrow = undefined!;
+            notParenthesizedArrow = undefined;
             topLevel = true;
         }
 
@@ -1429,6 +1438,10 @@ namespace ts {
             return currentToken = scanner.reScanLessThanToken();
         }
 
+        function reScanHashToken(): SyntaxKind {
+            return currentToken = scanner.reScanHashToken();
+        }
+
         function scanJsxIdentifier(): SyntaxKind {
             return currentToken = scanner.scanJsxIdentifier();
         }
@@ -1588,14 +1601,14 @@ namespace ts {
             const pos = getNodePos();
             const kind = token();
             nextToken();
-            return <T>finishNode(factory.createToken(kind), pos);
+            return finishNode(factory.createToken(kind), pos) as T;
         }
 
         function parseTokenNodeJSDoc<T extends Node>(): T {
             const pos = getNodePos();
             const kind = token();
             nextTokenJSDoc();
-            return <T>finishNode(factory.createToken(kind), pos);
+            return finishNode(factory.createToken(kind), pos) as T;
         }
 
         function canParseSemicolon() {
@@ -1737,7 +1750,7 @@ namespace ts {
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-                const node = <StringLiteral | NumericLiteral>parseLiteralNode();
+                const node = parseLiteralNode() as StringLiteral | NumericLiteral;
                 node.text = internIdentifier(node.text);
                 return node;
             }
@@ -2106,8 +2119,7 @@ namespace ts {
 
             while (!isListTerminator(kind)) {
                 if (isListElement(kind, /*inErrorRecovery*/ false)) {
-                    const element = parseListElement(kind, parseElement);
-                    list.push(element);
+                    list.push(parseListElement(kind, parseElement));
 
                     continue;
                 }
@@ -2124,7 +2136,7 @@ namespace ts {
         function parseListElement<T extends Node>(parsingContext: ParsingContext, parseElement: () => T): T {
             const node = currentNode(parsingContext);
             if (node) {
-                return <T>consumeNode(node);
+                return consumeNode(node) as T;
             }
 
             return parseElement();
@@ -2301,7 +2313,7 @@ namespace ts {
                         // Method declarations are not necessarily reusable.  An object-literal
                         // may have a method calls "constructor(...)" and we must reparse that
                         // into an actual .ConstructorDeclaration.
-                        const methodDeclaration = <MethodDeclaration>node;
+                        const methodDeclaration = node as MethodDeclaration;
                         const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
                             methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
 
@@ -2401,7 +2413,7 @@ namespace ts {
             //
             // In order to prevent this, we do not allow a variable declarator to be reused if it
             // has an initializer.
-            const variableDeclarator = <VariableDeclaration>node;
+            const variableDeclarator = node as VariableDeclaration;
             return variableDeclarator.initializer === undefined;
         }
 
@@ -2411,7 +2423,7 @@ namespace ts {
             }
 
             // See the comment in isReusableVariableDeclaration for why we do this.
-            const parameter = <ParameterDeclaration>node;
+            const parameter = node as ParameterDeclaration;
             return parameter.initializer === undefined;
         }
 
@@ -2681,7 +2693,7 @@ namespace ts {
             }
             else {
                 // TODO(rbuckton): Do we need to call `parseExpectedToken` or can we just call `createMissingNode` directly?
-                return <TemplateTail>parseExpectedToken(SyntaxKind.TemplateTail, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                return parseExpectedToken(SyntaxKind.TemplateTail, Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken)) as TemplateTail;
             }
         }
 
@@ -2697,7 +2709,7 @@ namespace ts {
         }
 
         function parseLiteralNode(): LiteralExpression {
-            return <LiteralExpression>parseLiteralLikeNode(token());
+            return parseLiteralLikeNode(token()) as LiteralExpression;
         }
 
         function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
@@ -2706,13 +2718,13 @@ namespace ts {
             }
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
-            return <TemplateHead>fragment;
+            return fragment as TemplateHead;
         }
 
         function parseTemplateMiddleOrTemplateTail(): TemplateMiddle | TemplateTail {
             const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateMiddle || fragment.kind === SyntaxKind.TemplateTail, "Template fragment has wrong token kind");
-            return <TemplateMiddle | TemplateTail>fragment;
+            return fragment as TemplateMiddle | TemplateTail;
         }
 
         function getTemplateLiteralRawText(kind: TemplateLiteralToken["kind"]) {
@@ -2988,9 +3000,16 @@ namespace ts {
         function parseParameterWorker(inOuterAwaitContext: boolean): ParameterDeclaration {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
+
+            // FormalParameter [Yield,Await]:
+            //      BindingElement[?Yield,?Await]
+
+            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
+            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
+
             if (token() === SyntaxKind.ThisKeyword) {
                 const node = factory.createParameterDeclaration(
-                    /*decorators*/ undefined,
+                    decorators,
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
                     createIdentifier(/*isIdentifier*/ true),
@@ -2998,14 +3017,14 @@ namespace ts {
                     parseTypeAnnotation(),
                     /*initializer*/ undefined
                 );
+
+                if (decorators) {
+                    parseErrorAtRange(decorators[0], Diagnostics.Decorators_may_not_be_applied_to_this_parameters);
+                }
+
                 return withJSDoc(finishNode(node, pos), hasJSDoc);
             }
 
-            // FormalParameter [Yield,Await]:
-            //      BindingElement[?Yield,?Await]
-
-            // Decorators are parsed in the outer [Await] context, the rest of the parameter is parsed in the function's [Await] context.
-            const decorators = inOuterAwaitContext ? doInAwaitContext(parseDecorators) : parseDecorators();
             const savedTopLevel = topLevel;
             topLevel = false;
             const modifiers = parseModifiers();
@@ -3227,7 +3246,10 @@ namespace ts {
 
         function isTypeMemberStart(): boolean {
             // Return true if we have the start of a signature member
-            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
+            if (token() === SyntaxKind.OpenParenToken ||
+                token() === SyntaxKind.LessThanToken ||
+                token() === SyntaxKind.GetKeyword ||
+                token() === SyntaxKind.SetKeyword) {
                 return true;
             }
             let idToken = false;
@@ -3268,6 +3290,14 @@ namespace ts {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
             const modifiers = parseModifiers();
+            if (parseContextualModifier(SyntaxKind.GetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.GetAccessor);
+            }
+
+            if (parseContextualModifier(SyntaxKind.SetKeyword)) {
+                return parseAccessorDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers, SyntaxKind.SetAccessor);
+            }
+
             if (isIndexSignature()) {
                 return parseIndexSignatureDeclaration(pos, hasJSDoc, /*decorators*/ undefined, modifiers);
             }
@@ -4010,7 +4040,7 @@ namespace ts {
             // parameter ('x => ...') above. We handle it here by checking if the parsed expression was a single
             // identifier and the current token is an arrow.
             if (expr.kind === SyntaxKind.Identifier && token() === SyntaxKind.EqualsGreaterThanToken) {
-                return parseSimpleArrowFunctionExpression(pos, <Identifier>expr, /*asyncModifier*/ undefined);
+                return parseSimpleArrowFunctionExpression(pos, expr as Identifier, /*asyncModifier*/ undefined);
             }
 
             // Now see if we might be in cases '2' or '3'.
@@ -4286,7 +4316,7 @@ namespace ts {
                     const pos = getNodePos();
                     const asyncModifier = parseModifiersForArrowFunction();
                     const expr = parseBinaryExpressionOrHigher(OperatorPrecedence.Lowest);
-                    return parseSimpleArrowFunctionExpression(pos, <Identifier>expr, asyncModifier);
+                    return parseSimpleArrowFunctionExpression(pos, expr as Identifier, asyncModifier);
                 }
             }
             return undefined;
@@ -4524,7 +4554,7 @@ namespace ts {
 
         function parsePrefixUnaryExpression() {
             const pos = getNodePos();
-            return finishNode(factory.createPrefixUnaryExpression(<PrefixUnaryOperator>token(), nextTokenAnd(parseSimpleUnaryExpression)), pos);
+            return finishNode(factory.createPrefixUnaryExpression(token() as PrefixUnaryOperator, nextTokenAnd(parseSimpleUnaryExpression)), pos);
         }
 
         function parseDeleteExpression() {
@@ -4581,7 +4611,7 @@ namespace ts {
                 const pos = getNodePos();
                 const updateExpression = parseUpdateExpression();
                 return token() === SyntaxKind.AsteriskAsteriskToken ?
-                    <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(token()), updateExpression, pos) :
+                    parseBinaryExpressionRest(getBinaryOperatorPrecedence(token()), updateExpression, pos) as BinaryExpression :
                     updateExpression;
             }
 
@@ -4702,7 +4732,7 @@ namespace ts {
         function parseUpdateExpression(): UpdateExpression {
             if (token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) {
                 const pos = getNodePos();
-                return finishNode(factory.createPrefixUnaryExpression(<PrefixUnaryOperator>token(), nextTokenAnd(parseLeftHandSideExpressionOrHigher)), pos);
+                return finishNode(factory.createPrefixUnaryExpression(token() as PrefixUnaryOperator, nextTokenAnd(parseLeftHandSideExpressionOrHigher)), pos);
             }
             else if (languageVariant === LanguageVariant.JSX && token() === SyntaxKind.LessThanToken && lookAhead(nextTokenIsIdentifierOrKeywordOrGreaterThan)) {
                 // JSXElement is part of primaryExpression
@@ -4713,7 +4743,7 @@ namespace ts {
 
             Debug.assert(isLeftHandSideExpression(expression));
             if ((token() === SyntaxKind.PlusPlusToken || token() === SyntaxKind.MinusMinusToken) && !scanner.hasPrecedingLineBreak()) {
-                const operator = <PostfixUnaryOperator>token();
+                const operator = token() as PostfixUnaryOperator;
                 nextToken();
                 return finishNode(factory.createPostfixUnaryExpression(expression, operator), expression.pos);
             }
@@ -4861,18 +4891,45 @@ namespace ts {
             return finishNode(factory.createPropertyAccessExpression(expression, parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true)), pos);
         }
 
-        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number): JsxElement | JsxSelfClosingElement | JsxFragment {
+        function parseJsxElementOrSelfClosingElementOrFragment(inExpressionContext: boolean, topInvalidNodePosition?: number, openingTag?: JsxOpeningElement | JsxOpeningFragment): JsxElement | JsxSelfClosingElement | JsxFragment {
             const pos = getNodePos();
             const opening = parseJsxOpeningOrSelfClosingElementOrOpeningFragment(inExpressionContext);
             let result: JsxElement | JsxSelfClosingElement | JsxFragment;
             if (opening.kind === SyntaxKind.JsxOpeningElement) {
-                const children = parseJsxChildren(opening);
-                const closingElement = parseJsxClosingElement(inExpressionContext);
+                let children = parseJsxChildren(opening);
+                let closingElement: JsxClosingElement;
 
-                if (!tagNamesAreEquivalent(opening.tagName, closingElement.tagName)) {
-                    parseErrorAtRange(closingElement, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                const lastChild: JsxChild | undefined = children[children.length - 1];
+                if (lastChild?.kind === SyntaxKind.JsxElement
+                    && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName)
+                    && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
+                    // when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
+                    // restructure (<div>(...<span></div>)) --> (<div>(...<span></span>)</div>)
+                    // (no need to error; the parent will error)
+                    const end = lastChild.openingElement.end; // newly-created children and closing are both zero-width end/end
+                    const newLast = finishNode(factory.createJsxElement(
+                        lastChild.openingElement,
+                        createNodeArray([], end, end),
+                        finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
+                    lastChild.openingElement.pos,
+                    end);
+
+                    children = createNodeArray([...children.slice(0, children.length - 1), newLast], children.pos, end);
+                    closingElement = lastChild.closingElement;
                 }
-
+                else {
+                    closingElement = parseJsxClosingElement(opening, inExpressionContext);
+                    if (!tagNamesAreEquivalent(opening.tagName, closingElement.tagName)) {
+                        if (openingTag && isJsxOpeningElement(openingTag) && tagNamesAreEquivalent(closingElement.tagName, openingTag.tagName)) {
+                            // opening incorrectly matched with its parent's closing -- put error on opening
+                            parseErrorAtRange(opening.tagName, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                        }
+                        else {
+                            // other opening/closing mismatches -- put error on closing
+                            parseErrorAtRange(closingElement.tagName, Diagnostics.Expected_corresponding_JSX_closing_tag_for_0, getTextOfNodeFromSourceText(sourceText, opening.tagName));
+                        }
+                    }
+                }
                 result = finishNode(factory.createJsxElement(opening, children, closingElement), pos);
             }
             else if (opening.kind === SyntaxKind.JsxOpeningFragment) {
@@ -4898,7 +4955,7 @@ namespace ts {
                     const operatorToken = createMissingNode(SyntaxKind.CommaToken, /*reportAtCurrentPosition*/ false);
                     setTextRangePosWidth(operatorToken, invalidElement.pos, 0);
                     parseErrorAt(skipTrivia(sourceText, topBadPos), invalidElement.end, Diagnostics.JSX_expressions_must_have_one_parent_element);
-                    return <JsxElement><Node>finishNode(factory.createBinaryExpression(result, operatorToken as Token<SyntaxKind.CommaToken>, invalidElement), pos);
+                    return finishNode(factory.createBinaryExpression(result, operatorToken as Token<SyntaxKind.CommaToken>, invalidElement), pos) as Node as JsxElement;
                 }
             }
 
@@ -4937,7 +4994,7 @@ namespace ts {
                 case SyntaxKind.OpenBraceToken:
                     return parseJsxExpression(/*inExpressionContext*/ false);
                 case SyntaxKind.LessThanToken:
-                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false);
+                    return parseJsxElementOrSelfClosingElementOrFragment(/*inExpressionContext*/ false, /*topInvalidNodePosition*/ undefined, openingTag);
                 default:
                     return Debug.assertNever(token);
             }
@@ -4953,6 +5010,13 @@ namespace ts {
                 const child = parseJsxChild(openingTag, currentToken = scanner.reScanJsxToken());
                 if (!child) break;
                 list.push(child);
+                if (isJsxOpeningElement(openingTag)
+                    && child?.kind === SyntaxKind.JsxElement
+                    && !tagNamesAreEquivalent(child.openingElement.tagName, child.closingElement.tagName)
+                    && tagNamesAreEquivalent(openingTag.tagName, child.closingElement.tagName)) {
+                    // stop after parsing a mismatched child like <div>...(<span></div>) in order to reattach the </div> higher
+                    break;
+                }
             }
 
             parsingContext = saveParsingContext;
@@ -4974,7 +5038,6 @@ namespace ts {
                 scanJsxText();
                 return finishNode(factory.createJsxOpeningFragment(), pos);
             }
-
             const tagName = parseJsxElementName();
             const typeArguments = (contextFlags & NodeFlags.JavaScriptFile) === 0 ? tryParseTypeArguments() : undefined;
             const attributes = parseJsxAttributes();
@@ -4990,12 +5053,14 @@ namespace ts {
             }
             else {
                 parseExpected(SyntaxKind.SlashToken);
-                if (inExpressionContext) {
-                    parseExpected(SyntaxKind.GreaterThanToken);
-                }
-                else {
-                    parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
-                    scanJsxText();
+                if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                    // manually advance the scanner in order to look for jsx text inside jsx
+                    if (inExpressionContext) {
+                        nextToken();
+                    }
+                    else {
+                        scanJsxText();
+                    }
                 }
                 node = factory.createJsxSelfClosingElement(tagName, typeArguments, attributes);
             }
@@ -5073,16 +5138,18 @@ namespace ts {
             return finishNode(factory.createJsxSpreadAttribute(expression), pos);
         }
 
-        function parseJsxClosingElement(inExpressionContext: boolean): JsxClosingElement {
+        function parseJsxClosingElement(open: JsxOpeningElement, inExpressionContext: boolean): JsxClosingElement {
             const pos = getNodePos();
             parseExpected(SyntaxKind.LessThanSlashToken);
             const tagName = parseJsxElementName();
-            if (inExpressionContext) {
-                parseExpected(SyntaxKind.GreaterThanToken);
-            }
-            else {
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                // manually advance the scanner in order to look for jsx text inside jsx
+                if (inExpressionContext || !tagNamesAreEquivalent(open.tagName, tagName)) {
+                    nextToken();
+                }
+                else {
+                    scanJsxText();
+                }
             }
             return finishNode(factory.createJsxClosingElement(tagName), pos);
         }
@@ -5093,12 +5160,14 @@ namespace ts {
             if (tokenIsIdentifierOrKeyword(token())) {
                 parseErrorAtRange(parseJsxElementName(), Diagnostics.Expected_corresponding_closing_tag_for_JSX_fragment);
             }
-            if (inExpressionContext) {
-                parseExpected(SyntaxKind.GreaterThanToken);
-            }
-            else {
-                parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false);
-                scanJsxText();
+            if (parseExpected(SyntaxKind.GreaterThanToken, /*diagnostic*/ undefined, /*shouldAdvance*/ false)) {
+                // manually advance the scanner in order to look for jsx text inside jsx
+                if (inExpressionContext) {
+                    nextToken();
+                }
+                else {
+                    scanJsxText();
+                }
             }
             return finishNode(factory.createJsxJsxClosingFragment(), pos);
         }
@@ -5213,7 +5282,7 @@ namespace ts {
                     continue;
                 }
 
-                return <MemberExpression>expression;
+                return expression as MemberExpression;
             }
         }
 
@@ -5590,6 +5659,7 @@ namespace ts {
         // STATEMENTS
         function parseBlock(ignoreMissingOpenBrace: boolean, diagnosticMessage?: DiagnosticMessage): Block {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             const openBracePosition = scanner.getTokenPos();
             if (parseExpected(SyntaxKind.OpenBraceToken, diagnosticMessage) || ignoreMissingOpenBrace) {
                 const multiLine = scanner.hasPrecedingLineBreak();
@@ -5603,11 +5673,17 @@ namespace ts {
                         );
                     }
                 }
-                return finishNode(factory.createBlock(statements, multiLine), pos);
+                const result = withJSDoc(finishNode(factory.createBlock(statements, multiLine), pos), hasJSDoc);
+                if (token() === SyntaxKind.EqualsToken) {
+                    parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected_This_follows_a_block_of_statements_so_if_you_intended_to_write_a_destructuring_assignment_you_might_need_to_wrap_the_the_whole_assignment_in_parentheses);
+                    nextToken();
+                }
+
+                return result;
             }
             else {
                 const statements = createMissingList<Statement>();
-                return finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos);
+                return withJSDoc(finishNode(factory.createBlock(statements, /*multiLine*/ undefined), pos), hasJSDoc);
             }
         }
 
@@ -5643,23 +5719,26 @@ namespace ts {
 
         function parseEmptyStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SemicolonToken);
-            return finishNode(factory.createEmptyStatement(), pos);
+            return withJSDoc(finishNode(factory.createEmptyStatement(), pos), hasJSDoc);
         }
 
         function parseIfStatement(): IfStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.IfKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const thenStatement = parseStatement();
             const elseStatement = parseOptional(SyntaxKind.ElseKeyword) ? parseStatement() : undefined;
-            return finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos);
+            return withJSDoc(finishNode(factory.createIfStatement(expression, thenStatement, elseStatement), pos), hasJSDoc);
         }
 
         function parseDoStatement(): DoStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.DoKeyword);
             const statement = parseStatement();
             parseExpected(SyntaxKind.WhileKeyword);
@@ -5672,21 +5751,23 @@ namespace ts {
             // spec but allowed in consensus reality. Approved -- this is the de-facto standard whereby
             //  do;while(0)x will have a semicolon inserted before x.
             parseOptional(SyntaxKind.SemicolonToken);
-            return finishNode(factory.createDoStatement(statement, expression), pos);
+            return withJSDoc(finishNode(factory.createDoStatement(statement, expression), pos), hasJSDoc);
         }
 
         function parseWhileStatement(): WhileStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WhileKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const statement = parseStatement();
-            return finishNode(factory.createWhileStatement(expression, statement), pos);
+            return withJSDoc(finishNode(factory.createWhileStatement(expression, statement), pos), hasJSDoc);
         }
 
         function parseForOrForInOrForOfStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ForKeyword);
             const awaitToken = parseOptionalToken(SyntaxKind.AwaitKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
@@ -5725,11 +5806,12 @@ namespace ts {
                 node = factory.createForStatement(initializer, condition, incrementor, parseStatement());
             }
 
-            return finishNode(node, pos);
+            return withJSDoc(finishNode(node, pos) as ForStatement | ForInOrOfStatement, hasJSDoc);
         }
 
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
 
             parseExpected(kind === SyntaxKind.BreakStatement ? SyntaxKind.BreakKeyword : SyntaxKind.ContinueKeyword);
             const label = canParseSemicolon() ? undefined : parseIdentifier();
@@ -5738,25 +5820,27 @@ namespace ts {
             const node = kind === SyntaxKind.BreakStatement
                 ? factory.createBreakStatement(label)
                 : factory.createContinueStatement(label);
-            return finishNode(node, pos);
+            return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
         function parseReturnStatement(): ReturnStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ReturnKeyword);
             const expression = canParseSemicolon() ? undefined : allowInAnd(parseExpression);
             parseSemicolon();
-            return finishNode(factory.createReturnStatement(expression), pos);
+            return withJSDoc(finishNode(factory.createReturnStatement(expression), pos), hasJSDoc);
         }
 
         function parseWithStatement(): WithStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.WithKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const statement = doInsideOfContext(NodeFlags.InWithStatement, parseStatement);
-            return finishNode(factory.createWithStatement(expression, statement), pos);
+            return withJSDoc(finishNode(factory.createWithStatement(expression, statement), pos), hasJSDoc);
         }
 
         function parseCaseClause(): CaseClause {
@@ -5790,12 +5874,13 @@ namespace ts {
 
         function parseSwitchStatement(): SwitchStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.SwitchKeyword);
             parseExpected(SyntaxKind.OpenParenToken);
             const expression = allowInAnd(parseExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             const caseBlock = parseCaseBlock();
-            return finishNode(factory.createSwitchStatement(expression, caseBlock), pos);
+            return withJSDoc(finishNode(factory.createSwitchStatement(expression, caseBlock), pos), hasJSDoc);
         }
 
         function parseThrowStatement(): ThrowStatement {
@@ -5803,6 +5888,7 @@ namespace ts {
             //      throw [no LineTerminator here]Expression[In, ?Yield];
 
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.ThrowKeyword);
 
             // Because of automatic semicolon insertion, we need to report error if this
@@ -5816,12 +5902,13 @@ namespace ts {
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
             parseSemicolon();
-            return finishNode(factory.createThrowStatement(expression), pos);
+            return withJSDoc(finishNode(factory.createThrowStatement(expression), pos), hasJSDoc);
         }
 
         // TODO: Review for error recovery
         function parseTryStatement(): TryStatement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
 
             parseExpected(SyntaxKind.TryKeyword);
             const tryBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
@@ -5835,7 +5922,7 @@ namespace ts {
                 finallyBlock = parseBlock(/*ignoreMissingOpenBrace*/ false);
             }
 
-            return finishNode(factory.createTryStatement(tryBlock, catchClause, finallyBlock), pos);
+            return withJSDoc(finishNode(factory.createTryStatement(tryBlock, catchClause, finallyBlock), pos), hasJSDoc);
         }
 
         function parseCatchClause(): CatchClause {
@@ -5858,9 +5945,10 @@ namespace ts {
 
         function parseDebuggerStatement(): Statement {
             const pos = getNodePos();
+            const hasJSDoc = hasPrecedingJSDocComment();
             parseExpected(SyntaxKind.DebuggerKeyword);
             parseSemicolon();
-            return finishNode(factory.createDebuggerStatement(), pos);
+            return withJSDoc(finishNode(factory.createDebuggerStatement(), pos), hasJSDoc);
         }
 
         function parseExpressionOrLabeledStatement(): ExpressionStatement | LabeledStatement {
@@ -6258,7 +6346,7 @@ namespace ts {
             let propertyName: PropertyName | undefined = parsePropertyName();
             let name: BindingName;
             if (tokenIsIdentifier && token() !== SyntaxKind.ColonToken) {
-                name = <Identifier>propertyName;
+                name = propertyName as Identifier;
                 propertyName = undefined;
             }
             else {
@@ -6714,11 +6802,11 @@ namespace ts {
         }
 
         function parseClassExpression(): ClassExpression {
-            return <ClassExpression>parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined, SyntaxKind.ClassExpression);
+            return parseClassDeclarationOrExpression(getNodePos(), hasPrecedingJSDocComment(), /*decorators*/ undefined, /*modifiers*/ undefined, SyntaxKind.ClassExpression) as ClassExpression;
         }
 
         function parseClassDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ClassDeclaration {
-            return <ClassDeclaration>parseClassDeclarationOrExpression(pos, hasJSDoc, decorators, modifiers, SyntaxKind.ClassDeclaration);
+            return parseClassDeclarationOrExpression(pos, hasJSDoc, decorators, modifiers, SyntaxKind.ClassDeclaration) as ClassDeclaration;
         }
 
         function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
@@ -6869,7 +6957,7 @@ namespace ts {
             const namespaceFlag = flags & NodeFlags.Namespace;
             const name = parseIdentifier();
             const body = parseOptional(SyntaxKind.DotToken)
-                ? <NamespaceDeclaration>parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag)
+                ? parseModuleOrNamespaceDeclaration(getNodePos(), /*hasJSDoc*/ false, /*decorators*/ undefined, /*modifiers*/ undefined, NodeFlags.NestedNamespace | namespaceFlag) as NamespaceDeclaration
                 : parseModuleBlock();
             const node = factory.createModuleDeclaration(decorators, modifiers, name, body, flags);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -6884,7 +6972,7 @@ namespace ts {
                 flags |= NodeFlags.GlobalAugmentation;
             }
             else {
-                name = <StringLiteral>parseLiteralNode();
+                name = parseLiteralNode() as StringLiteral;
                 name.text = internIdentifier(name.text);
             }
             let body: ModuleBlock | undefined;
@@ -7313,7 +7401,13 @@ namespace ts {
             export function parseJSDocNameReference(): JSDocNameReference {
                 const pos = getNodePos();
                 const hasBrace = parseOptional(SyntaxKind.OpenBraceToken);
-                const entityName = parseEntityName(/* allowReservedWords*/ false);
+                const p2 = getNodePos();
+                let entityName: EntityName | JSDocMemberName = parseEntityName(/* allowReservedWords*/ false);
+                while (token() === SyntaxKind.PrivateIdentifier) {
+                    reScanHashToken(); // rescan #id as # id
+                    nextTokenJSDoc(); // then skip the #
+                    entityName = finishNode(factory.createJSDocMemberName(entityName, parseIdentifier()), p2);
+                }
                 if (hasBrace) {
                     parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
@@ -7327,7 +7421,7 @@ namespace ts {
                 initializeState("", content, ScriptTarget.Latest, /*_syntaxCursor:*/ undefined, ScriptKind.JS);
                 const jsDoc = doInsideOfContext(NodeFlags.JSDoc, () => parseJSDocCommentWorker(start, length));
 
-                const sourceFile = <SourceFile>{ languageVariant: LanguageVariant.Standard, text: content };
+                const sourceFile = { languageVariant: LanguageVariant.Standard, text: content } as SourceFile;
                 const diagnostics = attachFileToDiagnostics(parseDiagnostics, sourceFile);
                 clearState();
 
@@ -7387,7 +7481,7 @@ namespace ts {
                 let linkEnd: number;
                 let commentsPos: number | undefined;
                 let comments: string[] = [];
-                const parts: (JSDocLink | JSDocText)[] = [];
+                const parts: JSDocComment[] = [];
 
                 // + 3 for leading /**, - 5 in total for /** */
                 return scanner.scanRange(start + 3, length - 5, () => {
@@ -7487,12 +7581,12 @@ namespace ts {
                         nextTokenJSDoc();
                     }
                     removeTrailingWhitespace(comments);
-                    if (comments.length) {
+                    if (parts.length && comments.length) {
                         parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? start, commentsPos));
                     }
                     if (parts.length && tags) Debug.assertIsDefined(commentsPos, "having parsed tags implies that the end of the comment span should be set");
                     const tagsArray = tags && createNodeArray(tags, tagsPos, tagsEnd);
-                    return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : undefined, tagsArray), start, end);
+                    return finishNode(factory.createJSDocComment(parts.length ? createNodeArray(parts, start, commentsPos) : comments.length ? comments.join("") : undefined, tagsArray), start, end);
                 });
 
                 function removeLeadingNewlines(comments: string[]) {
@@ -7592,6 +7686,9 @@ namespace ts {
                         case "readonly":
                             tag = parseSimpleTag(start, factory.createJSDocReadonlyTag, tagName, margin, indentText);
                             break;
+                        case "override":
+                            tag = parseSimpleTag(start, factory.createJSDocOverrideTag, tagName, margin, indentText);
+                            break;
                         case "deprecated":
                             hasDeprecatedTag = true;
                             tag = parseSimpleTag(start, factory.createJSDocDeprecatedTag, tagName, margin, indentText);
@@ -7640,10 +7737,10 @@ namespace ts {
                     return parseTagComments(margin, indentText.slice(margin));
                 }
 
-                function parseTagComments(indent: number, initialMargin?: string): NodeArray<JSDocText | JSDocLink> | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): string | NodeArray<JSDocComment> | undefined {
                     const commentsPos = getNodePos();
                     let comments: string[] = [];
-                    const parts: (JSDocLink | JSDocText)[] = [];
+                    const parts: JSDocComment[] = [];
                     let linkEnd;
                     let state = JSDocState.BeginningOfLine;
                     let previousWhitespace = true;
@@ -7672,8 +7769,9 @@ namespace ts {
                                 indent = 0;
                                 break;
                             case SyntaxKind.AtToken:
-                                if (state === JSDocState.SavingBackticks || !previousWhitespace && state === JSDocState.SavingComments) {
-                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace
+                                if (state === JSDocState.SavingBackticks
+                                    || state === JSDocState.SavingComments && (!previousWhitespace || lookAhead(isNextJSDocTokenWhitespace))) {
+                                    // @ doesn't start a new tag inside ``, and inside a comment, only after whitespace or not before whitespace
                                     comments.push(scanner.getTokenText());
                                     break;
                                 }
@@ -7741,38 +7839,62 @@ namespace ts {
 
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
-                    if (comments.length) {
-                        parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
-                    }
                     if (parts.length) {
+                        if (comments.length) {
+                            parts.push(finishNode(factory.createJSDocText(comments.join("")), linkEnd ?? commentsPos));
+                        }
                         return createNodeArray(parts, commentsPos, scanner.getTextPos());
+                    }
+                    else if (comments.length) {
+                        return comments.join("");
                     }
                 }
 
+                function isNextJSDocTokenWhitespace() {
+                    const next = nextTokenJSDoc();
+                    return next === SyntaxKind.WhitespaceTrivia || next === SyntaxKind.NewLineTrivia;
+                }
+
                 function parseJSDocLink(start: number) {
-                    if (!tryParse(parseJSDocLinkPrefix)) {
+                    const linkType = tryParse(parseJSDocLinkPrefix);
+                    if (!linkType) {
                         return undefined;
                     }
                     nextTokenJSDoc(); // start at token after link, then skip any whitespace
                     skipWhitespace();
                     // parseEntityName logs an error for non-identifier, so create a MissingNode ourselves to avoid the error
-                    const name = tokenIsIdentifierOrKeyword(token())
+                    const p2 = getNodePos();
+                    let name: EntityName | JSDocMemberName | undefined = tokenIsIdentifierOrKeyword(token())
                         ? parseEntityName(/*allowReservedWords*/ true)
                         : undefined;
+                    if (name) {
+                        while (token() === SyntaxKind.PrivateIdentifier) {
+                            reScanHashToken(); // rescan #id as # id
+                            nextTokenJSDoc(); // then skip the #
+                            name = finishNode(factory.createJSDocMemberName(name, parseIdentifier()), p2);
+                        }
+                    }
                     const text = [];
-                    while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia) {
+                    while (token() !== SyntaxKind.CloseBraceToken && token() !== SyntaxKind.NewLineTrivia && token() !== SyntaxKind.EndOfFileToken) {
                         text.push(scanner.getTokenText());
                         nextTokenJSDoc();
                     }
-                    return finishNode(factory.createJSDocLink(name, text.join("")), start, scanner.getTextPos());
+                    const create = linkType === "link" ? factory.createJSDocLink
+                        : linkType === "linkcode" ? factory.createJSDocLinkCode
+                        : factory.createJSDocLinkPlain;
+                    return finishNode(create(name, text.join("")), start, scanner.getTextPos());
                 }
 
                 function parseJSDocLinkPrefix() {
                     skipWhitespaceOrAsterisk();
-                    return token() === SyntaxKind.OpenBraceToken
+                    if (token() === SyntaxKind.OpenBraceToken
                         && nextTokenJSDoc() === SyntaxKind.AtToken
-                        && tokenIsIdentifierOrKeyword(nextTokenJSDoc())
-                        && scanner.getTokenValue() === "link";
+                        && tokenIsIdentifierOrKeyword(nextTokenJSDoc())) {
+                        const kind = scanner.getTokenValue();
+                        if(kind === "link" || kind === "linkcode" || kind === "linkplain") {
+                            return kind;
+                        }
+                    }
                 }
 
                 function parseUnknownTag(start: number, tagName: Identifier, indent: number, indentText: string) {
@@ -7910,8 +8032,10 @@ namespace ts {
                     if (!comments) {
                         commentEnd = scanner.getStartPos();
                     }
-                    const allParts = concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as (JSDocText | JSDocLink)[]; // cast away readonly
-                    return finishNode(factory.createJSDocAuthorTag(tagName, createNodeArray(allParts, commentStart)), start);
+                    const allParts = typeof comments !== "string"
+                        ? createNodeArray(concatenate([finishNode(textOnly, commentStart, commentEnd)], comments) as JSDocComment[], commentStart) // cast away readonly
+                        : textOnly.text + comments;
+                    return finishNode(factory.createJSDocAuthorTag(tagName, allParts), start);
                 }
 
                 function parseAuthorNameAndEmail(): JSDocText {
@@ -7970,7 +8094,7 @@ namespace ts {
                     return node;
                 }
 
-                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: NodeArray<JSDocText | JSDocLink>) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
+                function parseSimpleTag(start: number, createTag: (tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>) => JSDocTag, tagName: Identifier, margin: number, indentText: string): JSDocTag {
                     return finishNode(createTag(tagName, parseTrailingTagComments(start, getNodePos(), margin, indentText)), start);
                 }
 
@@ -8042,7 +8166,7 @@ namespace ts {
                     }
 
                     const typedefTag = factory.createJSDocTypedefTag(tagName, typeExpression, fullName, comment);
-                    return finishNode(typedefTag, start);
+                    return finishNode(typedefTag, start, end);
                 }
 
                 function parseJSDocTypeNameWithNamespace(nested?: boolean) {
@@ -8288,7 +8412,7 @@ namespace ts {
             // This is because we do incremental parsing in-place.  i.e. we take nodes from the old
             // tree and give them new positions and parents.  From that point on, trusting the old
             // tree at all is not possible as far too much of it may violate invariants.
-            const incrementalSourceFile = <IncrementalNode><Node>sourceFile;
+            const incrementalSourceFile = sourceFile as Node as IncrementalNode;
             Debug.assert(!incrementalSourceFile.hasBeenIncrementallyParsed);
             incrementalSourceFile.hasBeenIncrementallyParsed = true;
             Parser.fixupParentReferences(incrementalSourceFile);
@@ -8408,10 +8532,10 @@ namespace ts {
 
         function moveElementEntirelyPastChangeRange(element: IncrementalElement, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
             if (isArray) {
-                visitArray(<IncrementalNodeArray>element);
+                visitArray(element as IncrementalNodeArray);
             }
             else {
-                visitNode(<IncrementalNode>element);
+                visitNode(element as IncrementalNode);
             }
             return;
 
@@ -8436,7 +8560,7 @@ namespace ts {
                 forEachChild(node, visitNode, visitArray);
                 if (hasJSDocNodes(node)) {
                     for (const jsDocComment of node.jsDoc!) {
-                        visitNode(<IncrementalNode><Node>jsDocComment);
+                        visitNode(jsDocComment as Node as IncrementalNode);
                     }
                 }
                 checkNodePositions(node, aggressiveChecks);
@@ -8589,7 +8713,7 @@ namespace ts {
                     forEachChild(child, visitNode, visitArray);
                     if (hasJSDocNodes(child)) {
                         for (const jsDocComment of child.jsDoc!) {
-                            visitNode(<IncrementalNode><Node>jsDocComment);
+                            visitNode(jsDocComment as Node as IncrementalNode);
                         }
                     }
                     checkNodePositions(child, aggressiveChecks);
@@ -8825,7 +8949,7 @@ namespace ts {
 
                     // Either we don'd have a node, or we have a node at the position being asked for.
                     Debug.assert(!current || current.pos === position);
-                    return <IncrementalNode>current;
+                    return current as IncrementalNode;
                 }
             };
 
@@ -9024,7 +9148,7 @@ namespace ts {
         if (namedArgRegExCache.has(name)) {
             return namedArgRegExCache.get(name)!;
         }
-        const result = new RegExp(`(\\s${name}\\s*=\\s*)('|")(.+?)\\2`, "im");
+        const result = new RegExp(`(\\s${name}\\s*=\\s*)(?:(?:'([^']*)')|(?:"([^"]*)"))`, "im");
         namedArgRegExCache.set(name, result);
         return result;
     }
@@ -9048,16 +9172,17 @@ namespace ts {
                         return; // Missing required argument, don't parse
                     }
                     else if (matchResult) {
+                        const value = matchResult[2] || matchResult[3];
                         if (arg.captureSpan) {
-                            const startPos = range.pos + matchResult.index + matchResult[1].length + matchResult[2].length;
+                            const startPos = range.pos + matchResult.index + matchResult[1].length + 1;
                             argument[arg.name] = {
-                                value: matchResult[3],
+                                value,
                                 pos: startPos,
-                                end: startPos + matchResult[3].length
+                                end: startPos + value.length
                             };
                         }
                         else {
-                            argument[arg.name] = matchResult[3];
+                            argument[arg.name] = value;
                         }
                     }
                 }
@@ -9075,7 +9200,7 @@ namespace ts {
         }
 
         if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
-            const multiLinePragmaRegEx = /\s*@(\S+)\s*(.*)\s*$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
+            const multiLinePragmaRegEx = /@(\S+)(\s+.*)?$/gim; // Defined inline since it uses the "g" flag, which keeps a persistent index (for iterating)
             let multiLineMatch: RegExpExecArray | null;
             while (multiLineMatch = multiLinePragmaRegEx.exec(text)) {
                 addPragmaForMatch(pragmas, range, PragmaKindFlags.MultiLine, multiLineMatch);
@@ -9100,7 +9225,7 @@ namespace ts {
     function getNamedPragmaArguments(pragma: PragmaDefinition, text: string | undefined): {[index: string]: string} | "fail" {
         if (!text) return {};
         if (!pragma.args) return {};
-        const args = text.split(/\s+/);
+        const args = trimString(text).split(/\s+/);
         const argMap: {[index: string]: string} = {};
         for (let i = 0; i < pragma.args.length; i++) {
             const argument = pragma.args[i];
@@ -9122,7 +9247,7 @@ namespace ts {
         }
 
         if (lhs.kind === SyntaxKind.Identifier) {
-            return lhs.escapedText === (<Identifier>rhs).escapedText;
+            return lhs.escapedText === (rhs as Identifier).escapedText;
         }
 
         if (lhs.kind === SyntaxKind.ThisKeyword) {
@@ -9132,7 +9257,7 @@ namespace ts {
         // If we are at this statement then we must have PropertyAccessExpression and because tag name in Jsx element can only
         // take forms of JsxTagNameExpression which includes an identifier, "this" expression, or another propertyAccessExpression
         // it is safe to case the expression property as such. See parseJsxElementName for how we parse tag name in Jsx element
-        return (<PropertyAccessExpression>lhs).name.escapedText === (<PropertyAccessExpression>rhs).name.escapedText &&
-            tagNamesAreEquivalent((<PropertyAccessExpression>lhs).expression as JsxTagNameExpression, (<PropertyAccessExpression>rhs).expression as JsxTagNameExpression);
+        return (lhs as PropertyAccessExpression).name.escapedText === (rhs as PropertyAccessExpression).name.escapedText &&
+            tagNamesAreEquivalent((lhs as PropertyAccessExpression).expression as JsxTagNameExpression, (rhs as PropertyAccessExpression).expression as JsxTagNameExpression);
     }
 }

@@ -249,7 +249,7 @@ namespace ts {
         if (d && d.kind === SyntaxKind.TypeParameter) {
             for (let current: Node = d; current; current = current.parent) {
                 if (isFunctionLike(current) || isClassLike(current) || current.kind === SyntaxKind.InterfaceDeclaration) {
-                    return <Declaration>current;
+                    return current as Declaration;
                 }
             }
         }
@@ -490,7 +490,7 @@ namespace ts {
         return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
     }
     export function symbolName(symbol: Symbol): string {
-        if (symbol.valueDeclaration && isPrivateIdentifierPropertyDeclaration(symbol.valueDeclaration)) {
+        if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
             return idText(symbol.valueDeclaration.name);
         }
         return unescapeLeadingUnderscores(symbol.escapedName);
@@ -619,7 +619,7 @@ namespace ts {
     export function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined {
         if (declaration === undefined) return undefined;
         return getNonAssignedNameOfDeclaration(declaration) ||
-            (isFunctionExpression(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
+            (isFunctionExpression(declaration) || isArrowFunction(declaration) || isClassExpression(declaration) ? getAssignedName(declaration) : undefined);
     }
 
     /*@internal*/
@@ -773,6 +773,10 @@ namespace ts {
         return getFirstJSDocTag(node, isJSDocReadonlyTag, /*noCache*/ true);
     }
 
+    export function getJSDocOverrideTagNoCache(node: Node): JSDocOverrideTag | undefined {
+        return getFirstJSDocTag(node, isJSDocOverrideTag, /*noCache*/ true);
+    }
+
     /** Gets the JSDoc deprecated tag for the node if present */
     export function getJSDocDeprecatedTag(node: Node): JSDocDeprecatedTag | undefined {
         return getFirstJSDocTag(node, isJSDocDeprecatedTag);
@@ -897,8 +901,11 @@ namespace ts {
     }
 
     /** Gets the text of a jsdoc comment, flattening links to their text. */
-    export function getTextOfJSDocComment(comment?: NodeArray<JSDocText | JSDocLink>) {
-        return comment?.map(c => c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
+    export function getTextOfJSDocComment(comment?: string | NodeArray<JSDocComment>) {
+        return typeof comment === "string" ? comment
+            : comment?.map(c =>
+                // TODO: Other kinds here
+                c.kind === SyntaxKind.JSDocText ? c.text : `{@link ${c.name ? entityNameToString(c.name) + " " : ""}${c.text}}`).join("");
     }
 
     /**
@@ -999,7 +1006,7 @@ namespace ts {
     }
 
     export function isNullishCoalesce(node: Node) {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
+        return node.kind === SyntaxKind.BinaryExpression && (node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken;
     }
 
     export function isConstTypeReference(node: Node) {
@@ -1151,8 +1158,8 @@ namespace ts {
 
     // Private Identifiers
     /*@internal*/
-    export function isPrivateIdentifierPropertyDeclaration(node: Node): node is PrivateIdentifierPropertyDeclaration {
-        return isPropertyDeclaration(node) && isPrivateIdentifier(node.name);
+    export function isPrivateIdentifierClassElementDeclaration(node: Node): node is PrivateClassElementDeclaration {
+        return (isPropertyDeclaration(node) || isMethodOrAccessor(node)) && isPrivateIdentifier(node.name);
     }
 
     /*@internal*/
@@ -1176,6 +1183,7 @@ namespace ts {
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.StaticKeyword:
+            case SyntaxKind.OverrideKeyword:
                 return true;
         }
         return false;
@@ -1188,7 +1196,7 @@ namespace ts {
 
     /* @internal */
     export function isClassMemberModifier(idToken: SyntaxKind): boolean {
-        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
+        return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword || idToken === SyntaxKind.OverrideKeyword;
     }
 
     export function isModifier(node: Node): node is Modifier {
@@ -1532,8 +1540,8 @@ namespace ts {
             case SyntaxKind.PostfixUnaryExpression:
                 return true;
             case SyntaxKind.PrefixUnaryExpression:
-                return (<PrefixUnaryExpression>expr).operator === SyntaxKind.PlusPlusToken ||
-                    (<PrefixUnaryExpression>expr).operator === SyntaxKind.MinusMinusToken;
+                return (expr as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken ||
+                    (expr as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken;
             default:
                 return false;
         }
@@ -1590,7 +1598,7 @@ namespace ts {
             case SyntaxKind.WhileStatement:
                 return true;
             case SyntaxKind.LabeledStatement:
-                return lookInLabeledStatements && isIterationStatement((<LabeledStatement>node).statement, lookInLabeledStatements);
+                return lookInLabeledStatements && isIterationStatement((node as LabeledStatement).statement, lookInLabeledStatements);
         }
 
         return false;
@@ -1873,7 +1881,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocComment
             || node.kind === SyntaxKind.JSDocNamepathType
             || node.kind === SyntaxKind.JSDocText
-            || node.kind === SyntaxKind.JSDocLink
+            || isJSDocLinkLike(node)
             || isJSDocTag(node)
             || isJSDocTypeLiteral(node)
             || isJSDocSignature(node);
@@ -1966,5 +1974,8 @@ namespace ts {
         return node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    export function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain {
+        return node.kind === SyntaxKind.JSDocLink || node.kind === SyntaxKind.JSDocLinkCode || node.kind === SyntaxKind.JSDocLinkPlain;
+    }
     // #endregion
 }

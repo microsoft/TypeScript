@@ -1,0 +1,70 @@
+=== tests/cases/compiler/genericObjectSpreadResultInSwitch.ts ===
+type Params = {
+>Params : Symbol(Params, Decl(genericObjectSpreadResultInSwitch.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(foo, Decl(genericObjectSpreadResultInSwitch.ts, 0, 15))
+
+} & ({ tag: 'a'; type: number } | { tag: 'b'; type: string });
+>tag : Symbol(tag, Decl(genericObjectSpreadResultInSwitch.ts, 2, 6))
+>type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 16))
+>tag : Symbol(tag, Decl(genericObjectSpreadResultInSwitch.ts, 2, 35))
+>type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 45))
+
+const getType = <P extends Params>(params: P) => {
+>getType : Symbol(getType, Decl(genericObjectSpreadResultInSwitch.ts, 4, 5))
+>P : Symbol(P, Decl(genericObjectSpreadResultInSwitch.ts, 4, 17))
+>Params : Symbol(Params, Decl(genericObjectSpreadResultInSwitch.ts, 0, 0))
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 4, 35))
+>P : Symbol(P, Decl(genericObjectSpreadResultInSwitch.ts, 4, 17))
+
+    const {
+        // Omit
+        foo,
+>foo : Symbol(foo, Decl(genericObjectSpreadResultInSwitch.ts, 5, 11))
+
+        ...rest
+>rest : Symbol(rest, Decl(genericObjectSpreadResultInSwitch.ts, 7, 12))
+
+    } = params;
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 4, 35))
+
+    return rest;
+>rest : Symbol(rest, Decl(genericObjectSpreadResultInSwitch.ts, 7, 12))
+
+};
+
+declare const params: Params;
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 15, 13))
+>Params : Symbol(Params, Decl(genericObjectSpreadResultInSwitch.ts, 0, 0))
+
+switch (params.tag) {
+>params.tag : Symbol(tag, Decl(genericObjectSpreadResultInSwitch.ts, 2, 6), Decl(genericObjectSpreadResultInSwitch.ts, 2, 35))
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 15, 13))
+>tag : Symbol(tag, Decl(genericObjectSpreadResultInSwitch.ts, 2, 6), Decl(genericObjectSpreadResultInSwitch.ts, 2, 35))
+
+    case 'a': {
+        // TS 4.2: number
+        // TS 4.3: string | number
+        const result = getType(params).type;
+>result : Symbol(result, Decl(genericObjectSpreadResultInSwitch.ts, 21, 13))
+>getType(params).type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 16))
+>getType : Symbol(getType, Decl(genericObjectSpreadResultInSwitch.ts, 4, 5))
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 15, 13))
+>type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 16))
+
+        break;
+    }
+    case 'b': {
+        // TS 4.2: string
+        // TS 4.3: string | number
+        const result = getType(params).type;
+>result : Symbol(result, Decl(genericObjectSpreadResultInSwitch.ts, 28, 13))
+>getType(params).type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 45))
+>getType : Symbol(getType, Decl(genericObjectSpreadResultInSwitch.ts, 4, 5))
+>params : Symbol(params, Decl(genericObjectSpreadResultInSwitch.ts, 15, 13))
+>type : Symbol(type, Decl(genericObjectSpreadResultInSwitch.ts, 2, 45))
+
+        break;
+    }
+}

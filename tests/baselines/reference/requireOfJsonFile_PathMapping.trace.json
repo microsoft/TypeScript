@@ -29,7 +29,7 @@
     "Trying substitution 'src/types', candidate module location: 'src/types'.",
     "Loading module as file / folder, candidate module location '/src/types', target file type 'JavaScript'.",
     "Loading module 'foo/bar/foobar.json' from 'node_modules' folder, target file type 'JavaScript'.",
-    "File '/node_modules/foo/package.json' does not exist.",
+    "File '/node_modules/foo/package.json' does not exist according to earlier cached lookups.",
     "File '/node_modules/foo/bar/foobar.json.js' does not exist.",
     "File '/node_modules/foo/bar/foobar.json.jsx' does not exist.",
     "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'foo/bar/foobar.json'.",
@@ -38,6 +38,6 @@
     "Trying substitution 'node_modules/*', candidate module location: 'node_modules/foo/bar/foobar.json'.",
     "Loading module as file / folder, candidate module location '/node_modules/foo/bar/foobar.json', target file type 'Json'.",
     "File '/node_modules/foo/bar/foobar.json' exist - use it as a name resolution result.",
-    "File '/node_modules/foo/package.json' does not exist.",
+    "File '/node_modules/foo/package.json' does not exist according to earlier cached lookups.",
     "======== Module name 'foo/bar/foobar.json' was successfully resolved to '/node_modules/foo/bar/foobar.json'. ========"
 ]

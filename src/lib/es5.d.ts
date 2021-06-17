@@ -1073,7 +1073,7 @@ interface ReadonlyArray<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1207,7 +1207,7 @@ interface Array<T> {
      */
     toString(): string;
     /**
-     * Returns a string representation of an array. The elements are converted to string using their toLocalString methods.
+     * Returns a string representation of an array. The elements are converted to string using their toLocaleString methods.
      */
     toLocaleString(): string;
     /**
@@ -1508,7 +1508,7 @@ type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) 
 /**
  * Obtain the parameters of a constructor function type in a tuple
  */
-type ConstructorParameters<T extends new (...args: any) => any> = T extends new (...args: infer P) => any ? P : never;
+type ConstructorParameters<T extends abstract new (...args: any) => any> = T extends abstract new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type
@@ -1518,7 +1518,7 @@ type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => i
 /**
  * Obtain the return type of a constructor function type
  */
-type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+type InstanceType<T extends abstract new (...args: any) => any> = T extends abstract new (...args: any) => infer R ? R : any;
 
 /**
  * Convert string literal type to uppercase
@@ -1776,7 +1776,7 @@ interface Int8Array {
     every(predicate: (value: number, index: number, array: Int8Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2058,7 +2058,7 @@ interface Uint8Array {
     every(predicate: (value: number, index: number, array: Uint8Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2340,7 +2340,7 @@ interface Uint8ClampedArray {
     every(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2621,7 +2621,7 @@ interface Int16Array {
     every(predicate: (value: number, index: number, array: Int16Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -2903,7 +2903,7 @@ interface Uint16Array {
     every(predicate: (value: number, index: number, array: Uint16Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3185,7 +3185,7 @@ interface Int32Array {
     every(predicate: (value: number, index: number, array: Int32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3467,7 +3467,7 @@ interface Uint32Array {
     every(predicate: (value: number, index: number, array: Uint32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -3748,7 +3748,7 @@ interface Float32Array {
     every(predicate: (value: number, index: number, array: Float32Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.
@@ -4031,7 +4031,7 @@ interface Float64Array {
     every(predicate: (value: number, index: number, array: Float64Array) => unknown, thisArg?: any): boolean;
 
     /**
-     * Returns the this object after filling the section identified by start and end with value
+     * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array
      * @param value value to fill array section with
      * @param start index to start filling the array at. If start is negative, it is treated as
      * length+start where length is the length of the array.

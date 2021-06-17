@@ -83,12 +83,26 @@ namespace ts {
          * @param fileName The name of the file to be released
          * @param compilationSettings The compilation settings used to acquire the file
          */
+        /**@deprecated pass scriptKind for correctness */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
-
+        /**
+         * Informs the DocumentRegistry that a file is not needed any longer.
+         *
+         * Note: It is not allowed to call release on a SourceFile that was not acquired from
+         * this registry originally.
+         *
+         * @param fileName The name of the file to be released
+         * @param compilationSettings The compilation settings used to acquire the file
+         * @param scriptKind The script kind of the file to be released
+         */
+        releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind): void; // eslint-disable-line @typescript-eslint/unified-signatures
+        /**
+         * @deprecated pass scriptKind for correctness */
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
+        releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
         /*@internal*/
-        getLanguageServiceRefCounts(path: Path): [string, number | undefined][];
+        getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
 
         reportStats(): string;
     }
@@ -110,6 +124,11 @@ namespace ts {
         languageServiceRefCount: number;
     }
 
+    type BucketEntry = DocumentRegistryEntry | ESMap<ScriptKind, DocumentRegistryEntry>;
+    function isDocumentRegistryEntry(entry: BucketEntry): entry is DocumentRegistryEntry {
+        return !!(entry as DocumentRegistryEntry).sourceFile;
+    }
+
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry {
         return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory);
     }
@@ -118,18 +137,24 @@ namespace ts {
     export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = new Map<string, ESMap<Path, DocumentRegistryEntry>>();
+        const buckets = new Map<DocumentRegistryBucketKey, ESMap<Path, BucketEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function reportStats() {
             const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
                 const entries = buckets.get(name)!;
-                const sourceFiles: { name: string; refCount: number; }[] = [];
+                const sourceFiles: { name: string; scriptKind: ScriptKind, refCount: number; }[] = [];
                 entries.forEach((entry, name) => {
-                    sourceFiles.push({
-                        name,
-                        refCount: entry.languageServiceRefCount
-                    });
+                    if (isDocumentRegistryEntry(entry)) {
+                        sourceFiles.push({
+                            name,
+                            scriptKind: entry.sourceFile.scriptKind,
+                            refCount: entry.languageServiceRefCount
+                        });
+                    }
+                    else {
+                        entry.forEach((value, scriptKind) => sourceFiles.push({ name, scriptKind, refCount: value.languageServiceRefCount }));
+                    }
                 });
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
                 return {
@@ -160,6 +185,12 @@ namespace ts {
             return acquireOrUpdateDocument(fileName, path, compilationSettings, key, scriptSnapshot, version, /*acquiring*/ false, scriptKind);
         }
 
+        function getDocumentRegistryEntry(bucketEntry: BucketEntry, scriptKind: ScriptKind | undefined) {
+            const entry = isDocumentRegistryEntry(bucketEntry) ? bucketEntry : bucketEntry.get(Debug.checkDefined(scriptKind, "If there are more than one scriptKind's for same document the scriptKind should be provided"));
+            Debug.assert(scriptKind === undefined || !entry || entry.sourceFile.scriptKind === scriptKind, `Script kind should match provided ScriptKind:${scriptKind} and sourceFile.scriptKind: ${entry?.sourceFile.scriptKind}, !entry: ${!entry}`);
+            return entry;
+        }
+
         function acquireOrUpdateDocument(
             fileName: string,
             path: Path,
@@ -169,10 +200,11 @@ namespace ts {
             version: string,
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
-
-            const bucket = getOrUpdate(buckets, key, () => new Map<Path, DocumentRegistryEntry>());
-            let entry = bucket.get(path);
+            scriptKind = ensureScriptKind(fileName, scriptKind);
             const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
+            const bucket = getOrUpdate(buckets, key, () => new Map());
+            const bucketEntry = bucket.get(path);
+            let entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
             if (!entry && externalCache) {
                 const sourceFile = externalCache.getDocument(key, path);
                 if (sourceFile) {
@@ -181,7 +213,7 @@ namespace ts {
                         sourceFile,
                         languageServiceRefCount: 0
                     };
-                    bucket.set(path, entry);
+                    setBucketEntry();
                 }
             }
 
@@ -195,7 +227,7 @@ namespace ts {
                     sourceFile,
                     languageServiceRefCount: 1,
                 };
-                bucket.set(path, entry);
+                setBucketEntry();
             }
             else {
                 // We have an entry for this file.  However, it may be for a different version of
@@ -221,28 +253,53 @@ namespace ts {
             Debug.assert(entry.languageServiceRefCount !== 0);
 
             return entry.sourceFile;
+
+            function setBucketEntry() {
+                if (!bucketEntry) {
+                    bucket.set(path, entry!);
+                }
+                else if (isDocumentRegistryEntry(bucketEntry)) {
+                    const scriptKindMap = new Map<ScriptKind, DocumentRegistryEntry>();
+                    scriptKindMap.set(bucketEntry.sourceFile.scriptKind, bucketEntry);
+                    scriptKindMap.set(scriptKind!, entry!);
+                    bucket.set(path, scriptKindMap);
+                }
+                else {
+                    bucketEntry.set(scriptKind!, entry!);
+                }
+            }
         }
 
-        function releaseDocument(fileName: string, compilationSettings: CompilerOptions): void {
+        function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind): void {
             const path = toPath(fileName, currentDirectory, getCanonicalFileName);
             const key = getKeyForCompilationSettings(compilationSettings);
-            return releaseDocumentWithKey(path, key);
+            return releaseDocumentWithKey(path, key, scriptKind);
         }
 
-        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
+        function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void {
             const bucket = Debug.checkDefined(buckets.get(key));
-            const entry = bucket.get(path)!;
+            const bucketEntry = bucket.get(path)!;
+            const entry = getDocumentRegistryEntry(bucketEntry, scriptKind)!;
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.delete(path);
+                if (isDocumentRegistryEntry(bucketEntry)) {
+                    bucket.delete(path);
+                }
+                else {
+                    bucketEntry.delete(scriptKind!);
+                    if (bucketEntry.size === 1) {
+                        bucket.set(path, firstDefinedIterator(bucketEntry.values(), identity)!);
+                    }
+                }
             }
         }
 
-        function getLanguageServiceRefCounts(path: Path) {
+        function getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind) {
             return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
-                const entry = bucket.get(path);
+                const bucketEntry = bucket.get(path);
+                const entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
                 return [key, entry && entry.languageServiceRefCount];
             });
         }

@@ -45,6 +45,12 @@ namespace ts {
          * Otherwise undefined
          */
         readonly exportedModulesMap: ESMap<Path, BuilderState.ReferencedSet> | undefined;
+
+        /**
+         * true if file version is used as signature
+         * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
+         */
+        useFileVersionAsSignature: boolean;
         /**
          * Map of files that have already called update signature.
          * That means hence forth these files are assumed to have
@@ -68,7 +74,7 @@ namespace ts {
         export interface FileInfo {
             readonly version: string;
             signature: string | undefined;
-            affectsGlobalScope: boolean;
+            affectsGlobalScope: boolean | undefined;
         }
         /**
          * Referenced files with values for the keys as referenced file's path to be true
@@ -202,7 +208,7 @@ namespace ts {
         /**
          * Creates the state of file references and signature for the new program from oldState if it is safe
          */
-        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>): BuilderState {
+        export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
             const fileInfos = new Map<Path, FileInfo>();
             const referencedMap = newProgram.getCompilerOptions().module !== ModuleKind.None ? new Map<Path, ReferencedSet>() : undefined;
             const exportedModulesMap = referencedMap ? new Map<Path, ReferencedSet>() : undefined;
@@ -229,14 +235,15 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined });
             }
 
             return {
                 fileInfos,
                 referencedMap,
                 exportedModulesMap,
-                hasCalledUpdateShapeSignature
+                hasCalledUpdateShapeSignature,
+                useFileVersionAsSignature: !disableUseFileVersionAsSignature && !useOldState
             };
         }
 
@@ -258,6 +265,7 @@ namespace ts {
                 referencedMap: state.referencedMap && new Map(state.referencedMap),
                 exportedModulesMap: state.exportedModulesMap && new Map(state.exportedModulesMap),
                 hasCalledUpdateShapeSignature: new Set(state.hasCalledUpdateShapeSignature),
+                useFileVersionAsSignature: state.useFileVersionAsSignature,
             };
         }
 
@@ -317,7 +325,7 @@ namespace ts {
 
             const prevSignature = info.signature;
             let latestSignature: string | undefined;
-            if (!sourceFile.isDeclarationFile) {
+            if (!sourceFile.isDeclarationFile && !state.useFileVersionAsSignature) {
                 const emitOutput = getFileEmitOutput(
                     programOfThisState,
                     sourceFile,
@@ -472,7 +480,7 @@ namespace ts {
          */
         function isFileAffectingGlobalScope(sourceFile: SourceFile) {
             return containsGlobalScopeAugmentation(sourceFile) ||
-                !isExternalModule(sourceFile) && !containsOnlyAmbientModules(sourceFile);
+                !isExternalOrCommonJsModule(sourceFile) && !containsOnlyAmbientModules(sourceFile);
         }
 
         /**

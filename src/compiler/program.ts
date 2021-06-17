@@ -406,7 +406,7 @@ namespace ts {
             const lineStart = getPositionOfLineAndCharacter(file, i, 0);
             const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
             let lineContent = file.text.slice(lineStart, lineEnd);
-            lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+            lineContent = trimStringEnd(lineContent);  // trim from end
             lineContent = lineContent.replace(/\t/g, " ");   // convert tabs to single spaces
 
             // Output the gutter and the actual contents of the line.
@@ -656,46 +656,33 @@ namespace ts {
         fileExists: (fileName: string) => boolean,
         hasInvalidatedResolution: HasInvalidatedResolution,
         hasChangedAutomaticTypeDirectiveNames: HasChangedAutomaticTypeDirectiveNames | undefined,
+        getParsedCommandLine: (fileName: string) => ParsedCommandLine | undefined,
         projectReferences: readonly ProjectReference[] | undefined
     ): boolean {
         // If we haven't created a program yet or have changed automatic type directives, then it is not up-to-date
-        if (!program || hasChangedAutomaticTypeDirectiveNames?.()) {
-            return false;
-        }
+        if (!program || hasChangedAutomaticTypeDirectiveNames?.()) return false;
 
         // If root file names don't match
-        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) {
-            return false;
-        }
+        if (!arrayIsEqualTo(program.getRootFileNames(), rootFileNames)) return false;
 
         let seenResolvedRefs: ResolvedProjectReference[] | undefined;
 
         // If project references don't match
-        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) {
-            return false;
-        }
+        if (!arrayIsEqualTo(program.getProjectReferences(), projectReferences, projectReferenceUptoDate)) return false;
 
         // If any file is not up-to-date, then the whole program is not up-to-date
-        if (program.getSourceFiles().some(sourceFileNotUptoDate)) {
-            return false;
-        }
+        if (program.getSourceFiles().some(sourceFileNotUptoDate)) return false;
 
         // If any of the missing file paths are now created
-        if (program.getMissingFilePaths().some(fileExists)) {
-            return false;
-        }
+        if (program.getMissingFilePaths().some(fileExists)) return false;
 
         const currentOptions = program.getCompilerOptions();
         // If the compilation settings do no match, then the program is not up-to-date
-        if (!compareDataObjects(currentOptions, newOptions)) {
-            return false;
-        }
+        if (!compareDataObjects(currentOptions, newOptions)) return false;
 
         // If everything matches but the text of config file is changed,
         // error locations can change for program options, so update the program
-        if (currentOptions.configFile && newOptions.configFile) {
-            return currentOptions.configFile.text === newOptions.configFile.text;
-        }
+        if (currentOptions.configFile && newOptions.configFile) return currentOptions.configFile.text === newOptions.configFile.text;
 
         return true;
 
@@ -709,23 +696,26 @@ namespace ts {
         }
 
         function projectReferenceUptoDate(oldRef: ProjectReference, newRef: ProjectReference, index: number) {
-            if (!projectReferenceIsEqualTo(oldRef, newRef)) {
-                return false;
-            }
-            return resolvedProjectReferenceUptoDate(program!.getResolvedProjectReferences()![index], oldRef);
+            return projectReferenceIsEqualTo(oldRef, newRef) &&
+                resolvedProjectReferenceUptoDate(program!.getResolvedProjectReferences()![index], oldRef);
         }
 
         function resolvedProjectReferenceUptoDate(oldResolvedRef: ResolvedProjectReference | undefined, oldRef: ProjectReference): boolean {
             if (oldResolvedRef) {
-                if (contains(seenResolvedRefs, oldResolvedRef)) {
                     // Assume true
-                    return true;
-                }
+                if (contains(seenResolvedRefs, oldResolvedRef)) return true;
 
-                // If sourceFile for the oldResolvedRef existed, check the version for uptodate
-                if (!sourceFileVersionUptoDate(oldResolvedRef.sourceFile)) {
-                    return false;
-                }
+                const refPath = resolveProjectReferencePath(oldRef);
+                const newParsedCommandLine = getParsedCommandLine(refPath);
+
+                // Check if config file exists
+                if (!newParsedCommandLine) return false;
+
+                // If change in source file
+                if (oldResolvedRef.commandLine.options.configFile !== newParsedCommandLine.options.configFile) return false;
+
+                // check file names
+                if (!arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newParsedCommandLine.fileNames)) return false;
 
                 // Add to seen before checking the referenced paths of this config file
                 (seenResolvedRefs || (seenResolvedRefs = [])).push(oldResolvedRef);
@@ -737,7 +727,8 @@ namespace ts {
 
             // In old program, not able to resolve project reference path,
             // so if config file doesnt exist, it is uptodate.
-            return !fileExists(resolveProjectReferencePath(oldRef));
+            const refPath = resolveProjectReferencePath(oldRef);
+            return !getParsedCommandLine(refPath);
         }
     }
 
@@ -754,9 +745,7 @@ namespace ts {
         if (!program) return false;
         // If any compiler options change, we can't reuse old source file even if version match
         // The change in options like these could result in change in syntax tree or `sourceFile.bindDiagnostics`.
-        const oldOptions = program.getCompilerOptions();
-        return !!sourceFileAffectingCompilerOptions.some(option =>
-            !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
     }
 
     function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
@@ -852,6 +841,7 @@ namespace ts {
         let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
 
         let moduleResolutionCache: ModuleResolutionCache | undefined;
+        let typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
         let actualResolveModuleNamesWorker: (moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference) => ResolvedModuleFull[];
         const hasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
         if (host.resolveModuleNames) {
@@ -866,7 +856,7 @@ namespace ts {
             });
         }
         else {
-            moduleResolutionCache = createModuleResolutionCache(currentDirectory, x => host.getCanonicalFileName(x), options);
+            moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);
             const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, options, host, moduleResolutionCache, redirectedReference).resolvedModule!; // TODO: GH#18217
             actualResolveModuleNamesWorker = (moduleNames, containingFile, _reusedNames, redirectedReference) => loadWithLocalCache<ResolvedModuleFull>(Debug.checkEachDefined(moduleNames), containingFile, redirectedReference, loader);
         }
@@ -876,7 +866,15 @@ namespace ts {
             actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference) => host.resolveTypeReferenceDirectives!(Debug.checkEachDefined(typeDirectiveNames), containingFile, redirectedReference, options);
         }
         else {
-            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(typesRef, containingFile, options, host, redirectedReference).resolvedTypeReferenceDirective!; // TODO: GH#18217
+            typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+            const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveTypeReferenceDirective(
+                typesRef,
+                containingFile,
+                options,
+                host,
+                redirectedReference,
+                typeReferenceDirectiveResolutionCache,
+            ).resolvedTypeReferenceDirective!; // TODO: GH#18217
             actualResolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile, redirectedReference) => loadWithLocalCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, loader);
         }
 
@@ -885,9 +883,9 @@ namespace ts {
         // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
         const packageIdToSourceFile = new Map<string, SourceFile>();
         // Maps from a SourceFile's `.path` to the name of the package it was imported with.
-        let sourceFileToPackageName = new Map<string, string>();
+        let sourceFileToPackageName = new Map<Path, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
-        let redirectTargetsMap = createMultiMap<string>();
+        let redirectTargetsMap = createMultiMap<Path, string>();
 
         /**
          * map with
@@ -1021,12 +1019,31 @@ namespace ts {
                     host.onReleaseOldSourceFile(oldSourceFile, oldProgram.getCompilerOptions(), !!getSourceFileByPath(oldSourceFile.path));
                 }
             }
-            oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
-                if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
-                    host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
-                }
-            });
+            if (!host.getParsedCommandLine) {
+                oldProgram.forEachResolvedProjectReference(resolvedProjectReference => {
+                    if (!getResolvedProjectReferenceByPath(resolvedProjectReference.sourceFile.path)) {
+                        host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
+                    }
+                });
+            }
         }
+
+        // Release commandlines that new program does not use
+        if (oldProgram && host.onReleaseParsedCommandLine) {
+            forEachProjectReference(
+                oldProgram.getProjectReferences(),
+                oldProgram.getResolvedProjectReferences(),
+                (oldResolvedRef, parent, index) => {
+                    const oldReference = parent?.commandLine.projectReferences![index] || oldProgram!.getProjectReferences()![index];
+                    const oldRefPath = resolveProjectReferencePath(oldReference);
+                    if (!projectReferenceRedirects?.has(toPath(oldRefPath))) {
+                        host.onReleaseParsedCommandLine!(oldRefPath, oldResolvedRef, oldProgram!.getCompilerOptions());
+                    }
+                }
+            );
+        }
+
+        typeReferenceDirectiveResolutionCache = undefined;
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
         oldProgram = undefined;
@@ -1057,7 +1074,6 @@ namespace ts {
             getNodeCount: () => getDiagnosticsProducingTypeChecker().getNodeCount(),
             getIdentifierCount: () => getDiagnosticsProducingTypeChecker().getIdentifierCount(),
             getSymbolCount: () => getDiagnosticsProducingTypeChecker().getSymbolCount(),
-            getTypeCatalog: () => getDiagnosticsProducingTypeChecker().getTypeCatalog(),
             getTypeCount: () => getDiagnosticsProducingTypeChecker().getTypeCount(),
             getInstantiationCount: () => getDiagnosticsProducingTypeChecker().getInstantiationCount(),
             getRelationCacheSizes: () => getDiagnosticsProducingTypeChecker().getRelationCacheSizes(),
@@ -1263,7 +1279,7 @@ namespace ts {
             let result: ResolvedModuleFull[] | undefined;
             let reusedNames: string[] | undefined;
             /** A transient placeholder used to mark predicted resolution in the result list. */
-            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
+            const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = {} as any;
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
@@ -1272,7 +1288,15 @@ namespace ts {
                     const oldResolvedModule = getResolvedModule(oldSourceFile, moduleName);
                     if (oldResolvedModule) {
                         if (isTraceEnabled(options, host)) {
-                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, getNormalizedAbsolutePath(file.originalFileName, currentDirectory));
+                            trace(host,
+                                oldResolvedModule.packageId ?
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2,
+                                moduleName,
+                                getNormalizedAbsolutePath(file.originalFileName, currentDirectory),
+                                oldResolvedModule.resolvedFileName,
+                                oldResolvedModule.packageId && packageIdToString(oldResolvedModule.packageId)
+                            );
                         }
                         (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
@@ -1368,7 +1392,9 @@ namespace ts {
                     const newResolvedRef = parseProjectReferenceConfigFile(newRef);
                     if (oldResolvedRef) {
                         // Resolved project reference has gone missing or changed
-                        return !newResolvedRef || newResolvedRef.sourceFile !== oldResolvedRef.sourceFile;
+                        return !newResolvedRef ||
+                            newResolvedRef.sourceFile !== oldResolvedRef.sourceFile ||
+                            !arrayIsEqualTo(oldResolvedRef.commandLine.fileNames, newResolvedRef.commandLine.fileNames);
                     }
                     else {
                         // A previously-unresolved reference may be resolved now
@@ -1398,10 +1424,6 @@ namespace ts {
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
-                return StructureIsReused.Not;
-            }
-
-            if (!arrayIsEqualTo(options.types, oldOptions.types)) {
                 return StructureIsReused.Not;
             }
 
@@ -1485,7 +1507,7 @@ namespace ts {
 
                     if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'lib' references has changed. Matches behavior in changesAffectModuleResolution
-                        return StructureIsReused.Not;
+                        structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
@@ -1578,7 +1600,7 @@ namespace ts {
                 return structureIsReused;
             }
 
-            if (host.hasChangedAutomaticTypeDirectiveNames?.()) {
+            if (changesAffectingProgramStructure(oldOptions, options) || host.hasChangedAutomaticTypeDirectiveNames?.()) {
                 return StructureIsReused.SafeModules;
             }
 
@@ -1985,7 +2007,7 @@ namespace ts {
                         case SyntaxKind.Parameter:
                         case SyntaxKind.PropertyDeclaration:
                         case SyntaxKind.MethodDeclaration:
-                            if ((<ParameterDeclaration | PropertyDeclaration | MethodDeclaration>parent).questionToken === node) {
+                            if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                                 return "skip";
                             }
@@ -1999,7 +2021,7 @@ namespace ts {
                         case SyntaxKind.ArrowFunction:
                         case SyntaxKind.VariableDeclaration:
                             // type annotation
-                            if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
+                            if ((parent as FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration).type === node) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.Type_annotations_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2022,13 +2044,13 @@ namespace ts {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         case SyntaxKind.ExportAssignment:
-                            if ((<ExportAssignment>node).isExportEquals) {
+                            if ((node as ExportAssignment).isExportEquals) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.export_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
                             break;
                         case SyntaxKind.HeritageClause:
-                            const heritageClause = <HeritageClause>node;
+                            const heritageClause = node as HeritageClause;
                             if (heritageClause.token === SyntaxKind.ImplementsKeyword) {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics.implements_clauses_can_only_be_used_in_TypeScript_files));
                                 return "skip";
@@ -2078,7 +2100,7 @@ namespace ts {
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
                             // Check type parameters
-                            if (nodes === (<DeclarationWithTypeParameterChildren>parent).typeParameters) {
+                            if (nodes === (parent as DeclarationWithTypeParameterChildren).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2093,8 +2115,8 @@ namespace ts {
                             break;
                         case SyntaxKind.PropertyDeclaration:
                             // Check modifiers of property declaration
-                            if (nodes === (<PropertyDeclaration>parent).modifiers) {
-                                for (const modifier of <NodeArray<Modifier>>nodes) {
+                            if (nodes === (parent as PropertyDeclaration).modifiers) {
+                                for (const modifier of nodes as NodeArray<Modifier>) {
                                     if (modifier.kind !== SyntaxKind.StaticKeyword) {
                                         diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                     }
@@ -2104,7 +2126,7 @@ namespace ts {
                             break;
                         case SyntaxKind.Parameter:
                             // Check modifiers of parameter declaration
-                            if (nodes === (<ParameterDeclaration>parent).modifiers) {
+                            if (nodes === (parent as ParameterDeclaration).modifiers) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Parameter_modifiers_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2116,7 +2138,7 @@ namespace ts {
                         case SyntaxKind.JsxOpeningElement:
                         case SyntaxKind.TaggedTemplateExpression:
                             // Check type arguments
-                            if (nodes === (<NodeWithTypeArguments>parent).typeArguments) {
+                            if (nodes === (parent as NodeWithTypeArguments).typeArguments) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
                                 return "skip";
                             }
@@ -2139,6 +2161,7 @@ namespace ts {
                             case SyntaxKind.ReadonlyKeyword:
                             case SyntaxKind.DeclareKeyword:
                             case SyntaxKind.AbstractKeyword:
+                            case SyntaxKind.OverrideKeyword:
                                 diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                                 break;
 
@@ -2327,7 +2350,7 @@ namespace ts {
                             // Relative external module names are not permitted
 
                             // NOTE: body of ambient module is always a module block, if it exists
-                            const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                            const body = (node as ModuleDeclaration).body as ModuleBlock;
                             if (body) {
                                 for (const statement of body.statements) {
                                     collectModuleReferences(statement, /*inAmbientModule*/ true);
@@ -2886,6 +2909,7 @@ namespace ts {
                 const moduleNames = getModuleNames(file);
                 const resolutions = resolveModuleNamesReusingOldState(moduleNames, file);
                 Debug.assert(resolutions.length === moduleNames.length);
+                const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
                 for (let index = 0; index < moduleNames.length; index++) {
                     const resolution = resolutions[index];
                     setResolvedModule(file, moduleNames[index], resolution);
@@ -2912,11 +2936,11 @@ namespace ts {
                     // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                     // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                     const shouldAddFile = resolvedFileName
-                        && !getResolutionDiagnostic(options, resolution)
-                        && !options.noResolve
+                        && !getResolutionDiagnostic(optionsForFile, resolution)
+                        && !optionsForFile.noResolve
                         && index < file.imports.length
                         && !elideImport
-                        && !(isJsFile && !getAllowJSCompilerOption(options))
+                        && !(isJsFile && !getAllowJSCompilerOption(optionsForFile))
                         && (isInJSFile(file.imports[index]) || !(file.imports[index].flags & NodeFlags.JSDoc));
 
                     if (elideImport) {
@@ -3018,6 +3042,9 @@ namespace ts {
         function verifyCompilerOptions() {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+            if (options.strictOptionalProperties && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictOptionalProperties", "strictNullChecks");
             }
 
             if (options.isolatedModules) {
@@ -3195,9 +3222,10 @@ namespace ts {
                 }
             }
 
-            // there has to be common source directory if user specified --outdir || --sourceRoot
+            // there has to be common source directory if user specified --outdir || --rootDir || --sourceRoot
             // if user specified --mapRoot, there needs to be common source directory if there would be multiple files being emitted
             if (options.outDir || // there is --outDir specified
+                options.rootDir || // there is --rootDir specified
                 options.sourceRoot || // there is --sourceRoot specified
                 options.mapRoot) { // there is --mapRoot specified
 
@@ -3640,10 +3668,13 @@ namespace ts {
             if (host.getSymlinkCache) {
                 return host.getSymlinkCache();
             }
-            return symlinks || (symlinks = discoverProbableSymlinks(
-                files,
-                getCanonicalFileName,
-                host.getCurrentDirectory()));
+            if (!symlinks) {
+                symlinks = createSymlinkCache(currentDirectory, getCanonicalFileName);
+            }
+            if (files && resolvedTypeReferenceDirectives && !symlinks.hasProcessedResolutions()) {
+                symlinks.setSymlinksFromResolutions(files, resolvedTypeReferenceDirectives);
+            }
+            return symlinks;
         }
     }
 

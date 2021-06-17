@@ -58,7 +58,7 @@ namespace ts {
                     // Elide `import=` as it is not legal with --module ES6
                     return undefined;
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
                     const exportDecl = (node as ExportDeclaration);
                     return visitExportDeclaration(exportDecl);

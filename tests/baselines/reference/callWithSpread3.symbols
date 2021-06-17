@@ -75,12 +75,12 @@ fs2_(...s2n_); // error on ...s2n_
 >fs2_ : Symbol(fs2_, Decl(callWithSpread3.ts, 7, 49))
 >s2n_ : Symbol(s2n_, Decl(callWithSpread3.ts, 5, 13))
 
-fs2_(...s_, ...s_); // error         FIXME: bad error message
+fs2_(...s_, ...s_); // error on ...s_
 >fs2_ : Symbol(fs2_, Decl(callWithSpread3.ts, 7, 49))
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
 
-fs2_(...s_, ...s_, ...s_); // error  FIXME: worse error message
+fs2_(...s_, ...s_, ...s_); // error on ...s_
 >fs2_ : Symbol(fs2_, Decl(callWithSpread3.ts, 7, 49))
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))
 >s_ : Symbol(s_, Decl(callWithSpread3.ts, 3, 13))

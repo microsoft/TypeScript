@@ -1,5 +1,6 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts(2,21): error TS2345: Argument of type '[string, boolean]' is not assignable to parameter of type '[string, number]'.
-  Type 'boolean' is not assignable to type 'number'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'boolean' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts (1 errors) ====
@@ -7,4 +8,5 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts(2,21): error
     takeFirstTwoEntries(...new Map([["", true], ["hello", true]]));
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[string, boolean]' is not assignable to parameter of type '[string, number]'.
-!!! error TS2345:   Type 'boolean' is not assignable to type 'number'.
+!!! error TS2345:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2345:     Type 'boolean' is not assignable to type 'number'.

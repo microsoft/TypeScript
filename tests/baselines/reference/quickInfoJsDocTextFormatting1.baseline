@@ -114,7 +114,7 @@
               "text": [
                 {
                   "text": "var1",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -131,7 +131,7 @@
               "text": [
                 {
                   "text": "var2",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -270,7 +270,7 @@
               "text": [
                 {
                   "text": "var1",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -287,7 +287,7 @@
               "text": [
                 {
                   "text": "var2",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -426,7 +426,7 @@
               "text": [
                 {
                   "text": "var1",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -443,7 +443,7 @@
               "text": [
                 {
                   "text": "var2",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -582,7 +582,7 @@
               "text": [
                 {
                   "text": "var1",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -599,7 +599,7 @@
               "text": [
                 {
                   "text": "var2",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -738,7 +738,7 @@
               "text": [
                 {
                   "text": "var1",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",
@@ -755,7 +755,7 @@
               "text": [
                 {
                   "text": "var2",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

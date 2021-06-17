@@ -1,4 +1,5 @@
 // @target: esnext
+// @useDefineForClassFields: false
 
 // @Filename: framework-hooks.ts
 export const onInit = Symbol("onInit");

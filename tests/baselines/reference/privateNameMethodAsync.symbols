@@ -1,0 +1,56 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodAsync.ts ===
+const C = class {
+>C : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 5))
+
+    async #bar() { return await Promise.resolve(42); }
+>#bar : Symbol(C.#bar, Decl(privateNameMethodAsync.ts, 0, 17))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+    async foo() {
+>foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
+
+        const b = await this.#bar();
+>b : Symbol(b, Decl(privateNameMethodAsync.ts, 3, 13))
+>this.#bar : Symbol(C.#bar, Decl(privateNameMethodAsync.ts, 0, 17))
+>this : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 9))
+
+        return b + (this.#baz().next().value || 0) + ((await this.#qux().next()).value || 0);
+>b : Symbol(b, Decl(privateNameMethodAsync.ts, 3, 13))
+>this.#baz().next().value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>this.#baz().next : Symbol(Generator.next, Decl(lib.es2015.generator.d.ts, --, --))
+>this.#baz : Symbol(C.#baz, Decl(privateNameMethodAsync.ts, 5, 5))
+>this : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 9))
+>next : Symbol(Generator.next, Decl(lib.es2015.generator.d.ts, --, --))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>(await this.#qux().next()).value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>this.#qux().next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>this.#qux : Symbol(C.#qux, Decl(privateNameMethodAsync.ts, 6, 25))
+>this : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 9))
+>next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+    *#baz() { yield 42; }
+>#baz : Symbol(C.#baz, Decl(privateNameMethodAsync.ts, 5, 5))
+
+    async *#qux() {
+>#qux : Symbol(C.#qux, Decl(privateNameMethodAsync.ts, 6, 25))
+
+        yield (await Promise.resolve(42));
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+    }
+}
+
+new C().foo().then(console.log);
+>new C().foo().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>new C().foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
+>C : Symbol(C, Decl(privateNameMethodAsync.ts, 0, 5))
+>foo : Symbol(C.foo, Decl(privateNameMethodAsync.ts, 1, 54))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+

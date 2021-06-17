@@ -5,19 +5,5 @@
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
     "transformFlags": 0,
-    "comment": {
-        "0": {
-            "kind": "JSDocText",
-            "pos": 0,
-            "end": 6,
-            "modifierFlagsCache": 0,
-            "transformFlags": 0,
-            "text": "*@a"
-        },
-        "length": 1,
-        "pos": 0,
-        "end": 6,
-        "hasTrailingComma": false,
-        "transformFlags": 0
-    }
+    "comment": "*@a"
 }

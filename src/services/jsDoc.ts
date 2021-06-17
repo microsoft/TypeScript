@@ -44,6 +44,7 @@ namespace ts.JsDoc {
         "kind",
         "lends",
         "license",
+        "link",
         "listens",
         "member",
         "memberof",
@@ -130,7 +131,10 @@ namespace ts.JsDoc {
         return tags;
     }
 
-    function getDisplayPartsFromComment(comment: readonly (JSDocText | JSDocLink)[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (typeof comment === "string") {
+            return [textPart(comment)];
+        }
         return flatMap(
             comment,
             node => node.kind === SyntaxKind.JSDocText ? [textPart(node.text)] : buildLinkParts(node, checker)
@@ -138,8 +142,9 @@ namespace ts.JsDoc {
     }
 
     function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDisplayPart[] | undefined {
-        const { comment } = tag;
-        switch (tag.kind) {
+        const { comment, kind } = tag;
+        const namePart = getTagNameDisplayPart(kind);
+        switch (kind) {
             case SyntaxKind.JSDocImplementsTag:
                 return withNode((tag as JSDocImplementsTag).class);
             case SyntaxKind.JSDocAugmentsTag:
@@ -153,10 +158,12 @@ namespace ts.JsDoc {
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocSeeTag:
-                const { name } = tag as JSDocTypedefTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
-                return name ? withNode(name) : comment && getDisplayPartsFromComment(comment, checker);
+                const { name } = tag as JSDocTypedefTag | JSDocCallbackTag | JSDocPropertyTag | JSDocParameterTag | JSDocSeeTag;
+                return name ? withNode(name)
+                    : comment === undefined ? undefined
+                    : getDisplayPartsFromComment(comment, checker);
             default:
-                return comment && getDisplayPartsFromComment(comment, checker);
+                return comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         }
 
         function withNode(node: Node) {
@@ -164,7 +171,33 @@ namespace ts.JsDoc {
         }
 
         function addComment(s: string) {
-            return comment ? [textPart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)] : [textPart(s)];
+            if (comment) {
+                if (s.match(/^https?$/)) {
+                    return [textPart(s), ...getDisplayPartsFromComment(comment, checker)];
+                }
+                else {
+                    return [namePart(s), spacePart(), ...getDisplayPartsFromComment(comment, checker)];
+                }
+            }
+            else {
+                return [textPart(s)];
+            }
+        }
+    }
+
+    function getTagNameDisplayPart(kind: SyntaxKind): (text: string) => SymbolDisplayPart {
+        switch (kind) {
+            case SyntaxKind.JSDocParameterTag:
+                return parameterNamePart;
+            case SyntaxKind.JSDocPropertyTag:
+                return propertyNamePart;
+            case SyntaxKind.JSDocTemplateTag:
+                return typeParameterNamePart;
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
+                return typeAliasNamePart;
+            default:
+                return textPart;
         }
     }
 
@@ -361,7 +394,7 @@ namespace ts.JsDoc {
                 return { commentOwner };
 
             case SyntaxKind.VariableStatement: {
-                const varStatement = <VariableStatement>commentOwner;
+                const varStatement = commentOwner as VariableStatement;
                 const varDeclarations = varStatement.declarationList.declarations;
                 const host = varDeclarations.length === 1 && varDeclarations[0].initializer
                     ? getRightHandSideOfAssignment(varDeclarations[0].initializer)
@@ -407,13 +440,13 @@ namespace ts.JsDoc {
 
     function getRightHandSideOfAssignment(rightHandSide: Expression): FunctionExpression | ArrowFunction | ConstructorDeclaration | undefined {
         while (rightHandSide.kind === SyntaxKind.ParenthesizedExpression) {
-            rightHandSide = (<ParenthesizedExpression>rightHandSide).expression;
+            rightHandSide = (rightHandSide as ParenthesizedExpression).expression;
         }
 
         switch (rightHandSide.kind) {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return (<FunctionExpression>rightHandSide);
+                return (rightHandSide as FunctionExpression);
             case SyntaxKind.ClassExpression:
                 return find((rightHandSide as ClassExpression).members, isConstructorDeclaration);
         }

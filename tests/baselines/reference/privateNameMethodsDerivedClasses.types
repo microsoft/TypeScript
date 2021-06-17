@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameMethodsDerivedClasses.ts ===
+class Base {
+>Base : Base
+
+    #prop(): number{ return  123; }
+>#prop : () => number
+>123 : 123
+
+    static method(x: Derived) {
+>method : (x: Derived) => void
+>x : Derived
+
+        console.log(x.#prop());
+>console.log(x.#prop()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x.#prop() : number
+>x.#prop : () => number
+>x : Derived
+    }
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    static method(x: Derived) {
+>method : (x: Derived) => void
+>x : Derived
+
+        console.log(x.#prop());
+>console.log(x.#prop()) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x.#prop() : any
+>x.#prop : any
+>x : Derived
+    }
+}
+
