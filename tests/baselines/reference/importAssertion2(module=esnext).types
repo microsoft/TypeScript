@@ -20,7 +20,7 @@ export * from './0' assert { type: "json" }
 >type : error
 
 export * as ns from './0' assert { type: "json" }
->ns : typeof ns
+>ns : typeof import("tests/cases/conformance/importAssertion/0")
 >type : error
 
 === tests/cases/conformance/importAssertion/2.ts ===

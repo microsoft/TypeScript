@@ -1,14 +1,14 @@
-tests/cases/conformance/importAssertion/1.ts(1,14): error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/1.ts(2,28): error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/1.ts(3,28): error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/2.ts(1,28): error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/2.ts(2,38): error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/1.ts(1,14): error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/1.ts(2,28): error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/1.ts(3,28): error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/2.ts(1,28): error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/2.ts(2,38): error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(2,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(3,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(4,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(5,26): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(7,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/3.ts(8,11): message TS1433: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(8,11): message TS1434: Dynamic import must only have a specifier and an optional assertion as arguments
 tests/cases/conformance/importAssertion/3.ts(9,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(10,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comma not allowed.
@@ -21,13 +21,13 @@ tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comm
 ==== tests/cases/conformance/importAssertion/1.ts (3 errors) ====
     import './0' assert { type: "json" }
                  ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
     import { a, b } from './0' assert { "type": "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
     import * as foo from './0' assert { type: "json" }
                                ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
     a;
     b;
     foo.a;
@@ -36,10 +36,10 @@ tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comm
 ==== tests/cases/conformance/importAssertion/2.ts (2 errors) ====
     import { a, b } from './0' assert {}
                                ~~~~~~~~~
-!!! error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
     import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2803: Import assertions are only supported when the '--module' option is set to 'esnext'.
+!!! error TS2815: Import assertions are only supported when the '--module' option is set to 'esnext'.
     a;
     b;
     c;
@@ -65,7 +65,7 @@ tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comm
 !!! error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
     const f = import()
               ~~~~~~~~
-!!! message TS1433: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1434: Dynamic import must only have a specifier and an optional assertion as arguments
     const g = import('./0', {}, {})
                             ~~
 !!! error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
