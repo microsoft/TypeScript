@@ -1,6 +1,6 @@
 {
     "extends": "../tsconfig-noncomposite-base",
- 
+
     "compilerOptions": {
         "outFile": "../../built/local/tsserver.js",
         "types": [
@@ -15,6 +15,7 @@
     "references": [
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
+        { "path": "../jsonrpc", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },

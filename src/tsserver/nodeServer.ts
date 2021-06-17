@@ -126,6 +126,8 @@ namespace ts.server {
             stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
         } = require("fs");
 
+        rpc.RIL.install();
+
         class Logger extends BaseLogger {
             private fd = -1;
             constructor(
@@ -760,21 +762,61 @@ namespace ts.server {
         }
 
         class LSPSession extends IOSession {
-            listen() {
-                rl.on("line", (input: string) => {
-                    console.log(input);
-                    const message = input.trim();
-                    if (!message || message.charAt(0) !== "{") {
-                        return;
-                    }
+            reader: rpc.StreamMessageReader = new rpc.StreamMessageReader(process.stdin);
+            // // I/O streams
+            // private input: NodeJS.ReadStream;
 
-                    this.onMessage(message);
+            // // Input buffering
+            // private chunks: Buffer[];
+            // private totalLength: number;
+
+            // // Input message parsing
+            // private nextMessageLength: number;
+
+            // constructor() {
+            //     super();
+            //     this.input = process.stdin;
+            //     this.chunks = [];
+            //     this.totalLength = 0;
+            //     this.nextMessageLength = -1;
+            // }
+
+            listen() {
+                this.reader.listen(message => {
+                    this.onMessage(message.jsonrpc);
                 });
+                // this.input.on("data", (chunk: Buffer) => this.onData(chunk));
+
+                // rl.on("line", (input: string) => {
+                //     console.log(input);
+                //     const message = input.trim();
+                //     if (!message || message.charAt(0) !== "{") {
+                //         return;
+                //     }
+
+                //     this.onMessage(message);
+                // });
 
                 rl.on("close", () => {
                     this.exit();
                 });
             }
+
+            // private onData(chunk: Buffer): void {
+            //     this.appendChunk(chunk);
+            //     while (true) {
+            //         if (this.nextMessageLength === -1) {
+            //             const headers = this.tryReadHeaders();
+            //         }
+            //     }
+            // }
+
+
+            // private appendChunk(chunk: Buffer) {
+            //     this.chunks.push(chunk);
+            //     this.totalLength += chunk.byteLength;
+            // }
+
             protected parseMessage(message: string): protocol.Request {
                 const lspMessage = JSON.parse(message) as lsp.RequestMessage | lsp.NotificationMessage;
                 return {
