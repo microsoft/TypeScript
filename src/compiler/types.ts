@@ -6224,7 +6224,8 @@ namespace ts {
         type: "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
-        description?: DiagnosticMessage;                        // The message describing what the command line switch does
+        description?: DiagnosticMessage;                        // The message describing what the command line switch does.
+        defaultValueDescription?: string | DiagnosticMessage;   // The message describing what the dafault value is. string type is prepared for fixed chosen like "false" which do not need I18n.
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
         isCommandLineOnly?: boolean;
