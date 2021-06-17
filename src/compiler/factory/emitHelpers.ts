@@ -34,6 +34,7 @@ namespace ts {
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
+        createClassPrivateFieldInHelper(receiver: Expression, state: Identifier): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -72,6 +73,7 @@ namespace ts {
             // Class Fields Helpers
             createClassPrivateFieldGetHelper,
             createClassPrivateFieldSetHelper,
+            createClassPrivateFieldInHelper
         };
 
         /**
@@ -392,6 +394,10 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
         }
 
+        function createClassPrivateFieldInHelper(receiver: Expression, state: Identifier) {
+            context.requestEmitHelper(classPrivateFieldInHelper);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [receiver, state]);
+        }
     }
 
     /* @internal */
@@ -954,6 +960,17 @@ namespace ts {
             };`
     };
 
+    export const classPrivateFieldInHelper: UnscopedEmitHelper = {
+        name: "typescript:classPrivateFieldIn",
+        importName: "__classPrivateFieldIn",
+        scoped: false,
+        text: `
+            var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(receiver, state) {
+                if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
+                return typeof state === "function" ? receiver === state : state.has(receiver);
+            };`
+    };
+
     let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
 
     export function getAllUnscopedEmitHelpers() {
@@ -979,6 +996,7 @@ namespace ts {
             exportStarHelper,
             classPrivateFieldGetHelper,
             classPrivateFieldSetHelper,
+            classPrivateFieldInHelper,
             createBindingHelper,
             setModuleDefaultHelper
         ], helper => helper.name));

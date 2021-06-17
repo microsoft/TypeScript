@@ -54,6 +54,11 @@ namespace ts.codefix {
             }
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
+        else if (isPrivateIdentifierInInExpression(parent) && parent.name === node) {
+            const receiverType = checker.getTypeAtLocation(parent.expression);
+            Debug.assert(isPrivateIdentifier(node), "Expected a privateIdentifier for spelling (in)");
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, receiverType);
+        }
         else if (isQualifiedName(parent) && parent.right === node) {
             const symbol = checker.getSymbolAtLocation(parent.left);
             if (symbol && symbol.flags & SymbolFlags.Module) {

@@ -23590,6 +23590,32 @@ namespace ts {
                 return type;
             }
 
+            function narrowTypeByPrivateIdentifierInInExpression(type: Type, expr: PrivateIdentifierInInExpression, assumeTrue: boolean): Type {
+                const target = getReferenceCandidate(expr.expression);
+                if (!isMatchingReference(reference, target)) {
+                    return type;
+                }
+
+                const privateId = expr.name;
+                const symbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
+                if (symbol === undefined) {
+                    return type;
+                }
+                const classSymbol = symbol.parent!;
+                const classType = getTypeOfSymbol(classSymbol) as InterfaceType;
+                const classDecl = symbol.valueDeclaration;
+                Debug.assert(classDecl, "should always have a declaration");
+                let targetType: Type;
+                if (hasStaticModifier(classDecl)) {
+                    targetType = classType;
+                }
+                else {
+                    const classInstanceType = getDeclaredTypeOfSymbol(classSymbol);
+                    targetType = classInstanceType;
+                }
+                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
+            }
+
             function narrowTypeByOptionalChainContainment(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
                 // We are in a branch of obj?.foo === value (or any one of the other equality operators). We narrow obj as follows:
                 // When operator is === and type of value excludes undefined, null and undefined is removed from type of obj in true branch.
@@ -24022,6 +24048,8 @@ namespace ts {
                         return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
                         return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
+                    case SyntaxKind.PrivateIdentifierInInExpression:
+                        return narrowTypeByPrivateIdentifierInInExpression(type, expr as PrivateIdentifierInInExpression, assumeTrue);
                     case SyntaxKind.PrefixUnaryExpression:
                         if ((expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (expr as PrefixUnaryExpression).operand, !assumeTrue);
@@ -27726,6 +27754,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
+            const originalName = name;
             let props = getPropertiesOfType(containingType);
             if (typeof name !== "string") {
                 const parent = name.parent;
@@ -27734,7 +27763,23 @@ namespace ts {
                 }
                 name = idText(name);
             }
-            return getSpellingSuggestionForName(name, props, SymbolFlags.Value);
+            const suggestion = getSpellingSuggestionForName(name, props, SymbolFlags.Value);
+            if (suggestion) {
+                return suggestion;
+            }
+            // If we have `#typo in expr` then we can still look up potential privateIdentifiers from the surrounding classes
+            if (typeof originalName !== "string" && isPrivateIdentifierInInExpression(originalName.parent)) {
+                const privateIdentifiers: Symbol[] = [];
+                forEachEnclosingClass(originalName, (klass: ClassLikeDeclaration) => {
+                    forEach(klass.members, member => {
+                        if (isPrivateIdentifierClassElementDeclaration(member)) {
+                            privateIdentifiers.push(member.symbol);
+                        }
+                    });
+                });
+                return getSpellingSuggestionForName(name, privateIdentifiers, SymbolFlags.Value);
+            }
+            return undefined;
         }
 
         function getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
@@ -31494,6 +31539,11 @@ namespace ts {
                   isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
+            checkInExpressionRHS(right, rightType);
+            return booleanType;
+        }
+
+        function checkInExpressionRHS(right: Expression, rightType: Type) {
             const rightTypeConstraint = getConstraintOfType(rightType);
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
                 rightTypeConstraint && (
@@ -31503,7 +31553,6 @@ namespace ts {
             ) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
             }
-            return booleanType;
         }
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, rightIsThis?: boolean): Type {
@@ -31738,6 +31787,40 @@ namespace ts {
 
         function isTypeEqualityComparableTo(source: Type, target: Type) {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
+        }
+
+        function checkPrivateIdentifierInInExpression(node: PrivateIdentifierInInExpression, checkMode?: CheckMode) {
+            const privateId = node.name;
+            const exp = node.expression;
+            let rightType = checkExpression(exp, checkMode);
+
+            const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
+            if (lexicallyScopedSymbol === undefined) {
+                if (!getContainingClass(node)) {
+                    error(privateId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                }
+                else {
+                    const suggestion = getSuggestedSymbolForNonexistentProperty(privateId, rightType);
+                    if (suggestion) {
+                        const suggestedName = symbolName(suggestion);
+                        error(privateId, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(privateId), suggestedName);
+                    }
+                    else {
+                        error(privateId, Diagnostics.Cannot_find_name_0, diagnosticName(privateId));
+                    }
+                }
+                return anyType;
+            }
+
+            markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
+            getNodeLinks(node).resolvedSymbol = lexicallyScopedSymbol;
+
+            if (rightType === silentNeverType) {
+                return silentNeverType;
+            }
+            rightType = checkNonNullType(rightType, exp);
+            checkInExpressionRHS(exp, rightType);
+            return booleanType;
         }
 
         function createCheckBinaryExpression() {
@@ -32921,6 +33004,8 @@ namespace ts {
                     return checkPostfixUnaryExpression(node as PostfixUnaryExpression);
                 case SyntaxKind.BinaryExpression:
                     return checkBinaryExpression(node as BinaryExpression, checkMode);
+                case SyntaxKind.PrivateIdentifierInInExpression:
+                    return checkPrivateIdentifierInInExpression(node as PrivateIdentifierInInExpression, checkMode);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(node as ConditionalExpression, checkMode);
                 case SyntaxKind.SpreadElement:
@@ -39414,6 +39499,15 @@ namespace ts {
             }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
+            }
+
+            if (isPrivateIdentifier(name) && isPrivateIdentifierInInExpression(name.parent)) {
+                const links = getNodeLinks(name.parent);
+                if (links.resolvedSymbol) {
+                    return links.resolvedSymbol;
+                }
+                checkPrivateIdentifierInInExpression(name.parent);
+                return links.resolvedSymbol;
             }
 
             return undefined;

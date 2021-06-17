@@ -879,6 +879,8 @@ namespace ts {
                     return (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((expr as PrefixUnaryExpression).operand);
                 case SyntaxKind.TypeOfExpression:
                     return isNarrowingExpression((expr as TypeOfExpression).expression);
+                case SyntaxKind.PrivateIdentifierInInExpression:
+                    return isNarrowingExpression((expr as PrivateIdentifierInInExpression).expression);
             }
             return false;
         }

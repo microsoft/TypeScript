@@ -442,6 +442,9 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators);
             case SyntaxKind.CommaListExpression:
                 return visitNodes(cbNode, cbNodes, (node as CommaListExpression).elements);
+            case SyntaxKind.PrivateIdentifierInInExpression:
+                return visitNode(cbNode, (node as PrivateIdentifierInInExpression).name) ||
+                    visitNode(cbNode, (node as PrivateIdentifierInInExpression).expression);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (node as JsxElement).openingElement) ||
@@ -4446,9 +4449,32 @@ namespace ts {
             );
         }
 
+        function parsePrivateIdentifierInInExpression(pos: number): Expression {
+            // PrivateIdentifierInInExpression[in]:
+            //     [+in] PrivateIdentifier in RelationalExpression[?in]
+
+            Debug.assert(token() === SyntaxKind.PrivateIdentifier, "parsePrivateIdentifierInInExpression should only have been called if we had a privateIdentifier");
+            Debug.assert(inDisallowInContext() === false, "parsePrivateIdentifierInInExpression should only have been called if 'in' is allowed");
+            const id = parsePrivateIdentifier();
+            if (token() !== SyntaxKind.InKeyword) {
+                return createMissingNode(SyntaxKind.InKeyword, /*reportAtCurrentPosition*/ true, Diagnostics._0_expected, tokenToString(SyntaxKind.InKeyword));
+            }
+
+            const inToken = parseTokenNode<Token<SyntaxKind.InKeyword>>();
+            const exp = parseBinaryExpressionOrHigher(OperatorPrecedence.Relational);
+            return finishNode(factory.createPrivateIdentifierInInExpression(id, inToken, exp), pos);
+        }
+
         function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence): Expression {
+            // parse a BinaryExpression the LHS is either:
+            // 1) a PrivateIdentifierInInExpression when 'in' flag allowed and lookahead matches 'PrivateIdentifier in'
+            // 2) a UnaryExpression
+
             const pos = getNodePos();
-            const leftOperand = parseUnaryExpressionOrHigher();
+            const tryPrivateIdentifierInIn = token() === SyntaxKind.PrivateIdentifier && !inDisallowInContext() && lookAhead(nextTokenIsInKeyword);
+            const leftOperand = tryPrivateIdentifierInIn
+                ? parsePrivateIdentifierInInExpression(pos)
+                : parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand, pos);
         }
 
@@ -5975,6 +6001,11 @@ namespace ts {
         function nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() {
             nextToken();
             return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.BigIntLiteral || token() === SyntaxKind.StringLiteral) && !scanner.hasPrecedingLineBreak();
+        }
+
+        function nextTokenIsInKeyword() {
+            nextToken();
+            return token() === SyntaxKind.InKeyword;
         }
 
         function isDeclaration(): boolean {

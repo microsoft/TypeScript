@@ -1716,6 +1716,8 @@ namespace ts {
                         return emitPostfixUnaryExpression(node as PostfixUnaryExpression);
                     case SyntaxKind.BinaryExpression:
                         return emitBinaryExpression(node as BinaryExpression);
+                    case SyntaxKind.PrivateIdentifierInInExpression:
+                        return emitPrivateIdentifierInInExpression(node as PrivateIdentifierInInExpression);
                     case SyntaxKind.ConditionalExpression:
                         return emitConditionalExpression(node as ConditionalExpression);
                     case SyntaxKind.TemplateExpression:
@@ -2688,6 +2690,24 @@ namespace ts {
                 currentParenthesizerRule = parenthesizerRule;
                 pipelinePhase(EmitHint.Expression, next);
             }
+        }
+
+        function emitPrivateIdentifierInInExpression(node: PrivateIdentifierInInExpression) {
+            const linesBeforeIn = getLinesBetweenNodes(node, node.name, node.inToken);
+            const linesAfterIn = getLinesBetweenNodes(node, node.inToken, node.expression);
+
+            emitLeadingCommentsOfPosition(node.name.pos);
+            emitPrivateIdentifier(node.name);
+            emitTrailingCommentsOfPosition(node.name.end);
+
+            writeLinesAndIndent(linesBeforeIn, /*writeSpaceIfNotIndenting*/ true);
+            emitLeadingCommentsOfPosition(node.inToken.pos);
+            writeTokenNode(node.inToken, writeKeyword);
+            emitTrailingCommentsOfPosition(node.inToken.end, /*prefixSpace*/ true);
+            writeLinesAndIndent(linesAfterIn, /*writeSpaceIfNotIndenting*/ true);
+
+            emit(node.expression);
+            decreaseIndentIf(linesBeforeIn, linesAfterIn);
         }
 
         function emitConditionalExpression(node: ConditionalExpression) {
