@@ -1,4 +1,5 @@
 // @strict: true
+// @exactOptionalPropertyTypes: true
 // @declaration: true
 
 // Repro from #44567

@@ -16,7 +16,7 @@ declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 
 declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 >id4 : <T extends (x: {    foo?: number;}) => any>(input: T) => T
->x : { foo?: number; }
+>x : { foo?: number | undefined; }
 >foo : number | undefined
 >input : T
 
@@ -60,10 +60,10 @@ const f13 = id3(function ({ foo = 42 }) { return foo });
 >foo : any
 
 const f14 = id4(function ({ foo = 42 }) { return foo });
->f14 : ({ foo }: { foo?: number; }) => number
->id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number; }) => number
->id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number; }) => number
+>f14 : ({ foo }: { foo?: number | undefined; }) => number
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
+>id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 >foo : number

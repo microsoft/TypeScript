@@ -4853,7 +4853,7 @@
         "category": "Message",
         "code": 6242
     },
-    "Enable strict checking of optional properties.": {
+    "Interpret optional property types as written, rather than adding 'undefined'.": {
         "category": "Message",
         "code": 6243
     },

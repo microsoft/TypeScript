@@ -343,12 +343,12 @@ namespace ts {
         const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
         const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
         const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
-        const strictOptionalProperties = getStrictOptionValue(compilerOptions, "strictOptionalProperties");
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
         const useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
+        const exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
 
         const checkBinaryExpression = createCheckBinaryExpression();
         const emitResolver = createResolver();
@@ -739,7 +739,7 @@ namespace ts {
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
         const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
-        const missingType = strictOptionalProperties ? createIntrinsicType(TypeFlags.Undefined, "undefined") : undefinedType;
+        const missingType = exactOptionalPropertyTypes ? createIntrinsicType(TypeFlags.Undefined, "undefined") : undefinedType;
         const nullType = createIntrinsicType(TypeFlags.Null, "null");
         const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null, "null", ObjectFlags.ContainsWideningType);
         const stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -13884,7 +13884,7 @@ namespace ts {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
                 }
-                if (strictOptionalProperties && includes & TypeFlags.Undefined) {
+                if (exactOptionalPropertyTypes && includes & TypeFlags.Undefined) {
                     const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
                     if (missingIndex >= 0 && containsType(typeSet, undefinedType)) {
                         orderedRemoveItemAt(typeSet, missingIndex);
@@ -20356,15 +20356,15 @@ namespace ts {
         }
 
         function removeMissingType(type: Type, isOptional: boolean) {
-            return strictOptionalProperties && isOptional ? removeType(type, missingType) : type;
+            return exactOptionalPropertyTypes && isOptional ? removeType(type, missingType) : type;
         }
 
         function containsMissingType(type: Type) {
-            return strictOptionalProperties && (type === missingType || type.flags & TypeFlags.Union && containsType((type as UnionType).types, missingType));
+            return exactOptionalPropertyTypes && (type === missingType || type.flags & TypeFlags.Union && containsType((type as UnionType).types, missingType));
         }
 
         function removeMissingOrUndefinedType(type: Type): Type {
-            return strictOptionalProperties ? removeType(type, missingType) : getTypeWithFacts(type, TypeFacts.NEUndefined);
+            return exactOptionalPropertyTypes ? removeType(type, missingType) : getTypeWithFacts(type, TypeFacts.NEUndefined);
         }
 
         /**
@@ -21750,7 +21750,7 @@ namespace ts {
         }
 
         function isTypeOrBaseIdenticalTo(s: Type, t: Type) {
-            return strictOptionalProperties && t === missingType ? s === t :
+            return exactOptionalPropertyTypes && t === missingType ? s === t :
                 (isTypeIdenticalTo(s, t) || !!(t.flags & TypeFlags.String && s.flags & TypeFlags.StringLiteral || t.flags & TypeFlags.Number && s.flags & TypeFlags.NumberLiteral));
         }
 
@@ -26079,7 +26079,7 @@ namespace ts {
                         elementFlags.push(ElementFlags.Rest);
                     }
                 }
-                else if (strictOptionalProperties && e.kind === SyntaxKind.OmittedExpression) {
+                else if (exactOptionalPropertyTypes && e.kind === SyntaxKind.OmittedExpression) {
                     hasOmittedExpression = true;
                     elementTypes.push(missingType);
                     elementFlags.push(ElementFlags.Optional);
