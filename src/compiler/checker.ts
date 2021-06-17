@@ -13197,7 +13197,8 @@ namespace ts {
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
-                links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(checkExpression(node.exprName)));
+                const type = isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) : checkExpression(node.exprName);
+                links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(type));
             }
             return links.resolvedType;
         }
@@ -21998,9 +21999,11 @@ namespace ts {
                         && (source as MetaProperty).name.escapedText === (target as MetaProperty).name.escapedText;
                 case SyntaxKind.Identifier:
                 case SyntaxKind.PrivateIdentifier:
-                    return target.kind === SyntaxKind.Identifier && getResolvedSymbol(source as Identifier) === getResolvedSymbol(target as Identifier) ||
-                        (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) &&
-                        getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
+                    return isThisInTypeQuery(source) ?
+                        target.kind === SyntaxKind.ThisKeyword :
+                        target.kind === SyntaxKind.Identifier && getResolvedSymbol(source as Identifier) === getResolvedSymbol(target as Identifier) ||
+                            (target.kind === SyntaxKind.VariableDeclaration || target.kind === SyntaxKind.BindingElement) &&
+                            getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(source as Identifier)) === getSymbolOfNode(target);
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.SuperKeyword:
@@ -24538,6 +24541,7 @@ namespace ts {
         }
 
         function checkThisExpression(node: Node): Type {
+            const isNodeInTypeQuery = isInTypeQuery(node);
             // Stop at the first arrow function so that we can
             // tell whether 'this' needs to be captured.
             let container = getThisContainer(node, /* includeArrowFunctions */ true);
@@ -24581,7 +24585,7 @@ namespace ts {
             }
 
             // When targeting es6, mark that we'll need to capture `this` in its lexically bound scope.
-            if (capturedByArrowFunction && languageVersion < ScriptTarget.ES2015) {
+            if (!isNodeInTypeQuery && capturedByArrowFunction && languageVersion < ScriptTarget.ES2015) {
                 captureLexicalThis(node, container);
             }
 
@@ -27284,7 +27288,8 @@ namespace ts {
         }
 
         function checkQualifiedName(node: QualifiedName, checkMode: CheckMode | undefined) {
-            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, checkNonNullExpression(node.left), node.right, checkMode);
+            const leftType = isPartOfTypeQuery(node) && isThisIdentifier(node.left) ? checkNonNullType(checkThisExpression(node.left), node.left) : checkNonNullExpression(node.left);
+            return checkPropertyAccessExpressionOrQualifiedName(node, node.left, leftType, node.right, checkMode);
         }
 
         function isMethodAccessForCall(node: Node) {

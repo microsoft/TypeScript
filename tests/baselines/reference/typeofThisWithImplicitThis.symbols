@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThisWithImplicitThis.ts ===
+function Test1() {
+>Test1 : Symbol(Test1, Decl(typeofThisWithImplicitThis.ts, 0, 0))
+
+    let x: typeof this.no = 1
+>x : Symbol(x, Decl(typeofThisWithImplicitThis.ts, 1, 7))
+}
+
