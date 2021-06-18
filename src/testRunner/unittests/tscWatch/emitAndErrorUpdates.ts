@@ -126,8 +126,8 @@ console.log(b.c.d);`
                     ],
                 });
             }
-
-            describe("updates errors when deep import file changes", () => {
+            // "updates errors when deep import file changes"
+            describe("errors for .ts change", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.ts`,
                     content: `import {C} from './c';
@@ -149,8 +149,8 @@ export class B
                     cFile
                 );
             });
-
-            describe("updates errors when deep import through declaration file changes", () => {
+            // "updates errors when deep import through declaration file changes"
+            describe("errors for .d.ts change", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.d.ts`,
                     content: `import {C} from './c';
@@ -236,8 +236,8 @@ getPoint().c.x;`
                 ]
             });
         });
-
-        describe("updates errors when file transitively exported file changes", () => {
+        // "updates errors when file transitively exported file changes"
+        describe("transitive exports", () => {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
@@ -309,14 +309,15 @@ export class Data {
                     ]
                 });
             }
-            describe("when there are no circular import and exports", () => {
+            // "when there are no circular import and exports"
+            describe("no circular import/export", () => {
                 verifyTransitiveExports(
                     "when there are no circular import and exports",
                     [lib2Data]
                 );
             });
-
-            describe("when there are circular import and exports", () => {
+            // "when there are circular import and exports"
+            describe("yes circular import/exports", () => {
                 const lib2Data: File = {
                     path: `${projectRoot}/lib2/data.ts`,
                     content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
