@@ -102,40 +102,132 @@ type Tag2 = { __tag2__: void };
 type TaggedString1 = string & Tag1;
 type TaggedString2 = string & Tag2;
 
-declare let obj1: { [key: TaggedString1]: string };
-declare let obj2: { [key: TaggedString2]: string };
-declare let obj3: { [key: TaggedString1 | TaggedString2]: string };
-declare let obj4: { [key: TaggedString1 & TaggedString2]: string };
-
 declare let s0: string;
 declare let s1: TaggedString1;
 declare let s2: TaggedString2;
 declare let s3: TaggedString1 | TaggedString2;
 declare let s4: TaggedString1 & TaggedString2;
 
-obj1[s0];  // Error
-obj1[s1];
-obj1[s2];  // Error
-obj1[s3];  // Error
-obj1[s4];
+interface I1 { [key: TaggedString1]: string }
+interface I2 { [key: TaggedString2]: string }
+interface I3 { [key: TaggedString1 | TaggedString2]: string }
+interface I4 { [key: TaggedString1 & TaggedString2]: string }
 
-obj2[s0];  // Error
-obj2[s1];
-obj2[s2];
-obj2[s3];  // Error
-obj2[s4];
+declare let i1: I1;
+declare let i2: I2;
+declare let i3: I3;
+declare let i4: I4;
 
-obj3[s0];  // Error
-obj3[s1];
-obj3[s2];
-obj3[s3];
-obj3[s4];
+i1[s0];  // Error
+i1[s1];
+i1[s2];  // Error
+i1[s3];  // Error
+i1[s4];
 
-obj4[s0];  // Error
-obj4[s1];  // Error
-obj4[s2];  // Error
-obj4[s3];  // Error
-obj4[s4];
+i2[s0];  // Error
+i2[s1];  // Error
+i2[s2];
+i2[s3];  // Error
+i2[s4];
+
+i3[s0];  // Error
+i3[s1];
+i3[s2];
+i3[s3];
+i3[s4];
+
+i4[s0];  // Error
+i4[s1];  // Error
+i4[s2];  // Error
+i4[s3];  // Error
+i4[s4];
+
+i1 = i2;  // Error
+i1 = i3;
+i1 = i4;  // Error
+
+i2 = i1;  // Error
+i2 = i3;
+i2 = i4;  // Error
+
+i3 = i1;  // Error
+i3 = i2;  // Error
+i3 = i4;  // Error
+
+i4 = i1;
+i4 = i2;
+i4 = i3;
+
+declare let o1: { [key: TaggedString1]: string };
+declare let o2: { [key: TaggedString2]: string };
+declare let o3: { [key: TaggedString1 | TaggedString2]: string };
+declare let o4: { [key: TaggedString1 & TaggedString2]: string };
+
+o1[s0];  // Error
+o1[s1];
+o1[s2];  // Error
+o1[s3];  // Error
+o1[s4];
+
+o2[s0];  // Error
+o2[s1];  // Error
+o2[s2];
+o2[s3];  // Error
+o2[s4];
+
+o3[s0];  // Error
+o3[s1];
+o3[s2];
+o3[s3];
+o3[s4];
+
+o4[s0];  // Error
+o4[s1];  // Error
+o4[s2];  // Error
+o4[s3];  // Error
+o4[s4];
+
+o1 = o2;
+o1 = o3;
+o1 = o4;
+
+o2 = o1;
+o2 = o3;
+o2 = o4;
+
+o3 = o1;
+o3 = o2;
+o3 = o4;
+
+o4 = o1;
+o4 = o2;
+o4 = o3;
+
+// Index signatures inferred from computed property names
+
+const obj10 = {
+    ['x']: 0 as const,
+    ['a' + 'b']: 1 as const,
+};
+
+const obj11 = {
+    [1]: 2 as const,
+    [1 + 2]: 3 as const,
+};
+
+const obj12 = {
+    [sym]: 4 as const,
+    [Symbol()]: 5 as const,
+};
+
+const obj13 = {
+    ['x']: 0 as const,
+    ['a' + 'b']: 1 as const,
+    [1]: 2 as const,
+    [1 + 2]: 3 as const,
+    [sym]: 4 as const,
+    [Symbol()]: 5 as const,
+};
 
 // Repros from #1863
 
