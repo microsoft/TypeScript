@@ -9592,7 +9592,6 @@ declare namespace ts.server {
          */
         lineOffsetToPosition(line: number, offset: number): number;
         positionToLineOffset(position: number): protocol.Location;
-        textSpanToProtoTextSpan(range: TextSpan): protocol.TextSpan;
         isJavaScript(): boolean;
     }
 }
