@@ -4023,11 +4023,11 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
+    "Specify ECMAScript target version.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.": {
+    "Specify module code generation.": {
         "category": "Message",
         "code": 6016
     },
@@ -4235,7 +4235,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'.": {
+    "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
     },
@@ -4845,7 +4845,7 @@
         "category": "Message",
         "code": 6242
     },
-    "Enable strict checking of optional properties.": {
+    "Interpret optional property types as written, rather than adding 'undefined'.": {
         "category": "Message",
         "code": 6243
     },
@@ -5630,6 +5630,127 @@
         "code": 6803
     },
  
+    "one of:": {
+        "category": "Message",
+        "code": 6900
+    },
+    "one or more:": {
+        "category": "Message",
+        "code": 6901
+    },
+    "type:": {
+        "category": "Message",
+        "code": 6902
+    },
+    "default:": {
+        "category": "Message",
+        "code": 6903
+    },
+    "module === \"system\" or esModuleInterop": {
+        "category": "Message",
+        "code": 6904
+    },
+    "`false`, unless `strict` is set": {
+        "category": "Message",
+        "code": 6905
+    },
+    "`false`, unless `composite` is set": {
+        "category": "Message",
+        "code": 6906
+    },
+    "`[\"node_modules\", \"bower_components\", \"jspm_packages\"]`, plus the value of `outDir` if one is specified.": {
+        "category": "Message",
+        "code": 6907
+    },
+    "`[]` if `files` is specified, otherwise `[\"**/*\"]`": {
+        "category": "Message",
+        "code": 6908
+    },
+    "`true` if `composite`, `false` otherwise": {
+        "category": "Message",
+        "code": 6909
+    },
+    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+        "category": "Message",
+        "code": 69010
+    },
+    "Computed from the list of input files": {
+        "category": "Message",
+        "code": 6911
+    },
+    "Platform specific": {
+        "category": "Message",
+        "code": 6912
+    },
+    "You can learn about all of the compiler options at {0}": {
+        "category": "Message",
+        "code": 6913
+    },
+    "Including --watch, -w will start watching the current project for the file changes. Once set, you can config watch mode with:": {
+        "category": "Message",
+        "code": 6914
+    },
+    "Using --build, -b will make tsc behave more like a build orchestrator than a compiler. This is used to trigger building composite projects which you can learn more about at {0}": {
+        "category": "Message",
+        "code": 6915
+    },
+    "COMMON COMMANDS": {
+        "category": "Message",
+        "code": 6916
+    },
+    "ALL COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6917
+    },
+    "WATCH OPTIONS": {
+        "category": "Message",
+        "code": 6918
+    },
+    "BUILD OPTIONS": {
+        "category": "Message",
+        "code": 6919
+    },
+    "COMMON COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6920
+    },
+    "COMMAND LINE FLAGS": {
+        "category": "Message",
+        "code": 6921
+    },
+    "tsc: The TypeScript Compiler": {
+        "category": "Message",
+        "code": 6922
+    },
+    "Compiles the current project (tsconfig.json in the working directory.)": {
+        "category": "Message",
+        "code": 6923
+    },
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options": {
+        "category": "Message",
+        "code": 6924
+    },
+    "Build a composite project in the working directory.": {
+        "category": "Message",
+        "code": 6925
+    },
+    "Creates a tsconfig.json with the recommended settings in the working directory.": {
+        "category": "Message",
+        "code": 6926
+    },
+    "Compiles the TypeScript project located at the specified path": {
+        "category": "Message",
+        "code": 6927
+    },
+    "An expanded version of this information, showing all possible compiler options": {
+        "category": "Message",
+        "code": 6928
+    },
+    "Compiles the current project, with additional settings": {
+        "category": "Message",
+        "code": 6929
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -6918,6 +7039,14 @@
     "Can only convert named export": {
         "category": "Message",
         "code": 95164
+    },
+    "Add missing properties": {
+        "category": "Message",
+        "code": 95165
+    },
+    "Add all missing properties": {
+        "category": "Message",
+        "code": 95166
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

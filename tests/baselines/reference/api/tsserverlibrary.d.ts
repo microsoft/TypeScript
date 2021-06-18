@@ -2853,6 +2853,7 @@ declare namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
@@ -2913,7 +2914,6 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
-        strictOptionalProperties?: boolean;
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -3981,6 +3981,7 @@ declare namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -9557,6 +9558,7 @@ declare namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        session?: Session<unknown>;
         config: any;
     }
     interface PluginModule {
@@ -9948,6 +9950,7 @@ declare namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
+        session: Session<unknown> | undefined;
     }
     export interface WatchOptionsAndErrors {
         watchOptions: WatchOptions;
