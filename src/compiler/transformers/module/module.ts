@@ -49,8 +49,6 @@ namespace ts {
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
-        const zeroLiteral = factory.createNumericLiteral(0);
-        setEmitFlags(zeroLiteral, EmitFlags.Immutable);
 
         return chainBundle(context, transformSourceFile);
 
