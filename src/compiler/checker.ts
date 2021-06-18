@@ -26134,10 +26134,19 @@ namespace ts {
             return isNumericLiteralName(symbol.escapedName) || (firstDecl && isNamedDeclaration(firstDecl) && isNumericName(firstDecl.name));
         }
 
+        function isSymbolWithSymbolName(symbol: Symbol) {
+            const firstDecl = symbol.declarations?.[0];
+            return isKnownSymbol(symbol) || (firstDecl && isNamedDeclaration(firstDecl) && isComputedPropertyName(firstDecl.name) &&
+                isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
+        }
+
         function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
             const propTypes: Type[] = [];
             for (let i = offset; i < properties.length; i++) {
-                if (keyType === stringType || isSymbolWithNumericName(properties[i])) {
+                const prop = properties[i];
+                if (keyType === stringType && !isSymbolWithSymbolName(prop) ||
+                    keyType === numberType && isSymbolWithNumericName(prop) ||
+                    keyType === esSymbolType && isSymbolWithSymbolName(prop)) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
@@ -26179,6 +26188,7 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+            let hasComputedSymbolProperty = false;
 
             // Spreads may cause an early bail; ensure computed names are always checked (this is cached)
             // As otherwise they may not be checked until exports for the type at this position are retrieved,
@@ -26267,6 +26277,7 @@ namespace ts {
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
                         hasComputedNumberProperty = false;
+                        hasComputedSymbolProperty = false;
                     }
                     const type = getReducedType(checkExpression(memberDecl.expression));
                     if (isValidSpreadType(type)) {
@@ -26299,6 +26310,9 @@ namespace ts {
                     if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
                         if (isTypeAssignableTo(computedNameType, numberType)) {
                             hasComputedNumberProperty = true;
+                        }
+                        else if (isTypeAssignableTo(computedNameType, esSymbolType)) {
+                            hasComputedSymbolProperty = true;
                         }
                         else {
                             hasComputedStringProperty = true;
@@ -26350,9 +26364,10 @@ namespace ts {
             return createObjectLiteralType();
 
             function createObjectLiteralType() {
-                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType) : undefined;
-                const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType) : undefined;
-                const indexInfos = stringIndexInfo ? numberIndexInfo ? [stringIndexInfo, numberIndexInfo] : [stringIndexInfo] : numberIndexInfo ? [numberIndexInfo] : emptyArray;
+                const indexInfos = [];
+                if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
+                if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
+                if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
                 result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
                 if (isJSObjectLiteral) {
