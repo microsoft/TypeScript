@@ -2507,6 +2507,7 @@ namespace ts {
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
                     && moduleKind !== ModuleKind.ES2020
+                    && moduleKind !== ModuleKind.ES2022
                     && moduleKind !== ModuleKind.ESNext
                     && moduleKind !== ModuleKind.System);
         }
