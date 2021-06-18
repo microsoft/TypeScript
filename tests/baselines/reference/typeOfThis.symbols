@@ -1,460 +1,315 @@
-=== tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts ===
-class MyTestClass {
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
+=== tests/cases/conformance/types/specifyingTypes/typeQueries/typeofThis.ts ===
+class Test {
+>Test : Symbol(Test, Decl(typeofThis.ts, 0, 0))
 
-    private canary: number;
->canary : Symbol(MyTestClass.canary, Decl(typeOfThis.ts, 0, 19))
-
-    static staticCanary: number;
->staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
+    data = {};
+>data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
 
     constructor() {
-        //type of 'this' in constructor body is the class instance type
-        var p = this.canary;
->p : Symbol(p, Decl(typeOfThis.ts, 6, 11), Decl(typeOfThis.ts, 7, 11))
->this.canary : Symbol(MyTestClass.canary, Decl(typeOfThis.ts, 0, 19))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
->canary : Symbol(MyTestClass.canary, Decl(typeOfThis.ts, 0, 19))
-
-        var p: number;
->p : Symbol(p, Decl(typeOfThis.ts, 6, 11), Decl(typeOfThis.ts, 7, 11))
-
-        this.canary = 3;
->this.canary : Symbol(MyTestClass.canary, Decl(typeOfThis.ts, 0, 19))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
->canary : Symbol(MyTestClass.canary, Decl(typeOfThis.ts, 0, 19))
-    }
-
-    //type of 'this' in member function param list is the class instance type
-    memberFunc(t = this) {
->memberFunc : Symbol(MyTestClass.memberFunc, Decl(typeOfThis.ts, 9, 5))
->t : Symbol(t, Decl(typeOfThis.ts, 12, 15), Decl(typeOfThis.ts, 13, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var t: MyTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 12, 15), Decl(typeOfThis.ts, 13, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        //type of 'this' in member function body is the class instance type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 16, 11), Decl(typeOfThis.ts, 17, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 16, 11), Decl(typeOfThis.ts, 17, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-    }
-
-    //type of 'this' in member accessor(get and set) body is the class instance type
-    get prop() {
->prop : Symbol(MyTestClass.prop, Decl(typeOfThis.ts, 18, 5), Decl(typeOfThis.ts, 25, 5))
-
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 22, 11), Decl(typeOfThis.ts, 23, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 22, 11), Decl(typeOfThis.ts, 23, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        return this;
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-    }
-    set prop(v) {
->prop : Symbol(MyTestClass.prop, Decl(typeOfThis.ts, 18, 5), Decl(typeOfThis.ts, 25, 5))
->v : Symbol(v, Decl(typeOfThis.ts, 26, 13))
-
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 27, 11), Decl(typeOfThis.ts, 28, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 27, 11), Decl(typeOfThis.ts, 28, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        p = v;
->p : Symbol(p, Decl(typeOfThis.ts, 27, 11), Decl(typeOfThis.ts, 28, 11))
->v : Symbol(v, Decl(typeOfThis.ts, 26, 13))
-
-        v = p;
->v : Symbol(v, Decl(typeOfThis.ts, 26, 13))
->p : Symbol(p, Decl(typeOfThis.ts, 27, 11), Decl(typeOfThis.ts, 28, 11))
-    }
-
-    someFunc = () => {
->someFunc : Symbol(MyTestClass.someFunc, Decl(typeOfThis.ts, 31, 5))
-
-        //type of 'this' in member variable initializer is the class instance type
-        var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 35, 11), Decl(typeOfThis.ts, 36, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var t: MyTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 35, 11), Decl(typeOfThis.ts, 36, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-    };
-
-    //type of 'this' in static function param list is constructor function type
-    static staticFn(t = this) {
->staticFn : Symbol(MyTestClass.staticFn, Decl(typeOfThis.ts, 37, 6))
->t : Symbol(t, Decl(typeOfThis.ts, 40, 20), Decl(typeOfThis.ts, 41, 11), Decl(typeOfThis.ts, 42, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var t: typeof MyTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 40, 20), Decl(typeOfThis.ts, 41, 11), Decl(typeOfThis.ts, 42, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var t = MyTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 40, 20), Decl(typeOfThis.ts, 41, 11), Decl(typeOfThis.ts, 42, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        t.staticCanary;
->t.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
->t : Symbol(t, Decl(typeOfThis.ts, 40, 20), Decl(typeOfThis.ts, 41, 11), Decl(typeOfThis.ts, 42, 11))
->staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
-
-        //type of 'this' in static function body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 46, 11), Decl(typeOfThis.ts, 47, 11), Decl(typeOfThis.ts, 48, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: typeof MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 46, 11), Decl(typeOfThis.ts, 47, 11), Decl(typeOfThis.ts, 48, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p = MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 46, 11), Decl(typeOfThis.ts, 47, 11), Decl(typeOfThis.ts, 48, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 46, 11), Decl(typeOfThis.ts, 47, 11), Decl(typeOfThis.ts, 48, 11))
->staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
-    }
-
-    static get staticProp() {
->staticProp : Symbol(MyTestClass.staticProp, Decl(typeOfThis.ts, 50, 5), Decl(typeOfThis.ts, 59, 5))
-
-        //type of 'this' in static accessor body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 54, 11), Decl(typeOfThis.ts, 55, 11), Decl(typeOfThis.ts, 56, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: typeof MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 54, 11), Decl(typeOfThis.ts, 55, 11), Decl(typeOfThis.ts, 56, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p = MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 54, 11), Decl(typeOfThis.ts, 55, 11), Decl(typeOfThis.ts, 56, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 54, 11), Decl(typeOfThis.ts, 55, 11), Decl(typeOfThis.ts, 56, 11))
->staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
-
-        return this;
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-    }
-    static set staticProp(v: typeof MyTestClass) {
->staticProp : Symbol(MyTestClass.staticProp, Decl(typeOfThis.ts, 50, 5), Decl(typeOfThis.ts, 59, 5))
->v : Symbol(v, Decl(typeOfThis.ts, 60, 26))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        //type of 'this' in static accessor body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 62, 11), Decl(typeOfThis.ts, 63, 11), Decl(typeOfThis.ts, 64, 11))
->this : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p: typeof MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 62, 11), Decl(typeOfThis.ts, 63, 11), Decl(typeOfThis.ts, 64, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        var p = MyTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 62, 11), Decl(typeOfThis.ts, 63, 11), Decl(typeOfThis.ts, 64, 11))
->MyTestClass : Symbol(MyTestClass, Decl(typeOfThis.ts, 0, 0))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 62, 11), Decl(typeOfThis.ts, 63, 11), Decl(typeOfThis.ts, 64, 11))
->staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThis.ts, 1, 27))
+        var copy: typeof this.data = {};
+>copy : Symbol(copy, Decl(typeofThis.ts, 3, 11))
+>this.data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
+>data : Symbol(Test.data, Decl(typeofThis.ts, 0, 12))
     }
 }
 
-class MyGenericTestClass<T, U> {
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
+class Test1 {
+>Test1 : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 
-    private canary: number;
->canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThis.ts, 69, 32))
+    data = { foo: '' };
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
 
-    static staticCanary: number;
->staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
+    ['this'] = '';
+>['this'] : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>'this' : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
 
     constructor() {
-        //type of 'this' in constructor body is the class instance type
-        var p = this.canary;
->p : Symbol(p, Decl(typeOfThis.ts, 75, 11), Decl(typeOfThis.ts, 76, 11))
->this.canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThis.ts, 69, 32))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThis.ts, 69, 32))
+        var copy: typeof this.data = { foo: '' };
+>copy : Symbol(copy, Decl(typeofThis.ts, 11, 11))
+>this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 11, 38))
 
-        var p: number;
->p : Symbol(p, Decl(typeOfThis.ts, 75, 11), Decl(typeOfThis.ts, 76, 11))
+        var foo: typeof this.data.foo = '';
+>foo : Symbol(foo, Decl(typeofThis.ts, 12, 11))
+>this.data.foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
+>this.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>foo : Symbol(foo, Decl(typeofThis.ts, 8, 12))
 
-        this.canary = 3;
->this.canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThis.ts, 69, 32))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThis.ts, 69, 32))
-    }
+        var self: typeof this = this;
+>self : Symbol(self, Decl(typeofThis.ts, 14, 11))
+>this : Symbol(Test1, Decl(typeofThis.ts, 5, 1))
 
-    //type of 'this' in member function param list is the class instance type
-    memberFunc(t = this) {
->memberFunc : Symbol(MyGenericTestClass.memberFunc, Decl(typeOfThis.ts, 78, 5))
->t : Symbol(t, Decl(typeOfThis.ts, 81, 15), Decl(typeOfThis.ts, 82, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
+        self.data;
+>self.data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
+>self : Symbol(self, Decl(typeofThis.ts, 14, 11))
+>data : Symbol(Test1.data, Decl(typeofThis.ts, 7, 13))
 
-        var t: MyGenericTestClass<T, U>;
->t : Symbol(t, Decl(typeOfThis.ts, 81, 15), Decl(typeOfThis.ts, 82, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
-
-        //type of 'this' in member function body is the class instance type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 85, 11), Decl(typeOfThis.ts, 86, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: MyGenericTestClass<T, U>;
->p : Symbol(p, Decl(typeOfThis.ts, 85, 11), Decl(typeOfThis.ts, 86, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
-    }
-
-    //type of 'this' in member accessor(get and set) body is the class instance type
-    get prop() {
->prop : Symbol(MyGenericTestClass.prop, Decl(typeOfThis.ts, 87, 5), Decl(typeOfThis.ts, 94, 5))
-
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 91, 11), Decl(typeOfThis.ts, 92, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: MyGenericTestClass<T, U>;
->p : Symbol(p, Decl(typeOfThis.ts, 91, 11), Decl(typeOfThis.ts, 92, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
-
-        return this;
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-    }
-    set prop(v) {
->prop : Symbol(MyGenericTestClass.prop, Decl(typeOfThis.ts, 87, 5), Decl(typeOfThis.ts, 94, 5))
->v : Symbol(v, Decl(typeOfThis.ts, 95, 13))
-
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 96, 11), Decl(typeOfThis.ts, 97, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: MyGenericTestClass<T, U>;
->p : Symbol(p, Decl(typeOfThis.ts, 96, 11), Decl(typeOfThis.ts, 97, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
-
-        p = v;
->p : Symbol(p, Decl(typeOfThis.ts, 96, 11), Decl(typeOfThis.ts, 97, 11))
->v : Symbol(v, Decl(typeOfThis.ts, 95, 13))
-
-        v = p;
->v : Symbol(v, Decl(typeOfThis.ts, 95, 13))
->p : Symbol(p, Decl(typeOfThis.ts, 96, 11), Decl(typeOfThis.ts, 97, 11))
-    }
-
-    someFunc = () => {
->someFunc : Symbol(MyGenericTestClass.someFunc, Decl(typeOfThis.ts, 100, 5))
-
-        //type of 'this' in member variable initializer is the class instance type
-        var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 104, 11), Decl(typeOfThis.ts, 105, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var t: MyGenericTestClass<T, U>;
->t : Symbol(t, Decl(typeOfThis.ts, 104, 11), Decl(typeOfThis.ts, 105, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
->T : Symbol(T, Decl(typeOfThis.ts, 69, 25))
->U : Symbol(U, Decl(typeOfThis.ts, 69, 27))
-
-    };
-
-    //type of 'this' in static function param list is constructor function type
-    static staticFn(t = this) {
->staticFn : Symbol(MyGenericTestClass.staticFn, Decl(typeOfThis.ts, 106, 6))
->t : Symbol(t, Decl(typeOfThis.ts, 109, 20), Decl(typeOfThis.ts, 110, 11), Decl(typeOfThis.ts, 111, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var t: typeof MyGenericTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 109, 20), Decl(typeOfThis.ts, 110, 11), Decl(typeOfThis.ts, 111, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var t = MyGenericTestClass;
->t : Symbol(t, Decl(typeOfThis.ts, 109, 20), Decl(typeOfThis.ts, 110, 11), Decl(typeOfThis.ts, 111, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        t.staticCanary;
->t.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
->t : Symbol(t, Decl(typeOfThis.ts, 109, 20), Decl(typeOfThis.ts, 110, 11), Decl(typeOfThis.ts, 111, 11))
->staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
-
-        //type of 'this' in static function body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 115, 11), Decl(typeOfThis.ts, 116, 11), Decl(typeOfThis.ts, 117, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: typeof MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 115, 11), Decl(typeOfThis.ts, 116, 11), Decl(typeOfThis.ts, 117, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p = MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 115, 11), Decl(typeOfThis.ts, 116, 11), Decl(typeOfThis.ts, 117, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 115, 11), Decl(typeOfThis.ts, 116, 11), Decl(typeOfThis.ts, 117, 11))
->staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
-    }
-
-    static get staticProp() {
->staticProp : Symbol(MyGenericTestClass.staticProp, Decl(typeOfThis.ts, 119, 5), Decl(typeOfThis.ts, 128, 5))
-
-        //type of 'this' in static accessor body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 123, 11), Decl(typeOfThis.ts, 124, 11), Decl(typeOfThis.ts, 125, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: typeof MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 123, 11), Decl(typeOfThis.ts, 124, 11), Decl(typeOfThis.ts, 125, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p = MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 123, 11), Decl(typeOfThis.ts, 124, 11), Decl(typeOfThis.ts, 125, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 123, 11), Decl(typeOfThis.ts, 124, 11), Decl(typeOfThis.ts, 125, 11))
->staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
-
-        return this;
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-    }
-    static set staticProp(v: typeof MyGenericTestClass) {
->staticProp : Symbol(MyGenericTestClass.staticProp, Decl(typeOfThis.ts, 119, 5), Decl(typeOfThis.ts, 128, 5))
->v : Symbol(v, Decl(typeOfThis.ts, 129, 26))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        //type of 'this' in static accessor body is constructor function type
-        var p = this;
->p : Symbol(p, Decl(typeOfThis.ts, 131, 11), Decl(typeOfThis.ts, 132, 11), Decl(typeOfThis.ts, 133, 11))
->this : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p: typeof MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 131, 11), Decl(typeOfThis.ts, 132, 11), Decl(typeOfThis.ts, 133, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        var p = MyGenericTestClass;
->p : Symbol(p, Decl(typeOfThis.ts, 131, 11), Decl(typeOfThis.ts, 132, 11), Decl(typeOfThis.ts, 133, 11))
->MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThis.ts, 67, 1))
-
-        p.staticCanary;
->p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
->p : Symbol(p, Decl(typeOfThis.ts, 131, 11), Decl(typeOfThis.ts, 132, 11), Decl(typeOfThis.ts, 133, 11))
->staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThis.ts, 70, 27))
+        var str: typeof this.this = '';
+>str : Symbol(str, Decl(typeofThis.ts, 17, 11))
+>this.this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
+>this : Symbol(Test1['this'], Decl(typeofThis.ts, 8, 23))
     }
 }
 
-//type of 'this' in a function declaration param list is Any
-function fn(s = this) {
->fn : Symbol(fn, Decl(typeOfThis.ts, 136, 1))
->s : Symbol(s, Decl(typeOfThis.ts, 139, 12), Decl(typeOfThis.ts, 140, 7))
 
-    var s: any;
->s : Symbol(s, Decl(typeOfThis.ts, 139, 12), Decl(typeOfThis.ts, 140, 7))
+function Test2() {
+>Test2 : Symbol(Test2, Decl(typeofThis.ts, 19, 1))
 
-    s.spaaaaaaace = 4;
->s : Symbol(s, Decl(typeOfThis.ts, 139, 12), Decl(typeOfThis.ts, 140, 7))
-
-    //type of 'this' in a function declaration body is Any
-    var t: any;
->t : Symbol(t, Decl(typeOfThis.ts, 144, 7), Decl(typeOfThis.ts, 145, 7))
-
-    var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 144, 7), Decl(typeOfThis.ts, 145, 7))
-
-    this.spaaaaace = 4;
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 23, 7))
 }
 
-//type of 'this' in a function expression param list list is Any
-var q1 = function (s = this) {
->q1 : Symbol(q1, Decl(typeOfThis.ts, 150, 3))
->s : Symbol(s, Decl(typeOfThis.ts, 150, 19), Decl(typeOfThis.ts, 151, 7))
+function Test3(this: { no: number }) {
+>Test3 : Symbol(Test3, Decl(typeofThis.ts, 24, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 26, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 26, 22))
 
-    var s: any;
->s : Symbol(s, Decl(typeOfThis.ts, 150, 19), Decl(typeOfThis.ts, 151, 7))
-
-    s.spaaaaaaace = 4;
->s : Symbol(s, Decl(typeOfThis.ts, 150, 19), Decl(typeOfThis.ts, 151, 7))
-
-    //type of 'this' in a function expression body is Any
-    var t: any;
->t : Symbol(t, Decl(typeOfThis.ts, 155, 7), Decl(typeOfThis.ts, 156, 7))
-
-    var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 155, 7), Decl(typeOfThis.ts, 156, 7))
-
-    this.spaaaaace = 4;
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 27, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 26, 22))
+>this : Symbol(this, Decl(typeofThis.ts, 26, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 26, 22))
 }
 
-//type of 'this' in a fat arrow expression param list is typeof globalThis
-var q2 = (s = this) => {
->q2 : Symbol(q2, Decl(typeOfThis.ts, 161, 3))
->s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
->this : Symbol(globalThis)
+function Test4(this: { no: number } | undefined) {
+>Test4 : Symbol(Test4, Decl(typeofThis.ts, 28, 1))
+>this : Symbol(this, Decl(typeofThis.ts, 30, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 30, 22))
 
-    var s: typeof globalThis;
->s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
->globalThis : Symbol(globalThis)
-
-    s.spaaaaaaace = 4;
->s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
-
-    //type of 'this' in a fat arrow expression body is typeof globalThis
-    var t: typeof globalThis;
->t : Symbol(t, Decl(typeOfThis.ts, 166, 7), Decl(typeOfThis.ts, 167, 7))
->globalThis : Symbol(globalThis)
-
-    var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 166, 7), Decl(typeOfThis.ts, 167, 7))
->this : Symbol(globalThis)
-
-    this.spaaaaace = 4;
->this : Symbol(globalThis)
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 31, 7))
+>this.no : Symbol(no, Decl(typeofThis.ts, 30, 22))
+>this : Symbol(this, Decl(typeofThis.ts, 30, 15))
+>no : Symbol(no, Decl(typeofThis.ts, 30, 22))
 }
 
-//type of 'this' in global module is GlobalThis
-var t: typeof globalThis;
->t : Symbol(t, Decl(typeOfThis.ts, 172, 3), Decl(typeOfThis.ts, 173, 3))
->globalThis : Symbol(globalThis)
+class Test5 {
+>Test5 : Symbol(Test5, Decl(typeofThis.ts, 32, 1))
 
-var t = this;
->t : Symbol(t, Decl(typeOfThis.ts, 172, 3), Decl(typeOfThis.ts, 173, 3))
->this : Symbol(globalThis)
+    no = 1;
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
 
-this.spaaaaace = 4;
->this : Symbol(globalThis)
+    f = () => {
+>f : Symbol(Test5.f, Decl(typeofThis.ts, 35, 11))
 
+        // should not capture this.
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 39, 11))
+>this.no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+>no : Symbol(Test5.no, Decl(typeofThis.ts, 34, 13))
+    }
+}
+
+namespace Test6 {
+>Test6 : Symbol(Test6, Decl(typeofThis.ts, 41, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 44, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 45, 11))
+    }
+}
+
+module Test7 {
+>Test7 : Symbol(Test7, Decl(typeofThis.ts, 47, 1))
+
+    export let f = () => {
+>f : Symbol(f, Decl(typeofThis.ts, 50, 14))
+
+        let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 51, 11))
+    }
+}
+
+const Test8 = () => {
+>Test8 : Symbol(Test8, Decl(typeofThis.ts, 55, 5))
+
+    let x: typeof this.no = 1;
+>x : Symbol(x, Decl(typeofThis.ts, 56, 7))
+}
+
+class Test9 {
+>Test9 : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+
+    no = 0;
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+
+    this = 0;
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+
+    f() {
+>f : Symbol(Test9.f, Decl(typeofThis.ts, 61, 13))
+
+        if (this instanceof Test9D1) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 84, 1))
+
+            const d1: typeof this = this;
+>d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+
+            d1.f1();
+>d1.f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+>d1 : Symbol(d1, Decl(typeofThis.ts, 65, 17))
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+        }
+
+        if (this instanceof Test9D2) {
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 88, 1))
+
+            const d2: typeof this = this;
+>d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+
+            d2.f2();
+>d2.f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+>d2 : Symbol(d2, Decl(typeofThis.ts, 70, 17))
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+        }
+    }
+
+    g() {
+>g : Symbol(Test9.g, Decl(typeofThis.ts, 73, 5))
+
+        if (this.no === 1) {
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+
+            const no: typeof this.no = this.no;
+>no : Symbol(no, Decl(typeofThis.ts, 77, 17))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this.no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>no : Symbol(Test9.no, Decl(typeofThis.ts, 59, 13))
+        }
+
+        if (this.this === 1) {
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+
+            const no: typeof this.this = this.this;
+>no : Symbol(no, Decl(typeofThis.ts, 81, 17))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this.this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+>this : Symbol(Test9, Decl(typeofThis.ts, 57, 1))
+>this : Symbol(Test9.this, Decl(typeofThis.ts, 60, 11))
+        }
+    }
+}
+
+class Test9D1 {
+>Test9D1 : Symbol(Test9D1, Decl(typeofThis.ts, 84, 1))
+
+    f1() { }
+>f1 : Symbol(Test9D1.f1, Decl(typeofThis.ts, 86, 15))
+}
+
+class Test9D2 {
+>Test9D2 : Symbol(Test9D2, Decl(typeofThis.ts, 88, 1))
+
+    f2() { }
+>f2 : Symbol(Test9D2.f2, Decl(typeofThis.ts, 90, 15))
+}
+
+class Test10 {
+>Test10 : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+
+    a?: { b?: string }
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+
+    foo() {
+>foo : Symbol(Test10.foo, Decl(typeofThis.ts, 95, 22))
+
+        let a: typeof this.a = undefined as any;
+>a : Symbol(a, Decl(typeofThis.ts, 98, 11))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>undefined : Symbol(undefined)
+
+        if (this.a) {
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+
+            let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
+>a : Symbol(a, Decl(typeofThis.ts, 100, 15))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>undefined : Symbol(undefined)
+
+            let b: typeof this.a.b = undefined as any;
+>b : Symbol(b, Decl(typeofThis.ts, 101, 15))
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>undefined : Symbol(undefined)
+
+            if (this.a.b) {
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>this : Symbol(Test10, Decl(typeofThis.ts, 92, 1))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+
+                let b: typeof this.a.b = undefined as any;   // should narrow to string
+>b : Symbol(b, Decl(typeofThis.ts, 104, 19))
+>this.a.b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>this.a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>a : Symbol(Test10.a, Decl(typeofThis.ts, 94, 14))
+>b : Symbol(b, Decl(typeofThis.ts, 95, 9))
+>undefined : Symbol(undefined)
+            }
+        }
+    }
+}
+
+class Test11 {
+>Test11 : Symbol(Test11, Decl(typeofThis.ts, 108, 1))
+
+    this?: { x?: string };
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+
+    foo() {
+>foo : Symbol(Test11.foo, Decl(typeofThis.ts, 111, 26))
+
+        const o = this;
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11, Decl(typeofThis.ts, 108, 1))
+
+        let bar: typeof o.this = {};
+>bar : Symbol(bar, Decl(typeofThis.ts, 115, 11))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+
+        if (o.this && o.this.x) {
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o.this.x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+
+            let y: string = o.this.x;   // should narrow to string
+>y : Symbol(y, Decl(typeofThis.ts, 118, 15))
+>o.this.x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+>o.this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>o : Symbol(o, Decl(typeofThis.ts, 114, 13))
+>this : Symbol(Test11.this, Decl(typeofThis.ts, 110, 14))
+>x : Symbol(x, Decl(typeofThis.ts, 111, 12))
+        }
+    }
+}
 

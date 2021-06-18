@@ -88,11 +88,11 @@ class Test9 {
 }
 
 class Test9D1 {
-    f1() {}
+    f1() { }
 }
 
 class Test9D2 {
-    f2() {}
+    f2() { }
 }
 
 class Test10 {
@@ -113,7 +113,7 @@ class Test10 {
 
 class Test11 {
     this?: { x?: string };
-    
+
     foo() {
         const o = this;
         let bar: typeof o.this = {};
