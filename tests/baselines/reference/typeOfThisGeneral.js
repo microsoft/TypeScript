@@ -1,4 +1,4 @@
-//// [typeOfThis.ts]
+//// [typeOfThisGeneral.ts]
 class MyTestClass {
     private canary: number;
     static staticCanary: number;
@@ -177,7 +177,7 @@ this.spaaaaace = 4;
 
 
 
-//// [typeOfThis.js]
+//// [typeOfThisGeneral.js]
 class MyTestClass {
     constructor() {
         this.someFunc = () => {
