@@ -1,4 +1,4 @@
-//// [deleteExpressionMustBeOptional.ts]
+//// [deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts]
 interface Foo {
     a: number
     b: number | undefined
@@ -41,7 +41,7 @@ delete b.a
 delete b.b
 
 
-//// [deleteExpressionMustBeOptional.js]
+//// [deleteExpressionMustBeOptional_exactOptionalPropertyTypes.js]
 delete f.a;
 delete f.b;
 delete f.c;

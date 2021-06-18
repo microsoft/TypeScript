@@ -31276,8 +31276,9 @@ namespace ts {
         }
 
         function checkDeleteExpressionMustBeOptional(expr: AccessExpression, type: Type) {
-            const AnyOrUnknownOrNeverFlags = TypeFlags.AnyOrUnknown | TypeFlags.Never;
-            if (strictNullChecks && !(type.flags & AnyOrUnknownOrNeverFlags) && !(getFalsyFlags(type) & TypeFlags.Undefined)) {
+            if (strictNullChecks &&
+                !(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) &&
+                !(exactOptionalPropertyTypes ? 0 : getFalsyFlags(type) & TypeFlags.Undefined)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
             }
         }
