@@ -1455,11 +1455,8 @@ namespace ts.server {
             const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
 
             return hints.map(hint => ({
-                text: hint.text,
+                ...hint,
                 position: scriptInfo.positionToLineOffset(hint.position),
-                kind: hint.kind,
-                whitespaceBefore: hint.whitespaceBefore,
-                whitespaceAfter: hint.whitespaceAfter
             }));
         }
 

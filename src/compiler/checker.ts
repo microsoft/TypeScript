@@ -30337,7 +30337,7 @@ namespace ts {
             return restParameter.escapedName;
         }
 
-        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [__String, boolean] | undefined {
+        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
             const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
             if (pos < paramCount) {
                 const param = signature.parameters[pos];

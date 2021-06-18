@@ -3,6 +3,10 @@ namespace ts.InlayHints {
 
     const maxHintsLength = 30;
 
+    const leadingParameterNameCommentRegexFactory = (name: string) => {
+        return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
+    };
+
     export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const { file, program, span, cancellationToken, preferences } = context;
         const sourceFileText = file.text;
@@ -38,7 +42,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            if (preferences.includeInlayVariableTypeHints && (isVariableDeclaration(node))) {
+            if (preferences.includeInlayVariableTypeHints && isVariableDeclaration(node)) {
                 visitVariableLikeDeclaration(node);
             }
             else if (preferences.includeInlayPropertyDeclarationTypeHints && isPropertyDeclaration(node)) {
@@ -165,14 +169,13 @@ namespace ts.InlayHints {
         }
 
         function leadingCommentsContainsParameterName(node: Node, name: string) {
-            const fullStart = node.getFullStart();
-            const start = node.getStart();
-            if (start === fullStart) {
+            const ranges = getLeadingCommentRanges(sourceFileText, node.pos);
+            if (!ranges?.length) {
                 return false;
             }
 
-            // leading comments contains parameter name
-            return stringContains(sourceFileText.substring(fullStart, start), name);
+            const regex = leadingParameterNameCommentRegexFactory(name);
+            return some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
         }
 
         function isHintableExpression(node: Node) {
@@ -180,6 +183,12 @@ namespace ts.InlayHints {
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+            if (isArrowFunction(decl)) {
+                if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
+                    return;
+                }
+            }
+
             const effectiveTypeAnnotation = getEffectiveReturnTypeNode(decl);
             if (effectiveTypeAnnotation || !decl.body) {
                 return;

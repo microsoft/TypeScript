@@ -6,7 +6,7 @@
 ////     /** aParameter */
 ////     1,
 ////     // bParameter
-////     2,
+////     /*a*/2,
 ////     /* cParameter */
 ////     3
 //// )
@@ -20,17 +20,17 @@
 ////     2,
 ////     // cParameter
 ////     /** multiple comments */
-////     3
+////     /*b*/3
 //// )
 
 //// foo(
 ////     /** wrong name */
-////     /*a*/1,
-////     /*b*/2,
+////     /*c*/1,
+////     /*d*/2,
 ////     /** multiple */
 ////     /** wrong */
 ////     /** name */
-////     /*c*/3
+////     /*e*/3
 //// )
 
 
@@ -43,20 +43,32 @@ verify.getInlayHints([
         whitespaceBefore: true
     },
     {
-        text: 'aParameter:',
+        text: 'bParameter:',
         position: markers[1].position,
         kind: ts.InlayHintKind.Parameter,
         whitespaceAfter: true
     },
     {
-        text: 'bParameter:',
+        text: 'cParameter:',
         position: markers[2].position,
         kind: ts.InlayHintKind.Parameter,
         whitespaceAfter: true
     },
     {
-        text: 'cParameter:',
+        text: 'aParameter:',
         position: markers[3].position,
+        kind: ts.InlayHintKind.Parameter,
+        whitespaceAfter: true
+    },
+    {
+        text: 'bParameter:',
+        position: markers[4].position,
+        kind: ts.InlayHintKind.Parameter,
+        whitespaceAfter: true
+    },
+    {
+        text: 'cParameter:',
+        position: markers[5].position,
         kind: ts.InlayHintKind.Parameter,
         whitespaceAfter: true
     }

@@ -654,11 +654,9 @@ namespace ts.server {
             const response = this.processResponse<protocol.ProvideInlayHintsResponse>(request);
 
             return response.body!.map(item => ({ // TODO: GH#18217
-                text: item.text,
-                position: this.lineOffsetToPosition(file, item.position),
+                ...item,
                 kind: item.kind as InlayHintKind | undefined,
-                whitespaceBefore: item.whitespaceBefore,
-                whitespaceAfter: item.whitespaceAfter
+                position: this.lineOffsetToPosition(file, item.position),
             }));
         }
 

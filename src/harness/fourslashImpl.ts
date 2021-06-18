@@ -846,7 +846,7 @@ namespace FourSlash {
             };
             ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
                 assert.equal(actual.text, expected.text, "Text");
-                assert.deepEqual(actual.position, expected.position, "Position");
+                assert.equal(actual.position, expected.position, "Position");
                 assert.equal(actual.kind, expected.kind, "Kind");
                 assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
                 assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");

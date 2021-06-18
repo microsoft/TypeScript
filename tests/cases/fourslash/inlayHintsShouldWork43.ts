@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
-//// const a = b/*a*/ => 1
+//// const a = (b)/*a*/ => 1
+//// const aa = b => 1
 
 const markers = test.markers();
 verify.getInlayHints([
