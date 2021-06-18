@@ -1,4 +1,4 @@
-//// [abstractProperty.ts]
+//// [abstractPropertyBasics.ts]
 interface A {
     prop: string;
     raw: string;
@@ -21,7 +21,7 @@ class C extends B {
     m() { }
 }
 
-//// [abstractProperty.js]
+//// [abstractPropertyBasics.js]
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
