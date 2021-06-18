@@ -1,4 +1,4 @@
-=== tests/cases/compiler/abstractProperty.ts ===
+=== tests/cases/compiler/abstractPropertyBasics.ts ===
 interface A {
     prop: string;
 >prop : string
