@@ -1120,10 +1120,6 @@
         "category": "Message",
         "code": 1367
     },
-    "Specify emit/checking behavior for imports that are only used for types": {
-        "category": "Message",
-        "code": 1368
-    },
     "Did you mean '{0}'?": {
         "category": "Message",
         "code": 1369
@@ -2442,9 +2438,17 @@
         "category": "Error",
         "code": 2567
     },
+    "Property '{0}' may not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2568
+    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
+    },
+    "Could not find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2570
     },
     "Object is of type 'unknown'.": {
         "category": "Error",
@@ -4027,11 +4031,11 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'.": {
+    "Specify ECMAScript target version.": {
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'.": {
+    "Specify module code generation.": {
         "category": "Message",
         "code": 6016
     },
@@ -4239,7 +4243,7 @@
         "category": "Message",
         "code": 6079
     },
-    "Specify JSX code generation: 'preserve', 'react-native', 'react', 'react-jsx' or 'react-jsxdev'.": {
+    "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
     },
@@ -4625,10 +4629,6 @@
         "category": "Message",
         "code": 6184
     },
-    "Disable strict checking of generic signatures in function types.": {
-        "category": "Message",
-        "code": 6185
-    },
     "Enable strict checking of function types.": {
         "category": "Message",
         "code": 6186
@@ -4797,10 +4797,6 @@
         "category": "Message",
         "code": 6227
     },
-    "Synchronously call callbacks and update the state of directory watchers on platforms that don't support recursive watching natively.": {
-        "category": "Message",
-        "code": 6228
-    },
     "Tag '{0}' expects at least '{1}' arguments, but the JSX factory '{2}' provides at most '{3}'.": {
         "category": "Error",
         "code": 6229
@@ -4857,7 +4853,7 @@
         "category": "Message",
         "code": 6242
     },
-    "Enable strict checking of optional properties.": {
+    "Interpret optional property types as written, rather than adding 'undefined'.": {
         "category": "Message",
         "code": 6243
     },
@@ -4928,7 +4924,6 @@
         "category": "Message",
         "code": 6302
     },
-
     "Composite projects may not disable declaration emit.": {
         "category": "Error",
         "code": 6304
@@ -5021,17 +5016,9 @@
         "category": "Message",
         "code": 6365
     },
-    "Enable verbose logging": {
-        "category": "Message",
-        "code": 6366
-    },
     "Show what would be built (or deleted, if specified with '--clean')": {
         "category": "Message",
         "code": 6367
-    },
-    "Build all projects, including those that appear to be up to date": {
-        "category": "Message",
-        "code": 6368
     },
     "Option '--build' must be the first command line argument.": {
         "category": "Error",
@@ -5186,23 +5173,592 @@
     },
 
 
+    "Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files.": {
+        "category": "Message",
+        "code": 6600
+      },
+      "Allow 'import x from y' when a module doesn't have a default export.": {
+        "category": "Message",
+        "code": 6601
+      },
+      "Allow accessing UMD globals from modules.": {
+        "category": "Message",
+        "code": 6602
+      },
+      "Disable error reporting for unreachable code.": {
+        "category": "Message",
+        "code": 6603
+      },
+      "Disable error reporting for unused labels.": {
+        "category": "Message",
+        "code": 6604
+      },
+      "Ensure 'use strict' is always emitted.": {
+        "category": "Message",
+        "code": 6605
+      },
+      "Have recompiles in projects that use `incremental` and `watch` mode assume that changes within a file will only affect files directly depending on it.": {
+        "category": "Message",
+        "code": 6606
+      },
+      "Specify the base directory to resolve non-relative module names.": {
+        "category": "Message",
+        "code": 6607
+      },
+      "No longer supported. In early versions, manually set the text encoding for reading files.": {
+        "category": "Message",
+        "code": 6608
+      },
+      "Enable error reporting in type-checked JavaScript files.": {
+        "category": "Message",
+        "code": 6609
+      },
+      "Enable constraints that allow a TypeScript project to be used with project references.": {
+        "category": "Message",
+        "code": 6611
+      },
+      "Generate .d.ts files from TypeScript and JavaScript files in your project.": {
+        "category": "Message",
+        "code": 6612
+      },
+      "Specify the output directory for generated declaration files.": {
+        "category": "Message",
+        "code": 6613
+      },
+      "Create sourcemaps for d.ts files.": {
+        "category": "Message",
+        "code": 6614
+      },
+      "Output compiler performance information after building.": {
+        "category": "Message",
+        "code": 6615
+      },
+      "Disables inference for type acquisition by looking at filenames in a project.": {
+        "category": "Message",
+        "code": 6616
+      },
+      "Reduce the number of projects loaded automatically by TypeScript.": {
+        "category": "Message",
+        "code": 6617
+      },
+      "Remove the 20mb cap on total source code size for JavaScript files in the TypeScript language server.": {
+        "category": "Message",
+        "code": 6618
+      },
+      "Opt a project out of multi-project reference checking when editing.": {
+        "category": "Message",
+        "code": 6619
+      },
+      "Disable preferring source files instead of declaration files when referencing composite projects": {
+        "category": "Message",
+        "code": 6620
+      },
+      "Emit more compliant, but verbose and less performant JavaScript for iteration.": {
+        "category": "Message",
+        "code": 6621
+      },
+      "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
+        "category": "Message",
+        "code": 6622
+      },
+      "Only output d.ts files and not JavaScript files.": {
+        "category": "Message",
+        "code": 6623
+      },
+      "Emit design-type metadata for decorated declarations in source files.": {
+        "category": "Message",
+        "code": 6624
+      },
+      "Disable the type acquisition for JavaScript projects": {
+        "category": "Message",
+        "code": 6625
+      },
+      "Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility.": {
+        "category": "Message",
+        "code": 6626
+      },
+      "Filters results from the `include` option.": {
+        "category": "Message",
+        "code": 6627
+      },
+      "Remove a list of directories from the watch process.": {
+        "category": "Message",
+        "code": 6628
+      },
+      "Remove a list of files from the watch mode's processing.": {
+        "category": "Message",
+        "code": 6629
+      },
+      "Enable experimental support for TC39 stage 2 draft decorators.": {
+        "category": "Message",
+        "code": 6630
+      },
+      "Print files read during the compilation including why it was included.": {
+        "category": "Message",
+        "code": 6631
+      },
+      "Output more detailed compiler performance information after building.": {
+        "category": "Message",
+        "code": 6632
+      },
+      "Specify one or more path or node module references to base configuration files from which settings are inherited.": {
+        "category": "Message",
+        "code": 6633
+      },
+      "Specify what approach the watcher should use if the system runs out of native file watchers.": {
+        "category": "Message",
+        "code": 6634
+      },
+      "Include a list of files. This does not support glob patterns, as opposed to `include`.": {
+        "category": "Message",
+        "code": 6635
+      },
+      "Build all projects, including those that appear to be up to date": {
+        "category": "Message",
+        "code": 6636
+      },
+      "Ensure that casing is correct in imports.": {
+        "category": "Message",
+        "code": 6637
+      },
+      "Emit a v8 CPU profile of the compiler run for debugging.": {
+        "category": "Message",
+        "code": 6638
+      },
+      "Allow importing helper functions from tslib once per project, instead of including them per-file.": {
+        "category": "Message",
+        "code": 6639
+      },
+      "Specify a list of glob patterns that match files to be included in compilation.": {
+        "category": "Message",
+        "code": 6641
+      },
+      "Save .tsbuildinfo files to allow for incremental compilation of projects.": {
+        "category": "Message",
+        "code": 6642
+      },
+      "Include sourcemap files inside the emitted JavaScript.": {
+        "category": "Message",
+        "code": 6643
+      },
+      "Include source code in the sourcemaps inside the emitted JavaScript.": {
+        "category": "Message",
+        "code": 6644
+      },
+      "Ensure that each file can be safely transpiled without relying on other imports.": {
+        "category": "Message",
+        "code": 6645
+      },
+      "Specify what JSX code is generated.": {
+        "category": "Message",
+        "code": 6646
+      },
+      "Specify the JSX factory function used when targeting React JSX emit, e.g. 'React.createElement' or 'h'": {
+        "category": "Message",
+        "code": 6647
+      },
+      "Specify the JSX Fragment reference used for fragments when targeting React JSX emit e.g. 'React.Fragment' or 'Fragment'.": {
+        "category": "Message",
+        "code": 6648
+      },
+      "Specify module specifier used to import the JSX factory functions when using `jsx: react-jsx*`.`": {
+        "category": "Message",
+        "code": 6649
+      },
+      "Make keyof only return strings instead of string, numbers or symbols. Legacy option.": {
+        "category": "Message",
+        "code": 6650
+      },
+      "Specify a set of bundled library declaration files that describe the target runtime environment.": {
+        "category": "Message",
+        "code": 6651
+      },
+      "Print the names of emitted files after a compilation.": {
+        "category": "Message",
+        "code": 6652
+      },
+      "Print all of the files read during the compilation.": {
+        "category": "Message",
+        "code": 6653
+      },
+      "Set the language of the messaging from TypeScript. This does not affect emit.": {
+        "category": "Message",
+        "code": 6654
+      },
+      "Specify the location where debugger should locate map files instead of generated locations.": {
+        "category": "Message",
+        "code": 6655
+      },
+      "Specify the maximum folder depth used for checking JavaScript files from `node_modules`. Only applicable with `allowJs`.": {
+        "category": "Message",
+        "code": 6656
+      },
+      "Specify what module code is generated.": {
+        "category": "Message",
+        "code": 6657
+      },
+      "Specify how TypeScript looks up a file from a given module specifier.": {
+        "category": "Message",
+        "code": 6658
+      },
+      "Set the newline character for emitting files.": {
+        "category": "Message",
+        "code": 6659
+      },
+      "Disable emitting file from a compilation.": {
+        "category": "Message",
+        "code": 6660
+      },
+      "Disable generating custom helper functions like `__extends` in compiled output.": {
+        "category": "Message",
+        "code": 6661
+      },
+      "Disable emitting files if any type checking errors are reported.": {
+        "category": "Message",
+        "code": 6662
+      },
+      "Disable truncating types in error messages.": {
+        "category": "Message",
+        "code": 6663
+      },
+      "Enable error reporting for fallthrough cases in switch statements.": {
+        "category": "Message",
+        "code": 6664
+      },
+      "Enable error reporting for expressions and declarations with an implied `any` type..": {
+        "category": "Message",
+        "code": 6665
+      },
+      "Ensure overriding members in derived classes are marked with an override modifier.": {
+        "category": "Message",
+        "code": 6666
+      },
+      "Enable error reporting for codepaths that do not explicitly return in a function.": {
+        "category": "Message",
+        "code": 6667
+      },
+      "Enable error reporting when `this` is given the type `any`.": {
+        "category": "Message",
+        "code": 6668
+      },
+      "Disable adding 'use strict' directives in emitted JavaScript files.": {
+        "category": "Message",
+        "code": 6669
+      },
+      "Disable including any library files, including the default lib.d.ts.": {
+        "category": "Message",
+        "code": 6670
+      },
+      "Enforces using indexed accessors for keys declared using an indexed type": {
+        "category": "Message",
+        "code": 6671
+      },
+      "Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project.": {
+        "category": "Message",
+        "code": 6672
+      },
+      "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6673
+      },
+      "Add `undefined` to a type when accessed using an index.": {
+        "category": "Message",
+        "code": 6674
+      },
+      "Enable error reporting when a local variables aren't read.": {
+        "category": "Message",
+        "code": 6675
+      },
+      "Raise an error when a function parameter isn't read": {
+        "category": "Message",
+        "code": 6676
+      },
+      "Deprecated setting. Use `outFile` instead.": {
+        "category": "Message",
+        "code": 6677
+      },
+      "Specify an output folder for all emitted files.": {
+        "category": "Message",
+        "code": 6678
+      },
+      "Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output.": {
+        "category": "Message",
+        "code": 6679
+      },
+      "Specify a set of entries that re-map imports to additional lookup locations.": {
+        "category": "Message",
+        "code": 6680
+      },
+      "Specify a list of language service plugins to include.": {
+        "category": "Message",
+        "code": 6681
+      },
+      "Disable erasing `const enum` declarations in generated code.": {
+        "category": "Message",
+        "code": 6682
+      },
+      "Disable resolving symlinks to their realpath. This correlates to the same flag in node.": {
+        "category": "Message",
+        "code": 6683
+      },
+      "Disable wiping the console in watch mode": {
+        "category": "Message",
+        "code": 6684
+      },
+      "Enable color and formatting in output to make compiler errors easier to read": {
+        "category": "Message",
+        "code": 6685
+      },
+      "Specify the object invoked for `createElement`. This only applies when targeting `react` JSX emit.": {
+        "category": "Message",
+        "code": 6686
+      },
+      "Specify an array of objects that specify paths for projects. Used in project references.": {
+        "category": "Message",
+        "code": 6687
+      },
+      "Disable emitting comments.": {
+        "category": "Message",
+        "code": 6688
+      },
+      "Enable importing .json files": {
+        "category": "Message",
+        "code": 6689
+      },
+      "Specify the root folder within your source files.": {
+        "category": "Message",
+        "code": 6690
+      },
+      "Allow multiple folders to be treated as one when resolving modules.": {
+        "category": "Message",
+        "code": 6691
+      },
+      "Skip type checking .d.ts files that are included with TypeScript.": {
+        "category": "Message",
+        "code": 6692
+      },
+      "Skip type checking all .d.ts files.": {
+        "category": "Message",
+        "code": 6693
+      },
+      "Create source map files for emitted JavaScript files.": {
+        "category": "Message",
+        "code": 6694
+      },
+      "Specify the root path for debuggers to find the reference source code.": {
+        "category": "Message",
+        "code": 6695
+      },
+      "Check that the arguments for `bind`, `call`, and `apply` methods match the original function.": {
+        "category": "Message",
+        "code": 6697
+      },
+      "When assigning functions, check to ensure parameters and the return values are subtype-compatible.": {
+        "category": "Message",
+        "code": 6698
+      },
+      "When type checking, take into account `null` and `undefined`.": {
+        "category": "Message",
+        "code": 6699
+      },
+      "Check for class properties that are declared but not set in the constructor.": {
+        "category": "Message",
+        "code": 6700
+      },
+      "Disable emitting declarations that have `@internal` in their JSDoc comments.": {
+        "category": "Message",
+        "code": 6701
+      },
+      "Disable reporting of excess property errors during the creation of object literals.": {
+        "category": "Message",
+        "code": 6702
+      },
+      "Suppress `noImplicitAny` errors when indexing objects that lack index signatures.": {
+        "category": "Message",
+        "code": 6703
+      },
+      "Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.": {
+        "category": "Message",
+        "code": 6704
+      },
+      "Set the JavaScript language version for emitted JavaScript and include compatible library declarations.": {
+        "category": "Message",
+        "code": 6705
+      },
+      "Log paths used during the `moduleResolution` process.": {
+        "category": "Message",
+        "code": 6706
+      },
+      "Specify the folder for .tsbuildinfo incremental compilation files.": {
+        "category": "Message",
+        "code": 6707
+      },
+      "Specify options for automatic acquisition of declaration files.": {
+        "category": "Message",
+        "code": 6709
+      },
+      "Specify multiple folders that act like `./node_modules/@types`.": {
+        "category": "Message",
+        "code": 6710
+      },
+      "Specify type package names to be included without being referenced in a source file.": {
+        "category": "Message",
+        "code": 6711
+      },
+      "Emit ECMAScript-standard-compliant class fields.": {
+        "category": "Message",
+        "code": 6712
+      },
+      "Enable verbose logging": {
+        "category": "Message",
+        "code": 6713
+      },
+      "Specify how directories are watched on systems that lack recursive file-watching functionality.": {
+        "category": "Message",
+        "code": 6714
+      },
+      "Specify how the TypeScript watch mode works.": {
+        "category": "Message",
+        "code": 6715
+      },
     "Include 'undefined' in index signature results": {
         "category": "Message",
-        "code": 6800
-    },
-    "Ensure overriding members in derived classes are marked with an 'override' modifier.": {
-        "category": "Message",
-        "code": 6801
+        "code": 6716
     },
     "Require undeclared properties from index signatures to use element accesses.": {
         "category": "Message",
-        "code": 6802
+        "code": 6717
+    },
+    "Specify emit/checking behavior for imports that are only used for types": {
+        "category": "Message",
+        "code": 6718
     },
     "Type catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
     },
  
+    "one of:": {
+        "category": "Message",
+        "code": 6900
+    },
+    "one or more:": {
+        "category": "Message",
+        "code": 6901
+    },
+    "type:": {
+        "category": "Message",
+        "code": 6902
+    },
+    "default:": {
+        "category": "Message",
+        "code": 6903
+    },
+    "module === \"system\" or esModuleInterop": {
+        "category": "Message",
+        "code": 6904
+    },
+    "`false`, unless `strict` is set": {
+        "category": "Message",
+        "code": 6905
+    },
+    "`false`, unless `composite` is set": {
+        "category": "Message",
+        "code": 6906
+    },
+    "`[\"node_modules\", \"bower_components\", \"jspm_packages\"]`, plus the value of `outDir` if one is specified.": {
+        "category": "Message",
+        "code": 6907
+    },
+    "`[]` if `files` is specified, otherwise `[\"**/*\"]`": {
+        "category": "Message",
+        "code": 6908
+    },
+    "`true` if `composite`, `false` otherwise": {
+        "category": "Message",
+        "code": 6909
+    },
+    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+        "category": "Message",
+        "code": 69010
+    },
+    "Computed from the list of input files": {
+        "category": "Message",
+        "code": 6911
+    },
+    "Platform specific": {
+        "category": "Message",
+        "code": 6912
+    },
+    "You can learn about all of the compiler options at {0}": {
+        "category": "Message",
+        "code": 6913
+    },
+    "Including --watch, -w will start watching the current project for the file changes. Once set, you can config watch mode with:": {
+        "category": "Message",
+        "code": 6914
+    },
+    "Using --build, -b will make tsc behave more like a build orchestrator than a compiler. This is used to trigger building composite projects which you can learn more about at {0}": {
+        "category": "Message",
+        "code": 6915
+    },
+    "COMMON COMMANDS": {
+        "category": "Message",
+        "code": 6916
+    },
+    "ALL COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6917
+    },
+    "WATCH OPTIONS": {
+        "category": "Message",
+        "code": 6918
+    },
+    "BUILD OPTIONS": {
+        "category": "Message",
+        "code": 6919
+    },
+    "COMMON COMPILER OPTIONS": {
+        "category": "Message",
+        "code": 6920
+    },
+    "COMMAND LINE FLAGS": {
+        "category": "Message",
+        "code": 6921
+    },
+    "tsc: The TypeScript Compiler": {
+        "category": "Message",
+        "code": 6922
+    },
+    "Compiles the current project (tsconfig.json in the working directory.)": {
+        "category": "Message",
+        "code": 6923
+    },
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options": {
+        "category": "Message",
+        "code": 6924
+    },
+    "Build a composite project in the working directory.": {
+        "category": "Message",
+        "code": 6925
+    },
+    "Creates a tsconfig.json with the recommended settings in the working directory.": {
+        "category": "Message",
+        "code": 6926
+    },
+    "Compiles the TypeScript project located at the specified path": {
+        "category": "Message",
+        "code": 6927
+    },
+    "An expanded version of this information, showing all possible compiler options": {
+        "category": "Message",
+        "code": 6928
+    },
+    "Compiles the current project, with additional settings": {
+        "category": "Message",
+        "code": 6929
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -6140,10 +6696,6 @@
         "category": "Message",
         "code": 95075
     },
-    "Allow accessing UMD globals from modules.": {
-        "category": "Message",
-        "code": 95076
-    },
     "Extract type": {
         "category": "Message",
         "code": 95077
@@ -6495,6 +7047,14 @@
     "Can only convert named export": {
         "category": "Message",
         "code": 95164
+    },
+    "Add missing properties": {
+        "category": "Message",
+        "code": 95165
+    },
+    "Add all missing properties": {
+        "category": "Message",
+        "code": 95166
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

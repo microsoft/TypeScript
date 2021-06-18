@@ -73,10 +73,14 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 function fn(a, b, c, d, e, f, g) {
     var c_1, c_1_1;
@@ -94,7 +98,7 @@ function fn(a, b, c, d, e, f, g) {
                     b++;
                     --b;
                     a === b;
-                    __spreadArray([], c);
+                    __spreadArray([], c, true);
                     for (_i = 0, c_2 = c; _i < c_2.length; _i++) {
                         s = c_2[_i];
                         fn(b, b, c, d, e, f, g);

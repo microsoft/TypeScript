@@ -655,7 +655,7 @@ ${usage}`
             );
 
             verify(
-                "when using arrow function as object literal property",
+                "when using arrow function as object literal property types",
                 `export const foo = { bar: () => { } };`,
                 `shared.foo.bar();`,
                 "bar"
@@ -676,8 +676,10 @@ instance.fly();`,
                 "fly"
             );
 
+
             verify(
-                "when using arrow function as object literal property is loaded through indirect assignment with original declaration local to project is treated as local",
+                // when using arrow function as object literal property is loaded through indirect assignment with original declaration local to project is treated as local
+                "when using arrow function as object literal property",
                 `const local = { bar: () => { } };
 export const foo = local;`,
                 `shared.foo.bar();`,

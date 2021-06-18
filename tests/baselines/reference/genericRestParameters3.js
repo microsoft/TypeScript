@@ -68,17 +68,21 @@ foo2(...x2);
 
 //// [genericRestParameters3.js]
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 f1("foo", "abc");
 f1("foo", 10, true);
-f1.apply(void 0, __spreadArray(["foo"], t1));
-f1.apply(void 0, __spreadArray(["foo"], t2));
-f1.apply(void 0, __spreadArray(["foo"], t3));
-f1.apply(void 0, __spreadArray(["foo"], t4));
+f1.apply(void 0, __spreadArray(["foo"], t1, false));
+f1.apply(void 0, __spreadArray(["foo"], t2, false));
+f1.apply(void 0, __spreadArray(["foo"], t3, false));
+f1.apply(void 0, __spreadArray(["foo"], t4, false));
 f1("foo", 10); // Error
 f1("foo"); // Error
 f2 = f1;

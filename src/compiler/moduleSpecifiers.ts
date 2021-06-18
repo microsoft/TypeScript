@@ -47,7 +47,7 @@ namespace ts.moduleSpecifiers {
         host: ModuleSpecifierResolutionHost,
         oldImportSpecifier: string,
     ): string | undefined {
-        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferencesForUpdate(compilerOptions, oldImportSpecifier));
+        const res = getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferencesForUpdate(compilerOptions, oldImportSpecifier), {});
         if (res === oldImportSpecifier) return undefined;
         return res;
     }
@@ -59,9 +59,8 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
-        preferences: UserPreferences = {},
     ): string {
-        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferences(preferences, compilerOptions, importingSourceFile));
+        return getModuleSpecifierWorker(compilerOptions, importingSourceFileName, toFileName, host, getPreferences({}, compilerOptions, importingSourceFile), {});
     }
 
     export function getNodeModulesPackageName(
@@ -69,9 +68,10 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         nodeModulesFileName: string,
         host: ModuleSpecifierResolutionHost,
+        preferences: UserPreferences,
     ): string | undefined {
         const info = getInfo(importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(importingSourceFileName, nodeModulesFileName, host);
+        const modulePaths = getAllModulePaths(importingSourceFileName, nodeModulesFileName, host, preferences);
         return firstDefined(modulePaths,
             modulePath => tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions, /*packageNameOnly*/ true));
     }
@@ -81,10 +81,11 @@ namespace ts.moduleSpecifiers {
         importingSourceFileName: Path,
         toFileName: string,
         host: ModuleSpecifierResolutionHost,
-        preferences: Preferences
+        preferences: Preferences,
+        userPreferences: UserPreferences,
     ): string {
         const info = getInfo(importingSourceFileName, host);
-        const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host);
+        const modulePaths = getAllModulePaths(importingSourceFileName, toFileName, host, userPreferences);
         return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, host, compilerOptions)) ||
             getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
     }
@@ -106,9 +107,17 @@ namespace ts.moduleSpecifiers {
         if (!moduleSourceFile) {
             return [];
         }
-        const modulePaths = getAllModulePaths(importingSourceFile.path, moduleSourceFile.originalFileName, host);
-        const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
 
+        const cache = host.getModuleSpecifierCache?.();
+        const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences);
+        let modulePaths;
+        if (cached) {
+            if (cached.moduleSpecifiers) return cached.moduleSpecifiers;
+            modulePaths = cached.modulePaths;
+        }
+
+        modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
             reason => {
@@ -120,7 +129,11 @@ namespace ts.moduleSpecifiers {
                     undefined;
             }
         ));
-        if (existingSpecifier) return [existingSpecifier];
+        if (existingSpecifier) {
+            const moduleSpecifiers = [existingSpecifier];
+            cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
+            return moduleSpecifiers;
+        }
 
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
 
@@ -138,6 +151,7 @@ namespace ts.moduleSpecifiers {
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
+                cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, nodeModulesSpecifiers!);
                 return nodeModulesSpecifiers!;
             }
 
@@ -161,9 +175,11 @@ namespace ts.moduleSpecifiers {
             }
         }
 
-        return pathsSpecifiers?.length ? pathsSpecifiers :
+        const moduleSpecifiers = pathsSpecifiers?.length ? pathsSpecifiers :
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
             Debug.checkDefined(relativeSpecifiers);
+        cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
+        return moduleSpecifiers;
     }
 
     interface Info {
@@ -329,13 +345,27 @@ namespace ts.moduleSpecifiers {
      * Looks for existing imports that use symlinks to this module.
      * Symlinks will be returned first so they are preferred over the real path.
      */
-    function getAllModulePaths(importingFileName: Path, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+    function getAllModulePaths(
+        importingFilePath: Path,
+        importedFileName: string,
+        host: ModuleSpecifierResolutionHost,
+        preferences: UserPreferences,
+        importedFilePath = toPath(importedFileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host))
+    ) {
         const cache = host.getModuleSpecifierCache?.();
-        const getCanonicalFileName = hostGetCanonicalFileName(host);
         if (cache) {
-            const cached = cache.get(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName));
-            if (typeof cached === "object") return cached;
+            const cached = cache.get(importingFilePath, importedFilePath, preferences);
+            if (cached?.modulePaths) return cached.modulePaths;
         }
+        const modulePaths = getAllModulePathsWorker(importingFilePath, importedFileName, host);
+        if (cache) {
+            cache.setModulePaths(importingFilePath, importedFilePath, preferences, modulePaths);
+        }
+        return modulePaths;
+    }
+
+    function getAllModulePathsWorker(importingFileName: Path, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+        const getCanonicalFileName = hostGetCanonicalFileName(host);
         const allFileNames = new Map<string, { path: string, isRedirect: boolean, isInNodeModules: boolean }>();
         let importedFileFromNodeModules = false;
         forEachFileNameOfModule(
@@ -381,9 +411,6 @@ namespace ts.moduleSpecifiers {
             sortedPaths.push(...remainingPaths);
         }
 
-        if (cache) {
-            cache.set(importingFileName, toPath(importedFileName, host.getCurrentDirectory(), getCanonicalFileName), sortedPaths);
-        }
         return sortedPaths;
     }
 

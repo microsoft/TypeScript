@@ -510,3 +510,176 @@ interface Test {
 >bar : string | undefined
 }
 
+// Strict optional properties and inference
+
+declare let ox1: { p: string };
+>ox1 : { p: string; }
+>p : string
+
+declare let ox2: { p: string | undefined };
+>ox2 : { p: string | undefined; }
+>p : string | undefined
+
+declare let ox3: { p?: string };
+>ox3 : { p?: string; }
+>p : string | undefined
+
+declare let ox4: { p?: string | undefined };
+>ox4 : { p?: string | undefined; }
+>p : string | undefined
+
+declare let tx1: [string];
+>tx1 : [string]
+
+declare let tx2: [string | undefined];
+>tx2 : [string | undefined]
+
+declare let tx3: [string?];
+>tx3 : [string?]
+
+declare let tx4: [(string | undefined)?];
+>tx4 : [(string | undefined)?]
+
+declare function f11<T>(x: { p?: T }): T;
+>f11 : <T>(x: {    p?: T;}) => T
+>x : { p?: T; }
+>p : T | undefined
+
+f11(ox1);  // string
+>f11(ox1) : string
+>f11 : <T>(x: { p?: T; }) => T
+>ox1 : { p: string; }
+
+f11(ox2);  // string | undefined
+>f11(ox2) : string | undefined
+>f11 : <T>(x: { p?: T; }) => T
+>ox2 : { p: string | undefined; }
+
+f11(ox3);  // string
+>f11(ox3) : string
+>f11 : <T>(x: { p?: T; }) => T
+>ox3 : { p?: string; }
+
+f11(ox4);  // string | undefined
+>f11(ox4) : string | undefined
+>f11 : <T>(x: { p?: T; }) => T
+>ox4 : { p?: string | undefined; }
+
+declare function f12<T>(x: [T?]): T;
+>f12 : <T>(x: [T?]) => T
+>x : [T?]
+
+f12(tx1);  // string
+>f12(tx1) : string
+>f12 : <T>(x: [T?]) => T
+>tx1 : [string]
+
+f12(tx2);  // string | undefined
+>f12(tx2) : string | undefined
+>f12 : <T>(x: [T?]) => T
+>tx2 : [string | undefined]
+
+f12(tx3);  // string
+>f12(tx3) : string
+>f12 : <T>(x: [T?]) => T
+>tx3 : [string?]
+
+f12(tx4);  // string | undefined
+>f12(tx4) : string | undefined
+>f12 : <T>(x: [T?]) => T
+>tx4 : [(string | undefined)?]
+
+declare function f13<T>(x: Partial<T>): T;
+>f13 : <T>(x: Partial<T>) => T
+>x : Partial<T>
+
+f13(ox1);  // { p: string }
+>f13(ox1) : { p: string; }
+>f13 : <T>(x: Partial<T>) => T
+>ox1 : { p: string; }
+
+f13(ox2);  // { p: string | undefined }
+>f13(ox2) : { p: string | undefined; }
+>f13 : <T>(x: Partial<T>) => T
+>ox2 : { p: string | undefined; }
+
+f13(ox3);  // { p: string }
+>f13(ox3) : { p: string; }
+>f13 : <T>(x: Partial<T>) => T
+>ox3 : { p?: string; }
+
+f13(ox4);  // { p: string | undefined }
+>f13(ox4) : { p: string | undefined; }
+>f13 : <T>(x: Partial<T>) => T
+>ox4 : { p?: string | undefined; }
+
+f13(tx1);  // [string]
+>f13(tx1) : [string]
+>f13 : <T>(x: Partial<T>) => T
+>tx1 : [string]
+
+f13(tx2);  // [string | undefined]
+>f13(tx2) : [string | undefined]
+>f13 : <T>(x: Partial<T>) => T
+>tx2 : [string | undefined]
+
+f13(tx3);  // [string]
+>f13(tx3) : [string]
+>f13 : <T>(x: Partial<T>) => T
+>tx3 : [string?]
+
+f13(tx4);  // [string | undefined]
+>f13(tx4) : [string | undefined]
+>f13 : <T>(x: Partial<T>) => T
+>tx4 : [(string | undefined)?]
+
+// Repro from #44388
+
+type Undefinable<T> = T | undefined;
+>Undefinable : Undefinable<T>
+
+function expectNotUndefined<T>(value: Undefinable<T>): T {
+>expectNotUndefined : <T>(value: Undefinable<T>) => T
+>value : Undefinable<T>
+
+    if (value === undefined) {
+>value === undefined : boolean
+>value : Undefinable<T>
+>undefined : undefined
+
+        throw new TypeError('value is undefined');
+>new TypeError('value is undefined') : TypeError
+>TypeError : TypeErrorConstructor
+>'value is undefined' : "value is undefined"
+    }
+    return value;
+>value : T
+}
+
+interface Bar {
+    bar?: number;
+>bar : number | undefined
+}
+
+function aa(input: Bar): void {
+>aa : (input: Bar) => void
+>input : Bar
+
+    const notUndefinedVal = expectNotUndefined(input.bar);
+>notUndefinedVal : number
+>expectNotUndefined(input.bar) : number
+>expectNotUndefined : <T>(value: Undefinable<T>) => T
+>input.bar : number | undefined
+>input : Bar
+>bar : number | undefined
+
+    bb(notUndefinedVal);
+>bb(notUndefinedVal) : void
+>bb : (input: number) => void
+>notUndefinedVal : number
+}
+
+declare function bb(input: number): void;
+>bb : (input: number) => void
+>input : number
+
