@@ -193,6 +193,7 @@ declare namespace FourSlashInterface {
         markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesInFile(fileName?: string): Range[];
         spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
@@ -635,6 +636,8 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";

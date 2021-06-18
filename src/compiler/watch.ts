@@ -1,16 +1,16 @@
 /*@internal*/
 namespace ts {
-    const sysFormatDiagnosticsHost: FormatDiagnosticsHost = sys ? {
+    const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
         getCurrentDirectory: () => sys.getCurrentDirectory(),
         getNewLine: () => sys.newLine,
         getCanonicalFileName: createGetCanonicalFileName(sys.useCaseSensitiveFileNames)
-    } : undefined!; // TODO: GH#18217
+    } : undefined;
 
     /**
      * Create a function that reports error by writing to the system and handles the formating of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
-        const host: FormatDiagnosticsHost = system === sys ? sysFormatDiagnosticsHost : {
+        const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
             getCurrentDirectory: () => system.getCurrentDirectory(),
             getNewLine: () => system.newLine,
             getCanonicalFileName: createGetCanonicalFileName(system.useCaseSensitiveFileNames),

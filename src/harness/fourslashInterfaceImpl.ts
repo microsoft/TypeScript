@@ -23,6 +23,10 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
+        public rangesInFile(fileName?: string): FourSlash.Range[] {
+            return this.state.getRangesInFile(fileName);
+        }
+
         public spans(): ts.TextSpan[] {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }

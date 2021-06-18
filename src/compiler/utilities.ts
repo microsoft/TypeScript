@@ -4348,6 +4348,18 @@ namespace ts {
         return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
     }
 
+    export function isThisInTypeQuery(node: Node): boolean {
+        if (!isThisIdentifier(node)) {
+            return false;
+        }
+
+        while (isQualifiedName(node.parent) && node.parent.left === node) {
+            node = node.parent;
+        }
+
+        return node.parent.kind === SyntaxKind.TypeQuery;
+    }
+
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
@@ -6086,8 +6098,8 @@ namespace ts {
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"
-        | "strictOptionalProperties"
         | "alwaysStrict"
+        | "useUnknownInCatchVariables"
         ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
@@ -6166,12 +6178,25 @@ namespace ts {
         setSymlinkedFile(symlinkPath: Path, real: string): void;
         /*@internal*/
         setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
+        /**
+         * @internal
+         * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
+         * don't include automatic type reference directives. Must be called only when
+         * `hasProcessedResolutions` returns false (once per cache instance).
+         */
+        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        /**
+         * @internal
+         * Whether `setSymlinksFromResolutions` has already been called.
+         */
+        hasProcessedResolutions(): boolean;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
         let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
+        let hasProcessedResolutions = false;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
@@ -6200,28 +6225,28 @@ namespace ts {
                     });
                 }
             },
+            setSymlinksFromResolutions(files, typeReferenceDirectives) {
+                Debug.assert(!hasProcessedResolutions);
+                hasProcessedResolutions = true;
+                for (const file of files) {
+                    file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                }
+                typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            },
+            hasProcessedResolutions: () => hasProcessedResolutions,
         };
-    }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatMap(files, sf => {
-            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
-                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
-            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
-                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
-        });
-
-        for (const [resolvedPath, originalPath] of symlinks) {
-            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+        function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
+            if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
+            const { resolvedFileName, originalPath } = resolution;
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
-        return cache;
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {

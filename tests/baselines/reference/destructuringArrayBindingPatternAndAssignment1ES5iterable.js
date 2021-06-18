@@ -86,10 +86,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 // In a destructuring assignment expression, the type of the expression on the right must be assignable to the assignment target on the left.
 // An expression of type S is considered assignable to an assignment target V if one of the following is true
@@ -109,7 +113,7 @@ var _g = __read(foo(), 2), b6 = _g[0], b7 = _g[1];
 var _h = __read(foo()), b8 = _h.slice(0);
 //      S is not a tuple- like type and the numeric index signature type of S is assignable to the target given in E.
 var temp = [1, 2, 3];
-var _j = __read(__spreadArray([], __read(temp)), 2), c0 = _j[0], c1 = _j[1];
+var _j = __read(__spreadArray([], __read(temp), false), 2), c0 = _j[0], c1 = _j[1];
 var _k = __read([], 1), c2 = _k[0];
 var _l = __read([[[]], [[[[]]]]], 2), _m = __read(_l[0], 1), _o = __read(_m[0], 1), c3 = _o[0], _p = __read(_l[1], 1), _q = __read(_p[0], 1), _r = __read(_q[0], 1), _s = __read(_r[0], 1), c4 = _s[0];
 var _t = __read([[1], true], 2), _u = __read(_t[0], 1), c5 = _u[0], c6 = _t[1];

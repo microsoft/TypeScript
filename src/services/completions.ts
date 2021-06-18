@@ -1245,6 +1245,7 @@ namespace ts.Completions {
                         break;
 
                     case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxSpreadAttribute:
                         // For `<div foo={true} [||] ></div>`, `parent` will be `{true}` and `previousToken` will be `}`
                         if (previousToken.kind === SyntaxKind.CloseBraceToken && currentToken.kind === SyntaxKind.GreaterThanToken) {
                             isJsxIdentifierExpected = true;
@@ -1594,6 +1595,7 @@ namespace ts.Completions {
 
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
+            isNewIdentifierLocation = true;
             collectAutoImports(/*resolveModuleSpecifiers*/ true);
             return GlobalsSearch.Success;
         }
@@ -1753,7 +1755,7 @@ namespace ts.Completions {
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
-            const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, host);
+            const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             exportInfo.forEach((info, key) => {
                 const symbolName = key.substring(0, key.indexOf("|"));
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
@@ -1762,7 +1764,7 @@ namespace ts.Completions {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
                     const { moduleSpecifier, exportInfo } = resolveModuleSpecifiers
-                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences)
+                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences) || {}
                         : { moduleSpecifier: undefined, exportInfo: find(info, isImportableExportInfo) };
                     if (!exportInfo) return;
                     const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
@@ -1802,6 +1804,7 @@ namespace ts.Completions {
                     info.isFromPackageJson ? packageJsonAutoImportProvider! : program,
                     sourceFile,
                     moduleFile,
+                    preferences,
                     packageJsonFilter,
                     getModuleSpecifierResolutionHost(info.isFromPackageJson),
                     moduleSpecifierCache);
