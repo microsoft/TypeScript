@@ -174,7 +174,9 @@ namespace ts.textChanges {
             return node.getStart(sourceFile);
         }
         if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
-            return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
+            const startPos = node.getStart(sourceFile);
+            const pos = getLineStartPositionForPosition(startPos, sourceFile);
+            return rangeContainsPosition(node, pos) ? pos : startPos;
         }
         if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
             const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
