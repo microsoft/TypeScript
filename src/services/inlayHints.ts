@@ -10,6 +10,7 @@ namespace ts.InlayHints {
     export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const { file, program, span, cancellationToken, preferences } = context;
         const sourceFileText = file.text;
+        const compilerOptions = program.getCompilerOptions();
 
         const checker = program.getTypeChecker();
         const result: InlayHint[] = [];
@@ -169,6 +170,10 @@ namespace ts.InlayHints {
         }
 
         function leadingCommentsContainsParameterName(node: Node, name: string) {
+            if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+                return false;
+            }
+
             const ranges = getLeadingCommentRanges(sourceFileText, node.pos);
             if (!ranges?.length) {
                 return false;
