@@ -126,8 +126,7 @@ console.log(b.c.d);`
                     ],
                 });
             }
-            // "updates errors when deep import file changes"
-            describe("errors for .ts change", () => {
+            describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.ts`,
                     content: `import {C} from './c';
@@ -144,13 +143,12 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import file changes",
+                    "errors for .ts change",
                     bFile,
                     cFile
                 );
             });
-            // "updates errors when deep import through declaration file changes"
-            describe("errors for .d.ts change", () => {
+            describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.d.ts`,
                     content: `import {C} from './c';
@@ -167,7 +165,7 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import through declaration file changes",
+                    "errors for .d.ts change",
                     bFile,
                     cFile
                 );
@@ -236,8 +234,7 @@ getPoint().c.x;`
                 ]
             });
         });
-        // "updates errors when file transitively exported file changes"
-        describe("transitive exports", () => {
+        describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
@@ -287,7 +284,7 @@ export class Data {
 
             function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
                 verifyEmitAndErrorUpdates({
-                    subScenario: `updates errors when file transitively exported file changes/${subScenario}`,
+                    subScenario: `transitive exports/${subScenario}`,
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
@@ -309,15 +306,13 @@ export class Data {
                     ]
                 });
             }
-            // "when there are no circular import and exports"
-            describe("no circular import/export", () => {
+            describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(
-                    "when there are no circular import and exports",
+                    "no circular import/export",
                     [lib2Data]
                 );
             });
-            // "when there are circular import and exports"
-            describe("yes circular import/exports", () => {
+            describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
                     path: `${projectRoot}/lib2/data.ts`,
                     content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
@@ -338,7 +333,7 @@ export class Data2 {
 }`
                 };
                 verifyTransitiveExports(
-                    "when there are circular import and exports",
+                    "yes circular import/exports",
                     [lib2Data, lib2Data2]
                 );
             });
