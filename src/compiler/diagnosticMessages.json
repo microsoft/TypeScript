@@ -4853,7 +4853,7 @@
         "category": "Message",
         "code": 6242
     },
-    "Enable strict checking of optional properties.": {
+    "Interpret optional property types as written, rather than adding 'undefined'.": {
         "category": "Message",
         "code": 6243
     },
@@ -7047,6 +7047,14 @@
     "Can only convert named export": {
         "category": "Message",
         "code": 95164
+    },
+    "Add missing properties": {
+        "category": "Message",
+        "code": 95165
+    },
+    "Add all missing properties": {
+        "category": "Message",
+        "code": 95166
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

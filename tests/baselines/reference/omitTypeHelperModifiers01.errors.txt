@@ -1,8 +1,7 @@
-tests/cases/compiler/omitTypeHelperModifiers01.ts(13,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/compiler/omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot assign to 'c' because it is a read-only property.
 
 
-==== tests/cases/compiler/omitTypeHelperModifiers01.ts (2 errors) ====
+==== tests/cases/compiler/omitTypeHelperModifiers01.ts (1 errors) ====
     type A = {
         a: number;
         b?: string;
@@ -16,8 +15,6 @@ tests/cases/compiler/omitTypeHelperModifiers01.ts(16,7): error TS2540: Cannot as
         const b = x.b;
         x.b = "hello";
         x.b = undefined;
-        ~~~
-!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     
         const c = x.c;
         x.c = true;

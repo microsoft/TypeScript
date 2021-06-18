@@ -4275,6 +4275,7 @@ namespace ts {
         /* @internal */ getInstantiationCount(): number;
         /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
         /* @internal */ getRecursionIdentity(type: Type): object | undefined;
+        /* @internal */ getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): IterableIterator<Symbol>;
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -5971,6 +5972,7 @@ namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/generateCpuProfile?: string;
@@ -6045,7 +6047,6 @@ namespace ts {
         strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
-        strictOptionalProperties?: boolean;  // Always combine with strict property
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

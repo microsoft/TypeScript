@@ -1,5 +1,5 @@
 // @strict: true
-// @strictOptionalProperties: true
+// @exactOptionalPropertyTypes: true
 // @declaration: true
 
 declare function test<T>(x: { [key: string]: T }): T;
