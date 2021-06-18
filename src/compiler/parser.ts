@@ -444,6 +444,7 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (node as CommaListExpression).elements);
             case SyntaxKind.PrivateIdentifierInInExpression:
                 return visitNode(cbNode, (node as PrivateIdentifierInInExpression).name) ||
+                    visitNode(cbNode, (node as PrivateIdentifierInInExpression).inToken) ||
                     visitNode(cbNode, (node as PrivateIdentifierInInExpression).expression);
 
             case SyntaxKind.JsxElement:
