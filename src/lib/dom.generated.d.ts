@@ -11309,7 +11309,7 @@ interface PaymentRequest extends EventTarget {
     readonly shippingType: PaymentShippingType | null;
     abort(): Promise<void>;
     canMakePayment(): Promise<boolean>;
-    show(detailsPromise: PaymentDetailsUpdate | Promise<PaymentDetailsUpdate>): Promise<PaymentResponse>;
+    show(detailsPromise?: PaymentDetailsUpdate | Promise<PaymentDetailsUpdate>): Promise<PaymentResponse>;
     addEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
