@@ -417,6 +417,7 @@ namespace ts {
             },
             getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType: (type, kind) => getIndexInfoOfType(type, kind === IndexKind.String ? stringType : numberType),
+            getIndexInfosOfType,
             getSignaturesOfType,
             getIndexTypeOfType: (type, kind) => getIndexTypeOfType(type, kind === IndexKind.String ? stringType : numberType),
             getBaseTypes,
@@ -451,6 +452,10 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn);
                 // set ignoreErrors: true because any lookups invoked by the API shouldn't cause any new errors
                 return node ? getSymbolAtLocation(node, /*ignoreErrors*/ true) : undefined;
+            },
+            getIndexInfosAtLocation: nodeIn => {
+                const node = getParseTreeNode(nodeIn);
+                return node ? getIndexInfosAtLocation(node) : undefined;
             },
             getShorthandAssignmentValueSymbol: nodeIn => {
                 const node = getParseTreeNode(nodeIn);
@@ -12016,12 +12021,12 @@ namespace ts {
                 undefined;
         }
 
-        function isApplicableIndexType(source: Type, target: Type) {
+        function isApplicableIndexType(source: Type, target: Type): boolean {
             // A 'string' index signature applies to types assignable to 'string' or 'number', and a 'number' index
             // signature applies to types assignable to 'number' and numeric string literal types.
             return isTypeAssignableTo(source, target) ||
                 target === stringType && isTypeAssignableTo(source, numberType) ||
-                target === numberType && source.flags & TypeFlags.StringLiteral && isNumericLiteralName((source as StringLiteralType).value);
+                target === numberType && !!(source.flags & TypeFlags.StringLiteral) && isNumericLiteralName((source as StringLiteralType).value);
         }
 
         function getIndexInfosOfStructuredType(type: Type): readonly IndexInfo[] {
@@ -39540,6 +39545,16 @@ namespace ts {
                 default:
                     return undefined;
             }
+        }
+
+        function getIndexInfosAtLocation(node: Node): readonly IndexInfo[] | undefined {
+            if (isIdentifier(node) && isPropertyAccessExpression(node.parent) && node.parent.name === node) {
+                const keyType = getLiteralTypeFromPropertyName(node);
+                const objectType = getTypeOfExpression(node.parent.expression);
+                const objectTypes = objectType.flags & TypeFlags.Union ? (objectType as UnionType).types : [objectType];
+                return flatMap(objectTypes, t => filter(getIndexInfosOfType(t), info => isApplicableIndexType(keyType, info.keyType)));
+            }
+            return undefined;
         }
 
         function getShorthandAssignmentValueSymbol(location: Node | undefined): Symbol | undefined {
