@@ -178,15 +178,15 @@ declare let y12: {
 };
 declare function nonpartial<T>(x: Partial<T>): T;
 declare let x20: [number | undefined, string?, ...boolean[]];
-declare let y20: [number | undefined, string, ...boolean[]];
+declare let y20: [number, string, ...boolean[]];
 declare let x21: (number | undefined)[];
-declare let y21: (number | undefined)[];
+declare let y21: number[];
 declare let x22: {
     a: number | undefined;
     b?: string[];
 };
 declare let y22: {
-    a: number | undefined;
+    a: number;
     b: string[];
 };
 declare type Awaited<T> = T extends PromiseLike<infer U> ? U : T;

@@ -1162,6 +1162,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -1307,6 +1308,9 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
+                },
+                getWidthOfTerminal(){
+                    return process.stdout.columns;
                 },
                 writeOutputIsTTY() {
                     return process.stdout.isTTY;

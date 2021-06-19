@@ -1,4 +1,5 @@
 // @strict: true
+// @exactOptionalPropertyTypes: true
 // @declaration: true
 
 function f1(obj: { a?: string, b?: string | undefined }) {
