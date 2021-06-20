@@ -150,10 +150,21 @@ namespace ts.Completions {
         sourceFile: SourceFile,
         position: number,
         preferences: UserPreferences,
-        triggerCharacter: CompletionsTriggerCharacter | undefined
+        triggerCharacter: CompletionsTriggerCharacter | undefined,
+        completionKind?: CompletionTriggerKind,
     ): CompletionInfo | undefined {
         const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
+        const incompleteCompletionsCache = host.getIncompleteCompletionsCache?.();
+        if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions) {
+            const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, position, program, host, preferences);
+            if (incompleteContinuation) {
+                return incompleteContinuation;
+            }
+        }
+        else {
+            incompleteCompletionsCache?.clear();
+        }
 
         const contextToken = findPrecedingToken(position, sourceFile);
         if (triggerCharacter && !isInString(sourceFile, position, contextToken) && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) {
@@ -186,7 +197,11 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                return completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences);
+                const response = completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences);
+                if (response?.isIncomplete) {
+                    incompleteCompletionsCache?.set(response);
+                }
+                return response;
             case CompletionDataKind.JsDocTagName:
                 // If the current position is a jsDoc tag name, only tag names should be provided for completion
                 return jsdocCompletionInfo(JsDoc.getJSDocTagNameCompletions());
@@ -200,6 +215,61 @@ namespace ts.Completions {
             default:
                 return Debug.assertNever(completionData);
         }
+    }
+
+    function continuePreviousIncompleteResponse(
+        cache: IncompleteCompletionsCache,
+        file: SourceFile,
+        position: number,
+        program: Program,
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
+    ): CompletionInfo | undefined {
+        const previousResponse = cache.get();
+        if (!previousResponse) return undefined;
+
+        const previousToken = tryCast(findPrecedingToken(position, file, /*startNode*/ undefined), isIdentifier);
+        if (!previousToken) return undefined;
+
+        const start = timestamp();
+        const lowerCaseTokenText = previousToken.text.toLowerCase();
+        const exportMap = codefix.getSymbolToExportInfoMap(file, host, program);
+        const checker = program.getTypeChecker();
+        const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
+        const autoImportProviderChecker = autoImportProvider?.getTypeChecker();
+        let resolvedCount = 0;
+        let hasUnresolvedAutoImports = false;
+        const newEntries = mapDefined(previousResponse.entries, entry => {
+            if (entry.hasAction && entry.source && entry.data && !entry.data.moduleSpecifier) {
+                if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
+                    return undefined;
+                }
+                if (resolvedCount > 100) {
+                    hasUnresolvedAutoImports = true;
+                    return entry;
+                }
+                const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
+                const info = exportMap.get(entry.name, symbol, origin.moduleSymbol, origin.isFromPackageJson ? autoImportProviderChecker! : checker);
+                const result = info && codefix.getModuleSpecifierForBestExportInfo(info, file, origin.isFromPackageJson ? autoImportProvider! : program, host, preferences);
+                if (!result) return entry;
+                const newOrigin: SymbolOriginInfoResolvedExport = {
+                    ...origin,
+                    kind: SymbolOriginInfoKind.ResolvedExport,
+                    moduleSpecifier: result.moduleSpecifier,
+                };
+                entry.data = originToCompletionEntryData(newOrigin);
+                entry.source = getSourceFromOrigin(newOrigin);
+                entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
+                resolvedCount++;
+                return entry;
+            }
+        });
+        if (!hasUnresolvedAutoImports) {
+            previousResponse.isIncomplete = undefined;
+        }
+        previousResponse.entries = newEntries;
+        host.log?.(`continuePreviousIncompleteResponse: ${timestamp() - start}`);
+        return previousResponse;
     }
 
     function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
@@ -508,13 +578,7 @@ namespace ts.Completions {
         }
 
         if (originIsExport(origin) || originIsResolvedExport(origin)) {
-            data = {
-                exportName: origin.exportName,
-                fileName: origin.fileName,
-                ambientModuleName: origin.fileName ? undefined : stripQuotes(origin.moduleSymbol.name),
-                isPackageJsonImport: origin.isFromPackageJson ? true : undefined,
-                moduleSpecifier: originIsResolvedExport(origin) ? origin.moduleSpecifier : undefined,
-            };
+            data = originToCompletionEntryData(origin);
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -540,6 +604,16 @@ namespace ts.Completions {
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
             isImportStatementCompletion: originIsResolvedExport(origin) || undefined,
             data,
+        };
+    }
+
+    function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {
+        return {
+            exportName: origin.exportName,
+            fileName: origin.fileName,
+            ambientModuleName: origin.fileName ? undefined : stripQuotes(origin.moduleSymbol.name),
+            isPackageJsonImport: origin.isFromPackageJson ? true : undefined,
+            moduleSpecifier: originIsResolvedExport(origin) ? origin.moduleSpecifier : undefined,
         };
     }
 
@@ -1763,11 +1837,10 @@ namespace ts.Completions {
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             let resolvedCount = 0;
-            exportInfo.forEach((info, key) => {
-                const symbolName = key.substring(0, key.indexOf("|"));
+            exportInfo.forEach((info, symbolName) => {
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
-                if (isCompletionDetailsMatch || isNameMatch(symbolName)) {
+                if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
                     const shouldResolveModuleSpecifier = resolvedCount < 100;
@@ -1793,10 +1866,6 @@ namespace ts.Completions {
                 }
             });
             host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
-
-            function isNameMatch(symbolName: string) {
-                return stringContainsCharactersInOrder(symbolName, lowerCaseTokenText, /*strictFirstCharacter*/ true);
-            }
 
             function isImportableExportInfo(info: SymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
@@ -1826,49 +1895,6 @@ namespace ts.Completions {
             symbolToOriginInfoMap[symbols.length] = origin;
             symbolToSortTextIdMap[symbolId] = importCompletionNode ? SortTextId.LocationPriority : SortTextId.AutoImportSuggestions;
             symbols.push(symbol);
-        }
-
-        /**
-         * True if you could remove some characters in `a` to get `b`.
-         * E.g., true for "abcdef" and "bdf".
-         * But not true for "abcdef" and "dbf".
-         */
-        function stringContainsCharactersInOrder(str: string, lowercaseCharacters: string, strictFirstCharacter: boolean): boolean {
-            if (lowercaseCharacters.length === 0) {
-                return true;
-            }
-
-            let matchedFirstCharacter = !strictFirstCharacter;
-            let prevChar: number | undefined;
-            let characterIndex = 0;
-            const len = str.length;
-            for (let strIndex = 0; strIndex < len; strIndex++) {
-                const strChar = str.charCodeAt(strIndex);
-                const testChar = lowercaseCharacters.charCodeAt(characterIndex);
-                if (strChar === testChar || strChar === toUpperCharCode(testChar)) {
-                    matchedFirstCharacter ||=
-                        prevChar === undefined || // Beginning of word
-                        CharacterCodes.a <= prevChar && prevChar <= CharacterCodes.z && CharacterCodes.A <= strChar && strChar <= CharacterCodes.Z || // camelCase transition
-                        prevChar === CharacterCodes._ && strChar !== CharacterCodes._; // snake_case transition
-                    if (matchedFirstCharacter) {
-                        characterIndex++;
-                    }
-                    if (characterIndex === lowercaseCharacters.length) {
-                        return true;
-                    }
-                }
-                prevChar = strChar;
-            }
-
-            // Did not find all characters
-            return false;
-        }
-
-        function toUpperCharCode(charCode: number) {
-            if (CharacterCodes.a <= charCode && charCode <= CharacterCodes.z) {
-                return charCode - 32;
-            }
-            return charCode;
         }
 
         /**
@@ -2725,6 +2751,7 @@ namespace ts.Completions {
                 isDefaultExport,
                 exportName: data.exportName,
                 fileName: data.fileName,
+                isFromPackageJson: !!data.isPackageJsonImport,
             }
         };
     }
@@ -3172,5 +3199,48 @@ namespace ts.Completions {
     function isDeprecated(symbol: Symbol, checker: TypeChecker) {
         const declarations = skipAlias(symbol, checker).declarations;
         return !!length(declarations) && every(declarations, isDeprecatedDeclaration);
+    }
+
+    /**
+     * True if you could remove some characters in `a` to get `b`.
+     * E.g., true for "abcdef" and "bdf".
+     * But not true for "abcdef" and "dbf".
+     */
+     function stringContainsCharactersInOrder(str: string, lowercaseCharacters: string): boolean {
+        if (lowercaseCharacters.length === 0) {
+            return true;
+        }
+
+        let matchedFirstCharacter = false;
+        let prevChar: number | undefined;
+        let characterIndex = 0;
+        const len = str.length;
+        for (let strIndex = 0; strIndex < len; strIndex++) {
+            const strChar = str.charCodeAt(strIndex);
+            const testChar = lowercaseCharacters.charCodeAt(characterIndex);
+            if (strChar === testChar || strChar === toUpperCharCode(testChar)) {
+                matchedFirstCharacter ||=
+                    prevChar === undefined || // Beginning of word
+                    CharacterCodes.a <= prevChar && prevChar <= CharacterCodes.z && CharacterCodes.A <= strChar && strChar <= CharacterCodes.Z || // camelCase transition
+                    prevChar === CharacterCodes._ && strChar !== CharacterCodes._; // snake_case transition
+                if (matchedFirstCharacter) {
+                    characterIndex++;
+                }
+                if (characterIndex === lowercaseCharacters.length) {
+                    return true;
+                }
+            }
+            prevChar = strChar;
+        }
+
+        // Did not find all characters
+        return false;
+    }
+
+    function toUpperCharCode(charCode: number) {
+        if (CharacterCodes.a <= charCode && charCode <= CharacterCodes.z) {
+            return charCode - 32;
+        }
+        return charCode;
     }
 }

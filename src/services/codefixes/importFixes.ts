@@ -280,7 +280,12 @@ namespace ts.codefix {
         return getBestFix(getNewImportFixes(program, importingFile, /*position*/ undefined, /*preferTypeOnlyImport*/ false, /*useRequire*/ false, exportInfo, host, preferences), importingFile, host, preferences);
     }
 
-    export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program) {
+    export interface SymbolToExportInfoMap {
+        get(importedName: string, symbol: Symbol, moduleSymbol: Symbol, checker: TypeChecker): readonly SymbolExportInfo[] | undefined;
+        forEach(action: (info: readonly SymbolExportInfo[], name: string) => void): void;
+    }
+
+    export function getSymbolToExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program): SymbolToExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -291,7 +296,7 @@ namespace ts.codefix {
             const cached = cache.get(importingFile.path, program.getTypeChecker(), host.getProjectVersion?.());
             if (cached) {
                 host.log?.("getSymbolToExportInfoMap: cache hit");
-                return cached;
+                return wrapMultiMap(cached);
             }
             else {
                 host.log?.("getSymbolToExportInfoMap: cache miss or empty; calculating new results");
@@ -321,12 +326,28 @@ namespace ts.codefix {
             cache.set(result, host.getProjectVersion?.());
         }
         host.log?.(`getSymbolToExportInfoMap: done in ${timestamp() - start} ms`);
-        return result;
+        return wrapMultiMap(result);
 
-        function key(name: string, alias: Symbol, moduleSymbol: Symbol, checker: TypeChecker) {
+        function key(importedName: string, alias: Symbol, moduleSymbol: Symbol, checker: TypeChecker) {
             const moduleName = stripQuotes(moduleSymbol.name);
             const moduleKey = isExternalModuleNameRelative(moduleName) ? "/" : moduleName;
-            return `${name}|${getSymbolId(skipAlias(alias, checker))}|${moduleKey}`;
+            return `${importedName}|${getSymbolId(skipAlias(alias, checker))}|${moduleKey}`;
+        }
+
+        function wrapMultiMap(map: MultiMap<string, SymbolExportInfo>): SymbolToExportInfoMap {
+            const wrapped: SymbolToExportInfoMap = {
+                get: (importedName, symbol, moduleSymbol, checker) => map.get(key(importedName, symbol, moduleSymbol, checker)),
+                forEach: action => {
+                    map.forEach((info, key) => {
+                        const symbolName = key.substring(0, key.indexOf("|"));
+                        action(info, symbolName);
+                    });
+                },
+            };
+            if (Debug.isDebugging) {
+                Object.defineProperty(wrapped, "__cache", { get: () => map });
+            }
+            return wrapped;
         }
     }
 
