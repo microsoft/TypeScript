@@ -32,7 +32,7 @@ await <number, string> ``;
 // reparse class extends clause should fail
 class C extends await<string> {
 >C : C
->string : any
+>await : any
 }
 
 // await in class decorators should fail
@@ -45,37 +45,37 @@ class C1 {}
 >C1 : C1
 
 @await(x)
->await(x) : any
-> : any
+>await : any
 >x : any
+> : any
 
 class C2 {}
 >C2 : C2
 
 @await
-> : any
+>await : any
 
 class C3 {}
->C3 : C3
+>C3 : any
 
 // await in member decorators should fail
 class C4 {
 >C4 : C4
 
     @await
-> : any
+>await : any
 
     ["foo"]() {}
->["foo"] : () => void
->"foo" : "foo"
+>"foo" : any
 }
+> : any
+
 class C5 {
 >C5 : C5
 
     @await(1)
->await(1) : any
-> : any
->1 : 1
+>await : any
+>1 : any
 
     ["foo"]() {}
 >["foo"] : () => void
@@ -99,22 +99,27 @@ class C7 {
 >C7 : C7
 
     method1(@await [x]) {}
->method1 : ([x]: [any]) => void
-> : any
+>method1 : (x: any) => any
+>await : any
 >x : any
 
     method2(@await(1) [x]) {}
->method2 : ([x]: [any]) => void
->await(1) : any
-> : any
+>method2(@await(1) [x]) : any
+>method2 : any
+>await(1) [x] : any
+>(1) [x] : any
+>(1) : 1
 >1 : 1
 >x : any
 
     method3(@(await) [x]) {}
->method3 : ([x]: [any]) => void
+>method3(@(await) [x]) : any
+>method3 : any
+>(await) [x] : any
 >(await) : any
 >await : any
 > : any
 >x : any
 }
+> : any
 

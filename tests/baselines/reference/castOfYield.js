@@ -41,10 +41,8 @@ function f() {
             case 1:
                 (_a.sent());
                 // Unlike await, yield is not allowed to appear in a simple unary expression.
-                ;
-                return [4 /*yield*/, 0];
-            case 2:
-                _a.sent();
+                yield;
+                0;
                 return [2 /*return*/];
         }
     });

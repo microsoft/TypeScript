@@ -29,14 +29,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function bar1() {
     return __awaiter(this, void 0, void 0, function* () {
-        ++;
-        yield 42; // Error
+        ++await;
+        42; // Error
     });
 }
 function bar2() {
     return __awaiter(this, void 0, void 0, function* () {
-        --;
-        yield 42; // Error
+        --await;
+        42; // Error
     });
 }
 function bar3() {

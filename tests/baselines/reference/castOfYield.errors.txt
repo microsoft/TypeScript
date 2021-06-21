@@ -1,14 +1,17 @@
 error TS2318: Cannot find global type 'IterableIterator'.
-tests/cases/compiler/castOfYield.ts(4,14): error TS1109: Expression expected.
+tests/cases/compiler/castOfYield.ts(4,14): error TS2304: Cannot find name 'yield'.
+tests/cases/compiler/castOfYield.ts(4,20): error TS1005: ';' expected.
 
 
 !!! error TS2318: Cannot find global type 'IterableIterator'.
-==== tests/cases/compiler/castOfYield.ts (1 errors) ====
+==== tests/cases/compiler/castOfYield.ts (2 errors) ====
     function* f() {
         <number> (yield 0);
         // Unlike await, yield is not allowed to appear in a simple unary expression.
         <number> yield 0;
                  ~~~~~
-!!! error TS1109: Expression expected.
+!!! error TS2304: Cannot find name 'yield'.
+                       ~
+!!! error TS1005: ';' expected.
     }
     

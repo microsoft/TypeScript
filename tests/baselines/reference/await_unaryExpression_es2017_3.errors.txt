@@ -1,18 +1,24 @@
-tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(2,7): error TS1109: Expression expected.
-tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(6,7): error TS1109: Expression expected.
+tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(2,7): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(2,13): error TS1005: ';' expected.
+tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(6,7): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts(6,13): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts (2 errors) ====
+==== tests/cases/conformance/async/es2017/await_unaryExpression_es2017_3.ts (4 errors) ====
     async function bar1() {
         ++await 42; // Error
           ~~~~~
-!!! error TS1109: Expression expected.
+!!! error TS2304: Cannot find name 'await'.
+                ~~
+!!! error TS1005: ';' expected.
     }
     
     async function bar2() {
         --await 42; // Error
           ~~~~~
-!!! error TS1109: Expression expected.
+!!! error TS2304: Cannot find name 'await'.
+                ~~
+!!! error TS1005: ';' expected.
     }
     
     async function bar3() {
