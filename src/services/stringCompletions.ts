@@ -425,13 +425,14 @@ namespace ts.Completions.StringCompletions {
                 }
 
                 let foundFileName: string;
+                const outputExtension = moduleSpecifiers.getJSExtensionForFile(filePath, host.getCompilationSettings());
                 if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIs(filePath, Extension.Json)) {
                     foundFileName = removeFileExtension(getBaseFileName(filePath));
                     foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
                 }
-                else if (includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion && fileExtensionIs(filePath, Extension.Ts)) {
-                    foundFileName = changeExtension(getBaseFileName(filePath), Extension.Js);
-                    foundFiles.set(foundFileName, Extension.Js);
+                else if (includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion && outputExtension) {
+                    foundFileName = changeExtension(getBaseFileName(filePath), outputExtension);
+                    foundFiles.set(foundFileName, outputExtension);
                 }
                 else {
                     foundFileName = getBaseFileName(filePath);
