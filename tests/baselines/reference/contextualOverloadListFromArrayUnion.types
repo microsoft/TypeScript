@@ -46,7 +46,7 @@ interface ResizeObserverCallback { // duplicate for effect
 const resizeObserver = new ResizeObserver(([entry]) => {
 >resizeObserver : ResizeObserver
 >new ResizeObserver(([entry]) => {    entry}) : ResizeObserver
->ResizeObserver : { new (callback: globalThis.ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
+>ResizeObserver : { new (callback: globalThis.ResizeObserverCallback): ResizeObserver; readonly prototype: ResizeObserver; }
 >([entry]) => {    entry} : ([entry]: ResizeObserverEntry[]) => void
 >entry : ResizeObserverEntry
 

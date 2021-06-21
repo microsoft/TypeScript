@@ -19,7 +19,6 @@ type Source = {
   (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 >type : Symbol(type, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 3))
 >listener : Symbol(listener, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 16))
->EventListenerOrEventListenerObject : Symbol(EventListenerOrEventListenerObject, Decl(lib.dom.d.ts, --, --))
 >options : Symbol(options, Decl(varianceCallbacksAndIndexedAccesses.ts, 2, 62))
 >AddEventListenerOptions : Symbol(AddEventListenerOptions, Decl(lib.dom.d.ts, --, --))
 }
