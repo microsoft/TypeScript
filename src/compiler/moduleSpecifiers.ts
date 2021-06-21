@@ -687,18 +687,18 @@ namespace ts.moduleSpecifiers {
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
-                return noExtension + getJSExtensionForFileIfApplicable(fileName, options);
+                return noExtension + getJSExtensionForFile(fileName, options);
             default:
                 return Debug.assertNever(ending);
         }
     }
 
-    function getJSExtensionForFileIfApplicable(fileName: string, options: CompilerOptions): Extension {
-        return getJSExtensionForFile(fileName, options) ?? Debug.fail(`Extension ${extensionFromPath(fileName)} is unsupported:: FileName:: ${fileName}`);
+    function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension {
+        return tryGetJSExtensionForFile(fileName, options) ?? Debug.fail(`Extension ${extensionFromPath(fileName)} is unsupported:: FileName:: ${fileName}`);
     }
 
-    export function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension | undefined {
-        const ext = extensionFromPath(fileName);
+    export function tryGetJSExtensionForFile(fileName: string, options: CompilerOptions): Extension | undefined {
+        const ext = tryGetExtensionFromPath(fileName);
         switch (ext) {
             case Extension.Ts:
             case Extension.Dts:

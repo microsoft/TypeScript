@@ -425,7 +425,7 @@ namespace ts.Completions.StringCompletions {
                 }
 
                 let foundFileName: string;
-                const outputExtension = moduleSpecifiers.getJSExtensionForFile(filePath, host.getCompilationSettings());
+                const outputExtension = moduleSpecifiers.tryGetJSExtensionForFile(filePath, host.getCompilationSettings());
                 if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIs(filePath, Extension.Json)) {
                     foundFileName = removeFileExtension(getBaseFileName(filePath));
                     foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
