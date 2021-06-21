@@ -75,10 +75,6 @@
         "category": "Error",
         "code": 1022
     },
-    "An index signature parameter type must be either 'string' or 'number'.": {
-        "category": "Error",
-        "code": 1023
-    },
     "'readonly' modifier can only appear on a property declaration or index signature.": {
         "category": "Error",
         "code": 1024
@@ -891,6 +887,10 @@
         "category": "Error",
         "code": 1267
     },
+    "An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.": {
+        "category": "Error",
+        "code": 1268
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -996,11 +996,7 @@
         "category": "Error",
         "code": 1335
     },
-    "An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]: {2}' instead.": {
-        "category": "Error",
-        "code": 1336
-    },
-    "An index signature parameter type cannot be a union type. Consider using a mapped object type instead.": {
+    "An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.": {
         "category": "Error",
         "code": 1337
     },
@@ -1518,11 +1514,11 @@
         "category": "Error",
         "code": 2328
     },
-    "Index signature is missing in type '{0}'.": {
+    "Index signature for type '{0}' is missing in type '{1}'.": {
         "category": "Error",
         "code": 2329
     },
-    "Index signatures are incompatible.": {
+    "'{0}' and '{1}' index signatures are incompatible.": {
         "category": "Error",
         "code": 2330
     },
@@ -1698,13 +1694,9 @@
         "category": "Error",
         "code": 2373
     },
-    "Duplicate string index signature.": {
+    "Duplicate index signature for type '{0}'.": {
         "category": "Error",
         "code": 2374
-    },
-    "Duplicate number index signature.": {
-        "category": "Error",
-        "code": 2375
     },
     "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
@@ -1842,15 +1834,11 @@
         "category": "Error",
         "code": 2410
     },
-    "Property '{0}' of type '{1}' is not assignable to string index type '{2}'.": {
+    "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2411
     },
-    "Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.": {
-        "category": "Error",
-        "code": 2412
-    },
-    "Numeric index type '{0}' is not assignable to string index type '{1}'.": {
+    "'{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2413
     },
@@ -2689,6 +2677,10 @@
     "JSX property access expressions cannot include JSX namespace names": {
         "category": "Error",
         "code": 2633
+    },
+    "'{0}' index signatures are incompatible.": {
+        "category": "Error",
+        "code": 2634
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {

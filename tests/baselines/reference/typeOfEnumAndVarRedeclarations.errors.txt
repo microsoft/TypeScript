@@ -1,9 +1,10 @@
 tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(8,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
 tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
-tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,70): error TS2375: Duplicate number index signature.
+tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,40): error TS2374: Duplicate index signature for type 'number'.
+tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,70): error TS2374: Duplicate index signature for type 'number'.
 
 
-==== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts (3 errors) ====
+==== tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts (4 errors) ====
     enum E {
         a
     }
@@ -20,5 +21,7 @@ tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts(10,70): error TS2375: Dup
         ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'typeof E', but here has type '{ readonly [x: number]: string; readonly a: E; readonly b: E; }'.
 !!! related TS6203 tests/cases/compiler/typeOfEnumAndVarRedeclarations.ts:9:5: 'y' was also declared here.
+                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2374: Duplicate index signature for type 'number'.
                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2375: Duplicate number index signature.
+!!! error TS2374: Duplicate index signature for type 'number'.
