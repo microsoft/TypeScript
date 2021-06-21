@@ -5595,7 +5595,7 @@ namespace ts {
     }
 
     export interface StringMappingType extends InstantiableType {
-        symbol: Symbol;
+        symbol: Symbol; // TODO: Not needed, inherited from Type
         type: Type;
     }
 
