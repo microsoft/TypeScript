@@ -1510,17 +1510,17 @@ namespace ts {
                 return true;
             }
 
-            // // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is
-            // // considered a keyword and is not an identifier.
-            // if (token() === SyntaxKind.YieldKeyword && inYieldContext()) {
-            //     return false;
-            // }
+            // If we have a 'yield' keyword, and we're in the [yield] context, then 'yield' is
+            // considered a keyword and is not an identifier.
+            if (token() === SyntaxKind.YieldKeyword && inYieldContext()) {
+                return false;
+            }
 
-            // // If we have a 'await' keyword, and we're in the [Await] context, then 'await' is
-            // // considered a keyword and is not an identifier.
-            // if (token() === SyntaxKind.AwaitKeyword && inAwaitContext()) {
-            //     return false;
-            // }
+            // If we have a 'await' keyword, and we're in the [Await] context, then 'await' is
+            // considered a keyword and is not an identifier.
+            if (token() === SyntaxKind.AwaitKeyword && inAwaitContext()) {
+                return false;
+            }
 
             return token() > SyntaxKind.LastReservedWord;
         }

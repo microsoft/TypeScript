@@ -3,8 +3,9 @@ async function bar1() {
 >bar1 : () => Promise<void>
 
     ++await 42; // Error
->++await : number
->await : any
+>++ : number
+> : any
+>await 42 : 42
 >42 : 42
 }
 
@@ -12,8 +13,9 @@ async function bar2() {
 >bar2 : () => Promise<void>
 
     --await 42; // Error
->--await : number
->await : any
+>-- : number
+> : any
+>await 42 : 42
 >42 : 42
 }
 

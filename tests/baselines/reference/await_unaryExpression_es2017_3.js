@@ -19,12 +19,12 @@ async function bar4() {
 
 //// [await_unaryExpression_es2017_3.js]
 async function bar1() {
-    ++await;
-    42; // Error
+    ++;
+    await 42; // Error
 }
 async function bar2() {
-    --await;
-    42; // Error
+    --;
+    await 42; // Error
 }
 async function bar3() {
     var x = 42;
