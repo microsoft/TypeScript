@@ -90,7 +90,10 @@ namespace ts {
     }
 
     function createColors(sys: System) {
-        const showColors = defaultIsPretty(sys);
+        // https://no-color.org 
+        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color"
+
+        const showColors = defaultIsPretty(sys) || ;
         if (!showColors) {
             return {
                 bold: (str: string) => str,
@@ -104,10 +107,20 @@ namespace ts {
             return `\x1b[1m${str}\x1b[22m`;
         }
         function blue(str: string) {
-            return `\x1b[34m${str}\x1b[39m`;
+            if (supportsRicherColors) {
+                return `\x1B[38;5;68m${str}\x1B[39;49m`;
+            }
+            else {
+                return `\x1b[94m${str}\x1b[39m`;
+            }
         }
         function blueBackground(str: string) {
-            return `\x1b[44m${str}\x1b[49m`;
+            if (supportsRicherColors) {
+                return `\x1B[48;5;68m${str}\x1B[39;49m`;
+            }
+            else {
+                return `\x1b[44m${str}\x1b[49m`;
+            }
         }
         function white(str: string) {
             return `\x1b[37m${str}\x1b[39m`;
@@ -143,7 +156,7 @@ namespace ts {
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
-        if (terminalWidth >= 60) {
+        if (terminalWidth >= 80) {
             let description = "";
             if (option.description) {
                 description = getDiagnosticText(option.description);
@@ -340,7 +353,7 @@ namespace ts {
         example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
         example("tsc -b", Diagnostics.Build_a_composite_project_in_the_working_directory);
         example("tsc --init", Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
-        example("tsc -p .path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
+        example("tsc -p ./path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
         example("tsc --help --all", Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
         example(["tsc --noEmit", "tsc --target esnext"], Diagnostics.Compiles_the_current_project_with_additional_settings);
 

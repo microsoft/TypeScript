@@ -5405,7 +5405,7 @@
         "category": "Message",
         "code": 6659
       },
-      "Disable emitting file from a compilation.": {
+      "Disable emitting files from a compilation.": {
         "category": "Message",
         "code": 6660
       },
@@ -5505,7 +5505,7 @@
         "category": "Message",
         "code": 6684
       },
-      "Enable color and formatting in output to make compiler errors easier to read": {
+      "Enable color and formatting in the output to make compiler errors easier to read": {
         "category": "Message",
         "code": 6685
       },
@@ -5734,7 +5734,7 @@
         "category": "Message",
         "code": 6923
     },
-    "Ignoring tsconfig.json, compiles the specified files with default compiler options": {
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options.": {
         "category": "Message",
         "code": 6924
     },
@@ -5746,7 +5746,7 @@
         "category": "Message",
         "code": 6926
     },
-    "Compiles the TypeScript project located at the specified path": {
+    "Compiles the TypeScript project located at the specified path.": {
         "category": "Message",
         "code": 6927
     },
@@ -5754,7 +5754,7 @@
         "category": "Message",
         "code": 6928
     },
-    "Compiles the current project, with additional settings": {
+    "Compiles the current project, with additional settings.": {
         "category": "Message",
         "code": 6929
     },
