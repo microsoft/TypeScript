@@ -2330,7 +2330,7 @@ namespace ts {
                 // Report error if function is not top level function declaration
                 if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
                     blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
-                    !isFunctionLike(blockScopeContainer)) {
+                    !isFunctionLikeOrClassStaticBlockDeclaration(blockScopeContainer)) {
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
                     const errorSpan = getErrorSpanForNode(file, node);
