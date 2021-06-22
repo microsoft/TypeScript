@@ -17,7 +17,6 @@ class C extends B {
 
 
 //// [classStaticBlock5.js]
-var _C__;
 class B {
 }
 B.a = 1;
@@ -26,8 +25,8 @@ class C extends B {
 }
 C.b = 3;
 C.c = super.a;
-_C__ = { value: (() => {
-        this.b;
-        super.b;
-        super.a;
-    })() };
+(() => {
+    this.b;
+    super.b;
+    super.a;
+})();

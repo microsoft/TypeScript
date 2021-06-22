@@ -20,18 +20,17 @@ class C {
 
 
 //// [classStaticBlock2.js]
-var _C__, _C__1;
 const a = 1;
 const b = 2;
 class C {
 }
-_C__ = { value: (() => {
-        const a = 11;
-        a;
-        b;
-    })() };
-_C__1 = { value: (() => {
-        const a = 11;
-        a;
-        b;
-    })() };
+(() => {
+    const a = 11;
+    a;
+    b;
+})();
+(() => {
+    const a = 11;
+    a;
+    b;
+})();

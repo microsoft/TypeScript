@@ -9,7 +9,6 @@ export class C {
 
 //// [classStaticBlock24.js]
 "use strict";
-var _C__;
 exports.__esModule = true;
 exports.C = void 0;
 var C = /** @class */ (function () {
@@ -18,6 +17,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 exports.C = C;
-_C__ = { value: (function () {
-        C.x = 1;
-    })() };
+(function () {
+    C.x = 1;
+})();

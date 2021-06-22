@@ -51,27 +51,26 @@ function foo (v: number) {
 
 //// [classStaticBlock8.js]
 function foo(v) {
-    var _C__, _C__1;
     label: while (v) {
         var C_1 = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
-        _C__ = { value: (function () {
-                if (v === 1) {
-                    break label;
-                }
-                if (v === 2) {
-                    continue label;
-                }
-                if (v === 3) {
-                    break;
-                }
-                if (v === 4) {
-                    continue;
-                }
-            })() };
+        (function () {
+            if (v === 1) {
+                break label;
+            }
+            if (v === 2) {
+                continue label;
+            }
+            if (v === 3) {
+                break;
+            }
+            if (v === 4) {
+                continue;
+            }
+        })();
         if (v === 5) {
             break label;
         }
@@ -90,20 +89,20 @@ function foo(v) {
         }
         return C;
     }());
-    _C__1 = { value: (function () {
-            outer: break outer; // valid
-            loop: while (v) {
-                if (v === 1)
-                    break loop; // valid
-                if (v === 2)
-                    continue loop; // valid
-                if (v === 3)
-                    break; // valid
-                if (v === 4)
-                    continue; // valid
-            }
-            switch (v) {
-                default: break; // valid
-            }
-        })() };
+    (function () {
+        outer: break outer; // valid
+        loop: while (v) {
+            if (v === 1)
+                break loop; // valid
+            if (v === 2)
+                continue loop; // valid
+            if (v === 3)
+                break; // valid
+            if (v === 4)
+                continue; // valid
+        }
+        switch (v) {
+            default: break; // valid
+        }
+    })();
 }

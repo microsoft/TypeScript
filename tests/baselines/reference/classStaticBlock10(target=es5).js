@@ -28,13 +28,11 @@ class C2 {
 }
 
 //// [classStaticBlock10.js]
-var _C2__;
 var a1 = 1;
 var a2 = 1;
 var b1 = 2;
 var b2 = 2;
 function f() {
-    var _C1__;
     var a1 = 11;
     var b1 = 22;
     var C1 = /** @class */ (function () {
@@ -42,21 +40,21 @@ function f() {
         }
         return C1;
     }());
-    _C1__ = { value: (function () {
-            var a1 = 111;
-            var a2 = 111;
-            var b1 = 222;
-            var b2 = 222;
-        })() };
+    (function () {
+        var a1 = 111;
+        var a2 = 111;
+        var b1 = 222;
+        var b2 = 222;
+    })();
 }
 var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-_C2__ = { value: (function () {
-        var a1 = 111;
-        var a2 = 111;
-        var b1 = 222;
-        var b2 = 222;
-    })() };
+(function () {
+    var a1 = 111;
+    var a2 = 111;
+    var b1 = 222;
+    var b2 = 222;
+})();

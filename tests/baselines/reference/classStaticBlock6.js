@@ -115,7 +115,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _C__, _C__1;
 var B = /** @class */ (function () {
     function B() {
     }
@@ -129,22 +128,21 @@ var C = /** @class */ (function (_super) {
     }
     return C;
 }(B));
-_C__ = { value: (function () {
-        var await = 1;
-        var arguments = 1;
-        var eval = 1;
-    })() };
-_C__1 = { value: (function () {
-        yield ;
-        if (true) {
-        }
-        arguments;
-        yield ;
-        _this = _super.call(this) || this;
-    })() };
+(function () {
+    var await = 1;
+    var arguments = 1;
+    var eval = 1;
+})();
+(function () {
+    yield ;
+    if (true) {
+    }
+    arguments;
+    yield ;
+    _this = _super.call(this) || this;
+})();
 var CC = /** @class */ (function () {
     function CC() {
-        var _C__2;
         var C = /** @class */ (function (_super) {
             __extends(C, _super);
             function C() {
@@ -152,21 +150,20 @@ var CC = /** @class */ (function () {
             }
             return C;
         }(B));
-        _C__2 = { value: (function () {
-                var CC = /** @class */ (function (_super) {
-                    __extends(CC, _super);
-                    function CC() {
-                        return _super.call(this) || this;
-                    }
-                    return CC;
-                }(B));
-                _this = _super.call(this) || this;
-            })() };
+        (function () {
+            var CC = /** @class */ (function (_super) {
+                __extends(CC, _super);
+                function CC() {
+                    return _super.call(this) || this;
+                }
+                return CC;
+            }(B));
+            _this = _super.call(this) || this;
+        })();
     }
     return CC;
 }());
 function foo() {
-    var _C__3;
     return __awaiter(this, void 0, void 0, function () {
         var C;
         return __generator(this, function (_a) {
@@ -177,30 +174,29 @@ function foo() {
                 }
                 return C;
             }(B));
-            _C__3 = { value: (function () {
-                    arguments;
-                    yield ;
-                    function ff() {
-                        return __awaiter(this, arguments, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        arguments;
-                                        return [4 /*yield*/, ];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            });
+            (function () {
+                arguments;
+                yield ;
+                function ff() {
+                    return __awaiter(this, arguments, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    arguments;
+                                    return [4 /*yield*/, ];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
                         });
-                    }
-                })() };
+                    });
+                }
+            })();
             return [2 /*return*/];
         });
     });
 }
 function foo1() {
-    var _C__4;
     var C = /** @class */ (function (_super) {
         __extends(C, _super);
         function C() {
@@ -208,10 +204,10 @@ function foo1() {
         }
         return C;
     }(B));
-    _C__4 = { value: (function () {
+    (function () {
+        arguments;
+        function ff() {
             arguments;
-            function ff() {
-                arguments;
-            }
-        })() };
+        }
+    })();
 }

@@ -81,19 +81,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _C__;
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-_C__ = { value: (function () {
-        yield 1;
-        yield 1;
-        return 1;
-    })() };
+(function () {
+    yield 1;
+    yield 1;
+    return 1;
+})();
 function f1() {
-    var _C__1;
     return __awaiter(this, void 0, void 0, function () {
         var C;
         return __generator(this, function (_a) {
@@ -102,61 +100,59 @@ function f1() {
                 }
                 return C;
             }());
-            _C__1 = { value: (function () {
-                    yield 1;
-                    function ff() {
-                        return __awaiter(this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, 1];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            });
+            (function () {
+                yield 1;
+                function ff() {
+                    return __awaiter(this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, 1];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
                         });
-                    }
-                })() };
+                    });
+                }
+            })();
             return [2 /*return*/];
         });
     });
 }
 function f2() {
     var C;
-    var _C__2;
     return __generator(this, function (_a) {
         C = /** @class */ (function () {
             function C() {
             }
             return C;
         }());
-        _C__2 = { value: (function () {
-                yield 1;
-                function ff() {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, 1];
-                            case 1:
-                                _a.sent();
-                                return [2 /*return*/];
-                        }
-                    });
-                }
-            })() };
+        (function () {
+            yield 1;
+            function ff() {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, 1];
+                        case 1:
+                            _a.sent();
+                            return [2 /*return*/];
+                    }
+                });
+            }
+        })();
         return [2 /*return*/];
     });
 }
 function f3() {
-    var _C__3;
     var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
-    _C__3 = { value: (function () {
+    (function () {
+        return 1;
+        function ff() {
             return 1;
-            function ff() {
-                return 1;
-            }
-        })() };
+        }
+    })();
 }

@@ -45,13 +45,12 @@ var C = /** @class */ (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    var _C__;
     C.b = 3;
     C.c = _super.a;
-    _C__ = { value: (function () {
-            _this.b;
-            _super.b;
-            _super.a;
-        })() };
+    (function () {
+        _this.b;
+        _super.b;
+        _super.a;
+    })();
     return C;
 }(B));

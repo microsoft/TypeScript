@@ -10,7 +10,7 @@ export class C {
 //// [classStaticBlock24.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var _C__, C;
+    var C;
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
@@ -21,9 +21,9 @@ System.register([], function (exports_1, context_1) {
                 return C;
             }());
             exports_1("C", C);
-            _C__ = { value: (function () {
-                    C.x = 1;
-                })() };
+            (function () {
+                C.x = 1;
+            })();
         }
     };
 });

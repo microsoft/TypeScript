@@ -18,7 +18,6 @@ export class C {
     }
 })(function (require, exports) {
     "use strict";
-    var _C__;
     exports.__esModule = true;
     exports.C = void 0;
     var C = /** @class */ (function () {
@@ -27,7 +26,7 @@ export class C {
         return C;
     }());
     exports.C = C;
-    _C__ = { value: (function () {
-            C.x = 1;
-        })() };
+    (function () {
+        C.x = 1;
+    })();
 });

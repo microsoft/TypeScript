@@ -11,14 +11,13 @@ class C {
 
 
 //// [classStaticBlock1.js]
-var _C__;
 var a = 2;
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-_C__ = { value: (function () {
-        var a = 1;
-        a;
-    })() };
+(function () {
+    var a = 1;
+    a;
+})();
