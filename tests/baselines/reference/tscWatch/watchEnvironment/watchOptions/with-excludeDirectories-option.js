@@ -55,6 +55,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
+/user/username/projects/myproject/src/main.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}

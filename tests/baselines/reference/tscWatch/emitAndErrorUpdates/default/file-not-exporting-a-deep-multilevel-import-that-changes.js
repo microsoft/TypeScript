@@ -94,6 +94,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/d.ts
 /user/username/projects/myproject/e.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -201,6 +209,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/d.ts
 /user/username/projects/myproject/e.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (computed .d.ts)
+/user/username/projects/myproject/d.ts (computed .d.ts)
+/user/username/projects/myproject/e.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -288,6 +303,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -355,6 +376,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

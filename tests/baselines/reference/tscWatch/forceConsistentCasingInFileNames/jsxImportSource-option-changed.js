@@ -72,6 +72,11 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
+/user/username/projects/myproject/index.tsx (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
