@@ -16,18 +16,19 @@ function foo () {
 
 //// [classStaticBlock18.js]
 function foo() {
-    var _a, _b, _c__, __;
+    var _a, __;
     return _a = class {
         },
         _a.foo = 1,
         __ = { value: (() => {
-                const c = (_b = class {
+                var _a, _c__;
+                const c = (_a = class {
                     },
-                    _b.bar = 2,
+                    _a.bar = 2,
                     _c__ = { value: (() => {
                             // do
                         })() },
-                    _b);
+                    _a);
             })() },
         _a;
 }

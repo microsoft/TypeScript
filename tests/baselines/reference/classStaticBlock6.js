@@ -130,9 +130,9 @@ var C = /** @class */ (function (_super) {
     return C;
 }(B));
 _C__ = { value: (function () {
-        var await_1 = 1;
-        var arguments_1 = 1;
-        var eval_1 = 1;
+        var await = 1;
+        var arguments = 1;
+        var eval = 1;
     })() };
 _C__1 = { value: (function () {
         yield ;
@@ -153,7 +153,7 @@ var CC = /** @class */ (function () {
             return C;
         }(B));
         _C__2 = { value: (function () {
-                var CC_1 = /** @class */ (function (_super) {
+                var CC = /** @class */ (function (_super) {
                     __extends(CC, _super);
                     function CC() {
                         return _super.call(this) || this;

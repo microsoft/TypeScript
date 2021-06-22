@@ -281,6 +281,7 @@ namespace ts {
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
+            case SyntaxKind.ClassStaticBlockDeclaration:
                 return true;
         }
         return false;
@@ -759,7 +760,7 @@ namespace ts {
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
-            isFunctionLike(node);
+            isFunctionLikeOrClassStaticBlockDeclaration(node);
     }
 
     export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
@@ -849,7 +850,7 @@ namespace ts {
             case SyntaxKind.Block:
                 // function block is not considered block-scope container
                 // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                return !isFunctionLike(parentNode);
+                return !isFunctionLikeOrClassStaticBlockDeclaration(parentNode);
         }
 
         return false;

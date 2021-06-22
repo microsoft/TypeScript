@@ -19,6 +19,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 _C__ = { value: (function () {
-        var a_1 = 1;
-        a_1;
+        var a = 1;
+        a;
     })() };

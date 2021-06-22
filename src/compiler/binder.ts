@@ -2714,7 +2714,7 @@ namespace ts {
                     updateStrictModeStatementList((node as SourceFile).statements);
                     return bindSourceFileIfExternalModule();
                 case SyntaxKind.Block:
-                    if (!isFunctionLike(node.parent)) {
+                    if (!isFunctionLikeOrClassStaticBlockDeclaration(node.parent)) {
                         return;
                     }
                     // falls through

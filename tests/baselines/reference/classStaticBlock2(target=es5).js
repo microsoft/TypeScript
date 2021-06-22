@@ -29,12 +29,12 @@ var C = /** @class */ (function () {
     return C;
 }());
 _C__ = { value: (function () {
-        var a_1 = 11;
-        a_1;
+        var a = 11;
+        a;
         b;
     })() };
 _C__1 = { value: (function () {
-        var a_2 = 11;
-        a_2;
+        var a = 11;
+        a;
         b;
     })() };

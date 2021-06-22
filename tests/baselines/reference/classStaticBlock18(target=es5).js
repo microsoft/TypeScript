@@ -16,7 +16,7 @@ function foo () {
 
 //// [classStaticBlock18.js]
 function foo() {
-    var _a, _b, _c__, __;
+    var _a, __;
     return _a = /** @class */ (function () {
             function class_1() {
             }
@@ -24,16 +24,17 @@ function foo() {
         }()),
         _a.foo = 1,
         __ = { value: (function () {
-                var c_1 = (_b = /** @class */ (function () {
+                var _a, _c__;
+                var c = (_a = /** @class */ (function () {
                         function class_2() {
                         }
                         return class_2;
                     }()),
-                    _b.bar = 2,
+                    _a.bar = 2,
                     _c__ = { value: (function () {
                             // do
                         })() },
-                    _b);
+                    _a);
             })() },
         _a;
 }

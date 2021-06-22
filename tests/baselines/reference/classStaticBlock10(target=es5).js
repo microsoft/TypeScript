@@ -45,8 +45,8 @@ function f() {
     _C1__ = { value: (function () {
             var a1 = 111;
             var a2 = 111;
-            var b1_1 = 222;
-            var b2_1 = 222;
+            var b1 = 222;
+            var b2 = 222;
         })() };
 }
 var C2 = /** @class */ (function () {
@@ -57,6 +57,6 @@ var C2 = /** @class */ (function () {
 _C2__ = { value: (function () {
         var a1 = 111;
         var a2 = 111;
-        var b1_2 = 222;
-        var b2_2 = 222;
+        var b1 = 222;
+        var b2 = 222;
     })() };

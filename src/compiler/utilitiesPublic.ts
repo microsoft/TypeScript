@@ -1689,6 +1689,7 @@ namespace ts {
             || kind === SyntaxKind.BindingElement
             || kind === SyntaxKind.ClassDeclaration
             || kind === SyntaxKind.ClassExpression
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember

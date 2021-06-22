@@ -102,6 +102,7 @@ namespace ts {
             factory,
             hoistVariableDeclaration,
             endLexicalEnvironment,
+            startLexicalEnvironment,
             resumeLexicalEnvironment,
             addBlockScopedVariable
         } = context;
@@ -544,7 +545,12 @@ namespace ts {
         function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 receiver = visitNode(receiver, visitor, isExpression);
-                const right = factory.createImmediatelyInvokedArrowFunction(visitNode(node.body, visitor, isBlock).statements);
+
+                startLexicalEnvironment();
+                let statements = visitNodes(node.body.statements, visitor, isStatement);
+                statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
+
+                const right = factory.createImmediatelyInvokedArrowFunction(statements);
                 const name = createHoistedVariableForClass("_", node);
                 return createPrivateStaticFieldInitializer(
                     name,
