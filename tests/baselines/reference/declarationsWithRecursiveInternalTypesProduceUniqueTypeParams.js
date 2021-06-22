@@ -75,12 +75,12 @@ var testRecFun = function (parent) {
     return {
         result: parent,
         deeper: function (child) {
-            return exports.testRecFun(__assign(__assign({}, parent), child));
+            return (0, exports.testRecFun)(__assign(__assign({}, parent), child));
         }
     };
 };
 exports.testRecFun = testRecFun;
-var p1 = exports.testRecFun({ one: '1' });
+var p1 = (0, exports.testRecFun)({ one: '1' });
 void p1.result.one;
 var p2 = p1.deeper({ two: '2' });
 void p2.result.one;

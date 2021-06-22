@@ -2473,7 +2473,17 @@ namespace ts {
         }
 
         function emitCallExpression(node: CallExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
@@ -2488,7 +2498,17 @@ namespace ts {
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.tag, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);
