@@ -31,14 +31,29 @@ function foo (v: number) {
             continue;
         }
     }
+
+    class C {
+        static {
+            outer: break outer; // valid
+            loop: while (v) {
+                if (v === 1) break loop; // valid
+                if (v === 2) continue loop; // valid
+                if (v === 3) break; // valid
+                if (v === 4) continue; // valid
+            }
+            switch (v) {
+                default: break; // valid
+            }
+        }
+    }
 }
 
 
 //// [classStaticBlock8.js]
 function foo(v) {
-    var _C__;
+    var _C__, _C__1;
     label: while (v) {
-        var C = /** @class */ (function () {
+        var C_1 = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -70,4 +85,25 @@ function foo(v) {
             continue;
         }
     }
+    var C = /** @class */ (function () {
+        function C() {
+        }
+        return C;
+    }());
+    _C__1 = { value: (function () {
+            outer: break outer; // valid
+            loop: while (v) {
+                if (v === 1)
+                    break loop; // valid
+                if (v === 2)
+                    continue loop; // valid
+                if (v === 3)
+                    break; // valid
+                if (v === 4)
+                    continue; // valid
+            }
+            switch (v) {
+                default: break; // valid
+            }
+        })() };
 }

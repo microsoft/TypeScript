@@ -30,4 +30,19 @@ function foo (v: number) {
             continue;
         }
     }
+
+    class C {
+        static {
+            outer: break outer; // valid
+            loop: while (v) {
+                if (v === 1) break loop; // valid
+                if (v === 2) continue loop; // valid
+                if (v === 3) break; // valid
+                if (v === 4) continue; // valid
+            }
+            switch (v) {
+                default: break; // valid
+            }
+        }
+    }
 }

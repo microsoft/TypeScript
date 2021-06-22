@@ -54,5 +54,33 @@ function foo (v: number) {
             continue;
         }
     }
+
+    class C {
+>C : Symbol(C, Decl(classStaticBlock8.ts, 31, 5))
+
+        static {
+            outer: break outer; // valid
+            loop: while (v) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 1) break loop; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 2) continue loop; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 3) break; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                if (v === 4) continue; // valid
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+            }
+            switch (v) {
+>v : Symbol(v, Decl(classStaticBlock8.ts, 0, 14))
+
+                default: break; // valid
+            }
+        }
+    }
 }
 

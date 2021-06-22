@@ -45,5 +45,20 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts(15,21): er
                 continue;
             }
         }
+    
+        class C {
+            static {
+                outer: break outer; // valid
+                loop: while (v) {
+                    if (v === 1) break loop; // valid
+                    if (v === 2) continue loop; // valid
+                    if (v === 3) break; // valid
+                    if (v === 4) continue; // valid
+                }
+                switch (v) {
+                    default: break; // valid
+                }
+            }
+        }
     }
     
