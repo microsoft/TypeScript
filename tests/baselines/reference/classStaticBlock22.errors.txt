@@ -1,12 +1,3 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,5): error TS2304: Cannot find name 'let'.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS1005: ';' expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS18037: Await expression cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,14): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,16): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,5): error TS2304: Cannot find name 'let'.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS1005: ';' expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS18037: Await expression cannot be used inside class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,14): error TS1109: Expression expected.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,5): error TS18037: Await expression cannot be used inside class static block.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,10): error TS1109: Expression expected.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS18037: Await expression cannot be used inside class static block.
@@ -27,21 +18,11 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,17): e
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): error TS1109: Expression expected.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (27 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (18 errors) ====
     let await: "any";
     class C {
       static {
         let await: any; // illegal, cannot declare a new binding for await
-        ~~~
-!!! error TS2304: Cannot find name 'let'.
-            ~~~~~
-!!! error TS1005: ';' expected.
-            ~~~~~
-!!! error TS18037: Await expression cannot be used inside class static block.
-                 ~
-!!! error TS1109: Expression expected.
-                   ~~~
-!!! error TS2693: 'any' only refers to a type, but is being used as a value here.
       }
       static {
         let { await } = {} as any; // illegal, cannot declare a new binding for await
@@ -51,14 +32,6 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): e
       }
       static {
         let await; // illegal, cannot declare a new binding for await
-        ~~~
-!!! error TS2304: Cannot find name 'let'.
-            ~~~~~
-!!! error TS1005: ';' expected.
-            ~~~~~
-!!! error TS18037: Await expression cannot be used inside class static block.
-                 ~
-!!! error TS1109: Expression expected.
       }
       static {
         await; // illegal

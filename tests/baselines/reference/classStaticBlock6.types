@@ -13,9 +13,7 @@ class C extends B {
 
     static {
         let await = 1;
->let : any
->await : any
-> : any
+>await : number
 >1 : 1
 
         let arguments = 1;
@@ -84,7 +82,7 @@ async function foo () {
 
         static {
             arguments;
->arguments : IArguments
+>arguments : any
 
             await;
 >await : any
@@ -113,7 +111,7 @@ function foo1 () {
 
         static {
             arguments;
->arguments : IArguments
+>arguments : any
 
             function ff () {
 >ff : () => void

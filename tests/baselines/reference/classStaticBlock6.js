@@ -130,9 +130,7 @@ var C = /** @class */ (function (_super) {
     return C;
 }(B));
 _C__ = { value: (function () {
-        let;
-        yield ;
-        1;
+        var await_1 = 1;
         var arguments_1 = 1;
         var eval_1 = 1;
     })() };
@@ -169,7 +167,7 @@ var CC = /** @class */ (function () {
 }());
 function foo() {
     var _C__3;
-    return __awaiter(this, arguments, void 0, function () {
+    return __awaiter(this, void 0, void 0, function () {
         var C;
         return __generator(this, function (_a) {
             C = /** @class */ (function (_super) {

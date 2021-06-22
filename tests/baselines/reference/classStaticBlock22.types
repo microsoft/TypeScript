@@ -7,10 +7,7 @@ class C {
 
   static {
     let await: any; // illegal, cannot declare a new binding for await
->let : any
 >await : any
-> : any
->any : any
   }
   static {
     let { await } = {} as any; // illegal, cannot declare a new binding for await
@@ -27,9 +24,7 @@ class C {
   }
   static {
     let await; // illegal, cannot declare a new binding for await
->let : any
 >await : any
-> : any
   }
   static {
     await; // illegal

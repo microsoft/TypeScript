@@ -7,6 +7,7 @@ class C {
 
   static {
     let await: any; // illegal, cannot declare a new binding for await
+>await : Symbol(await, Decl(classStaticBlock22.ts, 3, 7))
   }
   static {
     let { await } = {} as any; // illegal, cannot declare a new binding for await
@@ -18,6 +19,7 @@ class C {
   }
   static {
     let await; // illegal, cannot declare a new binding for await
+>await : Symbol(await, Decl(classStaticBlock22.ts, 12, 7))
   }
   static {
     await; // illegal

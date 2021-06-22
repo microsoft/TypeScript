@@ -94,9 +94,7 @@ class C {
 let await;
 class C {
     static {
-        let;
-        await ;
-        any; // illegal, cannot declare a new binding for await
+        let await; // illegal, cannot declare a new binding for await
     }
     static {
         let { await } = {}; // illegal, cannot declare a new binding for await
@@ -105,8 +103,7 @@ class C {
         let { await: other } = {}; // legal
     }
     static {
-        let;
-        await ; // illegal, cannot declare a new binding for await
+        let await; // illegal, cannot declare a new binding for await
     }
     static {
         await ; // illegal

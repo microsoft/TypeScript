@@ -12,6 +12,8 @@ class C extends B {
 
     static {
         let await = 1;
+>await : Symbol(await, Decl(classStaticBlock6.ts, 6, 11))
+
         let arguments = 1;
 >arguments : Symbol(arguments, Decl(classStaticBlock6.ts, 7, 11))
 
