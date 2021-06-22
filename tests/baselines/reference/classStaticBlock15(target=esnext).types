@@ -1,4 +1,7 @@
 === tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts ===
+var _C__1;
+>_C__1 : any
+
 class C {
 >C : C
 

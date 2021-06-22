@@ -1,5 +1,6 @@
 // @target: esnext, es2015
 // @useDefineForClassFields: true
+var _C__1;
 
 class C {
   static #_1 = 1;

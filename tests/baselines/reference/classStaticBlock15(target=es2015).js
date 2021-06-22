@@ -1,4 +1,6 @@
 //// [classStaticBlock15.ts]
+var _C__1;
+
 class C {
   static #_1 = 1;
   static #_3 = 3;
@@ -17,6 +19,7 @@ console.log(_C__1)
 
 //// [classStaticBlock15.js]
 var _a, _C__1_1, _C__3, _C__5, _C__, _C__2, _C__4, _C__6, _C__7, _C__8;
+var _C__1;
 class C {
 }
 _a = C;
