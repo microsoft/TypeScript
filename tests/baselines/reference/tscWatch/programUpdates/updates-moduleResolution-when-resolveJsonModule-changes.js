@@ -99,7 +99,6 @@ Program files::
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
 /user/username/projects/myproject/data.json
 /user/username/projects/myproject/a.ts
 

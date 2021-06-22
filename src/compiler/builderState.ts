@@ -570,7 +570,7 @@ namespace ts {
          */
         function isFileAffectingGlobalScope(sourceFile: SourceFile) {
             return containsGlobalScopeAugmentation(sourceFile) ||
-                !isExternalOrCommonJsModule(sourceFile) && !containsOnlyAmbientModules(sourceFile);
+                !isExternalOrCommonJsModule(sourceFile) && !isJsonSourceFile(sourceFile) && !containsOnlyAmbientModules(sourceFile);
         }
 
         /**
