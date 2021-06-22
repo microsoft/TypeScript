@@ -246,6 +246,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/demo/core/utilities.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/core/utilities.ts (used version)
+
 Program root files: ["/user/username/projects/demo/animals/animal.ts","/user/username/projects/demo/animals/dog.ts","/user/username/projects/demo/animals/index.ts"]
 Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/animals","rootDir":"/user/username/projects/demo/animals","watch":true,"configFilePath":"/user/username/projects/demo/animals/tsconfig.json"}
 Program structureReused: Not
@@ -263,6 +267,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/demo/lib/core/utilities.d.ts
 /user/username/projects/demo/animals/dog.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/animals/animal.ts (used version)
+/user/username/projects/demo/animals/index.ts (used version)
+/user/username/projects/demo/lib/core/utilities.d.ts (used version)
+/user/username/projects/demo/animals/dog.ts (used version)
+
 Program root files: ["/user/username/projects/demo/zoo/zoo.ts"]
 Program options: {"declaration":true,"target":1,"module":1,"strict":true,"noUnusedLocals":true,"noUnusedParameters":true,"noImplicitReturns":true,"noFallthroughCasesInSwitch":true,"composite":true,"outDir":"/user/username/projects/demo/lib/zoo","rootDir":"/user/username/projects/demo/zoo","watch":true,"configFilePath":"/user/username/projects/demo/zoo/tsconfig.json"}
 Program structureReused: Not
@@ -279,6 +290,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/demo/lib/animals/dog.d.ts
 /user/username/projects/demo/lib/animals/index.d.ts
 /user/username/projects/demo/zoo/zoo.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/demo/lib/animals/animal.d.ts (used version)
+/user/username/projects/demo/lib/animals/dog.d.ts (used version)
+/user/username/projects/demo/lib/animals/index.d.ts (used version)
+/user/username/projects/demo/zoo/zoo.ts (used version)
 
 WatchedFiles::
 /user/username/projects/demo/animals/tsconfig.json:
@@ -418,7 +436,7 @@ function createDog() {
         woof: function () {
             console.log(this.name + " says \"Woof\"!");
         },
-        name: utilities_1.makeRandomName()
+        name: (0, utilities_1.makeRandomName)()
     });
 }
 exports.createDog = createDog;
@@ -531,7 +549,7 @@ exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
-        index_1.createDog()
+        (0, index_1.createDog)()
     ];
 }
 exports.createZoo = createZoo;

@@ -10,7 +10,7 @@ type T00 = Boxified<[number, string?, ...boolean[]]>;
 >T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
->T01 : [number?, string?, ...(boolean | undefined)[]]
+>T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]
 
 type T02 = Required<[number, string?, ...boolean[]]>;
 >T02 : [number, string, ...boolean[]]
@@ -124,33 +124,33 @@ declare function nonpartial<T>(x: Partial<T>): T;
 >x : Partial<T>
 
 declare let x20: [number | undefined, string?, ...boolean[]];
->x20 : [number | undefined, string?, ...boolean[]]
+>x20 : [number | undefined, (string | undefined)?, ...boolean[]]
 
 let y20 = nonpartial(x20);
->y20 : [number | undefined, string, ...boolean[]]
->nonpartial(x20) : [number | undefined, string, ...boolean[]]
+>y20 : [number, string, ...boolean[]]
+>nonpartial(x20) : [number, string, ...boolean[]]
 >nonpartial : <T>(x: Partial<T>) => T
->x20 : [number | undefined, string?, ...boolean[]]
+>x20 : [number | undefined, (string | undefined)?, ...boolean[]]
 
 declare let x21: (number | undefined)[];
 >x21 : (number | undefined)[]
 
 let y21 = nonpartial(x21);
->y21 : (number | undefined)[]
->nonpartial(x21) : (number | undefined)[]
+>y21 : number[]
+>nonpartial(x21) : number[]
 >nonpartial : <T>(x: Partial<T>) => T
 >x21 : (number | undefined)[]
 
 declare let x22: { a: number | undefined, b?: string[] };
->x22 : { a: number | undefined; b?: string[]; }
+>x22 : { a: number | undefined; b?: string[] | undefined; }
 >a : number | undefined
 >b : string[] | undefined
 
 let y22 = nonpartial(x22);
->y22 : { a: number | undefined; b: string[]; }
->nonpartial(x22) : { a: number | undefined; b: string[]; }
+>y22 : { a: number; b: string[]; }
+>nonpartial(x22) : { a: number; b: string[]; }
 >nonpartial : <T>(x: Partial<T>) => T
->x22 : { a: number | undefined; b?: string[]; }
+>x22 : { a: number | undefined; b?: string[] | undefined; }
 
 type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 >Awaited : Awaited<T>

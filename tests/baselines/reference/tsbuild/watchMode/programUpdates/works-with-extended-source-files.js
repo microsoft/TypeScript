@@ -68,6 +68,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+/a/b/commonfile2.ts (used version)
+
 Program root files: ["/a/b/other.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
@@ -78,6 +83,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other.ts (used version)
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -237,6 +246,8 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /a/b/project1.tsconfig.json:
   {"fileName":"/a/b/project1.tsconfig.json","pollingInterval":250}
@@ -290,6 +301,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -348,6 +361,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -408,6 +423,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile1.ts (computed .d.ts)
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/other.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -481,6 +501,8 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /a/b/project1.tsconfig.json:
   {"fileName":"/a/b/project1.tsconfig.json","pollingInterval":250}
@@ -540,6 +562,8 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:

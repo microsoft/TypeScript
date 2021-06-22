@@ -92,27 +92,27 @@ const bar = new Bar<Foo>();
 // all 3 of the below should error on passing `true` for `"1"`
 bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
 >bar.broken("a", "1", true) : void
->bar.broken : <K1 extends string | number, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>bar.broken : <K1 extends keyof Foo, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >bar : Bar<Foo>
->broken : <K1 extends string | number, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>broken : <K1 extends keyof Foo, K2 extends keys2broken<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >"a" : "a"
 >"1" : "1"
 >true : true
 
 bar.working("a", "1", true); // ok - true is not allowed
 >bar.working("a", "1", true) : void
->bar.working : <K1 extends string | number, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>bar.working : <K1 extends keyof Foo, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >bar : Bar<Foo>
->working : <K1 extends string | number, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>working : <K1 extends keyof Foo, K2 extends keys2working<Foo, K1>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >"a" : "a"
 >"1" : "1"
 >true : true
 
 bar.workaround("a", "1", true); // ok - true is not allowed
 >bar.workaround("a", "1", true) : void
->bar.workaround : <K1 extends string | number, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>bar.workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >bar : Bar<Foo>
->workaround : <K1 extends string | number, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
+>workaround : <K1 extends keyof Foo, K2 extends Extract<Foo[K1] extends object ? keyof Foo[K1] : never, string>, V extends Foo[K1][K2]>(k1: K1, k2: K2, value: V) => void
 >"a" : "a"
 >"1" : "1"
 >true : true

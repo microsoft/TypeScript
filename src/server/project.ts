@@ -84,6 +84,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        session?: Session<unknown>;
         config: any;
     }
 
@@ -1610,7 +1611,8 @@ namespace ts.server {
                     project: this,
                     languageService: this.languageService,
                     languageServiceHost: this,
-                    serverHost: this.projectService.host
+                    serverHost: this.projectService.host,
+                    session: this.projectService.session
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
@@ -2119,7 +2121,7 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
-                getDirectoryPath(configFileName),
+                getDirectoryPath(configFileName)
             );
         }
 

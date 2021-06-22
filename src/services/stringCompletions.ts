@@ -321,13 +321,14 @@ namespace ts.Completions.StringCompletions {
 
     interface ExtensionOptions {
         readonly extensions: readonly Extension[];
-        readonly includeExtensions: boolean;
+        readonly includeExtensionsOption: IncludeExtensionsOption;
     }
-    function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensions = false): ExtensionOptions {
-        return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensions };
+    function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensionsOption = IncludeExtensionsOption.Exclude): ExtensionOptions {
+        return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensionsOption };
     }
     function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, preferences: UserPreferences) {
-        const extensionOptions = getExtensionOptions(compilerOptions, preferences.importModuleSpecifierEnding === "js");
+        const includeExtensions = preferences.importModuleSpecifierEnding === "js" ? IncludeExtensionsOption.ModuleSpecifierCompletion : IncludeExtensionsOption.Exclude;
+        const extensionOptions = getExtensionOptions(compilerOptions, includeExtensions);
         if (compilerOptions.rootDirs) {
             return getCompletionEntriesForDirectoryFragmentWithRootDirs(
                 compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
@@ -370,10 +371,15 @@ namespace ts.Completions.StringCompletions {
         return flatMap(baseDirectories, baseDirectory => getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude));
     }
 
+    const enum IncludeExtensionsOption {
+        Exclude,
+        Include,
+        ModuleSpecifierCompletion,
+    }
     /**
      * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
      */
-    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, { extensions, includeExtensions }: ExtensionOptions, host: LanguageServiceHost, exclude?: string, result: NameAndKind[] = []): NameAndKind[] {
+    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, { extensions, includeExtensionsOption }: ExtensionOptions, host: LanguageServiceHost, exclude?: string, result: NameAndKind[] = []): NameAndKind[] {
         if (fragment === undefined) {
             fragment = "";
         }
@@ -407,7 +413,7 @@ namespace ts.Completions.StringCompletions {
         if (files) {
             /**
              * Multiple file entries might map to the same truncated name once we remove extensions
-             * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
+             * (happens iff includeExtensionsOption === includeExtensionsOption.Exclude) so we use a set-like data structure. Eg:
              *
              * both foo.ts and foo.tsx become foo
              */
@@ -418,8 +424,20 @@ namespace ts.Completions.StringCompletions {
                     continue;
                 }
 
-                const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
-                foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
+                let foundFileName: string;
+                const outputExtension = moduleSpecifiers.tryGetJSExtensionForFile(filePath, host.getCompilationSettings());
+                if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIs(filePath, Extension.Json)) {
+                    foundFileName = removeFileExtension(getBaseFileName(filePath));
+                    foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
+                }
+                else if (includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion && outputExtension) {
+                    foundFileName = changeExtension(getBaseFileName(filePath), outputExtension);
+                    foundFiles.set(foundFileName, outputExtension);
+                }
+                else {
+                    foundFileName = getBaseFileName(filePath);
+                    foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
+                }
             }
 
             foundFiles.forEach((ext, foundFile) => {
@@ -635,7 +653,7 @@ namespace ts.Completions.StringCompletions {
 
         const [, prefix, kind, toComplete] = match;
         const scriptPath = getDirectoryPath(sourceFile.path);
-        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, /*includeExtensions*/ true), host, sourceFile.path)
+        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, IncludeExtensionsOption.Include), host, sourceFile.path)
             : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions))
             : Debug.fail();
         return addReplacementSpans(toComplete, range.pos + prefix.length, names);
