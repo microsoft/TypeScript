@@ -55,8 +55,8 @@ exports.fn3 = fn3;`;
                 content: `"use strict";
 exports.__esModule = true;${appendJsText === changeJs ? "\nexports.fn3 = void 0;" : ""}
 var fns_1 = require("../decls/fns");
-fns_1.fn1();
-fns_1.fn2();
+(0, fns_1.fn1)();
+(0, fns_1.fn2)();
 ${appendJs}`
             }];
         }

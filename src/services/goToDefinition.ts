@@ -212,12 +212,7 @@ namespace ts.GoToDefinition {
 
     // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
-        if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
-        const type = checker.getTypeAtLocation(node.parent.expression);
-        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
-            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
-            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
-        });
+        return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {

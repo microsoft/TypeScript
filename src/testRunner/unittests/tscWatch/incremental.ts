@@ -181,8 +181,8 @@ namespace ts.tscWatch {
                         configFilePath: config.path
                     });
 
-                    assert.equal(state.referencedMap!.size, 0);
-                    assert.equal(state.exportedModulesMap!.size, 0);
+                    assert.equal(arrayFrom(state.referencedMap!.keys()).length, 0);
+                    assert.equal(arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                     assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                     assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as Path), emptyArray);

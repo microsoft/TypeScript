@@ -1,0 +1,152 @@
+=== tests/cases/conformance/salsa/spellingUncheckedJS.js ===
+export var inModule = 1
+>inModule : number
+>1 : 1
+
+inmodule.toFixed()
+>inmodule.toFixed() : error
+>inmodule.toFixed : error
+>inmodule : any
+>toFixed : any
+
+function f() {
+>f : () => void
+
+    var locals = 2 + true
+>locals : any
+>2 + true : any
+>2 : 2
+>true : true
+
+    locale.toFixed()
+>locale.toFixed() : error
+>locale.toFixed : error
+>locale : any
+>toFixed : any
+
+    // @ts-expect-error
+    localf.toExponential()
+>localf.toExponential() : error
+>localf.toExponential : error
+>localf : any
+>toExponential : any
+
+    // @ts-expect-error
+    "this is fine"
+>"this is fine" : "this is fine"
+}
+class Classe {
+>Classe : Classe
+
+    non = 'oui'
+>non : string
+>'oui' : "oui"
+
+    methode() {
+>methode : () => any
+
+        // no error on 'this' references
+        return this.none
+>this.none : error
+>this : this
+>none : any
+    }
+}
+class Derivee extends Classe {
+>Derivee : Derivee
+>Classe : Classe
+
+    methode() {
+>methode : () => any
+
+        // no error on 'super' references
+        return super.none
+>super.none : error
+>super : Classe
+>none : any
+    }
+}
+
+
+var object = {
+>object : { spaaace: number; }
+>{    spaaace: 3} : { spaaace: number; }
+
+    spaaace: 3
+>spaaace : number
+>3 : 3
+}
+object.spaaaace // error on read
+>object.spaaaace : error
+>object : { spaaace: number; }
+>spaaaace : any
+
+object.spaace = 12 // error on write
+>object.spaace = 12 : 12
+>object.spaace : error
+>object : { spaaace: number; }
+>spaace : any
+>12 : 12
+
+object.fresh = 12 // OK
+>object.fresh = 12 : 12
+>object.fresh : error
+>object : { spaaace: number; }
+>fresh : any
+>12 : 12
+
+other.puuuce // OK, from another file
+>other.puuuce : any
+>other : { puuce: number; }
+>puuuce : any
+
+new Date().getGMTDate() // OK, from another file
+>new Date().getGMTDate() : error
+>new Date().getGMTDate : error
+>new Date() : Date
+>Date : DateConstructor
+>getGMTDate : any
+
+// No suggestions for globals from other files
+const atoc = setIntegral(() => console.log('ok'), 500)
+>atoc : error
+>setIntegral(() => console.log('ok'), 500) : error
+>setIntegral : error
+>() => console.log('ok') : () => void
+>console.log('ok') : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>'ok' : "ok"
+>500 : 500
+
+AudioBuffin // etc
+>AudioBuffin : error
+
+Jimmy
+>Jimmy : number
+
+Jon
+>Jon : error
+
+=== tests/cases/conformance/salsa/other.js ===
+var Jimmy = 1
+>Jimmy : number
+>1 : 1
+
+var John = 2
+>John : number
+>2 : 2
+
+Jon // error, it's from the same file
+>Jon : error
+
+var other = {
+>other : { puuce: number; }
+>{    puuce: 4} : { puuce: number; }
+
+    puuce: 4
+>puuce : number
+>4 : 4
+}
+

@@ -1,14 +1,14 @@
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'data' of type 'A' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'hasOwnProperty' of type '(v: PropertyKey) => boolean' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'toString' of type '() => string' is not assignable to string index type 'Object'.
-tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(11,5): error TS2411: Property 'valueOf' of type '() => Object' is not assignable to string index type 'Object'.
+tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts(10,5): error TS2411: Property 'data' of type 'A' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(122,5): error TS2411: Property 'constructor' of type 'Function' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(125,5): error TS2411: Property 'toString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(128,5): error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(131,5): error TS2411: Property 'valueOf' of type '() => Object' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(137,5): error TS2411: Property 'hasOwnProperty' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(143,5): error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to 'string' index type 'Object'.
+lib.es5.d.ts(149,5): error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to 'string' index type 'Object'.
 
 
-==== tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts (8 errors) ====
+==== tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts (1 errors) ====
     class A {
         foo: string;
     }
@@ -19,23 +19,9 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts
     
     interface Object {
         data: A;
+        ~~~~
+!!! error TS2411: Property 'data' of type 'A' is not assignable to 'string' index type 'Object'.
         [x: string]: Object;
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'constructor' of type 'Function' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'data' of type 'A' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'hasOwnProperty' of type '(v: PropertyKey) => boolean' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'isPrototypeOf' of type '(v: Object) => boolean' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'propertyIsEnumerable' of type '(v: PropertyKey) => boolean' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'toLocaleString' of type '() => string' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'toString' of type '() => string' is not assignable to string index type 'Object'.
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2411: Property 'valueOf' of type '() => Object' is not assignable to string index type 'Object'.
     }
     
     class C {

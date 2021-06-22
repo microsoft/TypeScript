@@ -17,13 +17,17 @@ function a<T>(l: Recur<T>[]): void {
 //// [recursiveReverseMappedType.js]
 "use strict";
 // Repro from #38198
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 function join(l) {
-    return __spreadArray(['marker'], l);
+    return __spreadArray(['marker'], l, true);
 }
 function a(l) {
     var x = join(l);

@@ -10,7 +10,7 @@ declare class Component<P> {
 >context : any
 
   readonly props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Readonly<P> & Readonly<{ children?: {}; }>
+>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
 >children : {} | undefined
 }
 interface ComponentClass<P = {}> {
@@ -29,7 +29,7 @@ interface ComponentClass<P = {}> {
 }
 interface FunctionComponent<P = {}> {
   (props: P & { children?: {} }, context?: any): {} | null;
->props : P & { children?: {}; }
+>props : P & { children?: {} | undefined; }
 >children : {} | undefined
 >context : any
 >null : null

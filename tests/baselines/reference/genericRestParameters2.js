@@ -81,51 +81,55 @@ type T12 = P1<(x: number, y: number) => void>;
 
 //// [genericRestParameters2.js]
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 f10(42, "hello");
 f10(42, "hello", true);
 f10(42, "hello", true, false);
 f10(t1[0], t1[1], t1[2], t1[3]);
 f10.apply(void 0, t1);
-f10.apply(void 0, __spreadArray([42], t2));
-f10.apply(void 0, __spreadArray([42, "hello"], t3));
-f10.apply(void 0, __spreadArray([42, "hello", true], t4));
-f10.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4), [false]), t3));
+f10.apply(void 0, __spreadArray([42], t2, false));
+f10.apply(void 0, __spreadArray([42, "hello"], t3, false));
+f10.apply(void 0, __spreadArray([42, "hello", true], t4, false));
+f10.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4, false), [false], false), t3, false));
 f11(42, "hello");
 f11(42, "hello", true);
 f11(42, "hello", true, false);
 f11(t1[0], t1[1], t1[2], t1[3]);
 f11.apply(void 0, t1);
-f11.apply(void 0, __spreadArray([42], t2));
-f11.apply(void 0, __spreadArray([42, "hello"], t3));
-f11.apply(void 0, __spreadArray([42, "hello", true], t4));
-f11.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4), [false]), t3));
+f11.apply(void 0, __spreadArray([42], t2, false));
+f11.apply(void 0, __spreadArray([42, "hello"], t3, false));
+f11.apply(void 0, __spreadArray([42, "hello", true], t4, false));
+f11.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4, false), [false], false), t3, false));
 f12(42, "hello");
 f12(42, "hello", true);
 f12(42, "hello", true, false);
 f12(t1[0], t1[1], t1[2], t1[3]);
 f12.apply(void 0, t1);
-f12.apply(void 0, __spreadArray([42], t2));
-f12.apply(void 0, __spreadArray([42, "hello"], t3));
-f12.apply(void 0, __spreadArray([42, "hello", true], t4));
-f12.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4), [false]), t3));
+f12.apply(void 0, __spreadArray([42], t2, false));
+f12.apply(void 0, __spreadArray([42, "hello"], t3, false));
+f12.apply(void 0, __spreadArray([42, "hello", true], t4, false));
+f12.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4, false), [false], false), t3, false));
 f13(42, "hello");
 f13(42, "hello", true);
 f13(42, "hello", true, false);
 f13(t1[0], t1[1], t1[2], t1[3]);
 f13.apply(void 0, t1);
-f13.apply(void 0, __spreadArray([42], t2));
-f13.apply(void 0, __spreadArray([42, "hello"], t3));
-f13.apply(void 0, __spreadArray([42, "hello", true], t4));
-f13.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4), [false]), t3));
+f13.apply(void 0, __spreadArray([42], t2, false));
+f13.apply(void 0, __spreadArray([42, "hello"], t3, false));
+f13.apply(void 0, __spreadArray([42, "hello", true], t4, false));
+f13.apply(void 0, __spreadArray(__spreadArray(__spreadArray([42, "hello", true], t4, false), [false], false), t3, false));
 f20.apply(void 0, t1);
-f20.apply(void 0, __spreadArray([42], t2));
-f20.apply(void 0, __spreadArray([42, "hello"], t3));
-f20.apply(void 0, __spreadArray(__spreadArray([42, "hello"], t2), [true]));
+f20.apply(void 0, __spreadArray([42], t2, false));
+f20.apply(void 0, __spreadArray([42, "hello"], t3, false));
+f20.apply(void 0, __spreadArray(__spreadArray([42, "hello"], t2, false), [true], false));
 
 
 //// [genericRestParameters2.d.ts]

@@ -62,19 +62,23 @@ var d9 = [[...temp1], ...["hello"]];
 //      Elisionopt   SpreadElement
 //      ElementList, Elisionopt   AssignmentExpression
 //      ElementList, Elisionopt   SpreadElement
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 // SpreadElement:
 //      ...   AssignmentExpression
 var a0 = [, , 2, 3, 4];
 var a1 = ["hello", "world"];
-var a2 = __spreadArray(__spreadArray([, , ], a0), ["hello"]);
-var a3 = __spreadArray([, ], a0);
+var a2 = __spreadArray(__spreadArray([, , ,], a0, true), ["hello"], false);
+var a3 = __spreadArray([, ,], a0, true);
 var a4 = [function () { return 1; },];
-var a5 = __spreadArray(__spreadArray([], a0), [,]);
+var a5 = __spreadArray(__spreadArray([], a0, true), [,], false);
 // Each element expression in a non-empty array literal is processed as follows:
 //    - If the array literal contains no spread elements, and if the array literal is contextually typed (section 4.19)
 //      by a type T and T has a property with the numeric name N, where N is the index of the element expression in the array literal,
@@ -97,13 +101,13 @@ var temp1 = [1, 2, 3];
 var temp2 = [[1, 2, 3], ["hello", "string"]];
 var temp3 = [undefined, null, undefined];
 var temp4 = [];
-var d0 = __spreadArray([1, true], temp); // has type (string|number|boolean)[]
-var d1 = __spreadArray([], temp); // has type string[]
-var d2 = __spreadArray([], temp1);
-var d3 = __spreadArray([], temp1);
-var d4 = __spreadArray(__spreadArray([], temp), temp1);
-var d5 = __spreadArray([], temp3);
-var d6 = __spreadArray([], temp4);
-var d7 = __spreadArray([], temp1);
-var d8 = [__spreadArray([], temp1)];
-var d9 = __spreadArray([__spreadArray([], temp1)], ["hello"]);
+var d0 = __spreadArray([1, true], temp, true); // has type (string|number|boolean)[]
+var d1 = __spreadArray([], temp, true); // has type string[]
+var d2 = __spreadArray([], temp1, true);
+var d3 = __spreadArray([], temp1, true);
+var d4 = __spreadArray(__spreadArray([], temp, true), temp1, true);
+var d5 = __spreadArray([], temp3, true);
+var d6 = __spreadArray([], temp4, true);
+var d7 = __spreadArray([], temp1, true);
+var d8 = [__spreadArray([], temp1, true)];
+var d9 = __spreadArray([__spreadArray([], temp1, true)], ["hello"], false);
