@@ -626,6 +626,7 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;

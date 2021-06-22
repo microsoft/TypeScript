@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts.Completions {
+    export const moduleSpecifierResolutionLimit = 100;
+
     export type Log = (message: string) => void;
 
     export enum SortText {
@@ -153,21 +155,8 @@ namespace ts.Completions {
         triggerCharacter: CompletionsTriggerCharacter | undefined,
         completionKind?: CompletionTriggerKind,
     ): CompletionInfo | undefined {
-        const typeChecker = program.getTypeChecker();
-        const compilerOptions = program.getCompilerOptions();
-        const incompleteCompletionsCache = host.getIncompleteCompletionsCache?.();
-        if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions) {
-            const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, position, program, host, preferences);
-            if (incompleteContinuation) {
-                return incompleteContinuation;
-            }
-        }
-        else {
-            incompleteCompletionsCache?.clear();
-        }
-
-        const contextToken = findPrecedingToken(position, sourceFile);
-        if (triggerCharacter && !isInString(sourceFile, position, contextToken) && !isValidTrigger(sourceFile, triggerCharacter, contextToken, position)) {
+        const { previousToken } = getRelevantTokens(position, sourceFile);
+        if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
             return undefined;
         }
 
@@ -180,14 +169,29 @@ namespace ts.Completions {
 
         }
 
-        const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, contextToken, typeChecker, compilerOptions, host, log, preferences);
+        // If the request is a continuation of an earlier `isIncomplete` response,
+        // we can continue it from the cached previous response.
+        const typeChecker = program.getTypeChecker();
+        const compilerOptions = program.getCompilerOptions();
+        const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
+        if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
+            const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences);
+            if (incompleteContinuation) {
+                return incompleteContinuation;
+            }
+        }
+        else {
+            incompleteCompletionsCache?.clear();
+        }
+
+        const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, typeChecker, compilerOptions, host, log, preferences);
         if (stringCompletions) {
             return stringCompletions;
         }
 
-        if (contextToken && isBreakOrContinueStatement(contextToken.parent)
-            && (contextToken.kind === SyntaxKind.BreakKeyword || contextToken.kind === SyntaxKind.ContinueKeyword || contextToken.kind === SyntaxKind.Identifier)) {
-            return getLabelCompletionAtPosition(contextToken.parent);
+        if (previousToken && isBreakOrContinueStatement(previousToken.parent)
+            && (previousToken.kind === SyntaxKind.BreakKeyword || previousToken.kind === SyntaxKind.ContinueKeyword || previousToken.kind === SyntaxKind.Identifier)) {
+            return getLabelCompletionAtPosition(previousToken.parent);
         }
 
         const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host);
@@ -220,7 +224,7 @@ namespace ts.Completions {
     function continuePreviousIncompleteResponse(
         cache: IncompleteCompletionsCache,
         file: SourceFile,
-        position: number,
+        location: Identifier,
         program: Program,
         host: LanguageServiceHost,
         preferences: UserPreferences,
@@ -228,11 +232,8 @@ namespace ts.Completions {
         const previousResponse = cache.get();
         if (!previousResponse) return undefined;
 
-        const previousToken = tryCast(findPrecedingToken(position, file, /*startNode*/ undefined), isIdentifier);
-        if (!previousToken) return undefined;
-
         const start = timestamp();
-        const lowerCaseTokenText = previousToken.text.toLowerCase();
+        const lowerCaseTokenText = location.text.toLowerCase();
         const exportMap = codefix.getSymbolToExportInfoMap(file, host, program);
         const checker = program.getTypeChecker();
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
@@ -240,29 +241,40 @@ namespace ts.Completions {
         let resolvedCount = 0;
         let hasUnresolvedAutoImports = false;
         const newEntries = mapDefined(previousResponse.entries, entry => {
-            if (entry.hasAction && entry.source && entry.data && !entry.data.moduleSpecifier) {
-                if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
-                    return undefined;
-                }
-                if (resolvedCount > 100) {
-                    hasUnresolvedAutoImports = true;
-                    return entry;
-                }
-                const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
-                const info = exportMap.get(entry.name, symbol, origin.moduleSymbol, origin.isFromPackageJson ? autoImportProviderChecker! : checker);
-                const result = info && codefix.getModuleSpecifierForBestExportInfo(info, file, origin.isFromPackageJson ? autoImportProvider! : program, host, preferences);
-                if (!result) return entry;
-                const newOrigin: SymbolOriginInfoResolvedExport = {
-                    ...origin,
-                    kind: SymbolOriginInfoKind.ResolvedExport,
-                    moduleSpecifier: result.moduleSpecifier,
-                };
-                entry.data = originToCompletionEntryData(newOrigin);
-                entry.source = getSourceFromOrigin(newOrigin);
-                entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
-                resolvedCount++;
+            if (!entry.hasAction || !entry.source || !entry.data || entry.data.moduleSpecifier) {
+                // Not an auto import or already resolved; keep as is
                 return entry;
             }
+            if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
+                // No longer matches typed characters; filter out
+                return undefined;
+            }
+            if (resolvedCount >= moduleSpecifierResolutionLimit) {
+                // Not willing to do any more work on this request; keep as is
+                hasUnresolvedAutoImports = true;
+                return entry;
+            }
+            // Fill in details for auto import
+            const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
+            const info = exportMap.get(
+                entry.name,
+                origin.isDefaultExport ? symbol.exportSymbol || symbol : symbol,
+                origin.moduleSymbol,
+                origin.isFromPackageJson ? autoImportProviderChecker! : checker);
+            const result = info && codefix.getModuleSpecifierForBestExportInfo(info, file, origin.isFromPackageJson ? autoImportProvider! : program, host, preferences);
+            if (!result) return entry;
+            const newOrigin: SymbolOriginInfoResolvedExport = {
+                ...origin,
+                kind: SymbolOriginInfoKind.ResolvedExport,
+                moduleSpecifier: result.moduleSpecifier,
+            };
+            // Mutating for performance... feels sketchy but nobody else uses the cache,
+            // so why bother allocating a bunch of new objects?
+            entry.data = originToCompletionEntryData(newOrigin);
+            entry.source = getSourceFromOrigin(newOrigin);
+            entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
+            resolvedCount++;
+            return entry;
         });
         if (!hasUnresolvedAutoImports) {
             previousResponse.isIncomplete = undefined;
@@ -393,7 +405,7 @@ namespace ts.Completions {
 
         return {
             isGlobalCompletion: isInSnippetScope,
-            isIncomplete: hasUnresolvedAutoImports ? true : undefined,
+            isIncomplete: preferences.allowIncompleteCompletions && hasUnresolvedAutoImports ? true : undefined,
             isMemberCompletion: isMemberCompletionKind(completionKind),
             isNewIdentifierLocation,
             optionalReplacementSpan: getOptionalReplacementSpan(location),
@@ -602,7 +614,7 @@ namespace ts.Completions {
             sourceDisplay,
             isSnippet,
             isPackageJsonImport: originIsPackageJsonImport(origin) || undefined,
-            isImportStatementCompletion: originIsResolvedExport(origin) || undefined,
+            isImportStatementCompletion: !!importCompletionNode || undefined,
             data,
         };
     }
@@ -974,10 +986,14 @@ namespace ts.Completions {
         data: CompletionEntryData | undefined,
     ): CodeActionsAndSourceDisplay {
         if (data?.moduleSpecifier) {
-            return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
+            const { contextToken } = getRelevantTokens(position, sourceFile);
+            if (contextToken && getImportCompletionNode(contextToken)) {
+                // Import statement completion: 'import c|'
+                return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
+            }
         }
 
-        if (!origin || !originIsExport(origin)) {
+        if (!origin || !(originIsExport(origin) || originIsResolvedExport(origin))) {
             return { codeActions: undefined, sourceDisplay: undefined };
         }
 
@@ -993,6 +1009,7 @@ namespace ts.Completions {
             formatContext,
             previousToken && isIdentifier(previousToken) ? previousToken.getStart(sourceFile) : position,
             preferences);
+        Debug.assert(!data?.moduleSpecifier || moduleSpecifier === data.moduleSpecifier);
         return { sourceDisplay: [textPart(moduleSpecifier)], codeActions: [codeAction] };
     }
 
@@ -1191,20 +1208,12 @@ namespace ts.Completions {
         }
 
         start = timestamp();
-        const previousToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
-        log("getCompletionData: Get previous token 1: " + (timestamp() - start));
-
         // The decision to provide completion depends on the contextToken, which is determined through the previousToken.
         // Note: 'previousToken' (and thus 'contextToken') can be undefined if we are the beginning of the file
-        let contextToken = previousToken;
-
-        // Check if the caret is at the end of an identifier; this is a partial identifier that we want to complete: e.g. a.toS|
-        // Skip this partial identifier and adjust the contextToken to the token that precedes it.
-        if (contextToken && position <= contextToken.end && (isMemberName(contextToken) || isKeyword(contextToken.kind))) {
-            const start = timestamp();
-            contextToken = findPrecedingToken(contextToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
-            log("getCompletionData: Get previous token 2: " + (timestamp() - start));
-        }
+        const tokens = getRelevantTokens(position, sourceFile);
+        const previousToken = tokens.previousToken!;
+        let contextToken = tokens.contextToken!;
+        log("getCompletionData: Get previous token: " + (timestamp() - start));
 
         // Find the node where completion is requested on.
         // Also determine whether we are trying to complete with members of that node
@@ -1220,7 +1229,7 @@ namespace ts.Completions {
         let importCompletionNode: Node | undefined;
         let location = getTouchingPropertyName(sourceFile, position);
 
-        if (contextToken) {
+        if (tokens.contextToken) {
             const importCompletionCandidate = getImportCompletionNode(contextToken);
             if (importCompletionCandidate === SyntaxKind.FromKeyword) {
                 return { kind: CompletionDataKind.Keywords, keywords: [SyntaxKind.FromKeyword] };
@@ -1843,7 +1852,7 @@ namespace ts.Completions {
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
-                    const shouldResolveModuleSpecifier = resolvedCount < 100;
+                    const shouldResolveModuleSpecifier = preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
                     const { moduleSpecifier, exportInfo } = shouldResolveModuleSpecifier
                         ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences) || {}
                         : { moduleSpecifier: undefined, exportInfo: find(info, isImportableExportInfo) };
@@ -2725,6 +2734,15 @@ namespace ts.Completions {
         function isCurrentlyEditingNode(node: Node): boolean {
             return node.getStart(sourceFile) <= position && position <= node.getEnd();
         }
+    }
+
+    function getRelevantTokens(position: number, sourceFile: SourceFile): { contextToken: Node, previousToken: Node } | { contextToken: undefined, previousToken: undefined } {
+        const previousToken = findPrecedingToken(position, sourceFile);
+        if (previousToken && position <= previousToken.end && (isMemberName(previousToken) || isKeyword(previousToken.kind))) {
+            const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
+            return { contextToken: contextToken || previousToken, previousToken };
+        }
+        return { contextToken: previousToken as Node, previousToken: previousToken as Node };
     }
 
     function getAutoImportSymbolFromCompletionEntryData(name: string, data: CompletionEntryData, program: Program, host: LanguageServiceHost): { symbol: Symbol, origin: SymbolOriginInfoExport } | undefined {

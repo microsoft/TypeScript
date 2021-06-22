@@ -3215,9 +3215,7 @@ namespace ts {
                         // in the checker, even though the symbols to merge are the same (guaranteed by
                         // cache invalidation in synchronizeHostData).
                         if (info.symbol.declarations?.length) {
-                            info.symbol = checker.getMergedSymbol(info.exportKind === ExportKind.Default
-                                ? info.symbol.declarations[0].localSymbol ?? info.symbol.declarations[0].symbol
-                                : info.symbol.declarations[0].symbol);
+                            info.symbol = checker.getMergedSymbol(info.symbol.declarations[0].symbol);
                         }
                         if (info.moduleSymbol.declarations?.length) {
                             info.moduleSymbol = checker.getMergedSymbol(info.moduleSymbol.declarations[0].symbol);
