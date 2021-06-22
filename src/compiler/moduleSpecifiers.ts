@@ -90,6 +90,35 @@ namespace ts.moduleSpecifiers {
             getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
     }
 
+    export function tryGetModuleSpecifiersFromCache(
+        moduleSymbol: Symbol,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): readonly string[] | undefined {
+        return tryGetModuleSpecifiersFromCacheWorker(
+            moduleSymbol,
+            importingSourceFile,
+            host,
+            userPreferences)[0];
+    }
+
+    function tryGetModuleSpecifiersFromCacheWorker(
+        moduleSymbol: Symbol,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
+        const moduleSourceFile = getSourceFileOfModule(moduleSymbol);
+        if (!moduleSourceFile) {
+            return emptyArray as [];
+        }
+
+        const cache = host.getModuleSpecifierCache?.();
+        const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences);
+        return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
+    }
+
     /** Returns an import for each symlink and for the realpath. */
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
@@ -102,21 +131,18 @@ namespace ts.moduleSpecifiers {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
         if (ambient) return [ambient];
 
-        const info = getInfo(importingSourceFile.path, host);
-        const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
-        if (!moduleSourceFile) {
-            return [];
-        }
-
-        const cache = host.getModuleSpecifierCache?.();
-        const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences);
-        let modulePaths;
-        if (cached) {
-            if (cached.moduleSpecifiers) return cached.moduleSpecifiers;
-            modulePaths = cached.modulePaths;
-        }
+        // eslint-disable-next-line prefer-const
+        let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
+            moduleSymbol,
+            importingSourceFile,
+            host,
+            userPreferences,
+        );
+        if (specifiers) return specifiers;
+        if (!moduleSourceFile) return emptyArray;
 
         modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const info = getInfo(importingSourceFile.path, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),

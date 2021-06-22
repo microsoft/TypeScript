@@ -1,6 +1,7 @@
 /* @internal */
 namespace ts.Completions {
     export const moduleSpecifierResolutionLimit = 100;
+    export const moduleSpecifierResolutionCacheAttemptLimit = Infinity;
 
     export type Log = (message: string) => void;
 
@@ -239,6 +240,8 @@ namespace ts.Completions {
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
         const autoImportProviderChecker = autoImportProvider?.getTypeChecker();
         let resolvedCount = 0;
+        let resolvedFromCacheCount = 0;
+        let cacheAttemptCount = 0;
         let hasUnresolvedAutoImports = false;
         const newEntries = mapDefined(previousResponse.entries, entry => {
             if (!entry.hasAction || !entry.source || !entry.data || entry.data.moduleSpecifier) {
@@ -249,7 +252,9 @@ namespace ts.Completions {
                 // No longer matches typed characters; filter out
                 return undefined;
             }
-            if (resolvedCount >= moduleSpecifierResolutionLimit) {
+            const shouldResolveModuleSpecifier = resolvedCount < moduleSpecifierResolutionLimit;
+            const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
+            if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache) {
                 // Not willing to do any more work on this request; keep as is
                 hasUnresolvedAutoImports = true;
                 return entry;
@@ -261,8 +266,20 @@ namespace ts.Completions {
                 origin.isDefaultExport ? symbol.exportSymbol || symbol : symbol,
                 origin.moduleSymbol,
                 origin.isFromPackageJson ? autoImportProviderChecker! : checker);
-            const result = info && codefix.getModuleSpecifierForBestExportInfo(info, file, origin.isFromPackageJson ? autoImportProvider! : program, host, preferences);
-            if (!result) return entry;
+            const result = info && codefix.getModuleSpecifierForBestExportInfo(
+                info,
+                file,
+                origin.isFromPackageJson ? autoImportProvider! : program,
+                host,
+                preferences,
+                shouldGetModuleSpecifierFromCache);
+
+            cacheAttemptCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
+            if (!result) {
+                Debug.assert(shouldGetModuleSpecifierFromCache);
+                hasUnresolvedAutoImports = true;
+                return entry;
+            }
             const newOrigin: SymbolOriginInfoResolvedExport = {
                 ...origin,
                 kind: SymbolOriginInfoKind.ResolvedExport,
@@ -273,13 +290,16 @@ namespace ts.Completions {
             entry.data = originToCompletionEntryData(newOrigin);
             entry.source = getSourceFromOrigin(newOrigin);
             entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
-            resolvedCount++;
+            resolvedCount += shouldResolveModuleSpecifier ? 1 : 0;
+            resolvedFromCacheCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
             return entry;
         });
         if (!hasUnresolvedAutoImports) {
             previousResponse.isIncomplete = undefined;
         }
         previousResponse.entries = newEntries;
+        host.log?.(`continuePreviousIncompleteResponse: resolved ${resolvedCount} module specifiers, plus ${resolvedFromCacheCount} from cache (${Math.round(resolvedFromCacheCount / cacheAttemptCount * 100)}% hit rate)`);
+        host.log?.(`continuePreviousIncompleteResponse: ${hasUnresolvedAutoImports ? "still incomplete" : "response is now complete"}`);
         host.log?.(`continuePreviousIncompleteResponse: ${timestamp() - start}`);
         return previousResponse;
     }
@@ -936,7 +956,7 @@ namespace ts.Completions {
             }
             case "symbol": {
                 const { symbol, location, origin, previousToken } = symbolCompletion;
-                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(origin, symbol, program, typeChecker, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, entryId.data);
+                const { codeActions, sourceDisplay } = getCompletionEntryCodeActionsAndSourceDisplay(origin, symbol, program, host, compilerOptions, sourceFile, position, previousToken, formatContext, preferences, entryId.data);
                 return createCompletionDetailsForSymbol(symbol, typeChecker, sourceFile, location, cancellationToken, codeActions, sourceDisplay); // TODO: GH#18217
             }
             case "literal": {
@@ -975,7 +995,6 @@ namespace ts.Completions {
         origin: SymbolOriginInfo | SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | undefined,
         symbol: Symbol,
         program: Program,
-        checker: TypeChecker,
         host: LanguageServiceHost,
         compilerOptions: CompilerOptions,
         sourceFile: SourceFile,
@@ -997,6 +1016,7 @@ namespace ts.Completions {
             return { codeActions: undefined, sourceDisplay: undefined };
         }
 
+        const checker = origin.isFromPackageJson ? host.getPackageJsonAutoImportProvider!()!.getTypeChecker() : program.getTypeChecker();
         const { moduleSymbol } = origin;
         const exportedSymbol = checker.getMergedSymbol(skipAlias(symbol.exportSymbol || symbol, checker));
         const { moduleSpecifier, codeAction } = codefix.getImportCompletionAction(
@@ -1685,7 +1705,7 @@ namespace ts.Completions {
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
             isNewIdentifierLocation = true;
-            collectAutoImports(/*resolveModuleSpecifiers*/ true);
+            collectAutoImports();
             return GlobalsSearch.Success;
         }
 
@@ -1753,7 +1773,7 @@ namespace ts.Completions {
                     }
                 }
             }
-            collectAutoImports(/*resolveModuleSpecifier*/ true);
+            collectAutoImports();
             if (isTypeOnly) {
                 keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                     ? KeywordCompletionFilters.TypeAssertionKeywords
@@ -1832,36 +1852,43 @@ namespace ts.Completions {
         }
 
         /** Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextIdMap` */
-        function collectAutoImports(resolveModuleSpecifiers: boolean) {
+        function collectAutoImports() {
             if (!shouldOfferImportCompletions()) return;
-            Debug.assert(!detailsEntryId?.data);
+            Debug.assert(!detailsEntryId?.data, "Should not run 'collectAutoImports' when faster path is available via `data`");
+            if (detailsEntryId && !detailsEntryId.source) {
+                // Asking for completion details for an item that is not an auto-import
+                return;
+            }
+
             const start = timestamp();
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
-            host.log?.(`collectAutoImports: starting, ${resolveModuleSpecifiers ? "" : "not "}resolving module specifiers`);
-            if (moduleSpecifierCache) {
-                host.log?.(`collectAutoImports: module specifier cache size: ${moduleSpecifierCache.count()}`);
-            }
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
+            const getChecker = (isFromPackageJson: boolean) => isFromPackageJson ? packageJsonAutoImportProvider!.getTypeChecker() : typeChecker;
+            let ambientCount = 0;
             let resolvedCount = 0;
-            exportInfo.forEach((info, symbolName) => {
+            let resolvedFromCacheCount = 0;
+            let cacheAttemptCount = 0;
+            exportInfo.forEach(getChecker, (info, symbolName, isFromAmbientModule) => {
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
-                    const shouldResolveModuleSpecifier = preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
-                    const { moduleSpecifier, exportInfo } = shouldResolveModuleSpecifier
-                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences) || {}
-                        : { moduleSpecifier: undefined, exportInfo: find(info, isImportableExportInfo) };
+                    const shouldResolveModuleSpecifier = isFromAmbientModule || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
+                    const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
+                    const { moduleSpecifier, exportInfo = find(info, isImportableExportInfo) } = shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache
+                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences, shouldGetModuleSpecifierFromCache) || {}
+                        : { moduleSpecifier: undefined, exportInfo: undefined };
+                    cacheAttemptCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
                     if (!exportInfo) return;
                     const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
                     const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                     const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
                     pushAutoImportSymbol(symbol, {
-                        kind: shouldResolveModuleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
+                        kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                         moduleSpecifier,
                         symbolName,
                         exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
@@ -1870,10 +1897,14 @@ namespace ts.Completions {
                         moduleSymbol: exportInfo.moduleSymbol,
                         isFromPackageJson: exportInfo.isFromPackageJson,
                     });
-                    resolvedCount += shouldResolveModuleSpecifier ? 1 : 0;
-                    hasUnresolvedAutoImports ||= !shouldResolveModuleSpecifier;
+                    ambientCount += isFromAmbientModule ? 1 : 0;
+                    resolvedCount += !isFromAmbientModule && shouldResolveModuleSpecifier ? 1 : 0;
+                    resolvedFromCacheCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
+                    hasUnresolvedAutoImports ||= !moduleSpecifier;
                 }
             });
+            host.log?.(`collectAutoImports: resolved ${resolvedCount} module specifiers, plus ${ambientCount} ambient and ${resolvedFromCacheCount} from cache (${Math.round(resolvedFromCacheCount / cacheAttemptCount * 100)}% hit rate)`);
+            host.log?.(`collectAutoImports: resolution is ${hasUnresolvedAutoImports ? "incomplete" : "complete"}`);
             host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
 
             function isImportableExportInfo(info: SymbolExportInfo) {
