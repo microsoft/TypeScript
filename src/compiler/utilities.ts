@@ -1582,6 +1582,10 @@ namespace ts {
         });
     }
 
+    export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
+        return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {

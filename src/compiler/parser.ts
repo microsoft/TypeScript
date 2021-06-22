@@ -1251,10 +1251,6 @@ namespace ts {
             setContextFlag(val, NodeFlags.AwaitContext);
         }
 
-        function setClassStaticBlockContext(val: boolean) {
-            setContextFlag(val, NodeFlags.ClassStaticBlockContext);
-        }
-
         function doOutsideOfContext<T>(context: NodeFlags, func: () => T): T {
             // contextFlagsToClear will contain only the context flags that are
             // currently set that we need to temporarily clear
@@ -1321,14 +1317,6 @@ namespace ts {
             return doOutsideOfContext(NodeFlags.AwaitContext, func);
         }
 
-        function doOutsideOfClassStaticBlockContext<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.ClassStaticBlockContext, func);
-        }
-
-        function doOutsideYieldContext<T>(func: () => T): T {
-            return doOutsideOfContext(NodeFlags.YieldContext, func);
-        }
-
         function doInYieldAndAwaitContext<T>(func: () => T): T {
             return doInsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext, func);
         }
@@ -1355,10 +1343,6 @@ namespace ts {
 
         function inAwaitContext() {
             return inContext(NodeFlags.AwaitContext);
-        }
-
-        function inClassStaticBlockContext() {
-            return inContext(NodeFlags.ClassStaticBlockContext);
         }
 
         function parseErrorAtCurrentToken(message: DiagnosticMessage, arg0?: any): void {
@@ -4024,7 +4008,7 @@ namespace ts {
             // If we do successfully parse arrow-function, we must *not* recurse for productions 1, 2 or 3. An ArrowFunction is
             // not a LeftHandSideExpression, nor does it start a ConditionalExpression.  So we are done
             // with AssignmentExpression if we see one.
-            const arrowExpression = doOutsideOfClassStaticBlockContext(() => tryParseParenthesizedArrowFunctionExpression() || tryParseAsyncSimpleArrowFunctionExpression());
+            const arrowExpression = tryParseParenthesizedArrowFunctionExpression() || tryParseAsyncSimpleArrowFunctionExpression();
             if (arrowExpression) {
                 return arrowExpression;
             }
@@ -5595,8 +5579,6 @@ namespace ts {
             //      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
             const savedDecoratorContext = inDecoratorContext();
             setDecoratorContext(/*val*/ false);
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
-            setClassStaticBlockContext(/*val*/ false);
 
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -5616,7 +5598,6 @@ namespace ts {
             const body = parseFunctionBlock(isGenerator | isAsync);
 
             setDecoratorContext(savedDecoratorContext);
-            setClassStaticBlockContext(savedClassStaticBlockContext);
 
             const node = factory.createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -6472,8 +6453,6 @@ namespace ts {
 
         function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
             const savedAwaitContext = inAwaitContext();
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
-            setClassStaticBlockContext(/*val*/ false);
 
             const modifierFlags = modifiersToFlags(modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
@@ -6488,7 +6467,6 @@ namespace ts {
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlockOrSemicolon(isGenerator | isAsync, Diagnostics.or_expected);
             setAwaitContext(savedAwaitContext);
-            setClassStaticBlockContext(savedClassStaticBlockContext);
             const node = factory.createFunctionDeclaration(decorators, modifiers, asteriskToken, name, typeParameters, parameters, type, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
@@ -6508,8 +6486,6 @@ namespace ts {
         function tryParseConstructorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): ConstructorDeclaration | undefined {
             return tryParse(() => {
                 if (parseConstructorName()) {
-                    const savedClassStaticBlockContext = inClassStaticBlockContext();
-                    setClassStaticBlockContext(/*val*/ false);
                     const typeParameters = parseTypeParameters();
                     const parameters = parseParameters(SignatureFlags.None);
                     const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
@@ -6518,7 +6494,6 @@ namespace ts {
                     // Attach `typeParameters` and `type` if they exist so that we can report them in the grammar checker.
                     node.typeParameters = typeParameters;
                     node.type = type;
-                    setClassStaticBlockContext(savedClassStaticBlockContext);
                     return withJSDoc(finishNode(node, pos), hasJSDoc);
                 }
             });
@@ -6535,8 +6510,6 @@ namespace ts {
             exclamationToken: ExclamationToken | undefined,
             diagnosticMessage?: DiagnosticMessage
         ): MethodDeclaration {
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
-            setClassStaticBlockContext(/*val*/ false);
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = some(modifiers, isAsyncModifier) ? SignatureFlags.Await : SignatureFlags.None;
             const typeParameters = parseTypeParameters();
@@ -6556,7 +6529,6 @@ namespace ts {
             );
             // An exclamation token on a method is invalid syntax and will be handled by the grammar checker
             node.exclamationToken = exclamationToken;
-            setClassStaticBlockContext(savedClassStaticBlockContext);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6568,14 +6540,11 @@ namespace ts {
             name: PropertyName,
             questionToken: QuestionToken | undefined
         ): PropertyDeclaration {
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
-            setClassStaticBlockContext(/*val*/ false);
             const exclamationToken = !questionToken && !scanner.hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
             const type = parseTypeAnnotation();
             const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
             parseSemicolon();
             const node = factory.createPropertyDeclaration(decorators, modifiers, name, questionToken || exclamationToken, type, initializer);
-            setClassStaticBlockContext(savedClassStaticBlockContext);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6598,8 +6567,6 @@ namespace ts {
 
         function parseAccessorDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: AccessorDeclaration["kind"]): AccessorDeclaration {
             const name = parsePropertyName();
-            const savedClassStaticBlockContext = inClassStaticBlockContext();
-            setClassStaticBlockContext(/*val*/ false);
             const typeParameters = parseTypeParameters();
             const parameters = parseParameters(SignatureFlags.None);
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
@@ -6610,7 +6577,6 @@ namespace ts {
             // Keep track of `typeParameters` (for both) and `type` (for setters) if they were parsed those indicate grammar errors
             node.typeParameters = typeParameters;
             if (type && node.kind === SyntaxKind.SetAccessor) (node as Mutable<SetAccessorDeclaration>).type = type;
-            setClassStaticBlockContext(savedClassStaticBlockContext);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -6690,11 +6656,18 @@ namespace ts {
         }
 
         function parseClassStaticBlockBody() {
-            return doOutsideYieldContext(() => {
-                return doInsideOfContext(NodeFlags.AwaitContext | NodeFlags.ClassStaticBlockContext, () => {
-                    return parseBlock(/*ignoreMissingOpenBrace*/ false);
-                });
-            });
+            const savedYieldContext = inYieldContext();
+            const savedAwaitContext = inAwaitContext();
+
+            setYieldContext(false);
+            setAwaitContext(true);
+
+            const body = parseBlock(/*ignoreMissingOpenBrace*/ false);
+
+            setYieldContext(savedYieldContext);
+            setAwaitContext(savedAwaitContext);
+
+            return body;
         }
 
         function parseDecoratorExpression() {

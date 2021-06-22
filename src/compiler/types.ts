@@ -775,7 +775,6 @@ namespace ts {
         JsonFile                                      = 1 << 25, // If node was parsed in a Json
         /* @internal */ TypeCached                    = 1 << 26, // If a type was cached for node at any point
         /* @internal */ Deprecated                    = 1 << 27, // If has '@deprecated' JSDoc tag
-        ClassStaticBlockContext                       = 1 << 28, // If node was parsed in the 'class static block' and not in another function boundary.
 
         BlockScoped = Let | Const,
 
@@ -783,10 +782,10 @@ namespace ts {
         ReachabilityAndEmitFlags = ReachabilityCheckFlags | HasAsyncFunctions,
 
         // Parsing context flags
-        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | ClassStaticBlockContext | JavaScriptFile | InWithStatement | Ambient,
+        ContextFlags = DisallowInContext | YieldContext | DecoratorContext | AwaitContext | JavaScriptFile | InWithStatement | Ambient,
 
         // Exclude these flags when parsing a Type
-        TypeExcludesFlags = YieldContext | AwaitContext | ClassStaticBlockContext,
+        TypeExcludesFlags = YieldContext | AwaitContext,
 
         // Represents all flags that are potentially set once and
         // never cleared on SourceFiles which get re-used in between incremental parses.

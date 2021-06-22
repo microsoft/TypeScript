@@ -522,12 +522,11 @@ declare namespace ts {
         HasAggregatedChildData = 524288,
         JSDoc = 4194304,
         JsonFile = 33554432,
-        ClassStaticBlockContext = 268435456,
         BlockScoped = 3,
         ReachabilityCheckFlags = 768,
         ReachabilityAndEmitFlags = 2816,
-        ContextFlags = 293793792,
-        TypeExcludesFlags = 268476416,
+        ContextFlags = 25358336,
+        TypeExcludesFlags = 40960,
     }
     export enum ModifierFlags {
         None = 0,
@@ -4322,7 +4321,6 @@ declare namespace ts {
     function isPropertyName(node: Node): node is PropertyName;
     function isBindingName(node: Node): node is BindingName;
     function isFunctionLike(node: Node | undefined): node is SignatureDeclaration;
-    function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is (SignatureDeclaration | ClassStaticBlockDeclaration);
     function isClassElement(node: Node): node is ClassElement;
     function isClassLike(node: Node): node is ClassLikeDeclaration;
     function isAccessor(node: Node): node is AccessorDeclaration;

@@ -342,10 +342,14 @@ namespace ts {
         return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
     }
 
+    function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ClassElement): element is PropertyDeclaration | ClassStaticBlockDeclaration {
+        return isStaticPropertyDeclaration(element) || isClassStaticBlockDeclaration(element);
+    }
+
     export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
     export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
     export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
-        return filter(node.members, or(isStaticPropertyDeclaration, isClassStaticBlockDeclaration)) as (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+        return filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
     }
 
     /**
