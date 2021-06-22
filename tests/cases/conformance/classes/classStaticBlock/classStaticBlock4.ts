@@ -1,4 +1,4 @@
-// @target: esnext, es2015, es5
+// @target: esnext
 
 class C {
     static s1 = 1;

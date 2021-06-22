@@ -1,4 +1,5 @@
 // @useDefineForClassFields: false
+// @target: es2015
 
 class C {
   static #_1 = 1;

@@ -1,4 +1,4 @@
-// @target: esnext, es2015, es5
+// @target: esnext, es2015
 
 let getX;
 class C {
