@@ -7155,19 +7155,19 @@
         "category": "Error",
         "code": 18036
     },
-    "Await expression cannot be used inside class static block.": {
+    "Await expression cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18037
     },
-    "'For await' loops cannot be used inside class static block.": {
+    "'For await' loops cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18038
     },
-    "Invalid use of '{0}'. It cannot be used inside class static block.": {
+    "Invalid use of '{0}'. It cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18039
     },
-    "A 'return' statement cannot be used inside class static block.": {
+    "A 'return' statement cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18041
     }

@@ -31307,7 +31307,7 @@ namespace ts {
                     }
                 }
                 else if (containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
-                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_class_static_block);
+                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_a_class_static_block);
                 }
 
                 if (isInParameterInitializerBeforeContainingFunction(node)) {
@@ -35890,7 +35890,7 @@ namespace ts {
             const containingFunctionOrClassStaticBlock = getContainingFunctionOrClassStaticBlock(node);
             if (node.awaitModifier) {
                 if (containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
-                    grammarErrorOnNode(node.awaitModifier, Diagnostics.For_await_loops_cannot_be_used_inside_class_static_block);
+                    grammarErrorOnNode(node.awaitModifier, Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block);
                 }
                 else {
                     const functionFlags = getFunctionFlags(containingFunctionOrClassStaticBlock);
@@ -36779,7 +36779,7 @@ namespace ts {
 
             const containingFunctionOrClassStaticBlock = getContainingFunctionOrClassStaticBlock(node);
             if(containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
-                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_inside_class_static_block);
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block);
                 return;
             }
 
