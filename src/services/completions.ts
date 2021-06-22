@@ -551,6 +551,7 @@ namespace ts.Completions {
         let data: CompletionEntryData | undefined;
         let isSnippet: true | undefined;
         let sourceDisplay;
+        let hasAction;
 
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
@@ -611,6 +612,7 @@ namespace ts.Completions {
 
         if (originIsExport(origin) || originIsResolvedExport(origin)) {
             data = originToCompletionEntryData(origin);
+            hasAction = !importCompletionNode;
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -627,7 +629,7 @@ namespace ts.Completions {
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),
-            hasAction: origin && originIsExport(origin) || undefined,
+            hasAction: hasAction ? true : undefined,
             isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
             insertText,
             replacementSpan,
@@ -1875,10 +1877,14 @@ namespace ts.Completions {
                 if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                 const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                 if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
+                    const shouldResolveModuleSpecifier = isFromAmbientModule || !!importCompletionNode || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
+                    const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
+                    if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
+                        return;
+                    }
+
                     // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                     // (We need to ensure that at least one is importable to show a completion.)
-                    const shouldResolveModuleSpecifier = isFromAmbientModule || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
-                    const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
                     const { moduleSpecifier, exportInfo = find(info, isImportableExportInfo) } = shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache
                         ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences, shouldGetModuleSpecifierFromCache) || {}
                         : { moduleSpecifier: undefined, exportInfo: undefined };
