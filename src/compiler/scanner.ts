@@ -2063,8 +2063,9 @@ namespace ts {
                             pos += charSize(ch);
                             continue;
                         }
-                        error(Diagnostics.Invalid_character);
-                        pos += charSize(ch);
+                        const size = charSize(ch);
+                        error(Diagnostics.Invalid_character, pos, size);
+                        pos += size;
                         return token = SyntaxKind.Unknown;
                 }
             }

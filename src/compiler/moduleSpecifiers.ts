@@ -694,7 +694,11 @@ namespace ts.moduleSpecifiers {
     }
 
     function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension {
-        const ext = extensionFromPath(fileName);
+        return tryGetJSExtensionForFile(fileName, options) ?? Debug.fail(`Extension ${extensionFromPath(fileName)} is unsupported:: FileName:: ${fileName}`);
+    }
+
+    export function tryGetJSExtensionForFile(fileName: string, options: CompilerOptions): Extension | undefined {
+        const ext = tryGetExtensionFromPath(fileName);
         switch (ext) {
             case Extension.Ts:
             case Extension.Dts:
@@ -705,10 +709,8 @@ namespace ts.moduleSpecifiers {
             case Extension.Jsx:
             case Extension.Json:
                 return ext;
-            case Extension.TsBuildInfo:
-                return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported:: FileName:: ${fileName}`);
             default:
-                return Debug.assertNever(ext);
+                return undefined;
         }
     }
 

@@ -1521,6 +1521,8 @@ namespace ts {
             if (token() === SyntaxKind.Identifier) {
                 return true;
             }
+
+            // `let await`/`let yield` in [Yield] or [Await] are allowed here and disallowed in the binder.
             return token() > SyntaxKind.LastReservedWord;
         }
 
@@ -6140,15 +6142,15 @@ namespace ts {
             }
         }
 
-        function nextTokenIsIdentifierOrStartOfDestructuring() {
+        function nextTokenIsBindingIdentifierOrStartOfDestructuring() {
             nextToken();
-            return isIdentifier() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
+            return isBindingIdentifier() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
         }
 
         function isLetDeclaration() {
             // In ES6 'let' always starts a lexical declaration if followed by an identifier or {
             // or [.
-            return lookAhead(nextTokenIsIdentifierOrStartOfDestructuring);
+            return lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuring);
         }
 
         function parseStatement(): Statement {

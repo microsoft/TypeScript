@@ -17,10 +17,14 @@ f2(...[1], 2, 3, 4, 5, 6);
 
 
 //// [functionParameterArityMismatch.js]
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 f1();
 f1(1, 2);
@@ -29,4 +33,4 @@ f2(1);
 f2(1, 2, 3);
 f2(1, 2, 3, 4, 5);
 f2(1, 2, 3, 4, 5, 6, 7);
-f2.apply(void 0, __spreadArray(__spreadArray([], [1]), [2, 3, 4, 5, 6]));
+f2.apply(void 0, __spreadArray(__spreadArray([], [1], false), [2, 3, 4, 5, 6], false));

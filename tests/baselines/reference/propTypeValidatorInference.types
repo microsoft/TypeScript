@@ -91,7 +91,7 @@ interface Props {
 >bool : boolean
 
     shape: {
->shape : { foo: string; bar?: boolean; baz?: any; }
+>shape : { foo: string; bar?: boolean | undefined; baz?: any; }
 
         foo: string;
 >foo : string
@@ -104,7 +104,7 @@ interface Props {
 
     };
     oneOfType: string | boolean | {
->oneOfType : string | boolean | { foo?: string; bar: number; }
+>oneOfType : string | boolean | { foo?: string | undefined; bar: number; }
 
         foo?: string;
 >foo : string | undefined
