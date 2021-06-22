@@ -4802,11 +4802,11 @@ namespace ts {
                     type = (type as UnionType).origin!;
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
-                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types.slice();
+                    const types = type.flags & TypeFlags.Union ? formatUnionTypes((type as UnionType).types) : (type as IntersectionType).types;
                     if (length(types) === 1) {
                         return typeToTypeNodeHelper(types[0], context);
                     }
-                    const typeNodes = mapToTypeNodes(types.sort(typeDisplayComparison), context, /*isBareList*/ true);
+                    const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
                     if (typeNodes && typeNodes.length > 0) {
                         return type.flags & TypeFlags.Union ? factory.createUnionTypeNode(typeNodes) : factory.createIntersectionTypeNode(typeNodes);
                     }
@@ -7858,7 +7858,7 @@ namespace ts {
             }
             if (flags & TypeFlags.Null) result.push(nullType);
             if (flags & TypeFlags.Undefined) result.push(undefinedType);
-            return result;
+            return result.sort(typeDisplayComparison);
         }
 
         function typeDisplayComparison(t1: Type, t2: Type) {
