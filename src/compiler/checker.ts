@@ -15368,17 +15368,20 @@ namespace ts {
             return isEmptyObjectType(type) || !!(type.flags & (TypeFlags.Null | TypeFlags.Undefined | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index));
         }
 
-        function tryMergeUnionOfObjectTypeAndEmptyObject(type: UnionType, readonly: boolean): Type | undefined {
-            if (every(type.types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
-                return find(type.types, isEmptyObjectType) || emptyObjectType;
+        function tryMergeUnionOfObjectTypeAndEmptyObject(type: Type, readonly: boolean): Type {
+            if (!(type.flags & TypeFlags.Union)) {
+                return type;
             }
-            const firstType = find(type.types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            if (every((type as UnionType).types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
+                return find((type as UnionType).types, isEmptyObjectType) || emptyObjectType;
+            }
+            const firstType = find((type as UnionType).types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (!firstType) {
-                return undefined;
+                return type;
             }
-            const secondType = firstType && find(type.types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            const secondType = find((type as UnionType).types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (secondType) {
-                return undefined;
+                return type;
             }
             return getAnonymousPartialType(firstType);
 
@@ -15424,20 +15427,14 @@ namespace ts {
             if (right.flags & TypeFlags.Never) {
                 return left;
             }
+            left = tryMergeUnionOfObjectTypeAndEmptyObject(left, readonly);
             if (left.flags & TypeFlags.Union) {
-                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
-                if (merged) {
-                    return getSpreadType(merged, right, symbol, objectFlags, readonly);
-                }
                 return checkCrossProductUnion([left, right])
                     ? mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly))
                     : errorType;
             }
+            right = tryMergeUnionOfObjectTypeAndEmptyObject(right, readonly);
             if (right.flags & TypeFlags.Union) {
-                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
-                if (merged) {
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly);
-                }
                 return checkCrossProductUnion([left, right])
                     ? mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly))
                     : errorType;
@@ -15487,7 +15484,7 @@ namespace ts {
                         const declarations = concatenate(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.escapedName);
-                        result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
+                        result.type = getUnionType([getTypeOfSymbol(leftProp), removeMissingOrUndefinedType(rightType)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
@@ -26305,14 +26302,15 @@ namespace ts {
                     }
                     const type = getReducedType(checkExpression(memberDecl.expression));
                     if (isValidSpreadType(type)) {
+                        const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(type, inConstContext);
                         if (allPropertiesTable) {
-                            checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
+                            checkSpreadPropOverrides(mergedType, allPropertiesTable, memberDecl);
                         }
                         offset = propertiesArray.length;
                         if (spread === errorType) {
                             continue;
                         }
-                        spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
+                        spread = getSpreadType(spread, mergedType, node.symbol, objectFlags, inConstContext);
                     }
                     else {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
@@ -26627,11 +26625,12 @@ namespace ts {
 
         function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
             for (const right of getPropertiesOfType(type)) {
-                const left = props.get(right.escapedName);
-                const rightType = getTypeOfSymbol(right);
-                if (left && !maybeTypeOfKind(rightType, TypeFlags.Nullable) && !(maybeTypeOfKind(rightType, TypeFlags.AnyOrUnknown) && right.flags & SymbolFlags.Optional)) {
-                    const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
-                    addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                if (!(right.flags & SymbolFlags.Optional)) {
+                    const left = props.get(right.escapedName);
+                    if (left) {
+                        const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                    }
                 }
             }
         }
