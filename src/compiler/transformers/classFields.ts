@@ -6,6 +6,11 @@ namespace ts {
          * which have initializers that reference the class name.
          */
         ClassAliases = 1 << 0,
+        /**
+         * Enables substitutions for class expressions with static fields
+         * which have initializers that reference the 'this' or 'super'.
+         */
+        ClassStaticThisOrSuperReference = 1 << 1,
     }
     export const enum PrivateIdentifierKind {
         Field = "f",
@@ -120,6 +125,8 @@ namespace ts {
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
+        const previousOnEmitNode = context.onEmitNode;
+        context.onEmitNode = onEmitNode;
 
         let enabledSubstitutions: ClassPropertySubstitutionFlags;
 
@@ -140,7 +147,9 @@ namespace ts {
         const privateIdentifierEnvironmentStack: (PrivateIdentifierEnvironment | undefined)[] = [];
         let currentPrivateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
 
-        let staticFieldInitializerContext: StaticClassFieldsInitializeContext | undefined;
+        const staticFieldInitializerContextMap: (StaticClassFieldsInitializeContext | undefined)[] = [];
+        let currentStaticFieldInitializerContext: StaticClassFieldsInitializeContext | undefined;
+        let currentComputedPropertyNameStaticFieldInitializerContext: StaticClassFieldsInitializeContext | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -156,7 +165,7 @@ namespace ts {
         }
 
         function visitor(node: Node): VisitResult<Node> {
-            if (!(node.transformFlags & (TransformFlags.ContainsClassFields | TransformFlags.ContainsLexicalThisOrSuper))) return node;
+            if (!(node.transformFlags & TransformFlags.ContainsClassFields)) return node;
 
             switch (node.kind) {
                 case SyntaxKind.ClassExpression:
@@ -184,77 +193,6 @@ namespace ts {
                     return visitForStatement(node as ForStatement);
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
-                case SyntaxKind.ThisKeyword:
-                    return visitThisExpression(node as ThisExpression);
-                case SyntaxKind.SuperKeyword:
-                    return visitSuperExpression(node as SuperExpression);
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.Constructor:
-                    return visitNonStaticBoundaryFunction(node as FunctionDeclaration | FunctionExpression | ConstructorDeclaration);
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.MethodDeclaration:
-                    return visitNameInStaticBoundaryFunction(node as AccessorDeclaration | MethodDeclaration);
-            }
-            return visitEachChild(node, visitor, context);
-        }
-
-        function visitNameInStaticBoundaryFunction(node: AccessorDeclaration | MethodDeclaration) {
-            function nameInContextVisitor(n: Node): Node {
-                if (node.name === n) {
-                    return visitNode(n, visitor);
-                }
-
-                const savedStaticFieldInitializerContext = staticFieldInitializerContext;
-                staticFieldInitializerContext = undefined;
-                const result = visitNode(n, visitor);
-                staticFieldInitializerContext = savedStaticFieldInitializerContext;
-                return result;
-            }
-            return visitEachChild(node, nameInContextVisitor, context);
-        }
-
-        function visitNonStaticBoundaryFunction(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration) {
-            const savedStaticFieldInitializerContext = staticFieldInitializerContext;
-            staticFieldInitializerContext = undefined;
-            const result = visitEachChild(node, visitor, context);
-            staticFieldInitializerContext = savedStaticFieldInitializerContext;
-            return result;
-        }
-
-        function visitThisExpression(node: ThisExpression): Expression {
-            if (!staticFieldInitializerContext) {
-                return visitEachChild(node, visitor, context);
-            }
-
-            const { receiver, classHasDecorators } = staticFieldInitializerContext;
-            return setTextRange(
-                setOriginalNode(
-                    classHasDecorators ?
-                        factory.createParenthesizedExpression(factory.createVoidZero()) :
-                        factory.cloneNode(receiver),
-                    node,
-                ),
-                node
-            );
-        }
-
-        function visitSuperExpression(node: SuperExpression): Expression {
-            if (staticFieldInitializerContext) {
-                const shouldRewriteSuper = languageVersion >= ScriptTarget.ES2015;
-                const { baseClass, classHasDecorators } = staticFieldInitializerContext;
-                if (baseClass && (shouldRewriteSuper || classHasDecorators)) {
-                    return setTextRange(
-                        setOriginalNode(
-                            classHasDecorators ?
-                                factory.createParenthesizedExpression(factory.createVoidZero()) :
-                                factory.cloneNode(baseClass),
-                            node
-                        ),
-                        node
-                    );
-                }
             }
             return visitEachChild(node, visitor, context);
         }
@@ -1077,15 +1015,18 @@ namespace ts {
             return expressions;
         }
 
-        function visitPropertyDeclarationInContext(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
-            const savedStaticFieldInitializerContext = staticFieldInitializerContext;
-            staticFieldInitializerContext = hasStaticModifier(property) ? {
+        function visitPropertyDeclarationWithStaticFieldInitializerContext(property: PropertyDeclaration, receiver: LeftHandSideExpression, baseClass: LeftHandSideExpression | undefined, classHasDecorators: boolean | undefined) {
+            const staticFieldInitializerContext = hasStaticModifier(property) ? {
                 receiver,
                 baseClass,
                 classHasDecorators
             } : undefined;
             const result = visitNode(property.initializer, visitor, isExpression);
-            staticFieldInitializerContext = savedStaticFieldInitializerContext;
+            staticFieldInitializerContextMap[getOriginalNodeId(property)] = staticFieldInitializerContext;
+
+            if (staticFieldInitializerContext) {
+                enableSubstitutionForClassStaticThisOrSuperReference();
+            }
             return result;
         }
 
@@ -1109,14 +1050,14 @@ namespace ts {
                         if (!privateIdentifierInfo.isStatic) {
                             return createPrivateInstanceFieldInitializer(
                                 receiver,
-                                visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators),
+                                visitPropertyDeclarationWithStaticFieldInitializerContext(property, receiver, baseClass, classHasDecorators),
                                 privateIdentifierInfo.brandCheckIdentifier
                             );
                         }
                         else {
                             return createPrivateStaticFieldInitializer(
                                 privateIdentifierInfo.variableName,
-                                visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators)
+                                visitPropertyDeclarationWithStaticFieldInitializerContext(property, receiver, baseClass, classHasDecorators)
                             );
                         }
                     }
@@ -1137,7 +1078,7 @@ namespace ts {
                 return undefined;
             }
 
-            const initializer = property.initializer || emitAssignment ? visitPropertyDeclarationInContext(property, receiver, baseClass, classHasDecorators) ?? factory.createVoidZero()
+            const initializer = property.initializer || emitAssignment ? visitPropertyDeclarationWithStaticFieldInitializerContext(property, receiver, baseClass, classHasDecorators) ?? factory.createVoidZero()
                 : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
                 : factory.createVoidZero();
 
@@ -1167,6 +1108,25 @@ namespace ts {
             }
         }
 
+        function enableSubstitutionForClassStaticThisOrSuperReference() {
+            if ((enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference) === 0) {
+                enabledSubstitutions |= ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference;
+
+                context.enableSubstitution(SyntaxKind.ThisKeyword);
+                context.enableSubstitution(SyntaxKind.SuperKeyword);
+                context.enableEmitNotification(SyntaxKind.ThisKeyword);
+                context.enableEmitNotification(SyntaxKind.SuperKeyword);
+                context.enableEmitNotification(SyntaxKind.FunctionDeclaration);
+                context.enableEmitNotification(SyntaxKind.FunctionExpression);
+                context.enableEmitNotification(SyntaxKind.Constructor);
+                context.enableEmitNotification(SyntaxKind.GetAccessor);
+                context.enableEmitNotification(SyntaxKind.SetAccessor);
+                context.enableEmitNotification(SyntaxKind.MethodDeclaration);
+                context.enableEmitNotification(SyntaxKind.ComputedPropertyName);
+                context.enableEmitNotification(SyntaxKind.PropertyDeclaration);
+            }
+        }
+
         /**
          * Generates brand-check initializer for private methods.
          *
@@ -1188,6 +1148,75 @@ namespace ts {
             );
         }
 
+        function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            switch (node.kind) {
+                case SyntaxKind.ThisKeyword:
+                case SyntaxKind.SuperKeyword:
+                    onEmitThisOrSuperExpression(hint, node as SuperExpression | SuperExpression, emitCallback);
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.Constructor:
+                    onEmitFunctionLikeDeclaration(hint, node as FunctionDeclaration | FunctionExpression | ConstructorDeclaration, emitCallback);
+                    break;
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                case SyntaxKind.MethodDeclaration:
+                    onEmitNamedMemberDeclaration(hint, node as AccessorDeclaration | MethodDeclaration, emitCallback);
+                    break;
+                case SyntaxKind.ComputedPropertyName:
+                    onEmitComputedPropertyName(hint, node as ComputedPropertyName, emitCallback);
+                    break;
+                case SyntaxKind.PropertyDeclaration:
+                    onEmitPropertyDeclaration(hint, node as PropertyDeclaration, emitCallback);
+                    break;
+                default:
+                    previousOnEmitNode(hint, node, emitCallback);
+            }
+
+        }
+
+        function onEmitPropertyDeclaration(hint: EmitHint, node: PropertyDeclaration, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const savedStaticFieldInitializerContext = currentStaticFieldInitializerContext;
+            currentStaticFieldInitializerContext = staticFieldInitializerContextMap[getOriginalNodeId(node)];
+
+            previousOnEmitNode(hint, node, emitCallback);
+            currentStaticFieldInitializerContext = savedStaticFieldInitializerContext;
+        }
+
+        function onEmitFunctionLikeDeclaration(hint: EmitHint, node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const savedStaticFieldInitializerContext = currentStaticFieldInitializerContext;
+            currentStaticFieldInitializerContext = undefined;
+
+            previousOnEmitNode(hint, node, emitCallback);
+            currentStaticFieldInitializerContext = savedStaticFieldInitializerContext;
+        }
+
+        function onEmitNamedMemberDeclaration(hint: EmitHint, node: AccessorDeclaration | MethodDeclaration, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const savedStaticFieldInitializerContext = currentStaticFieldInitializerContext;
+            const savedCurrentComputedPropertyNameStaticFieldInitializerContext = currentComputedPropertyNameStaticFieldInitializerContext;
+            currentComputedPropertyNameStaticFieldInitializerContext = currentStaticFieldInitializerContext;
+            currentStaticFieldInitializerContext = undefined;
+
+            previousOnEmitNode(hint, node, emitCallback);
+            currentStaticFieldInitializerContext = savedStaticFieldInitializerContext;
+            currentComputedPropertyNameStaticFieldInitializerContext = savedCurrentComputedPropertyNameStaticFieldInitializerContext;
+        }
+
+        function onEmitComputedPropertyName(hint: EmitHint, node: ComputedPropertyName, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const savedStaticFieldInitializerContext = currentStaticFieldInitializerContext;
+            currentStaticFieldInitializerContext = currentComputedPropertyNameStaticFieldInitializerContext;
+
+            previousOnEmitNode(hint, node, emitCallback);
+            currentStaticFieldInitializerContext = savedStaticFieldInitializerContext;
+        }
+
+        function onEmitThisOrSuperExpression(hint: EmitHint, node: ThisExpression | SuperExpression, emitCallback: (hint: EmitHint, node: Node) => void) {
+            staticFieldInitializerContextMap[getOriginalNodeId(node)] = currentStaticFieldInitializerContext;
+
+            previousOnEmitNode(hint, node, emitCallback);
+        }
+
         /**
          * Hooks node substitutions.
          *
@@ -1206,7 +1235,54 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(node as Identifier);
+                case SyntaxKind.ThisKeyword:
+                    return substituteThisExpression(node as ThisExpression);
+                case SyntaxKind.SuperKeyword:
+                    return substituteSuperExpression(node as SuperExpression);
             }
+            return node;
+        }
+
+        function substituteThisExpression(node: ThisExpression) {
+            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference) {
+                const staticFieldInitializerContext = staticFieldInitializerContextMap[getOriginalNodeId(node)];
+                if (staticFieldInitializerContext) {
+                    const { receiver, classHasDecorators } = staticFieldInitializerContext;
+                    return setTextRange(
+                        setOriginalNode(
+                            classHasDecorators ?
+                                factory.createParenthesizedExpression(factory.createVoidZero()) :
+                                factory.cloneNode(receiver),
+                            node,
+                        ),
+                        node
+                    );
+                }
+            }
+
+            return node;
+        }
+
+        function substituteSuperExpression(node: SuperExpression) {
+            if (enabledSubstitutions & ClassPropertySubstitutionFlags.ClassStaticThisOrSuperReference) {
+                const staticFieldInitializerContext = staticFieldInitializerContextMap[getOriginalNodeId(node)];
+                if (staticFieldInitializerContext) {
+                    const shouldRewriteSuper = languageVersion >= ScriptTarget.ES2015;
+                    const { baseClass, classHasDecorators } = staticFieldInitializerContext;
+                    if (baseClass && (shouldRewriteSuper || classHasDecorators)) {
+                        return setTextRange(
+                            setOriginalNode(
+                                classHasDecorators ?
+                                    factory.createParenthesizedExpression(factory.createVoidZero()) :
+                                    factory.cloneNode(baseClass),
+                                node
+                            ),
+                            node
+                        );
+                    }
+                }
+            }
+
             return node;
         }
 
