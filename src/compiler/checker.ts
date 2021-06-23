@@ -31272,8 +31272,11 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                const containingFunctionOrClassStaticBlock = getContainingFunctionOrClassStaticBlock(node);
-                if (!(node.flags & NodeFlags.AwaitContext)) {
+                const container = getContainingFunctionOrClassStaticBlock(node);
+                if (container && isClassStaticBlockDeclaration(container)) {
+                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_a_class_static_block);
+                }
+                else if (!(node.flags & NodeFlags.AwaitContext)) {
                     if (isInTopLevelContext(node)) {
                         const sourceFile = getSourceFileOfNode(node);
                         if (!hasParseDiagnostics(sourceFile)) {
@@ -31298,16 +31301,13 @@ namespace ts {
                         if (!hasParseDiagnostics(sourceFile)) {
                             const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                             const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules);
-                            if (containingFunctionOrClassStaticBlock && containingFunctionOrClassStaticBlock.kind !== SyntaxKind.ClassStaticBlockDeclaration && containingFunctionOrClassStaticBlock.kind !== SyntaxKind.Constructor && (getFunctionFlags(containingFunctionOrClassStaticBlock) & FunctionFlags.Async) === 0) {
-                                const relatedInfo = createDiagnosticForNode(containingFunctionOrClassStaticBlock, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
+                            if (container && container.kind !== SyntaxKind.Constructor && (getFunctionFlags(container) & FunctionFlags.Async) === 0) {
+                                const relatedInfo = createDiagnosticForNode(container, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
                                 addRelatedInfo(diagnostic, relatedInfo);
                             }
                             diagnostics.add(diagnostic);
                         }
                     }
-                }
-                else if (containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
-                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_a_class_static_block);
                 }
 
                 if (isInParameterInitializerBeforeContainingFunction(node)) {
@@ -35887,13 +35887,13 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
-            const containingFunctionOrClassStaticBlock = getContainingFunctionOrClassStaticBlock(node);
+            const container = getContainingFunctionOrClassStaticBlock(node);
             if (node.awaitModifier) {
-                if (containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
+                if (container && isClassStaticBlockDeclaration(container)) {
                     grammarErrorOnNode(node.awaitModifier, Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block);
                 }
                 else {
-                    const functionFlags = getFunctionFlags(containingFunctionOrClassStaticBlock);
+                    const functionFlags = getFunctionFlags(container);
                     if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
                         // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
@@ -36777,33 +36777,33 @@ namespace ts {
                 return;
             }
 
-            const containingFunctionOrClassStaticBlock = getContainingFunctionOrClassStaticBlock(node);
-            if(containingFunctionOrClassStaticBlock && isClassStaticBlockDeclaration(containingFunctionOrClassStaticBlock)) {
+            const container = getContainingFunctionOrClassStaticBlock(node);
+            if(container && isClassStaticBlockDeclaration(container)) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block);
                 return;
             }
 
-            if (!containingFunctionOrClassStaticBlock) {
+            if (!container) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 return;
             }
 
-            const signature = getSignatureFromDeclaration(containingFunctionOrClassStaticBlock);
+            const signature = getSignatureFromDeclaration(container);
             const returnType = getReturnTypeOfSignature(signature);
-            const functionFlags = getFunctionFlags(containingFunctionOrClassStaticBlock);
+            const functionFlags = getFunctionFlags(container);
             if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                if (containingFunctionOrClassStaticBlock.kind === SyntaxKind.SetAccessor) {
+                if (container.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
                         error(node, Diagnostics.Setters_cannot_return_a_value);
                     }
                 }
-                else if (containingFunctionOrClassStaticBlock.kind === SyntaxKind.Constructor) {
+                else if (container.kind === SyntaxKind.Constructor) {
                     if (node.expression && !checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression)) {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
-                else if (getReturnTypeFromAnnotation(containingFunctionOrClassStaticBlock)) {
+                else if (getReturnTypeFromAnnotation(container)) {
                     const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
                         ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
@@ -36816,7 +36816,7 @@ namespace ts {
                     }
                 }
             }
-            else if (containingFunctionOrClassStaticBlock.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(containingFunctionOrClassStaticBlock, returnType)) {
+            else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(container, returnType)) {
                 // The function has a return type, but the return statement doesn't have an expression.
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }

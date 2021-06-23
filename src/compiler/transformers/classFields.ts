@@ -132,8 +132,6 @@ namespace ts {
          */
         let pendingStatements: Statement[] | undefined;
 
-        let classStaticBlockContainsPrivateFields = false;
-
         const privateIdentifierEnvironmentStack: (PrivateIdentifierEnvironment | undefined)[] = [];
         let currentPrivateIdentifierEnvironment: PrivateIdentifierEnvironment | undefined;
 
@@ -397,7 +395,6 @@ namespace ts {
 
         function visitPropertyAccessExpression(node: PropertyAccessExpression) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(node.name)) {
-                classStaticBlockContainsPrivateFields = true;
                 const privateIdentifierInfo = accessPrivateIdentifier(node.name);
                 if (privateIdentifierInfo) {
                     return setTextRange(
@@ -545,36 +542,20 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
+        function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
-                const savedClassStaticBlockContainsPrivateFields = classStaticBlockContainsPrivateFields;
-                classStaticBlockContainsPrivateFields = false;
-
                 startLexicalEnvironment();
                 let statements = visitNodes(node.body.statements, visitor, isStatement);
                 statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
 
-                const result = classStaticBlockContainsPrivateFields ?
-                    transformClassStaticBlockDeclarationWithPrivateFields(statements, node, receiver) :
-                    transformClassStaticBlockDeclarationWithIIFE(statements);
-
-                classStaticBlockContainsPrivateFields = savedClassStaticBlockContainsPrivateFields;
-                return result;
+                return setTextRange(
+                    setOriginalNode(
+                        factory.createImmediatelyInvokedArrowFunction(statements),
+                        node
+                    ),
+                    node
+                );
             }
-        }
-
-        function transformClassStaticBlockDeclarationWithIIFE(statements: NodeArray<Statement>) {
-            return factory.createImmediatelyInvokedArrowFunction(statements);
-        }
-
-        function transformClassStaticBlockDeclarationWithPrivateFields(statements: NodeArray<Statement>, node: ClassStaticBlockDeclaration, receiver: LeftHandSideExpression) {
-            receiver = visitNode(receiver, visitor, isExpression);
-            const right = factory.createImmediatelyInvokedArrowFunction(statements);
-            const name = createHoistedVariableForClass("_", node);
-            return createPrivateStaticFieldInitializer(
-                name,
-                right
-            );
         }
 
         function visitBinaryExpression(node: BinaryExpression) {
@@ -1008,7 +989,7 @@ namespace ts {
          */
         function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property, receiver) : transformProperty(property, receiver);
+                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property) : transformProperty(property, receiver);
                 if (!expression) {
                     continue;
                 }
@@ -1029,7 +1010,7 @@ namespace ts {
         function generateInitializedPropertyExpressionsOrClassStaticBlock(propertiesOrClassStaticBlocks: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             const expressions: Expression[] = [];
             for (const property of propertiesOrClassStaticBlocks) {
-                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property, receiver) : transformProperty(property, receiver);
+                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property) : transformProperty(property, receiver);
                 if (!expression) {
                     continue;
                 }
