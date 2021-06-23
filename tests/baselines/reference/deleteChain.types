@@ -61,9 +61,9 @@ delete (o3.b?.c);
 >c : string | undefined
 
 declare const o4: { b?: { c: { d?: { e: string } } } };
->o4 : { b?: {    c: {        d?: {            e: string;        };    };}; }
+>o4 : { b?: { c: {    d?: {        e: string;    };}; } | undefined; }
 >b : { c: {    d?: {        e: string;    };}; } | undefined
->c : { d?: {    e: string;}; }
+>c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
 
@@ -71,11 +71,11 @@ delete o4.b?.c.d?.e;
 >delete o4.b?.c.d?.e : boolean
 >o4.b?.c.d?.e : string | undefined
 >o4.b?.c.d : { e: string; } | undefined
->o4.b?.c : { d?: { e: string; }; } | undefined
->o4.b : { c: { d?: { e: string; }; }; } | undefined
->o4 : { b?: { c: { d?: { e: string; }; }; }; }
->b : { c: { d?: { e: string; }; }; } | undefined
->c : { d?: { e: string; }; } | undefined
+>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
+>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
 
@@ -84,11 +84,11 @@ delete (o4.b?.c.d)?.e;
 >(o4.b?.c.d)?.e : string | undefined
 >(o4.b?.c.d) : { e: string; } | undefined
 >o4.b?.c.d : { e: string; } | undefined
->o4.b?.c : { d?: { e: string; }; } | undefined
->o4.b : { c: { d?: { e: string; }; }; } | undefined
->o4 : { b?: { c: { d?: { e: string; }; }; }; }
->b : { c: { d?: { e: string; }; }; } | undefined
->c : { d?: { e: string; }; } | undefined
+>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
+>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
 
@@ -97,18 +97,18 @@ delete (o4.b?.c.d?.e);
 >(o4.b?.c.d?.e) : string | undefined
 >o4.b?.c.d?.e : string | undefined
 >o4.b?.c.d : { e: string; } | undefined
->o4.b?.c : { d?: { e: string; }; } | undefined
->o4.b : { c: { d?: { e: string; }; }; } | undefined
->o4 : { b?: { c: { d?: { e: string; }; }; }; }
->b : { c: { d?: { e: string; }; }; } | undefined
->c : { d?: { e: string; }; } | undefined
+>o4.b?.c : { d?: { e: string; } | undefined; } | undefined
+>o4.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o4 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
 
 declare const o5: { b?(): { c: { d?: { e: string } } } };
 >o5 : { b?(): {    c: {        d?: {            e: string;        };    };}; }
 >b : (() => {    c: {        d?: {            e: string;        };    };}) | undefined
->c : { d?: {    e: string;}; }
+>c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
 
@@ -116,12 +116,12 @@ delete o5.b?.().c.d?.e;
 >delete o5.b?.().c.d?.e : boolean
 >o5.b?.().c.d?.e : string | undefined
 >o5.b?.().c.d : { e: string; } | undefined
->o5.b?.().c : { d?: { e: string; }; } | undefined
->o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
->o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
->b : (() => { c: { d?: { e: string; }; }; }) | undefined
->c : { d?: { e: string; }; } | undefined
+>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
+>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
 
@@ -130,19 +130,19 @@ delete (o5.b?.().c.d?.e);
 >(o5.b?.().c.d?.e) : string | undefined
 >o5.b?.().c.d?.e : string | undefined
 >o5.b?.().c.d : { e: string; } | undefined
->o5.b?.().c : { d?: { e: string; }; } | undefined
->o5.b?.() : { c: { d?: { e: string; }; }; } | undefined
->o5.b : (() => { c: { d?: { e: string; }; }; }) | undefined
->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
->b : (() => { c: { d?: { e: string; }; }; }) | undefined
->c : { d?: { e: string; }; } | undefined
+>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
+>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
+>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
+>c : { d?: { e: string; } | undefined; } | undefined
 >d : { e: string; } | undefined
 >e : string | undefined
 
 declare const o6: { b?: { c: { d?: { e: string } } } };
->o6 : { b?: {    c: {        d?: {            e: string;        };    };}; }
+>o6 : { b?: { c: {    d?: {        e: string;    };}; } | undefined; }
 >b : { c: {    d?: {        e: string;    };}; } | undefined
->c : { d?: {    e: string;}; }
+>c : { d?: { e: string; } | undefined; }
 >d : { e: string; } | undefined
 >e : string
 
@@ -150,10 +150,10 @@ delete o6.b?.['c'].d?.['e'];
 >delete o6.b?.['c'].d?.['e'] : boolean
 >o6.b?.['c'].d?.['e'] : string | undefined
 >o6.b?.['c'].d : { e: string; } | undefined
->o6.b?.['c'] : { d?: { e: string; }; } | undefined
->o6.b : { c: { d?: { e: string; }; }; } | undefined
->o6 : { b?: { c: { d?: { e: string; }; }; }; }
->b : { c: { d?: { e: string; }; }; } | undefined
+>o6.b?.['c'] : { d?: { e: string; } | undefined; } | undefined
+>o6.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o6 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
 >'c' : "c"
 >d : { e: string; } | undefined
 >'e' : "e"
@@ -163,10 +163,10 @@ delete (o6.b?.['c'].d?.['e']);
 >(o6.b?.['c'].d?.['e']) : string | undefined
 >o6.b?.['c'].d?.['e'] : string | undefined
 >o6.b?.['c'].d : { e: string; } | undefined
->o6.b?.['c'] : { d?: { e: string; }; } | undefined
->o6.b : { c: { d?: { e: string; }; }; } | undefined
->o6 : { b?: { c: { d?: { e: string; }; }; }; }
->b : { c: { d?: { e: string; }; }; } | undefined
+>o6.b?.['c'] : { d?: { e: string; } | undefined; } | undefined
+>o6.b : { c: { d?: { e: string; } | undefined; }; } | undefined
+>o6 : { b?: { c: { d?: { e: string; } | undefined; }; } | undefined; }
+>b : { c: { d?: { e: string; } | undefined; }; } | undefined
 >'c' : "c"
 >d : { e: string; } | undefined
 >'e' : "e"

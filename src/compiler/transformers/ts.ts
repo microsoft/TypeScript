@@ -411,11 +411,11 @@ namespace ts {
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
-                    // falls through
+                    return undefined;
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
-                    return undefined;
+                    return factory.createNotEmittedStatement(node);
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects

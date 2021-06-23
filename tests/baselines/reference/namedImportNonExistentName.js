@@ -26,6 +26,6 @@ module.exports = x;
 "use strict";
 exports.__esModule = true;
 var foo_1 = require("./foo");
-foo_1.foo();
+(0, foo_1.foo)();
 var foo2_1 = require("./foo2");
 foo2_1.c;

@@ -122,6 +122,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/transitivereferences/a.d.ts (used version)
+/user/username/projects/transitivereferences/b.d.ts (used version)
+/user/username/projects/transitivereferences/refs/a.d.ts (used version)
+/user/username/projects/transitivereferences/c.ts (used version)
+
 Dependencies for::
 /a/lib/lib.d.ts:
   /a/lib/lib.d.ts

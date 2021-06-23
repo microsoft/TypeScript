@@ -7,7 +7,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(69,26): error TS2322
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(71,35): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(80,38): error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(81,29): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(81,29): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(98,12): error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
   Type '{ foo: string; }' is missing the following properties from type '{ bar: ReactNode | null | undefined; baz: number; }': bar, baz
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(100,56): error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
@@ -18,7 +18,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(112,46): error TS232
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(113,57): error TS2322: Type 'null' is not assignable to type 'ReactNode'.
 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(122,58): error TS2322: Type '{ foo: string; bar: string; }' is not assignable to type 'Defaultize<FooProps, { foo: string; }>'.
   Property 'bar' does not exist on type 'Defaultize<FooProps, { foo: string; }>'.
-tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS2322: Type 'number' is not assignable to type 'string | undefined'.
 
 
 ==== tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx (15 errors) ====
@@ -121,7 +121,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
     const m = <JustDefaultProps foo="no" />; // error, wrong type
                                 ~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:75:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<{}, { foo: number; }>'
     
     interface FooProps {
@@ -186,7 +186,7 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<FooProps, { foo: string; }>'.
     const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
                                                     ~~~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string | undefined'.
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:117:9: The expected type comes from property 'foo' which is declared here on type 'Defaultize<FooProps, { foo: string; }>'
     const aa = <JustDefaultPropsWithSpecifiedGeneric />;
     

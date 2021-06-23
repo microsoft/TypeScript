@@ -15,7 +15,7 @@ class D {
 
 class E {
     a = this.x; // ok
-    b: typeof this.x; // error
+    b: typeof this.x; // ok
     constructor(public x) { }
 }
 

@@ -41,6 +41,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -113,6 +117,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -161,6 +170,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/a.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

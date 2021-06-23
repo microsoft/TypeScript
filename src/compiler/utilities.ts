@@ -4352,6 +4352,18 @@ namespace ts {
         return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
     }
 
+    export function isThisInTypeQuery(node: Node): boolean {
+        if (!isThisIdentifier(node)) {
+            return false;
+        }
+
+        while (isQualifiedName(node.parent) && node.parent.left === node) {
+            node = node.parent;
+        }
+
+        return node.parent.kind === SyntaxKind.TypeQuery;
+    }
+
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
@@ -6090,7 +6102,6 @@ namespace ts {
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"
-        | "strictOptionalProperties"
         | "alwaysStrict"
         | "useUnknownInCatchVariables"
         ;
