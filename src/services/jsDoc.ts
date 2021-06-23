@@ -95,8 +95,10 @@ namespace ts.JsDoc {
             for (const jsdoc of getCommentHavingNodes(declaration)) {
                 if (jsdoc.comment === undefined
                     || isJSDoc(jsdoc)
-                      && declaration.kind !== SyntaxKind.JSDocTypedefTag
-                      && jsdoc.tags?.every(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)) {
+                       && declaration.kind !== SyntaxKind.JSDocTypedefTag
+                       && jsdoc.tags
+                       && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+                       && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
                     continue;
                 }
                 const newparts = getDisplayPartsFromComment(jsdoc.comment, checker);
@@ -127,14 +129,18 @@ namespace ts.JsDoc {
 
     export function getJsDocTagsFromDeclarations(declarations?: Declaration[], checker?: TypeChecker): JSDocTagInfo[] {
         // Only collect doc comments from duplicate declarations once.
-        const tags: JSDocTagInfo[] = [];
+        const infos: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            for (const tag of getJSDocTags(declaration)) {
-                if (tag.kind === SyntaxKind.JSDocTypedefTag || tag.kind === SyntaxKind.JSDocCallbackTag) continue;
-                tags.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
+            const tags = getJSDocTags(declaration)
+            if (tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
+                && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
+                return
+            }
+            for (const tag of tags) {
+                infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
             }
         });
-        return tags;
+        return infos;
     }
 
     function getDisplayPartsFromComment(comment: string | readonly JSDocComment[], checker: TypeChecker | undefined): SymbolDisplayPart[] {
