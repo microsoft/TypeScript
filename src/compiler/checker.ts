@@ -5749,7 +5749,7 @@ namespace ts {
                         contextFile,
                         moduleResolverHost,
                         { importModuleSpecifierPreference: isBundle ? "non-relative" : "project-relative", importModuleSpecifierEnding: isBundle ? "minimal" : undefined },
-                    ));
+                    ).moduleSpecifiers);
                     links.specifierCache ??= new Map();
                     links.specifierCache.set(contextFile.path, specifier);
                 }

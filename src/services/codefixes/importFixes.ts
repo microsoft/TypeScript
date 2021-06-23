@@ -277,8 +277,8 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         preferences: UserPreferences,
         fromCacheOnly?: boolean,
-    ): { exportInfo?: SymbolExportInfo, moduleSpecifier: string } | undefined {
-        const fixes = getNewImportFixes(
+    ): { exportInfo?: SymbolExportInfo, moduleSpecifier: string, computedWithoutCacheCount: number } | undefined {
+        const { fixes, computedWithoutCacheCount } = getNewImportFixes(
             program,
             importingFile,
             /*position*/ undefined,
@@ -288,7 +288,8 @@ namespace ts.codefix {
             host,
             preferences,
             fromCacheOnly);
-        return getBestFix(fixes, importingFile, host, preferences);
+        const result = getBestFix(fixes, importingFile, host, preferences);
+        return result && { ...result, computedWithoutCacheCount };
     }
 
     export interface SymbolToExportInfoMap {
@@ -542,26 +543,34 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         preferences: UserPreferences,
         fromCacheOnly?: boolean,
-    ): readonly (FixAddNewImport | FixUseImportType)[] {
+    ): { computedWithoutCacheCount: number, fixes: readonly (FixAddNewImport | FixUseImportType)[] } {
         const isJs = isSourceFileJS(sourceFile);
         const compilerOptions = program.getCompilerOptions();
         const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
         const checker = program.getTypeChecker();
         const getModuleSpecifiers = fromCacheOnly
-            ? (moduleSymbol: Symbol) => moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences)
+            ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
             : (moduleSymbol: Symbol) => moduleSpecifiers.getModuleSpecifiers(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
-        return flatMap(moduleSymbols, exportInfo => getModuleSpecifiers(exportInfo.moduleSymbol)?.map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
-            // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-            exportInfo.exportedSymbolIsTypeOnly && isJs && position !== undefined
-                ? { kind: ImportFixKind.ImportType, moduleSpecifier, position, exportInfo }
-                : {
-                    kind: ImportFixKind.AddNew,
-                    moduleSpecifier,
-                    importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
-                    useRequire,
-                    typeOnly: preferTypeOnlyImport,
-                    exportInfo,
-                }));
+
+        let computedWithoutCacheCount = 0;
+        const fixes = flatMap(moduleSymbols, exportInfo => {
+            const { computedWithoutCache, moduleSpecifiers } = getModuleSpecifiers(exportInfo.moduleSymbol);
+            computedWithoutCacheCount += Number(computedWithoutCache);
+            return moduleSpecifiers?.map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
+                // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
+                exportInfo.exportedSymbolIsTypeOnly && isJs && position !== undefined
+                    ? { kind: ImportFixKind.ImportType, moduleSpecifier, position, exportInfo }
+                    : {
+                        kind: ImportFixKind.AddNew,
+                        moduleSpecifier,
+                        importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
+                        useRequire,
+                        typeOnly: preferTypeOnlyImport,
+                        exportInfo,
+                    });
+            });
+
+        return { computedWithoutCacheCount, fixes };
     }
 
     function getFixesForAddImport(
@@ -576,7 +585,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): readonly (FixAddNewImport | FixUseImportType)[] {
         const existingDeclaration = firstDefined(existingImports, info => newImportInfoFromExistingSpecifier(info, preferTypeOnlyImport, useRequire));
-        return existingDeclaration ? [existingDeclaration] : getNewImportFixes(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences);
+        return existingDeclaration ? [existingDeclaration] : getNewImportFixes(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences).fixes;
     }
 
     function newImportInfoFromExistingSpecifier({ declaration, importKind }: FixAddToExistingImportInfo, preferTypeOnlyImport: boolean, useRequire: boolean): FixAddNewImport | undefined {

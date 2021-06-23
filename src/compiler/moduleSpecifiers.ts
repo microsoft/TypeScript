@@ -127,9 +127,9 @@ namespace ts.moduleSpecifiers {
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
-    ): readonly string[] {
+    ): { moduleSpecifiers: readonly string[], computedWithoutCache: boolean } {
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
-        if (ambient) return [ambient];
+        if (ambient) return { moduleSpecifiers: [ambient], computedWithoutCache: false };
 
         // eslint-disable-next-line prefer-const
         let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
@@ -138,8 +138,8 @@ namespace ts.moduleSpecifiers {
             host,
             userPreferences,
         );
-        if (specifiers) return specifiers;
-        if (!moduleSourceFile) return emptyArray;
+        if (specifiers) return { moduleSpecifiers: specifiers, computedWithoutCache: false };
+        if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache: false };
 
         modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
         const info = getInfo(importingSourceFile.path, host);
@@ -158,7 +158,7 @@ namespace ts.moduleSpecifiers {
         if (existingSpecifier) {
             const moduleSpecifiers = [existingSpecifier];
             cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
-            return moduleSpecifiers;
+            return { moduleSpecifiers, computedWithoutCache: true };
         }
 
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
@@ -178,7 +178,7 @@ namespace ts.moduleSpecifiers {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
                 cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, nodeModulesSpecifiers!);
-                return nodeModulesSpecifiers!;
+                return { moduleSpecifiers: nodeModulesSpecifiers!, computedWithoutCache: true };
             }
 
             if (!specifier && !modulePath.isRedirect) {
@@ -205,7 +205,7 @@ namespace ts.moduleSpecifiers {
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
             Debug.checkDefined(relativeSpecifiers);
         cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
-        return moduleSpecifiers;
+        return { moduleSpecifiers, computedWithoutCache: true };
     }
 
     interface Info {

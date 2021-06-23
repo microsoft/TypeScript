@@ -146,6 +146,68 @@ namespace ts.Completions {
 
     const enum GlobalsSearch { Continue, Success, Fail }
 
+    interface ModuleSpecifierResolutioContext {
+        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
+        hasUresolvedAutoImports: () => boolean;
+    }
+
+    interface ModuleSpecifierResolutionResult {
+        exportInfo?: SymbolExportInfo;
+        moduleSpecifier: string;
+    }
+
+    function resolvingModuleSpecifiers<TReturn>(
+        logPrefix: string,
+        host: LanguageServiceHost,
+        program: Program,
+        sourceFile: SourceFile,
+        preferences: UserPreferences,
+        isForImportStatementCompletion: boolean,
+        cb: (context: ModuleSpecifierResolutioContext) => TReturn,
+    ): TReturn {
+        const start = timestamp();
+        let hasUnresolvedAutoImports = false;
+        let ambientCount = 0;
+        let resolvedCount = 0;
+        let resolvedFromCacheCount = 0;
+        let cacheAttemptCount = 0;
+
+        const result = cb({ tryResolve, hasUresolvedAutoImports: () => hasUnresolvedAutoImports });
+
+        const hitRateMessage = cacheAttemptCount ? ` (${(resolvedFromCacheCount / cacheAttemptCount * 100).toFixed(1)}% hit rate)` : "";
+        host.log?.(`${logPrefix}: resolved ${resolvedCount} module specifiers, plus ${ambientCount} ambient and ${resolvedFromCacheCount} from cache${hitRateMessage}`);
+        host.log?.(`${logPrefix}: response is ${hasUnresolvedAutoImports ? "incomplete" : "complete"}`);
+        host.log?.(`${logPrefix}: ${timestamp() - start}`);
+        return result;
+
+        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
+            if (isFromAmbientModule) {
+                const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
+                if (result) {
+                    ambientCount++;
+                }
+                return result;
+            }
+            const shouldResolveModuleSpecifier = isForImportStatementCompletion || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
+            const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
+            const result = (shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache)
+                ? codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences, shouldGetModuleSpecifierFromCache)
+                : undefined;
+
+            if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
+                hasUnresolvedAutoImports = true;
+            }
+
+            resolvedCount += result?.computedWithoutCacheCount || 0;
+            if (shouldGetModuleSpecifierFromCache) {
+                cacheAttemptCount++;
+                resolvedFromCacheCount += result ? exportInfo.length : 0;
+            }
+
+            return result;
+        }
+    }
+
     export function getCompletionsAtPosition(
         host: LanguageServiceHost,
         program: Program,
@@ -233,74 +295,61 @@ namespace ts.Completions {
         const previousResponse = cache.get();
         if (!previousResponse) return undefined;
 
-        const start = timestamp();
         const lowerCaseTokenText = location.text.toLowerCase();
         const exportMap = codefix.getSymbolToExportInfoMap(file, host, program);
         const checker = program.getTypeChecker();
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
         const autoImportProviderChecker = autoImportProvider?.getTypeChecker();
-        let resolvedCount = 0;
-        let resolvedFromCacheCount = 0;
-        let cacheAttemptCount = 0;
-        let hasUnresolvedAutoImports = false;
-        const newEntries = mapDefined(previousResponse.entries, entry => {
-            if (!entry.hasAction || !entry.source || !entry.data || entry.data.moduleSpecifier) {
-                // Not an auto import or already resolved; keep as is
-                return entry;
-            }
-            if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
-                // No longer matches typed characters; filter out
-                return undefined;
-            }
-            const shouldResolveModuleSpecifier = resolvedCount < moduleSpecifierResolutionLimit;
-            const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
-            if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache) {
-                // Not willing to do any more work on this request; keep as is
-                hasUnresolvedAutoImports = true;
-                return entry;
-            }
-            // Fill in details for auto import
-            const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
-            const info = exportMap.get(
-                entry.name,
-                origin.isDefaultExport ? symbol.exportSymbol || symbol : symbol,
-                origin.moduleSymbol,
-                origin.isFromPackageJson ? autoImportProviderChecker! : checker);
-            const result = info && codefix.getModuleSpecifierForBestExportInfo(
-                info,
-                file,
-                origin.isFromPackageJson ? autoImportProvider! : program,
-                host,
-                preferences,
-                shouldGetModuleSpecifierFromCache);
+        const newEntries = resolvingModuleSpecifiers(
+            "continuePreviousIncompleteResponse",
+            host,
+            program,
+            file,
+            preferences,
+            /*isForImportStatementCompletion*/ false,
+            context => {
+                const entries = mapDefined(previousResponse.entries, entry => {
+                    if (!entry.hasAction || !entry.source || !entry.data || entry.data.moduleSpecifier) {
+                        // Not an auto import or already resolved; keep as is
+                        return entry;
+                    }
+                    if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
+                        // No longer matches typed characters; filter out
+                        return undefined;
+                    }
 
-            cacheAttemptCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
-            if (!result) {
-                Debug.assert(shouldGetModuleSpecifierFromCache);
-                hasUnresolvedAutoImports = true;
-                return entry;
-            }
-            const newOrigin: SymbolOriginInfoResolvedExport = {
-                ...origin,
-                kind: SymbolOriginInfoKind.ResolvedExport,
-                moduleSpecifier: result.moduleSpecifier,
-            };
-            // Mutating for performance... feels sketchy but nobody else uses the cache,
-            // so why bother allocating a bunch of new objects?
-            entry.data = originToCompletionEntryData(newOrigin);
-            entry.source = getSourceFromOrigin(newOrigin);
-            entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
-            resolvedCount += shouldResolveModuleSpecifier ? 1 : 0;
-            resolvedFromCacheCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
-            return entry;
-        });
-        if (!hasUnresolvedAutoImports) {
-            previousResponse.isIncomplete = undefined;
-        }
+                    const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
+                    const info = exportMap.get(
+                        entry.name,
+                        origin.isDefaultExport ? symbol.exportSymbol || symbol : symbol,
+                        origin.moduleSymbol,
+                        origin.isFromPackageJson ? autoImportProviderChecker! : checker);
+
+                    const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
+                    if (!result) return entry;
+
+                    const newOrigin: SymbolOriginInfoResolvedExport = {
+                        ...origin,
+                        kind: SymbolOriginInfoKind.ResolvedExport,
+                        moduleSpecifier: result.moduleSpecifier,
+                    };
+                    // Mutating for performance... feels sketchy but nobody else uses the cache,
+                    // so why bother allocating a bunch of new objects?
+                    entry.data = originToCompletionEntryData(newOrigin);
+                    entry.source = getSourceFromOrigin(newOrigin);
+                    entry.sourceDisplay = [textPart(newOrigin.moduleSpecifier)];
+                    return entry;
+                });
+
+                if (!context.hasUresolvedAutoImports()) {
+                    previousResponse.isIncomplete = undefined;
+                }
+
+                return entries;
+            },
+        );
+
         previousResponse.entries = newEntries;
-        host.log?.(`continuePreviousIncompleteResponse: resolved ${resolvedCount} module specifiers, plus ${resolvedFromCacheCount} from cache (${Math.round(resolvedFromCacheCount / cacheAttemptCount * 100)}% hit rate)`);
-        host.log?.(`continuePreviousIncompleteResponse: ${hasUnresolvedAutoImports ? "still incomplete" : "response is now complete"}`);
-        host.log?.(`continuePreviousIncompleteResponse: ${timestamp() - start}`);
         return previousResponse;
     }
 
@@ -1862,56 +1911,52 @@ namespace ts.Completions {
                 return;
             }
 
-            const start = timestamp();
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             const getChecker = (isFromPackageJson: boolean) => isFromPackageJson ? packageJsonAutoImportProvider!.getTypeChecker() : typeChecker;
-            let ambientCount = 0;
-            let resolvedCount = 0;
-            let resolvedFromCacheCount = 0;
-            let cacheAttemptCount = 0;
-            exportInfo.forEach(getChecker, (info, symbolName, isFromAmbientModule) => {
-                if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
-                const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
-                if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
-                    const shouldResolveModuleSpecifier = isFromAmbientModule || !!importCompletionNode || preferences.allowIncompleteCompletions && resolvedCount < moduleSpecifierResolutionLimit;
-                    const shouldGetModuleSpecifierFromCache = !shouldResolveModuleSpecifier && preferences.allowIncompleteCompletions && cacheAttemptCount < moduleSpecifierResolutionCacheAttemptLimit;
-                    if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
-                        return;
-                    }
+            resolvingModuleSpecifiers(
+                "collectAutoImports",
+                host,
+                program,
+                sourceFile,
+                preferences,
+                !!importCompletionNode,
+                context => {
+                    exportInfo.forEach(getChecker, (info, symbolName, isFromAmbientModule) => {
+                        if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
+                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
+                        if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
+                            if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
+                                return;
+                            }
 
-                    // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
-                    // (We need to ensure that at least one is importable to show a completion.)
-                    const { moduleSpecifier, exportInfo = find(info, isImportableExportInfo) } = shouldResolveModuleSpecifier || shouldGetModuleSpecifierFromCache
-                        ? codefix.getModuleSpecifierForBestExportInfo(info, sourceFile, program, host, preferences, shouldGetModuleSpecifierFromCache) || {}
-                        : { moduleSpecifier: undefined, exportInfo: undefined };
-                    cacheAttemptCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
-                    if (!exportInfo) return;
-                    const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
-                    const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
-                    const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
-                    pushAutoImportSymbol(symbol, {
-                        kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
-                        moduleSpecifier,
-                        symbolName,
-                        exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
-                        fileName: moduleFile?.fileName,
-                        isDefaultExport,
-                        moduleSymbol: exportInfo.moduleSymbol,
-                        isFromPackageJson: exportInfo.isFromPackageJson,
+                            // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
+                            // (We need to ensure that at least one is importable to show a completion.)
+                            const { exportInfo = find(info, isImportableExportInfo), moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
+
+                            if (!exportInfo) return;
+                            const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
+                            const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
+                            const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
+                            pushAutoImportSymbol(symbol, {
+                                kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
+                                moduleSpecifier,
+                                symbolName,
+                                exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
+                                fileName: moduleFile?.fileName,
+                                isDefaultExport,
+                                moduleSymbol: exportInfo.moduleSymbol,
+                                isFromPackageJson: exportInfo.isFromPackageJson,
+                            });
+                        }
                     });
-                    ambientCount += isFromAmbientModule ? 1 : 0;
-                    resolvedCount += !isFromAmbientModule && shouldResolveModuleSpecifier ? 1 : 0;
-                    resolvedFromCacheCount += shouldGetModuleSpecifierFromCache ? 1 : 0;
-                    hasUnresolvedAutoImports ||= !moduleSpecifier;
+
+                    hasUnresolvedAutoImports = context.hasUresolvedAutoImports();
                 }
-            });
-            host.log?.(`collectAutoImports: resolved ${resolvedCount} module specifiers, plus ${ambientCount} ambient and ${resolvedFromCacheCount} from cache (${Math.round(resolvedFromCacheCount / cacheAttemptCount * 100)}% hit rate)`);
-            host.log?.(`collectAutoImports: resolution is ${hasUnresolvedAutoImports ? "incomplete" : "complete"}`);
-            host.log?.(`collectAutoImports: done in ${timestamp() - start} ms`);
+            );
 
             function isImportableExportInfo(info: SymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
@@ -1930,7 +1975,6 @@ namespace ts.Completions {
                     moduleSpecifierCache);
             }
         }
-
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
             const symbolId = getSymbolId(symbol);
