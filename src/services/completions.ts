@@ -1,7 +1,8 @@
 /* @internal */
 namespace ts.Completions {
+    // Exported only for tests
     export const moduleSpecifierResolutionLimit = 100;
-    export const moduleSpecifierResolutionCacheAttemptLimit = Infinity;
+    export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
     export type Log = (message: string) => void;
 
@@ -199,9 +200,9 @@ namespace ts.Completions {
             }
 
             resolvedCount += result?.computedWithoutCacheCount || 0;
+            resolvedFromCacheCount += exportInfo.length - resolvedCount;
             if (shouldGetModuleSpecifierFromCache) {
                 cacheAttemptCount++;
-                resolvedFromCacheCount += result ? exportInfo.length : 0;
             }
 
             return result;

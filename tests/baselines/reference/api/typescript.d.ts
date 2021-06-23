@@ -3950,6 +3950,7 @@ declare namespace ts {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
@@ -5513,6 +5514,11 @@ declare namespace ts {
         PartialSemantic = 1,
         Syntactic = 2
     }
+    interface IncompleteCompletionsCache {
+        get(): CompletionInfo | undefined;
+        set(response: CompletionInfo): void;
+        clear(): void;
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5724,12 +5730,30 @@ declare namespace ts {
         skipDestructiveCodeActions?: boolean;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+    enum CompletionTriggerKind {
+        /**
+         * Completion was triggered by typing an identifier (24x7 code
+         * complete), manual invocation (e.g Ctrl+Space) or via API.
+         */
+        Invoked = 1,
+        /**
+         * Completion was triggered by a trigger character specified by
+         * the `triggerCharacters` properties of the
+         * `CompletionRegistrationOptions`.
+         */
+        TriggerCharacter = 2,
+        /**
+         * Completion was re-triggered as the current completion list is incomplete.
+         */
+        TriggerForIncompleteCompletions = 3
+    }
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
          * (as opposed to when the user explicitly requested them) this should be set.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
