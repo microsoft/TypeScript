@@ -131,10 +131,10 @@ namespace ts.JsDoc {
         // Only collect doc comments from duplicate declarations once.
         const infos: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            const tags = getJSDocTags(declaration)
+            const tags = getJSDocTags(declaration);
             if (tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
                 && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
-                return
+                return;
             }
             for (const tag of tags) {
                 infos.push({ name: tag.tagName.text, text: getCommentDisplayParts(tag, checker) });
