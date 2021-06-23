@@ -670,7 +670,7 @@ namespace ts.server {
             }
         }
 
-        class IOSession extends Session {
+        class IOSession<TMessage = string, TRequest = protocol.Request> extends Session<TMessage, TRequest> {
             private eventPort: number | undefined;
             private eventSocket: NodeSocket | undefined;
             private socketEventQueue: { body: any, eventName: string }[] | undefined;
@@ -748,7 +748,9 @@ namespace ts.server {
                 tracing?.stopTracing();
                 process.exit(0);
             }
+        }
 
+        class TSPSession extends IOSession {
             listen() {
                 rl.on("line", (input: string) => {
                     const message = input.trim();
@@ -759,72 +761,55 @@ namespace ts.server {
                     this.exit();
                 });
             }
+
+            protected getFileFromRequest(request: protocol.FileRequest): protocol.FileRequestArgs | undefined {
+                return request.arguments && request.arguments.file ? request.arguments : undefined;
+            }
+
+            protected getCommandFromRequest(request: protocol.Request) {
+                return request.command;
+            }
+
+            protected getSeqFromRequest(request: protocol.Request) {
+                return request.seq;
+            }
         }
 
-        class LSPSession extends IOSession {
+        class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage> {
             reader: rpc.StreamMessageReader = new rpc.StreamMessageReader(process.stdin);
-            // // I/O streams
-            // private input: NodeJS.ReadStream;
-
-            // // Input buffering
-            // private chunks: Buffer[];
-            // private totalLength: number;
-
-            // // Input message parsing
-            // private nextMessageLength: number;
-
-            // constructor() {
-            //     super();
-            //     this.input = process.stdin;
-            //     this.chunks = [];
-            //     this.totalLength = 0;
-            //     this.nextMessageLength = -1;
-            // }
 
             listen() {
                 this.reader.listen(message => {
-                    this.onMessage(message.jsonrpc);
+                    this.onMessage(message);
                 });
-                // this.input.on("data", (chunk: Buffer) => this.onData(chunk));
-
-                // rl.on("line", (input: string) => {
-                //     console.log(input);
-                //     const message = input.trim();
-                //     if (!message || message.charAt(0) !== "{") {
-                //         return;
-                //     }
-
-                //     this.onMessage(message);
-                // });
 
                 rl.on("close", () => {
                     this.exit();
                 });
             }
 
-            // private onData(chunk: Buffer): void {
-            //     this.appendChunk(chunk);
-            //     while (true) {
-            //         if (this.nextMessageLength === -1) {
-            //             const headers = this.tryReadHeaders();
-            //         }
-            //     }
-            // }
+            protected parseMessage(message: rpc.Message): rpc.RequestMessage {
+                return message as rpc.RequestMessage;
+            }
 
+            protected getCommandFromRequest(request: rpc.RequestMessage) {
+                return request.method;
+            }
 
-            // private appendChunk(chunk: Buffer) {
-            //     this.chunks.push(chunk);
-            //     this.totalLength += chunk.byteLength;
-            // }
+            protected getSeqFromRequest(request: rpc.RequestMessage) {
+                if (request.id === null) {
+                    return -1; // TODO: should never happen, allowable by JSONRPC but not LSP
+                }
 
-            protected parseMessage(message: string): protocol.Request {
-                const lspMessage = JSON.parse(message) as lsp.RequestMessage | lsp.NotificationMessage;
-                return {
-                    seq: (lspMessage as lsp.RequestMessage).id as number ?? 0, // TODO: aaaaaaahhhhh
-                    type: "request",
-                    command: lspMessage.method,
-                    arguments: lspMessage.params,
-                };
+                if (typeof request.id === "number") {
+                    return request.id;
+                }
+
+                return Number(request.id);
+            }
+
+            protected toStringMessage(message: rpc.RequestMessage) {
+                return JSON.stringify(message);
             }
 
             protected handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
@@ -878,7 +863,7 @@ namespace ts.server {
             startTracing("server", traceDir);
         }
 
-        const ioSession = options.useLsp ? new LSPSession() : new IOSession();
+        const ioSession = options.useLsp ? new LSPSession() : new TSPSession();
         process.on("uncaughtException", err => {
             ioSession.logError(err, "unknown");
         });

@@ -713,7 +713,7 @@ namespace ts.server {
         useLsp?: boolean;
     }
 
-    export class Session<TMessage = string> implements EventSender {
+    export class Session<TMessage = string, TRequest = protocol.Request> implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
         private changeSeq = 0;
@@ -2994,14 +2994,14 @@ namespace ts.server {
             }
         }
 
-        public executeCommand(request: protocol.Request): HandlerResponse {
-            const handler = this.handlers.get(request.command);
+        public executeCommand(request: TRequest, command: string, seq: number): HandlerResponse {
+            const handler = this.handlers.get(command);
             if (handler) {
-                return this.executeWithRequestId(request.seq, () => handler(request));
+                return this.executeWithRequestId(seq, () => handler(request));
             }
             else {
                 this.logger.msg(`Unrecognized JSON command:${stringifyIndented(request)}`, Msg.Err);
-                this.doOutput(/*info*/ undefined, CommandNames.Unknown, request.seq, /*success*/ false, `Unrecognized JSON command: ${request.command}`);
+                this.doOutput(/*info*/ undefined, CommandNames.Unknown, seq, /*success*/ false, `Unrecognized JSON command: ${command}`);
                 return { responseRequired: false };
             }
         }
@@ -3019,37 +3019,41 @@ namespace ts.server {
                 }
             }
 
-            let request: protocol.Request | undefined;
+            let request: TRequest | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
+            let command: string | undefined;
+            let seq: number | undefined;
             try {
                 request = this.parseMessage(message);
-                relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+                relevantFile = this.getFileFromRequest(request);
+                command = this.getCommandFromRequest(request);
+                seq = this.getSeqFromRequest(request);
 
-                tracing?.instant(tracing.Phase.Session, "request", { seq: request.seq, command: request.command });
-                perfLogger.logStartCommand("" + request.command, this.toStringMessage(message).substring(0, 100));
+                tracing?.instant(tracing.Phase.Session, "request", { seq, command });
+                perfLogger.logStartCommand("" + command, this.toStringMessage(message).substring(0, 100));
 
-                tracing?.push(tracing.Phase.Session, "executeCommand", { seq: request.seq, command: request.command }, /*separateBeginAndEnd*/ true);
-                const { response, responseRequired } = this.executeCommand(request);
+                tracing?.push(tracing.Phase.Session, "executeCommand", { seq, command }, /*separateBeginAndEnd*/ true);
+                const { response, responseRequired } = this.executeCommand(request, command, seq);
                 tracing?.pop();
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
                     const elapsedTime = hrTimeToMilliseconds(this.hrtime(start)).toFixed(4);
                     if (responseRequired) {
-                        this.logger.perftrc(`${request.seq}::${request.command}: elapsed time (in milliseconds) ${elapsedTime}`);
+                        this.logger.perftrc(`${seq}::${command}: elapsed time (in milliseconds) ${elapsedTime}`);
                     }
                     else {
-                        this.logger.perftrc(`${request.seq}::${request.command}: async elapsed time (in milliseconds) ${elapsedTime}`);
+                        this.logger.perftrc(`${seq}::${command}: async elapsed time (in milliseconds) ${elapsedTime}`);
                     }
                 }
 
                 // Note: Log before writing the response, else the editor can complete its activity before the server does
-                perfLogger.logStopCommand("" + request.command, "Success");
-                tracing?.instant(tracing.Phase.Session, "response", { seq: request.seq, command: request.command, success: !!response });
+                perfLogger.logStopCommand("" + command, "Success");
+                tracing?.instant(tracing.Phase.Session, "response", { seq, command, success: !!response });
                 if (response) {
-                    this.doOutput(response, request.command, request.seq, /*success*/ true);
+                    this.doOutput(response, command, seq, /*success*/ true);
                 }
                 else if (responseRequired) {
-                    this.doOutput(/*info*/ undefined, request.command, request.seq, /*success*/ false, "No content available.");
+                    this.doOutput(/*info*/ undefined, command, seq, /*success*/ false, "No content available.");
                 }
             }
             catch (err) {
@@ -3058,27 +3062,38 @@ namespace ts.server {
 
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
-                    perfLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
-                    tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq: request?.seq, command: request?.command });
-                    this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
+                    perfLogger.logStopCommand("" + command, "Canceled: " + err);
+                    tracing?.instant(tracing.Phase.Session, "commandCanceled", { seq, command });
+                    this.doOutput({ canceled: true }, command!, seq!, /*success*/ true);
                     return;
                 }
 
                 this.logErrorWorker(err, this.toStringMessage(message), relevantFile);
-                perfLogger.logStopCommand("" + (request && request.command), "Error: " + err);
-                tracing?.instant(tracing.Phase.Session, "commandError", { seq: request?.seq, command: request?.command, message: (err as Error).message });
+                perfLogger.logStopCommand("" + command, "Error: " + err);
+                tracing?.instant(tracing.Phase.Session, "commandError", { seq, command, message: (err as Error).message });
 
                 this.doOutput(
                     /*info*/ undefined,
-                    request ? request.command : CommandNames.Unknown,
-                    request ? request.seq : 0,
+                    command ?? CommandNames.Unknown,
+                    seq ?? 0,
                     /*success*/ false,
                     "Error processing request. " + (err as StackTraceError).message + "\n" + (err as StackTraceError).stack);
             }
         }
+        protected getSeqFromRequest(_request: TRequest): number {
+            return 0;
+        }
 
-        protected parseMessage(message: TMessage): protocol.Request {
-            return JSON.parse(message as any as string) as protocol.Request;
+        protected getCommandFromRequest(_request: TRequest): string {
+            return "";
+        }
+
+        protected getFileFromRequest(_request: TRequest): protocol.FileRequestArgs | undefined {
+            return undefined;
+        }
+
+        protected parseMessage(message: TMessage): TRequest {
+            return JSON.parse(message as any as string) as TRequest;
         }
 
         protected toStringMessage(message: TMessage): string {
