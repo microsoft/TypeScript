@@ -1301,7 +1301,7 @@ namespace ts.Completions {
         let importCompletionNode: Node | undefined;
         let location = getTouchingPropertyName(sourceFile, position);
 
-        if (tokens.contextToken) {
+        if (contextToken) {
             const importCompletionCandidate = getImportCompletionNode(contextToken);
             if (importCompletionCandidate === SyntaxKind.FromKeyword) {
                 return { kind: CompletionDataKind.Keywords, keywords: [SyntaxKind.FromKeyword] };

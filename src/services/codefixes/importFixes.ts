@@ -321,7 +321,7 @@ namespace ts.codefix {
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, _moduleFile, program, isFromPackageJson) => {
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            if (defaultInfo) {
+            if (defaultInfo && !checker.isUndefinedSymbol(defaultInfo.symbol)) {
                 const name = getNameForExportedSymbol(getLocalSymbolForExportDefault(defaultInfo.symbol) || defaultInfo.symbol, target);
                 result.add(key(name, defaultInfo.symbol, moduleSymbol, checker), {
                     symbol: defaultInfo.symbol,
