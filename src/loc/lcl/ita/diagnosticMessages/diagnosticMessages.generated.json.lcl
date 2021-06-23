@@ -2097,12 +2097,18 @@
       <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_o_1337" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un tipo di parametro della firma dell'indice non può essere un tipo di valore letterale o un tipo generico. Considerare l'utilizzo di un tipo di oggetto con mapping.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type_1268" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un tipo di parametro della firma dell'indice deve essere 'stringa', 'numero', 'simbolo' o un tipo di valore letterale del modello.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5163,6 +5169,9 @@
       <Item ItemId=";Duplicate_index_signature_for_type_0_2374" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate index signature for type '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Firma dell'indice duplicata per il tipo '{0}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7284,6 +7293,9 @@
       <Item ItemId=";Index_signature_for_type_0_is_missing_in_type_1_2329" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Index signature for type '{0}' is missing in type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La firma dell'indice per il tipo '{0}' manca nel tipo '{1}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -10245,6 +10257,9 @@
       <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_2_index_type_3_2411" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[La proprietà '{0}' del tipo '{1}' non è assegnabile al tipo di indice '{2}' '{3}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14889,6 +14904,9 @@
       <Item ItemId=";_0_and_1_index_signatures_are_incompatible_2330" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' and '{1}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le firme dell'indice '{0}' e '{1}' non sono compatibili.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15075,12 +15093,18 @@
       <Item ItemId=";_0_index_signatures_are_incompatible_2634" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le firme dell'indice '{0}' non sono compatibili.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";_0_index_type_1_is_not_assignable_to_2_index_type_3_2413" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Il tipo di indice '{0}' '{1}' non è assegnabile al tipo di indice '{2}' '{3}'.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
