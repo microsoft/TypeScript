@@ -93,9 +93,13 @@ namespace ts.JsDoc {
         const parts: SymbolDisplayPart[][] = [];
         forEachUnique(declarations, declaration => {
             for (const jsdoc of getCommentHavingNodes(declaration)) {
+                // skip comments containing @typedefs since they're not associated with particular declarations
+                // Exceptions:
+                // - @typedefs are themselves declarations with associated comments
+                // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
                 if (jsdoc.comment === undefined
                     || isJSDoc(jsdoc)
-                       && declaration.kind !== SyntaxKind.JSDocTypedefTag
+                       && declaration.kind !== SyntaxKind.JSDocTypedefTag && declaration.kind !== SyntaxKind.JSDocCallbackTag
                        && jsdoc.tags
                        && jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
                        && !jsdoc.tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
@@ -132,6 +136,9 @@ namespace ts.JsDoc {
         const infos: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
             const tags = getJSDocTags(declaration);
+            // skip comments containing @typedefs since they're not associated with particular declarations
+            // Exceptions:
+            // - @param or @return indicate that the author thinks of it as a 'local' @typedef that's part of the function documentation
             if (tags.some(t => t.kind === SyntaxKind.JSDocTypedefTag || t.kind === SyntaxKind.JSDocCallbackTag)
                 && !tags.some(t => t.kind === SyntaxKind.JSDocParameterTag || t.kind === SyntaxKind.JSDocReturnTag)) {
                 return;
