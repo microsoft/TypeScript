@@ -41,6 +41,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/globals.d.ts
 /users/username/projects/project/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/globals.d.ts (used version)
+/users/username/projects/project/index.ts (used version)
+
 WatchedFiles::
 
 FsWatches::
@@ -120,6 +125,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /users/username/projects/project/index.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.ts (computed .d.ts)
 
 WatchedFiles::
 
