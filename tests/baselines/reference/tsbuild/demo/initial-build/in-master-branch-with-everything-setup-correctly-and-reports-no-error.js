@@ -198,7 +198,7 @@ function createDog() {
         woof: function () {
             console.log(this.name + " says \"Woof\"!");
         },
-        name: utilities_1.makeRandomName()
+        name: (0, utilities_1.makeRandomName)()
     });
 }
 exports.createDog = createDog;
@@ -482,7 +482,7 @@ exports.createZoo = void 0;
 var index_1 = require("../animals/index");
 function createZoo() {
     return [
-        index_1.createDog()
+        (0, index_1.createDog)()
     ];
 }
 exports.createZoo = createZoo;

@@ -65,6 +65,12 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
 
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/project/src/filepresent.ts (used version)
+/src/project/src/anotherfilewithsamereferenes.ts (used version)
+/src/project/src/main.ts (used version)
+
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
 /// <reference path="filePresent.d.ts" />
@@ -204,6 +210,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 
+No shapes updated in the builder::
+
 
 
 
@@ -247,6 +255,11 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/filePresent.ts
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
@@ -366,6 +379,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/main.d.ts] file written with same contents
@@ -491,6 +507,12 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/newfile.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts] file written with same contents
@@ -630,6 +652,13 @@ Semantic diagnostics in builder refreshed for::
 /src/project/src/anotherFileWithSameReferenes.ts
 /src/project/src/newFile.ts
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/filenotfound.ts (computed .d.ts)
+/src/project/src/filepresent.ts (computed .d.ts)
+/src/project/src/anotherfilewithsamereferenes.ts (computed .d.ts)
+/src/project/src/newfile.ts (computed .d.ts)
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/anotherFileWithSameReferenes.d.ts]
@@ -773,6 +802,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /src/project/src/main.ts
+
+Shape signatures in builder refreshed for::
+/src/project/src/main.ts (computed .d.ts)
 
 
 //// [/src/project/src/main.d.ts] file written with same contents

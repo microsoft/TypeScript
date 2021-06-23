@@ -49,6 +49,12 @@ Semantic diagnostics in builder refreshed for::
 /a/b/f2.ts
 /a/b/f3.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
+/a/b/f2.ts (used version)
+/a/b/f3.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
@@ -84,7 +90,7 @@ exports.Foo = Foo;
 exports.__esModule = true;
 exports.y = void 0;
 var f1_1 = require("./f1");
-exports.y = f1_1.Foo();
+exports.y = (0, f1_1.Foo)();
 
 
 //// [/a/b/f3.js]
@@ -123,6 +129,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/b/f2.ts
 /a/b/f3.ts
+
+Shape signatures in builder refreshed for::
+/a/b/f1.ts (computed .d.ts)
+/a/b/f2.ts (computed .d.ts)
+/a/b/f3.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:
@@ -186,6 +197,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/f1.ts
 /a/b/f2.ts
+
+Shape signatures in builder refreshed for::
+/a/b/f1.ts (computed .d.ts)
+/a/b/f2.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

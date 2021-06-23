@@ -93,6 +93,7 @@
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/awaiter.ts",
         "unittests/evaluation/destructuring.ts",
+        "unittests/evaluation/externalModules.ts",
         "unittests/evaluation/forAwaitOf.ts",
         "unittests/evaluation/forOf.ts",
         "unittests/evaluation/optionalCall.ts",
