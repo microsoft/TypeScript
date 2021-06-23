@@ -2994,8 +2994,13 @@ namespace ts.server {
             }
         }
 
+        protected getHandlers(): ESMap<string, (request: TRequest) => HandlerResponse> {
+            return this.handlers as unknown as ESMap<string, (request: TRequest) => HandlerResponse>;
+        }
+
         public executeCommand(request: TRequest, command: string, seq: number): HandlerResponse {
-            const handler = this.handlers.get(command);
+            const handlers = this.getHandlers();
+            const handler = handlers.get(command);
             if (handler) {
                 return this.executeWithRequestId(seq, () => handler(request));
             }

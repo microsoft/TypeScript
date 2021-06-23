@@ -4,7 +4,7 @@ namespace ts.server.lsp {
     }
 
     export interface Message {
-        jsonRpc: string;
+        jsonrpc: string;
     }
 
     export interface RequestMessage extends Message {
@@ -23,9 +23,9 @@ namespace ts.server.lsp {
         result?: string | number | boolean | object | null;
     }
 
-    export interface InitializeRequest extends protocol.Request {
-        command: Methods.Initialize;
-        arguments: InitializeParams;
+    export interface InitializeRequest extends RequestMessage {
+        method: Methods.Initialize;
+        params: InitializeParams;
     }
 
     export interface InitializeParams {

@@ -812,7 +812,11 @@ namespace ts.server {
                 return JSON.stringify(message);
             }
 
-            protected handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
+            protected getHandlers() {
+                return this.lspHandlers;
+            }
+
+            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage) => HandlerResponse>({
                 [lsp.Methods.Initialize]: (_request: lsp.InitializeRequest) => this.requiredResponse({
                     capabilities: {}
                 }),
@@ -826,7 +830,7 @@ namespace ts.server {
                     return;
                 }
                 const lspMsg: lsp.ResponseMessage = {
-                    jsonRpc: "2.0",
+                    jsonrpc: "2.0",
                     id: (msg as protocol.Response).request_seq,
                     result: (msg as protocol.Response).body
                 };
