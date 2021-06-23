@@ -2106,29 +2106,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead_1336" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_o_1337" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
+          <Val><![CDATA[An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un tipo de parámetro de firma de índice no puede ser un alias de tipo. Considere la posibilidad de escribir en su lugar "[{0}: {1}]5D;: {2}".]]></Val>
+            <Val><![CDATA[Un tipo de parámetro de signatura de índice no puede ser un tipo literal o un tipo genérico. Considere la posibilidad de usar, en su lugar, uno de los tipos de objeto asignados.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead_1337" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type_1268" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type cannot be a union type. Consider using a mapped object type instead.]]></Val>
+          <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un tipo de parámetro de firma de índice no puede ser un tipo de unión. Considere la posibilidad de usar en su lugar un tipo de objeto asignado.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";An_index_signature_parameter_type_must_be_either_string_or_number_1023" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type must be either 'string' or 'number'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de un parámetro de signatura de índice debe ser "string" o "number".]]></Val>
+            <Val><![CDATA[El tipo de parámetro de la signatura de índice debe ser "string", "number", "symbol" o un tipo literal de plantilla.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5187,6 +5178,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_index_signature_for_type_0_2374" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate index signature for type '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Signatura de índice duplicada para el tipo "{0}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_label_0_1114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate label '{0}'.]]></Val>
@@ -5199,29 +5199,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Duplicate_number_index_signature_2375" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate number index signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Signatura de índice de número duplicada.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Duplicate_property_0_2718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate property '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Propiedad "{0}" duplicada.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Duplicate_string_index_signature_2374" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate string index signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Signatura de índice de cadena duplicada.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7320,29 +7302,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Index_signature_for_type_0_is_missing_in_type_1_2329" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Index signature for type '{0}' is missing in type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Falta la signatura de índice para el tipo "{0}" en el tipo "{1}".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Index_signature_in_type_0_only_permits_reading_2542" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Index signature in type '{0}' only permits reading.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La signatura de índice del tipo '{0}' solo permite lectura.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Index_signature_is_missing_in_type_0_2329" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Index signature is missing in type '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Falta la signatura de índice en el tipo '{0}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Index_signatures_are_incompatible_2330" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Index signatures are incompatible.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Las signaturas de índice no son compatibles.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8708,15 +8681,6 @@
           <Val><![CDATA[Not all constituents of type '{0}' are constructable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[No se pueden construir todos los constituyentes del tipo "{0}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Numeric_index_type_0_is_not_assignable_to_string_index_type_1_2413" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[El tipo de índice numérico '{0}' no se puede asignar a un tipo de índice de cadena '{1}'.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10302,20 +10266,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2_2412" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_2_index_type_3_2411" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.]]></Val>
+          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad '{0}' de tipo '{1}' no se puede asignar al tipo de índice numérico '{2}'.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_string_index_type_2_2411" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to string index type '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La propiedad '{0}' de tipo '{1}' no se puede asignar al tipo de índice de cadena '{2}'.]]></Val>
+            <Val><![CDATA[La propiedad "{0}" de tipo "{1}" no se puede asignar al tipo de índice "{2}" "{3}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14958,6 +14913,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_and_1_index_signatures_are_incompatible_2330" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' and '{1}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las signaturas de índice "{0}" y "{1}" no son compatibles.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_and_1_operations_cannot_be_mixed_without_parentheses_5076" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' and '{1}' operations cannot be mixed without parentheses.]]></Val>
@@ -15134,6 +15098,24 @@
           <Val><![CDATA['{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' tiene el tipo de valor devuelto "any" implícitamente porque no tiene una anotación de tipo y se hace referencia a este directa o indirectamente en su propio inicializador.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_index_signatures_are_incompatible_2634" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Las signaturas de índice "{0}" no son compatibles.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_index_type_1_is_not_assignable_to_2_index_type_3_2413" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[El tipo de índice "{0}"' "{1}" no se puede asignar al tipo de índice "{2}" "{3}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

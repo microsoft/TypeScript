@@ -2094,29 +2094,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_type_alias_Consider_writing_0_Colon_1_Colon_2_instead_1336" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_o_1337" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
+          <Val><![CDATA[An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス シグネチャのパラメーターの型を型のエイリアスにすることはできません。代わりに、'[{0}: {1}]5D;: {2}' と記述することをご検討ください。]]></Val>
+            <Val><![CDATA[インデックス シグネチャ パラメーターの型をリテラル型またはジェネリック型にすることはできません。代わりに、マップされたオブジェクト型の使用を検討してください。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_index_signature_parameter_type_cannot_be_a_union_type_Consider_using_a_mapped_object_type_instead_1337" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";An_index_signature_parameter_type_must_be_string_number_symbol_or_a_template_literal_type_1268" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type cannot be a union type. Consider using a mapped object type instead.]]></Val>
+          <Val><![CDATA[An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス シグネチャのパラメーターの型を共用体型にすることはできません。代わりに、マップされたオブジェクト型の使用をご検討ください。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";An_index_signature_parameter_type_must_be_either_string_or_number_1023" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An index signature parameter type must be either 'string' or 'number'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックス シグネチャのパラメーターの型は 'string' または 'number' のいずれかである必要があります。]]></Val>
+            <Val><![CDATA[インデックス シグネチャ パラメーター型は、'string'、'number'、'symbol'、またはテンプレート リテラルの型である必要があります。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5175,6 +5166,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_index_signature_for_type_0_2374" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate index signature for type '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' のインデックス シグネチャが重複しています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_label_0_1114" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate label '{0}'.]]></Val>
@@ -5187,29 +5187,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Duplicate_number_index_signature_2375" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate number index signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[number インデックス シグネチャが重複しています。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Duplicate_property_0_2718" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate property '{0}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[プロパティ '{0}' が重複しています。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Duplicate_string_index_signature_2374" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate string index signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[string インデックス シグネチャが重複しています。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7308,29 +7290,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Index_signature_for_type_0_is_missing_in_type_1_2329" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Index signature for type '{0}' is missing in type '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[型 '{0}' is missing in type '{1}' のインデックス シグネチャがありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Index_signature_in_type_0_only_permits_reading_2542" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Index signature in type '{0}' only permits reading.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型 '{0}' のインデックス シグネチャは、読み取りのみを許可します。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Index_signature_is_missing_in_type_0_2329" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Index signature is missing in type '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{0}' のインデックス シグネチャがありません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Index_signatures_are_incompatible_2330" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Index signatures are incompatible.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[インデックスの署名に互換性がありません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8696,15 +8669,6 @@
           <Val><![CDATA[Not all constituents of type '{0}' are constructable.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[型 '{0}' のすべての構成要素がコンストラクト可能なわけではありません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Numeric_index_type_0_is_not_assignable_to_string_index_type_1_2413" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Numeric index type '{0}' is not assignable to string index type '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[数値インデックス型 '{0}' を文字列インデックス型 '{1}' に割り当てることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10290,20 +10254,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_numeric_index_type_2_2412" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_2_index_type_3_2411" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to numeric index type '{2}'.]]></Val>
+          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{1}' のプロパティ '{0}' を数値インデックス型 '{2}' に割り当てることはできません。]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_of_type_1_is_not_assignable_to_string_index_type_2_2411" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' of type '{1}' is not assignable to string index type '{2}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[型 '{1}' のプロパティ '{0}' を文字列インデックス型 '{2}' に割り当てることはできません。]]></Val>
+            <Val><![CDATA[型 '{1}' のプロパティ '{0}' は'{2}' インデックス型 '{3}' に割り当てることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14946,6 +14901,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_and_1_index_signatures_are_incompatible_2330" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' and '{1}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' および '{1}' インデックス シグネチャに互換性がありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_and_1_operations_cannot_be_mixed_without_parentheses_5076" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' and '{1}' operations cannot be mixed without parentheses.]]></Val>
@@ -15122,6 +15086,24 @@
           <Val><![CDATA['{0}' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' には型の注釈がなく、直接または間接的に初期化子で参照されているため、暗黙的に 'any' 型が含まれています。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_index_signatures_are_incompatible_2634" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' index signatures are incompatible.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' インデックス シグネチャに互換性がありません。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_index_type_1_is_not_assignable_to_2_index_type_3_2413" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' index type '{1}' is not assignable to '{2}' index type '{3}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}'インデックス型'{1}' を '{2}'インデックス型'{3}' に割り当てることはできません。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
