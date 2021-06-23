@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock26.ts, 0, 0))
+
+    static {
+        let await = 1;
+>await : Symbol(await, Decl(classStaticBlock26.ts, 2, 11))
+    }
+    static {
+        var await = 1;
+>await : Symbol(await, Decl(classStaticBlock26.ts, 5, 11))
+    }
+    static {
+        const await = 1;
+>await : Symbol(await, Decl(classStaticBlock26.ts, 8, 13))
+    }
+}
+

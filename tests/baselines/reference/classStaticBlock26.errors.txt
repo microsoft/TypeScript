@@ -1,0 +1,24 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts(3,13): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts(6,13): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts(9,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts (3 errors) ====
+    class C {
+        static {
+            let await = 1;
+                ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+        }
+        static {
+            var await = 1;
+                ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+        }
+        static {
+            const await = 1;
+                  ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+        }
+    }
+    
