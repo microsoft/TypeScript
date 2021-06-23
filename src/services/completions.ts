@@ -1057,8 +1057,8 @@ namespace ts.Completions {
         data: CompletionEntryData | undefined,
     ): CodeActionsAndSourceDisplay {
         if (data?.moduleSpecifier) {
-            const { contextToken } = getRelevantTokens(position, sourceFile);
-            if (contextToken && getImportCompletionNode(contextToken)) {
+            const { contextToken, previousToken } = getRelevantTokens(position, sourceFile);
+            if (previousToken && getImportCompletionNode(contextToken || previousToken)) {
                 // Import statement completion: 'import c|'
                 return { codeActions: undefined, sourceDisplay: [textPart(data.moduleSpecifier)] };
             }
@@ -2822,7 +2822,7 @@ namespace ts.Completions {
         const previousToken = findPrecedingToken(position, sourceFile);
         if (previousToken && position <= previousToken.end && (isMemberName(previousToken) || isKeyword(previousToken.kind))) {
             const contextToken = findPrecedingToken(previousToken.getFullStart(), sourceFile, /*startNode*/ undefined)!; // TODO: GH#18217
-            return { contextToken: contextToken || previousToken, previousToken };
+            return { contextToken, previousToken };
         }
         return { contextToken: previousToken as Node, previousToken: previousToken as Node };
     }
