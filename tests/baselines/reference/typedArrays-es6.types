@@ -57,7 +57,7 @@ const int8Array = new Int8Array(1);
 const nodeList = new NodeList();
 >nodeList : NodeList
 >new NodeList() : NodeList
->NodeList : { new (): NodeList; readonly prototype: NodeList; }
+>NodeList : { new (): NodeList; prototype: NodeList; }
 
 [...nodeList];
 >[...nodeList] : Node[]

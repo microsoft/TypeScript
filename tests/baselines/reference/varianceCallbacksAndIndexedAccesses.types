@@ -11,7 +11,7 @@ type Source = {
 
   (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
 >type : string
->listener : any
+>listener : EventListenerOrEventListenerObject
 >options : boolean | AddEventListenerOptions
 }
 

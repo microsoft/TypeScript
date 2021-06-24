@@ -3,7 +3,7 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(14,10): error TS2774: 
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(41,18): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(44,9): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(48,11): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
-tests/cases/compiler/truthinessCallExpressionCoercion2.ts(65,61): error TS2339: Property 'exception' does not exist on type 'Console'.
+tests/cases/compiler/truthinessCallExpressionCoercion2.ts(65,46): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(76,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(79,10): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 tests/cases/compiler/truthinessCallExpressionCoercion2.ts(99,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
@@ -86,9 +86,9 @@ tests/cases/compiler/truthinessCallExpressionCoercion2.ts(112,14): error TS2774:
     function checksConsole() {
         // error
         typeof window !== 'undefined' && window.console &&
-            ((window.console as any).firebug || (window.console.exception && window.console.table));
-                                                                ~~~~~~~~~
-!!! error TS2339: Property 'exception' does not exist on type 'Console'.
+            ((window.console as any).firebug || (window.console.error && window.console.table));
+                                                 ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
     }
     
     function checksPropertyAccess() {
