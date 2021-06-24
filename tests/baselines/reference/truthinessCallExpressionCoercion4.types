@@ -1,0 +1,18 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion4.ts ===
+const or = x => y => x || y;
+>or : (x: any) => (y: any) => any
+>x => y => x || y : (x: any) => (y: any) => any
+>x : any
+>y => x || y : (y: any) => any
+>y : any
+>x || y : any
+>x : any
+>y : any
+
+if (or(true)) { // error
+>or(true) : (y: any) => any
+>or : (x: any) => (y: any) => any
+>true : true
+  
+}
+

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/truthinessCallExpressionCoercion4.ts ===
+const or = x => y => x || y;
+>or : Symbol(or, Decl(truthinessCallExpressionCoercion4.ts, 0, 5))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion4.ts, 0, 10))
+>y : Symbol(y, Decl(truthinessCallExpressionCoercion4.ts, 0, 15))
+>x : Symbol(x, Decl(truthinessCallExpressionCoercion4.ts, 0, 10))
+>y : Symbol(y, Decl(truthinessCallExpressionCoercion4.ts, 0, 15))
+
+if (or(true)) { // error
+>or : Symbol(or, Decl(truthinessCallExpressionCoercion4.ts, 0, 5))
+  
+}
+
