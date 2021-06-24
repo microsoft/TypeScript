@@ -3192,15 +3192,16 @@ namespace ts {
 
     export interface ExportMapCache {
         clear(): void;
-        get(file: Path, checker: TypeChecker, projectVersion?: string): MultiMap<string, SymbolExportInfo & { needsMerge?: boolean }> | undefined;
-        set(suggestions: MultiMap<string, SymbolExportInfo & { needsMerge?: boolean }>, projectVersion?: string): void;
+        get(file: Path, checker: TypeChecker): MultiMap<string, SymbolExportInfo> | undefined;
+        getProjectVersion(): string | undefined;
+        set(suggestions: MultiMap<string, SymbolExportInfo>, projectVersion?: string): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
         onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean): boolean;
     }
     export function createExportMapCache(): ExportMapCache {
-        let cache: MultiMap<string, SymbolExportInfo & { needsMerge?: boolean }> | undefined;
-        // let projectVersion: string | undefined;
+        let cache: MultiMap<string, SymbolExportInfo> | undefined;
+        let projectVersion: string | undefined;
         let usableByFileName: Path | undefined;
         const wrapped: ExportMapCache = {
             isEmpty() {
@@ -3208,12 +3209,12 @@ namespace ts {
             },
             clear() {
                 cache = undefined;
-                // projectVersion = undefined;
+                projectVersion = undefined;
             },
             set(suggestions, version) {
                 cache = suggestions;
                 if (version) {
-                    // projectVersion = version;
+                    projectVersion = version;
                 }
             },
             get: (file) => {
@@ -3222,6 +3223,7 @@ namespace ts {
                 }
                 return cache;
             },
+            getProjectVersion: () => projectVersion,
             onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean) {
                 if (fileIsGlobalOnly(oldSourceFile) && fileIsGlobalOnly(newSourceFile)) {
                     // File is purely global; doesn't affect export map

@@ -305,17 +305,18 @@ namespace ts.codefix {
         host.getPackageJsonAutoImportProvider?.();
         const cache = host.getExportMapCache?.();
         if (cache) {
-            const cached = cache.get(importingFile.path, program.getTypeChecker(), host.getProjectVersion?.());
+            const cached = cache.get(importingFile.path, program.getTypeChecker());
             if (cached) {
                 host.log?.("getSymbolToExportInfoMap: cache hit");
-                return wrapMultiMap(cached);
+                const projectVersion = host.getProjectVersion?.();
+                return wrapMultiMap(cached, !projectVersion || cache.getProjectVersion() !== projectVersion);
             }
             else {
                 host.log?.("getSymbolToExportInfoMap: cache miss or empty; calculating new results");
             }
         }
 
-        const result: MultiMap<string, SymbolExportInfo & { needsMerge?: boolean }> = createMultiMap();
+        const result: MultiMap<string, SymbolExportInfo> = createMultiMap();
         const compilerOptions = program.getCompilerOptions();
         const target = getEmitScriptTarget(compilerOptions);
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, _moduleFile, program, isFromPackageJson) => {
@@ -329,7 +330,6 @@ namespace ts.codefix {
                     exportKind: defaultInfo.exportKind,
                     exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol, checker),
                     isFromPackageJson,
-                    needsMerge: ((defaultInfo.symbol.flags | moduleSymbol.flags) & SymbolFlags.Transient) > 0,
                 });
             }
             const seenExports = new Map<Symbol, true>();
@@ -339,8 +339,8 @@ namespace ts.codefix {
                         symbol: exported,
                         moduleSymbol,
                         exportKind: ExportKind.Named,
-                        exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported, checker), isFromPackageJson,
-                        needsMerge: ((exported.flags | moduleSymbol.flags) & SymbolFlags.Transient) > 0,
+                        exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported, checker),
+                        isFromPackageJson,
                     });
                 }
             }
@@ -351,7 +351,7 @@ namespace ts.codefix {
             cache.set(result, host.getProjectVersion?.());
         }
         host.log?.(`getSymbolToExportInfoMap: done in ${timestamp() - start} ms`);
-        return wrapMultiMap(result);
+        return wrapMultiMap(result, /*isFromPreviousProjectVersion*/ false);
 
         function key(importedName: string, alias: Symbol, moduleSymbol: Symbol, checker: TypeChecker) {
             const moduleName = stripQuotes(moduleSymbol.name);
@@ -360,16 +360,26 @@ namespace ts.codefix {
             return `${importedName}|${getSymbolId(original.declarations?.[0].symbol || original)}|${moduleKey}`;
         }
 
-        function wrapMultiMap(map: MultiMap<string, SymbolExportInfo & { needsMerge?: boolean }>): SymbolToExportInfoMap {
+        function parseKey(key: string) {
+            const symbolName = key.substring(0, key.indexOf("|"));
+            const moduleKey = key.substring(key.lastIndexOf("|") + 1);
+            const ambientModuleName = moduleKey === "/" ? undefined : moduleKey;
+            return { symbolName, ambientModuleName };
+        }
+
+        function wrapMultiMap(map: MultiMap<string, SymbolExportInfo>, isFromPreviousProjectVersion: boolean): SymbolToExportInfoMap {
             const wrapped: SymbolToExportInfoMap = {
                 get: (importedName, symbol, moduleSymbol, checker) => {
-                    return map.get(key(importedName, symbol, moduleSymbol, checker))?.map(info => mergeInfoSymbols(info, checker));
+                    const info = map.get(key(importedName, symbol, moduleSymbol, checker));
+                    return isFromPreviousProjectVersion ? info?.map(info => replaceTransientSymbols(info, checker)) : info;
                 },
                 forEach: (getChecker, action) => {
                     map.forEach((info, key) => {
-                        const symbolName = key.substring(0, key.indexOf("|"));
-                        const isFromAmbientModule = key.substring(key.lastIndexOf("|") + 1) !== "/";
-                        action(info.map(i => mergeInfoSymbols(i, getChecker(i.isFromPackageJson))), symbolName, isFromAmbientModule);
+                        const { symbolName, ambientModuleName } = parseKey(key);
+                        action(
+                            isFromPreviousProjectVersion ? info.map(i => replaceTransientSymbols(i, getChecker(i.isFromPackageJson))) : info,
+                            symbolName,
+                            !!ambientModuleName);
                     });
                 },
             };
@@ -378,14 +388,32 @@ namespace ts.codefix {
             }
             return wrapped;
 
-            function mergeInfoSymbols(info: SymbolExportInfo & { needsMerge?: boolean }, checker: TypeChecker) {
-                return info.needsMerge
-                    ? {
-                        ...info,
-                        symbol: checker.getMergedSymbol(info.symbol.declarations?.[0]?.symbol || info.symbol),
-                        moduleSymbol: checker.getMergedSymbol(info.moduleSymbol.declarations?.[0]?.symbol || info.moduleSymbol),
-                    }
-                    : info;
+            /**
+             * Transient symbols have new identities with every new checker. If we stored one of those in the cache
+             * and are now accessing it with a new checker, we want to access its new identity. To do that, we ask
+             * the new checker for the merged symbol of one of the transient symbol's declarations. This assumes
+             * (or rather, asserts) that transient symbols seen here are all transient because they are merged symbols.
+             * Other kinds of transient symbols may be unrecoverable, but hopefully (and apparently) they don't show up
+             * here. We also mutate `info` with those new symbols so the old ones can be released from memory.
+             *
+             * TODO: probably this cache should just refuse to store transient symbols entirely, since they may retain
+             * the whole checker that created them through their `type` property and other `SymbolLinks` if populated.
+             * But this is the way it's been working for a while now without complaints of memory leaks, so I'm not
+             * chainging it right now. But if this comment survives more than a couple months, someone should bug me
+             * about it.
+             */
+            function replaceTransientSymbols(info: SymbolExportInfo, checker: TypeChecker) {
+                if (info.symbol.flags & SymbolFlags.Transient) {
+                    const updated = checker.getMergedSymbol(info.symbol.declarations?.[0]?.symbol || info.symbol);
+                    Debug.assert(updated !== info.symbol);
+                    info.symbol = updated;
+                }
+                if (info.moduleSymbol.flags & SymbolFlags.Transient) {
+                    const updated = checker.getMergedSymbol(info.moduleSymbol.declarations?.[0]?.symbol || info.moduleSymbol);
+                    Debug.assert(updated !== info.moduleSymbol);
+                    info.moduleSymbol = updated;
+                }
+                return info;
             }
         }
     }
