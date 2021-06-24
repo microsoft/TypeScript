@@ -19,7 +19,6 @@ verify.getInlayHints([
         whitespaceAfter: true
     },
 ], undefined, {
-    includeInlayParameterNameHints: true,
-    includeInlayNonLiteralParameterNameHints: true,
-    includeInlayDuplicatedParameterNameHints: true,
+    includeInlayParameterNameHints: "all",
+    includeInlayParameterNameHintsWhenArgumentMatchesName: true,
 });

@@ -8479,9 +8479,8 @@ namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlayParameterNameHints?: boolean;
-        readonly includeInlayNonLiteralParameterNameHints?: boolean;
-        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;

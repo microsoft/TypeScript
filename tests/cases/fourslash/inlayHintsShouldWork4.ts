@@ -28,5 +28,5 @@ verify.getInlayHints([
         whitespaceAfter: true
     }
 ], undefined, {
-    includeInlayParameterNameHints: true
+    includeInlayParameterNameHints: "literals"
 });

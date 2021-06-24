@@ -25,6 +25,5 @@ verify.getInlayHints(
         kind: ts.InlayHintKind.Parameter,
         whitespaceAfter: true
     })) , undefined, {
-    includeInlayParameterNameHints: true,
-    includeInlayNonLiteralParameterNameHints: false
+    includeInlayParameterNameHints: "literals"
 });

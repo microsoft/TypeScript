@@ -13,7 +13,6 @@ verify.getInlayHints([
         whitespaceAfter: true
     },
 ], undefined, {
-    includeInlayParameterNameHints: true,
-    includeInlayNonLiteralParameterNameHints: true,
-    includeInlayDuplicatedParameterNameHints: false,
+    includeInlayParameterNameHints: "all",
+    includeInlayParameterNameHintsWhenArgumentMatchesName: false,
 });

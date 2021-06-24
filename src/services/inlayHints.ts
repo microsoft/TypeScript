@@ -7,6 +7,14 @@ namespace ts.InlayHints {
         return new RegExp(`^\\s?/\\*\\*?\\s?${name}\\s?\\*\\/\\s?$`);
     };
 
+    function shouldShowParameterNameHints(preferences: UserPreferences) {
+        return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
+    }
+
+    function shouldShowLiteralParameterNameHintsOnly(preferences: UserPreferences) {
+        return preferences.includeInlayParameterNameHints === "literals";
+    }
+
     export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const { file, program, span, cancellationToken, preferences } = context;
         const sourceFileText = file.text;
@@ -52,7 +60,7 @@ namespace ts.InlayHints {
             else if (preferences.includeInlayEnumMemberValueHints && isEnumMember(node)) {
                 visitEnumMember(node);
             }
-            else if (preferences.includeInlayParameterNameHints && (isCallExpression(node) || isNewExpression(node))) {
+            else if (shouldShowParameterNameHints(preferences) && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
             else {
@@ -147,14 +155,14 @@ namespace ts.InlayHints {
 
             for (let i = 0; i < args.length; ++i) {
                 const arg = args[i];
-                if (!preferences.includeInlayNonLiteralParameterNameHints && !isHintableExpression(arg)) {
+                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableExpression(arg)) {
                     continue;
                 }
 
                 const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (identifierNameInfo) {
                     const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
-                    const isParameterNameNotSameAsArgument = preferences.includeInlayDuplicatedParameterNameHints || !isIdentifier(arg) || arg.text !== parameterName;
+                    const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !isIdentifier(arg) || arg.text !== parameterName;
                     if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                         continue;
                     }

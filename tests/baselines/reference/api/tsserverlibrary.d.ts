@@ -3957,9 +3957,8 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlayParameterNameHints?: boolean;
-        readonly includeInlayNonLiteralParameterNameHints?: boolean;
-        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;
@@ -5746,9 +5745,8 @@ declare namespace ts {
         includeInsertTextCompletions?: boolean;
     }
     interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: boolean;
-        readonly includeInlayNonLiteralParameterNameHints?: boolean;
-        readonly includeInlayDuplicatedParameterNameHints?: boolean;
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
         readonly includeInlayPropertyDeclarationTypeHints?: boolean;

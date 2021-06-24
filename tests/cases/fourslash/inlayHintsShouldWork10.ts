@@ -5,5 +5,5 @@
 
 const markers = test.markers();
 verify.getInlayHints([], undefined, {
-    includeInlayParameterNameHints: true
+    includeInlayParameterNameHints: "literals"
 });

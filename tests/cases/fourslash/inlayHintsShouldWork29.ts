@@ -32,6 +32,6 @@ verify.getInlayHints([
         whitespaceBefore: true
     }
 ], undefined, {
-    includeInlayParameterNameHints: true,
+    includeInlayParameterNameHints: "literals",
     includeInlayFunctionParameterTypeHints: true
 });

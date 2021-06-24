@@ -4,5 +4,5 @@
 //// foo(1, 2);
 
 verify.getInlayHints([], undefined, {
-    includeInlayParameterNameHints: false
+    includeInlayParameterNameHints: "none"
 });

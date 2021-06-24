@@ -27,5 +27,5 @@ verify.getInlayHints(
             whitespaceAfter: true
         }
     }), span, {
-    includeInlayParameterNameHints: true
+    includeInlayParameterNameHints: "literals"
 })

@@ -13,5 +13,5 @@
 goTo.file('/a.js')
 const markers = test.markers();
 verify.getInlayHints([], undefined, {
-    includeInlayParameterNameHints: true
+    includeInlayParameterNameHints: "literals"
 });
