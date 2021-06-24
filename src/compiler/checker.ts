@@ -21998,9 +21998,35 @@ namespace ts {
                 (containsTruthyCheck(source, (target as BinaryExpression).left) || containsTruthyCheck(source, (target as BinaryExpression).right)));
         }
 
-        function getAccessedPropertyName(access: AccessExpression): __String | undefined {
+        function getPropertyAccess(expr: Expression) {
+            if (isAccessExpression(expr)) {
+                return expr;
+            }
+            if (isIdentifier(expr)) {
+                const symbol = getResolvedSymbol(expr);
+                if (isConstVariable(symbol)) {
+                    const declaration = symbol.valueDeclaration!;
+                    // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
+                    if (isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer)) {
+                        return declaration.initializer;
+                    }
+                    // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
+                    if (isBindingElement(declaration) && !declaration.initializer) {
+                        const parent = declaration.parent.parent;
+                        if (isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer))) {
+                            return declaration;
+                        }
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function getAccessedPropertyName(access: AccessExpression | BindingElement): __String | undefined {
+            let propertyName;
             return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
-                isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+                access.kind === SyntaxKind.ElementAccessExpression && isStringOrNumericLiteralLike(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
+                access.kind === SyntaxKind.BindingElement && (propertyName = getDestructuringPropertyName(access)) ? escapeLeadingUnderscores(propertyName) :
                 undefined;
         }
 
@@ -22948,14 +22974,15 @@ namespace ts {
             }
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, isConstant?: boolean, flowContainer?: Node) {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
+            let inlineLevel = 0;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
-            if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
+            if (!reference.flowNode) {
                 return declaredType;
             }
             flowInvocationCount++;
@@ -23244,8 +23271,9 @@ namespace ts {
                                 t => !(t.flags & TypeFlags.Never || t.flags & TypeFlags.StringLiteral && (t as StringLiteralType).value === "undefined"));
                         }
                     }
-                    if (isMatchingReferenceDiscriminant(expr, type)) {
-                        type = narrowTypeBySwitchOnDiscriminantProperty(type, expr as AccessExpression, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                    const access = getDiscriminantPropertyAccess(expr, type);
+                    if (access) {
+                        type = narrowTypeBySwitchOnDiscriminantProperty(type, access, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
                     }
                 }
                 return createFlowType(type, isIncomplete(flowType));
@@ -23402,19 +23430,16 @@ namespace ts {
                 return result;
             }
 
-            function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
+            function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
+                let access, name;
                 const type = declaredType.flags & TypeFlags.Union ? declaredType : computedType;
-                if (!(type.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
-                    return false;
-                }
-                const name = getAccessedPropertyName(expr);
-                if (name === undefined) {
-                    return false;
-                }
-                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(type, name);
+                return type.flags & TypeFlags.Union && (access = getPropertyAccess(expr)) && (name = getAccessedPropertyName(access)) &&
+                    isMatchingReference(reference, isAccessExpression(access) ? access.expression : access.parent.parent.initializer!) &&
+                    isDiscriminantProperty(type, name) ?
+                    access : undefined;
             }
 
-            function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
+            function narrowTypeByDiscriminant(type: Type, access: AccessExpression | BindingElement, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
                 if (propName === undefined) {
                     return type;
@@ -23432,7 +23457,7 @@ namespace ts {
                 });
             }
 
-            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
+            function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
                 if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union) {
                     const keyPropertyName = getKeyPropertyName(type as UnionType);
                     if (keyPropertyName && keyPropertyName === getAccessedPropertyName(access)) {
@@ -23447,7 +23472,7 @@ namespace ts {
                 return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
             }
 
-            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
+            function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
                 if (clauseStart < clauseEnd && type.flags & TypeFlags.Union && getKeyPropertyName(type as UnionType) === getAccessedPropertyName(access)) {
                     const clauseTypes = getSwitchClauseTypes(switchStatement).slice(clauseStart, clauseEnd);
                     const candidate = getUnionType(map(clauseTypes, t => getConstituentTypeForKeyType(type as UnionType, t) || unknownType));
@@ -23465,8 +23490,9 @@ namespace ts {
                 if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
                     type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                 }
-                if (isMatchingReferenceDiscriminant(expr, type)) {
-                    return narrowTypeByDiscriminant(type, expr as AccessExpression, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
+                const access = getDiscriminantPropertyAccess(expr, type);
+                if (access) {
+                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
                 return type;
             }
@@ -23524,11 +23550,13 @@ namespace ts {
                                 type = narrowTypeByOptionalChainContainment(type, operator, left, assumeTrue);
                             }
                         }
-                        if (isMatchingReferenceDiscriminant(left, type)) {
-                            return narrowTypeByDiscriminantProperty(type, left as AccessExpression, operator, right, assumeTrue);
+                        const leftAccess = getDiscriminantPropertyAccess(left, type);
+                        if (leftAccess) {
+                            return narrowTypeByDiscriminantProperty(type, leftAccess, operator, right, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(right, type)) {
-                            return narrowTypeByDiscriminantProperty(type, right as AccessExpression, operator, left, assumeTrue);
+                        const rightAccess = getDiscriminantPropertyAccess(right, type);
+                        if (rightAccess) {
+                            return narrowTypeByDiscriminantProperty(type, rightAccess, operator, left, assumeTrue);
                         }
                         if (isMatchingConstructorReference(left)) {
                             return narrowTypeByConstructor(type, operator, right, assumeTrue);
@@ -23553,6 +23581,17 @@ namespace ts {
                         break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
+                    // Ordinarily we won't see && and || expressions in control flow analysis because the Binder breaks those
+                    // expressions down to individual conditional control flows. However, we may encounter them when analyzing
+                    // aliased conditional expressions.
+                    case SyntaxKind.AmpersandAmpersandToken:
+                        return assumeTrue ?
+                            narrowType(narrowType(type, expr.left, /*assumeTrue*/ true), expr.right, /*assumeTrue*/ true) :
+                            getUnionType([narrowType(type, expr.left, /*assumeTrue*/ false), narrowType(type, expr.right, /*assumeTrue*/ false)]);
+                    case SyntaxKind.BarBarToken:
+                        return assumeTrue ?
+                            getUnionType([narrowType(type, expr.left, /*assumeTrue*/ true), narrowType(type, expr.right, /*assumeTrue*/ true)]) :
+                            narrowType(narrowType(type, expr.left, /*assumeTrue*/ false), expr.right, /*assumeTrue*/ false);
                 }
                 return type;
             }
@@ -23959,8 +23998,9 @@ namespace ts {
                             !(getTypeFacts(predicate.type) & TypeFacts.EQUndefined)) {
                             type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                         }
-                        if (isMatchingReferenceDiscriminant(predicateArgument, type)) {
-                            return narrowTypeByDiscriminant(type, predicateArgument as AccessExpression, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
+                        const access = getDiscriminantPropertyAccess(predicateArgument, type);
+                        if (access) {
+                            return narrowTypeByDiscriminant(type, access, t => getNarrowedType(t, predicate.type!, assumeTrue, isTypeSubtypeOf));
                         }
                     }
                 }
@@ -23977,6 +24017,21 @@ namespace ts {
                 }
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
+                        // When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
+                        // up to two levels of aliased conditional expressions that are themselves declared as const variables.
+                        if (isConstant && !isMatchingReference(reference, expr) && inlineLevel < 2) {
+                            const symbol = getResolvedSymbol(expr as Identifier);
+                            if (isConstVariable(symbol)) {
+                                const declaration = symbol.valueDeclaration;
+                                if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer) {
+                                    inlineLevel++;
+                                    const result = narrowType(type, declaration.initializer, assumeTrue);
+                                    inlineLevel--;
+                                    return result;
+                                }
+                            }
+                        }
+                        // falls through
                     case SyntaxKind.ThisKeyword:
                     case SyntaxKind.SuperKeyword:
                     case SyntaxKind.PropertyAccessExpression:
@@ -24002,8 +24057,9 @@ namespace ts {
                 if (isMatchingReference(reference, expr)) {
                     return getTypeWithFacts(type, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull);
                 }
-                if (isMatchingReferenceDiscriminant(expr, type)) {
-                    return narrowTypeByDiscriminant(type, expr as AccessExpression, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
+                const access = getDiscriminantPropertyAccess(expr, type);
+                if (access) {
+                    return narrowTypeByDiscriminant(type, access, t => getTypeWithFacts(t, assumePresent ? TypeFacts.NEUndefinedOrNull : TypeFacts.EQUndefinedOrNull));
                 }
                 return type;
             }
@@ -24081,7 +24137,7 @@ namespace ts {
         }
 
         function isConstVariable(symbol: Symbol) {
-            return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0 && getTypeOfSymbol(symbol) !== autoArrayType;
+            return symbol.flags & SymbolFlags.Variable && (getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const) !== 0;
         }
 
         /** remove undefined from the annotated type of a parameter when there is an initializer (that doesn't include undefined) */
@@ -24313,12 +24369,12 @@ namespace ts {
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
             const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
+            const isConstant = isConstVariable(localOrExportSymbol) && getTypeOfSymbol(localOrExportSymbol) !== autoArrayType || isParameter && !isParameterAssigned(localOrExportSymbol);
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
-            while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
-                flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethod(flowContainer)) &&
-                (isConstVariable(localOrExportSymbol) || isParameter && !isParameterAssigned(localOrExportSymbol))) {
+            while (isConstant && flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
+                flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethod(flowContainer))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
@@ -24333,7 +24389,7 @@ namespace ts {
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                 getOptionalType(type);
-            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
+            const flowType = getFlowTypeOfReference(node, type, initialType, isConstant, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -27547,7 +27603,7 @@ namespace ts {
                 getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
-            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
+            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType, prop && isReadonlySymbol(prop));
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
@@ -37991,7 +38047,7 @@ namespace ts {
                     error(node.name, Diagnostics.Augmentations_for_the_global_scope_should_have_declare_modifier_unless_they_appear_in_already_ambient_context);
                 }
 
-                const isAmbientExternalModule = isAmbientModule(node);
+                const isAmbientExternalModule: boolean = isAmbientModule(node);
                 const contextErrorMessage = isAmbientExternalModule
                     ? Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
                     : Diagnostics.A_namespace_declaration_is_only_allowed_in_a_namespace_or_module;
