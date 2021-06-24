@@ -149,7 +149,7 @@ namespace ts.Completions {
 
     interface ModuleSpecifierResolutioContext {
         tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
-        hasUresolvedAutoImports: () => boolean;
+        resolutionLimitExceeded: () => boolean;
     }
 
     interface ModuleSpecifierResolutionResult {
@@ -167,17 +167,17 @@ namespace ts.Completions {
         cb: (context: ModuleSpecifierResolutioContext) => TReturn,
     ): TReturn {
         const start = timestamp();
-        let hasUnresolvedAutoImports = false;
+        let resolutionLimitExceeded = false;
         let ambientCount = 0;
         let resolvedCount = 0;
         let resolvedFromCacheCount = 0;
         let cacheAttemptCount = 0;
 
-        const result = cb({ tryResolve, hasUresolvedAutoImports: () => hasUnresolvedAutoImports });
+        const result = cb({ tryResolve, resolutionLimitExceeded: () => resolutionLimitExceeded });
 
         const hitRateMessage = cacheAttemptCount ? ` (${(resolvedFromCacheCount / cacheAttemptCount * 100).toFixed(1)}% hit rate)` : "";
         host.log?.(`${logPrefix}: resolved ${resolvedCount} module specifiers, plus ${ambientCount} ambient and ${resolvedFromCacheCount} from cache${hitRateMessage}`);
-        host.log?.(`${logPrefix}: response is ${hasUnresolvedAutoImports ? "incomplete" : "complete"}`);
+        host.log?.(`${logPrefix}: response is ${resolutionLimitExceeded ? "incomplete" : "complete"}`);
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
@@ -196,7 +196,7 @@ namespace ts.Completions {
                 : undefined;
 
             if (!shouldResolveModuleSpecifier && !shouldGetModuleSpecifierFromCache || shouldGetModuleSpecifierFromCache && !result) {
-                hasUnresolvedAutoImports = true;
+                resolutionLimitExceeded = true;
             }
 
             resolvedCount += result?.computedWithoutCacheCount || 0;
@@ -314,7 +314,7 @@ namespace ts.Completions {
                         // Not an auto import or already resolved; keep as is
                         return entry;
                     }
-                    if (!stringContainsCharactersInOrder(entry.name, lowerCaseTokenText)) {
+                    if (!charactersFuzzyMatchInString(entry.name, lowerCaseTokenText)) {
                         // No longer matches typed characters; filter out
                         return undefined;
                     }
@@ -342,7 +342,7 @@ namespace ts.Completions {
                     return entry;
                 });
 
-                if (!context.hasUresolvedAutoImports()) {
+                if (!context.resolutionLimitExceeded()) {
                     previousResponse.isIncomplete = undefined;
                 }
 
@@ -1929,7 +1929,7 @@ namespace ts.Completions {
                     exportInfo.forEach(getChecker, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
-                        if (isCompletionDetailsMatch || stringContainsCharactersInOrder(symbolName, lowerCaseTokenText)) {
+                        if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
                                 return;
                             }
@@ -1955,7 +1955,7 @@ namespace ts.Completions {
                         }
                     });
 
-                    hasUnresolvedAutoImports = context.hasUresolvedAutoImports();
+                    hasUnresolvedAutoImports = context.resolutionLimitExceeded();
                 }
             );
 
@@ -3302,11 +3302,22 @@ namespace ts.Completions {
     }
 
     /**
-     * True if you could remove some characters in `a` to get `b`.
-     * E.g., true for "abcdef" and "bdf".
-     * But not true for "abcdef" and "dbf".
+     * True if the first character of `lowercaseCharacters` is the first character
+     * of some "word" in `identiferString` (where the string is split into "words"
+     * by camelCase and snake_case segments), then if the remaining characters of
+     * `lowercaseCharacters` appear, in order, in the rest of `identifierString`.
+     *
+     * True:
+     * 'state' in 'useState'
+     * 'sae' in 'useState'
+     * 'viable' in 'ENVIRONMENT_VARIABLE'
+     *
+     * False:
+     * 'staet' in 'useState'
+     * 'tate' in 'useState'
+     * 'ment' in 'ENVIRONMENT_VARIABLE'
      */
-     function stringContainsCharactersInOrder(str: string, lowercaseCharacters: string): boolean {
+     function charactersFuzzyMatchInString(identifierString: string, lowercaseCharacters: string): boolean {
         if (lowercaseCharacters.length === 0) {
             return true;
         }
@@ -3314,9 +3325,9 @@ namespace ts.Completions {
         let matchedFirstCharacter = false;
         let prevChar: number | undefined;
         let characterIndex = 0;
-        const len = str.length;
+        const len = identifierString.length;
         for (let strIndex = 0; strIndex < len; strIndex++) {
-            const strChar = str.charCodeAt(strIndex);
+            const strChar = identifierString.charCodeAt(strIndex);
             const testChar = lowercaseCharacters.charCodeAt(characterIndex);
             if (strChar === testChar || strChar === toUpperCharCode(testChar)) {
                 matchedFirstCharacter ||=
