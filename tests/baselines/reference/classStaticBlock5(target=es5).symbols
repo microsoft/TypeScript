@@ -21,7 +21,9 @@ class C extends B {
 
     static {
         this.b;
+>this.b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
 >this : Symbol(C, Decl(classStaticBlock5.ts, 3, 1))
+>b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
 
         super.b;
         super.a;

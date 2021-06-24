@@ -27,9 +27,9 @@ class C extends B {
 
     static {
         this.b;
->this.b : any
->this : this
->b : any
+>this.b : number
+>this : typeof C
+>b : number
 
         super.b;
 >super.b : any

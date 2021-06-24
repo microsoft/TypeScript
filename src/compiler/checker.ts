@@ -24543,6 +24543,9 @@ namespace ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
+                    break;
                 case SyntaxKind.ComputedPropertyName:
                     error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
                     break;
@@ -24601,7 +24604,8 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                const type = hasSyntacticModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
+                const isStatic = hasSyntacticModifier(container, ModifierFlags.Static) || isClassStaticBlockDeclaration(container);
+                const type = isStatic ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
                 return getFlowTypeOfReference(node, type);
             }
 

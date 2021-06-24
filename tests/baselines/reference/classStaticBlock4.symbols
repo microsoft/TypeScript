@@ -7,7 +7,9 @@ class C {
 
     static {
         this.s1;
+>this.s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
 >this : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
 
         C.s1;
 >C.s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
@@ -15,7 +17,9 @@ class C {
 >s1 : Symbol(C.s1, Decl(classStaticBlock4.ts, 0, 9))
 
         this.s2;
+>this.s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
 >this : Symbol(C, Decl(classStaticBlock4.ts, 0, 0))
+>s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
 
         C.s2;
 >C.s2 : Symbol(C.s2, Decl(classStaticBlock4.ts, 9, 5))
