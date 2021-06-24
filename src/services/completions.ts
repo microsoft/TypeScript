@@ -1297,10 +1297,9 @@ namespace ts.Completions {
             getTypeScriptMemberSymbols();
         }
         else if (isRightOfOpenTag) {
-            const tagSymbols = typeChecker.getJsxIntrinsicTagNamesAt(location);
-            Debug.assertEachIsDefined(tagSymbols, "getJsxIntrinsicTagNames() should all be defined");
+            symbols = typeChecker.getJsxIntrinsicTagNamesAt(location);
+            Debug.assertEachIsDefined(symbols, "getJsxIntrinsicTagNames() should all be defined");
             tryGetGlobalSymbols();
-            symbols = tagSymbols.concat(symbols);
             completionKind = CompletionKind.Global;
             keywordFilters = KeywordCompletionFilters.None;
         }
@@ -1586,7 +1585,7 @@ namespace ts.Completions {
             const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
             const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.Completions);
-            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
+            symbols = concatenate(symbols, filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties));
             setSortTextToOptionalMember();
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
@@ -1644,7 +1643,7 @@ namespace ts.Completions {
 
             const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
-            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            symbols = concatenate(symbols, typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
             Debug.assertEachIsDefined(symbols, "getSymbolsInScope() should all be defined");
             for (const symbol of symbols) {
                 if (!typeChecker.isArgumentsSymbol(symbol) &&
@@ -1981,7 +1980,7 @@ namespace ts.Completions {
             const existingMemberEscapedNames: Set<__String> = new Set();
             existingMembers.forEach(s => existingMemberEscapedNames.add(s.escapedName));
 
-            symbols = filter(members, s => !existingMemberEscapedNames.has(s.escapedName));
+            symbols = concatenate(symbols, filter(members, s => !existingMemberEscapedNames.has(s.escapedName)));
 
             completionKind = CompletionKind.ObjectPropertyDeclaration;
             isNewIdentifierLocation = true;
@@ -2070,7 +2069,7 @@ namespace ts.Completions {
 
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
-                symbols = filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers));
+                symbols = concatenate(symbols, filterObjectMembersList(typeMembers, Debug.checkDefined(existingMembers)));
             }
             setSortTextToOptionalMember();
 
@@ -2106,7 +2105,7 @@ namespace ts.Completions {
             isNewIdentifierLocation = false;
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
             const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
-            symbols = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
+            symbols = concatenate(symbols, exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName)));
             return GlobalsSearch.Success;
         }
 
@@ -2185,7 +2184,7 @@ namespace ts.Completions {
                         type?.symbol && typeChecker.getPropertiesOfType(typeChecker.getTypeOfSymbolAtLocation(type.symbol, decl)) :
                         type && typeChecker.getPropertiesOfType(type);
                 });
-                symbols = filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags);
+                symbols = concatenate(symbols, filterClassMembersList(baseSymbols, decl.members, classElementModifierFlags));
             }
 
             return GlobalsSearch.Success;
