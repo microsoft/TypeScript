@@ -127,9 +127,28 @@ namespace ts.moduleSpecifiers {
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
+    ): readonly string[] {
+        return getModuleSpecifiersWithCacheInfo(
+            moduleSymbol,
+            checker,
+            compilerOptions,
+            importingSourceFile,
+            host,
+            userPreferences,
+        ).moduleSpecifiers;
+    }
+
+    export function getModuleSpecifiersWithCacheInfo(
+        moduleSymbol: Symbol,
+        checker: TypeChecker,
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
     ): { moduleSpecifiers: readonly string[], computedWithoutCache: boolean } {
+        let computedWithoutCache = false;
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
-        if (ambient) return { moduleSpecifiers: [ambient], computedWithoutCache: false };
+        if (ambient) return { moduleSpecifiers: [ambient], computedWithoutCache };
 
         // eslint-disable-next-line prefer-const
         let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
@@ -138,10 +157,23 @@ namespace ts.moduleSpecifiers {
             host,
             userPreferences,
         );
-        if (specifiers) return { moduleSpecifiers: specifiers, computedWithoutCache: false };
-        if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache: false };
+        if (specifiers) return { moduleSpecifiers: specifiers, computedWithoutCache };
+        if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache };
 
+        computedWithoutCache = true;
         modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const result = computeModuleSpecifiers(modulePaths, compilerOptions, importingSourceFile, host, userPreferences);
+        cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, result);
+        return { moduleSpecifiers: result, computedWithoutCache };
+    }
+
+    function computeModuleSpecifiers(
+        modulePaths: readonly ModulePath[],
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): readonly string[] {
         const info = getInfo(importingSourceFile.path, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
@@ -157,8 +189,7 @@ namespace ts.moduleSpecifiers {
         ));
         if (existingSpecifier) {
             const moduleSpecifiers = [existingSpecifier];
-            cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
-            return { moduleSpecifiers, computedWithoutCache: true };
+            return moduleSpecifiers;
         }
 
         const importedFileIsInNodeModules = some(modulePaths, p => p.isInNodeModules);
@@ -177,8 +208,7 @@ namespace ts.moduleSpecifiers {
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-                cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, nodeModulesSpecifiers!);
-                return { moduleSpecifiers: nodeModulesSpecifiers!, computedWithoutCache: true };
+                return nodeModulesSpecifiers!;
             }
 
             if (!specifier && !modulePath.isRedirect) {
@@ -201,11 +231,9 @@ namespace ts.moduleSpecifiers {
             }
         }
 
-        const moduleSpecifiers = pathsSpecifiers?.length ? pathsSpecifiers :
+        return pathsSpecifiers?.length ? pathsSpecifiers :
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
             Debug.checkDefined(relativeSpecifiers);
-        cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
-        return { moduleSpecifiers, computedWithoutCache: true };
     }
 
     interface Info {
@@ -440,7 +468,7 @@ namespace ts.moduleSpecifiers {
         return sortedPaths;
     }
 
-    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
+    export function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
         const decl = moduleSymbol.declarations?.find(
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
