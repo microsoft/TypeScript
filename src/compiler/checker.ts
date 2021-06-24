@@ -28604,8 +28604,10 @@ namespace ts {
          * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
-            if (node.kind === SyntaxKind.CallExpression) {
-                const callee = skipOuterExpressions(node.expression);
+            const expression = node.kind === SyntaxKind.CallExpression ? node.expression :
+                node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag : undefined;
+            if (expression) {
+                const callee = skipOuterExpressions(expression);
                 if (isAccessExpression(callee)) {
                     return callee.expression;
                 }
