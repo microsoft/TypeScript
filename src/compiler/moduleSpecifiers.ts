@@ -108,7 +108,7 @@ namespace ts.moduleSpecifiers {
         importingSourceFile: SourceFile,
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
-    ): [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
+    ): readonly [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
         const moduleSourceFile = getSourceFileOfModule(moduleSymbol);
         if (!moduleSourceFile) {
             return emptyArray as [];
@@ -468,7 +468,7 @@ namespace ts.moduleSpecifiers {
         return sortedPaths;
     }
 
-    export function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
+    function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeChecker): string | undefined {
         const decl = moduleSymbol.declarations?.find(
             d => isNonGlobalAmbientModule(d) && (!isExternalModuleAugmentation(d) || !isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(d.name)))
         ) as (ModuleDeclaration & { name: StringLiteral }) | undefined;
