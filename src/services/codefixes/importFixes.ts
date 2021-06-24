@@ -388,30 +388,12 @@ namespace ts.codefix {
             }
             return wrapped;
 
-            /**
-             * Transient symbols have new identities with every new checker. If we stored one of those in the cache
-             * and are now accessing it with a new checker, we want to access its new identity. To do that, we ask
-             * the new checker for the merged symbol of one of the transient symbol's declarations. This assumes
-             * (or rather, asserts) that transient symbols seen here are all transient because they are merged symbols.
-             * Other kinds of transient symbols may be unrecoverable, but hopefully (and apparently) they don't show up
-             * here. We also mutate `info` with those new symbols so the old ones can be released from memory.
-             *
-             * TODO: probably this cache should just refuse to store transient symbols entirely, since they may retain
-             * the whole checker that created them through their `type` property and other `SymbolLinks` if populated.
-             * But this is the way it's been working for a while now without complaints of memory leaks, so I'm not
-             * chainging it right now. But if this comment survives more than a couple months, someone should bug me
-             * about it.
-             */
             function replaceTransientSymbols(info: SymbolExportInfo, checker: TypeChecker) {
                 if (info.symbol.flags & SymbolFlags.Transient) {
-                    const updated = checker.getMergedSymbol(info.symbol.declarations?.[0]?.symbol || info.symbol);
-                    Debug.assert(updated !== info.symbol);
-                    info.symbol = updated;
+                    info.symbol = checker.getMergedSymbol(info.symbol.declarations?.[0]?.symbol || info.symbol);
                 }
                 if (info.moduleSymbol.flags & SymbolFlags.Transient) {
-                    const updated = checker.getMergedSymbol(info.moduleSymbol.declarations?.[0]?.symbol || info.moduleSymbol);
-                    Debug.assert(updated !== info.moduleSymbol);
-                    info.moduleSymbol = updated;
+                    info.moduleSymbol = checker.getMergedSymbol(info.moduleSymbol.declarations?.[0]?.symbol || info.moduleSymbol);
                 }
                 return info;
             }
