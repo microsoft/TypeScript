@@ -27,70 +27,38 @@ class C {
 >await : any
   }
   static {
-    await; // illegal
->await : any
-> : any
-  }
-  static {
-    await(1); // illegal
->await(1) : 1
->(1) : 1
->1 : 1
-  }
-  static {
-    function await() {}; // illegal
+    function await() { }; // illegal
 >await : () => void
   }
   static {
-    class await {}; // illegal
+    class await { }; // illegal
 >await : await
   }
-  static {
-    ({ await }); // illegal short-hand property reference
->({ await }) : { await: any; }
->{ await } : { await: any; }
->await : any
-> : any
-  }
-  static {
-    ({ [await]: 1 }); // illegal
->({ [await]: 1 }) : { [x: number]: number; }
->{ [await]: 1 } : { [x: number]: number; }
->[await] : number
->await : any
-> : any
->1 : 1
-  }
+
   static {
     class D {
 >D : D
 
-        await = 1; // legal
+      await = 1; // legal
 >await : number
 >1 : 1
 
-        x = await; // legal (initializers have an implicit function boundary)
+      x = await; // legal (initializers have an implicit function boundary)
 >x : "any"
 >await : "any"
 
-        [await] = 1; // illegal (computed property names are evaluated outside of a class body
->[await] : number
->await : any
-> : any
->1 : 1
-
-      };
+    };
   }
   static {
-    (function await() {}); // legal, 'await' in function expression name not bound inside of static block
->(function await() {}) : () => void
->function await() {} : () => void
+    (function await() { }); // legal, 'await' in function expression name not bound inside of static block
+>(function await() { }) : () => void
+>function await() { } : () => void
 >await : () => void
   }
   static {
-    (class await {}); // legal, 'await' in class expression name not bound inside of static block
->(class await {}) : typeof await
->class await {} : typeof await
+    (class await { }); // legal, 'await' in class expression name not bound inside of static block
+>(class await { }) : typeof await
+>class await { } : typeof await
 >await : typeof await
   }
   static {
@@ -105,28 +73,19 @@ class C {
 >() => await : () => "any"
 >await : "any"
   }
-  static {
-    await: // illegal, 'await' cannot be used as a label
->await : any
-> : any
 
-        break await; // illegal, 'await' cannot be used as a label
-> : any
->await : any
-> : any
-  }
   static {
     class E {
 >E : E
 
-      constructor () { await; }
+      constructor() { await; }
 >await : "any"
 
-      method () { await; }
+      method() { await; }
 >method : () => void
 >await : "any"
 
-      get accessor () {
+      get accessor() {
 >accessor : any
 
         await;
@@ -135,7 +94,7 @@ class C {
         return 1;
 >1 : 1
       }
-      set accessor (v: any) {
+      set accessor(v: any) {
 >accessor : any
 >v : any
 
@@ -157,11 +116,11 @@ class C {
     class S {
 >S : S
 
-      static method () { await; }
+      static method() { await; }
 >method : () => void
 >await : "any"
 
-      static get accessor () {
+      static get accessor() {
 >accessor : any
 
         await;
@@ -170,7 +129,7 @@ class C {
         return 1;
 >1 : 1
       }
-      static set accessor (v: any) {
+      static set accessor(v: any) {
 >accessor : any
 >v : any
 
@@ -187,21 +146,5 @@ class C {
 >function () { await; } : () => void
 >await : "any"
     }
-  }
-  static {
-    function f (await) {}
->f : (await: any) => void
->await : any
-
-    const ff = (await) => {}
->ff : any
->(await) : any
->await : any
-> : any
-
-    const fff = await => {}
->fff : any
->await : any
-> : any
   }
 }

@@ -1,84 +1,59 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,5): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,10): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,5): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(28,14): error TS1005: ':' expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,9): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(31,14): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,10): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(37,15): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,5): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(53,10): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS1003: Identifier expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,15): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(54,20): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,17): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,22): error TS1109: Expression expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(87,24): error TS1005: ';' expected.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,17): error TS18037: Await expression cannot be used inside a class static block.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): error TS1109: Expression expected.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(7,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(29,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(32,12): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (18 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (7 errors) ====
     let await: "any";
     class C {
       static {
         let await: any; // illegal, cannot declare a new binding for await
+            ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
       }
       static {
         let { await } = {} as any; // illegal, cannot declare a new binding for await
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
       }
       static {
         let { await: other } = {} as any; // legal
       }
       static {
         let await; // illegal, cannot declare a new binding for await
-      }
-      static {
-        await; // illegal
-        ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-             ~
-!!! error TS1109: Expression expected.
-      }
-      static {
-        await(1); // illegal
-        ~~~~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-      }
-      static {
-        function await() {}; // illegal
-      }
-      static {
-        class await {}; // illegal
-      }
-      static {
-        ({ await }); // illegal short-hand property reference
-                 ~
-!!! error TS1005: ':' expected.
-      }
-      static {
-        ({ [await]: 1 }); // illegal
             ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-                 ~
-!!! error TS1109: Expression expected.
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
       }
+      static {
+        function await() { }; // illegal
+                 ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        class await { }; // illegal
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+    
       static {
         class D {
-            await = 1; // legal
-            x = await; // legal (initializers have an implicit function boundary)
-            [await] = 1; // illegal (computed property names are evaluated outside of a class body
-             ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-                  ~
-!!! error TS1109: Expression expected.
-          };
+          await = 1; // legal
+          x = await; // legal (initializers have an implicit function boundary)
+        };
       }
       static {
-        (function await() {}); // legal, 'await' in function expression name not bound inside of static block
+        (function await() { }); // legal, 'await' in function expression name not bound inside of static block
+                  ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
       }
       static {
-        (class await {}); // legal, 'await' in class expression name not bound inside of static block
+        (class await { }); // legal, 'await' in class expression name not bound inside of static block
+               ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
       }
       static {
         (function () { return await; }); // legal, 'await' is inside of a new function boundary
@@ -86,29 +61,16 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): e
       static {
         (() => await); // legal, 'await' is inside of a new function boundary
       }
-      static {
-        await: // illegal, 'await' cannot be used as a label
-        ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-             ~
-!!! error TS1109: Expression expected.
-            break await; // illegal, 'await' cannot be used as a label
-                  ~~~~~
-!!! error TS1003: Identifier expected.
-                  ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-                       ~
-!!! error TS1109: Expression expected.
-      }
+    
       static {
         class E {
-          constructor () { await; }
-          method () { await; }
-          get accessor () {
+          constructor() { await; }
+          method() { await; }
+          get accessor() {
             await;
             return 1;
           }
-          set accessor (v: any) {
+          set accessor(v: any) {
             await;
           }
           propLambda = () => { await; }
@@ -117,31 +79,16 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(88,23): e
       }
       static {
         class S {
-          static method () { await; }
-          static get accessor () {
+          static method() { await; }
+          static get accessor() {
             await;
             return 1;
           }
-          static set accessor (v: any) {
+          static set accessor(v: any) {
             await;
           }
           static propLambda = () => { await; }
           static propFunc = function () { await; }
         }
-      }
-      static {
-        function f (await) {}
-        const ff = (await) => {}
-                    ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-                         ~
-!!! error TS1109: Expression expected.
-                           ~~
-!!! error TS1005: ';' expected.
-        const fff = await => {}
-                    ~~~~~
-!!! error TS18037: Await expression cannot be used inside a class static block.
-                          ~~
-!!! error TS1109: Expression expected.
       }
     }

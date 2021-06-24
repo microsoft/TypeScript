@@ -14,35 +14,23 @@ class C {
     let await; // illegal, cannot declare a new binding for await
   }
   static {
-    await; // illegal
+    function await() { }; // illegal
   }
   static {
-    await(1); // illegal
+    class await { }; // illegal
   }
-  static {
-    function await() {}; // illegal
-  }
-  static {
-    class await {}; // illegal
-  }
-  static {
-    ({ await }); // illegal short-hand property reference
-  }
-  static {
-    ({ [await]: 1 }); // illegal
-  }
+
   static {
     class D {
-        await = 1; // legal
-        x = await; // legal (initializers have an implicit function boundary)
-        [await] = 1; // illegal (computed property names are evaluated outside of a class body
-      };
+      await = 1; // legal
+      x = await; // legal (initializers have an implicit function boundary)
+    };
   }
   static {
-    (function await() {}); // legal, 'await' in function expression name not bound inside of static block
+    (function await() { }); // legal, 'await' in function expression name not bound inside of static block
   }
   static {
-    (class await {}); // legal, 'await' in class expression name not bound inside of static block
+    (class await { }); // legal, 'await' in class expression name not bound inside of static block
   }
   static {
     (function () { return await; }); // legal, 'await' is inside of a new function boundary
@@ -50,19 +38,16 @@ class C {
   static {
     (() => await); // legal, 'await' is inside of a new function boundary
   }
-  static {
-    await: // illegal, 'await' cannot be used as a label
-        break await; // illegal, 'await' cannot be used as a label
-  }
+
   static {
     class E {
-      constructor () { await; }
-      method () { await; }
-      get accessor () {
+      constructor() { await; }
+      method() { await; }
+      get accessor() {
         await;
         return 1;
       }
-      set accessor (v: any) {
+      set accessor(v: any) {
         await;
       }
       propLambda = () => { await; }
@@ -71,22 +56,17 @@ class C {
   }
   static {
     class S {
-      static method () { await; }
-      static get accessor () {
+      static method() { await; }
+      static get accessor() {
         await;
         return 1;
       }
-      static set accessor (v: any) {
+      static set accessor(v: any) {
         await;
       }
       static propLambda = () => { await; }
       static propFunc = function () { await; }
     }
-  }
-  static {
-    function f (await) {}
-    const ff = (await) => {}
-    const fff = await => {}
   }
 }
 
@@ -106,12 +86,6 @@ class C {
         let await; // illegal, cannot declare a new binding for await
     }
     static {
-        await ; // illegal
-    }
-    static {
-        await (1); // illegal
-    }
-    static {
         function await() { }
         ; // illegal
     }
@@ -121,16 +95,9 @@ class C {
         ; // illegal
     }
     static {
-        ({ await:  }); // illegal short-hand property reference
-    }
-    static {
-        ({ [await ]: 1 }); // illegal
-    }
-    static {
         class D {
             await = 1; // legal
             x = await; // legal (initializers have an implicit function boundary)
-            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
         }
         ;
     }
@@ -146,11 +113,6 @@ class C {
     }
     static {
         (() => await); // legal, 'await' is inside of a new function boundary
-    }
-    static {
-        await ;
-        break ;
-        await ; // illegal, 'await' cannot be used as a label
     }
     static {
         class E {
@@ -180,12 +142,5 @@ class C {
             static propLambda = () => { await; };
             static propFunc = function () { await; };
         }
-    }
-    static {
-        function f(await) { }
-        const ff = (await );
-        { }
-        const fff = await ;
-        { }
     }
 }

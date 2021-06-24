@@ -1,13 +1,30 @@
 //// [classStaticBlock26.ts]
 class C {
     static {
-        let await = 1;
+        await; // illegal
     }
     static {
-        var await = 1;
+        await (1); // illegal
     }
     static {
-        const await = 1;
+        ({ [await]: 1 }); // illegal
+    }
+    static {
+        class D {
+            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+        };
+    }
+    static {
+        ({ await }); // illegal short-hand property reference
+    }
+    static {
+        await: // illegal, 'await' cannot be used as a label
+        break await; // illegal, 'await' cannot be used as a label
+    }
+    static {
+        function f(await) { }
+        const ff = (await) => { }
+        const fff = await => { }
     }
 }
 
@@ -15,12 +32,33 @@ class C {
 //// [classStaticBlock26.js]
 class C {
     static {
-        let await = 1;
+        await ; // illegal
     }
     static {
-        var await = 1;
+        await (1); // illegal
     }
     static {
-        const await = 1;
+        ({ [await ]: 1 }); // illegal
+    }
+    static {
+        class D {
+            [await ] = 1; // illegal (computed property names are evaluated outside of a class body
+        }
+        ;
+    }
+    static {
+        ({ await:  }); // illegal short-hand property reference
+    }
+    static {
+        await ;
+        break ;
+        await ; // illegal, 'await' cannot be used as a label
+    }
+    static {
+        function f(await) { }
+        const ff = (await );
+        { }
+        const fff = await ;
+        { }
     }
 }

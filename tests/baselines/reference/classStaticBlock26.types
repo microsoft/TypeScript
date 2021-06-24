@@ -3,19 +3,69 @@ class C {
 >C : C
 
     static {
-        let await = 1;
->await : number
+        await; // illegal
+>await : any
+> : any
+    }
+    static {
+        await (1); // illegal
+>await (1) : 1
+>(1) : 1
 >1 : 1
     }
     static {
-        var await = 1;
->await : number
+        ({ [await]: 1 }); // illegal
+>({ [await]: 1 }) : { [x: number]: number; }
+>{ [await]: 1 } : { [x: number]: number; }
+>[await] : number
+>await : any
+> : any
 >1 : 1
     }
     static {
-        const await = 1;
->await : 1
+        class D {
+>D : D
+
+            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+>[await] : number
+>await : any
+> : any
 >1 : 1
+
+        };
+    }
+    static {
+        ({ await }); // illegal short-hand property reference
+>({ await }) : { await: any; }
+>{ await } : { await: any; }
+>await : any
+> : any
+    }
+    static {
+        await: // illegal, 'await' cannot be used as a label
+>await : any
+> : any
+
+        break await; // illegal, 'await' cannot be used as a label
+> : any
+>await : any
+> : any
+    }
+    static {
+        function f(await) { }
+>f : (await: any) => void
+>await : any
+
+        const ff = (await) => { }
+>ff : any
+>(await) : any
+>await : any
+> : any
+
+        const fff = await => { }
+>fff : any
+>await : any
+> : any
     }
 }
 
