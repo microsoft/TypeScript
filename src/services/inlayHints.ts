@@ -154,7 +154,8 @@ namespace ts.InlayHints {
             }
 
             for (let i = 0; i < args.length; ++i) {
-                const arg = args[i];
+                const originalArg = args[i];
+                const arg = skipParentheses(originalArg);
                 if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableExpression(arg)) {
                     continue;
                 }
@@ -172,7 +173,7 @@ namespace ts.InlayHints {
                         continue;
                     }
 
-                    addParameterHints(name, args[i].getStart(), isFirstVariadicArgument);
+                    addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
                 }
             }
         }

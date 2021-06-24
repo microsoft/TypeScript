@@ -13,8 +13,8 @@
 //// foo(/*i*/[1]);
 
 //// foo(foo);
-//// foo((1));
-//// foo(foo(/*j*/1));
+//// foo(/*j*/(1));
+//// foo(foo(/*k*/1));
 
 const markers = test.markers();
 
