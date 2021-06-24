@@ -23,6 +23,13 @@ namespace ts.projectSystem {
         path: "/node_modules/mobx/index.d.ts",
         content: "export declare function observable(): unknown;"
     };
+    const exportEqualsMappedType: File = {
+        path: "/lib/foo/constants.d.ts",
+        content: `
+            type Signals = "SIGINT" | "SIGABRT";
+            declare const exp: {} & { [K in Signals]: K };
+            export = exp;`,
+    };
 
     describe("unittests:: tsserver:: exportMapCache", () => {
         it("caches auto-imports in the same file", () => {
@@ -60,10 +67,20 @@ namespace ts.projectSystem {
             project.getPackageJsonAutoImportProvider();
             assert.isUndefined(exportMapCache.get(bTs.path as Path, checker));
         });
+
+        it("does not contain transient symbols", () => {
+            const { exportMapCache, checker } = setup();
+            exportMapCache.get(bTs.path as Path, checker)?.forEach((info, key) => {
+                if (key.startsWith("SIGINT")) {
+                    assert(!hasProperty(info[0].symbol, "type"));
+                    assert(!hasProperty(info[0].symbol, "nameType"));
+                }
+            });
+        });
     });
 
     function setup() {
-        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxDts]);
+        const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxDts, exportEqualsMappedType]);
         const session = createSession(host);
         openFilesForSession([aTs, bTs], session);
         const projectService = session.getProjectService();
