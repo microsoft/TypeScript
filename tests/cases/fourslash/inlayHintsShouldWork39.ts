@@ -4,7 +4,6 @@
 ////     return 1
 //// }
 
-const markers = test.markers();
 verify.getInlayHints([], undefined, {
     includeInlayFunctionLikeReturnTypeHints: true,
 });

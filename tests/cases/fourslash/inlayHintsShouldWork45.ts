@@ -10,7 +10,6 @@
 //// const a = require('./a');
 
 goTo.file('/b.js')
-const markers = test.markers();
 verify.getInlayHints([], undefined, {
     includeInlayVariableTypeHints: true,
 });

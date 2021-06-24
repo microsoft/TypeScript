@@ -3,7 +3,6 @@
 //// declare const unknownCall: any;
 //// unknownCall();
 
-const markers = test.markers();
 verify.getInlayHints([], undefined, {
     includeInlayParameterNameHints: "literals"
 });
