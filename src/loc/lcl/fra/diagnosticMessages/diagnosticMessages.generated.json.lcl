@@ -15528,6 +15528,9 @@
       <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_2815" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['arguments' cannot be referenced in property initializers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les « arguments » ne peuvent pas être référencés dans les initialiseurs de propriété.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
