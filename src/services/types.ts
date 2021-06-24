@@ -1589,6 +1589,6 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: UserPreferences;
+        preferences: InlayHintsOptions;
     }
 }

@@ -2551,12 +2551,12 @@ namespace ts.server.protocol {
     }
 
     export const enum InlayHintKind {
-        Other = 0,
-        Type = 1,
-        Parameter = 2,
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
     }
 
-    export interface ProvideInlayHintsRequestArgs extends FileRequestArgs {
+    export interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
          */
@@ -2567,9 +2567,9 @@ namespace ts.server.protocol {
         length: number;
     }
 
-    export interface ProvideInlayHintsRequest extends Request {
+    export interface InlayHintsRequest extends Request {
         command: CommandTypes.ProvideInlayHints;
-        arguments: ProvideInlayHintsRequestArgs;
+        arguments: InlayHintsRequestArgs;
     }
 
     export interface InlayHintItem {
@@ -2580,7 +2580,7 @@ namespace ts.server.protocol {
         whitespaceAfter?: boolean;
     }
 
-    export interface ProvideInlayHintsResponse extends Response {
+    export interface InlayHintsResponse extends Response {
         body?: InlayHintItem[];
     }
 

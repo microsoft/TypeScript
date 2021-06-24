@@ -646,10 +646,10 @@ namespace ts.server {
 
         provideInlayHints(file: string, span: TextSpan): InlayHint[] {
             const { start, length } = span;
-            const args: protocol.ProvideInlayHintsRequestArgs = { file, start, length };
+            const args: protocol.InlayHintsRequestArgs = { file, start, length };
 
-            const request = this.processRequest<protocol.ProvideInlayHintsRequest>(CommandNames.ProvideInlayHints, args);
-            const response = this.processResponse<protocol.ProvideInlayHintsResponse>(request);
+            const request = this.processRequest<protocol.InlayHintsRequest>(CommandNames.ProvideInlayHints, args);
+            const response = this.processResponse<protocol.InlayHintsResponse>(request);
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 ...item,

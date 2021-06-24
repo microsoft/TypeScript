@@ -1449,7 +1449,7 @@ namespace ts.server {
             });
         }
 
-        private provideInlayHints(args: protocol.ProvideInlayHintsRequestArgs) {
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
@@ -2973,7 +2973,7 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
-            [CommandNames.ProvideInlayHints]: (request: protocol.ProvideInlayHintsRequest) => {
+            [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
                 return this.requiredResponse(this.provideInlayHints(request.arguments));
             }
         }));

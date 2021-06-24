@@ -3957,13 +3957,6 @@ declare namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-        readonly includeInlayFunctionParameterTypeHints?: boolean;
-        readonly includeInlayVariableTypeHints?: boolean;
-        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     export interface PseudoBigInt {
@@ -6541,7 +6534,7 @@ declare namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: UserPreferences;
+        preferences: InlayHintsOptions;
     }
 }
 declare namespace ts {
@@ -8708,11 +8701,11 @@ declare namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
     enum InlayHintKind {
-        Other = 0,
-        Type = 1,
-        Parameter = 2
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
     }
-    interface ProvideInlayHintsRequestArgs extends FileRequestArgs {
+    interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
          */
@@ -8722,9 +8715,9 @@ declare namespace ts.server.protocol {
          */
         length: number;
     }
-    interface ProvideInlayHintsRequest extends Request {
+    interface InlayHintsRequest extends Request {
         command: CommandTypes.ProvideInlayHints;
-        arguments: ProvideInlayHintsRequestArgs;
+        arguments: InlayHintsRequestArgs;
     }
     interface InlayHintItem {
         text: string;
@@ -8733,7 +8726,7 @@ declare namespace ts.server.protocol {
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
-    interface ProvideInlayHintsResponse extends Response {
+    interface InlayHintsResponse extends Response {
         body?: InlayHintItem[];
     }
     /**
