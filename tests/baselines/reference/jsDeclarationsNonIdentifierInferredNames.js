@@ -20,3 +20,21 @@ export function ExampleFunctionalComponent({ "data-testid": dataTestId, [dynProp
 }): JSX.Element;
 declare const dynPropName: "data-dyn";
 export {};
+
+
+//// [DtsFileErrors]
+
+
+out/jsDeclarationsNonIdentifierInferredNames.d.ts(4,5): error TS2503: Cannot find namespace 'JSX'.
+
+
+==== ./out/jsDeclarationsNonIdentifierInferredNames.d.ts (1 errors) ====
+    export function ExampleFunctionalComponent({ "data-testid": dataTestId, [dynPropName]: dynProp }: {
+        "data-testid": any;
+        "data-dyn": any;
+    }): JSX.Element;
+        ~~~
+!!! error TS2503: Cannot find namespace 'JSX'.
+    declare const dynPropName: "data-dyn";
+    export {};
+    
