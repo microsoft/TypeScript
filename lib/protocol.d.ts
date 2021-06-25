@@ -72,7 +72,8 @@ declare namespace ts.server.protocol {
         UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
-        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideInlayHints = "provideInlayHints"
     }
     /**
      * A TypeScript Server message
@@ -1589,6 +1590,14 @@ declare namespace ts.server.protocol {
         arguments: FormatOnKeyRequestArgs;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+    const enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3
+    }
     /**
      * Arguments for completions messages.
      */
@@ -1602,6 +1611,7 @@ declare namespace ts.server.protocol {
          * Should be `undefined` if a user manually requested completion.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -1943,6 +1953,35 @@ declare namespace ts.server.protocol {
      */
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
+    }
+    interface InlayHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+    interface InlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: InlayHintsRequestArgs;
+    }
+    interface InlayHintItem {
+        text: string;
+        position: Location;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+    interface InlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
     /**
      * Synchronous request for semantic diagnostics of one file.
@@ -2602,6 +2641,7 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
@@ -2832,7 +2872,10 @@ declare namespace ts.server.protocol {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
-        /** class X { constructor() { } } */
+        /**
+         * class X { constructor() { } }
+         * class X { static { } }
+         */
         constructorImplementationElement = "constructor",
         /** interface Y { ():number; } */
         callSignatureElement = "call",
