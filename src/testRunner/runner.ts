@@ -9,11 +9,12 @@ namespace Harness {
             const seen = new Map<string, string>();
             const dupes: [string, string][] = [];
             for (const runner of runners) {
-                if (runner instanceof CompilerBaselineRunner) {
+                if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
                     for (const sf of runner.enumerateTestFiles()) {
                         const full = typeof sf === "string" ? sf : sf.file;
                         const base = vpath.basename(full).toLowerCase();
-                        if (seen.has(base)) {
+                        // allow existing dupes in fourslash/shims and fourslash/server
+                        if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
                             dupes.push([seen.get(base)!, full]);
                         }
                         else {
