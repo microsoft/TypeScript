@@ -1,9 +1,12 @@
-tests/cases/compiler/defaultKeywordWithoutExport2.ts(1,1): error TS1029: 'export' modifier must precede 'default' modifier.
+tests/cases/compiler/defaultKeywordWithoutExport2.ts(1,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/defaultKeywordWithoutExport2.ts(1,18): error TS1003: Identifier expected.
 
 
-==== tests/cases/compiler/defaultKeywordWithoutExport2.ts (1 errors) ====
+==== tests/cases/compiler/defaultKeywordWithoutExport2.ts (2 errors) ====
     default function () {
     ~~~~~~~
-!!! error TS1029: 'export' modifier must precede 'default' modifier.
+!!! error TS1128: Declaration or statement expected.
+                     ~
+!!! error TS1003: Identifier expected.
     
     }

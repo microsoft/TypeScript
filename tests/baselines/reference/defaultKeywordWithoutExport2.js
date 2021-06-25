@@ -4,5 +4,5 @@ default function () {
 }
 
 //// [defaultKeywordWithoutExport2.js]
-default function () {
+function () {
 }
