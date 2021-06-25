@@ -13,7 +13,7 @@
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
 >import.meta.url : string
 >import.meta : ImportMeta
@@ -54,7 +54,7 @@
 >src : string
 >URL.createObjectURL(blob) : string
 >URL.createObjectURL : (object: any) => string
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
 >createObjectURL : (object: any) => string
 >blob : Blob
 
@@ -71,11 +71,11 @@
 
   document.body.appendChild(image);
 >document.body.appendChild(image) : HTMLImageElement
->document.body.appendChild : <T extends Node>(newChild: T) => T
+>document.body.appendChild : <T extends Node>(node: T) => T
 >document.body : HTMLElement
 >document : Document
 >body : HTMLElement
->appendChild : <T extends Node>(newChild: T) => T
+>appendChild : <T extends Node>(node: T) => T
 >image : HTMLImageElement
 
 })();
