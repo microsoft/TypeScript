@@ -104,7 +104,7 @@ namespace ts.InlayHints {
             result.push({
                 text: `= ${truncation(text, maxHintsLength)}`,
                 position,
-                kind: InlayHintKind.Other,
+                kind: InlayHintKind.Enum,
                 whitespaceBefore: true,
             });
         }

@@ -706,9 +706,9 @@ namespace ts {
     }
 
     export const enum InlayHintKind {
-        Other = 0,
-        Type = 1,
-        Parameter = 2,
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
     }
 
     export interface InlayHint {

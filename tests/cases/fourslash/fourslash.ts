@@ -67,9 +67,9 @@ declare module ts {
     }
 
     const enum InlayHintKind {
-        Other = 0,
-        Type = 1,
-        Parameter = 2,
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
     }
 
     enum SemicolonPreference {
