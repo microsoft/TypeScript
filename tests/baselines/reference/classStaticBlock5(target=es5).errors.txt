@@ -1,10 +1,9 @@
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(8,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(11,9): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(12,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(13,9): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(12,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(13,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts (4 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts (3 errors) ====
     class B {
         static a = 1;
         static b = 2;
@@ -18,14 +17,12 @@ tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(13,9): err
     
         static {
             this.b;
-            ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
             super.b;
-            ~~~~~
-!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+                  ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
             super.a;
-            ~~~~~
-!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+                  ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
         }
     }
     

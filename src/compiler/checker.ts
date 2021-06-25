@@ -1579,21 +1579,34 @@ namespace ts {
                     if (isFunctionLike(current)) {
                         return true;
                     }
+                    if (isClassStaticBlockDeclaration(current)) {
+                        return declaration.pos < usage.pos;
+                    }
 
-                    const initializerOfProperty = current.parent &&
-                        current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                        (current.parent as PropertyDeclaration).initializer === current;
-
-                    if (initializerOfProperty) {
-                        if (hasSyntacticModifier(current.parent, ModifierFlags.Static)) {
-                            if (declaration.kind === SyntaxKind.MethodDeclaration) {
-                                return true;
+                    const propertyDeclaration = tryCast(current.parent, isPropertyDeclaration);
+                    if (propertyDeclaration) {
+                        const initializerOfProperty = propertyDeclaration.initializer === current;
+                        if (initializerOfProperty) {
+                            if (isStatic(current.parent)) {
+                                if (declaration.kind === SyntaxKind.MethodDeclaration) {
+                                    return true;
+                                }
+                                if (isPropertyDeclaration(declaration) && getContainingClass(usage) === getContainingClass(declaration)) {
+                                    const propName = declaration.name;
+                                    if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
+                                        const type = getTypeOfSymbol(getSymbolOfNode(declaration));
+                                        const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
+                                        if (isPropertyInitializedInStaticBlocks(propName, type, staticBlocks, declaration.parent.pos, current.pos)) {
+                                            return true;
+                                        }
+                                    }
+                                }
                             }
-                        }
-                        else {
-                            const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !hasSyntacticModifier(declaration, ModifierFlags.Static);
-                            if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
-                                return true;
+                            else {
+                                const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !isStatic(declaration);
+                                if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -1857,7 +1870,7 @@ namespace ts {
                         // local variables of the constructor. This effectively means that entities from outer scopes
                         // by the same name as a constructor parameter or local variable are inaccessible
                         // in initializer expressions for instance member variables.
-                        if (!hasSyntacticModifier(location, ModifierFlags.Static)) {
+                        if (!isStatic(location)) {
                             const ctor = findConstructorDeclaration(location.parent as ClassLikeDeclaration);
                             if (ctor && ctor.locals) {
                                 if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
@@ -1879,7 +1892,7 @@ namespace ts {
                                 result = undefined;
                                 break;
                             }
-                            if (lastLocation && hasSyntacticModifier(lastLocation, ModifierFlags.Static)) {
+                            if (lastLocation && isStatic(lastLocation)) {
                                 // TypeScript 1.0 spec (April 2014): 3.4.1
                                 // The scope of a type parameter extends over the entire declaration with which the type
                                 // parameter list is associated, with the exception of static member declarations in classes.
@@ -2189,7 +2202,7 @@ namespace ts {
                 // initializers in instance property declaration of class like entities are executed in constructor and thus deferred
                 return isTypeQueryNode(location) || ((
                     isFunctionLikeDeclaration(location) ||
-                    (location.kind === SyntaxKind.PropertyDeclaration && !hasSyntacticModifier(location, ModifierFlags.Static))
+                    (location.kind === SyntaxKind.PropertyDeclaration && !isStatic(location))
                 ) && (!lastLocation || lastLocation !== (location as SignatureDeclaration | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
             }
             if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
@@ -2258,7 +2271,7 @@ namespace ts {
 
                     // No static member is present.
                     // Check if we're in an instance method and look for a relevant instance member.
-                    if (location === container && !hasSyntacticModifier(location, ModifierFlags.Static)) {
+                    if (location === container && !isStatic(location)) {
                         const instanceType = (getDeclaredTypeOfSymbol(classSymbol) as InterfaceType).thisType!; // TODO: GH#18217
                         if (getPropertyOfType(instanceType, name)) {
                             error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, diagnosticName(nameArg));
@@ -4855,7 +4868,7 @@ namespace ts {
                     }
                     function shouldWriteTypeOfFunctionSymbol() {
                         const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) &&  // typeof static method
-                            some(symbol.declarations, declaration => hasSyntacticModifier(declaration, ModifierFlags.Static));
+                            some(symbol.declarations, declaration => isStatic(declaration));
                         const isNonLocalFunctionSymbol = !!(symbol.flags & SymbolFlags.Function) &&
                             (symbol.parent || // is exported function symbol
                                 forEach(symbol.declarations, declaration =>
@@ -7008,7 +7021,7 @@ namespace ts {
 
                 function isNamespaceMember(p: Symbol) {
                     return !!(p.flags & (SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias)) ||
-                        !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && getEffectiveModifierFlags(p.valueDeclaration) & ModifierFlags.Static && isClassLike(p.valueDeclaration.parent));
+                        !(p.flags & SymbolFlags.Prototype || p.escapedName === "prototype" || p.valueDeclaration && isStatic(p.valueDeclaration) && isClassLike(p.valueDeclaration.parent));
                 }
 
                 function sanitizeJSDocImplements(clauses: readonly ExpressionWithTypeArguments[]): ExpressionWithTypeArguments[] | undefined {
@@ -8448,14 +8461,23 @@ namespace ts {
                 return addOptionality(type, isProperty, isOptional);
             }
 
-            if (isPropertyDeclaration(declaration) && !hasStaticModifier(declaration) && (noImplicitAny || isInJSFile(declaration))) {
+            if (isPropertyDeclaration(declaration) && (noImplicitAny || isInJSFile(declaration))) {
                 // We have a property declaration with no type annotation or initializer, in noImplicitAny mode or a .js file.
-                // Use control flow analysis of this.xxx assignments in the constructor to determine the type of the property.
-                const constructor = findConstructorDeclaration(declaration.parent);
-                const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
-                    getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
-                    undefined;
-                return type && addOptionality(type, /*isProperty*/ true, isOptional);
+                // Use control flow analysis of this.xxx assignments in the constructor or static block to determine the type of the property.
+                if (!hasStaticModifier(declaration)) {
+                    const constructor = findConstructorDeclaration(declaration.parent);
+                    const type = constructor ? getFlowTypeInConstructor(declaration.symbol, constructor) :
+                        getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
+                        undefined;
+                    return type && addOptionality(type, /*isProperty*/ true, isOptional);
+                }
+                else {
+                    const staticBlocks = filter(declaration.parent.members, isClassStaticBlockDeclaration);
+                    const type = staticBlocks.length ? getFlowTypeInStaticBlocks(declaration.symbol, staticBlocks) :
+                        getEffectiveModifierFlags(declaration) & ModifierFlags.Ambient ? getTypeOfPropertyInBaseClass(declaration.symbol) :
+                        undefined;
+                    return type && addOptionality(type, /*isProperty*/ true, isOptional);
+                }
             }
 
             if (isJsxAttribute(declaration)) {
@@ -8528,6 +8550,27 @@ namespace ts {
             setParent(reference, file);
             reference.flowNode = file.endFlowNode;
             return getFlowTypeOfReference(reference, autoType, undefinedType);
+        }
+
+        function getFlowTypeInStaticBlocks(symbol: Symbol, staticBlocks: readonly ClassStaticBlockDeclaration[]) {
+            const accessName = startsWith(symbol.escapedName as string, "__#")
+                ? factory.createPrivateIdentifier((symbol.escapedName as string).split("@")[1])
+                : unescapeLeadingUnderscores(symbol.escapedName);
+            for (const staticBlock of staticBlocks) {
+                const reference = factory.createPropertyAccessExpression(factory.createThis(), accessName);
+                setParent(reference.expression, reference);
+                setParent(reference, staticBlock);
+                reference.flowNode = staticBlock.returnFlowNode;
+                const flowType = getFlowTypeOfProperty(reference, symbol);
+                if (noImplicitAny && (flowType === autoType || flowType === autoArrayType)) {
+                    error(symbol.valueDeclaration, Diagnostics.Member_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
+                }
+                // We don't infer a type if assignments are only null or undefined.
+                if (everyType(flowType, isNullableType)) {
+                    continue;
+                }
+                return convertAutoToAny(flowType);
+            }
         }
 
         function getFlowTypeInConstructor(symbol: Symbol, constructor: ConstructorDeclaration) {
@@ -10131,7 +10174,7 @@ namespace ts {
         }
 
         function isStaticPrivateIdentifierProperty(s: Symbol): boolean {
-            return !!s.valueDeclaration && isPrivateIdentifierClassElementDeclaration(s.valueDeclaration) && hasSyntacticModifier(s.valueDeclaration, ModifierFlags.Static);
+            return !!s.valueDeclaration && isPrivateIdentifierClassElementDeclaration(s.valueDeclaration) && isStatic(s.valueDeclaration);
         }
 
         function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
@@ -15617,7 +15660,7 @@ namespace ts {
             const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             const parent = container && container.parent;
             if (parent && (isClassLike(parent) || parent.kind === SyntaxKind.InterfaceDeclaration)) {
-                if (!hasSyntacticModifier(container, ModifierFlags.Static) &&
+                if (!isStatic(container) &&
                     (!isConstructorDeclaration(container) || isNodeDescendantOf(node, container.body))) {
                     return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(parent as ClassLikeDeclaration | InterfaceDeclaration)).thisType!;
                 }
@@ -24242,7 +24285,7 @@ namespace ts {
                     let container = getThisContainer(node, /*includeArrowFunctions*/ false);
                     while (container.kind !== SyntaxKind.SourceFile) {
                         if (container.parent === declaration) {
-                            if (container.kind === SyntaxKind.PropertyDeclaration && hasSyntacticModifier(container, ModifierFlags.Static)) {
+                            if (container.kind === SyntaxKind.PropertyDeclaration && isStatic(container)) {
                                 getNodeLinks(declaration).flags |= NodeCheckFlags.ClassWithConstructorReference;
                                 getNodeLinks(node).flags |= NodeCheckFlags.ConstructorReferenceInClass;
                             }
@@ -24545,9 +24588,6 @@ namespace ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
-                case SyntaxKind.ClassStaticBlockDeclaration:
-                    error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
-                    break;
                 case SyntaxKind.ComputedPropertyName:
                     error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
                     break;
@@ -24606,8 +24646,7 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                const isStatic = hasSyntacticModifier(container, ModifierFlags.Static) || isClassStaticBlockDeclaration(container);
-                const type = isStatic ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
+                const type = isStatic(container) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
                 return getFlowTypeOfReference(node, type);
             }
 
@@ -24637,7 +24676,7 @@ namespace ts {
             }
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                return hasSyntacticModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
+                return isStatic(container) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
             }
         }
 
@@ -24758,7 +24797,7 @@ namespace ts {
                 checkThisBeforeSuper(node, container, Diagnostics.super_must_be_called_before_accessing_a_property_of_super_in_the_constructor_of_a_derived_class);
             }
 
-            if (hasSyntacticModifier(container, ModifierFlags.Static) || isCallExpression) {
+            if (isStatic(container) || isCallExpression) {
                 nodeCheckFlag = NodeCheckFlags.SuperStatic;
             }
             else {
@@ -24894,12 +24933,13 @@ namespace ts {
 
                     // topmost container must be something that is directly nested in the class declaration\object literal expression
                     if (isClassLike(container.parent) || container.parent.kind === SyntaxKind.ObjectLiteralExpression) {
-                        if (hasSyntacticModifier(container, ModifierFlags.Static)) {
+                        if (isStatic(container)) {
                             return container.kind === SyntaxKind.MethodDeclaration ||
                                 container.kind === SyntaxKind.MethodSignature ||
                                 container.kind === SyntaxKind.GetAccessor ||
                                 container.kind === SyntaxKind.SetAccessor ||
-                                container.kind === SyntaxKind.PropertyDeclaration;
+                                container.kind === SyntaxKind.PropertyDeclaration ||
+                                container.kind === SyntaxKind.ClassStaticBlockDeclaration;
                         }
                         else {
                             return container.kind === SyntaxKind.MethodDeclaration ||
@@ -25038,7 +25078,7 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     return getContextualTypeForBindingElement(declaration);
                 case SyntaxKind.PropertyDeclaration:
-                    if (hasSyntacticModifier(declaration, ModifierFlags.Static)) {
+                    if (isStatic(declaration)) {
                         return getContextualTypeForStaticPropertyDeclaration(declaration);
                     }
                 // By default, do nothing and return undefined - only the above cases have context implied by a parent
@@ -27541,10 +27581,12 @@ namespace ts {
             let assumeUninitialized = false;
             if (strictNullChecks && strictPropertyInitialization && isAccessExpression(node) && node.expression.kind === SyntaxKind.ThisKeyword) {
                 const declaration = prop && prop.valueDeclaration;
-                if (declaration && isInstancePropertyWithoutInitializer(declaration)) {
-                    const flowContainer = getControlFlowContainer(node);
-                    if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent && !(declaration.flags & NodeFlags.Ambient)) {
-                        assumeUninitialized = true;
+                if (declaration && isPropertyWithoutInitializer(declaration)) {
+                    if (!isStatic(declaration)) {
+                        const flowContainer = getControlFlowContainer(node);
+                        if (flowContainer.kind === SyntaxKind.Constructor && flowContainer.parent === declaration.parent && !(declaration.flags & NodeFlags.Ambient)) {
+                            assumeUninitialized = true;
+                        }
                     }
                 }
             }
@@ -27710,7 +27752,7 @@ namespace ts {
 
         function typeHasStaticProperty(propName: __String, containingType: Type): boolean {
             const prop = containingType.symbol && getPropertyOfType(getTypeOfSymbol(containingType.symbol), propName);
-            return prop !== undefined && !!prop.valueDeclaration && hasSyntacticModifier(prop.valueDeclaration, ModifierFlags.Static);
+            return prop !== undefined && !!prop.valueDeclaration && isStatic(prop.valueDeclaration);
         }
 
         function getSuggestedLibForNonExistentName(name: __String | Identifier) {
@@ -33274,16 +33316,16 @@ namespace ts {
                     }
                 }
                 else {
-                    const isStatic = hasSyntacticModifier(member, ModifierFlags.Static);
+                    const isStaticMember = isStatic(member);
                     const name = member.name;
                     if (!name) {
                         continue;
                     }
                     const isPrivate = isPrivateIdentifier(name);
-                    const privateStaticFlags = isPrivate && isStatic ? DeclarationMeaning.PrivateStatic : 0;
+                    const privateStaticFlags = isPrivate && isStaticMember ? DeclarationMeaning.PrivateStatic : 0;
                     const names =
                         isPrivate ? privateIdentifiers :
-                        isStatic ? staticNames :
+                        isStaticMember ? staticNames :
                         instanceNames;
 
                     const memberName = name && getPropertyNameForPropertyNameNode(name);
@@ -33353,8 +33395,8 @@ namespace ts {
         function checkClassForStaticPropertyNameConflicts(node: ClassLikeDeclaration) {
             for (const member of node.members) {
                 const memberNameNode = member.name;
-                const isStatic = hasSyntacticModifier(member, ModifierFlags.Static);
-                if (isStatic && memberNameNode) {
+                const isStaticMember = isStatic(member);
+                if (isStaticMember && memberNameNode) {
                     const memberName = getPropertyNameForPropertyNameNode(memberNameNode);
                     switch (memberName) {
                         case "name":
@@ -33536,7 +33578,7 @@ namespace ts {
                     return true;
                 }
                 return n.kind === SyntaxKind.PropertyDeclaration &&
-                    !hasSyntacticModifier(n, ModifierFlags.Static) &&
+                    !isStatic(n) &&
                     !!(n as PropertyDeclaration).initializer;
             }
 
@@ -34021,13 +34063,13 @@ namespace ts {
                         )) {
                             const reportError =
                                 (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.MethodSignature) &&
-                                hasSyntacticModifier(node, ModifierFlags.Static) !== hasSyntacticModifier(subsequentNode, ModifierFlags.Static);
+                                isStatic(node) !== isStatic(subsequentNode);
                             // we can get here in two cases
                             // 1. mixed static and instance class members
                             // 2. something with the same name was defined before the set of overloads that prevents them from merging
                             // here we'll report error only for the first case since for second we should already report error in binder
                             if (reportError) {
-                                const diagnostic = hasSyntacticModifier(node, ModifierFlags.Static) ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
+                                const diagnostic = isStatic(node) ? Diagnostics.Function_overload_must_be_static : Diagnostics.Function_overload_must_not_be_static;
                                 error(errorNode, diagnostic);
                             }
                             return;
@@ -36999,13 +37041,13 @@ namespace ts {
             }
         }
 
-        function checkIndexConstraints(type: Type, isStatic?: boolean) {
+        function checkIndexConstraints(type: Type, isStaticIndex?: boolean) {
             const indexInfos = getIndexInfosOfType(type);
             if (indexInfos.length === 0) {
                 return;
             }
             for (const prop of getPropertiesOfObjectType(type)) {
-                if (!(isStatic && prop.flags & SymbolFlags.Prototype)) {
+                if (!(isStaticIndex && prop.flags & SymbolFlags.Prototype)) {
                     checkIndexConstraintForProperty(type, prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*includeNonPublic*/ true), getNonMissingTypeOfSymbol(prop));
                 }
             }
@@ -37014,7 +37056,7 @@ namespace ts {
                 for (const member of typeDeclaration.members) {
                     // Only process instance properties with computed names here. Static properties cannot be in conflict with indexers,
                     // and properties with literal names were already checked.
-                    if (!hasSyntacticModifier(member, ModifierFlags.Static) && !hasBindableName(member)) {
+                    if (!isStatic(member) && !hasBindableName(member)) {
                         const symbol = getSymbolOfNode(member);
                         checkIndexConstraintForProperty(type, symbol, getTypeOfExpression((member as DynamicNamedDeclaration).name.expression), getNonMissingTypeOfSymbol(symbol));
                     }
@@ -37358,7 +37400,7 @@ namespace ts {
 
             if (produceDiagnostics) {
                 checkIndexConstraints(type);
-                checkIndexConstraints(staticType, /*isStatic*/ true);
+                checkIndexConstraints(staticType, /*isStaticIndex*/ true);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
             }
@@ -37388,7 +37430,7 @@ namespace ts {
 
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
-                const hasStatic = hasStaticModifier(member);
+                const hasStatic = isStatic(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (!declaredProp) {
@@ -37435,7 +37477,7 @@ namespace ts {
             // iterate over all implemented properties and issue errors on each one which isn't compatible, rather than the class as a whole, if possible
             let issuedMemberError = false;
             for (const member of node.members) {
-                if (hasStaticModifier(member)) {
+                if (isStatic(member)) {
                     continue;
                 }
                 const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
@@ -37691,7 +37733,7 @@ namespace ts {
                 if (getEffectiveModifierFlags(member) & ModifierFlags.Ambient) {
                     continue;
                 }
-                if (isInstancePropertyWithoutInitializer(member)) {
+                if (!isStatic(member) && isPropertyWithoutInitializer(member)) {
                     const propName = (member as PropertyDeclaration).name;
                     if (isIdentifier(propName) || isPrivateIdentifier(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
@@ -37705,11 +37747,28 @@ namespace ts {
             }
         }
 
-        function isInstancePropertyWithoutInitializer(node: Node) {
+        function isPropertyWithoutInitializer(node: Node) {
             return node.kind === SyntaxKind.PropertyDeclaration &&
-                !hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Abstract) &&
+                !hasAbstractModifier(node) &&
                 !(node as PropertyDeclaration).exclamationToken &&
                 !(node as PropertyDeclaration).initializer;
+        }
+
+        function isPropertyInitializedInStaticBlocks(propName: Identifier | PrivateIdentifier, propType: Type, staticBlocks: readonly ClassStaticBlockDeclaration[], startPos: number, endPos: number) {
+            for (const staticBlock of staticBlocks) {
+                // static block must be within the provided range as they are evaluated in document order (unlike constructors)
+                if (staticBlock.pos >= startPos && staticBlock.pos <= endPos) {
+                    const reference = factory.createPropertyAccessExpression(factory.createThis(), propName);
+                    setParent(reference.expression, reference);
+                    setParent(reference, staticBlock);
+                    reference.flowNode = staticBlock.returnFlowNode;
+                    const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+                    if (!(getFalsyFlags(flowType) & TypeFlags.Undefined)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         function isPropertyInitializedInConstructor(propName: Identifier | PrivateIdentifier, propType: Type, constructor: ConstructorDeclaration) {
@@ -39123,7 +39182,7 @@ namespace ts {
             }
 
             const symbols = createSymbolTable();
-            let isStatic = false;
+            let isStaticSymbol = false;
 
             populateSymbols();
 
@@ -39161,7 +39220,7 @@ namespace ts {
                             // add the type parameters into the symbol table
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
-                            if (!isStatic) {
+                            if (!isStaticSymbol) {
                                 copySymbols(getMembersOfSymbol(getSymbolOfNode(location as ClassDeclaration | InterfaceDeclaration)), meaning & SymbolFlags.Type);
                             }
                             break;
@@ -39177,7 +39236,7 @@ namespace ts {
                         copySymbol(argumentsSymbol, meaning);
                     }
 
-                    isStatic = hasSyntacticModifier(location, ModifierFlags.Static);
+                    isStaticSymbol = isStatic(location);
                     location = location.parent;
                 }
 
@@ -39776,7 +39835,7 @@ namespace ts {
          */
         function getParentTypeOfClassElement(node: ClassElement) {
             const classSymbol = getSymbolOfNode(node.parent)!;
-            return hasSyntacticModifier(node, ModifierFlags.Static)
+            return isStatic(node)
                 ? getTypeOfSymbol(classSymbol)
                 : getDeclaredTypeOfSymbol(classSymbol);
         }
@@ -41820,8 +41879,8 @@ namespace ts {
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
-                        if (!hasSyntacticModifier(parent, ModifierFlags.Static) ||
-                            !hasEffectiveModifier(parent, ModifierFlags.Readonly)) {
+                        if (!isStatic(parent) ||
+                            !hasEffectiveReadonlyModifier(parent)) {
                             return grammarErrorOnNode((parent as PropertyDeclaration).name, Diagnostics.A_property_of_a_class_whose_type_is_a_unique_symbol_type_must_be_both_static_and_readonly);
                         }
                         break;
@@ -42238,7 +42297,7 @@ namespace ts {
             }
 
             if (isPropertyDeclaration(node) && node.exclamationToken && (!isClassLike(node.parent) || !node.type || node.initializer ||
-                node.flags & NodeFlags.Ambient || hasSyntacticModifier(node, ModifierFlags.Static | ModifierFlags.Abstract))) {
+                node.flags & NodeFlags.Ambient || isStatic(node) || hasAbstractModifier(node))) {
                 const message = node.initializer
                     ? Diagnostics.Declarations_with_initializers_cannot_also_have_definite_assignment_assertions
                     : !node.type

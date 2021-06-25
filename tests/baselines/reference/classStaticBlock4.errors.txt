@@ -1,22 +1,16 @@
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(5,9): error TS2332: 'this' cannot be referenced in current location.
-tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(8,9): error TS2332: 'this' cannot be referenced in current location.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(8,14): error TS2729: Property 's2' is used before its initialization.
 tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts(9,11): error TS2729: Property 's2' is used before its initialization.
 
 
-==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts (4 errors) ====
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts (2 errors) ====
     class C {
         static s1 = 1;
     
         static {
             this.s1;
-            ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
             C.s1;
     
             this.s2;
-            ~~~~
-!!! error TS2332: 'this' cannot be referenced in current location.
                  ~~
 !!! error TS2729: Property 's2' is used before its initialization.
 !!! related TS2728 tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts:12:12: 's2' is declared here.

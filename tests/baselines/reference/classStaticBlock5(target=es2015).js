@@ -28,7 +28,7 @@ _a = C;
 C.b = 3;
 C.c = Reflect.get(_b, "a", _a);
 (() => {
-    this.b;
-    super.b;
-    super.a;
+    _a.b;
+    Reflect.get(_b, "b", _a);
+    Reflect.get(_b, "a", _a);
 })();

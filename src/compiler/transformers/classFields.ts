@@ -137,8 +137,8 @@ namespace ts {
 
         // We don't need to transform `super` property access when targeting ES5, ES3 because
         // the es2015 transformation handles those.
-        const shouldTransformSuperInStaticFields = (languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields) && languageVersion >= ScriptTarget.ES2015;
-        const shouldTransformThisInStaticFields = languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields;
+        const shouldTransformSuperInStaticInitializers = (languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields) && languageVersion >= ScriptTarget.ES2015;
+        const shouldTransformThisInStaticInitializers = languageVersion <= ScriptTarget.ES2021 || !useDefineForClassFields;
 
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onSubstituteNode = onSubstituteNode;
@@ -165,7 +165,7 @@ namespace ts {
         const classLexicalEnvironmentMap = new Map<number, ClassLexicalEnvironment>();
         let currentClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
         let currentComputedPropertyNameClassLexicalEnvironment: ClassLexicalEnvironment | undefined;
-        let currentStaticPropertyDeclaration: PropertyDeclaration | undefined;
+        let currentStaticPropertyDeclarationOrStaticBlock: PropertyDeclaration | ClassStaticBlockDeclaration | undefined;
 
         return chainBundle(context, transformSourceFile);
 
@@ -198,8 +198,8 @@ namespace ts {
             }
             if (node.transformFlags & TransformFlags.ContainsClassFields ||
                 node.transformFlags & TransformFlags.ContainsLexicalSuper &&
-                    shouldTransformSuperInStaticFields &&
-                    currentStaticPropertyDeclaration &&
+                    shouldTransformSuperInStaticInitializers &&
+                    currentStaticPropertyDeclarationOrStaticBlock &&
                     currentClassLexicalEnvironment) {
                 switch (node.kind) {
                     case SyntaxKind.PrefixUnaryExpression:
@@ -225,23 +225,15 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor: {
-                        const savedCurrentStaticPropertyDeclaration = currentStaticPropertyDeclaration;
-                        currentStaticPropertyDeclaration = undefined;
+                        const savedCurrentStaticPropertyDeclarationOrStaticBlock = currentStaticPropertyDeclarationOrStaticBlock;
+                        currentStaticPropertyDeclarationOrStaticBlock = undefined;
                         const result = visitEachChild(node, visitor, context);
-                        currentStaticPropertyDeclaration = savedCurrentStaticPropertyDeclaration;
+                        currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;
                         return result;
                     }
                 }
             }
             return visitEachChild(node, visitor, context);
-        }
-
-        function visitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
-            if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
-                return visitEachChild(node, classElementVisitor, context);
-            }
-            // ClassStaticBlockDeclaration for classes are transformed in `visitClassDeclaration` or `visitClassExpression`.
-            return undefined;
         }
 
         function discardedValueVisitor(node: Node): VisitResult<Node> {
@@ -477,10 +469,10 @@ namespace ts {
                     );
                 }
             }
-            if (shouldTransformSuperInStaticFields &&
+            if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node) &&
                 isIdentifier(node.name) &&
-                currentStaticPropertyDeclaration &&
+                currentStaticPropertyDeclarationOrStaticBlock &&
                 currentClassLexicalEnvironment) {
                 const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                 if (facts & ClassFacts.ClassWasDecorated) {
@@ -502,9 +494,9 @@ namespace ts {
         }
 
         function visitElementAccessExpression(node: ElementAccessExpression) {
-            if (shouldTransformSuperInStaticFields &&
+            if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node) &&
-                currentStaticPropertyDeclaration &&
+                currentStaticPropertyDeclarationOrStaticBlock &&
                 currentClassLexicalEnvironment) {
                 const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                 if (facts & ClassFacts.ClassWasDecorated) {
@@ -552,9 +544,9 @@ namespace ts {
                         return expression;
                     }
                 }
-                else if (shouldTransformSuperInStaticFields &&
+                else if (shouldTransformSuperInStaticInitializers &&
                     isSuperProperty(node.operand) &&
-                    currentStaticPropertyDeclaration &&
+                    currentStaticPropertyDeclarationOrStaticBlock &&
                     currentClassLexicalEnvironment) {
                     // converts `++super.a` into `(Reflect.set(_baseTemp, "a", (_a = Reflect.get(_baseTemp, "a", _classTemp), _b = ++_a), _classTemp), _b)`
                     // converts `++super[f()]` into `(Reflect.set(_baseTemp, _a = f(), (_b = Reflect.get(_baseTemp, _a, _classTemp), _c = ++_b), _classTemp), _c)`
@@ -657,9 +649,9 @@ namespace ts {
                 );
             }
 
-            if (shouldTransformSuperInStaticFields &&
+            if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node.expression) &&
-                currentStaticPropertyDeclaration &&
+                currentStaticPropertyDeclarationOrStaticBlock &&
                 currentClassLexicalEnvironment?.classConstructor) {
 
                 // converts `super.f(...)` into `Reflect.get(_baseTemp, "f", _classTemp).call(_classTemp, ...)`
@@ -691,9 +683,9 @@ namespace ts {
                     visitNode(node.template, visitor, isTemplateLiteral)
                 );
             }
-            if (shouldTransformSuperInStaticFields &&
+            if (shouldTransformSuperInStaticInitializers &&
                 isSuperProperty(node.tag) &&
-                currentStaticPropertyDeclaration &&
+                currentStaticPropertyDeclarationOrStaticBlock &&
                 currentClassLexicalEnvironment?.classConstructor) {
 
                 // converts `` super.f`x` `` into `` Reflect.get(_baseTemp, "f", _classTemp).bind(_classTemp)`x` ``
@@ -716,17 +708,22 @@ namespace ts {
 
         function transformClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
+                if (currentClassLexicalEnvironment) {
+                    classLexicalEnvironmentMap.set(getOriginalNodeId(node), currentClassLexicalEnvironment);
+                }
+
                 startLexicalEnvironment();
+                const savedCurrentStaticPropertyDeclarationOrStaticBlock = currentStaticPropertyDeclarationOrStaticBlock;
+                currentStaticPropertyDeclarationOrStaticBlock = node;
                 let statements = visitNodes(node.body.statements, visitor, isStatement);
                 statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
+                currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;
 
-                return setTextRange(
-                    setOriginalNode(
-                        factory.createImmediatelyInvokedArrowFunction(statements),
-                        node
-                    ),
-                    node
-                );
+                const iife = factory.createImmediatelyInvokedArrowFunction(statements);
+                setOriginalNode(iife, node);
+                setTextRange(iife, node);
+                addEmitFlags(iife, EmitFlags.AdviseOnEmitNode);
+                return iife;
             }
         }
 
@@ -759,9 +756,9 @@ namespace ts {
                         );
                     }
                 }
-                else if (shouldTransformSuperInStaticFields &&
+                else if (shouldTransformSuperInStaticInitializers &&
                     isSuperProperty(node.left) &&
-                    currentStaticPropertyDeclaration &&
+                    currentStaticPropertyDeclarationOrStaticBlock &&
                     currentClassLexicalEnvironment) {
                     const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                     if (facts & ClassFacts.ClassWasDecorated) {
@@ -930,18 +927,18 @@ namespace ts {
                 facts |= ClassFacts.ClassWasDecorated;
             }
             for (const member of node.members) {
-                if (!hasStaticModifier(member)) continue;
+                if (!isStatic(member)) continue;
                 if (member.name && isPrivateIdentifier(member.name) && shouldTransformPrivateElementsOrClassStaticBlocks) {
                     facts |= ClassFacts.NeedsClassConstructorReference;
                 }
-                if (isPropertyDeclaration(member)) {
-                    if (shouldTransformThisInStaticFields && member.transformFlags & TransformFlags.ContainsLexicalThis) {
+                if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
+                    if (shouldTransformThisInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalThis) {
                         facts |= ClassFacts.NeedsSubstitutionForThisInClassStaticField;
                         if (!(facts & ClassFacts.ClassWasDecorated)) {
                             facts |= ClassFacts.NeedsClassConstructorReference;
                         }
                     }
-                    if (shouldTransformSuperInStaticFields && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
+                    if (shouldTransformSuperInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
                         if (!(facts & ClassFacts.ClassWasDecorated)) {
                             facts |= ClassFacts.NeedsClassConstructorReference | ClassFacts.NeedsClassSuperReference;
                         }
@@ -1118,6 +1115,14 @@ namespace ts {
             return classExpression;
         }
 
+        function visitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
+                return visitEachChild(node, classElementVisitor, context);
+            }
+            // ClassStaticBlockDeclaration for classes are transformed in `visitClassDeclaration` or `visitClassExpression`.
+            return undefined;
+        }
+
         function transformClassMembers(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
             if (shouldTransformPrivateElementsOrClassStaticBlocks) {
                 // Declare private names.
@@ -1158,7 +1163,7 @@ namespace ts {
         }
 
         function isClassElementThatRequiresConstructorStatement(member: ClassElement) {
-            if (hasStaticModifier(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
+            if (isStatic(member) || hasSyntacticModifier(getOriginalNode(member), ModifierFlags.Abstract)) {
                 return false;
             }
             if (useDefineForClassFields) {
@@ -1288,7 +1293,9 @@ namespace ts {
          */
         function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
             for (const property of properties) {
-                const expression = isClassStaticBlockDeclaration(property) ? transformClassStaticBlockDeclaration(property) : transformProperty(property, receiver);
+                const expression = isClassStaticBlockDeclaration(property) ?
+                    transformClassStaticBlockDeclaration(property) :
+                    transformProperty(property, receiver);
                 if (!expression) {
                     continue;
                 }
@@ -1330,7 +1337,7 @@ namespace ts {
          * @param receiver The object receiving the property assignment.
          */
         function transformProperty(property: PropertyDeclaration, receiver: LeftHandSideExpression) {
-            const savedCurrentStaticPropertyDeclaration = currentStaticPropertyDeclaration;
+            const savedCurrentStaticPropertyDeclarationOrStaticBlock = currentStaticPropertyDeclarationOrStaticBlock;
             const transformed = transformPropertyWorker(property, receiver);
             if (transformed && hasStaticModifier(property) && currentClassLexicalEnvironment?.facts) {
                 // capture the lexical environment for the member
@@ -1338,7 +1345,7 @@ namespace ts {
                 addEmitFlags(transformed, EmitFlags.AdviseOnEmitNode);
                 classLexicalEnvironmentMap.set(getOriginalNodeId(transformed), currentClassLexicalEnvironment);
             }
-            currentStaticPropertyDeclaration = savedCurrentStaticPropertyDeclaration;
+            currentStaticPropertyDeclarationOrStaticBlock = savedCurrentStaticPropertyDeclarationOrStaticBlock;
             return transformed;
         }
 
@@ -1350,7 +1357,7 @@ namespace ts {
                 : property.name;
 
             if (hasStaticModifier(property)) {
-                currentStaticPropertyDeclaration = property;
+                currentStaticPropertyDeclarationOrStaticBlock = property;
             }
 
             if (shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifier(propertyName)) {
@@ -1881,9 +1888,9 @@ namespace ts {
                 if (isPrivateIdentifierPropertyAccessExpression(target)) {
                     wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
                 }
-                else if (shouldTransformSuperInStaticFields &&
+                else if (shouldTransformSuperInStaticInitializers &&
                     isSuperProperty(target) &&
-                    currentStaticPropertyDeclaration &&
+                    currentStaticPropertyDeclarationOrStaticBlock &&
                     currentClassLexicalEnvironment) {
                     const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                     if (facts & ClassFacts.ClassWasDecorated) {
@@ -1936,9 +1943,9 @@ namespace ts {
                     if (isPrivateIdentifierPropertyAccessExpression(target)) {
                         wrapped = wrapPrivateIdentifierForDestructuringTarget(target);
                     }
-                    else if (shouldTransformSuperInStaticFields &&
+                    else if (shouldTransformSuperInStaticInitializers &&
                         isSuperProperty(target) &&
-                        currentStaticPropertyDeclaration &&
+                        currentStaticPropertyDeclarationOrStaticBlock &&
                         currentClassLexicalEnvironment) {
                         const { classConstructor, superClassReference, facts } = currentClassLexicalEnvironment;
                         if (facts & ClassFacts.ClassWasDecorated) {

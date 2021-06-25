@@ -3348,6 +3348,10 @@
         "category": "Error",
         "code": 2816
     },
+    "Property '{0}' has no initializer and is not definitely assigned in a class static block.": {
+        "category": "Error",
+        "code": 2817
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

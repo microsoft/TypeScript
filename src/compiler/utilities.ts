@@ -1706,6 +1706,7 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
@@ -4400,7 +4401,7 @@ namespace ts {
         else {
             forEach(declarations, member => {
                 if (isAccessor(member)
-                    && hasSyntacticModifier(member, ModifierFlags.Static) === hasSyntacticModifier(accessor, ModifierFlags.Static)) {
+                    && isStatic(member) === isStatic(accessor)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -4709,6 +4710,11 @@ namespace ts {
 
     export function hasSyntacticModifier(node: Node, flags: ModifierFlags): boolean {
         return !!getSelectedSyntacticModifierFlags(node, flags);
+    }
+
+    export function isStatic(node: Node) {
+        // https://tc39.es/ecma262/#sec-static-semantics-isstatic
+        return isClassElement(node) && hasStaticModifier(node) || isClassStaticBlockDeclaration(node);
     }
 
     export function hasStaticModifier(node: Node): boolean {

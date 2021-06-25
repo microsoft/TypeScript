@@ -1871,7 +1871,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !isStatic(node)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -4379,7 +4379,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getInternalName(node)
                 : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
         }

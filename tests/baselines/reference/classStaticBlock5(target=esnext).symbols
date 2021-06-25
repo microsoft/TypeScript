@@ -29,7 +29,14 @@ class C extends B {
 >b : Symbol(C.b, Decl(classStaticBlock5.ts, 5, 19))
 
         super.b;
+>super.b : Symbol(B.b, Decl(classStaticBlock5.ts, 1, 17))
+>super : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+>b : Symbol(B.b, Decl(classStaticBlock5.ts, 1, 17))
+
         super.a;
+>super.a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
+>super : Symbol(B, Decl(classStaticBlock5.ts, 0, 0))
+>a : Symbol(B.a, Decl(classStaticBlock5.ts, 0, 9))
     }
 }
 

@@ -1543,6 +1543,8 @@ namespace ts {
         readonly body: Block;
         /* @internal */ readonly decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
         /* @internal */ readonly modifier?: ModifiersArray; // Present for use with reporting a grammar error
+        /* @internal */ endFlowNode?: FlowNode;
+        /* @internal */ returnFlowNode?: FlowNode;
     }
 
     export interface TypeNode extends Node {
