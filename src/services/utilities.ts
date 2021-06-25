@@ -3216,6 +3216,50 @@ namespace ts {
     }
 
     export function createExportMapCache(host: ExportMapCacheHost): ExportMapCache {
+        class CachedSymbolExportInfo {
+            constructor(
+                public id: number,
+                public symbolName: string,
+                public moduleName: string,
+                public moduleFileName: string | undefined,
+                public exportKind: ExportKind,
+                public isTypeOnly: boolean,
+                public isFromPackageJson: boolean,
+            ) {}
+
+            get symbol() {
+                const fromCache = symbols.get(this.id)?.symbol;
+                if (fromCache) return fromCache;
+                const moduleSymbol = this.moduleSymbol;
+                const containingProgram = this.isFromPackageJson
+                    ? host.getPackageJsonAutoImportProvider()!
+                    : host.getCurrentProgram()!;
+                const checker = containingProgram.getTypeChecker();
+                const symbolName = this.exportKind === ExportKind.Default
+                    ? InternalSymbolName.Default
+                    : this.symbolName;
+                const symbol = Debug.checkDefined(this.exportKind === ExportKind.ExportEquals
+                    ? checker.resolveExternalModuleSymbol(moduleSymbol)
+                    : checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol));
+                symbols.set(this.id, { moduleSymbol, symbol });
+                return symbol;
+            }
+
+            get moduleSymbol() {
+                const fromCache = symbols.get(this.id)?.moduleSymbol;
+                if (fromCache) return fromCache;
+                const containingProgram = this.isFromPackageJson
+                    ? host.getPackageJsonAutoImportProvider()!
+                    : host.getCurrentProgram()!;
+                const checker = containingProgram.getTypeChecker();
+                const moduleSymbol = Debug.checkDefined(this.moduleFileName
+                    ? checker.getMergedSymbol(containingProgram.getSourceFile(this.moduleFileName)!.symbol)
+                    : checker.tryFindAmbientModule(this.moduleName));
+                symbols.set(this.id, { moduleSymbol, symbol: undefined });
+                return moduleSymbol;
+            }
+        }
+
         let exportInfoId = 0;
         const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, { moduleSymbol: Symbol, symbol: Symbol | undefined }>();
@@ -3246,45 +3290,14 @@ namespace ts {
                 symbol = undefined!;
                 moduleSymbol = undefined!;
 
-                const info: CachedSymbolExportInfo = {
+                const info = new CachedSymbolExportInfo(
                     id,
-                    symbolName: importedName,
+                    importedName,
                     moduleName,
                     moduleFileName,
                     exportKind,
                     isTypeOnly,
-                    isFromPackageJson,
-                    get moduleSymbol() {
-                        const fromCache = symbols.get(this.id)?.moduleSymbol;
-                        if (fromCache) return fromCache;
-                        const containingProgram = this.isFromPackageJson
-                            ? host.getPackageJsonAutoImportProvider()!
-                            : host.getCurrentProgram()!;
-                        const checker = containingProgram.getTypeChecker();
-                        const moduleSymbol = Debug.checkDefined(this.moduleFileName
-                            ? checker.getMergedSymbol(containingProgram.getSourceFile(this.moduleFileName)!.symbol)
-                            : checker.tryFindAmbientModule(this.moduleName));
-                        symbols.set(this.id, { moduleSymbol, symbol: undefined });
-                        return moduleSymbol;
-                    },
-                    get symbol() {
-                        const fromCache = symbols.get(this.id)?.symbol;
-                        if (fromCache) return fromCache;
-                        const moduleSymbol = this.moduleSymbol;
-                        const containingProgram = this.isFromPackageJson
-                            ? host.getPackageJsonAutoImportProvider()!
-                            : host.getCurrentProgram()!;
-                        const checker = containingProgram.getTypeChecker();
-                        const symbolName = this.exportKind === ExportKind.Default
-                            ? InternalSymbolName.Default
-                            : this.symbolName;
-                        const symbol = Debug.checkDefined(this.exportKind === ExportKind.ExportEquals
-                            ? checker.resolveExternalModuleSymbol(moduleSymbol)
-                            : checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol));
-                        symbols.set(this.id, { moduleSymbol, symbol });
-                        return symbol;
-                    }
-                };
+                    isFromPackageJson);
 
                 exportInfo.add(k, info);
             },
