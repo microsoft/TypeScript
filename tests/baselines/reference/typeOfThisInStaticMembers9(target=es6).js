@@ -22,12 +22,14 @@ class D extends C {
 
 
 //// [typeOfThisInStaticMembers9.js]
+var _a, _b;
 class C {
 }
 C.f = 1;
-class D extends C {
+class D extends (_b = C) {
 }
-D.arrowFunctionBoundary = () => C.f + 1;
+_a = D;
+D.arrowFunctionBoundary = () => Reflect.get(_b, "f", _a) + 1;
 D.functionExprBoundary = function () { return super.f + 2; };
 D.classExprBoundary = class {
     constructor() {
@@ -43,7 +45,7 @@ D.functionAndClassDeclBoundary = (() => {
             this.a = super.f + 5;
         }
         method() {
-            return C.f + 6;
+            return super.f + 6;
         }
     }
 })();

@@ -12,17 +12,18 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
+    _a = C;
     C.c = "foo";
-    C.bar = (_c = /** @class */ (function () {
+    C.bar = (_b = /** @class */ (function () {
             function Inner() {
-                this[_b] = 123;
+                this[_d] = 123;
             }
             return Inner;
         }()),
-        _a = C.c,
-        _b = C.c,
-        _c[_a] = 123,
-        _c);
+        _c = _a.c,
+        _d = _a.c,
+        _b[_c] = 123,
+        _b);
     return C;
 }());

@@ -9,9 +9,11 @@ class C {
 
 
 //// [typeOfThisInStaticMembers5.js]
+var _a;
 class C {
     constructor(foo) {
         this.foo = foo;
     }
 }
-C.create = () => new C("yep");
+_a = C;
+C.create = () => new _a("yep");

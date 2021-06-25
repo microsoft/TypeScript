@@ -100,7 +100,7 @@ var D = /** @class */ (function (_super) {
     });
     D.c = 2;
     D.d = (void 0).c + 1;
-    D.e = (void 0).a + (void 0).c + 1;
+    D.e = _super.a + (void 0).c + 1;
     D.f = function () { return (void 0).c + 1; };
     D.ff = function () { this.c + 1; };
     D = __decorate([
@@ -111,8 +111,10 @@ var D = /** @class */ (function (_super) {
 var CC = /** @class */ (function () {
     function CC() {
     }
+    var _a;
+    _a = CC;
     CC.a = 1;
-    CC.b = CC.a + 1;
+    CC.b = _a.a + 1;
     return CC;
 }());
 var DD = /** @class */ (function (_super) {
@@ -133,10 +135,12 @@ var DD = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    var _b;
+    _b = DD;
     DD.c = 2;
-    DD.d = DD.c + 1;
-    DD.e = _super.a + DD.c + 1;
-    DD.f = function () { return DD.c + 1; };
+    DD.d = _b.c + 1;
+    DD.e = _super.a + _b.c + 1;
+    DD.f = function () { return _b.c + 1; };
     DD.ff = function () { this.c + 1; };
     return DD;
 }(CC));

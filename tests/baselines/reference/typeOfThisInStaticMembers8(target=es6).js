@@ -19,10 +19,12 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
+var _a;
 class C {
 }
+_a = C;
 C.f = 1;
-C.arrowFunctionBoundary = () => C.f + 1;
+C.arrowFunctionBoundary = () => _a.f + 1;
 C.functionExprBoundary = function () { return this.f + 2; };
 C.classExprBoundary = class {
     constructor() {
@@ -38,7 +40,7 @@ C.functionAndClassDeclBoundary = (() => {
             this.a = this.f + 5;
         }
         method() {
-            return C.f + 6;
+            return this.f + 6;
         }
     }
 })();

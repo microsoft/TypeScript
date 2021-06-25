@@ -12,7 +12,8 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
+    _a = C;
     Object.defineProperty(C, "c", {
         enumerable: true,
         configurable: true,
@@ -23,9 +24,9 @@ var C = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: (_c = /** @class */ (function () {
+        value: (_b = /** @class */ (function () {
                 function Inner() {
-                    Object.defineProperty(this, _b, {
+                    Object.defineProperty(this, _d, {
                         enumerable: true,
                         configurable: true,
                         writable: true,
@@ -34,15 +35,15 @@ var C = /** @class */ (function () {
                 }
                 return Inner;
             }()),
-            _a = C.c,
-            _b = C.c,
-            Object.defineProperty(_c, _a, {
+            _c = _a.c,
+            _d = _a.c,
+            Object.defineProperty(_b, _c, {
                 enumerable: true,
                 configurable: true,
                 writable: true,
                 value: 123
             }),
-            _c)
+            _b)
     });
     return C;
 }());

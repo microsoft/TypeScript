@@ -1414,6 +1414,18 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isObjectBindingOrAssignmentElement(node: Node): node is ObjectBindingOrAssignmentElement {
+        switch (node.kind) {
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment: // AssignmentProperty
+            case SyntaxKind.ShorthandPropertyAssignment: // AssignmentProperty
+            case SyntaxKind.SpreadAssignment: // AssignmentRestProperty
+                return true;
+        }
+        return false;
+    }
+
     /**
      * Determines whether a node is an ArrayBindingOrAssignmentPattern
      */

@@ -13,6 +13,8 @@ var C = /** @class */ (function () {
     function C(foo) {
         this.foo = foo;
     }
-    C.create = function () { return new C("yep"); };
+    var _a;
+    _a = C;
+    C.create = function () { return new _a("yep"); };
     return C;
 }());

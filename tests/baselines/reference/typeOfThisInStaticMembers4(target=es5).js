@@ -30,6 +30,8 @@ var __extends = (this && this.__extends) || (function () {
 var C = /** @class */ (function () {
     function C() {
     }
+    var _a;
+    _a = C;
     Object.defineProperty(C, "a", {
         enumerable: true,
         configurable: true,
@@ -40,7 +42,7 @@ var C = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: C.a + 1
+        value: _a.a + 1
     });
     return C;
 }());
@@ -49,6 +51,8 @@ var D = /** @class */ (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    var _b;
+    _b = D;
     Object.defineProperty(D, "c", {
         enumerable: true,
         configurable: true,
@@ -59,13 +63,13 @@ var D = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: D.c + 1
+        value: _b.c + 1
     });
     Object.defineProperty(D, "e", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: _super.a + D.c + 1
+        value: _super.a + _b.c + 1
     });
     return D;
 }(C));

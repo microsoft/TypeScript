@@ -22,8 +22,10 @@ class C {
 var C = /** @class */ (function () {
     function C() {
     }
+    var _a;
+    _a = C;
     C.f = 1;
-    C.arrowFunctionBoundary = function () { return C.f + 1; };
+    C.arrowFunctionBoundary = function () { return _a.f + 1; };
     C.functionExprBoundary = function () { return this.f + 2; };
     C.classExprBoundary = /** @class */ (function () {
         function class_1() {
@@ -40,7 +42,7 @@ var C = /** @class */ (function () {
                 this.a = this.f + 5;
             }
             CC.prototype.method = function () {
-                return C.f + 6;
+                return this.f + 6;
             };
             return CC;
         }());

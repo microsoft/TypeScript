@@ -55,6 +55,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var _a, _b, _c;
 let C = class C {
 };
 Object.defineProperty(C, "a", {
@@ -118,6 +119,7 @@ D = __decorate([
 ], D);
 class CC {
 }
+_a = CC;
 Object.defineProperty(CC, "a", {
     enumerable: true,
     configurable: true,
@@ -128,9 +130,9 @@ Object.defineProperty(CC, "b", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: CC.a + 1
+    value: _a.a + 1
 });
-class DD extends CC {
+class DD extends (_c = CC) {
     static foo() {
         return this.c + 1;
     }
@@ -141,6 +143,7 @@ class DD extends CC {
         this.c = v + 1;
     }
 }
+_b = DD;
 Object.defineProperty(DD, "c", {
     enumerable: true,
     configurable: true,
@@ -151,19 +154,19 @@ Object.defineProperty(DD, "d", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: DD.c + 1
+    value: _b.c + 1
 });
 Object.defineProperty(DD, "e", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: CC.a + DD.c + 1
+    value: Reflect.get(_c, "a", _b) + _b.c + 1
 });
 Object.defineProperty(DD, "f", {
     enumerable: true,
     configurable: true,
     writable: true,
-    value: () => DD.c + 1
+    value: () => _b.c + 1
 });
 Object.defineProperty(DD, "ff", {
     enumerable: true,

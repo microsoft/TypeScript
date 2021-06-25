@@ -55,6 +55,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var _a, _b, _c;
 let C = class C {
 };
 C.a = 1;
@@ -83,9 +84,10 @@ D = __decorate([
 ], D);
 class CC {
 }
+_a = CC;
 CC.a = 1;
-CC.b = CC.a + 1;
-class DD extends CC {
+CC.b = _a.a + 1;
+class DD extends (_c = CC) {
     static foo() {
         return this.c + 1;
     }
@@ -96,8 +98,9 @@ class DD extends CC {
         this.c = v + 1;
     }
 }
+_b = DD;
 DD.c = 2;
-DD.d = DD.c + 1;
-DD.e = CC.a + DD.c + 1;
-DD.f = () => DD.c + 1;
+DD.d = _b.c + 1;
+DD.e = Reflect.get(_c, "a", _b) + _b.c + 1;
+DD.f = () => _b.c + 1;
 DD.ff = function () { this.c + 1; };

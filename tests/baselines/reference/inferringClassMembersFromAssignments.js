@@ -224,12 +224,14 @@ var C = /** @class */ (function () {
             this.inStaticSetter = "string";
         }
     };
+    var _a;
+    _a = C;
     C.prop = function () {
         if (Math.random()) {
-            C.inStaticPropertyDeclaration = 0;
+            _a.inStaticPropertyDeclaration = 0;
         }
         else {
-            C.inStaticPropertyDeclaration = "string";
+            _a.inStaticPropertyDeclaration = "string";
         }
     };
     return C;

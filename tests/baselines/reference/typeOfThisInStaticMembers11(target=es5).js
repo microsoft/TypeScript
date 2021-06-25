@@ -129,7 +129,7 @@ var D = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: (void 0).a + (void 0).c + 1
+        value: _super.a + (void 0).c + 1
     });
     Object.defineProperty(D, "f", {
         enumerable: true,
@@ -151,6 +151,8 @@ var D = /** @class */ (function (_super) {
 var CC = /** @class */ (function () {
     function CC() {
     }
+    var _a;
+    _a = CC;
     Object.defineProperty(CC, "a", {
         enumerable: true,
         configurable: true,
@@ -161,7 +163,7 @@ var CC = /** @class */ (function () {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: CC.a + 1
+        value: _a.a + 1
     });
     return CC;
 }());
@@ -188,6 +190,8 @@ var DD = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    var _b;
+    _b = DD;
     Object.defineProperty(DD, "c", {
         enumerable: true,
         configurable: true,
@@ -198,19 +202,19 @@ var DD = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: DD.c + 1
+        value: _b.c + 1
     });
     Object.defineProperty(DD, "e", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: _super.a + DD.c + 1
+        value: _super.a + _b.c + 1
     });
     Object.defineProperty(DD, "f", {
         enumerable: true,
         configurable: true,
         writable: true,
-        value: function () { return DD.c + 1; }
+        value: function () { return _b.c + 1; }
     });
     Object.defineProperty(DD, "ff", {
         enumerable: true,

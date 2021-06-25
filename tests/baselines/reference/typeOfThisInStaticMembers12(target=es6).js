@@ -9,16 +9,17 @@ class C {
 
 
 //// [typeOfThisInStaticMembers12.js]
-var _a, _b, _c;
+var _a, _b, _c, _d;
 class C {
 }
+_a = C;
 C.c = "foo";
-C.bar = (_c = class Inner {
+C.bar = (_b = class Inner {
         constructor() {
-            this[_b] = 123;
+            this[_d] = 123;
         }
     },
-    _a = C.c,
-    _b = C.c,
-    _c[_a] = 123,
-    _c);
+    _c = _a.c,
+    _d = _a.c,
+    _b[_c] = 123,
+    _b);
