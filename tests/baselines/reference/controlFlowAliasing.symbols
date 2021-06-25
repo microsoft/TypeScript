@@ -1,0 +1,602 @@
+=== tests/cases/conformance/controlFlow/controlFlowAliasing.ts ===
+// Narrowing by aliased conditional expressions
+
+function f10(x: string | number) {
+>f10 : Symbol(f10, Decl(controlFlowAliasing.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 2, 13))
+
+    const isString = typeof x === "string";
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 3, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 2, 13))
+
+    if (isString) {
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 3, 9))
+
+        let t: string = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 5, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 2, 13))
+    }
+    else {
+        let t: number = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 8, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 2, 13))
+    }
+}
+
+function f11(x: unknown) {
+>f11 : Symbol(f11, Decl(controlFlowAliasing.ts, 10, 1))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 12, 13))
+
+    const isString = typeof x === "string";
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 13, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 12, 13))
+
+    if (isString) {
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 13, 9))
+
+        let t: string = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 15, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 12, 13))
+    }
+}
+
+function f12(x: string | number | boolean) {
+>f12 : Symbol(f12, Decl(controlFlowAliasing.ts, 17, 1))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 19, 13))
+
+    const isString = typeof x === "string";
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 20, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 19, 13))
+
+    const isNumber = typeof x === "number";
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 21, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 19, 13))
+
+    if (isString || isNumber) {
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 20, 9))
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 21, 9))
+
+        let t: string | number = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 23, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 19, 13))
+    }
+    else {
+        let t: boolean = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 26, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 19, 13))
+    }
+}
+
+function f13(x: string | number | boolean) {
+>f13 : Symbol(f13, Decl(controlFlowAliasing.ts, 28, 1))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 30, 13))
+
+    const isString = typeof x === "string";
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 31, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 30, 13))
+
+    const isNumber = typeof x === "number";
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 32, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 30, 13))
+
+    const isStringOrNumber = isString || isNumber;
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(controlFlowAliasing.ts, 33, 9))
+>isString : Symbol(isString, Decl(controlFlowAliasing.ts, 31, 9))
+>isNumber : Symbol(isNumber, Decl(controlFlowAliasing.ts, 32, 9))
+
+    if (isStringOrNumber) {
+>isStringOrNumber : Symbol(isStringOrNumber, Decl(controlFlowAliasing.ts, 33, 9))
+
+        let t: string | number = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 35, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 30, 13))
+    }
+    else {
+        let t: boolean = x;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 38, 11))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 30, 13))
+    }
+}
+
+function f14(x: number | null | undefined): number | null {
+>f14 : Symbol(f14, Decl(controlFlowAliasing.ts, 40, 1))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 42, 13))
+
+    const notUndefined = x !== undefined;
+>notUndefined : Symbol(notUndefined, Decl(controlFlowAliasing.ts, 43, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 42, 13))
+>undefined : Symbol(undefined)
+
+    return notUndefined ? x : 0;
+>notUndefined : Symbol(notUndefined, Decl(controlFlowAliasing.ts, 43, 9))
+>x : Symbol(x, Decl(controlFlowAliasing.ts, 42, 13))
+}
+
+function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f20 : Symbol(f20, Decl(controlFlowAliasing.ts, 45, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 47, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 47, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 47, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 47, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 47, 63))
+
+    const isFoo = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 48, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 47, 19), Decl(controlFlowAliasing.ts, 47, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 47, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 47, 19), Decl(controlFlowAliasing.ts, 47, 50))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 48, 9))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 47, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 47, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 47, 32))
+    }
+    else {
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 47, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 47, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 47, 63))
+    }
+}
+
+function f21(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f21 : Symbol(f21, Decl(controlFlowAliasing.ts, 55, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 57, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 57, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 57, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 57, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 57, 63))
+
+    const isFoo: boolean = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 58, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 57, 19), Decl(controlFlowAliasing.ts, 57, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 57, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 57, 19), Decl(controlFlowAliasing.ts, 57, 50))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 58, 9))
+
+        obj.foo;  // Not narrowed because isFoo has type annotation
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 57, 13))
+    }
+    else {
+        obj.bar;  // Not narrowed because isFoo has type annotation
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 57, 13))
+    }
+}
+
+function f22(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f22 : Symbol(f22, Decl(controlFlowAliasing.ts, 65, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 67, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 67, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 67, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 67, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 67, 63))
+
+    let isFoo = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 68, 7))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 67, 19), Decl(controlFlowAliasing.ts, 67, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 67, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 67, 19), Decl(controlFlowAliasing.ts, 67, 50))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 68, 7))
+
+        obj.foo;  // Not narrowed because isFoo is mutable
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 67, 13))
+    }
+    else {
+        obj.bar;  // Not narrowed because isFoo is mutable
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 67, 13))
+    }
+}
+
+function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f23 : Symbol(f23, Decl(controlFlowAliasing.ts, 75, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 77, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 77, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 77, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 77, 63))
+
+    const isFoo = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 78, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 77, 19), Decl(controlFlowAliasing.ts, 77, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 77, 19), Decl(controlFlowAliasing.ts, 77, 50))
+
+    obj = obj;
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 78, 9))
+
+        obj.foo;  // Not narrowed because obj is assigned in function body
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+    }
+    else {
+        obj.bar;  // Not narrowed because obj is assigned in function body
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 77, 13))
+    }
+}
+
+function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f24 : Symbol(f24, Decl(controlFlowAliasing.ts, 86, 1))
+>arg : Symbol(arg, Decl(controlFlowAliasing.ts, 88, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 88, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 88, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 88, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 88, 63))
+
+    const obj = arg;
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 89, 9))
+>arg : Symbol(arg, Decl(controlFlowAliasing.ts, 88, 13))
+
+    const isFoo = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 90, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 88, 19), Decl(controlFlowAliasing.ts, 88, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 89, 9))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 88, 19), Decl(controlFlowAliasing.ts, 88, 50))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 90, 9))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 88, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 89, 9))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 88, 32))
+    }
+    else {
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 88, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 89, 9))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 88, 63))
+    }
+}
+
+function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f25 : Symbol(f25, Decl(controlFlowAliasing.ts, 97, 1))
+>arg : Symbol(arg, Decl(controlFlowAliasing.ts, 99, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 99, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 99, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 99, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 99, 63))
+
+    let obj = arg;
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 100, 7))
+>arg : Symbol(arg, Decl(controlFlowAliasing.ts, 99, 13))
+
+    const isFoo = obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 101, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 99, 19), Decl(controlFlowAliasing.ts, 99, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 100, 7))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 99, 19), Decl(controlFlowAliasing.ts, 99, 50))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 101, 9))
+
+        obj.foo;  // Not narrowed because obj is mutable
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 100, 7))
+    }
+    else {
+        obj.bar;  // Not narrowed because obj is mutable
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 100, 7))
+    }
+}
+
+function f26(outer: { readonly obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
+>f26 : Symbol(f26, Decl(controlFlowAliasing.ts, 108, 1))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 110, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 110, 37))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 110, 50))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 110, 68))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 110, 81))
+
+    const isFoo = outer.obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 111, 9))
+>outer.obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 110, 37), Decl(controlFlowAliasing.ts, 110, 68))
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 110, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 110, 37), Decl(controlFlowAliasing.ts, 110, 68))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 111, 9))
+
+        outer.obj.foo;
+>outer.obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 110, 50))
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 110, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 110, 50))
+    }
+    else {
+        outer.obj.bar;
+>outer.obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 110, 81))
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 110, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 110, 21))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 110, 81))
+    }
+}
+
+function f27(outer: { obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number } }) {
+>f27 : Symbol(f27, Decl(controlFlowAliasing.ts, 118, 1))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 120, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 120, 28))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 120, 41))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 120, 59))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 120, 72))
+
+    const isFoo = outer.obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 121, 9))
+>outer.obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 120, 28), Decl(controlFlowAliasing.ts, 120, 59))
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 120, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 120, 28), Decl(controlFlowAliasing.ts, 120, 59))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 121, 9))
+
+        outer.obj.foo;  // Not narrowed because obj is mutable
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 120, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+    }
+    else {
+        outer.obj.bar;  // Not narrowed because obj is mutable
+>outer.obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+>outer : Symbol(outer, Decl(controlFlowAliasing.ts, 120, 13))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 120, 21))
+    }
+}
+
+function f28(obj?: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f28 : Symbol(f28, Decl(controlFlowAliasing.ts, 128, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 20))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 130, 33))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 51))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 130, 64))
+
+    const isFoo = obj && obj.kind === 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 131, 9))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 20), Decl(controlFlowAliasing.ts, 130, 51))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 20), Decl(controlFlowAliasing.ts, 130, 51))
+
+    const isBar = obj && obj.kind === 'bar';
+>isBar : Symbol(isBar, Decl(controlFlowAliasing.ts, 132, 9))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 20), Decl(controlFlowAliasing.ts, 130, 51))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 130, 20), Decl(controlFlowAliasing.ts, 130, 51))
+
+    if (isFoo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 131, 9))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 130, 33))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 130, 33))
+    }
+    if (isBar) {
+>isBar : Symbol(isBar, Decl(controlFlowAliasing.ts, 132, 9))
+
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 130, 64))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 130, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 130, 64))
+    }
+}
+
+// Narrowing by aliased discriminant property access
+
+function f30(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f30 : Symbol(f30, Decl(controlFlowAliasing.ts, 139, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 143, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 143, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 143, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 143, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 143, 63))
+
+    const kind = obj.kind;
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 144, 9))
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 143, 19), Decl(controlFlowAliasing.ts, 143, 50))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 143, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 143, 19), Decl(controlFlowAliasing.ts, 143, 50))
+
+    if (kind === 'foo') {
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 144, 9))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 143, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 143, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 143, 32))
+    }
+    else {
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 143, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 143, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 143, 63))
+    }
+}
+
+function f31(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f31 : Symbol(f31, Decl(controlFlowAliasing.ts, 151, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 153, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 153, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 153, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 153, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 153, 63))
+
+    const { kind } = obj;
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 154, 11))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 153, 13))
+
+    if (kind === 'foo') {
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 154, 11))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 153, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 153, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 153, 32))
+    }
+    else {
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 153, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 153, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 153, 63))
+    }
+}
+
+function f32(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f32 : Symbol(f32, Decl(controlFlowAliasing.ts, 161, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 163, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 163, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 163, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 163, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 163, 63))
+
+    const { kind: k } = obj;
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 163, 19), Decl(controlFlowAliasing.ts, 163, 50))
+>k : Symbol(k, Decl(controlFlowAliasing.ts, 164, 11))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 163, 13))
+
+    if (k === 'foo') {
+>k : Symbol(k, Decl(controlFlowAliasing.ts, 164, 11))
+
+        obj.foo;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 163, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 163, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 163, 32))
+    }
+    else {
+        obj.bar;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 163, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 163, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 163, 63))
+    }
+}
+
+function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
+>f33 : Symbol(f33, Decl(controlFlowAliasing.ts, 171, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 173, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 173, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 173, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 173, 50))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 173, 63))
+
+    const { kind } = obj;
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 174, 11))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 173, 13))
+
+    switch (kind) {
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 174, 11))
+
+        case 'foo': obj.foo; break;
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 173, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 173, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 173, 32))
+
+        case 'bar': obj.bar; break;
+>obj.bar : Symbol(bar, Decl(controlFlowAliasing.ts, 173, 63))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 173, 13))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 173, 63))
+    }
+}
+
+// Mixing of aliased discriminants and conditionals
+
+function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
+>f40 : Symbol(f40, Decl(controlFlowAliasing.ts, 179, 1))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 183, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 183, 19))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 183, 32))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 183, 51))
+>bar : Symbol(bar, Decl(controlFlowAliasing.ts, 183, 64))
+
+    const { kind } = obj;
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 184, 11))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 183, 13))
+
+    const isFoo = kind == 'foo';
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 185, 9))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 184, 11))
+
+    if (isFoo && obj.foo) {
+>isFoo : Symbol(isFoo, Decl(controlFlowAliasing.ts, 185, 9))
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 183, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 183, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 183, 32))
+
+        let t: string = obj.foo;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 187, 11))
+>obj.foo : Symbol(foo, Decl(controlFlowAliasing.ts, 183, 32))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 183, 13))
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 183, 32))
+    }
+}
+
+// Unsupported narrowing of destructured payload by destructured discriminant
+
+type Data = { kind: 'str', payload: string } | { kind: 'num', payload: number };
+>Data : Symbol(Data, Decl(controlFlowAliasing.ts, 189, 1))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 193, 13))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 26))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 193, 48))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 61))
+
+function gg2(obj: Data) {
+>gg2 : Symbol(gg2, Decl(controlFlowAliasing.ts, 193, 80))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 195, 13))
+>Data : Symbol(Data, Decl(controlFlowAliasing.ts, 189, 1))
+
+    if (obj.kind === 'str') {
+>obj.kind : Symbol(kind, Decl(controlFlowAliasing.ts, 193, 13), Decl(controlFlowAliasing.ts, 193, 48))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 195, 13))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 193, 13), Decl(controlFlowAliasing.ts, 193, 48))
+
+        let t: string = obj.payload;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 197, 11))
+>obj.payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 26))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 195, 13))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 26))
+    }
+    else {
+        let t: number = obj.payload;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 200, 11))
+>obj.payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 61))
+>obj : Symbol(obj, Decl(controlFlowAliasing.ts, 195, 13))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 193, 61))
+    }
+}
+
+function foo({ kind, payload }: Data) {
+>foo : Symbol(foo, Decl(controlFlowAliasing.ts, 202, 1))
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 204, 14))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 204, 20))
+>Data : Symbol(Data, Decl(controlFlowAliasing.ts, 189, 1))
+
+    if (kind === 'str') {
+>kind : Symbol(kind, Decl(controlFlowAliasing.ts, 204, 14))
+
+        let t: string = payload;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 206, 11))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 204, 20))
+    }
+    else {
+        let t: number = payload;
+>t : Symbol(t, Decl(controlFlowAliasing.ts, 209, 11))
+>payload : Symbol(payload, Decl(controlFlowAliasing.ts, 204, 20))
+    }
+}
+
