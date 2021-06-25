@@ -843,12 +843,12 @@ namespace ts.server {
                     id: (msg as protocol.Response).request_seq,
                     result: (msg as protocol.Response).body
                 };
-                const msgText = this.formatMessage(lspMsg, this.logger, this.byteLength, this.host.newLine);
+                const msgText = this.formatMessage(lspMsg, this.logger, this.byteLength);
                 perfLogger.logEvent(`Response message size: ${msgText.length}`);
                 this.host.write(msgText);
             }
 
-            private formatMessage<T extends lsp.Message>(msg: T, _logger: Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
+            private formatMessage<T extends lsp.Message>(msg: T, _logger: Logger, byteLength: (s: string, encoding: string) => number): string {
                 // const verboseLogging = logger.hasLevel(LogLevel.verbose);
 
                 const json = JSON.stringify(msg);
@@ -857,7 +857,7 @@ namespace ts.server {
                 // }
 
                 const len = byteLength(json, "utf8");
-                return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
+                return `Content-Length: ${1 + len}\r\n\r\n${json}`;
             }
         }
 
