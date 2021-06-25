@@ -154,6 +154,7 @@ namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideInlayHints = "provideInlayHints"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -2547,6 +2548,40 @@ namespace ts.server.protocol {
      */
     export interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+
+    export const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
+    export interface InlayHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+
+    export interface InlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: InlayHintsRequestArgs;
+    }
+
+    export interface InlayHintItem {
+        text: string;
+        position: Location;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
+    export interface InlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
 
     /**

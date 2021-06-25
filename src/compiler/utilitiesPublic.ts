@@ -1232,6 +1232,11 @@ namespace ts {
         return node && isFunctionLikeDeclarationKind(node.kind);
     }
 
+    /* @internal */
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
+    }
+
     function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.FunctionDeclaration:

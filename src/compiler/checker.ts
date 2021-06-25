@@ -428,6 +428,7 @@ namespace ts {
                 return node ? getTypeFromTypeNode(node) : errorType;
             },
             getParameterType: getTypeAtPosition,
+            getParameterIdentifierNameAtPosition,
             getPromisedTypeOfPromise,
             getAwaitedType: type => getAwaitedType(type),
             getReturnTypeOfSignature,
@@ -30352,6 +30353,39 @@ namespace ts {
             return restParameter.escapedName;
         }
 
+        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
+            const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
+            if (pos < paramCount) {
+                const param = signature.parameters[pos];
+                return isParameterDeclarationWithIdentifierName(param) ? [param.escapedName, false] : undefined;
+            }
+
+            const restParameter = signature.parameters[paramCount] || unknownSymbol;
+            if (!isParameterDeclarationWithIdentifierName(restParameter)) {
+                return undefined;
+            }
+
+            const restType = getTypeOfSymbol(restParameter);
+            if (isTupleType(restType)) {
+                const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+                const index = pos - paramCount;
+                const associatedName = associatedNames?.[index];
+                const isRestTupleElement = !!associatedName?.dotDotDotToken;
+                return associatedName ? [
+                    getTupleElementLabel(associatedName),
+                    isRestTupleElement
+                ] : undefined;
+            }
+
+            if (pos === paramCount) {
+                return [restParameter.escapedName, true];
+            }
+            return undefined;
+        }
+
+        function isParameterDeclarationWithIdentifierName(symbol: Symbol) {
+            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
+        }
         function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
             return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && d.name && isIdentifier(d.name));
         }

@@ -251,6 +251,10 @@ namespace FourSlashInterface {
             }
         }
 
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+            this.state.verifyInlayHints(expected, span, preference);
+        }
+
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
@@ -1665,6 +1669,14 @@ namespace FourSlashInterface {
         readonly range: FourSlash.Range;
         readonly containerName?: string;
         readonly containerKind?: ts.ScriptElementKind;
+    }
+
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: ts.InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];

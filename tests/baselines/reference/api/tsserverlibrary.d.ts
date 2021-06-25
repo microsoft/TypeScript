@@ -5676,6 +5676,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5736,6 +5737,15 @@ declare namespace ts {
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
@@ -5841,6 +5851,18 @@ declare namespace ts {
     interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+    enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
+    }
+    interface InlayHint {
+        text: string;
+        position: number;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -6507,6 +6529,14 @@ declare namespace ts {
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
     }
+    interface InlayHintsContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
+        span: TextSpan;
+        preferences: InlayHintsOptions;
+    }
 }
 declare namespace ts {
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
@@ -6798,7 +6828,8 @@ declare namespace ts.server.protocol {
         UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
-        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideInlayHints = "provideInlayHints"
     }
     /**
      * A TypeScript Server message
@@ -8670,6 +8701,35 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
+    enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
+    }
+    interface InlayHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+    interface InlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: InlayHintsRequestArgs;
+    }
+    interface InlayHintItem {
+        text: string;
+        position: Location;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+    interface InlayHintsResponse extends Response {
+        body?: InlayHintItem[];
+    }
     /**
      * Synchronous request for semantic diagnostics of one file.
      */
@@ -10300,6 +10360,7 @@ declare namespace ts.server {
         private getSuggestionDiagnosticsSync;
         private getJsxClosingTag;
         private getDocumentHighlights;
+        private provideInlayHints;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
         private getProjectInfoWorker;
