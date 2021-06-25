@@ -148,12 +148,12 @@ namespace ts.Completions {
     const enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
-        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
+        tryResolve: (exportInfo: readonly CachedSymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
         resolutionLimitExceeded: () => boolean;
     }
 
     interface ModuleSpecifierResolutionResult {
-        exportInfo?: SymbolExportInfo;
+        exportInfo?: CachedSymbolExportInfo;
         moduleSpecifier: string;
     }
 
@@ -181,7 +181,7 @@ namespace ts.Completions {
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
-        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
+        function tryResolve(exportInfo: readonly CachedSymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
             if (isFromAmbientModule) {
                 const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
                 if (result) {
@@ -321,9 +321,10 @@ namespace ts.Completions {
 
                     const { symbol, origin } = Debug.checkDefined(getAutoImportSymbolFromCompletionEntryData(entry.name, entry.data, program, host));
                     const info = exportMap.get(
+                        file.path,
                         entry.name,
-                        origin.isDefaultExport ? symbol.exportSymbol || symbol : symbol,
-                        origin.moduleSymbol,
+                        symbol,
+                        origin.moduleSymbol.name,
                         origin.isFromPackageJson ? autoImportProviderChecker! : checker);
 
                     const result = info && context.tryResolve(info, !isExternalModuleNameRelative(stripQuotes(origin.moduleSymbol.name)));
@@ -1916,7 +1917,6 @@ namespace ts.Completions {
             const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
-            const getChecker = (isFromPackageJson: boolean) => isFromPackageJson ? packageJsonAutoImportProvider!.getTypeChecker() : typeChecker;
             resolvingModuleSpecifiers(
                 "collectAutoImports",
                 host,
@@ -1925,9 +1925,9 @@ namespace ts.Completions {
                 preferences,
                 !!importCompletionNode,
                 context => {
-                    exportInfo.forEach(getChecker, (info, symbolName, isFromAmbientModule) => {
+                    exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
-                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
+                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === i.moduleName);
                         if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
                                 return;
@@ -1938,7 +1938,6 @@ namespace ts.Completions {
                             const { exportInfo = find(info, isImportableExportInfo), moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
 
                             if (!exportInfo) return;
-                            const moduleFile = tryCast(exportInfo.moduleSymbol.valueDeclaration, isSourceFile);
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                             const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
                             pushAutoImportSymbol(symbol, {
@@ -1946,7 +1945,7 @@ namespace ts.Completions {
                                 moduleSpecifier,
                                 symbolName,
                                 exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
-                                fileName: moduleFile?.fileName,
+                                fileName: exportInfo.moduleFileName,
                                 isDefaultExport,
                                 moduleSymbol: exportInfo.moduleSymbol,
                                 isFromPackageJson: exportInfo.isFromPackageJson,
@@ -1958,7 +1957,7 @@ namespace ts.Completions {
                 }
             );
 
-            function isImportableExportInfo(info: SymbolExportInfo) {
+            function isImportableExportInfo(info: CachedSymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
                 if (!moduleFile) {
                     return packageJsonFilter
