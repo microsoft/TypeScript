@@ -24018,8 +24018,8 @@ namespace ts {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
                         // When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
-                        // up to two levels of aliased conditional expressions that are themselves declared as const variables.
-                        if (isConstant && !isMatchingReference(reference, expr) && inlineLevel < 2) {
+                        // up to five levels of aliased conditional expressions that are themselves declared as const variables.
+                        if (isConstant && !isMatchingReference(reference, expr) && inlineLevel < 5) {
                             const symbol = getResolvedSymbol(expr as Identifier);
                             if (isConstVariable(symbol)) {
                                 const declaration = symbol.valueDeclaration;
