@@ -884,6 +884,10 @@ namespace ts.FindAllReferences {
                     node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined);
             }
 
+            if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
+                return [{ definition: { type: DefinitionKind.Keyword, node }, references: [nodeEntry(node)] }];
+            }
+
             // Labels
             if (isJumpStatementTarget(node)) {
                 const labelDefinition = getTargetLabel(node.parent, node.text);

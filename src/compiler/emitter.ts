@@ -1351,6 +1351,8 @@ namespace ts {
                         return emitMethodSignature(node as MethodSignature);
                     case SyntaxKind.MethodDeclaration:
                         return emitMethodDeclaration(node as MethodDeclaration);
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                     case SyntaxKind.Constructor:
                         return emitConstructor(node as ConstructorDeclaration);
                     case SyntaxKind.GetAccessor:
@@ -2061,6 +2063,13 @@ namespace ts {
             emit(node.name);
             emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
+        }
+
+        function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword("static");
+            emitBlockFunctionBody(node.body);
         }
 
         function emitConstructor(node: ConstructorDeclaration) {

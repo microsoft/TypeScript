@@ -80,6 +80,11 @@ Semantic diagnostics in builder refreshed for::
 /home/user/projects/myproject/node_modules/reala/index.d.ts
 /home/user/projects/myproject/src/file.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/home/user/projects/myproject/node_modules/reala/index.d.ts (used version)
+/home/user/projects/myproject/src/file.ts (used version)
+
 WatchedFiles::
 /home/user/projects/myproject/tsconfig.json:
   {"fileName":"/home/user/projects/myproject/tsconfig.json","pollingInterval":250}

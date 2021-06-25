@@ -1,0 +1,71 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock26.ts ===
+class C {
+>C : C
+
+    static {
+        await; // illegal
+>await : any
+> : any
+    }
+    static {
+        await (1); // illegal
+>await (1) : 1
+>(1) : 1
+>1 : 1
+    }
+    static {
+        ({ [await]: 1 }); // illegal
+>({ [await]: 1 }) : { [x: number]: number; }
+>{ [await]: 1 } : { [x: number]: number; }
+>[await] : number
+>await : any
+> : any
+>1 : 1
+    }
+    static {
+        class D {
+>D : D
+
+            [await] = 1; // illegal (computed property names are evaluated outside of a class body
+>[await] : number
+>await : any
+> : any
+>1 : 1
+
+        };
+    }
+    static {
+        ({ await }); // illegal short-hand property reference
+>({ await }) : { await: any; }
+>{ await } : { await: any; }
+>await : any
+> : any
+    }
+    static {
+        await: // illegal, 'await' cannot be used as a label
+>await : any
+> : any
+
+        break await; // illegal, 'await' cannot be used as a label
+> : any
+>await : any
+> : any
+    }
+    static {
+        function f(await) { }
+>f : (await: any) => void
+>await : any
+
+        const ff = (await) => { }
+>ff : any
+>(await) : any
+>await : any
+> : any
+
+        const fff = await => { }
+>fff : any
+>await : any
+> : any
+    }
+}
+

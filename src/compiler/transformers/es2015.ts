@@ -1632,6 +1632,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Constructors are handled in visitClassExpression/visitClassDeclaration
                         break;
 

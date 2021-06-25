@@ -206,6 +206,7 @@ namespace ts {
         PropertyDeclaration,
         MethodSignature,
         MethodDeclaration,
+        ClassStaticBlockDeclaration,
         Constructor,
         GetAccessor,
         SetAccessor,
@@ -873,6 +874,7 @@ namespace ts {
     export type HasJSDoc =
         | ParameterDeclaration
         | CallSignatureDeclaration
+        | ClassStaticBlockDeclaration
         | ConstructSignatureDeclaration
         | MethodSignature
         | PropertySignature
@@ -1533,6 +1535,14 @@ namespace ts {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
         readonly type: TypeNode;
+    }
+
+    export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
+        readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
+        readonly parent: ClassDeclaration | ClassExpression;
+        readonly body: Block;
+        /* @internal */ readonly decorators?: NodeArray<Decorator>; // Present for use with reporting a grammar error
+        /* @internal */ readonly modifier?: ModifiersArray; // Present for use with reporting a grammar error
     }
 
     export interface TypeNode extends Node {
@@ -4104,6 +4114,7 @@ namespace ts {
          * Returns `any` if the index is not valid.
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
+        /* @internal */ getParameterIdentifierNameAtPosition(signature: Signature, parameterIndex: number): [parameterName: __String, isRestParameter: boolean] | undefined;
         getNullableType(type: Type, flags: TypeFlags): Type;
         getNonNullableType(type: Type): Type;
         /* @internal */ getNonOptionalType(type: Type): Type;
@@ -7054,6 +7065,8 @@ namespace ts {
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
 
         //
         // Types

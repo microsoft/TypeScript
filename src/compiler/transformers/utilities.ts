@@ -342,6 +342,16 @@ namespace ts {
         return filter(node.members, m => isInitializedOrStaticProperty(m, requireInitializer, isStatic)) as PropertyDeclaration[];
     }
 
+    function isStaticPropertyDeclarationOrClassStaticBlockDeclaration(element: ClassElement): element is PropertyDeclaration | ClassStaticBlockDeclaration {
+        return isStaticPropertyDeclaration(element) || isClassStaticBlockDeclaration(element);
+    }
+
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[];
+    export function getStaticPropertiesAndClassStaticBlock(node: ClassExpression | ClassDeclaration): readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[] {
+        return filter(node.members, isStaticPropertyDeclarationOrClassStaticBlockDeclaration);
+    }
+
     /**
      * Is a class element either a static or an instance property declaration with an initializer?
      *
@@ -352,6 +362,10 @@ namespace ts {
         return isPropertyDeclaration(member)
             && (!!member.initializer || !requireInitializer)
             && hasStaticModifier(member) === isStatic;
+    }
+
+    function isStaticPropertyDeclaration(member: ClassElement) {
+        return isPropertyDeclaration(member) && hasStaticModifier(member);
     }
 
     /**

@@ -22,6 +22,19 @@ namespace ts.GoToDefinition {
             return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
         }
 
+        if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
+            const classDecl = node.parent.parent;
+            const symbol = getSymbol(classDecl, typeChecker);
+            const staticBlocks = filter(classDecl.members, isClassStaticBlockDeclaration);
+            const containerName = symbol ? typeChecker.symbolToString(symbol, classDecl) : "";
+            const sourceFile = node.getSourceFile();
+            return map(staticBlocks, staticBlock => {
+                let { pos } = moveRangePastModifiers(staticBlock);
+                pos = skipTrivia(sourceFile.text, pos);
+                return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, { start: pos, length: "static".length });
+            });
+        }
+
         const symbol = getSymbol(node, typeChecker);
 
         // Could not find a symbol e.g. node is string or number keyword,
@@ -305,10 +318,12 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
-        const name = getNameOfDeclaration(declaration) || declaration;
-        const sourceFile = name.getSourceFile();
-        const textSpan = createTextSpanFromNode(name, sourceFile);
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, textSpan?: TextSpan): DefinitionInfo {
+        const sourceFile = declaration.getSourceFile();
+        if (!textSpan) {
+            const name = getNameOfDeclaration(declaration) || declaration;
+            textSpan = createTextSpanFromNode(name, sourceFile);
+        }
         return {
             fileName: sourceFile.fileName,
             textSpan,

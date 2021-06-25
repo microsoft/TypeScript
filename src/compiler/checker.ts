@@ -428,6 +428,7 @@ namespace ts {
                 return node ? getTypeFromTypeNode(node) : errorType;
             },
             getParameterType: getTypeAtPosition,
+            getParameterIdentifierNameAtPosition,
             getPromisedTypeOfPromise,
             getAwaitedType: type => getAwaitedType(type),
             getReturnTypeOfSignature,
@@ -15368,17 +15369,20 @@ namespace ts {
             return isEmptyObjectType(type) || !!(type.flags & (TypeFlags.Null | TypeFlags.Undefined | TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index));
         }
 
-        function tryMergeUnionOfObjectTypeAndEmptyObject(type: UnionType, readonly: boolean): Type | undefined {
-            if (every(type.types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
-                return find(type.types, isEmptyObjectType) || emptyObjectType;
+        function tryMergeUnionOfObjectTypeAndEmptyObject(type: Type, readonly: boolean): Type {
+            if (!(type.flags & TypeFlags.Union)) {
+                return type;
             }
-            const firstType = find(type.types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            if (every((type as UnionType).types, isEmptyObjectTypeOrSpreadsIntoEmptyObject)) {
+                return find((type as UnionType).types, isEmptyObjectType) || emptyObjectType;
+            }
+            const firstType = find((type as UnionType).types, t => !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (!firstType) {
-                return undefined;
+                return type;
             }
-            const secondType = firstType && find(type.types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
+            const secondType = find((type as UnionType).types, t => t !== firstType && !isEmptyObjectTypeOrSpreadsIntoEmptyObject(t));
             if (secondType) {
-                return undefined;
+                return type;
             }
             return getAnonymousPartialType(firstType);
 
@@ -15424,20 +15428,14 @@ namespace ts {
             if (right.flags & TypeFlags.Never) {
                 return left;
             }
+            left = tryMergeUnionOfObjectTypeAndEmptyObject(left, readonly);
             if (left.flags & TypeFlags.Union) {
-                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(left as UnionType, readonly);
-                if (merged) {
-                    return getSpreadType(merged, right, symbol, objectFlags, readonly);
-                }
                 return checkCrossProductUnion([left, right])
                     ? mapType(left, t => getSpreadType(t, right, symbol, objectFlags, readonly))
                     : errorType;
             }
+            right = tryMergeUnionOfObjectTypeAndEmptyObject(right, readonly);
             if (right.flags & TypeFlags.Union) {
-                const merged = tryMergeUnionOfObjectTypeAndEmptyObject(right as UnionType, readonly);
-                if (merged) {
-                    return getSpreadType(left, merged, symbol, objectFlags, readonly);
-                }
                 return checkCrossProductUnion([left, right])
                     ? mapType(right, t => getSpreadType(left, t, symbol, objectFlags, readonly))
                     : errorType;
@@ -15487,7 +15485,7 @@ namespace ts {
                         const declarations = concatenate(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.escapedName);
-                        result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
+                        result.type = getUnionType([getTypeOfSymbol(leftProp), removeMissingOrUndefinedType(rightType)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;
@@ -22034,7 +22032,7 @@ namespace ts {
                     if ((prop as TransientSymbol).isDiscriminantProperty === undefined) {
                         (prop as TransientSymbol).isDiscriminantProperty =
                             ((prop as TransientSymbol).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
-                            !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Instantiable);
+                            !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Instantiable & ~TypeFlags.TemplateLiteral);
                     }
                     return !!(prop as TransientSymbol).isDiscriminantProperty;
                 }
@@ -24188,7 +24186,7 @@ namespace ts {
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
             if (symbol === argumentsSymbol) {
-                if (isInPropertyInitializer(node)) {
+                if (isInPropertyInitializerOrClassStaticBlock(node)) {
                     error(node, Diagnostics.arguments_cannot_be_referenced_in_property_initializers);
                     return errorType;
                 }
@@ -24547,6 +24545,9 @@ namespace ts {
                         // do not return here so in case if lexical this is captured - it will be reflected in flags on NodeLinks
                     }
                     break;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    error(node, Diagnostics.this_cannot_be_referenced_in_current_location);
+                    break;
                 case SyntaxKind.ComputedPropertyName:
                     error(node, Diagnostics.this_cannot_be_referenced_in_a_computed_property_name);
                     break;
@@ -24605,7 +24606,8 @@ namespace ts {
 
             if (isClassLike(container.parent)) {
                 const symbol = getSymbolOfNode(container.parent);
-                const type = hasSyntacticModifier(container, ModifierFlags.Static) ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
+                const isStatic = hasSyntacticModifier(container, ModifierFlags.Static) || isClassStaticBlockDeclaration(container);
+                const type = isStatic ? getTypeOfSymbol(symbol) : (getDeclaredTypeOfSymbol(symbol) as InterfaceType).thisType!;
                 return getFlowTypeOfReference(node, type);
             }
 
@@ -26312,14 +26314,15 @@ namespace ts {
                     }
                     const type = getReducedType(checkExpression(memberDecl.expression));
                     if (isValidSpreadType(type)) {
+                        const mergedType = tryMergeUnionOfObjectTypeAndEmptyObject(type, inConstContext);
                         if (allPropertiesTable) {
-                            checkSpreadPropOverrides(type, allPropertiesTable, memberDecl);
+                            checkSpreadPropOverrides(mergedType, allPropertiesTable, memberDecl);
                         }
                         offset = propertiesArray.length;
                         if (spread === errorType) {
                             continue;
                         }
-                        spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
+                        spread = getSpreadType(spread, mergedType, node.symbol, objectFlags, inConstContext);
                     }
                     else {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
@@ -26634,11 +26637,12 @@ namespace ts {
 
         function checkSpreadPropOverrides(type: Type, props: SymbolTable, spread: SpreadAssignment | JsxSpreadAttribute) {
             for (const right of getPropertiesOfType(type)) {
-                const left = props.get(right.escapedName);
-                const rightType = getTypeOfSymbol(right);
-                if (left && !maybeTypeOfKind(rightType, TypeFlags.Nullable) && !(maybeTypeOfKind(rightType, TypeFlags.AnyOrUnknown) && right.flags & SymbolFlags.Optional)) {
-                    const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
-                    addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                if (!(right.flags & SymbolFlags.Optional)) {
+                    const left = props.get(right.escapedName);
+                    if (left) {
+                        const diagnostic = error(left.valueDeclaration, Diagnostics._0_is_specified_more_than_once_so_this_usage_will_be_overwritten, unescapeLeadingUnderscores(left.escapedName));
+                        addRelatedInfo(diagnostic, createDiagnosticForNode(spread, Diagnostics.This_spread_always_overwrites_this_property));
+                    }
                 }
             }
         }
@@ -27567,7 +27571,7 @@ namespace ts {
 
             let diagnosticMessage;
             const declarationName = idText(right);
-            if (isInPropertyInitializer(node)
+            if (isInPropertyInitializerOrClassStaticBlock(node)
                 && !isOptionalPropertyDeclaration(valueDeclaration)
                 && !(isAccessExpression(node) && isAccessExpression(node.expression))
                 && !isBlockScopedNameDeclaredBeforeUse(valueDeclaration, right)
@@ -27588,7 +27592,7 @@ namespace ts {
             }
         }
 
-        function isInPropertyInitializer(node: Node): boolean {
+        function isInPropertyInitializerOrClassStaticBlock(node: Node): boolean {
             return !!findAncestor(node, node => {
                 switch (node.kind) {
                     case SyntaxKind.PropertyDeclaration:
@@ -27608,6 +27612,8 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
+                    case SyntaxKind.ExpressionStatement:
+                        return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
                     default:
                         return isExpressionNode(node) ? false : "quit";
                 }
@@ -30355,6 +30361,39 @@ namespace ts {
             return restParameter.escapedName;
         }
 
+        function getParameterIdentifierNameAtPosition(signature: Signature, pos: number): [parameterName: __String, isRestParameter: boolean] | undefined {
+            const paramCount = signature.parameters.length - (signatureHasRestParameter(signature) ? 1 : 0);
+            if (pos < paramCount) {
+                const param = signature.parameters[pos];
+                return isParameterDeclarationWithIdentifierName(param) ? [param.escapedName, false] : undefined;
+            }
+
+            const restParameter = signature.parameters[paramCount] || unknownSymbol;
+            if (!isParameterDeclarationWithIdentifierName(restParameter)) {
+                return undefined;
+            }
+
+            const restType = getTypeOfSymbol(restParameter);
+            if (isTupleType(restType)) {
+                const associatedNames = ((restType as TypeReference).target as TupleType).labeledElementDeclarations;
+                const index = pos - paramCount;
+                const associatedName = associatedNames?.[index];
+                const isRestTupleElement = !!associatedName?.dotDotDotToken;
+                return associatedName ? [
+                    getTupleElementLabel(associatedName),
+                    isRestTupleElement
+                ] : undefined;
+            }
+
+            if (pos === paramCount) {
+                return [restParameter.escapedName, true];
+            }
+            return undefined;
+        }
+
+        function isParameterDeclarationWithIdentifierName(symbol: Symbol) {
+            return symbol.valueDeclaration && isParameter(symbol.valueDeclaration) && isIdentifier(symbol.valueDeclaration.name);
+        }
         function isValidDeclarationForTupleLabel(d: Declaration): d is NamedTupleMember | (ParameterDeclaration & { name: Identifier }) {
             return d.kind === SyntaxKind.NamedTupleMember || (isParameter(d) && d.name && isIdentifier(d.name));
         }
@@ -31272,7 +31311,11 @@ namespace ts {
         function checkAwaitExpression(node: AwaitExpression): Type {
             // Grammar checking
             if (produceDiagnostics) {
-                if (!(node.flags & NodeFlags.AwaitContext)) {
+                const container = getContainingFunctionOrClassStaticBlock(node);
+                if (container && isClassStaticBlockDeclaration(container)) {
+                    error(node, Diagnostics.Await_expression_cannot_be_used_inside_a_class_static_block);
+                }
+                else if (!(node.flags & NodeFlags.AwaitContext)) {
                     if (isInTopLevelContext(node)) {
                         const sourceFile = getSourceFileOfNode(node);
                         if (!hasParseDiagnostics(sourceFile)) {
@@ -31297,9 +31340,8 @@ namespace ts {
                         if (!hasParseDiagnostics(sourceFile)) {
                             const span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                             const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.await_expressions_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules);
-                            const func = getContainingFunction(node);
-                            if (func && func.kind !== SyntaxKind.Constructor && (getFunctionFlags(func) & FunctionFlags.Async) === 0) {
-                                const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
+                            if (container && container.kind !== SyntaxKind.Constructor && (getFunctionFlags(container) & FunctionFlags.Async) === 0) {
+                                const relatedInfo = createDiagnosticForNode(container, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
                                 addRelatedInfo(diagnostic, relatedInfo);
                             }
                             diagnostics.add(diagnostic);
@@ -33458,6 +33500,12 @@ namespace ts {
             }
         }
 
+        function checkClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            checkGrammarDecoratorsAndModifiers(node);
+
+            forEachChild(node, checkSourceElement);
+        }
+
         function checkConstructorDeclaration(node: ConstructorDeclaration) {
             // Grammar check on signature of constructor and modifier of the constructor is done in checkSignatureDeclaration function.
             checkSignatureDeclaration(node);
@@ -35065,10 +35113,11 @@ namespace ts {
                         break;
                     case SyntaxKind.IndexSignature:
                     case SyntaxKind.SemicolonClassElement:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Can't be private
                         break;
                     default:
-                        Debug.fail();
+                        Debug.fail("Unexpected class member");
                 }
             }
         }
@@ -35500,6 +35549,7 @@ namespace ts {
             if (!node.name) {
                 return;
             }
+
             // For a computed property, just check the initializer and exit
             // Do not use hasDynamicName here, because that returns false for well known symbols.
             // We want to perform checkComputedPropertyName for all computed properties, including
@@ -35876,11 +35926,17 @@ namespace ts {
         function checkForOfStatement(node: ForOfStatement): void {
             checkGrammarForInOrForOfStatement(node);
 
+            const container = getContainingFunctionOrClassStaticBlock(node);
             if (node.awaitModifier) {
-                const functionFlags = getFunctionFlags(getContainingFunction(node));
-                if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
-                    // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
+                if (container && isClassStaticBlockDeclaration(container)) {
+                    grammarErrorOnNode(node.awaitModifier, Diagnostics.For_await_loops_cannot_be_used_inside_a_class_static_block);
+                }
+                else {
+                    const functionFlags = getFunctionFlags(container);
+                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
+                        // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
+                    }
                 }
             }
             else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
@@ -36760,28 +36816,33 @@ namespace ts {
                 return;
             }
 
-            const func = getContainingFunction(node);
-            if (!func) {
+            const container = getContainingFunctionOrClassStaticBlock(node);
+            if(container && isClassStaticBlockDeclaration(container)) {
+                grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_cannot_be_used_inside_a_class_static_block);
+                return;
+            }
+
+            if (!container) {
                 grammarErrorOnFirstToken(node, Diagnostics.A_return_statement_can_only_be_used_within_a_function_body);
                 return;
             }
 
-            const signature = getSignatureFromDeclaration(func);
+            const signature = getSignatureFromDeclaration(container);
             const returnType = getReturnTypeOfSignature(signature);
-            const functionFlags = getFunctionFlags(func);
+            const functionFlags = getFunctionFlags(container);
             if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                if (func.kind === SyntaxKind.SetAccessor) {
+                if (container.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
                         error(node, Diagnostics.Setters_cannot_return_a_value);
                     }
                 }
-                else if (func.kind === SyntaxKind.Constructor) {
+                else if (container.kind === SyntaxKind.Constructor) {
                     if (node.expression && !checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression)) {
                         error(node, Diagnostics.Return_type_of_constructor_signature_must_be_assignable_to_the_instance_type_of_the_class);
                     }
                 }
-                else if (getReturnTypeFromAnnotation(func)) {
+                else if (getReturnTypeFromAnnotation(container)) {
                     const unwrappedReturnType = unwrapReturnType(returnType, functionFlags) ?? returnType;
                     const unwrappedExprType = functionFlags & FunctionFlags.Async
                         ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
@@ -36794,7 +36855,7 @@ namespace ts {
                     }
                 }
             }
-            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
+            else if (container.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(container, returnType)) {
                 // The function has a return type, but the return statement doesn't have an expression.
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
@@ -38624,6 +38685,8 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
                     return checkMethodDeclaration(node as MethodDeclaration | MethodSignature);
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return checkClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                 case SyntaxKind.Constructor:
                     return checkConstructorDeclaration(node as ConstructorDeclaration);
                 case SyntaxKind.GetAccessor:
@@ -41101,6 +41164,7 @@ namespace ts {
                         case SyntaxKind.InterfaceDeclaration:
                         case SyntaxKind.VariableStatement:
                         case SyntaxKind.TypeAliasDeclaration:
+                        case SyntaxKind.ClassStaticBlockDeclaration:
                             return true;
                         case SyntaxKind.EnumDeclaration:
                             return nodeHasAnyModifiersExcept(node, SyntaxKind.ConstKeyword);
@@ -41838,7 +41902,7 @@ namespace ts {
         function checkGrammarBreakOrContinueStatement(node: BreakOrContinueStatement): boolean {
             let current: Node = node;
             while (current) {
-                if (isFunctionLike(current)) {
+                if (isFunctionLikeOrClassStaticBlockDeclaration(current)) {
                     return grammarErrorOnNode(node, Diagnostics.Jump_target_cannot_cross_function_boundary);
                 }
 

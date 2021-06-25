@@ -1,0 +1,93 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock17.ts ===
+let friendA: { getX(o: A): number, setX(o: A, v: number): void };
+>friendA : Symbol(friendA, Decl(classStaticBlock17.ts, 0, 3))
+>getX : Symbol(getX, Decl(classStaticBlock17.ts, 0, 14))
+>o : Symbol(o, Decl(classStaticBlock17.ts, 0, 20))
+>A : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+>setX : Symbol(setX, Decl(classStaticBlock17.ts, 0, 34))
+>o : Symbol(o, Decl(classStaticBlock17.ts, 0, 40))
+>A : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+>v : Symbol(v, Decl(classStaticBlock17.ts, 0, 45))
+
+class A {
+>A : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+
+  #x: number;
+>#x : Symbol(A.#x, Decl(classStaticBlock17.ts, 2, 9))
+
+  constructor (v: number) {
+>v : Symbol(v, Decl(classStaticBlock17.ts, 5, 15))
+
+    this.#x = v;
+>this.#x : Symbol(A.#x, Decl(classStaticBlock17.ts, 2, 9))
+>this : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+>v : Symbol(v, Decl(classStaticBlock17.ts, 5, 15))
+  }
+
+  getX () {
+>getX : Symbol(A.getX, Decl(classStaticBlock17.ts, 7, 3))
+
+    return this.#x;
+>this.#x : Symbol(A.#x, Decl(classStaticBlock17.ts, 2, 9))
+>this : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+  }
+
+  static {
+    friendA = {
+>friendA : Symbol(friendA, Decl(classStaticBlock17.ts, 0, 3))
+
+      getX(obj) { return obj.#x },
+>getX : Symbol(getX, Decl(classStaticBlock17.ts, 14, 15))
+>obj : Symbol(obj, Decl(classStaticBlock17.ts, 15, 11))
+>obj.#x : Symbol(A.#x, Decl(classStaticBlock17.ts, 2, 9))
+>obj : Symbol(obj, Decl(classStaticBlock17.ts, 15, 11))
+
+      setX(obj, value) { obj.#x = value }
+>setX : Symbol(setX, Decl(classStaticBlock17.ts, 15, 34))
+>obj : Symbol(obj, Decl(classStaticBlock17.ts, 16, 11))
+>value : Symbol(value, Decl(classStaticBlock17.ts, 16, 15))
+>obj.#x : Symbol(A.#x, Decl(classStaticBlock17.ts, 2, 9))
+>obj : Symbol(obj, Decl(classStaticBlock17.ts, 16, 11))
+>value : Symbol(value, Decl(classStaticBlock17.ts, 16, 15))
+
+    };
+  }
+};
+
+class B {
+>B : Symbol(B, Decl(classStaticBlock17.ts, 19, 2))
+
+  constructor(a: A) {
+>a : Symbol(a, Decl(classStaticBlock17.ts, 22, 14))
+>A : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+
+    const x = friendA.getX(a); // ok
+>x : Symbol(x, Decl(classStaticBlock17.ts, 23, 9))
+>friendA.getX : Symbol(getX, Decl(classStaticBlock17.ts, 0, 14))
+>friendA : Symbol(friendA, Decl(classStaticBlock17.ts, 0, 3))
+>getX : Symbol(getX, Decl(classStaticBlock17.ts, 0, 14))
+>a : Symbol(a, Decl(classStaticBlock17.ts, 22, 14))
+
+    friendA.setX(a, x + 1); // ok
+>friendA.setX : Symbol(setX, Decl(classStaticBlock17.ts, 0, 34))
+>friendA : Symbol(friendA, Decl(classStaticBlock17.ts, 0, 3))
+>setX : Symbol(setX, Decl(classStaticBlock17.ts, 0, 34))
+>a : Symbol(a, Decl(classStaticBlock17.ts, 22, 14))
+>x : Symbol(x, Decl(classStaticBlock17.ts, 23, 9))
+  }
+};
+
+const a = new A(41);
+>a : Symbol(a, Decl(classStaticBlock17.ts, 28, 5))
+>A : Symbol(A, Decl(classStaticBlock17.ts, 0, 65))
+
+const b = new B(a);
+>b : Symbol(b, Decl(classStaticBlock17.ts, 29, 5))
+>B : Symbol(B, Decl(classStaticBlock17.ts, 19, 2))
+>a : Symbol(a, Decl(classStaticBlock17.ts, 28, 5))
+
+a.getX();
+>a.getX : Symbol(A.getX, Decl(classStaticBlock17.ts, 7, 3))
+>a : Symbol(a, Decl(classStaticBlock17.ts, 28, 5))
+>getX : Symbol(A.getX, Decl(classStaticBlock17.ts, 7, 3))
+
