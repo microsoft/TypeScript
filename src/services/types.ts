@@ -1404,7 +1404,10 @@ namespace ts {
          */
         memberVariableElement = "property",
 
-        /** class X { constructor() { } } */
+        /**
+         * class X { constructor() { } }
+         * class X { static { } }
+         */
         constructorImplementationElement = "constructor",
 
         /** interface Y { ():number; } */

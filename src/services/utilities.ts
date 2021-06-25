@@ -416,7 +416,9 @@ namespace ts {
             case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
             case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
             case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
-            case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
             case SyntaxKind.Parameter: return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
@@ -1620,7 +1622,7 @@ namespace ts {
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & ModifierFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & ModifierFlags.Static || isClassStaticBlockDeclaration(node)) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (flags & ModifierFlags.Deprecated) result.push(ScriptElementKindModifier.deprecatedModifier);

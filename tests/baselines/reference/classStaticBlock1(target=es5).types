@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock1.ts ===
+const a = 2;
+>a : 2
+>2 : 2
+
+class C {
+>C : C
+
+    static {
+        const a = 1;
+>a : 1
+>1 : 1
+
+        a;
+>a : 1
+    }
+}
+

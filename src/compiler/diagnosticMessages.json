@@ -7154,5 +7154,21 @@
     "Class decorators can't be used with static private identifier. Consider removing the experimental decorator.": {
         "category": "Error",
         "code": 18036
+    },
+    "Await expression cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18037
+    },
+    "'For await' loops cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18038
+    },
+    "Invalid use of '{0}'. It cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18039
+    },
+    "A 'return' statement cannot be used inside a class static block.": {
+        "category": "Error",
+        "code": 18041
     }
 }
