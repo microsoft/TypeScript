@@ -35720,6 +35720,10 @@ namespace ts {
             }
 
             const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
+            if (!testedSymbol && !isPromise) {
+                return;
+            }
+
             const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
                 || testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode!, testedSymbol);
             if (!isUsed) {
