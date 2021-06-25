@@ -762,20 +762,24 @@ namespace ts.server {
                 });
             }
 
-            protected getFileFromRequest(request: protocol.FileRequest): protocol.FileRequestArgs | undefined {
+            protected override getFileFromRequest(request: protocol.FileRequest): protocol.FileRequestArgs | undefined {
                 return request.arguments && request.arguments.file ? request.arguments : undefined;
             }
 
-            protected getCommandFromRequest(request: protocol.Request) {
+            protected override getCommandFromRequest(request: protocol.Request) {
                 return request.command;
             }
 
-            protected getSeqFromRequest(request: protocol.Request) {
+            protected override getSeqFromRequest(request: protocol.Request) {
                 return request.seq;
+            }
+
+            protected override getHandlers() {
+                return this.handlers;
             }
         }
 
-        class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage> {
+        class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
             reader: rpc.StreamMessageReader = new rpc.StreamMessageReader(process.stdin);
 
             listen() {
@@ -788,15 +792,19 @@ namespace ts.server {
                 });
             }
 
-            protected parseMessage(message: rpc.Message): rpc.RequestMessage {
+            protected override parseMessage(message: rpc.Message): rpc.RequestMessage | rpc.NotificationMessage {
                 return message as rpc.RequestMessage;
             }
 
-            protected getCommandFromRequest(request: rpc.RequestMessage) {
+            protected override getCommandFromRequest(request: rpc.RequestMessage | rpc.NotificationMessage) {
                 return request.method;
             }
 
-            protected getSeqFromRequest(request: rpc.RequestMessage) {
+            protected override getSeqFromRequest(request: rpc.RequestMessage | rpc.NotificationMessage) {
+                if (!("id" in request)) {
+                    return -1 // TODO: will the language server choke on this?
+                }
+
                 if (request.id === null) {
                     return -1; // TODO: should never happen, allowable by JSONRPC but not LSP
                 }
@@ -808,21 +816,22 @@ namespace ts.server {
                 return Number(request.id);
             }
 
-            protected toStringMessage(message: rpc.RequestMessage) {
+            protected override toStringMessage(message: rpc.RequestMessage) {
                 return JSON.stringify(message);
             }
 
-            protected getHandlers() {
+            protected override getHandlers() {
                 return this.lspHandlers;
             }
 
-            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage) => HandlerResponse>({
+            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
                 [lsp.Methods.Initialize]: (_request: lsp.InitializeRequest) => this.requiredResponse({
                     capabilities: {}
                 }),
+                [lsp.Methods.Initialized]: (_request: lsp.InitializedNotification) => this.notRequired(),
             }));
 
-            public send(msg: protocol.Message) {
+            public override send(msg: protocol.Message) {
                 if (msg.type === "event") {
                     if (this.logger.hasLevel(LogLevel.verbose)) {
                         this.logger.info(`Session does not support events: ignored event: ${JSON.stringify(msg)}`);

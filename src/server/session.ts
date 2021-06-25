@@ -2566,7 +2566,7 @@ namespace ts.server {
 
         exit() { /*overridden*/ }
 
-        private notRequired(): HandlerResponse {
+        protected notRequired(): HandlerResponse {
             return { responseRequired: false };
         }
 
@@ -2995,7 +2995,7 @@ namespace ts.server {
         }
 
         protected getHandlers(): ESMap<string, (request: TRequest) => HandlerResponse> {
-            return this.handlers as unknown as ESMap<string, (request: TRequest) => HandlerResponse>;
+            return new Map();
         }
 
         public executeCommand(request: TRequest, command: string, seq: number): HandlerResponse {

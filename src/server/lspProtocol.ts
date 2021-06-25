@@ -1,6 +1,7 @@
 namespace ts.server.lsp {
     export const enum Methods {
-        Initialize = "initialize"
+        Initialize = "initialize",
+        Initialized = "initialized",
     }
 
     export interface Message {
@@ -30,5 +31,10 @@ namespace ts.server.lsp {
 
     export interface InitializeParams {
         processId: number | null;
+    }
+
+    export interface InitializedNotification extends NotificationMessage {
+        method: Methods.Initialized;
+        params?: {};
     }
 }
