@@ -169,6 +169,7 @@
         "unittests/tsserver/cancellationToken.ts",
         "unittests/tsserver/compileOnSave.ts",
         "unittests/tsserver/completions.ts",
+        "unittests/tsserver/completionsIncomplete.ts",
         "unittests/tsserver/configFileSearch.ts",
         "unittests/tsserver/configuredProjects.ts",
         "unittests/tsserver/declarationFileMaps.ts",

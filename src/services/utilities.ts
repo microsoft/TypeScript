@@ -3194,7 +3194,8 @@ namespace ts {
 
     export interface ExportMapCache {
         clear(): void;
-        get(file: Path, checker: TypeChecker, projectVersion?: string): MultiMap<string, SymbolExportInfo> | undefined;
+        get(file: Path, checker: TypeChecker): MultiMap<string, SymbolExportInfo> | undefined;
+        getProjectVersion(): string | undefined;
         set(suggestions: MultiMap<string, SymbolExportInfo>, projectVersion?: string): void;
         isEmpty(): boolean;
         /** @returns Whether the change resulted in the cache being cleared */
@@ -3218,30 +3219,13 @@ namespace ts {
                     projectVersion = version;
                 }
             },
-            get: (file, checker, version) => {
+            get: (file) => {
                 if (usableByFileName && file !== usableByFileName) {
                     return undefined;
                 }
-                if (version && projectVersion === version) {
-                    return cache;
-                }
-                cache?.forEach(infos => {
-                    for (const info of infos) {
-                        // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
-                        // in the checker, even though the symbols to merge are the same (guaranteed by
-                        // cache invalidation in synchronizeHostData).
-                        if (info.symbol.declarations?.length) {
-                            info.symbol = checker.getMergedSymbol(info.exportKind === ExportKind.Default
-                                ? info.symbol.declarations[0].localSymbol ?? info.symbol.declarations[0].symbol
-                                : info.symbol.declarations[0].symbol);
-                        }
-                        if (info.moduleSymbol.declarations?.length) {
-                            info.moduleSymbol = checker.getMergedSymbol(info.moduleSymbol.declarations[0].symbol);
-                        }
-                    }
-                });
-                  return cache;
+                return cache;
             },
+            getProjectVersion: () => projectVersion,
             onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean) {
                 if (fileIsGlobalOnly(oldSourceFile) && fileIsGlobalOnly(newSourceFile)) {
                     // File is purely global; doesn't affect export map

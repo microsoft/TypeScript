@@ -227,6 +227,12 @@ namespace ts {
         Syntactic,
     }
 
+    export interface IncompleteCompletionsCache {
+        get(): CompletionInfo | undefined;
+        set(response: CompletionInfo): void;
+        clear(): void;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -274,10 +280,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
-        /* @internal */
-        getGlobalTypingsCacheLocation?(): string | undefined;
-        /* @internal */
-        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
+        /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+        /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.
@@ -294,30 +298,20 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
 
-        /* @internal */
-        getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
-        /* @internal */
-        getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */
-        getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
-        /* @internal */
-        getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */
-        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
-        /* @internal */
-        getExportMapCache?(): ExportMapCache;
-        /* @internal */
-        getModuleSpecifierCache?(): ModuleSpecifierCache;
-        /* @internal */
-        setCompilerHost?(host: CompilerHost): void;
-        /* @internal */
-        useSourceOfProjectReferenceRedirect?(): boolean;
-        /* @internal */
-        getPackageJsonAutoImportProvider?(): Program | undefined;
-        /* @internal */
-        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+        /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getExportMapCache?(): ExportMapCache;
+        /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
+        /* @internal */ setCompilerHost?(host: CompilerHost): void;
+        /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+        /* @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     }
 
     /* @internal */
@@ -560,12 +554,24 @@ namespace ts {
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
+    export const enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3,
+    }
+
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
          * (as opposed to when the user explicitly requested them) this should be set.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */

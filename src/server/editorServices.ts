@@ -795,7 +795,8 @@ namespace ts.server {
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
-
+        /*@internal*/
+        private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
         /*@internal*/
         readonly session: Session<unknown> | undefined;
 
@@ -4146,6 +4147,26 @@ namespace ts.server {
                 }
             }
         }
+
+        /*@internal*/
+        getIncompleteCompletionsCache() {
+            return this.incompleteCompletionsCache ||= createIncompleteCompletionsCache();
+        }
+    }
+
+    function createIncompleteCompletionsCache(): IncompleteCompletionsCache {
+        let info: CompletionInfo | undefined;
+        return {
+            get() {
+                return info;
+            },
+            set(newInfo) {
+                info = newInfo;
+            },
+            clear() {
+                info = undefined;
+            }
+        };
     }
 
     /* @internal */

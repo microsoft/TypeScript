@@ -274,6 +274,10 @@ namespace ts {
         return node as SourceFile;
     }
 
+    export function getSourceFileOfModule(module: Symbol) {
+        return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
+    }
+
     export function isStatementWithLocals(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Block:

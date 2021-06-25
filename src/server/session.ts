@@ -1841,6 +1841,7 @@ namespace ts.server {
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
+                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });

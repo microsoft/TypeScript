@@ -1744,6 +1744,11 @@ namespace ts.server {
         watchNodeModulesForPackageJsonChanges(directoryPath: string) {
             return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
         }
+
+        /*@internal*/
+        getIncompleteCompletionsCache() {
+            return this.projectService.getIncompleteCompletionsCache();
+        }
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: ESMap<Path, readonly string[]>): SortedReadonlyArray<string> {

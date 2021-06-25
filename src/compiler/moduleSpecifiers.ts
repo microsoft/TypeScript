@@ -90,6 +90,35 @@ namespace ts.moduleSpecifiers {
             getLocalModuleSpecifier(toFileName, info, compilerOptions, host, preferences);
     }
 
+    export function tryGetModuleSpecifiersFromCache(
+        moduleSymbol: Symbol,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): readonly string[] | undefined {
+        return tryGetModuleSpecifiersFromCacheWorker(
+            moduleSymbol,
+            importingSourceFile,
+            host,
+            userPreferences)[0];
+    }
+
+    function tryGetModuleSpecifiersFromCacheWorker(
+        moduleSymbol: Symbol,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): readonly [specifiers?: readonly string[], moduleFile?: SourceFile, modulePaths?: readonly ModulePath[], cache?: ModuleSpecifierCache] {
+        const moduleSourceFile = getSourceFileOfModule(moduleSymbol);
+        if (!moduleSourceFile) {
+            return emptyArray as [];
+        }
+
+        const cache = host.getModuleSpecifierCache?.();
+        const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences);
+        return [cached?.moduleSpecifiers, moduleSourceFile, cached?.modulePaths, cache];
+    }
+
     /** Returns an import for each symlink and for the realpath. */
     export function getModuleSpecifiers(
         moduleSymbol: Symbol,
@@ -99,24 +128,53 @@ namespace ts.moduleSpecifiers {
         host: ModuleSpecifierResolutionHost,
         userPreferences: UserPreferences,
     ): readonly string[] {
+        return getModuleSpecifiersWithCacheInfo(
+            moduleSymbol,
+            checker,
+            compilerOptions,
+            importingSourceFile,
+            host,
+            userPreferences,
+        ).moduleSpecifiers;
+    }
+
+    export function getModuleSpecifiersWithCacheInfo(
+        moduleSymbol: Symbol,
+        checker: TypeChecker,
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): { moduleSpecifiers: readonly string[], computedWithoutCache: boolean } {
+        let computedWithoutCache = false;
         const ambient = tryGetModuleNameFromAmbientModule(moduleSymbol, checker);
-        if (ambient) return [ambient];
+        if (ambient) return { moduleSpecifiers: [ambient], computedWithoutCache };
 
-        const info = getInfo(importingSourceFile.path, host);
-        const moduleSourceFile = getSourceFileOfNode(moduleSymbol.valueDeclaration || getNonAugmentationDeclaration(moduleSymbol));
-        if (!moduleSourceFile) {
-            return [];
-        }
+        // eslint-disable-next-line prefer-const
+        let [specifiers, moduleSourceFile, modulePaths, cache] = tryGetModuleSpecifiersFromCacheWorker(
+            moduleSymbol,
+            importingSourceFile,
+            host,
+            userPreferences,
+        );
+        if (specifiers) return { moduleSpecifiers: specifiers, computedWithoutCache };
+        if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache };
 
-        const cache = host.getModuleSpecifierCache?.();
-        const cached = cache?.get(importingSourceFile.path, moduleSourceFile.path, userPreferences);
-        let modulePaths;
-        if (cached) {
-            if (cached.moduleSpecifiers) return cached.moduleSpecifiers;
-            modulePaths = cached.modulePaths;
-        }
-
+        computedWithoutCache = true;
         modulePaths ||= getAllModulePathsWorker(importingSourceFile.path, moduleSourceFile.originalFileName, host);
+        const result = computeModuleSpecifiers(modulePaths, compilerOptions, importingSourceFile, host, userPreferences);
+        cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, result);
+        return { moduleSpecifiers: result, computedWithoutCache };
+    }
+
+    function computeModuleSpecifiers(
+        modulePaths: readonly ModulePath[],
+        compilerOptions: CompilerOptions,
+        importingSourceFile: SourceFile,
+        host: ModuleSpecifierResolutionHost,
+        userPreferences: UserPreferences,
+    ): readonly string[] {
+        const info = getInfo(importingSourceFile.path, host);
         const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
         const existingSpecifier = forEach(modulePaths, modulePath => forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
@@ -131,7 +189,6 @@ namespace ts.moduleSpecifiers {
         ));
         if (existingSpecifier) {
             const moduleSpecifiers = [existingSpecifier];
-            cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
             return moduleSpecifiers;
         }
 
@@ -151,7 +208,6 @@ namespace ts.moduleSpecifiers {
             if (specifier && modulePath.isRedirect) {
                 // If we got a specifier for a redirect, it was a bare package specifier (e.g. "@foo/bar",
                 // not "@foo/bar/path/to/file"). No other specifier will be this good, so stop looking.
-                cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, nodeModulesSpecifiers!);
                 return nodeModulesSpecifiers!;
             }
 
@@ -175,11 +231,9 @@ namespace ts.moduleSpecifiers {
             }
         }
 
-        const moduleSpecifiers = pathsSpecifiers?.length ? pathsSpecifiers :
+        return pathsSpecifiers?.length ? pathsSpecifiers :
             nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
             Debug.checkDefined(relativeSpecifiers);
-        cache?.set(importingSourceFile.path, moduleSourceFile.path, userPreferences, modulePaths, moduleSpecifiers);
-        return moduleSpecifiers;
     }
 
     interface Info {
