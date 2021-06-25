@@ -2313,6 +2313,9 @@ namespace ts.Completions {
                         break;
                 }
             }
+            if (isClassStaticBlockDeclaration(classElement)) {
+                classElementModifierFlags |= ModifierFlags.Static;
+            }
 
             // No member list for private methods
             if (!(classElementModifierFlags & ModifierFlags.Private)) {
@@ -2766,7 +2769,7 @@ namespace ts.Completions {
                 }
 
                 // do not filter it out if the static presence doesnt match
-                if (hasEffectiveModifier(m, ModifierFlags.Static) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
+                if (isStatic(m) !== !!(currentClassElementModifierFlags & ModifierFlags.Static)) {
                     continue;
                 }
 

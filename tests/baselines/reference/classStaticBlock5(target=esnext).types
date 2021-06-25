@@ -20,10 +20,10 @@ class C extends B {
 >3 : 3
 
     static c = super.a
->c : any
->super.a : any
->super : any
->a : any
+>c : number
+>super.a : number
+>super : typeof B
+>a : number
 
     static {
         this.b;
@@ -32,14 +32,14 @@ class C extends B {
 >b : number
 
         super.b;
->super.b : any
->super : any
->b : any
+>super.b : number
+>super : typeof B
+>b : number
 
         super.a;
->super.a : any
->super : any
->a : any
+>super.a : number
+>super : typeof B
+>a : number
     }
 }
 

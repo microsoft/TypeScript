@@ -17,7 +17,7 @@ const z: Foo<number> = x;
 // Repro from #30118
 
 class Bar<T extends string> {
-  private static instance: Bar<string>[];
+  private static instance: Bar<string>[] = [];
 
   cast(_name: ([T] extends [string] ? string : string)) { }
   
