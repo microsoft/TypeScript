@@ -48,6 +48,36 @@ function f14(x: number | null | undefined): number | null {
     return notUndefined ? x : 0;
 }
 
+function f15(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    if (isString) {
+        let s: string = obj.x;
+    }
+}
+
+function f16(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        let s: string = obj.x;  // Not narrowed because of is assigned in function body
+    }
+}
+
+function f17(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    if (isString) {
+        let s: string = obj[0];
+    }
+}
+
+function f18(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        let s: string = obj[0];  // Not narrowed because of is assigned in function body
+    }
+}
+
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
