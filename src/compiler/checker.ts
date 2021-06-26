@@ -22975,7 +22975,20 @@ namespace ts {
             }
         }
 
-        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, isConstant?: boolean, flowContainer?: Node) {
+        function isConstantReference(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    const symbol = getResolvedSymbol(node as Identifier);
+                    return isConstVariable(symbol) || !!symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter && !isParameterAssigned(symbol);
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
+                    return isConstantReference((node as AccessExpression).expression) && isReadonlySymbol(getNodeLinks(node).resolvedSymbol || unknownSymbol);
+            }
+            return false;
+        }
+
+        function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node) {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
@@ -24020,11 +24033,11 @@ namespace ts {
                     case SyntaxKind.Identifier:
                         // When narrowing a reference to a const variable, non-assigned parameter, or readonly property, we inline
                         // up to five levels of aliased conditional expressions that are themselves declared as const variables.
-                        if (isConstant && !isMatchingReference(reference, expr) && inlineLevel < 5) {
+                        if (!isMatchingReference(reference, expr) && inlineLevel < 5) {
                             const symbol = getResolvedSymbol(expr as Identifier);
                             if (isConstVariable(symbol)) {
                                 const declaration = symbol.valueDeclaration;
-                                if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer) {
+                                if (declaration && isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isConstantReference(reference)) {
                                     inlineLevel++;
                                     const result = narrowType(type, declaration.initializer, assumeTrue);
                                     inlineLevel--;
@@ -24370,12 +24383,12 @@ namespace ts {
             const isOuterVariable = flowContainer !== declarationContainer;
             const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
             const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
-            const isConstant = isConstVariable(localOrExportSymbol) && getTypeOfSymbol(localOrExportSymbol) !== autoArrayType || isParameter && !isParameterAssigned(localOrExportSymbol);
             // When the control flow originates in a function expression or arrow function and we are referencing
             // a const variable or parameter from an outer function, we extend the origin of the control flow
             // analysis to include the immediately enclosing function.
-            while (isConstant && flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
-                flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethod(flowContainer))) {
+            while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
+                flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethod(flowContainer)) &&
+                (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isParameterAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
@@ -24390,7 +24403,7 @@ namespace ts {
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, declaration as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
                 getOptionalType(type);
-            const flowType = getFlowTypeOfReference(node, type, initialType, isConstant, flowContainer);
+            const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
@@ -27608,7 +27621,7 @@ namespace ts {
                 getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
-            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType, prop && isReadonlySymbol(prop));
+            const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(errorNode, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217
                 // Return the declared type to reduce follow-on errors
