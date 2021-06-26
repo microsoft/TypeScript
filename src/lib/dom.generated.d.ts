@@ -14654,6 +14654,7 @@ interface SecurityPolicyViolationEvent extends Event {
     readonly sourceFile: string;
     readonly statusCode: number;
     readonly violatedDirective: string;
+    readonly disposition: "enforce" | "report";
 }
 
 declare var SecurityPolicyViolationEvent: {
