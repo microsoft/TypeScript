@@ -18364,9 +18364,9 @@ namespace ts {
                     if (relation === comparableRelation && target.flags & TypeFlags.Primitive) {
                         const constraints = sameMap((source as IntersectionType).types, t => t.flags & TypeFlags.Primitive ? t : getBaseConstraintOfType(t) || unknownType);
                         if (constraints !== (source as IntersectionType).types) {
-                            source = getIntersectionType(constraints);
-                            if (!(source.flags & TypeFlags.Intersection)) {
-                                return isRelatedTo(source, target, /*reportErrors*/ false);
+                            const newSource = getIntersectionType(constraints);
+                            if (!(newSource.flags & TypeFlags.Intersection) && !(newSource.flags & TypeFlags.Unknown)) {
+                                return isRelatedTo(newSource, target, /*reportErrors*/ false);
                             }
                         }
                     }
