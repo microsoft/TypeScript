@@ -137,6 +137,117 @@ function f14(x: number | null | undefined): number | null {
 >0 : 0
 }
 
+function f15(obj: { readonly x: string | number }) {
+>f15 : (obj: {    readonly x: string | number;}) => void
+>obj : { readonly x: string | number; }
+>x : string | number
+
+    const isString = typeof obj.x === 'string';
+>isString : boolean
+>typeof obj.x === 'string' : boolean
+>typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj.x : string | number
+>obj : { readonly x: string | number; }
+>x : string | number
+>'string' : "string"
+
+    if (isString) {
+>isString : boolean
+
+        let s: string = obj.x;
+>s : string
+>obj.x : string
+>obj : { readonly x: string | number; }
+>x : string
+    }
+}
+
+function f16(obj: { readonly x: string | number }) {
+>f16 : (obj: {    readonly x: string | number;}) => void
+>obj : { readonly x: string | number; }
+>x : string | number
+
+    const isString = typeof obj.x === 'string';
+>isString : boolean
+>typeof obj.x === 'string' : boolean
+>typeof obj.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj.x : string | number
+>obj : { readonly x: string | number; }
+>x : string | number
+>'string' : "string"
+
+    obj = { x: 42 };
+>obj = { x: 42 } : { x: number; }
+>obj : { readonly x: string | number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+
+    if (isString) {
+>isString : boolean
+
+        let s: string = obj.x;  // Not narrowed because of is assigned in function body
+>s : string
+>obj.x : string | number
+>obj : { readonly x: string | number; }
+>x : string | number
+    }
+}
+
+function f17(obj: readonly [string | number]) {
+>f17 : (obj: readonly [string | number]) => void
+>obj : readonly [string | number]
+
+    const isString = typeof obj[0] === 'string';
+>isString : boolean
+>typeof obj[0] === 'string' : boolean
+>typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj[0] : string | number
+>obj : readonly [string | number]
+>0 : 0
+>'string' : "string"
+
+    if (isString) {
+>isString : boolean
+
+        let s: string = obj[0];
+>s : string
+>obj[0] : string
+>obj : readonly [string | number]
+>0 : 0
+    }
+}
+
+function f18(obj: readonly [string | number]) {
+>f18 : (obj: readonly [string | number]) => void
+>obj : readonly [string | number]
+
+    const isString = typeof obj[0] === 'string';
+>isString : boolean
+>typeof obj[0] === 'string' : boolean
+>typeof obj[0] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj[0] : string | number
+>obj : readonly [string | number]
+>0 : 0
+>'string' : "string"
+
+    obj = [42];
+>obj = [42] : [number]
+>obj : readonly [string | number]
+>[42] : [number]
+>42 : 42
+
+    if (isString) {
+>isString : boolean
+
+        let s: string = obj[0];  // Not narrowed because of is assigned in function body
+>s : string
+>obj[0] : string | number
+>obj : readonly [string | number]
+>0 : 0
+    }
+}
+
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >f20 : (obj: {    kind: 'foo';    foo: string;} | {    kind: 'bar';    bar: number;}) => void
 >obj : { kind: 'foo'; foo: string; } | { kind: 'bar'; bar: number; }

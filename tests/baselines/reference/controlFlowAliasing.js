@@ -46,6 +46,36 @@ function f14(x: number | null | undefined): number | null {
     return notUndefined ? x : 0;
 }
 
+function f15(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    if (isString) {
+        let s: string = obj.x;
+    }
+}
+
+function f16(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        let s: string = obj.x;  // Not narrowed because of is assigned in function body
+    }
+}
+
+function f17(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    if (isString) {
+        let s: string = obj[0];
+    }
+}
+
+function f18(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        let s: string = obj[0];  // Not narrowed because of is assigned in function body
+    }
+}
+
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
@@ -256,6 +286,32 @@ function f14(x) {
     var notUndefined = x !== undefined;
     return notUndefined ? x : 0;
 }
+function f15(obj) {
+    var isString = typeof obj.x === 'string';
+    if (isString) {
+        var s = obj.x;
+    }
+}
+function f16(obj) {
+    var isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        var s = obj.x; // Not narrowed because of is assigned in function body
+    }
+}
+function f17(obj) {
+    var isString = typeof obj[0] === 'string';
+    if (isString) {
+        var s = obj[0];
+    }
+}
+function f18(obj) {
+    var isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        var s = obj[0]; // Not narrowed because of is assigned in function body
+    }
+}
 function f20(obj) {
     var isFoo = obj.kind === 'foo';
     if (isFoo) {
@@ -413,6 +469,14 @@ declare function f11(x: unknown): void;
 declare function f12(x: string | number | boolean): void;
 declare function f13(x: string | number | boolean): void;
 declare function f14(x: number | null | undefined): number | null;
+declare function f15(obj: {
+    readonly x: string | number;
+}): void;
+declare function f16(obj: {
+    readonly x: string | number;
+}): void;
+declare function f17(obj: readonly [string | number]): void;
+declare function f18(obj: readonly [string | number]): void;
 declare function f20(obj: {
     kind: 'foo';
     foo: string;
