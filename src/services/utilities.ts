@@ -2054,7 +2054,9 @@ namespace ts {
     // Display-part writer helpers
     // #region
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
-        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+        const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
+        return !!findAncestor(declaration, n =>
+            isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
     }
 
     const displayPartWriter = getDisplayPartWriter();
