@@ -1141,7 +1141,7 @@ namespace ts.refactor.extractSymbol {
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        let initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
         ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
 
@@ -1375,7 +1375,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(body as Expression)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();
