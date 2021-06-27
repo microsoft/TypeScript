@@ -4450,7 +4450,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     /**
      * Specifies the beginning and end of the document body.
      */
-    body: HTMLElement;
+    body: HTMLElement | null;
     /**
      * Returns document's encoding.
      */
