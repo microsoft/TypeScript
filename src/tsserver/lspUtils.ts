@@ -16,4 +16,9 @@ namespace ts.server {
         }
         return undefined;
     }
+
+    export function getLineAndOffsetFromPosition(position: lsp.Position) {
+        // TS assumes the client is 1-based
+        return { line: position.line + 1, offset: position.character + 1 };
+    }
 }

@@ -875,7 +875,20 @@ namespace ts.server {
                     );
                     return this.notRequired();
                 },
-                [lsp.Methods.DidChange]: (_request: lsp.DidChangeTextDocumentNotification) => {
+                [lsp.Methods.DidChange]: (request: lsp.DidChangeTextDocumentNotification) => {
+                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
+                    for (const contentChange of request.params.contentChanges) {
+                        if ("range" in contentChange) {
+                            const { line, offset } = getLineAndOffsetFromPosition(contentChange.range.start);
+                            const { line: endLine, offset: endOffset } = getLineAndOffsetFromPosition(contentChange.range.end);
+                            this.change(filePath, line, offset, endLine, endOffset, contentChange.text);
+                        } else {
+                            // replace whole file
+                            const scriptInfo = this.projectService.getScriptInfo(filePath)!;
+                            Debug.assert(!!scriptInfo);
+                            scriptInfo.open(contentChange.text);
+                        }
+                    }
                     return this.notRequired();
                 },
                 [lsp.Methods.DidClose]: (_request: lsp.DidCloseTextDocumentNotification) => {

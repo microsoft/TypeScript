@@ -1977,16 +1977,16 @@ namespace ts.server {
             }
         }
 
-        private change(args: protocol.ChangeRequestArgs) {
-            const scriptInfo = this.projectService.getScriptInfo(args.file)!;
+        protected change(filePath: string, line: number, offset: number, endLine: number, endOffset: number, insertString: string | undefined) {
+            const scriptInfo = this.projectService.getScriptInfo(filePath)!;
             Debug.assert(!!scriptInfo);
-            const start = scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            const start = scriptInfo.lineOffsetToPosition(line, offset);
+            const end = scriptInfo.lineOffsetToPosition(endLine, endOffset);
             if (start >= 0) {
                 this.changeSeq++;
                 this.projectService.applyChangesToFile(scriptInfo, singleIterator({
                     span: { start, length: end - start },
-                    newText: args.insertString! // TODO: GH#18217
+                    newText: insertString! // TODO: GH#18217
                 }));
             }
         }
@@ -2811,7 +2811,8 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.Change]: (request: protocol.ChangeRequest) => {
-                this.change(request.arguments);
+                const { file: filePath, line, offset, endLine, endOffset, insertString } = request.arguments;
+                this.change(filePath, line, offset, endLine, endOffset, insertString);
                 return this.notRequired();
             },
             [CommandNames.Configure]: (request: protocol.ConfigureRequest) => {
