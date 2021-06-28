@@ -48,6 +48,36 @@ function f14(x: number | null | undefined): number | null {
     return notUndefined ? x : 0;
 }
 
+function f15(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    if (isString) {
+        let s: string = obj.x;
+    }
+}
+
+function f16(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        let s: string = obj.x;  // Not narrowed because of is assigned in function body
+    }
+}
+
+function f17(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    if (isString) {
+        let s: string = obj[0];
+    }
+}
+
+function f18(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        let s: string = obj[0];  // Not narrowed because of is assigned in function body
+    }
+}
+
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
@@ -179,6 +209,36 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     switch (kind) {
         case 'foo': obj.foo; break;
         case 'bar': obj.bar; break;
+    }
+}
+
+
+class C10 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+    }
+}
+
+class C11 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
     }
 }
 

@@ -46,6 +46,36 @@ function f14(x: number | null | undefined): number | null {
     return notUndefined ? x : 0;
 }
 
+function f15(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    if (isString) {
+        let s: string = obj.x;
+    }
+}
+
+function f16(obj: { readonly x: string | number }) {
+    const isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        let s: string = obj.x;  // Not narrowed because of is assigned in function body
+    }
+}
+
+function f17(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    if (isString) {
+        let s: string = obj[0];
+    }
+}
+
+function f18(obj: readonly [string | number]) {
+    const isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        let s: string = obj[0];  // Not narrowed because of is assigned in function body
+    }
+}
+
 function f20(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     const isFoo = obj.kind === 'foo';
     if (isFoo) {
@@ -180,6 +210,36 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     }
 }
 
+
+class C10 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+    }
+}
+
+class C11 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
+    }
+}
+
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
@@ -255,6 +315,32 @@ function f13(x) {
 function f14(x) {
     var notUndefined = x !== undefined;
     return notUndefined ? x : 0;
+}
+function f15(obj) {
+    var isString = typeof obj.x === 'string';
+    if (isString) {
+        var s = obj.x;
+    }
+}
+function f16(obj) {
+    var isString = typeof obj.x === 'string';
+    obj = { x: 42 };
+    if (isString) {
+        var s = obj.x; // Not narrowed because of is assigned in function body
+    }
+}
+function f17(obj) {
+    var isString = typeof obj[0] === 'string';
+    if (isString) {
+        var s = obj[0];
+    }
+}
+function f18(obj) {
+    var isString = typeof obj[0] === 'string';
+    obj = [42];
+    if (isString) {
+        var s = obj[0]; // Not narrowed because of is assigned in function body
+    }
 }
 function f20(obj) {
     var isFoo = obj.kind === 'foo';
@@ -380,6 +466,37 @@ function f33(obj) {
             break;
     }
 }
+var C10 = /** @class */ (function () {
+    function C10(x) {
+        this.x = x;
+        var thisX_isString = typeof this.x === 'string';
+        var xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            var s = void 0;
+            s = this.x;
+            s = x;
+        }
+    }
+    return C10;
+}());
+var C11 = /** @class */ (function () {
+    function C11(x) {
+        this.x = x;
+        var thisX_isString = typeof this.x === 'string';
+        var xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            var s = void 0;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
+    }
+    return C11;
+}());
 // Mixing of aliased discriminants and conditionals
 function f40(obj) {
     var kind = obj.kind;
@@ -413,6 +530,14 @@ declare function f11(x: unknown): void;
 declare function f12(x: string | number | boolean): void;
 declare function f13(x: string | number | boolean): void;
 declare function f14(x: number | null | undefined): number | null;
+declare function f15(obj: {
+    readonly x: string | number;
+}): void;
+declare function f16(obj: {
+    readonly x: string | number;
+}): void;
+declare function f17(obj: readonly [string | number]): void;
+declare function f18(obj: readonly [string | number]): void;
 declare function f20(obj: {
     kind: 'foo';
     foo: string;
@@ -508,6 +633,14 @@ declare function f33(obj: {
     kind: 'bar';
     bar: number;
 }): void;
+declare class C10 {
+    readonly x: string | number;
+    constructor(x: string | number);
+}
+declare class C11 {
+    readonly x: string | number;
+    constructor(x: string | number);
+}
 declare function f40(obj: {
     kind: 'foo';
     foo?: string;
