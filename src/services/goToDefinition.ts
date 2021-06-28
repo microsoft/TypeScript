@@ -12,9 +12,13 @@ namespace ts.GoToDefinition {
         if (node === sourceFile) {
             return undefined;
         }
-        const { parent } = node;
 
+        const { parent } = node;
         const typeChecker = program.getTypeChecker();
+
+        if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
+            return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+        }
 
         // Labels
         if (isJumpStatementTarget(node)) {
@@ -124,6 +128,26 @@ namespace ts.GoToDefinition {
                     getDefinitionFromSymbol(typeChecker, propertySymbol, node));
             }
         }
+    }
+
+    function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node) {
+        const classElement = findAncestor(node, isClassElement);
+        if (!(classElement && classElement.name)) return;
+
+        const baseDeclaration = findAncestor(classElement, isClassLike);
+        if (!baseDeclaration) return;
+
+        const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
+        const baseType = baseTypeNode ? typeChecker.getTypeAtLocation(baseTypeNode) : undefined;
+        if (!baseType) return;
+
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
+        const symbol = hasStaticModifier(classElement)
+            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
+            : typeChecker.getPropertyOfType(baseType, name);
+        if (!symbol) return;
+
+        return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
