@@ -825,16 +825,6 @@ namespace ts.server {
                 return this.lspHandlers;
             }
 
-            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
-                // General messages
-                [lsp.Methods.Initialize]: (_request: lsp.InitializeRequest) => this.requiredResponse({
-                    capabilities: {}
-                }),
-                [lsp.Methods.Initialized]: (_request: lsp.InitializedNotification) => this.notRequired(),
-                [lsp.Methods.Shutdown]: (_request: lsp.RequestMessage & { params: never }) => this.requiredResponse(undefined),
-                [lsp.Methods.Exit]: (_request: lsp.NotificationMessage & { params: never }) => this.exit(),
-            }));
-
             public override send(msg: protocol.Message) {
                 if (msg.type === "event") {
                     if (this.logger.hasLevel(LogLevel.verbose)) {
@@ -849,6 +839,33 @@ namespace ts.server {
                     result: typeof body === "undefined" ? null : body // LSP doesn't allow returning undefined unless there's an error
                 };
                 this.writer.write(lspMsg);
+            }
+
+            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
+                // General messages
+                [lsp.Methods.Initialize]: (request: lsp.InitializeRequest) => this.requiredResponse(this.getInitializeResult(request.params)),
+                [lsp.Methods.Initialized]: (_request: lsp.InitializedNotification) => this.notRequired(),
+                [lsp.Methods.Shutdown]: (_request: lsp.RequestMessage & { params: never }) => this.requiredResponse(undefined),
+                [lsp.Methods.Exit]: (_request: lsp.NotificationMessage & { params: never }) => this.exit(),
+
+                // Text synchronization messages
+                [lsp.Methods.DidOpen]: (_request: lsp.DidOpenTextDocumentNotification) => {
+                    return this.notRequired();
+                },
+                [lsp.Methods.DidChange]: (_request: lsp.DidChangeTextDocumentNotification) => {
+                    return this.notRequired();
+                },
+                [lsp.Methods.DidClose]: (_request: lsp.DidCloseTextDocumentNotification) => {
+                    return this.notRequired();
+                }
+            }));
+
+            private getInitializeResult(_request: lsp.InitializeParams): lsp.InitializeResult {
+                return {
+                    capabilities: {
+                        textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
+                    },
+                };
             }
         }
 
