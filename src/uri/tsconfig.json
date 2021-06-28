@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "outFile": "../../built/local/uri.js",
+        "lib": [
+            "es6",
+            "scripthost"
+        ]
+    },
+    "files": [
+        "charCode.ts",
+        "platform.ts",
+        "uri.ts"
+    ]
+}
