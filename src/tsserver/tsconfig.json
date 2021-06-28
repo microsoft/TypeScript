@@ -8,6 +8,7 @@
         ]
     },
     "files": [
+        "lspUtils.ts",
         "nodeServer.ts",
         "webServer.ts",
         "server.ts"
@@ -16,6 +17,7 @@
         { "path": "../compiler", "prepend": true },
         { "path": "../services", "prepend": true },
         { "path": "../jsonrpc", "prepend": true },
+        { "path": "../uri", "prepend": true },
         { "path": "../jsTyping", "prepend": true },
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },

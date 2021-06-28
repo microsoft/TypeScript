@@ -780,8 +780,9 @@ namespace ts.server {
         }
 
         class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
-            reader = new rpc.StreamMessageReader(process.stdin);
-            writer = new rpc.StreamMessageWriter(process.stdout);
+            readonly inMemoryResourcePrefix = "^";
+            readonly reader = new rpc.StreamMessageReader(process.stdin);
+            readonly writer = new rpc.StreamMessageWriter(process.stdout);
 
             listen() {
                 this.reader.listen(message => {
@@ -841,6 +842,20 @@ namespace ts.server {
                 this.writer.write(lspMsg);
             }
 
+            private textDocumentToNormalizedPath(textDocument: lsp.DocumentUri) {
+                const documentUri = uri.URI.parse(textDocument);
+
+                let path;
+                switch (documentUri.scheme) {
+                    case "file":
+                        path = documentUri.path;
+                    default:
+                        path = this.inMemoryResourcePrefix + documentUri.toString(true);
+                }
+
+                return normalizePath(path) as NormalizedPath;
+            }
+
             private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
                 // General messages
                 [lsp.Methods.Initialize]: (request: lsp.InitializeRequest) => this.requiredResponse(this.getInitializeResult(request.params)),
@@ -849,7 +864,15 @@ namespace ts.server {
                 [lsp.Methods.Exit]: (_request: lsp.NotificationMessage & { params: never }) => this.exit(),
 
                 // Text synchronization messages
-                [lsp.Methods.DidOpen]: (_request: lsp.DidOpenTextDocumentNotification) => {
+                [lsp.Methods.DidOpen]: (request: lsp.DidOpenTextDocumentNotification) => {
+                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
+                    const scriptKind = mode2ScriptKind(request.params.textDocument.languageId) ?? "JS";
+                    this.openClientFile(
+                        filePath,
+                        request.params.textDocument.text,
+                        convertScriptKindName(scriptKind),
+                        undefined // TODO - workspace folders
+                    );
                     return this.notRequired();
                 },
                 [lsp.Methods.DidChange]: (_request: lsp.DidChangeTextDocumentNotification) => {

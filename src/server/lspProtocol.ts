@@ -47,7 +47,7 @@ namespace ts.server.lsp {
         range: Range,
     }
 
-    type DocumentUri = string;
+    export type DocumentUri = string;
 
     export interface TextDocumentIdentifier {
         uri: DocumentUri;
