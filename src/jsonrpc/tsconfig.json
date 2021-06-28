@@ -12,12 +12,14 @@
     },
     "files": [
         "disposable.ts",
+        "semaphore.ts",
         "encoding.ts",
         "events.ts",
         "is.ts",
         "messageBuffer.ts",
         "messages.ts",
         "messageReader.ts",
+        "messageWriter.ts",
         "ral.ts",
         "ril.ts",
         "main.ts"
