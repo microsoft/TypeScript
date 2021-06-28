@@ -742,7 +742,7 @@ namespace ts.server {
                 this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
             }
 
-            exit() {
+            exit(): never {
                 this.logger.info("Exiting...");
                 this.projectService.closeLog();
                 tracing?.stopTracing();
@@ -826,10 +826,13 @@ namespace ts.server {
             }
 
             private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
+                // General messages
                 [lsp.Methods.Initialize]: (_request: lsp.InitializeRequest) => this.requiredResponse({
                     capabilities: {}
                 }),
                 [lsp.Methods.Initialized]: (_request: lsp.InitializedNotification) => this.notRequired(),
+                [lsp.Methods.Shutdown]: (_request: lsp.RequestMessage & { params: never }) => this.requiredResponse(undefined),
+                [lsp.Methods.Exit]: (_request: lsp.NotificationMessage & { params: never }) => this.exit(),
             }));
 
             public override send(msg: protocol.Message) {
@@ -839,10 +842,11 @@ namespace ts.server {
                     }
                     return;
                 }
+                const body = (msg as protocol.Response).body;
                 const lspMsg: rpc.ResponseMessage = {
                     jsonrpc: "2.0",
                     id: (msg as protocol.Response).request_seq,
-                    result: (msg as protocol.Response).body
+                    result: typeof body === "undefined" ? null : body // LSP doesn't allow returning undefined unless there's an error
                 };
                 this.writer.write(lspMsg);
             }

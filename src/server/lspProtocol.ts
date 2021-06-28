@@ -2,6 +2,8 @@ namespace ts.server.lsp {
     export const enum Methods {
         Initialize = "initialize",
         Initialized = "initialized",
+        Shutdown = "shutdown",
+        Exit = "exit",
     }
 
     export interface Message {
