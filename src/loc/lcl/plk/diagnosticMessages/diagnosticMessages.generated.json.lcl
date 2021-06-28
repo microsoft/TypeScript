@@ -800,6 +800,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";A_return_statement_cannot_be_used_inside_a_class_static_block_18041" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[A 'return' statement cannot be used inside a class static block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Instrukcji „return” nie można użyć wewnątrz bloku statycznego klasy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";A_series_of_entries_which_re_map_imports_to_lookup_locations_relative_to_the_baseUrl_6167" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A series of entries which re-map imports to lookup locations relative to the 'baseUrl'.]]></Val>
@@ -2375,6 +2384,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Await_expression_cannot_be_used_inside_a_class_static_block_18037" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Await expression cannot be used inside a class static block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nie można użyć wyrażenia await wewnątrz bloku statycznego klasy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";BUILD_OPTIONS_6919" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[BUILD OPTIONS]]></Val>
@@ -3229,6 +3247,15 @@
           <Val><![CDATA[Cannot use namespace '{0}' as a value.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Nie można używać przestrzeni nazw „{0}” jako wartości.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class_2816" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot use 'this' in a static property initializer of a decorated class.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nie można użyć elementu "this" w statycznym inicjatorze właściwości dekorowanej klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6518,6 +6545,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";For_await_loops_cannot_be_used_inside_a_class_static_block_18038" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['For await' loops cannot be used inside a class static block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Pętli "For await" nie można używać wewnątrz bloku statycznego klasy.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Found_0_errors_6217" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Found {0} errors.]]></Val>
@@ -7552,6 +7588,15 @@
           <Val><![CDATA[Invalid use of '{0}'. Class definitions are automatically in strict mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Nieprawidłowe użycie elementu „{0}”. Definicje klas są określane automatycznie w trybie z ograniczeniami.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Invalid_use_of_0_It_cannot_be_used_inside_a_class_static_block_18039" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid use of '{0}'. It cannot be used inside a class static block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Nieprawidłowe użycie elementu "{0}". Nie można go użyć wewnątrz bloku statycznego klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9973,6 +10018,15 @@
           <Val><![CDATA[Property '{0}' does not exist on type '{1}'. Try changing the 'lib' compiler option to include 'dom'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Właściwość "{0}" nie istnieje w typie "{1}". Spróbuj zmienić opcję kompilatora "lib", aby uwzględnić parametr "dom".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Property_0_has_no_initializer_and_is_not_definitely_assigned_in_a_class_static_block_2817" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Property '{0}' has no initializer and is not definitely assigned in a class static block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Właściwość "{0}" nie ma inicjatora i nie jest zdecydowanie przypisana w bloku statycznym klasy.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
