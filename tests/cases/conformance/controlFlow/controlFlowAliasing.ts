@@ -212,6 +212,36 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     }
 }
 
+
+class C10 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+    }
+}
+
+class C11 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
+    }
+}
+
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
