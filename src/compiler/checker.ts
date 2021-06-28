@@ -35870,15 +35870,14 @@ namespace ts {
             if (getFalsyFlags(type)) return;
 
             const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
+            if (isPropertyAccessExpression(location) && isAssertionExpression(skipParentheses(location.expression))) {
+                return;
+            }
+
             const testedNode = isIdentifier(location) ? location
                 : isPropertyAccessExpression(location) ? location.name
                 : isBinaryExpression(location) && isIdentifier(location.right) ? location.right
                 : undefined;
-            const isPropertyExpressionCast = isPropertyAccessExpression(location)
-                && isAssertionExpression(skipParentheses(location.expression));
-            if (!testedNode || isPropertyExpressionCast) {
-                return;
-            }
 
             // While it technically should be invalid for any known-truthy value
             // to be tested, we de-scope to functions and Promises unreferenced in
@@ -35891,13 +35890,13 @@ namespace ts {
                 return;
             }
 
-            const testedSymbol = getSymbolAtLocation(testedNode);
-            if (!testedSymbol) {
+            const testedSymbol = testedNode && getSymbolAtLocation(testedNode);
+            if (!testedSymbol && !isPromise) {
                 return;
             }
 
-            const isUsed = isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
-                || body && isSymbolUsedInConditionBody(condExpr, body, testedNode, testedSymbol);
+            const isUsed = testedSymbol && isBinaryExpression(condExpr.parent) && isSymbolUsedInBinaryExpressionChain(condExpr.parent, testedSymbol)
+                || testedSymbol && body && isSymbolUsedInConditionBody(condExpr, body, testedNode!, testedSymbol);
             if (!isUsed) {
                 if (isPromise) {
                     errorAndMaybeSuggestAwait(
