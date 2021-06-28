@@ -22,13 +22,19 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(154,19): error TS2339
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
 tests/cases/conformance/controlFlow/controlFlowAliasing.ts(157,19): error TS2339: Property 'bar' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'bar' does not exist on type '{ kind: "foo"; foo: string; }'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(237,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(219,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/controlFlow/controlFlowAliasing.ts(240,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(232,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(233,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(267,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(270,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (14 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (17 errors) ====
     // Narrowing by aliased conditional expressions
     
     function f10(x: string | number) {
@@ -273,6 +279,45 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(240,13): error TS2322
         switch (kind) {
             case 'foo': obj.foo; break;
             case 'bar': obj.bar; break;
+        }
+    }
+    
+    
+    class C10 {
+        constructor(readonly x: string | number) {
+            const thisX_isString = typeof this.x === 'string';
+            const xIsString = typeof x === 'string';
+            if (thisX_isString && xIsString) {
+                let s: string;
+                s = this.x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                s = x;
+            }
+        }
+    }
+    
+    class C11 {
+        constructor(readonly x: string | number) {
+            const thisX_isString = typeof this.x === 'string';
+            const xIsString = typeof x === 'string';
+            if (thisX_isString && xIsString) {
+                // Some narrowings may be invalidated due to later assignments.
+                let s: string;
+                s = this.x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                s = x;
+                ~
+!!! error TS2322: Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+            }
+            else {
+                this.x = 10;
+                x = 10;
+            }
         }
     }
     

@@ -210,6 +210,36 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     }
 }
 
+
+class C10 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+    }
+}
+
+class C11 {
+    constructor(readonly x: string | number) {
+        const thisX_isString = typeof this.x === 'string';
+        const xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            let s: string;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
+    }
+}
+
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
@@ -436,6 +466,37 @@ function f33(obj) {
             break;
     }
 }
+var C10 = /** @class */ (function () {
+    function C10(x) {
+        this.x = x;
+        var thisX_isString = typeof this.x === 'string';
+        var xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            var s = void 0;
+            s = this.x;
+            s = x;
+        }
+    }
+    return C10;
+}());
+var C11 = /** @class */ (function () {
+    function C11(x) {
+        this.x = x;
+        var thisX_isString = typeof this.x === 'string';
+        var xIsString = typeof x === 'string';
+        if (thisX_isString && xIsString) {
+            // Some narrowings may be invalidated due to later assignments.
+            var s = void 0;
+            s = this.x;
+            s = x;
+        }
+        else {
+            this.x = 10;
+            x = 10;
+        }
+    }
+    return C11;
+}());
 // Mixing of aliased discriminants and conditionals
 function f40(obj) {
     var kind = obj.kind;
@@ -572,6 +633,14 @@ declare function f33(obj: {
     kind: 'bar';
     bar: number;
 }): void;
+declare class C10 {
+    readonly x: string | number;
+    constructor(x: string | number);
+}
+declare class C11 {
+    readonly x: string | number;
+    constructor(x: string | number);
+}
 declare function f40(obj: {
     kind: 'foo';
     foo?: string;

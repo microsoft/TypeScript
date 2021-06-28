@@ -701,6 +701,111 @@ function f33(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
     }
 }
 
+
+class C10 {
+>C10 : C10
+
+    constructor(readonly x: string | number) {
+>x : string | number
+
+        const thisX_isString = typeof this.x === 'string';
+>thisX_isString : boolean
+>typeof this.x === 'string' : boolean
+>typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>this.x : string | number
+>this : this
+>x : string | number
+>'string' : "string"
+
+        const xIsString = typeof x === 'string';
+>xIsString : boolean
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+
+        if (thisX_isString && xIsString) {
+>thisX_isString && xIsString : boolean
+>thisX_isString : boolean
+>xIsString : boolean
+
+            let s: string;
+>s : string
+
+            s = this.x;
+>s = this.x : string | number
+>s : string
+>this.x : string | number
+>this : this
+>x : string | number
+
+            s = x;
+>s = x : string
+>s : string
+>x : string
+        }
+    }
+}
+
+class C11 {
+>C11 : C11
+
+    constructor(readonly x: string | number) {
+>x : string | number
+
+        const thisX_isString = typeof this.x === 'string';
+>thisX_isString : boolean
+>typeof this.x === 'string' : boolean
+>typeof this.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>this.x : string | number
+>this : this
+>x : string | number
+>'string' : "string"
+
+        const xIsString = typeof x === 'string';
+>xIsString : boolean
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+
+        if (thisX_isString && xIsString) {
+>thisX_isString && xIsString : boolean
+>thisX_isString : boolean
+>xIsString : boolean
+
+            // Some narrowings may be invalidated due to later assignments.
+            let s: string;
+>s : string
+
+            s = this.x;
+>s = this.x : string | number
+>s : string
+>this.x : string | number
+>this : this
+>x : string | number
+
+            s = x;
+>s = x : string | number
+>s : string
+>x : string | number
+        }
+        else {
+            this.x = 10;
+>this.x = 10 : 10
+>this.x : string | number
+>this : this
+>x : string | number
+>10 : 10
+
+            x = 10;
+>x = 10 : 10
+>x : string | number
+>10 : 10
+        }
+    }
+}
+
 // Mixing of aliased discriminants and conditionals
 
 function f40(obj: { kind: 'foo', foo?: string } | { kind: 'bar', bar?: number }) {
