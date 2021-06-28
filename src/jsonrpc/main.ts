@@ -5,4 +5,10 @@ namespace ts.server.rpc {
             super(RIL().stream.asReadableStream(readble), encoding);
         }
     }
+
+    export class StreamMessageWriter extends WriteableStreamMessageWriter {
+        public constructor(writable: NodeJS.WritableStream, options?: RAL.MessageBufferEncoding | MessageWriterOptions) {
+            super(RIL().stream.asWritableStream(writable), options);
+        }
+    }
 }

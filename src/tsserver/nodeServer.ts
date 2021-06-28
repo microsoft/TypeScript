@@ -780,7 +780,8 @@ namespace ts.server {
         }
 
         class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
-            reader: rpc.StreamMessageReader = new rpc.StreamMessageReader(process.stdin);
+            reader = new rpc.StreamMessageReader(process.stdin);
+            writer = new rpc.StreamMessageWriter(process.stdout);
 
             listen() {
                 this.reader.listen(message => {
@@ -838,26 +839,12 @@ namespace ts.server {
                     }
                     return;
                 }
-                const lspMsg: lsp.ResponseMessage = {
+                const lspMsg: rpc.ResponseMessage = {
                     jsonrpc: "2.0",
                     id: (msg as protocol.Response).request_seq,
                     result: (msg as protocol.Response).body
                 };
-                const msgText = this.formatMessage(lspMsg, this.logger, this.byteLength);
-                perfLogger.logEvent(`Response message size: ${msgText.length}`);
-                this.host.write(msgText);
-            }
-
-            private formatMessage<T extends lsp.Message>(msg: T, _logger: Logger, byteLength: (s: string, encoding: string) => number): string {
-                // const verboseLogging = logger.hasLevel(LogLevel.verbose);
-
-                const json = JSON.stringify(msg);
-                // if (verboseLogging) {
-                    // logger.info(`${msg.}:${indent(json)}`);
-                // }
-
-                const len = byteLength(json, "utf8");
-                return `Content-Length: ${1 + len}\r\n\r\n${json}`;
+                this.writer.write(lspMsg);
             }
         }
 
