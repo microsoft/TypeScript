@@ -2999,8 +2999,14 @@ namespace ts.server {
             return new Map();
         }
 
-        public executeCommand(request: TRequest, command: string, seq: number): HandlerResponse {
+        public executeCommand(request: TRequest, command?: string, seq?: number): HandlerResponse {
             const handlers = this.getHandlers();
+            if (!command) {
+                command = this.getCommandFromRequest(request);
+            }
+            if (!seq) {
+                seq = this.getSeqFromRequest(request);
+            }
             const handler = handlers.get(command);
             if (handler) {
                 return this.executeWithRequestId(seq, () => handler(request));
