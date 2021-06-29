@@ -2,6 +2,34 @@
 namespace ts.server.lsp {
     const inMemoryResourcePrefix = "^";
 
+    export function parseMessage(message: lsp.Message): lsp.RequestMessage | lsp.NotificationMessage {
+        return message as lsp.RequestMessage;
+    }
+
+    export function getCommandFromRequest(request: lsp.RequestMessage | lsp.NotificationMessage) {
+        return request.method;
+    }
+
+    export function getSeqFromRequest(request: lsp.RequestMessage | lsp.NotificationMessage) {
+        if (!("id" in request)) {
+            return -1 // TODO: will the language server choke on this?
+        }
+
+        if (request.id === null) {
+            return -1; // TODO: should never happen, allowable by JSONRPC but not LSP
+        }
+
+        if (typeof request.id === "number") {
+            return request.id;
+        }
+
+        return Number(request.id);
+    }
+
+    export function toStringMessage(message: lsp.RequestMessage) {
+        return JSON.stringify(message);
+    }
+
     export interface SessionMethods {
         requiredResponse(response: {} | undefined): HandlerResponse,
         notRequired(): HandlerResponse,

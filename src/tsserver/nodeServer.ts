@@ -798,31 +798,19 @@ namespace ts.server {
             }
 
             protected override parseMessage(message: rpc.Message): rpc.RequestMessage | rpc.NotificationMessage {
-                return message as rpc.RequestMessage;
+                return lsp.parseMessage(message);
             }
 
             protected override getCommandFromRequest(request: rpc.RequestMessage | rpc.NotificationMessage) {
-                return request.method;
+                return lsp.getCommandFromRequest(request);
             }
 
             protected override getSeqFromRequest(request: rpc.RequestMessage | rpc.NotificationMessage) {
-                if (!("id" in request)) {
-                    return -1 // TODO: will the language server choke on this?
-                }
-
-                if (request.id === null) {
-                    return -1; // TODO: should never happen, allowable by JSONRPC but not LSP
-                }
-
-                if (typeof request.id === "number") {
-                    return request.id;
-                }
-
-                return Number(request.id);
+                return lsp.getSeqFromRequest(request);
             }
 
             protected override toStringMessage(message: rpc.RequestMessage) {
-                return JSON.stringify(message);
+                return lsp.toStringMessage(message as lsp.RequestMessage); // cast required because rpc allows null id
             }
 
             protected override getHandlers() {
