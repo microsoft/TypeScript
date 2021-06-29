@@ -860,3 +860,42 @@ let aid = a[id];
 >a : Symbol(a, Decl(indexSignatures1.ts, 295, 5))
 >id : Symbol(id, Decl(indexSignatures1.ts, 291, 5))
 
+// Repro from #44793
+
+interface AA {
+>AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
+
+    a?: string;
+>a : Symbol(AA.a, Decl(indexSignatures1.ts, 301, 14))
+
+    b?: number;
+>b : Symbol(AA.b, Decl(indexSignatures1.ts, 302, 15))
+
+    [key: symbol]: string;
+>key : Symbol(key, Decl(indexSignatures1.ts, 304, 5))
+}
+
+const aa: AA = { [sym]: '123' };
+>aa : Symbol(aa, Decl(indexSignatures1.ts, 307, 5))
+>AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 307, 16))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
+>obj1 : Symbol(obj1, Decl(indexSignatures1.ts, 309, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 309, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 309, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+>obj2 : Symbol(obj2, Decl(indexSignatures1.ts, 310, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 310, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 310, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+>obj3 : Symbol(obj3, Decl(indexSignatures1.ts, 311, 5))
+>key : Symbol(key, Decl(indexSignatures1.ts, 311, 15))
+>[sym] : Symbol([sym], Decl(indexSignatures1.ts, 311, 41))
+>sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
