@@ -912,6 +912,24 @@ namespace ts.server {
                     const result: lsp.Hover = { contents: parts, range };
                     return this.requiredResponse(result);
                 },
+                [lsp.Methods.SignatureHelp]: (request: lsp.SignatureHelpRequest) => {
+                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
+                    const { line, offset } = getLineAndOffsetFromPosition(request.params.position);
+                    const triggerReason = lsp.toTsTriggerReason(request.params.context);
+                    const info = this.getSignatureHelpItems({file: filePath, line, offset, triggerReason }, /*simplifiedResult*/ true) as protocol.SignatureHelpItems; // cast is true due to simplified result
+                    if (!info) {
+                        return this.requiredResponse(/*response*/ undefined);
+                    }
+                    const signatures = info.items.map(lsp.convertSignature);
+                    const activeSignature = lsp.getActiveSignature(request.params.context, info, signatures);
+                    const activeParameter =lsp.getActiveParameter(info);
+                    const result: lsp.SignatureHelp = {
+                        signatures,
+                        activeSignature,
+                        activeParameter,
+                    };
+                    return this.requiredResponse(result);
+                },
             }));
 
             private getInitializeResult(_request: lsp.InitializeParams): lsp.InitializeResult {
@@ -919,6 +937,10 @@ namespace ts.server {
                     capabilities: {
                         textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
                         hoverProvider: true,
+                        signatureHelpProvider: {
+                            triggerCharacters: ['(', ',', '<'],
+                            retriggerCharacters: [')'],
+                        }
                     },
                 };
             }

@@ -13,6 +13,7 @@ namespace ts.server.lsp {
 
         // Language features
         Hover = "textDocument/hover",
+        SignatureHelp = "textDocument/signatureHelp",
     }
 
     export interface Message {
@@ -70,6 +71,16 @@ namespace ts.server.lsp {
         version: number;
     }
 
+    export enum MarkupKind {
+        PlainText = 'plaintext',
+        Markdown = 'markdown',
+    }
+
+    export interface MarkupContent {
+        kind: MarkupKind;
+        value: string;
+    }
+
     export interface InitializeRequest extends RequestMessage {
         method: Methods.Initialize;
         params: InitializeParams;
@@ -86,6 +97,7 @@ namespace ts.server.lsp {
     export interface ServerCapabilities {
         textDocumentSync?: TextDocumentSyncKind;
         hoverProvider?: boolean;
+        signatureHelpProvider?: SignatureHelpOptions;
     }
 
     export interface InitializedNotification extends NotificationMessage {
@@ -153,4 +165,49 @@ namespace ts.server.lsp {
     }
 
     export type MarkedString = string | { language: string; value: string };
+
+    export interface SignatureHelpOptions {
+        triggerCharacters?: string[];
+        retriggerCharacters?: string[];
+    }
+
+    export interface SignatureHelpRequest extends RequestMessage {
+        method: Methods.SignatureHelp;
+        params: SignatureHelpParams;
+    }
+
+    export interface SignatureHelpParams extends TextDocumentPositionParams {
+        context?: SignatureHelpContext;
+    }
+
+    export enum SignatureHelpTriggerKind {
+        Invoked = 1,
+        TriggerCharacter = 2,
+        ContentChange = 3,
+    }
+
+    export interface SignatureHelpContext {
+        triggerKind: SignatureHelpTriggerKind;
+        triggerCharacter?: string;
+        isRetrigger: boolean;
+        activeSignatureHelp?: SignatureHelp;
+    }
+
+    export interface SignatureHelp {
+        signatures: SignatureInformation[];
+        activeSignature?: number; // >= 0
+        activeParameter?: number; // >= 0
+    }
+
+    export interface SignatureInformation {
+        label: string;
+        documentation?: string | MarkupContent;
+        parameters?: ParameterInformation[];
+        activeParameter?: number // >= 0
+    }
+
+    export interface ParameterInformation {
+        label: string | [number, number] // [>= 0, >= 0]
+        documentation?: string | MarkupContent;
+    }
 }
