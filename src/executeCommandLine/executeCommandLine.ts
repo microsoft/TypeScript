@@ -90,10 +90,7 @@ namespace ts {
     }
 
     function createColors(sys: System) {
-        // https://no-color.org
-        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
-
-        const showColors = defaultIsPretty(sys);
+        const showColors = defaultIsPretty(sys) || !!sys.getEnvironmentVariable("NO_COLOR");
         if (!showColors) {
             return {
                 bold: (str: string) => str,
@@ -103,15 +100,30 @@ namespace ts {
             };
         }
 
+        // There are ~3 types of terminal color support: 16 colors, 256 and 16m colors
+        // If there is richer color support, e.g. 256+ we can use extended ANSI codes which are not just generic 'blue'
+        // but a 'lighter blue' which is closer to the blue in the TS logo.
+        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
+
         function bold(str: string) {
             return `\x1b[1m${str}\x1b[22m`;
         }
         function blue(str: string) {
             if (supportsRicherColors) {
+                // https://jonasjacek.github.io/colors/ - SteelBlue3 ANSI 68
                 return `\x1B[38;5;68m${str}\x1B[39;49m`;
             }
             else {
-                return `\x1b[94m${str}\x1b[39m`;
+                // This should probably only hit both Console and Powershell on Windows, as anything more modern supports more colors.
+                // Those two colorthemes treat 'blue' as navy blue against a black background.
+                // https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit
+                const useThemeBlue = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+                if (useThemeBlue) {
+                    return `\x1b[44m${str}\x1b[39m`;
+                }
+                else {
+                    return `\x1b[94m${str}\x1b[39m`;
+                }
             }
         }
         function blueBackground(str: string) {
