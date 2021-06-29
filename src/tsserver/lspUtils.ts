@@ -21,4 +21,8 @@ namespace ts.server {
         // TS assumes the client is 1-based
         return { line: position.line + 1, offset: position.character + 1 };
     }
+
+    export function getLspPositionFromLocation(location: protocol.Location): lsp.Position {
+        return { line: Math.max(0, location.line - 1), character: Math.max(0, location.offset - 1) };
+    }
 }

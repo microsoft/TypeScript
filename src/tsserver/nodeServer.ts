@@ -893,13 +893,32 @@ namespace ts.server {
                 },
                 [lsp.Methods.DidClose]: (_request: lsp.DidCloseTextDocumentNotification) => {
                     return this.notRequired();
-                }
+                },
+
+                // Language features
+                [lsp.Methods.Hover]: (request: lsp.HoverRequest) => {
+                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
+                    const { line, offset } = getLineAndOffsetFromPosition(request.params.position);
+                    const quickInfo = this.getQuickInfoWorker({ file: filePath, line, offset }, /*simplifiedResult*/ true) as protocol.QuickInfoResponseBody;
+                    if (!quickInfo) {
+                        return this.requiredResponse(/*response*/ undefined);
+                    }
+
+                    const parts: lsp.MarkedString[] = [];
+                    parts.push({ language: 'typescript', value: quickInfo.displayString });
+
+                    //todo: documentation and tags
+                    const range: lsp.Range = { start: getLspPositionFromLocation(quickInfo.start), end: getLspPositionFromLocation(quickInfo.end) };
+                    const result: lsp.Hover = { contents: parts, range };
+                    return this.requiredResponse(result);
+                },
             }));
 
             private getInitializeResult(_request: lsp.InitializeParams): lsp.InitializeResult {
                 return {
                     capabilities: {
                         textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
+                        hoverProvider: true,
                     },
                 };
             }

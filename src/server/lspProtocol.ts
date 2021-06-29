@@ -10,6 +10,9 @@ namespace ts.server.lsp {
         DidOpen = "textDocument/didOpen",
         DidChange = "textDocument/didChange",
         DidClose = "textDocument/didClose",
+
+        // Language features
+        Hover = "textDocument/hover",
     }
 
     export interface Message {
@@ -82,6 +85,7 @@ namespace ts.server.lsp {
 
     export interface ServerCapabilities {
         textDocumentSync?: TextDocumentSyncKind;
+        hoverProvider?: boolean;
     }
 
     export interface InitializedNotification extends NotificationMessage {
@@ -131,4 +135,22 @@ namespace ts.server.lsp {
     export interface DidCloseTextDocumentParams {
         textDocument: TextDocumentIdentifier;
     }
+
+    export interface TextDocumentPositionParams {
+        textDocument: TextDocumentIdentifier,
+        position: Position,
+    }
+
+    export interface HoverRequest extends RequestMessage {
+        method: Methods.Hover,
+        params: TextDocumentPositionParams,
+    }
+
+    export interface Hover {
+        contents: MarkedString | MarkedString[];
+
+        range?: Range;
+    }
+
+    export type MarkedString = string | { language: string; value: string };
 }
