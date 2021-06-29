@@ -5407,7 +5407,7 @@
         "category": "Message",
         "code": 6659
     },
-    "Disable emitting file from a compilation.": {
+    "Disable emitting files from a compilation.": {
         "category": "Message",
         "code": 6660
     },
