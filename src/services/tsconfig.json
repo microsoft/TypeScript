@@ -11,6 +11,7 @@
     "files": [
         "types.ts",
         "utilities.ts",
+        "exportInfoMap.ts",
         "classifier.ts",
         "classifier2020.ts",
         "stringCompletions.ts",

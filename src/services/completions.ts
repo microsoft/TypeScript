@@ -297,7 +297,7 @@ namespace ts.Completions {
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = codefix.getSymbolToExportInfoMap(file, host, program);
+        const exportMap = getExportInfoMap(file, host, program);
         const checker = program.getTypeChecker();
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
         const autoImportProviderChecker = autoImportProvider?.getTypeChecker();
@@ -1914,7 +1914,7 @@ namespace ts.Completions {
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-            const exportInfo = codefix.getSymbolToExportInfoMap(sourceFile, host, program);
+            const exportInfo = getExportInfoMap(sourceFile, host, program);
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(
@@ -1927,7 +1927,7 @@ namespace ts.Completions {
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
-                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === i.moduleSymbol.name);
+                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             const defaultExportInfo = find(info, isImportableExportInfo);
                             if (isFromAmbientModule && !defaultExportInfo) {

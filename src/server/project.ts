@@ -251,7 +251,7 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        exportMapCache: ExportMapCache | undefined;
+        exportMapCache: ExportInfoMap | undefined;
         /*@internal*/
         private changedFilesForExportMapCache: Set<Path> | undefined;
         /*@internal*/
@@ -1668,8 +1668,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getExportMapCache() {
-            return this.exportMapCache ||= createExportMapCache(this);
+        getCachedExportInfoMap() {
+            return this.exportMapCache ||= createCacheableExportInfoMap(this);
         }
 
         /*@internal*/

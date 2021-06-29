@@ -125,7 +125,7 @@ namespace ts.projectSystem {
         const project = configuredProjectAt(projectService, 0);
         triggerCompletions();
         const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-        return { host, project, projectService, session, exportMapCache: project.getExportMapCache(), checker, triggerCompletions };
+        return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
         function triggerCompletions() {
             const requestLocation: protocol.FileLocationRequestArgs = {
