@@ -906,6 +906,7 @@ namespace ts.server {
 
                     const parts: lsp.MarkedString[] = [];
                     parts.push({ language: 'typescript', value: quickInfo.displayString });
+                    parts.push(lsp.markdownDocumentation(quickInfo.documentation, quickInfo.tags).value);
 
                     //todo: documentation and tags
                     const range: lsp.Range = { start: getLspPositionFromLocation(quickInfo.start), end: getLspPositionFromLocation(quickInfo.end) };

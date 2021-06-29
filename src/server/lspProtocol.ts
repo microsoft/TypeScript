@@ -159,7 +159,7 @@ namespace ts.server.lsp {
     }
 
     export interface Hover {
-        contents: MarkedString | MarkedString[];
+        contents: MarkedString | MarkedString[] | MarkupContent;
 
         range?: Range;
     }
