@@ -1007,3 +1007,47 @@ let aid = a[id];
 >a : A
 >id : `${number}-${number}-${number}-${number}`
 
+// Repro from #44793
+
+interface AA {
+    a?: string;
+>a : string | undefined
+
+    b?: number;
+>b : number | undefined
+
+    [key: symbol]: string;
+>key : symbol
+}
+
+const aa: AA = { [sym]: '123' };
+>aa : AA
+>{ [sym]: '123' } : { [sym]: string; }
+>[sym] : string
+>sym : unique symbol
+>'123' : "123"
+
+const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
+>obj1 : { [key: symbol]: string; }
+>key : symbol
+>{ [sym]: 'hello '} : { [sym]: string; }
+>[sym] : string
+>sym : unique symbol
+>'hello ' : "hello "
+
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+>obj2 : { [key: string]: string; }
+>key : string
+>{ [sym]: 'hello '} : { [sym]: string; }
+>[sym] : string
+>sym : unique symbol
+>'hello ' : "hello "
+
+const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+>obj3 : { [key: number]: string; }
+>key : number
+>{ [sym]: 'hello '} : { [sym]: string; }
+>[sym] : string
+>sym : unique symbol
+>'hello ' : "hello "
+

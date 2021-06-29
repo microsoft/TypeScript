@@ -68,9 +68,11 @@ tests/cases/conformance/types/members/indexSignatures1.ts(281,35): error TS2322:
   Object literal may only specify known properties, and ''someKey'' does not exist in type 'PseudoDeclaration'.
 tests/cases/conformance/types/members/indexSignatures1.ts(286,7): error TS2322: Type '"two"' is not assignable to type '`/${string}`'.
 tests/cases/conformance/types/members/indexSignatures1.ts(289,7): error TS2322: Type 'number' is not assignable to type 'PathsObject'.
+tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
+  Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
 
 
-==== tests/cases/conformance/types/members/indexSignatures1.ts (49 errors) ====
+==== tests/cases/conformance/types/members/indexSignatures1.ts (50 errors) ====
     // Symbol index signature checking
     
     const sym = Symbol();
@@ -488,4 +490,21 @@ tests/cases/conformance/types/members/indexSignatures1.ts(289,7): error TS2322: 
     const a: A = { [id]: 'test' }
     
     let aid = a[id];
+    
+    // Repro from #44793
+    
+    interface AA {
+        a?: string;
+        b?: number;
+        [key: symbol]: string;
+    }
+    
+    const aa: AA = { [sym]: '123' };
+    
+    const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
+    const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+    const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+                                              ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
+!!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     
