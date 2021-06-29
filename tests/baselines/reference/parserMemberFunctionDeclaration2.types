@@ -3,5 +3,6 @@ class C {
 >C : C
 
     static static Foo() { }
+>static : any
 >Foo : () => void
 }

@@ -3,5 +3,6 @@ class C {
 >C : C
 
    static static [x: string]: string;
+>static : any
 >x : string
 }

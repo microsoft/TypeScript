@@ -1,5 +1,5 @@
-tests/cases/compiler/staticAsIdentifier.ts(12,12): error TS1030: 'static' modifier already seen.
-tests/cases/compiler/staticAsIdentifier.ts(16,12): error TS1030: 'static' modifier already seen.
+tests/cases/compiler/staticAsIdentifier.ts(12,19): error TS1005: ';' expected.
+tests/cases/compiler/staticAsIdentifier.ts(16,19): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/staticAsIdentifier.ts (2 errors) ====
@@ -15,13 +15,28 @@ tests/cases/compiler/staticAsIdentifier.ts(16,12): error TS1030: 'static' modifi
     
     class C3 {
         static static p: string;
-               ~~~~~~
-!!! error TS1030: 'static' modifier already seen.
+                      ~
+!!! error TS1005: ';' expected.
     }
     
     class C4 {
         static static foo() {}
-               ~~~~~~
-!!! error TS1030: 'static' modifier already seen.
+                      ~~~
+!!! error TS1005: ';' expected.
     }
+    
+    class C5 {
+        static static
+    }
+    
+    class C6 {
+        static 
+        static
+    }
+    
+    class C7 extends C6 {
+        static override static
+    }
+    
+    
     
