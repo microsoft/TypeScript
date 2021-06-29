@@ -670,14 +670,8 @@ namespace ts.server {
             }
         }
 
-        class IOSession<TMessage = string, TRequest = protocol.Request> extends Session<TMessage, TRequest> {
-            private eventPort: number | undefined;
-            private eventSocket: NodeSocket | undefined;
-            private socketEventQueue: { body: any, eventName: string }[] | undefined;
-            /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
-            private constructed: boolean | undefined;
-
-            constructor() {
+        class NodeSession<TMessage = string, TRequest = protocol.Request> extends Session<TMessage, TRequest> {
+            constructor(canUseEvents: boolean) {
                 const event = (body: object, eventName: string) => {
                     this.event(body, eventName);
                 };
@@ -696,9 +690,28 @@ namespace ts.server {
                     byteLength: Buffer.byteLength,
                     hrtime: process.hrtime,
                     logger,
-                    canUseEvents: true,
+                    canUseEvents,
                     typesMapLocation,
                 });
+            }
+
+            exit(): never {
+                this.logger.info("Exiting...");
+                this.projectService.closeLog();
+                tracing?.stopTracing();
+                process.exit(0);
+            }
+        }
+
+        class IOSession extends NodeSession {
+            private eventPort: number | undefined;
+            private eventSocket: NodeSocket | undefined;
+            private socketEventQueue: { body: any, eventName: string }[] | undefined;
+            /** No longer needed if syntax target is es6 or above. Any access to "this" before initialized will be a runtime error. */
+            private constructed: boolean | undefined;
+
+            constructor(canUseEvents: boolean) {
+                super(canUseEvents);
 
                 this.eventPort = eventPort;
                 if (this.canUseEvents && this.eventPort) {
@@ -742,15 +755,6 @@ namespace ts.server {
                 this.eventSocket!.write(formatMessage(toEvent(eventName, body), this.logger, this.byteLength, this.host.newLine), "utf8");
             }
 
-            exit(): never {
-                this.logger.info("Exiting...");
-                this.projectService.closeLog();
-                tracing?.stopTracing();
-                process.exit(0);
-            }
-        }
-
-        class TSPSession extends IOSession {
             listen() {
                 rl.on("line", (input: string) => {
                     const message = input.trim();
@@ -779,7 +783,7 @@ namespace ts.server {
             }
         }
 
-        class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
+        class LSPSession extends NodeSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
             readonly reader = new rpc.StreamMessageReader(process.stdin);
             readonly writer = new rpc.StreamMessageWriter(process.stdout);
 
@@ -866,7 +870,7 @@ namespace ts.server {
             startTracing("server", traceDir);
         }
 
-        const ioSession = options.useLsp ? new LSPSession() : new TSPSession();
+        const ioSession = options.useLsp ? new LSPSession(/*canUseEvents*/false) : new IOSession(/*canUseEvents*/true);
         process.on("uncaughtException", err => {
             ioSession.logError(err, "unknown");
         });
