@@ -93,7 +93,7 @@ namespace ts {
         // https://no-color.org 
         const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color"
 
-        const showColors = defaultIsPretty(sys) || ;
+        const showColors = defaultIsPretty(sys);
         if (!showColors) {
             return {
                 bold: (str: string) => str,
