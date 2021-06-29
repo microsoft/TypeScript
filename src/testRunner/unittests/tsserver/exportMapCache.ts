@@ -82,7 +82,7 @@ namespace ts.projectSystem {
             // accessing a transient symbol with two different checkers results in different symbol identities, since
             // transient symbols are recreated with every new checker.
             const programBefore = project.getCurrentProgram()!;
-            let sigintPropBefore: readonly CachedSymbolExportInfo[] | undefined;
+            let sigintPropBefore: readonly SymbolExportInfo[] | undefined;
             exportMapCache.forEach(bTs.path as Path, (info, name) => {
                 if (name === "SIGINT") sigintPropBefore = info;
             });
@@ -108,7 +108,7 @@ namespace ts.projectSystem {
             assert(programBefore !== project.getCurrentProgram()!);
 
             // Get same info from cache again
-            let sigintPropAfter: readonly CachedSymbolExportInfo[] | undefined;
+            let sigintPropAfter: readonly SymbolExportInfo[] | undefined;
             exportMapCache.forEach(bTs.path as Path, (info, name) => {
                 if (name === "SIGINT") sigintPropAfter = info;
             });

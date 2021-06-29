@@ -148,12 +148,12 @@ namespace ts.Completions {
     const enum GlobalsSearch { Continue, Success, Fail }
 
     interface ModuleSpecifierResolutioContext {
-        tryResolve: (exportInfo: readonly CachedSymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
+        tryResolve: (exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult | undefined;
         resolutionLimitExceeded: () => boolean;
     }
 
     interface ModuleSpecifierResolutionResult {
-        exportInfo?: CachedSymbolExportInfo;
+        exportInfo?: SymbolExportInfo;
         moduleSpecifier: string;
     }
 
@@ -181,7 +181,7 @@ namespace ts.Completions {
         host.log?.(`${logPrefix}: ${timestamp() - start}`);
         return result;
 
-        function tryResolve(exportInfo: readonly CachedSymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
+        function tryResolve(exportInfo: readonly SymbolExportInfo[], isFromAmbientModule: boolean): ModuleSpecifierResolutionResult | undefined {
             if (isFromAmbientModule) {
                 const result = codefix.getModuleSpecifierForBestExportInfo(exportInfo, sourceFile, program, host, preferences);
                 if (result) {
@@ -1927,15 +1927,16 @@ namespace ts.Completions {
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
-                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === i.moduleName);
+                        const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === i.moduleSymbol.name);
                         if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
-                            if (isFromAmbientModule && !some(info, isImportableExportInfo)) {
+                            const defaultExportInfo = find(info, isImportableExportInfo);
+                            if (isFromAmbientModule && !defaultExportInfo) {
                                 return;
                             }
 
                             // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                             // (We need to ensure that at least one is importable to show a completion.)
-                            const { exportInfo = find(info, isImportableExportInfo), moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
+                            const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
 
                             if (!exportInfo) return;
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
@@ -1957,7 +1958,7 @@ namespace ts.Completions {
                 }
             );
 
-            function isImportableExportInfo(info: CachedSymbolExportInfo) {
+            function isImportableExportInfo(info: SymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
                 if (!moduleFile) {
                     return packageJsonFilter
@@ -1974,6 +1975,7 @@ namespace ts.Completions {
                     moduleSpecifierCache);
             }
         }
+
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
             const symbolId = getSymbolId(symbol);
