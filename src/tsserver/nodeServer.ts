@@ -780,7 +780,6 @@ namespace ts.server {
         }
 
         class LSPSession extends IOSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
-            readonly inMemoryResourcePrefix = "^";
             readonly reader = new rpc.StreamMessageReader(process.stdin);
             readonly writer = new rpc.StreamMessageWriter(process.stdout);
 
@@ -823,7 +822,16 @@ namespace ts.server {
             }
 
             protected override getHandlers() {
-                return this.lspHandlers;
+                return lsp.getHandlers({
+                    change: this.change.bind(this),
+                    exit: this.exit.bind(this),
+                    getQuickInfoWorker: this.getQuickInfoWorker.bind(this),
+                    getSignatureHelpItems: this.getSignatureHelpItems.bind(this),
+                    notRequired: this.notRequired.bind(this),
+                    openClientFile: this.openClientFile.bind(this),
+                    projectService: this.projectService,
+                    requiredResponse: this.requiredResponse.bind(this),
+                });
             }
 
             public override send(msg: protocol.Message) {
@@ -840,110 +848,6 @@ namespace ts.server {
                     result: typeof body === "undefined" ? null : body // LSP doesn't allow returning undefined unless there's an error
                 };
                 this.writer.write(lspMsg);
-            }
-
-            private textDocumentToNormalizedPath(textDocument: lsp.DocumentUri) {
-                const documentUri = uri.URI.parse(textDocument);
-
-                let path;
-                switch (documentUri.scheme) {
-                    case "file":
-                        path = documentUri.path;
-                    default:
-                        path = this.inMemoryResourcePrefix + documentUri.toString(true);
-                }
-
-                return normalizePath(path) as NormalizedPath;
-            }
-
-            private lspHandlers = new Map(getEntries<(request: rpc.RequestMessage | rpc.NotificationMessage) => HandlerResponse>({
-                // General messages
-                [lsp.Methods.Initialize]: (request: lsp.InitializeRequest) => this.requiredResponse(this.getInitializeResult(request.params)),
-                [lsp.Methods.Initialized]: (_request: lsp.InitializedNotification) => this.notRequired(),
-                [lsp.Methods.Shutdown]: (_request: lsp.RequestMessage & { params: never }) => this.requiredResponse(undefined),
-                [lsp.Methods.Exit]: (_request: lsp.NotificationMessage & { params: never }) => this.exit(),
-
-                // Text synchronization messages
-                [lsp.Methods.DidOpen]: (request: lsp.DidOpenTextDocumentNotification) => {
-                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
-                    const scriptKind = mode2ScriptKind(request.params.textDocument.languageId) ?? "JS";
-                    this.openClientFile(
-                        filePath,
-                        request.params.textDocument.text,
-                        convertScriptKindName(scriptKind),
-                        undefined // TODO - workspace folders
-                    );
-                    return this.notRequired();
-                },
-                [lsp.Methods.DidChange]: (request: lsp.DidChangeTextDocumentNotification) => {
-                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
-                    for (const contentChange of request.params.contentChanges) {
-                        if ("range" in contentChange) {
-                            const { line, offset } = getLineAndOffsetFromPosition(contentChange.range.start);
-                            const { line: endLine, offset: endOffset } = getLineAndOffsetFromPosition(contentChange.range.end);
-                            this.change(filePath, line, offset, endLine, endOffset, contentChange.text);
-                        } else {
-                            // replace whole file
-                            const scriptInfo = this.projectService.getScriptInfo(filePath)!;
-                            Debug.assert(!!scriptInfo);
-                            scriptInfo.open(contentChange.text);
-                        }
-                    }
-                    return this.notRequired();
-                },
-                [lsp.Methods.DidClose]: (_request: lsp.DidCloseTextDocumentNotification) => {
-                    return this.notRequired();
-                },
-
-                // Language features
-                [lsp.Methods.Hover]: (request: lsp.HoverRequest) => {
-                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
-                    const { line, offset } = getLineAndOffsetFromPosition(request.params.position);
-                    const quickInfo = this.getQuickInfoWorker({ file: filePath, line, offset }, /*simplifiedResult*/ true) as protocol.QuickInfoResponseBody;
-                    if (!quickInfo) {
-                        return this.requiredResponse(/*response*/ undefined);
-                    }
-
-                    const parts: lsp.MarkedString[] = [];
-                    parts.push({ language: 'typescript', value: quickInfo.displayString });
-                    parts.push(lsp.markdownDocumentation(quickInfo.documentation, quickInfo.tags).value);
-
-                    //todo: documentation and tags
-                    const range: lsp.Range = { start: getLspPositionFromLocation(quickInfo.start), end: getLspPositionFromLocation(quickInfo.end) };
-                    const result: lsp.Hover = { contents: parts, range };
-                    return this.requiredResponse(result);
-                },
-                [lsp.Methods.SignatureHelp]: (request: lsp.SignatureHelpRequest) => {
-                    const filePath = this.textDocumentToNormalizedPath(request.params.textDocument.uri);
-                    const { line, offset } = getLineAndOffsetFromPosition(request.params.position);
-                    const triggerReason = lsp.toTsTriggerReason(request.params.context);
-                    const info = this.getSignatureHelpItems({file: filePath, line, offset, triggerReason }, /*simplifiedResult*/ true) as protocol.SignatureHelpItems; // cast is true due to simplified result
-                    if (!info) {
-                        return this.requiredResponse(/*response*/ undefined);
-                    }
-                    const signatures = info.items.map(lsp.convertSignature);
-                    const activeSignature = lsp.getActiveSignature(request.params.context, info, signatures);
-                    const activeParameter =lsp.getActiveParameter(info);
-                    const result: lsp.SignatureHelp = {
-                        signatures,
-                        activeSignature,
-                        activeParameter,
-                    };
-                    return this.requiredResponse(result);
-                },
-            }));
-
-            private getInitializeResult(_request: lsp.InitializeParams): lsp.InitializeResult {
-                return {
-                    capabilities: {
-                        textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
-                        hoverProvider: true,
-                        signatureHelpProvider: {
-                            triggerCharacters: ['(', ',', '<'],
-                            retriggerCharacters: [')'],
-                        }
-                    },
-                };
             }
         }
 

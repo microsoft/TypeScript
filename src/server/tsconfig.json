@@ -11,7 +11,8 @@
     "references": [
         { "path": "../compiler" },
         { "path": "../jsTyping" },
-        { "path": "../services" }
+        { "path": "../services" },
+        { "path": "../uri", "prepend": true }
     ],
     "files": [
         "types.ts",
@@ -19,7 +20,9 @@
         "utilities.ts",
         "watchType.ts",
         "protocol.ts",
+        "markdown.ts",
         "lspProtocol.ts",
+        "lspHandlers.ts",
         "scriptInfo.ts",
         "typingsCache.ts",
         "project.ts",
