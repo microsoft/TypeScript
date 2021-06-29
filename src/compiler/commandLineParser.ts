@@ -649,14 +649,6 @@ namespace ts {
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
         },
         {
-            name: "strictOptionalProperties",
-            type: "boolean",
-            affectsSemanticDiagnostics: true,
-            strictFlag: true,
-            category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_strict_checking_of_optional_properties
-        },
-        {
             name: "noImplicitThis",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -699,6 +691,13 @@ namespace ts {
             category: Diagnostics.Type_Checking,
             description: Diagnostics.Raise_an_error_when_a_function_parameter_isn_t_read,
             defaultValueDescription: "false"
+        },
+        {
+            name: "exactOptionalPropertyTypes",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Type_Checking,
+            description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined
         },
         {
             name: "noImplicitReturns",

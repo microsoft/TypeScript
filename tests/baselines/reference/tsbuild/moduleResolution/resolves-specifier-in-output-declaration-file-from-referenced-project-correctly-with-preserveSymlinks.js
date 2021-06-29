@@ -101,6 +101,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/const.ts
 /user/username/projects/myproject/packages/pkg2/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/const.ts (used version)
+/user/username/projects/myproject/packages/pkg2/index.ts (used version)
+
 Program root files: ["/user/username/projects/myproject/packages/pkg1/index.ts"]
 Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/build","preserveSymlinks":true,"traceResolution":true,"configFilePath":"/user/username/projects/myproject/packages/pkg1/tsconfig.json"}
 Program structureReused: Not
@@ -115,6 +120,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/packages/pkg2/build/const.d.ts
 /user/username/projects/myproject/node_modules/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/build/const.d.ts (used version)
+/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts (used version)
+/user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
 WatchedFiles::
 

@@ -398,7 +398,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -411,7 +411,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }

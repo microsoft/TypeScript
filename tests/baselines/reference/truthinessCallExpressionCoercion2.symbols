@@ -140,15 +140,15 @@ function checksConsole() {
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 
-        ((window.console as any).firebug || (window.console.exception && window.console.table));
+        ((window.console as any).firebug || (window.console.error && window.console.table));
 >window.console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->window.console.exception : Symbol(Console.exception, Decl(lib.dom.d.ts, --, --))
+>window.console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 >window.console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
->exception : Symbol(Console.exception, Decl(lib.dom.d.ts, --, --))
+>error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 >window.console.table : Symbol(Console.table, Decl(lib.dom.d.ts, --, --))
 >window.console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))

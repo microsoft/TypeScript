@@ -57,6 +57,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/library/library.ts (used version)
+
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
@@ -69,6 +73,11 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/sample1/Library/library.d.ts
 /user/username/projects/sample1/App/app.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/sample1/library/library.d.ts (used version)
+/user/username/projects/sample1/app/app.ts (used version)
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:
@@ -149,7 +158,7 @@ export {};
 "use strict";
 exports.__esModule = true;
 var library_1 = require("../Library/library");
-library_1.createSomeObject().message;
+(0, library_1.createSomeObject)().message;
 
 
 
@@ -199,6 +208,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/Library/library.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/library/library.ts (computed .d.ts)
+
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
@@ -210,6 +222,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/Library/library.d.ts
 /user/username/projects/sample1/App/app.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/library/library.d.ts (used version)
+/user/username/projects/sample1/app/app.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:
@@ -323,6 +339,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/Library/library.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/library/library.ts (computed .d.ts)
+
 Program root files: ["/user/username/projects/sample1/App/app.ts"]
 Program options: {"watch":true,"configFilePath":"/user/username/projects/sample1/App/tsconfig.json"}
 Program structureReused: Not
@@ -334,6 +353,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/sample1/Library/library.d.ts
 /user/username/projects/sample1/App/app.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/sample1/library/library.d.ts (used version)
+/user/username/projects/sample1/app/app.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/sample1/library/tsconfig.json:

@@ -23,7 +23,7 @@ export = createRule({
         const sourceCodeText = sourceCode.getText();
 
         const isSetOrAssert = (name: string): boolean => name.startsWith("set") || name.startsWith("assert");
-        const isTrivia = (node: TSESTree.Expression): boolean => {
+        const isTrivia = (node: TSESTree.CallExpressionArgument): boolean => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
             }
@@ -69,7 +69,7 @@ export = createRule({
             return false;
         };
 
-        const checkArg = (node: TSESTree.Expression): void => {
+        const checkArg = (node: TSESTree.CallExpressionArgument): void => {
             if (!isTrivia(node)) {
                 return;
             }

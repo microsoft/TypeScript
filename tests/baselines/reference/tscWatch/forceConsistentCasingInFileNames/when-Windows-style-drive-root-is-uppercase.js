@@ -60,6 +60,11 @@ C:/a/lib/lib.d.ts
 C:/project/a.ts
 C:/project/b.ts
 
+Shape signatures in builder refreshed for::
+c:/a/lib/lib.d.ts (used version)
+c:/project/a.ts (used version)
+c:/project/b.ts (used version)
+
 WatchedFiles::
 c:/project/tsconfig.json:
   {"fileName":"C:/project/tsconfig.json","pollingInterval":250}
@@ -136,6 +141,10 @@ C:/project/b.ts
 Semantic diagnostics in builder refreshed for::
 C:/project/a.ts
 C:/project/b.ts
+
+Shape signatures in builder refreshed for::
+c:/project/a.ts (computed .d.ts)
+c:/project/b.ts (computed .d.ts)
 
 WatchedFiles::
 c:/project/tsconfig.json:

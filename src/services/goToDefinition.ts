@@ -12,14 +12,31 @@ namespace ts.GoToDefinition {
         if (node === sourceFile) {
             return undefined;
         }
-        const { parent } = node;
 
+        const { parent } = node;
         const typeChecker = program.getTypeChecker();
+
+        if (node.kind === SyntaxKind.OverrideKeyword || (isJSDocOverrideTag(node) && rangeContainsPosition(node.tagName, position))) {
+            return getDefinitionFromOverriddenMember(typeChecker, node) || emptyArray;
+        }
 
         // Labels
         if (isJumpStatementTarget(node)) {
             const label = getTargetLabel(node.parent, node.text);
             return label ? [createDefinitionInfoFromName(typeChecker, label, ScriptElementKind.label, node.text, /*containerName*/ undefined!)] : undefined; // TODO: GH#18217
+        }
+
+        if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
+            const classDecl = node.parent.parent;
+            const symbol = getSymbol(classDecl, typeChecker);
+            const staticBlocks = filter(classDecl.members, isClassStaticBlockDeclaration);
+            const containerName = symbol ? typeChecker.symbolToString(symbol, classDecl) : "";
+            const sourceFile = node.getSourceFile();
+            return map(staticBlocks, staticBlock => {
+                let { pos } = moveRangePastModifiers(staticBlock);
+                pos = skipTrivia(sourceFile.text, pos);
+                return createDefinitionInfoFromName(typeChecker, staticBlock, ScriptElementKind.constructorImplementationElement, "static {}", containerName, { start: pos, length: "static".length });
+            });
         }
 
         const symbol = getSymbol(node, typeChecker);
@@ -111,6 +128,26 @@ namespace ts.GoToDefinition {
                     getDefinitionFromSymbol(typeChecker, propertySymbol, node));
             }
         }
+    }
+
+    function getDefinitionFromOverriddenMember(typeChecker: TypeChecker, node: Node) {
+        const classElement = findAncestor(node, isClassElement);
+        if (!(classElement && classElement.name)) return;
+
+        const baseDeclaration = findAncestor(classElement, isClassLike);
+        if (!baseDeclaration) return;
+
+        const baseTypeNode = getEffectiveBaseTypeNode(baseDeclaration);
+        const baseType = baseTypeNode ? typeChecker.getTypeAtLocation(baseTypeNode) : undefined;
+        if (!baseType) return;
+
+        const name = unescapeLeadingUnderscores(getTextOfPropertyName(classElement.name));
+        const symbol = hasStaticModifier(classElement)
+            ? typeChecker.getPropertyOfType(typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, baseDeclaration), name)
+            : typeChecker.getPropertyOfType(baseType, name);
+        if (!symbol) return;
+
+        return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
     export function getReferenceAtPosition(sourceFile: SourceFile, position: number, program: Program): { reference: FileReference, fileName: string, unverified: boolean, file?: SourceFile } | undefined {
@@ -212,12 +249,7 @@ namespace ts.GoToDefinition {
 
     // At 'x.foo', see if the type of 'x' has an index signature, and if so find its declarations.
     function getDefinitionInfoForIndexSignatures(node: Node, checker: TypeChecker): DefinitionInfo[] | undefined {
-        if (!isPropertyAccessExpression(node.parent) || node.parent.name !== node) return;
-        const type = checker.getTypeAtLocation(node.parent.expression);
-        return mapDefined(type.isUnionOrIntersection() ? type.types : [type], nonUnionType => {
-            const info = checker.getIndexInfoOfType(nonUnionType, IndexKind.String);
-            return info && info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration);
-        });
+        return mapDefined(checker.getIndexInfosAtLocation(node), info => info.declaration && createDefinitionFromSignatureDeclaration(checker, info.declaration));
     }
 
     function getSymbol(node: Node, checker: TypeChecker): Symbol | undefined {
@@ -310,10 +342,12 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
-        const name = getNameOfDeclaration(declaration) || declaration;
-        const sourceFile = name.getSourceFile();
-        const textSpan = createTextSpanFromNode(name, sourceFile);
+    function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string, textSpan?: TextSpan): DefinitionInfo {
+        const sourceFile = declaration.getSourceFile();
+        if (!textSpan) {
+            const name = getNameOfDeclaration(declaration) || declaration;
+            textSpan = createTextSpanFromNode(name, sourceFile);
+        }
         return {
             fileName: sourceFile.fileName,
             textSpan,
