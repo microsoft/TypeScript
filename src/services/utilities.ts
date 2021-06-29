@@ -3228,7 +3228,7 @@ namespace ts {
 
     export function createExportMapCache(host: ExportMapCacheHost): ExportMapCache {
         let exportInfoId = 1;
-        const exportInfo = new Map<string, CachedSymbolExportInfo | CachedSymbolExportInfo[]>();
+        const exportInfo = createMultiMap<string, CachedSymbolExportInfo>();
         const symbols = new Map<number, Symbol>();
         const moduleSymbols = new Map<number, Symbol>();
         let usableByFileName: Path | undefined;
@@ -3249,14 +3249,13 @@ namespace ts {
                 const importedName = getNameForExportedSymbol(isDefault && getLocalSymbolForExportDefault(symbol) || symbol, scriptTarget);
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
-                const k = key(importedName, symbol, moduleName, checker);
                 const storedSymbol = symbol.flags & SymbolFlags.Transient ? undefined : symbol;
                 const storedModuleSymbol = moduleSymbol.flags & SymbolFlags.Transient ? undefined : moduleSymbol;
 
                 if (!storedSymbol) symbols.set(id, symbol);
                 if (!storedModuleSymbol) moduleSymbols.set(id, moduleSymbol);
 
-                const info: CachedSymbolExportInfo = {
+                exportInfo.add(key(importedName, symbol, moduleName, checker), {
                     id,
                     symbolName: importedName,
                     moduleName,
@@ -3267,31 +3266,18 @@ namespace ts {
                     isFromPackageJson,
                     symbol: storedSymbol,
                     moduleSymbol: storedModuleSymbol,
-                };
-
-                const existing = exportInfo.get(k);
-                if (existing) {
-                    if (isArray(existing)) {
-                        existing.push(info);
-                    }
-                    else {
-                        exportInfo.set(k, [existing, info]);
-                    }
-                }
-                else {
-                    exportInfo.set(k, info);
-                }
+                });
             },
             get: (importingFile, importedName, symbol, moduleName, checker) => {
                 if (importingFile !== usableByFileName) return;
                 const result = exportInfo.get(key(importedName, symbol, moduleName, checker));
-                return !result ? result : toArray(result).map(rehydrateCachedInfo);
+                return result?.map(rehydrateCachedInfo);
             },
             forEach: (importingFile, action) => {
                 if (importingFile !== usableByFileName) return;
                 exportInfo.forEach((info, key) => {
                     const { symbolName, ambientModuleName } = parseKey(key);
-                    action(toArray(info).map(rehydrateCachedInfo), symbolName, !!ambientModuleName);
+                    action(info.map(rehydrateCachedInfo), symbolName, !!ambientModuleName);
                 });
             },
             releaseSymbols: () => {
@@ -3395,10 +3381,6 @@ namespace ts {
                 }
             }
             return true;
-        }
-
-        function isArray(info: CachedSymbolExportInfo | CachedSymbolExportInfo[]): info is CachedSymbolExportInfo[] {
-            return !(info as CachedSymbolExportInfo).id;
         }
     }
 
