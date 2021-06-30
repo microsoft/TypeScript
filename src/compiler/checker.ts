@@ -41139,6 +41139,9 @@ namespace ts {
                         if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
                             return grammarErrorOnNode(modifier, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
                         }
+                        else if (!(flags & ModifierFlags.Export)) {
+                            return grammarErrorOnNode(modifier, Diagnostics._0_modifier_must_precede_1_modifier, "export", "default");
+                        }
 
                         flags |= ModifierFlags.Default;
                         break;
