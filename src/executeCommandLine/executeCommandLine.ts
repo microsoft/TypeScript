@@ -104,7 +104,17 @@ namespace ts {
             return `\x1b[1m${str}\x1b[22m`;
         }
 
+        const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+        const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
+        const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
+
         function blue(str: string) {
+            // Effectively Powershell and Command prompt users use cyan instead
+            // of blue because the default theme doesn't show blue with enough contrast.
+            if (isWindows && !isWindowsTerminal && !isVSCode) {
+                return `\x1b[96m${str}\x1b[39m`;
+            }
+
             return `\x1b[94m${str}\x1b[39m`;
         }
 
