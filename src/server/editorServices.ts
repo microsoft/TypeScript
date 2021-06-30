@@ -3236,8 +3236,20 @@ namespace ts.server {
             const configFileName = this.getConfigFileNameForFile(originalFileInfo);
             if (!configFileName) return undefined;
 
-            let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName);
+            if (!configuredProject) {
+                if (project.getCompilerOptions().disableReferencedProjectLoad) {
+                    // If location was a project reference redirect, then location and originalLocation are the same.
+                    // Otherwise, if we found originalLocation via a source map instead, then it might be from a project
+                    // that isn't open. Since the user has specified that they don't want to load projects, fall back to
+                    // the original location (i.e. the .d.ts file).
+                    return this.getScriptInfo(originalLocation.fileName)?.containingProjects.length
+                        ? originalLocation
+                        : location;
+                }
+
+                configuredProject = this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            }
             updateProjectIfDirty(configuredProject);
 
             const projectContainsOriginalInfo = (project: ConfiguredProject) => {
