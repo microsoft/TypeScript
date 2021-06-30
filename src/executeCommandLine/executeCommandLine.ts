@@ -96,7 +96,7 @@ namespace ts {
                 bold: (str: string) => str,
                 blue: (str: string) => str,
                 blueBackground: (str: string) => str,
-                white: (str: string) => str
+                brightWhite: (str: string) => str
             };
         }
 
@@ -112,7 +112,7 @@ namespace ts {
             // Effectively Powershell and Command prompt users use cyan instead
             // of blue because the default theme doesn't show blue with enough contrast.
             if (isWindows && !isWindowsTerminal && !isVSCode) {
-                return `\x1b[96m${str}\x1b[39m`;
+                return brightWhite(str);
             }
 
             return `\x1b[94m${str}\x1b[39m`;
@@ -130,13 +130,13 @@ namespace ts {
                 return `\x1b[44m${str}\x1B[39;49m`;
             }
         }
-        function white(str: string) {
+        function brightWhite(str: string) {
             return `\x1b[97m${str}\x1b[39m`;
         }
         return {
             bold,
             blue,
-            white,
+            brightWhite,
             blueBackground
         };
     }
@@ -413,7 +413,7 @@ namespace ts {
         const tsIconLength = 5;
 
         const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = colors.blueBackground(colors.white(padLeft("TS ", tsIconLength)));
+        const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
         if (terminalWidth >= tscExplanation.length + tsIconLength) {
             // right align of the icon is 120 at most.
