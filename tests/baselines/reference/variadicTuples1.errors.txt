@@ -34,7 +34,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
   Type 'T' is not assignable to type 'U'.
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
-  Type '"2"' is not assignable to type 'number | "0" | keyof T[] | "1"'.
+  Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
@@ -300,7 +300,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
         k3 = '2';  // Error
         ~~
 !!! error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
-!!! error TS2322:   Type '"2"' is not assignable to type 'number | "0" | keyof T[] | "1"'.
+!!! error TS2322:   Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
     }
     
     // Inference between variadic tuple types

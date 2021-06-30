@@ -46,6 +46,7 @@ namespace ts.projectSystem {
             };
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
                 isGlobalCompletion: true,
+                isIncomplete: undefined,
                 isMemberCompletion: false,
                 isNewIdentifierLocation: false,
                 optionalReplacementSpan: { start: { line: 1, offset: 1 }, end: { line: 1, offset: 4 } },

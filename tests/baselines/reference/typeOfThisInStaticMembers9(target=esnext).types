@@ -1,0 +1,82 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers9.ts ===
+class C {
+>C : C
+
+    static f = 1
+>f : number
+>1 : 1
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    static arrowFunctionBoundary = () => super.f + 1;
+>arrowFunctionBoundary : () => number
+>() => super.f + 1 : () => number
+>super.f + 1 : number
+>super.f : number
+>super : typeof C
+>f : number
+>1 : 1
+
+    static functionExprBoundary = function () { return super.f + 2 };
+>functionExprBoundary : () => any
+>function () { return super.f + 2 } : () => any
+>super.f + 2 : any
+>super.f : any
+>super : any
+>f : any
+>2 : 2
+
+    static classExprBoundary = class { a = super.f + 3 };
+>classExprBoundary : typeof (Anonymous class)
+>class { a = super.f + 3 } : typeof (Anonymous class)
+>a : any
+>super.f + 3 : any
+>super.f : any
+>super : any
+>f : any
+>3 : 3
+
+    static functionAndClassDeclBoundary = (() => {
+>functionAndClassDeclBoundary : void
+>(() => {        function foo () {            return super.f + 4        }        class C {            a = super.f + 5            method () {                return super.f +6            }        }    })() : void
+>(() => {        function foo () {            return super.f + 4        }        class C {            a = super.f + 5            method () {                return super.f +6            }        }    }) : () => void
+>() => {        function foo () {            return super.f + 4        }        class C {            a = super.f + 5            method () {                return super.f +6            }        }    } : () => void
+
+        function foo () {
+>foo : () => any
+
+            return super.f + 4
+>super.f + 4 : any
+>super.f : any
+>super : any
+>f : any
+>4 : 4
+        }
+        class C {
+>C : C
+
+            a = super.f + 5
+>a : any
+>super.f + 5 : any
+>super.f : any
+>super : any
+>f : any
+>5 : 5
+
+            method () {
+>method : () => any
+
+                return super.f +6
+>super.f +6 : any
+>super.f : any
+>super : any
+>f : any
+>6 : 6
+            }
+        }
+    })();
+}
+

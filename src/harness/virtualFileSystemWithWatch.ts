@@ -922,7 +922,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                     });
                 }
                 return { directories, files };
-            }, path => this.realpath(path));
+            }, path => this.realpath(path), path => this.directoryExists(path));
         }
 
         createHash(s: string): string {

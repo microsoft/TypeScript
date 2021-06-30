@@ -169,6 +169,8 @@ namespace ts {
         ForStatement = 1 << 11,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 12,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 13, // Enclosed in a constructor that captures 'this' for use with 'super'
+        StaticInitializer = 1 << 14,            // Enclosed in a static initializer
+
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -176,7 +178,7 @@ namespace ts {
         // Ancestor masks
         //
 
-        AncestorFactsMask = (ConstructorWithCapturedSuper << 1) - 1,
+        AncestorFactsMask = (StaticInitializer << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -189,7 +191,7 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | IterationContainer | StaticInitializer,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
@@ -225,12 +227,15 @@ namespace ts {
         IterationStatementBlockIncludes = IterationStatementBlock,
         IterationStatementBlockExcludes = BlockScopeExcludes,
 
+        StaticInitializerIncludes = FunctionIncludes | StaticInitializer,
+        StaticInitializerExcludes = FunctionExcludes,
+
         //
         // Subtree facts
         //
 
-        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
-        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
+        NewTarget = 1 << 15,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 16,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -375,6 +380,23 @@ namespace ts {
 
         function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
             return shouldVisitNode(node) ? visitorWorker(node, /*expressionResultIsUnused*/ true) : node;
+        }
+
+        function classWrapperStatementVisitor(node: Node): VisitResult<Node> {
+            if (shouldVisitNode(node)) {
+                const original = getOriginalNode(node);
+                if (isPropertyDeclaration(original) && hasStaticModifier(original)) {
+                    const ancestorFacts = enterSubtree(
+                        HierarchyFacts.StaticInitializerExcludes,
+                        HierarchyFacts.StaticInitializerIncludes
+                    );
+                    const result = visitorWorker(node, /*expressionResultIsUnused*/ false);
+                    exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
+                    return result;
+                }
+                return visitorWorker(node, /*expressionResultIsUnused*/ false);
+            }
+            return node;
         }
 
         function callExpressionVisitor(node: Node): VisitResult<Node> {
@@ -602,7 +624,7 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
-            if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
+            if (hierarchyFacts & HierarchyFacts.ArrowFunction && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
             if (convertedLoopState) {
@@ -1610,6 +1632,7 @@ namespace ts {
                         break;
 
                     case SyntaxKind.Constructor:
+                    case SyntaxKind.ClassStaticBlockDeclaration:
                         // Constructors are handled in visitClassExpression/visitClassDeclaration
                         break;
 
@@ -1749,7 +1772,7 @@ namespace ts {
          * @param node An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
-            if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+            if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
 
@@ -1768,10 +1791,6 @@ namespace ts {
             setTextRange(func, node);
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
-
-            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis) {
-                enableSubstitutionsForCapturedThis();
-            }
 
             // If an arrow function contains
             exitSubtree(ancestorFacts, HierarchyFacts.ArrowFunctionSubtreeExcludes, HierarchyFacts.None);
@@ -1852,7 +1871,7 @@ namespace ts {
         function transformFunctionLikeToExpression(node: FunctionLikeDeclaration, location: TextRange | undefined, name: Identifier | undefined, container: Node | undefined): FunctionExpression {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const ancestorFacts = container && isClassLike(container) && !hasSyntacticModifier(node, ModifierFlags.Static)
+            const ancestorFacts = container && isClassLike(container) && !isStatic(node)
                 ? enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes | HierarchyFacts.NonStaticClassElement)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
@@ -3687,7 +3706,7 @@ namespace ts {
             // visit the class body statements outside of any converted loop body.
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
-            const bodyStatements = visitNodes(body.statements, visitor, isStatement);
+            const bodyStatements = visitNodes(body.statements, classWrapperStatementVisitor, isStatement);
             convertedLoopState = savedConvertedLoopState;
 
             const classStatements = filter(bodyStatements, isVariableStatementWithInitializer);
@@ -3714,7 +3733,10 @@ namespace ts {
             //      return C;
             //  }())
             //
-            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            let aliasAssignment = tryCast(initializer, isAssignmentExpression);
+            if (!aliasAssignment && isBinaryExpression(initializer) && initializer.operatorToken.kind === SyntaxKind.CommaToken) {
+                aliasAssignment = tryCast(initializer.left, isAssignmentExpression);
+            }
 
             // The underlying call (3) is another IIFE that may contain a '_super' argument.
             const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
@@ -4357,7 +4379,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getInternalName(node)
                 : factory.createPropertyAccessExpression(factory.getInternalName(node), "prototype");
         }

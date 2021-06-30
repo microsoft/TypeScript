@@ -30,7 +30,7 @@ export = createRule({
         };
 
         const isRegexLiteral = (node: TSESTree.Node | null): boolean => {
-            return !!(node && node.type === AST_NODE_TYPES.Literal && node.regex);
+            return !!(node && node.type === AST_NODE_TYPES.Literal && Object.prototype.hasOwnProperty.call(node, "regex"));
         };
 
         const checkDoubleSpace = (node: TSESTree.Node) => {

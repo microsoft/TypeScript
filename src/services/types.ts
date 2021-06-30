@@ -227,6 +227,12 @@ namespace ts {
         Syntactic,
     }
 
+    export interface IncompleteCompletionsCache {
+        get(): CompletionInfo | undefined;
+        set(response: CompletionInfo): void;
+        clear(): void;
+    }
+
     //
     // Public interface of the host of a language service instance.
     //
@@ -274,10 +280,8 @@ namespace ts {
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
-        /* @internal */
-        getGlobalTypingsCacheLocation?(): string | undefined;
-        /* @internal */
-        getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
+        /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
+        /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
 
         /*
          * Required for full import and type reference completions.
@@ -294,30 +298,20 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
 
-        /* @internal */
-        getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
-        /* @internal */
-        getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */
-        getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
-        /* @internal */
-        getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */
-        getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
-        /* @internal */
-        getExportMapCache?(): ExportMapCache;
-        /* @internal */
-        getModuleSpecifierCache?(): ModuleSpecifierCache;
-        /* @internal */
-        setCompilerHost?(host: CompilerHost): void;
-        /* @internal */
-        useSourceOfProjectReferenceRedirect?(): boolean;
-        /* @internal */
-        getPackageJsonAutoImportProvider?(): Program | undefined;
-        /* @internal */
-        sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
+        /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+        /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getExportMapCache?(): ExportMapCache;
+        /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
+        /* @internal */ setCompilerHost?(host: CompilerHost): void;
+        /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
+        /* @internal */ getPackageJsonAutoImportProvider?(): Program | undefined;
+        /* @internal */ sendPerformanceEvent?(kind: PerformanceEvent["kind"], durationMs: number): void;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         /* @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
+        /* @internal */ getIncompleteCompletionsCache?(): IncompleteCompletionsCache;
     }
 
     /* @internal */
@@ -487,6 +481,8 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
+
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -558,16 +554,38 @@ namespace ts {
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
 
+    export const enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3,
+    }
+
     export interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
          * (as opposed to when the user explicitly requested them) this should be set.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+
+    export interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
@@ -691,6 +709,20 @@ namespace ts {
     export interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+
+    export const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
+    export interface InlayHint {
+        text: string;
+        position: number;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export interface TodoCommentDescriptor {
@@ -1378,7 +1410,10 @@ namespace ts {
          */
         memberVariableElement = "property",
 
-        /** class X { constructor() { } } */
+        /**
+         * class X { constructor() { } }
+         * class X { static { } }
+         */
         constructorImplementationElement = "constructor",
 
         /** interface Y { ():number; } */
@@ -1555,5 +1590,14 @@ namespace ts {
         preferences: UserPreferences;
         triggerReason?: RefactorTriggerReason;
         kind?: string;
+    }
+
+    export interface InlayHintsContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
+        span: TextSpan;
+        preferences: InlayHintsOptions;
     }
 }

@@ -72,6 +72,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/projects/project1/class1.d.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
@@ -155,6 +160,8 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
@@ -228,6 +235,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project1/class3.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/projects/project1/class3.d.ts (used version)
+/user/username/projects/myproject/projects/project1/class1.d.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
@@ -357,6 +369,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/projects/project1/class1.d.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/myproject/projects/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/projects/project2/tsconfig.json","pollingInterval":250}
@@ -435,6 +451,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/projects/project1/class1.d.ts
 /user/username/projects/myproject/projects/project1/class3.d.ts
 /user/username/projects/myproject/projects/project2/class2.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/projects/project1/class3.d.ts (used version)
+/user/username/projects/myproject/projects/project1/class1.d.ts (used version)
+/user/username/projects/myproject/projects/project2/class2.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/projects/project2/tsconfig.json:

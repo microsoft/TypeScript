@@ -411,6 +411,7 @@ namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
+        session: Session<unknown> | undefined;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -794,6 +795,10 @@ namespace ts.server {
         readonly packageJsonCache: PackageJsonCache;
         /*@internal*/
         private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
+        /*@internal*/
+        private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
+        /*@internal*/
+        readonly session: Session<unknown> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;
@@ -812,6 +817,8 @@ namespace ts.server {
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
             this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
             this.typesMapLocation = (opts.typesMapLocation === undefined) ? combinePaths(getDirectoryPath(this.getExecutingFilePath()), "typesMap.json") : opts.typesMapLocation;
+            this.session = opts.session;
+
             if (opts.serverMode !== undefined) {
                 this.serverMode = opts.serverMode;
                 this.syntaxOnly = this.serverMode === LanguageServiceMode.Syntactic;
@@ -4140,6 +4147,26 @@ namespace ts.server {
                 }
             }
         }
+
+        /*@internal*/
+        getIncompleteCompletionsCache() {
+            return this.incompleteCompletionsCache ||= createIncompleteCompletionsCache();
+        }
+    }
+
+    function createIncompleteCompletionsCache(): IncompleteCompletionsCache {
+        let info: CompletionInfo | undefined;
+        return {
+            get() {
+                return info;
+            },
+            set(newInfo) {
+                info = newInfo;
+            },
+            clear() {
+                info = undefined;
+            }
+        };
     }
 
     /* @internal */

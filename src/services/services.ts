@@ -1188,6 +1188,7 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
+        "provideInlayHints"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1599,7 +1600,8 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 fullPreferences,
-                options.triggerCharacter);
+                options.triggerCharacter,
+                options.triggerKind);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -2504,6 +2506,17 @@ namespace ts {
             };
         }
 
+        function getInlayHintsContext(file: SourceFile, span: TextSpan, preferences: UserPreferences): InlayHintsContext {
+            return {
+                file,
+                program: getProgram()!,
+                host,
+                span,
+                preferences,
+                cancellationToken,
+            };
+        }
+
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
@@ -2556,6 +2569,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        }
+
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
         }
 
         const ls: LanguageService = {
@@ -2623,6 +2642,7 @@ namespace ts {
             toggleMultilineComment,
             commentSelection,
             uncommentSelection,
+            provideInlayHints,
         };
 
         switch (languageServiceMode) {
