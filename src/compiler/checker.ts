@@ -12106,7 +12106,7 @@ namespace ts {
         }
 
         function getApplicableIndexInfoForName(type: Type, name: __String): IndexInfo | undefined {
-            return getApplicableIndexInfo(type, getStringLiteralType(unescapeLeadingUnderscores(name)));
+            return getApplicableIndexInfo(type, isLateBoundName(name) ? esSymbolType : getStringLiteralType(unescapeLeadingUnderscores(name)));
         }
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
@@ -27121,8 +27121,12 @@ namespace ts {
          */
         function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
+                // For backwards compatibility a symbol-named property is satisfied by a string index signature. This
+                // is incorrect and inconsistent with element access expressions, where it is an error, so eventually
+                // we should remove this exception.
                 if (getPropertyOfObjectType(targetType, name) ||
                     getApplicableIndexInfoForName(targetType, name) ||
+                    isLateBoundName(name) && getIndexInfoOfType(targetType, stringType) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
@@ -28724,8 +28728,10 @@ namespace ts {
          * Returns the this argument in calls like x.f(...) and x[f](...). Undefined otherwise.
          */
         function getThisArgumentOfCall(node: CallLikeExpression): LeftHandSideExpression | undefined {
-            if (node.kind === SyntaxKind.CallExpression) {
-                const callee = skipOuterExpressions(node.expression);
+            const expression = node.kind === SyntaxKind.CallExpression ? node.expression :
+                node.kind === SyntaxKind.TaggedTemplateExpression ? node.tag : undefined;
+            if (expression) {
+                const callee = skipOuterExpressions(expression);
                 if (isAccessExpression(callee)) {
                     return callee.expression;
                 }
@@ -31403,8 +31409,9 @@ namespace ts {
         }
 
         function checkDeleteExpressionMustBeOptional(expr: AccessExpression, type: Type) {
-            const AnyOrUnknownOrNeverFlags = TypeFlags.AnyOrUnknown | TypeFlags.Never;
-            if (strictNullChecks && !(type.flags & AnyOrUnknownOrNeverFlags) && !(getFalsyFlags(type) & TypeFlags.Undefined)) {
+            if (strictNullChecks &&
+                !(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) &&
+                !(exactOptionalPropertyTypes ? 0 : getFalsyFlags(type) & TypeFlags.Undefined)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
             }
         }

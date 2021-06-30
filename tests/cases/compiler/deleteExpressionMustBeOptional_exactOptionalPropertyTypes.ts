@@ -1,4 +1,5 @@
-// @strict: true, false
+// @strictNullChecks: true
+// @exactOptionalPropertyTypes: true, false
 
 interface Foo {
     a: number

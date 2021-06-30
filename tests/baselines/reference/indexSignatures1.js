@@ -298,6 +298,20 @@ const a: A = { [id]: 'test' }
 
 let aid = a[id];
 
+// Repro from #44793
+
+interface AA {
+    a?: string;
+    b?: number;
+    [key: symbol]: string;
+}
+
+const aa: AA = { [sym]: '123' };
+
+const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+
 
 //// [indexSignatures1.js]
 "use strict";
@@ -457,6 +471,10 @@ const pathObject = 123; // Error
 const id = '0000-0000-0000-0001';
 const a = { [id]: 'test' };
 let aid = a[id];
+const aa = { [sym]: '123' };
+const obj1 = { [sym]: 'hello ' };
+const obj2 = { [sym]: 'hello ' }; // Permitted for backwards compatibility
+const obj3 = { [sym]: 'hello ' }; // Error
 
 
 //// [indexSignatures1.d.ts]
@@ -627,3 +645,18 @@ declare const id: IdType;
 declare type A = Record<IdType, string>;
 declare const a: A;
 declare let aid: string;
+interface AA {
+    a?: string;
+    b?: number;
+    [key: symbol]: string;
+}
+declare const aa: AA;
+declare const obj1: {
+    [key: symbol]: string;
+};
+declare const obj2: {
+    [key: string]: string;
+};
+declare const obj3: {
+    [key: number]: string;
+};
