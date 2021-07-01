@@ -25,7 +25,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
         getMemoryUsage?(): number | undefined;
-        join(...components: string[]): string
+        joinPath(...components: string[]): string
     }
 
     export let IO: IO;
@@ -63,7 +63,7 @@ namespace Harness {
             return dirPath === path ? undefined : dirPath;
         }
 
-        function join(...components: string[]) {
+        function joinPath(...components: string[]) {
             return pathModule.join(...components);
         }
 
@@ -161,7 +161,7 @@ namespace Harness {
             tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
             getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
             getEnvironmentVariable: name => ts.sys.getEnvironmentVariable(name),
-            join
+            joinPath
         };
     }
 
@@ -1395,7 +1395,7 @@ namespace Harness {
                 }
                 else {
                     if (!IO.fileExists(expected)) {
-                        throw new Error(`New baseline created at ${IO.join("tests", "baselines","local", relativeFileName)}`);
+                        throw new Error(`New baseline created at ${IO.joinPath("tests", "baselines","local", relativeFileName)}`);
                     }
                     else {
                         throw new Error(`The baseline file ${relativeFileName} has changed.`);
