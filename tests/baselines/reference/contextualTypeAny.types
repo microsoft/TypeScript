@@ -13,7 +13,7 @@ var obj: { [s: string]: number } = { p: "", q: x };
 
 var arr: number[] = ["", x];
 >arr : number[]
->["", x] : any[]
+>["", x] : (any | string)[]
 >"" : ""
 >x : any
 

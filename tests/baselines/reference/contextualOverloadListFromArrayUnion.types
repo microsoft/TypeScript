@@ -147,7 +147,7 @@ export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 series([
 >series([    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),], (error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }}) : void
 >series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
->[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : ((cb: Callback<unknown>) => number)[]
+>[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : (((cb: Callback<unknown>) => number) | ((cb: Callback<unknown>) => number) | ((cb: Callback<unknown>) => number))[]
 
     cb => setTimeout(() => cb(null, 1), 300),
 >cb => setTimeout(() => cb(null, 1), 300) : (cb: Callback<unknown>) => number

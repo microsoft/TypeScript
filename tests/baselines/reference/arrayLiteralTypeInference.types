@@ -58,7 +58,7 @@ var x2: Action[] = [
 
 var x3: Action[] = [
 >x3 : Action[]
->[    new Action(),    new ActionA(),    new ActionB()] : Action[]
+>[    new Action(),    new ActionA(),    new ActionB()] : (Action | ActionA | ActionB)[]
 
     new Action(),
 >new Action() : Action
@@ -119,7 +119,7 @@ var z3: { id: number }[] =
 >id : number
 
     [
->[        new Action(),        new ActionA(),        new ActionB()    ] : Action[]
+>[        new Action(),        new ActionA(),        new ActionB()    ] : (Action | ActionA | ActionB)[]
 
         new Action(),
 >new Action() : Action

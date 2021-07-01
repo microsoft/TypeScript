@@ -11,9 +11,9 @@ for (const subcomponent of [1, 2, 3]) {
 >3 : 3
 
     additional = [...additional, subcomponent];
->additional = [...additional, subcomponent] : any[]
+>additional = [...additional, subcomponent] : (any | number)[]
 >additional : any[]
->[...additional, subcomponent] : any[]
+>[...additional, subcomponent] : (any | number)[]
 >...additional : any
 >additional : any[]
 >subcomponent : number

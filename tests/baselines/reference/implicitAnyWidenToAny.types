@@ -63,20 +63,20 @@ var array2: any[] = [];
 
 var array3: any[] = [null, undefined];
 >array3 : any[]
->[null, undefined] : null[]
+>[null, undefined] : never[]
 >null : null
 >undefined : undefined
 
 var array4: number[] = [null, undefined];
 >array4 : number[]
->[null, undefined] : null[]
+>[null, undefined] : never[]
 >null : null
 >undefined : undefined
 
 var array5 = <any[]>[null, undefined];
 >array5 : any[]
 ><any[]>[null, undefined] : any[]
->[null, undefined] : null[]
+>[null, undefined] : never[]
 >null : null
 >undefined : undefined
 
