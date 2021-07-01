@@ -2370,7 +2370,7 @@ namespace ts {
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                     else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                        imports = append(imports, node.arguments[0] as StringLiteralLike);
+                        imports = append(imports, node.arguments[0]);
                     }
                     else if (isLiteralImportTypeNode(node)) {
                         imports = append(imports, node.argument.literal);

@@ -473,7 +473,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
