@@ -629,9 +629,7 @@ namespace ts.server {
         CommandNames.CompilerOptionsDiagnosticsFull,
         CommandNames.EncodedSemanticClassificationsFull,
         CommandNames.SemanticDiagnosticsSync,
-        CommandNames.SyntacticDiagnosticsSync,
         CommandNames.SuggestionDiagnosticsSync,
-        CommandNames.Geterr,
         CommandNames.GeterrForProject,
         CommandNames.Reload,
         CommandNames.ReloadProjects,
@@ -1062,10 +1060,16 @@ namespace ts.server {
                 }
 
                 this.syntacticCheck(fileName, project);
+                // Only try to provide semantic diagnostics if we're clean of syntactic diagnostics.
                 if (this.changeSeq !== seq) {
                     return;
                 }
 
+                // Don't provide semantic diagnostics unless we're in full semantic mode.
+                if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                    goNext();
+                    return;
+                }
                 next.immediate(() => {
                     this.semanticCheck(fileName, project);
                     if (this.changeSeq !== seq) {
@@ -1074,13 +1078,12 @@ namespace ts.server {
 
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
+                        return;
                     }
-                    else {
-                        next.immediate(() => {
-                            this.suggestionCheck(fileName, project);
-                            goNext();
-                        });
-                    }
+                    next.immediate(() => {
+                        this.suggestionCheck(fileName, project);
+                        goNext();
+                    });
                 });
             };
 
