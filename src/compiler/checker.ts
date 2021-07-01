@@ -31402,16 +31402,16 @@ namespace ts {
                 if (isReadonlySymbol(symbol)) {
                     error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_read_only_property);
                 }
-
-                checkDeleteExpressionMustBeOptional(expr, getTypeOfSymbol(symbol));
+                checkDeleteExpressionMustBeOptional(expr, symbol);
             }
             return booleanType;
         }
 
-        function checkDeleteExpressionMustBeOptional(expr: AccessExpression, type: Type) {
+        function checkDeleteExpressionMustBeOptional(expr: AccessExpression, symbol: Symbol) {
+            const type = getTypeOfSymbol(symbol);
             if (strictNullChecks &&
                 !(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Never)) &&
-                !(exactOptionalPropertyTypes ? 0 : getFalsyFlags(type) & TypeFlags.Undefined)) {
+                !(exactOptionalPropertyTypes ? hasQuestionToken(symbol.valueDeclaration!) : getFalsyFlags(type) & TypeFlags.Undefined)) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_optional);
             }
         }
