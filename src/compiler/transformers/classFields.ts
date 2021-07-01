@@ -738,7 +738,7 @@ namespace ts {
                     visitNode(node.right, visitor)
                 );
                 const expr = some(pendingExpressions) ?
-                    factory.inlineExpressions(compact([...pendingExpressions!, node])) :
+                    factory.inlineExpressions(compact([...pendingExpressions, node])) :
                     node;
                 pendingExpressions = savedPendingExpressions;
                 return expr;
