@@ -1,11 +1,19 @@
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(25,8): error TS2790: The operand of a 'delete' operator must be optional.
 tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(26,8): error TS2790: The operand of a 'delete' operator must be optional.
 tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(27,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(29,8): error TS2790: The operand of a 'delete' operator must be optional.
-tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(34,10): error TS2339: Property 'j' does not exist on type 'Foo'.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(28,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(30,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(35,10): error TS2339: Property 'j' does not exist on type 'Foo'.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(37,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(38,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(39,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(40,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(41,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(42,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(45,8): error TS2790: The operand of a 'delete' operator must be optional.
+tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts(46,10): error TS2339: Property 'j' does not exist on type 'Partial<Foo>'.
 
 
-==== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts (5 errors) ====
+==== tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts (13 errors) ====
     interface Foo {
         a: number
         b: number | undefined
@@ -27,6 +35,7 @@ tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.t
     }
     
     declare const f: Foo
+    declare const g: Partial<Foo>
     declare const a: AA
     declare const b: BB
     
@@ -50,6 +59,33 @@ tests/cases/compiler/deleteExpressionMustBeOptional_exactOptionalPropertyTypes.t
     delete f.j
              ~
 !!! error TS2339: Property 'j' does not exist on type 'Foo'.
+    
+    delete g.a
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.b
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.c
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.d
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.e
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.f
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.g
+    delete g.h
+    delete g.i
+           ~~~
+!!! error TS2790: The operand of a 'delete' operator must be optional.
+    delete g.j
+             ~
+!!! error TS2339: Property 'j' does not exist on type 'Partial<Foo>'.
     
     delete a.a
     delete a.b
