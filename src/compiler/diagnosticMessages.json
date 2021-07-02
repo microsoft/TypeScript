@@ -3352,6 +3352,10 @@
         "category": "Error",
         "code": 2817
     },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.": {
+        "category": "Error",
+        "code": 2818
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

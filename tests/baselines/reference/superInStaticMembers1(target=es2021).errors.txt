@@ -1,0 +1,630 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/classDeclInContainingScopeStaticBlock.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/classDeclInContainingScopeStaticField.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/constEnumInContainingScopeStaticBlock.ts(3,12): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/constEnumInContainingScopeStaticField.ts(3,12): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/defaultImportInContainingScopeStaticBlock.ts(3,8): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/defaultImportInContainingScopeStaticField.ts(3,8): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/enumInContainingScopeStaticBlock.ts(3,6): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/enumInContainingScopeStaticField.ts(3,6): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/funcDeclInContainingScopeStaticBlock.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/funcDeclInContainingScopeStaticField.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingClassExprStaticBlock.ts(3,8): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingClassExprStaticField.ts(3,8): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingFuncExprStaticBlock.ts(3,11): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingFuncExprStaticField.ts(3,11): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(6,17): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(10,19): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(14,18): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(18,19): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(22,22): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(26,18): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(30,24): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(52,15): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(57,14): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(62,13): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(67,15): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(72,18): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(77,14): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts(82,20): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportInContainingScopeStaticBlock.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportInContainingScopeStaticField.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfConstEnumInContainingScopeStaticBlock.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfConstEnumInContainingScopeStaticField.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfInterfaceInContainingScopeStaticBlock.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfInterfaceInContainingScopeStaticField.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfUninstantiatedNamespaceInContainingScopeStaticBlock.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfUninstantiatedNamespaceInContainingScopeStaticField.ts(3,10): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namespaceImportInContainingScopeStaticBlock.ts(3,13): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/namespaceImportInContainingScopeStaticField.ts(3,13): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/valueNamespaceInContainingScopeStaticBlock.ts(3,11): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/valueNamespaceInContainingScopeStaticField.ts(3,11): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock1.ts(3,5): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock2.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock3.ts(3,6): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField1.ts(3,5): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField2.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField3.ts(3,6): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+
+
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/external.ts (0 errors) ====
+    export class Reflect {}
+    export interface Foo {}
+    export declare namespace Bar { type _ = unknown; }
+    export const enum Baz {}
+    export default class {};
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/locals.ts (14 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    class C extends B {
+        static _ = [
+            (() => {
+                var Reflect; // collision (es2015-es2021 only)
+                    ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+                      ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                var [Reflect] = [null]; // collision (es2015-es2021 only)
+                     ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                class Reflect {} // collision (es2015-es2021 only)
+                      ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                function Reflect() {} // collision (es2015-es2021 only)
+                         ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                enum Reflect {} // collision (es2015-es2021 only)
+                     ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                const enum Reflect {} // collision (es2015-es2021 only)
+                           ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+                super.w();
+            })(),
+            (() => {
+                type Reflect = unknown; // no collision
+                super.w();
+            })(),
+            (() => {
+                interface Reflect {}; // no collision
+                super.w();
+            })(),
+            (() => {
+                (class Reflect {}); // no collision
+                super.w();
+            })(),
+            (() => {
+                (function Reflect() {}); // no collision
+                super.w();
+            })(),
+        ];
+    
+        static {
+            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+                  ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            var [Reflect] = [null]; // collision (es2015-es2021 only)
+                 ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            var Reflect; // collision (es2015-es2021 only)
+                ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            class Reflect {} // collision (es2015-es2021 only)
+                  ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            function Reflect() {} // collision (es2015-es2021 only)
+                     ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            enum Reflect {} // collision (es2015-es2021 only)
+                 ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            const enum Reflect {} // collision (es2015-es2021 only)
+                       ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+            super.w();
+        }
+    
+        static {
+            type Reflect = unknown; // no collision
+            super.w();
+        }
+    
+        static {
+            interface Reflect {} // no collision
+            super.w();
+        }
+    
+        static {
+            (class Reflect {}) // no collision
+            super.w();
+        }
+    
+        static {
+            (function Reflect() {}) // no collision
+            super.w();
+        }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField1.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var Reflect = null; // collision (es2015-es2021 only)
+        ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField2.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+          ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticField3.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var [Reflect] = [null]; // collision (es2015-es2021 only)
+         ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock1.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var Reflect = null; // collision (es2015-es2021 only)
+        ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock2.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
+          ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/varInContainingScopeStaticBlock3.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    var [Reflect] = [null]; // collision (es2015-es2021 only)
+         ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/classDeclInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    class Reflect {} // collision (es2015-es2021 only)
+          ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/classDeclInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    class Reflect {} // collision (es2015-es2021 only)
+          ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/funcDeclInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    function Reflect() {} // collision (es2015-es2021 only)
+             ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/funcDeclInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    function Reflect() {} // collision (es2015-es2021 only)
+             ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/valueNamespaceInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    namespace Reflect {} // collision (es2015-es2021 only)
+              ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/valueNamespaceInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    namespace Reflect {} // collision (es2015-es2021 only)
+              ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/enumInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    enum Reflect {} // collision (es2015-es2021 only)
+         ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/enumInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    enum Reflect {} // collision (es2015-es2021 only)
+         ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/constEnumInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    const enum Reflect {} // collision (es2015-es2021 only)
+               ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/constEnumInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    const enum Reflect {} // collision (es2015-es2021 only)
+               ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namespaceImportInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import * as Reflect from "./external"; // collision (es2015-es2021 only)
+                ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namespaceImportInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import * as Reflect from "./external"; // collision (es2015-es2021 only)
+                ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Reflect } from "./external"; // collision (es2015-es2021 only)
+             ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Reflect } from "./external"; // collision (es2015-es2021 only)
+             ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfInterfaceInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Foo as Reflect } from "./external"; // collision (es2015-es2021 only, not a type-only import)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfInterfaceInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Foo as Reflect } from "./external"; // collision (es2015-es2021 only, not a type-only import)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfUninstantiatedNamespaceInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Bar as Reflect } from "./external"; // collision (es2015-es2021 only, not a type-only import)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfUninstantiatedNamespaceInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Bar as Reflect } from "./external"; // collision (es2015-es2021 only, not a type-only import)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfConstEnumInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Baz as Reflect } from "./external"; // collision (es2015-es2021 only)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/namedImportOfConstEnumInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import { Baz as Reflect } from "./external"; // collision (es2015-es2021 only)
+             ~~~~~~~~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOnlyNamedImportInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import type { Reflect } from "./external"; // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOnlyNamedImportInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import type { Reflect } from "./external"; // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/defaultImportInContainingScopeStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import Reflect from "./external"; // collision (es2015-es2021 only)
+           ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/defaultImportInContainingScopeStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import Reflect from "./external"; // collision (es2015-es2021 only)
+           ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOnlyDefaultImportInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import type Reflect from "./external"; // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOnlyDefaultImportInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    import type Reflect from "./external"; // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    type Reflect = unknown; // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    type Reflect = unknown; // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/interfaceInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    interface Reflect {}; // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/interfaceInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    interface Reflect {}; // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/uninstantiatedNamespaceInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    declare namespace Reflect { type _ = unknown; }; // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/uninstantiatedNamespaceInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    declare namespace Reflect { type _ = unknown; }; // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/classExprInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (class Reflect {}); // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/classExprInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (class Reflect {}); // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingClassExprStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (class Reflect { // collision (es2015-es2021 only)
+           ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+        static {
+            class C extends B {
+                static _ = super.w();
+            }
+        }
+    });
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingClassExprStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (class Reflect { // collision (es2015-es2021 only)
+           ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+        static {
+            class C extends B {
+                static { super.w(); }
+            }
+        }
+    });
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/funcExprInContainingScopeStaticField.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (function Reflect() {}); // no collision
+    class C extends B {
+        static _ = super.w();
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/funcExprInContainingScopeStaticBlock.ts (0 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (function Reflect() {}); // no collision
+    class C extends B {
+        static { super.w(); }
+    }
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingFuncExprStaticField.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (function Reflect() { // collision (es2015-es2021 only)
+              ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+        class C extends B {
+            static _ = super.w();
+        }
+    });
+    
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/inContainingFuncExprStaticBlock.ts (1 errors) ====
+    export {};
+    declare class B { static w(): number; }
+    (function Reflect() { // collision (es2015-es2021 only)
+              ~~~~~~~
+!!! error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
+        class C extends B {
+            static { super.w(); }
+        }
+    });
+    
