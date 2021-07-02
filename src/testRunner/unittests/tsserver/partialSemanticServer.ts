@@ -123,7 +123,12 @@ import { something } from "something";
             const expectedErrorMessage = "')' expected.";
 
             const host = createServerHost([file1, libFile, configFile]);
-            const session = createSession(host, { serverMode: LanguageServiceMode.PartialSemantic, useSingleInferredProject: true });
+            const session = createSession(host, {
+                serverMode: LanguageServiceMode.PartialSemantic,
+                useSingleInferredProject: true,
+                logger: createLoggerWithInMemoryLogs()
+            });
+
             const service = session.getProjectService();
             openFilesForSession([file1], session);
             const request: protocol.SyntacticDiagnosticsSyncRequest = {
@@ -141,6 +146,9 @@ import { something } from "something";
             const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file1.path);
             assert.isTrue(diagnostics.length === 1);
             assert.equal(diagnostics[0].messageText, expectedErrorMessage);
+
+            verifyGetErrRequest({ session, host, files: [file1], skip: [{ semantic: true, suggestion: true }] });
+            baselineTsserverLogs("partialSemanticServer", "syntactic diagnostics are returned with no error", session);
         });
 
         it("should not include auto type reference directives", () => {
