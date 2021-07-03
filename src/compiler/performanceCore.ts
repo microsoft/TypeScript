@@ -3,6 +3,8 @@ namespace ts {
     // The following definitions provide the minimum compatible support for the Web Performance User Timings API
     // between browsers and NodeJS:
 
+    export type EntryType = "node" | "mark" | "measure" | "gc" | "function" | "http2" | "http";
+
     export interface PerformanceHooks {
         /** Indicates whether we should write native performance events */
         shouldWriteNativeEvents: boolean;
@@ -19,20 +21,20 @@ namespace ts {
 
     export interface PerformanceEntry {
         name: string;
-        entryType: string;
+        entryType: EntryType;
         startTime: number;
         duration: number;
     }
 
     export interface PerformanceObserverEntryList {
         getEntries(): PerformanceEntryList;
-        getEntriesByName(name: string, type?: string): PerformanceEntryList;
-        getEntriesByType(type: string): PerformanceEntryList;
+        getEntriesByName(name: string, type?: EntryType): PerformanceEntryList;
+        getEntriesByType(type: EntryType): PerformanceEntryList;
     }
 
     export interface PerformanceObserver {
         disconnect(): void;
-        observe(options: { entryTypes: readonly string[] }): void;
+        observe(options: { entryTypes: readonly EntryType[] } | { type: EntryType }): void;
     }
 
     export type PerformanceObserverConstructor = new (callback: (list: PerformanceObserverEntryList, observer: PerformanceObserver) => void) => PerformanceObserver;

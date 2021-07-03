@@ -255,8 +255,8 @@ namespace ts.server {
         sys.clearImmediate = clearImmediate;
         /* eslint-enable no-restricted-globals */
 
-        if (typeof global !== "undefined" && global.gc) {
-            sys.gc = () => global.gc();
+        if (typeof global !== "undefined" && typeof global.gc === "function") {
+            sys.gc = global.gc;
         }
 
         sys.require = (initialDir: string, moduleName: string): RequireResult => {
