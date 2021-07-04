@@ -31,3 +31,7 @@ b.b;
 >b : Symbol(b, Decl(d.ts, 3, 11))
 >b : Symbol(b, Decl(abc.ts, 1, 18))
 
+const c = { A };
+>c : Symbol(c, Decl(d.ts, 5, 5))
+>A : Symbol(A, Decl(d.ts, 5, 11))
+
