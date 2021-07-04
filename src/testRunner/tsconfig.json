@@ -98,6 +98,7 @@
         "unittests/evaluation/forOf.ts",
         "unittests/evaluation/optionalCall.ts",
         "unittests/evaluation/objectRest.ts",
+        "unittests/evaluation/superInStaticInitializer.ts",
         "unittests/services/cancellableLanguageServiceOperations.ts",
         "unittests/services/colorization.ts",
         "unittests/services/convertToAsyncFunction.ts",
