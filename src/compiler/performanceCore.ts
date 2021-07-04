@@ -32,7 +32,7 @@ namespace ts {
 
     export interface PerformanceObserver {
         disconnect(): void;
-        observe(options: { entryTypes: readonly string[] }): void;
+        observe(options: { entryTypes: readonly ("mark" | "measure")[] }): void;
     }
 
     export type PerformanceObserverConstructor = new (callback: (list: PerformanceObserverEntryList, observer: PerformanceObserver) => void) => PerformanceObserver;
