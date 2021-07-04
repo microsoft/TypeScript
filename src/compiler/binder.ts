@@ -917,7 +917,7 @@ namespace ts {
         }
 
         function isNarrowableInOperands(left: Expression, right: Expression) {
-            return isStringLiteralLike(left) && isNarrowingExpression(right);
+            return isNarrowingExpression(right) && (isIdentifier(left) || isStringLiteralLike(left));
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
