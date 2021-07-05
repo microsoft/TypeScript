@@ -1,5 +1,6 @@
 // @strict: true
 // @jsx: react
+/// <reference path="/.lib/react16.d.ts" />
 
 // Repro from #44797
 
