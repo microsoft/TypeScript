@@ -1,8 +1,10 @@
 === tests/cases/compiler/ignoredJsxAttributes.tsx ===
+/// <reference path="react16.d.ts" />
+
 // Repro from #44797
 
 import * as React from "react";
->React : any
+>React : typeof React
 
 interface Props {
     foo: string;
@@ -13,7 +15,7 @@ interface Props {
 }
 
 declare function Yadda(props: Props): JSX.Element;
->Yadda : (props: Props) => any
+>Yadda : (props: Props) => JSX.Element
 >props : Props
 >JSX : any
 
@@ -32,17 +34,17 @@ let props: Props = {
 };
 
 let x1 = <Yadda foo="hello" data-yadda={42}/>;
->x1 : any
-><Yadda foo="hello" data-yadda={42}/> : any
->Yadda : (props: Props) => any
+>x1 : JSX.Element
+><Yadda foo="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
 >foo : string
 >data-yadda : number
 >42 : 42
 
 let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
->x2 : any
-><Yadda bar="hello" data-yadda={42}/> : any
->Yadda : (props: Props) => any
+>x2 : JSX.Element
+><Yadda bar="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
 >bar : string
 >data-yadda : number
 >42 : 42

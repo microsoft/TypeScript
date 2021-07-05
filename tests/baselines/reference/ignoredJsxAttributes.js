@@ -1,4 +1,6 @@
 //// [ignoredJsxAttributes.tsx]
+/// <reference path="/.lib/react16.d.ts" />
+
 // Repro from #44797
 
 import * as React from "react";
@@ -21,8 +23,9 @@ let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
 
 //// [ignoredJsxAttributes.js]
 "use strict";
-// Repro from #44797
+/// <reference path="react16.d.ts" />
 exports.__esModule = true;
+// Repro from #44797
 var React = require("react");
 var props = {
     foo: "",

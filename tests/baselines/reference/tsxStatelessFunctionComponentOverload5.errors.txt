@@ -22,13 +22,15 @@ tests/cases/conformance/jsx/file.tsx(55,68): error TS2769: No overload matches t
     Type 'boolean' is not assignable to type 'string'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
     Type 'boolean' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches this call.
+tests/cases/conformance/jsx/file.tsx(56,13): error TS2769: No overload matches this call.
   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
     Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-    Type 'boolean' is not assignable to type 'string'.
+    Type '{ "data-format": true; }' is not assignable to type 'HyphenProps'.
+      Types of property '"data-format"' are incompatible.
+        Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
@@ -122,14 +124,15 @@ tests/cases/conformance/jsx/file.tsx(56,12): error TS2769: No overload matches t
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & LinkProps'
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:5:5: The expected type comes from property 'className' which is declared here on type 'IntrinsicAttributes & HyphenProps'
     const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Property 'onClick' is missing in type '{ "data-format": true; }' but required in type 'ButtonProps'.
 !!! error TS2769:   Overload 2 of 3, '(linkProps: LinkProps): Element', gave the following error.
 !!! error TS2769:     Property 'to' is missing in type '{ "data-format": true; }' but required in type 'LinkProps'.
 !!! error TS2769:   Overload 3 of 3, '(hyphenProps: HyphenProps): Element', gave the following error.
-!!! error TS2769:     Type 'boolean' is not assignable to type 'string'.
+!!! error TS2769:     Type '{ "data-format": true; }' is not assignable to type 'HyphenProps'.
+!!! error TS2769:       Types of property '"data-format"' are incompatible.
+!!! error TS2769:         Type 'boolean' is not assignable to type 'string'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:5: 'onClick' is declared here.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:13:5: 'to' is declared here.
-!!! related TS6500 tests/cases/conformance/jsx/file.tsx:17:5: The expected type comes from property 'data-format' which is declared here on type 'IntrinsicAttributes & HyphenProps'
