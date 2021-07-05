@@ -27857,7 +27857,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined {
-            return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
+            return getSpellingSuggestionForName(name, getPropertiesOfType(baseType), SymbolFlags.ClassMember);
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
