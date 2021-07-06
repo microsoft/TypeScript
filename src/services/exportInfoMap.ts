@@ -316,11 +316,11 @@ namespace ts {
         });
 
         if (cache.isUsableByFile(importingFile.path)) {
-            host.log?.("getSymbolToExportInfoMap: cache hit");
+            host.log?.("getExportInfoMap: cache hit");
             return cache;
         }
 
-        host.log?.("getSymbolToExportInfoMap: cache miss or empty; calculating new results");
+        host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         const scriptTarget = getEmitScriptTarget(compilerOptions);
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
@@ -353,7 +353,7 @@ namespace ts {
             }
         });
 
-        host.log?.(`getSymbolToExportInfoMap: done in ${timestamp() - start} ms`);
+        host.log?.(`getExportInfoMap: done in ${timestamp() - start} ms`);
         return cache;
     }
 

@@ -1930,15 +1930,13 @@ namespace ts.Completions {
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             const defaultExportInfo = find(info, isImportableExportInfo);
-                            if (isFromAmbientModule && !defaultExportInfo) {
+                            if (!defaultExportInfo) {
                                 return;
                             }
 
                             // If we don't need to resolve module specifiers, we can use any re-export that is importable at all
                             // (We need to ensure that at least one is importable to show a completion.)
                             const { exportInfo = defaultExportInfo, moduleSpecifier } = context.tryResolve(info, isFromAmbientModule) || {};
-
-                            if (!exportInfo) return;
                             const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
                             const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
                             pushAutoImportSymbol(symbol, {
@@ -1975,7 +1973,6 @@ namespace ts.Completions {
                     moduleSpecifierCache);
             }
         }
-
 
         function pushAutoImportSymbol(symbol: Symbol, origin: SymbolOriginInfoResolvedExport | SymbolOriginInfoExport) {
             const symbolId = getSymbolId(symbol);
