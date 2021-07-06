@@ -3224,20 +3224,39 @@ namespace ts.server {
 
         /*@internal*/
         getOriginalLocationEnsuringConfiguredProject(project: Project, location: DocumentPosition): DocumentPosition | undefined {
-            const originalLocation = project.isSourceOfProjectReferenceRedirect(location.fileName) ?
+            const isSourceOfProjectReferenceRedirect = project.isSourceOfProjectReferenceRedirect(location.fileName);
+            const originalLocation = isSourceOfProjectReferenceRedirect ?
                 location :
                 project.getSourceMapper().tryGetSourcePosition(location);
             if (!originalLocation) return undefined;
 
             const { fileName } = originalLocation;
-            if (!this.getScriptInfo(fileName) && !this.host.fileExists(fileName)) return undefined;
+            const scriptInfo = this.getScriptInfo(fileName);
+            if (!scriptInfo && !this.host.fileExists(fileName)) return undefined;
 
             const originalFileInfo: OriginalFileInfo = { fileName: toNormalizedPath(fileName), path: this.toPath(fileName) };
             const configFileName = this.getConfigFileNameForFile(originalFileInfo);
             if (!configFileName) return undefined;
 
-            let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName) ||
-                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            let configuredProject: ConfiguredProject | undefined = this.findConfiguredProjectByProjectName(configFileName);
+            if (!configuredProject) {
+                if (project.getCompilerOptions().disableReferencedProjectLoad) {
+                    // If location was a project reference redirect, then `location` and `originalLocation` are the same.
+                    if (isSourceOfProjectReferenceRedirect) {
+                        return location;
+                    }
+
+                    // Otherwise, if we found `originalLocation` via a source map instead, then we check whether it's in
+                    // an open project.  If it is, we should search the containing project(s), even though the "default"
+                    // configured project isn't open.  However, if it's not in an open project, we need to stick with
+                    // `location` (i.e. the .d.ts file) because otherwise we'll miss the references in that file.
+                    return scriptInfo?.containingProjects.length
+                        ? originalLocation
+                        : location;
+                }
+
+                configuredProject = this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName}${location !== originalLocation ? " for location: " + location.fileName : ""}`);
+            }
             updateProjectIfDirty(configuredProject);
 
             const projectContainsOriginalInfo = (project: ConfiguredProject) => {
