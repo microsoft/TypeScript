@@ -5,7 +5,7 @@ TypeScript compiler works and how you can contribute to it.
 
 Here are the key sections in this docs:
 
-- [Getting Set up](#getting-set-up)
+- [Getting set up](#getting-set-up)
 - [What is in the TypeScript repo?](#what-is-in-the-typescript-repo)
 - [The TypeScript Compiler](#the-typescript-compiler)
 - [The TSServer](#the-tsserver)
@@ -30,6 +30,7 @@ As an alternative, this repository also includes a [development container](https
 
 - Clone the TypeScript repository locally and use the `Open Folder in Container` command.
 - Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.
+The development container uses a Linux image so you will need to switch to Linux containers if you are using Docker for Windows.
 
 ### Build commands
 
@@ -37,8 +38,8 @@ You can use `npm run gulp -- --tasks --depth 1` to see all the possible build co
 
 ### What happened during setup
 
-TypeScript is built in TypeScript. The compiler uses a "last known good" version of the TypeScript to bootstrap,
-you can find this version in `/lib`. The command `npm run gulp` created a copy of the compiler at `built/local`.
+TypeScript is written in and built by TypeScript. The compiler uses a "last known good" version of the TypeScript build to bootstrap.
+You can find this version in `/lib`. The command `npm run gulp` created a copy of the compiler at `built/local`.
 The corresponding version of the `tsc` compiler used in the npm package is now available via:
 `node built/local/tsc.js --help`.
 
@@ -125,8 +126,7 @@ structure of the code in memory. You can explore the TypeScript syntax tree in
 (by turning on the "AST" setting) or in
 [TypeScript AST Viewer](https://ts-ast-viewer.com/#code/GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIohAgM5zqoB0WA5tgEQASMzuA3EQL5A).
 
-Common changes to the parser are ones that add TypeScript syntax that does not exist in JavaScript, or adds new JavaScript syntax
-that was approved by the TC39 committee.
+The parser needs to be updated any time TypeScript needs to support new syntax for new type system features or new ECMAScript features.
 
 #### Type checking
 
@@ -156,7 +156,7 @@ Type checking in TypeScript happens in the file `checker.ts`, this is a 40k line
 of work. The checker works primarily by recursively diving into, known as "walking", the syntax tree, and making assertions about the
 nodes on its way through.
 
-As a rough outline, using the code above, the following functions in the checker would be called:
+As a rough outline, using the syntax tree in [Parsing text](#parsing-text), the following functions in the checker would be called:
 
 ```
 checkSourceFileWorker (for the root SourceFile)
@@ -191,8 +191,10 @@ into JavaScript that works on older platforms.
 ## TSServer
 
 The TSServer is responsible for providing information to text editors. The TSServer powers features like code
-completion, refactoring tools and jump to definition. The TSServer is similar to the language server protocol
+completion, refactoring tools, and go to definition. The TSServer protocol is similar to the language server protocol
 but is older.
+
+Common changes to the server generally include additions and fixes to things used by editor UI and commands, such as refactorings and completions.
 
 ## Tips and Tricks
 
