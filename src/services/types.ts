@@ -303,7 +303,7 @@ namespace ts {
         /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
         /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
         /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
-        /* @internal */ getExportMapCache?(): ExportMapCache;
+        /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
         /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */ setCompilerHost?(host: CompilerHost): void;
         /* @internal */ useSourceOfProjectReferenceRedirect?(): boolean;
