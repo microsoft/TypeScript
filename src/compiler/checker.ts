@@ -4788,13 +4788,13 @@ namespace ts {
 
 
                 function conditionalTypeToTypeNode(type: ConditionalType) {
-                    const checkTypeNode = typeToTypeNodeHelper((type as ConditionalType).checkType, context);
+                    const checkTypeNode = typeToTypeNodeHelper(type.checkType, context);
                     const saveInferTypeParameters = context.inferTypeParameters;
-                    context.inferTypeParameters = (type as ConditionalType).root.inferTypeParameters;
-                    const extendsTypeNode = typeToTypeNodeHelper((type as ConditionalType).extendsType, context);
+                    context.inferTypeParameters = type.root.inferTypeParameters;
+                    const extendsTypeNode = typeToTypeNodeHelper(type.extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(type as ConditionalType));
-                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(type as ConditionalType));
+                    const trueTypeNode = typeToTypeNodeOrCircularityElision(getTrueTypeFromConditionalType(type));
+                    const falseTypeNode = typeToTypeNodeOrCircularityElision(getFalseTypeFromConditionalType(type));
                     context.approximateLength += 15;
                     return factory.createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
