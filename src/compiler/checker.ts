@@ -16794,7 +16794,7 @@ namespace ts {
         function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
-                if (isJsxSpreadAttribute(prop)) continue;
+                if (isJsxSpreadAttribute(prop) || isHyphenatedJsxName(idText(prop.name))) continue;
                 yield { errorNode: prop.name, innerExpression: prop.initializer, nameType: getStringLiteralType(idText(prop.name)) };
             }
         }
@@ -17355,7 +17355,7 @@ namespace ts {
         }
 
         function isIgnoredJsxProperty(source: Type, sourceProp: Symbol) {
-            return getObjectFlags(source) & ObjectFlags.JsxAttributes && !isUnhyphenatedJsxName(sourceProp.escapedName);
+            return getObjectFlags(source) & ObjectFlags.JsxAttributes && isHyphenatedJsxName(sourceProp.escapedName);
         }
 
         function getNormalizedType(type: Type, writing: boolean): Type {
@@ -26585,8 +26585,8 @@ namespace ts {
             return getJsxElementTypeAt(node) || anyType;
         }
 
-        function isUnhyphenatedJsxName(name: string | __String) {
-            return !stringContains(name as string, "-");
+        function isHyphenatedJsxName(name: string | __String) {
+            return stringContains(name as string, "-");
         }
 
         /**
@@ -27127,7 +27127,7 @@ namespace ts {
                 if (getPropertyOfObjectType(targetType, name) ||
                     getApplicableIndexInfoForName(targetType, name) ||
                     isLateBoundName(name) && getIndexInfoOfType(targetType, stringType) ||
-                    isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                    isComparingJsxAttributes && isHyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
                 }
