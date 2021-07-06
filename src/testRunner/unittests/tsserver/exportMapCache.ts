@@ -75,7 +75,7 @@ namespace ts.projectSystem {
 
         it("does not store transient symbols through program updates", () => {
             const { exportMapCache, project, session } = setup();
-            // SIGINT, exported from /lib/foo/constants.d.ts, is a mapped type property, which will be a trasient symbol.
+            // SIGINT, exported from /lib/foo/constants.d.ts, is a mapped type property, which will be a transient symbol.
             // Transient symbols contain types, which retain the checkers they came from, so are not safe to cache.
             // We clear symbols from the cache during updateGraph, leaving only the information about how to re-get them
             // (see getters on `CachedSymbolExportInfo`). We can roughly test that this is working by ensuring that
@@ -105,7 +105,7 @@ namespace ts.projectSystem {
                 }
             });
             project.getLanguageService(/*ensureSynchronized*/ true);
-            assert(programBefore !== project.getCurrentProgram()!);
+            assert.notEqual(programBefore, project.getCurrentProgram()!);
 
             // Get same info from cache again
             let sigintPropAfter: readonly SymbolExportInfo[] | undefined;

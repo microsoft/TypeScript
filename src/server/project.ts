@@ -251,7 +251,7 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        exportMapCache: ExportInfoMap | undefined;
+        private exportMapCache: ExportInfoMap | undefined;
         /*@internal*/
         private changedFilesForExportMapCache: Set<Path> | undefined;
         /*@internal*/
@@ -1673,6 +1673,11 @@ namespace ts.server {
         }
 
         /*@internal*/
+        clearCachedExportInfoMap() {
+            this.exportMapCache?.clear();
+        }
+
+        /*@internal*/
         getModuleSpecifierCache() {
             return this.moduleSpecifierCache;
         }
@@ -2019,7 +2024,7 @@ namespace ts.server {
             const oldProgram = this.getCurrentProgram();
             const hasSameSetOfFiles = super.updateGraph();
             if (oldProgram && oldProgram !== this.getCurrentProgram()) {
-                this.hostProject.exportMapCache?.clear();
+                this.hostProject.clearCachedExportInfoMap();
             }
             return hasSameSetOfFiles;
         }
