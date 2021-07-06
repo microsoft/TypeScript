@@ -313,12 +313,13 @@ namespace FourSlash {
                     this.addMatchedInputFile(referenceFilePath, /* extensions */ undefined);
                 });
 
+                const exts = ts.flatten(ts.getSupportedExtensions(compilationOptions));
                 // Add import files into language-service host
                 ts.forEach(importedFiles, importedFile => {
                     // Fourslash insert tests/cases/fourslash into inputFile.unitName and import statement doesn't require ".ts"
                     // so convert them before making appropriate comparison
                     const importedFilePath = this.basePath + "/" + importedFile.fileName;
-                    this.addMatchedInputFile(importedFilePath, ts.getSupportedExtensions(compilationOptions));
+                    this.addMatchedInputFile(importedFilePath, exts);
                 });
 
                 // Check if no-default-lib flag is false and if so add default library

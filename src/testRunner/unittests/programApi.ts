@@ -11,7 +11,7 @@ namespace ts {
         assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
     }
 
-    describe("unittests:: Program.getMissingFilePaths", () => {
+    describe("unittests:: programApi:: Program.getMissingFilePaths", () => {
 
         const options: CompilerOptions = {
             noLib: true,

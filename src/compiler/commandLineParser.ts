@@ -3214,7 +3214,7 @@ namespace ts {
 
         let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
                 if (fileExtensionIs(file, Extension.Json)) {
                     // Valid only if *.json specified
                     if (!jsonOnlyIncludeRegexes) {
@@ -3439,16 +3439,24 @@ namespace ts {
      * extension priority.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
-            const higherPriorityExtension = extensions[i];
-            const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return false;
+        }
+        for (const ext of extensionGroup) {
+            if (fileExtensionIs(file, ext)) {
+                break;
+            }
+            const higherPriorityPath = keyMapper(changeExtension(file, ext));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
+                if (ext === Extension.Dts && (fileExtensionIs(file, Extension.Js) || fileExtensionIs(file, Extension.Jsx))) {
+                    // LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
+                    // files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
+                    // prevent breakage.
+                    continue;
+                }
                 return true;
             }
         }
@@ -3461,15 +3469,18 @@ namespace ts {
      * already been included.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
-            const lowerPriorityExtension = extensions[i];
-            const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return;
+        }
+        for (let i = extensionGroup.length - 1; i >= 0; i--) {
+            const ext = extensionGroup[i];
+            if (fileExtensionIs(file, ext)) {
+                break;
+            }
+            const lowerPriorityPath = keyMapper(changeExtension(file, ext));
             wildcardFiles.delete(lowerPriorityPath);
         }
     }

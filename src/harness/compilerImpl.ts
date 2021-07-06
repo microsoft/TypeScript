@@ -118,11 +118,11 @@ namespace compiler {
                             const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
                             this._inputs.push(input);
                             if (!vpath.isDeclaration(sourceFile.fileName)) {
-                                const extname = ts.getOutputExtension(sourceFile, this.options);
+                                const extname = ts.getOutputExtension(sourceFile.fileName, this.options);
                                 const outputs: CompilationOutput = {
                                     inputs: [input],
                                     js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts")),
+                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ts.getDeclarationEmitExtensionForPath(sourceFile.fileName))),
                                     map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
                                 };
 
@@ -205,7 +205,7 @@ namespace compiler {
             }
             else {
                 path = vpath.resolve(this.vfs.cwd(), path);
-                const outDir = ext === ".d.ts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+                const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
                 if (outDir) {
                     const common = this.commonSourceDirectory;
                     if (common) {

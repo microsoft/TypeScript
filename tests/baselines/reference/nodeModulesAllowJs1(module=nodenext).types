@@ -7,8 +7,44 @@ const x = 1;
 export {x};
 >x : 1
 
+=== tests/cases/conformance/node/allowJs/subfolder/index.cjs ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder/index.mjs ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
 === tests/cases/conformance/node/allowJs/subfolder2/index.js ===
 // cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.cjs ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.mjs ===
+// esm format file
 const x = 1;
 >x : 1
 >1 : 1
@@ -25,7 +61,296 @@ const x = 1;
 export {x};
 >x : 1
 
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.cjs ===
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.mjs ===
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
 === tests/cases/conformance/node/allowJs/index.js ===
+import * as m1 from "./index.js";
+>m1 : typeof m1
+
+import * as m2 from "./index.mjs";
+>m2 : typeof m2
+
+import * as m3 from "./index.cjs";
+>m3 : typeof m3
+
+import * as m4 from "./subfolder/index.js";
+>m4 : typeof m4
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : typeof m5
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : typeof m6
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : typeof m7
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : typeof m8
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : typeof m9
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : typeof m10
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : typeof m11
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : typeof m12
+
+void m1;
+>void m1 : undefined
+>m1 : typeof m1
+
+void m2;
+>void m2 : undefined
+>m2 : typeof m2
+
+void m3;
+>void m3 : undefined
+>m3 : typeof m3
+
+void m4;
+>void m4 : undefined
+>m4 : typeof m4
+
+void m5;
+>void m5 : undefined
+>m5 : typeof m5
+
+void m6;
+>void m6 : undefined
+>m6 : typeof m6
+
+void m7;
+>void m7 : undefined
+>m7 : typeof m7
+
+void m8;
+>void m8 : undefined
+>m8 : typeof m8
+
+void m9;
+>void m9 : undefined
+>m9 : typeof m9
+
+void m10;
+>void m10 : undefined
+>m10 : typeof m10
+
+void m11;
+>void m11 : undefined
+>m11 : typeof m11
+
+void m12;
+>void m12 : undefined
+>m12 : typeof m12
+
+// esm format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/index.cjs ===
+// ESM format imports below should error
+import * as m1 from "./index.js";
+>m1 : typeof m1
+
+import * as m2 from "./index.mjs";
+>m2 : typeof m2
+
+import * as m3 from "./index.cjs";
+>m3 : typeof m3
+
+import * as m4 from "./subfolder/index.js";
+>m4 : typeof m4
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : typeof m5
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : typeof m6
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : typeof m7
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : typeof m8
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : typeof m9
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : typeof m10
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : typeof m11
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : typeof m12
+
+void m1;
+>void m1 : undefined
+>m1 : typeof m1
+
+void m2;
+>void m2 : undefined
+>m2 : typeof m2
+
+void m3;
+>void m3 : undefined
+>m3 : typeof m3
+
+void m4;
+>void m4 : undefined
+>m4 : typeof m4
+
+void m5;
+>void m5 : undefined
+>m5 : typeof m5
+
+void m6;
+>void m6 : undefined
+>m6 : typeof m6
+
+void m7;
+>void m7 : undefined
+>m7 : typeof m7
+
+void m8;
+>void m8 : undefined
+>m8 : typeof m8
+
+void m9;
+>void m9 : undefined
+>m9 : typeof m9
+
+void m10;
+>void m10 : undefined
+>m10 : typeof m10
+
+void m11;
+>void m11 : undefined
+>m11 : typeof m11
+
+void m12;
+>void m12 : undefined
+>m12 : typeof m12
+
+// cjs format file
+const x = 1;
+>x : 1
+>1 : 1
+
+export {x};
+>x : 1
+
+=== tests/cases/conformance/node/allowJs/index.mjs ===
+import * as m1 from "./index.js";
+>m1 : typeof m1
+
+import * as m2 from "./index.mjs";
+>m2 : typeof m2
+
+import * as m3 from "./index.cjs";
+>m3 : typeof m3
+
+import * as m4 from "./subfolder/index.js";
+>m4 : typeof m4
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : typeof m5
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : typeof m6
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : typeof m7
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : typeof m8
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : typeof m9
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : typeof m10
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : typeof m11
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : typeof m12
+
+void m1;
+>void m1 : undefined
+>m1 : typeof m1
+
+void m2;
+>void m2 : undefined
+>m2 : typeof m2
+
+void m3;
+>void m3 : undefined
+>m3 : typeof m3
+
+void m4;
+>void m4 : undefined
+>m4 : typeof m4
+
+void m5;
+>void m5 : undefined
+>m5 : typeof m5
+
+void m6;
+>void m6 : undefined
+>m6 : typeof m6
+
+void m7;
+>void m7 : undefined
+>m7 : typeof m7
+
+void m8;
+>void m8 : undefined
+>m8 : typeof m8
+
+void m9;
+>void m9 : undefined
+>m9 : typeof m9
+
+void m10;
+>void m10 : undefined
+>m10 : typeof m10
+
+void m11;
+>void m11 : undefined
+>m11 : typeof m11
+
+void m12;
+>void m12 : undefined
+>m12 : typeof m12
+
 // esm format file
 const x = 1;
 >x : 1

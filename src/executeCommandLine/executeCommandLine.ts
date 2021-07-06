@@ -43,10 +43,10 @@ namespace ts {
         }
 
         const path = file.path;
-        if (fileExtensionIsOneOf(path, supportedTSExtensions)) {
+        if (fileExtensionIsOneOf(path, supportedTSExtensionsFlat)) {
             return "TypeScript";
         }
-        else if (fileExtensionIsOneOf(path, supportedJSExtensions)) {
+        else if (fileExtensionIsOneOf(path, supportedJSExtensionsFlat)) {
             return "JavaScript";
         }
         else if (fileExtensionIs(path, Extension.Json)) {

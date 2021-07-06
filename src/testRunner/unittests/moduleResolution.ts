@@ -81,9 +81,11 @@ namespace ts {
     }
 
     describe("unittests:: moduleResolution:: Node module resolution - relative paths", () => {
-
+        // node module resolution does _not_ implicitly append these extensions to an extensionless path (though will still attempt to load them if explicitly)
+        const nonImplicitExtensions = [Extension.Mts, Extension.Dmts, Extension.Mjs, Extension.Cts, Extension.Dcts, Extension.Cjs];
+        const autoExtensions = filter(supportedTSExtensionsFlat, e => nonImplicitExtensions.indexOf(e) === -1);
         function testLoadAsFile(containingFileName: string, moduleFileNameNoExt: string, moduleName: string): void {
-            for (const ext of supportedTSExtensions) {
+            for (const ext of autoExtensions) {
                 test(ext, /*hasDirectoryExists*/ false);
                 test(ext, /*hasDirectoryExists*/ true);
             }
@@ -96,7 +98,7 @@ namespace ts {
 
                 const failedLookupLocations: string[] = [];
                 const dir = getDirectoryPath(containingFileName);
-                for (const e of supportedTSExtensions) {
+                for (const e of autoExtensions) {
                     if (e === ext) {
                         break;
                     }
@@ -137,7 +139,7 @@ namespace ts {
                 const resolution = nodeModuleNameResolver(moduleName, containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile));
                 checkResolvedModule(resolution.resolvedModule, createResolvedModule(moduleFile.name));
                 // expect three failed lookup location - attempt to load module as file with all supported extensions
-                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions.length);
+                assert.equal(resolution.failedLookupLocations.length, supportedTSExtensions[0].length);
             }
         }
 

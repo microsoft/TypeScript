@@ -330,7 +330,7 @@ namespace ts.Completions.StringCompletions {
         readonly includeExtensionsOption: IncludeExtensionsOption;
     }
     function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensionsOption = IncludeExtensionsOption.Exclude): ExtensionOptions {
-        return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensionsOption };
+        return { extensions: flatten(getSupportedExtensionsForModuleResolution(compilerOptions)), includeExtensionsOption };
     }
     function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, preferences: UserPreferences) {
         const includeExtensions = preferences.importModuleSpecifierEnding === "js" ? IncludeExtensionsOption.ModuleSpecifierCompletion : IncludeExtensionsOption.Exclude;
@@ -344,10 +344,10 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[] {
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
-            extensions.concat(Extension.Json) :
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+            getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
 

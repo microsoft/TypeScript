@@ -6,6 +6,22 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.js, 2, 8))
 
+=== tests/cases/conformance/node/allowJs/subfolder/index.cjs ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cjs, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.cjs, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder/index.mjs ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mjs, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mjs, 2, 8))
+
 === tests/cases/conformance/node/allowJs/subfolder2/index.js ===
 // cjs format file
 const x = 1;
@@ -13,6 +29,22 @@ const x = 1;
 
 export {x};
 >x : Symbol(x, Decl(index.js, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.cjs ===
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cjs, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.cjs, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder2/index.mjs ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mjs, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mjs, 2, 8))
 
 === tests/cases/conformance/node/allowJs/subfolder2/another/index.js ===
 // esm format file
@@ -22,11 +54,260 @@ const x = 1;
 export {x};
 >x : Symbol(x, Decl(index.js, 2, 8))
 
-=== tests/cases/conformance/node/allowJs/index.js ===
-// esm format file
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.cjs ===
+// cjs format file
 const x = 1;
->x : Symbol(x, Decl(index.js, 1, 5))
+>x : Symbol(x, Decl(index.cjs, 1, 5))
 
 export {x};
->x : Symbol(x, Decl(index.js, 2, 8))
+>x : Symbol(x, Decl(index.cjs, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/subfolder2/another/index.mjs ===
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mjs, 1, 5))
+
+export {x};
+>x : Symbol(x, Decl(index.mjs, 2, 8))
+
+=== tests/cases/conformance/node/allowJs/index.js ===
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.js, 0, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.js, 1, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.js, 2, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.js, 3, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.js, 4, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.js, 5, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.js, 6, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.js, 7, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.js, 8, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.js, 9, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.js, 10, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.js, 11, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.js, 0, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.js, 1, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.js, 2, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.js, 3, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.js, 4, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.js, 5, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.js, 6, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.js, 7, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.js, 8, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.js, 9, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.js, 10, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.js, 11, 6))
+
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.js, 25, 5))
+
+export {x};
+>x : Symbol(m1.x, Decl(index.js, 26, 8))
+
+=== tests/cases/conformance/node/allowJs/index.cjs ===
+// ESM format imports below should error
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.cjs, 1, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.cjs, 2, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.cjs, 3, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.cjs, 4, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.cjs, 5, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.cjs, 6, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.cjs, 7, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.cjs, 8, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.cjs, 9, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.cjs, 10, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.cjs, 11, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.cjs, 12, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.cjs, 1, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.cjs, 2, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.cjs, 3, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.cjs, 4, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.cjs, 5, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.cjs, 6, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.cjs, 7, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.cjs, 8, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.cjs, 9, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.cjs, 10, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.cjs, 11, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.cjs, 12, 6))
+
+// cjs format file
+const x = 1;
+>x : Symbol(x, Decl(index.cjs, 26, 5))
+
+export {x};
+>x : Symbol(m3.x, Decl(index.cjs, 27, 8))
+
+=== tests/cases/conformance/node/allowJs/index.mjs ===
+import * as m1 from "./index.js";
+>m1 : Symbol(m1, Decl(index.mjs, 0, 6))
+
+import * as m2 from "./index.mjs";
+>m2 : Symbol(m2, Decl(index.mjs, 1, 6))
+
+import * as m3 from "./index.cjs";
+>m3 : Symbol(m3, Decl(index.mjs, 2, 6))
+
+import * as m4 from "./subfolder/index.js";
+>m4 : Symbol(m4, Decl(index.mjs, 3, 6))
+
+import * as m5 from "./subfolder/index.mjs";
+>m5 : Symbol(m5, Decl(index.mjs, 4, 6))
+
+import * as m6 from "./subfolder/index.cjs";
+>m6 : Symbol(m6, Decl(index.mjs, 5, 6))
+
+import * as m7 from "./subfolder2/index.js";
+>m7 : Symbol(m7, Decl(index.mjs, 6, 6))
+
+import * as m8 from "./subfolder2/index.mjs";
+>m8 : Symbol(m8, Decl(index.mjs, 7, 6))
+
+import * as m9 from "./subfolder2/index.cjs";
+>m9 : Symbol(m9, Decl(index.mjs, 8, 6))
+
+import * as m10 from "./subfolder2/another/index.js";
+>m10 : Symbol(m10, Decl(index.mjs, 9, 6))
+
+import * as m11 from "./subfolder2/another/index.mjs";
+>m11 : Symbol(m11, Decl(index.mjs, 10, 6))
+
+import * as m12 from "./subfolder2/another/index.cjs";
+>m12 : Symbol(m12, Decl(index.mjs, 11, 6))
+
+void m1;
+>m1 : Symbol(m1, Decl(index.mjs, 0, 6))
+
+void m2;
+>m2 : Symbol(m2, Decl(index.mjs, 1, 6))
+
+void m3;
+>m3 : Symbol(m3, Decl(index.mjs, 2, 6))
+
+void m4;
+>m4 : Symbol(m4, Decl(index.mjs, 3, 6))
+
+void m5;
+>m5 : Symbol(m5, Decl(index.mjs, 4, 6))
+
+void m6;
+>m6 : Symbol(m6, Decl(index.mjs, 5, 6))
+
+void m7;
+>m7 : Symbol(m7, Decl(index.mjs, 6, 6))
+
+void m8;
+>m8 : Symbol(m8, Decl(index.mjs, 7, 6))
+
+void m9;
+>m9 : Symbol(m9, Decl(index.mjs, 8, 6))
+
+void m10;
+>m10 : Symbol(m10, Decl(index.mjs, 9, 6))
+
+void m11;
+>m11 : Symbol(m11, Decl(index.mjs, 10, 6))
+
+void m12;
+>m12 : Symbol(m12, Decl(index.mjs, 11, 6))
+
+// esm format file
+const x = 1;
+>x : Symbol(x, Decl(index.mjs, 25, 5))
+
+export {x};
+>x : Symbol(m2.x, Decl(index.mjs, 26, 8))
 

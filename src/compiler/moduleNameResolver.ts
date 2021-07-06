@@ -1244,11 +1244,12 @@ namespace ts {
     function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         if (extensions === Extensions.Json || extensions === Extensions.TSConfig) {
             const extensionLess = tryRemoveExtension(candidate, Extension.Json);
-            return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
+            const extension = extensionLess ? candidate.substring(extensionLess.length) : "";
+            return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, extension, onlyRecordFailures, state);
         }
 
         // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
-        const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, onlyRecordFailures, state);
+        const resolvedByAddingExtension = tryAddingExtensions(candidate, extensions, "", onlyRecordFailures, state);
         if (resolvedByAddingExtension) {
             return resolvedByAddingExtension;
         }
@@ -1257,16 +1258,16 @@ namespace ts {
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
         if (hasJSFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
+            const extension = candidate.substring(extensionless.length);
             if (state.traceEnabled) {
-                const extension = candidate.substring(extensionless.length);
                 trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
             }
-            return tryAddingExtensions(extensionless, extensions, onlyRecordFailures, state);
+            return tryAddingExtensions(extensionless, extensions, extension, onlyRecordFailures, state);
         }
     }
 
     /** Try to return an existing file that adds one of the `extensions` to `candidate`. */
-    function tryAddingExtensions(candidate: string, extensions: Extensions, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+    function tryAddingExtensions(candidate: string, extensions: Extensions, originalExtension: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         if (!onlyRecordFailures) {
             // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
@@ -1277,11 +1278,51 @@ namespace ts {
 
         switch (extensions) {
             case Extensions.DtsOnly:
-                return tryExtension(Extension.Dts);
+                switch (originalExtension) {
+                    case Extension.Mjs:
+                    case Extension.Mts:
+                    case Extension.Dmts:
+                        return tryExtension(Extension.Dmts);
+                    case Extension.Cjs:
+                    case Extension.Cts:
+                    case Extension.Dcts:
+                        return tryExtension(Extension.Dcts);
+                    case Extension.Json:
+                        candidate += Extension.Json;
+                        return tryExtension(Extension.Dts);
+                    default: return tryExtension(Extension.Dts);
+                }
             case Extensions.TypeScript:
-                return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
+                switch (originalExtension) {
+                    case Extension.Mjs:
+                    case Extension.Mts:
+                    case Extension.Dmts:
+                        return tryExtension(Extension.Mts) || tryExtension(Extension.Dmts);
+                    case Extension.Cjs:
+                    case Extension.Cts:
+                    case Extension.Dcts:
+                        return tryExtension(Extension.Cts) || tryExtension(Extension.Dcts);
+                    case Extension.Json:
+                        candidate += Extension.Json;
+                        return tryExtension(Extension.Dts);
+                    default:
+                        return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
+                }
             case Extensions.JavaScript:
-                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                switch (originalExtension) {
+                    case Extension.Mjs:
+                    case Extension.Mts:
+                    case Extension.Dmts:
+                        return tryExtension(Extension.Mjs);
+                    case Extension.Cjs:
+                    case Extension.Cts:
+                    case Extension.Dcts:
+                        return tryExtension(Extension.Cjs);
+                    case Extension.Json:
+                        return tryExtension(Extension.Json);
+                    default:
+                        return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                }
             case Extensions.TSConfig:
             case Extensions.Json:
                 return tryExtension(Extension.Json);

@@ -108,7 +108,7 @@ namespace vpath {
     }
 
     export function isDeclaration(path: string) {
-        return extname(path, ".d.ts", /*ignoreCase*/ false).length > 0;
+        return ts.fileExtensionIsOneOf(path, [ts.Extension.Dmts, ts.Extension.Dcts, ts.Extension.Dts]);
     }
 
     export function isSourceMap(path: string) {

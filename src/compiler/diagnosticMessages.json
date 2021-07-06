@@ -5975,6 +5975,14 @@
         "category": "Error",
         "code": 7057
     },
+    "This syntax is reserved in files with this extension. Use an `as` expression instead.": {
+        "category": "Error",
+        "code": 7058
+    },
+    "This syntax is reserved in files with this extension. Add a trailing comma or explicit constraint.": {
+        "category": "Error",
+        "code": 7059
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

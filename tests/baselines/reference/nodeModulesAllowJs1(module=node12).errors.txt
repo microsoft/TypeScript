@@ -1,0 +1,158 @@
+tests/cases/conformance/node/allowJs/index.cjs(2,21): error TS1435: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(3,21): error TS1435: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(6,21): error TS1435: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(9,21): error TS1435: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(11,22): error TS1435: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(12,22): error TS1435: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+
+
+==== tests/cases/conformance/node/allowJs/subfolder/index.js (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder/index.cjs (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder/index.mjs (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/index.js (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/index.cjs (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/index.mjs (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/another/index.js (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/another/index.cjs (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/subfolder2/another/index.mjs (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/index.js (0 errors) ====
+    import * as m1 from "./index.js";
+    import * as m2 from "./index.mjs";
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+    import * as m11 from "./subfolder2/another/index.mjs";
+    import * as m12 from "./subfolder2/another/index.cjs";
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/index.cjs (6 errors) ====
+    // ESM format imports below should error
+    import * as m1 from "./index.js";
+                        ~~~~~~~~~~~~
+!!! error TS1435: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m2 from "./index.mjs";
+                        ~~~~~~~~~~~~~
+!!! error TS1435: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1435: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1435: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1435: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m11 from "./subfolder2/another/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1435: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    import * as m12 from "./subfolder2/another/index.cjs";
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    // cjs format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/index.mjs (0 errors) ====
+    import * as m1 from "./index.js";
+    import * as m2 from "./index.mjs";
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+    import * as m11 from "./subfolder2/another/index.mjs";
+    import * as m12 from "./subfolder2/another/index.cjs";
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    // esm format file
+    const x = 1;
+    export {x};
+==== tests/cases/conformance/node/allowJs/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== tests/cases/conformance/node/allowJs/subfolder/package.json (0 errors) ====
+    {
+        "type": "commonjs"
+    }
+==== tests/cases/conformance/node/allowJs/subfolder2/package.json (0 errors) ====
+    {
+    }
+==== tests/cases/conformance/node/allowJs/subfolder2/another/package.json (0 errors) ====
+    {
+        "type": "module"
+    }
