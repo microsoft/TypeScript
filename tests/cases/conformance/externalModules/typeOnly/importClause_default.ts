@@ -5,3 +5,4 @@ export default class A { a!: string }
 import type A from './a';
 new A();
 let a: A = { a: '' };
+let b = { A };

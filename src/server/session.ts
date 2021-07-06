@@ -473,7 +473,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
@@ -775,6 +775,7 @@ namespace ts.server {
                 typesMapLocation: opts.typesMapLocation,
                 syntaxOnly: opts.syntaxOnly,
                 serverMode: opts.serverMode,
+                session: this
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
@@ -1449,6 +1450,17 @@ namespace ts.server {
             });
         }
 
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
+
+            return hints.map(hint => ({
+                ...hint,
+                position: scriptInfo.positionToLineOffset(hint.position),
+            }));
+        }
+
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
             this.projectService.setCompilerOptionsForInferredProjects(args.options, args.projectRootPath);
         }
@@ -1829,6 +1841,7 @@ namespace ts.server {
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
+                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });
@@ -2962,6 +2975,9 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
+                return this.requiredResponse(this.provideInlayHints(request.arguments));
+            }
         }));
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

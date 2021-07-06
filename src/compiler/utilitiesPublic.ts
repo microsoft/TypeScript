@@ -1228,8 +1228,18 @@ namespace ts {
     }
 
     /* @internal */
+    export function isFunctionLikeOrClassStaticBlockDeclaration(node: Node | undefined): node is SignatureDeclaration | ClassStaticBlockDeclaration {
+        return !!node && (isFunctionLikeKind(node.kind) || isClassStaticBlockDeclaration(node));
+    }
+
+    /* @internal */
     export function isFunctionLikeDeclaration(node: Node): node is FunctionLikeDeclaration {
         return node && isFunctionLikeDeclarationKind(node.kind);
+    }
+
+    /* @internal */
+    export function isBooleanLiteral(node: Node): node is BooleanLiteral {
+        return node.kind === SyntaxKind.TrueKeyword || node.kind === SyntaxKind.FalseKeyword;
     }
 
     function isFunctionLikeDeclarationKind(kind: SyntaxKind): boolean {
@@ -1278,6 +1288,7 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.SemicolonClassElement;
     }
 
@@ -1411,6 +1422,18 @@ namespace ts {
                 return true;
         }
 
+        return false;
+    }
+
+    /* @internal */
+    export function isObjectBindingOrAssignmentElement(node: Node): node is ObjectBindingOrAssignmentElement {
+        switch (node.kind) {
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.PropertyAssignment: // AssignmentProperty
+            case SyntaxKind.ShorthandPropertyAssignment: // AssignmentProperty
+            case SyntaxKind.SpreadAssignment: // AssignmentRestProperty
+                return true;
+        }
         return false;
     }
 
@@ -1683,6 +1706,7 @@ namespace ts {
             || kind === SyntaxKind.BindingElement
             || kind === SyntaxKind.ClassDeclaration
             || kind === SyntaxKind.ClassExpression
+            || kind === SyntaxKind.ClassStaticBlockDeclaration
             || kind === SyntaxKind.Constructor
             || kind === SyntaxKind.EnumDeclaration
             || kind === SyntaxKind.EnumMember

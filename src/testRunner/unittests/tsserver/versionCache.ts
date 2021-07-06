@@ -52,6 +52,18 @@ var q:Point=<Point>p;`;
             assert.deepEqual(lineIndex.positionToLineOffset(0), { line: 1, offset: 1 });
         });
 
+        it("handles emptying whole file (GH#44518)", () => {
+            // See below for the main thing that this tests; it would be better to have a test
+            // that uses `ScriptInfo.positionToLineOffset` but I couldn't find away to do that
+            const { lines } = server.LineIndex.linesFromText("function foo() {\n\ndsa\n\n}\n\nfo(dsa\n\n\n    ");
+            const lineIndex = new server.LineIndex();
+            lineIndex.load(lines);
+            const snapshot = lineIndex.edit(0, 39);
+            assert.equal(snapshot.getText(0, snapshot.getLength()), "");
+            // line must always be >=1, otherwise the failIfInvalidLocation(location) assertion in ScriptInfo.positionToLineOffset will fail
+            assert.deepEqual(snapshot.positionToLineOffset(0), { line: 1, offset: 1 });
+        });
+
         it(`change 9 1 0 1 {"y"}`, () => {
             validateEditAtLineCharIndex(9, 1, 0, "y");
         });

@@ -22,7 +22,7 @@ var Point = function (x, y) { return ({ x: x, y: y }); };
 exports.Point = Point;
 var Rect = function (a, b) { return ({ a: a, b: b }); };
 exports.Rect = Rect;
-exports.Point.zero = function () { return exports.Point(0, 0); };
+exports.Point.zero = function () { return (0, exports.Point)(0, 0); };
 
 
 //// [declarationEmitExpandoWithGenericConstraint.d.ts]

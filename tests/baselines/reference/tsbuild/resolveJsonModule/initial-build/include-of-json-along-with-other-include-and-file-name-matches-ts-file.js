@@ -89,7 +89,7 @@ exports["default"] = index_json_1["default"].hello;
 
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-2379406821-{\"hello\":\"world\"}","affectsGlobalScope":true},"-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","../src/index.json","../src/index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-2379406821-{\"hello\":\"world\"}","-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello"],"options":{"allowSyntheticDefaultImports":true,"composite":true,"esModuleInterop":true,"module":1,"outDir":"./","skipDefaultLibCheck":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3]},"version":"FakeTSVersion"}
 
 //// [/src/dist/tsconfig_withIncludeOfJson.tsbuildinfo.readable.baseline.txt]
 {
@@ -112,8 +112,7 @@ exports["default"] = index_json_1["default"].hello;
       },
       "../src/index.json": {
         "version": "-2379406821-{\"hello\":\"world\"}",
-        "signature": "-2379406821-{\"hello\":\"world\"}",
-        "affectsGlobalScope": true
+        "signature": "-2379406821-{\"hello\":\"world\"}"
       },
       "../src/index.ts": {
         "version": "-6335882310-import hello from \"./index.json\"\n\nexport default hello.hello",
@@ -145,6 +144,6 @@ exports["default"] = index_json_1["default"].hello;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1008
+  "size": 970
 }
 

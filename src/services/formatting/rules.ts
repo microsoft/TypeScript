@@ -459,6 +459,9 @@ namespace ts.formatting {
             // equal in import a = module('a');
             // falls through
             case SyntaxKind.ImportEqualsDeclaration:
+            // equal in export = 1
+            // falls through
+            case SyntaxKind.ExportAssignment:
             // equal in let a = 0
             // falls through
             case SyntaxKind.VariableDeclaration:

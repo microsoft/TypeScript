@@ -23,6 +23,7 @@
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
+        "moduleSpecifierCache.ts",
         "packageJsonCache.ts",
         "session.ts",
         "scriptVersionCache.ts"

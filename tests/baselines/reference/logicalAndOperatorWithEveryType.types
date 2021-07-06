@@ -300,7 +300,7 @@ var re5 = a5 && a5;
 >re5 : void
 >a5 && a5 : void
 >a5 : void
->a5 : void
+>a5 : never
 
 var re6 = a6 && a5;
 >re6 : void

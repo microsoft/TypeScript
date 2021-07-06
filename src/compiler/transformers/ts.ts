@@ -324,6 +324,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 
@@ -368,6 +369,7 @@ namespace ts {
                 case SyntaxKind.PrivateKeyword:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.AbstractKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.DeclareKeyword:
                 case SyntaxKind.ReadonlyKeyword:
@@ -410,11 +412,11 @@ namespace ts {
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
-                    // falls through
+                    return undefined;
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
-                    return undefined;
+                    return factory.createNotEmittedStatement(node);
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
@@ -943,7 +945,7 @@ namespace ts {
          * @param member The class member.
          */
         function isStaticDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStatic*/ true, parent);
+            return isDecoratedClassElement(member, /*isStaticElement*/ true, parent);
         }
 
         /**
@@ -953,7 +955,7 @@ namespace ts {
          * @param member The class member.
          */
         function isInstanceDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStatic*/ false, parent);
+            return isDecoratedClassElement(member, /*isStaticElement*/ false, parent);
         }
 
         /**
@@ -962,9 +964,9 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
+        function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
             return nodeOrChildIsDecorated(member, parent)
-                && isStatic === hasSyntacticModifier(member, ModifierFlags.Static);
+                && isStaticElement === isStatic(member);
         }
 
         /**
@@ -3156,7 +3158,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getDeclarationName(node)
                 : getClassPrototype(node);
         }
