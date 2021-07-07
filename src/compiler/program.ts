@@ -3778,7 +3778,7 @@ namespace ts {
         function fileExistsIfProjectReferenceDts(file: string) {
             const source = host.getSourceOfProjectReferenceRedirect(host.toPath(file));
             return source !== undefined ?
-                isString(source) ? originalFileExists.call(host.compilerHost, source) : true :
+                isString(source) ? originalFileExists.call(host.compilerHost, source) as boolean : true :
                 undefined;
         }
 

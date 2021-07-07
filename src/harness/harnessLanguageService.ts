@@ -325,7 +325,8 @@ namespace Harness.LanguageService {
                     readFile: fileName => {
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
-                    }
+                    },
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName)!;
