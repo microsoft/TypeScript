@@ -1868,10 +1868,17 @@ namespace ts {
                 return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
                 return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
             default:
                 return false;
         }
+    }
+
+    export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
+        if (nodeIsDecorated(node)) return true;
+        const constructor = getFirstConstructorWithBody(node);
+        return !!constructor && childIsDecorated(constructor, node);
     }
 
     export function isJSXTagName(node: Node) {

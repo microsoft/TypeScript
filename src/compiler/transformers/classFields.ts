@@ -923,7 +923,7 @@ namespace ts {
         function getClassFacts(node: ClassLikeDeclaration) {
             let facts = ClassFacts.None;
             const original = getOriginalNode(node);
-            if (isClassDeclaration(original) && some(original.decorators)) {
+            if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(original)) {
                 facts |= ClassFacts.ClassWasDecorated;
             }
             for (const member of node.members) {
