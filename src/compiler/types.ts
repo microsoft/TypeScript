@@ -3895,6 +3895,8 @@ namespace ts {
         /* @internal */
         getMissingFilePaths(): readonly Path[];
         /* @internal */
+        getModuleResolutionCache(): ModuleResolutionCache | undefined;
+        /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
