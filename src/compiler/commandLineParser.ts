@@ -74,7 +74,7 @@ namespace ts {
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
-        ["esnext.intl", "lib.esnext.intl.d.ts"],
+        ["esnext.intl", "es2018.intl.d.ts"],
         ["esnext.bigint", "lib.es2020.bigint.d.ts"],
         ["esnext.string", "lib.es2021.string.d.ts"],
         ["esnext.promise", "lib.es2021.promise.d.ts"],
