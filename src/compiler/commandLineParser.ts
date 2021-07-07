@@ -727,7 +727,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",
