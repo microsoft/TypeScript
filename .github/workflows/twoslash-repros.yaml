@@ -14,7 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Use node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
+      with:
+        cache: npm
     - run: |
        npm init -y
        npm install --save typescript@next
