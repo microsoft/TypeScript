@@ -209,7 +209,12 @@ namespace Harness.Parallel.Worker {
             const errors: ErrorInfo[] = [];
             const passes: TestInfo[] = [];
             const start = +new Date();
-            const runner = new Mocha.Runner(suite, /*delay*/ false);
+            /* DeprecationWarning: "Runner(suite: Suite, delay: boolean)" is deprecated. Use "Runner(suite: Suite, {delay: boolean})" instead.*/
+            const runner = new Mocha.Runner(
+                suite,
+                // TODO: Remove `as any as boolean` when @types/mocha is version 9.x
+                { delay: false } as any as boolean /* Because Mocha is out of sync with is definition  9.0.2/8.2 */ 
+            );
 
             runner
                 .on("start", () => {
