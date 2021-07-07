@@ -209,8 +209,14 @@ namespace Harness.Parallel.Worker {
             const errors: ErrorInfo[] = [];
             const passes: TestInfo[] = [];
             const start = +new Date();
-            const runner = new Mocha.Runner(suite, /*delay*/ false);
-
+            /* DeprecationWarning: "Runner(suite: Suite, delay: boolean)" is deprecated. Use "Runner(suite: Suite, {delay: boolean})" instead.*/
+            const runner = new Mocha.Runner(
+                suite,
+                // TODO: Remove `as any as boolean` when @types/mocha is version 9.x
+                {
+                    delay: false,
+                } as any as boolean /* Because Mocha is out of sync with is definition 9.0.2/8.2 */
+            );
             runner
                 .on("start", () => {
                     unhookUncaughtExceptions(); // turn off global uncaught handling
@@ -219,14 +225,24 @@ namespace Harness.Parallel.Worker {
                     passes.push({ name: test.titlePath() });
                 })
                 .on("fail", (test: Mocha.Test | Mocha.Hook, err: any) => {
-                    errors.push({ name: test.titlePath(), error: err.message, stack: err.stack });
+                    errors.push({
+                        name: test.titlePath(),
+                        error: err.message,
+                        stack: err.stack,
+                    });
                 })
                 .on("end", () => {
                     hookUncaughtExceptions();
                     runner.dispose();
                 })
                 .run(() => {
-                    fn({ task, errors, passes, passing: passes.length, duration: +new Date() - start });
+                    fn({
+                        task,
+                        errors,
+                        passes,
+                        passing: passes.length,
+                        duration: +new Date() - start,
+                    });
                 });
         }
 
