@@ -10,9 +10,10 @@ jobs:
 
     steps:
     - name: Use node version 12.x
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: 12.x
+        cache: npm
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.branch_name }}
