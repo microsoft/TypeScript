@@ -101,11 +101,11 @@ namespace ts.server {
                 default:
                     Debug.assertNever(type);
             }
-            this.host.writeMessage(<LoggingMessage>{
+            this.host.writeMessage({
                 type: "log",
                 level,
                 body,
-            });
+            } as LoggingMessage);
         }
     }
 
@@ -122,7 +122,6 @@ namespace ts.server {
                 const webPath = getWebPath(path);
                 return webPath && host.readFile(webPath);
             },
-
             write: host.writeMessage.bind(host),
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,
@@ -206,7 +205,7 @@ namespace ts.server {
         }
 
         protected parseMessage(message: {}): protocol.Request {
-            return <protocol.Request>message;
+            return message as protocol.Request;
         }
 
         protected toStringMessage(message: {}) {

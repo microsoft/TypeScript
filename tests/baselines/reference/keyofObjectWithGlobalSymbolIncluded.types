@@ -1,0 +1,18 @@
+=== tests/cases/compiler/keyofObjectWithGlobalSymbolIncluded.ts ===
+const obj = {
+>obj : { [Symbol.species]: ArrayConstructor; }
+>{    [Symbol.species]: Array} : { [Symbol.species]: ArrayConstructor; }
+
+    [Symbol.species]: Array
+>[Symbol.species] : ArrayConstructor
+>Symbol.species : unique symbol
+>Symbol : SymbolConstructor
+>species : unique symbol
+>Array : ArrayConstructor
+
+};
+
+type Q = keyof typeof obj;
+>Q : unique symbol
+>obj : { [Symbol.species]: ArrayConstructor; }
+

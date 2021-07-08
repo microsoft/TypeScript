@@ -1,10 +1,8 @@
-tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(10,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
 tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(10,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
-tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
 tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,11): error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
 
 
-==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (4 errors) ====
+==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (2 errors) ====
     interface Foo {
         n: number;
         x: number;
@@ -15,13 +13,9 @@ tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,11): er
     const mismatch = {
         n: 13,
         get x(this: Foo) { return this.n; },
-            ~
-!!! error TS2682: 'get' and 'set' accessor must have the same 'this' type.
               ~~~~~~~~~
 !!! error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
         set x(this: Bar, n) { this.wrong = "method"; }
-            ~
-!!! error TS2682: 'get' and 'set' accessor must have the same 'this' type.
               ~~~~~~~~~
 !!! error TS2784: 'get' and 'set' accessors cannot declare 'this' parameters.
     }

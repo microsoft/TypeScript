@@ -17,7 +17,7 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions(context) {
-            const seenClassDeclarations = new Map<string, true>();
+            const seenClassDeclarations = new Map<number, true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
@@ -70,7 +70,7 @@ namespace ts.codefix {
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
             }
         }
 

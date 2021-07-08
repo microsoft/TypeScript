@@ -41,12 +41,14 @@ var whitespace3 = <div>
 
 
 //// [file.jsx]
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var p;
 var selfClosed1 = <div />;
@@ -67,10 +69,10 @@ var SomeClass = /** @class */ (function () {
     SomeClass.prototype.f = function () {
         var _this = this;
         var rewrites1 = <div>{function () { return _this; }}</div>;
-        var rewrites2 = <div>{__spreadArrays([p], p, [p])}</div>;
+        var rewrites2 = <div>{__spreadArray(__spreadArray([p], p, true), [p], false)}</div>;
         var rewrites3 = <div>{{ p: p }}</div>;
         var rewrites4 = <div a={function () { return _this; }}></div>;
-        var rewrites5 = <div a={__spreadArrays([p], p, [p])}></div>;
+        var rewrites5 = <div a={__spreadArray(__spreadArray([p], p, true), [p], false)}></div>;
         var rewrites6 = <div a={{ p: p }}></div>;
     };
     return SomeClass;

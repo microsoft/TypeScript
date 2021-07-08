@@ -1,0 +1,52 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers7.ts ===
+class C {
+>C : C
+
+    static a = 1;
+>a : number
+>1 : 1
+
+    static b = this.a + 1;
+>b : number
+>this.a + 1 : number
+>this.a : number
+>this : typeof C
+>a : number
+>1 : 1
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    static c = 2;
+>c : number
+>2 : 2
+
+    static d = this.c + 1;
+>d : number
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+
+    static e = 1 + (super.a) + (this.c + 1) + 1;
+>e : number
+>1 + (super.a) + (this.c + 1) + 1 : number
+>1 + (super.a) + (this.c + 1) : number
+>1 + (super.a) : number
+>1 : 1
+>(super.a) : number
+>super.a : number
+>super : typeof C
+>a : number
+>(this.c + 1) : number
+>this.c + 1 : number
+>this.c : number
+>this : typeof D
+>c : number
+>1 : 1
+>1 : 1
+}
+

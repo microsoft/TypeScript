@@ -81,7 +81,7 @@ namespace M
     }
 }`;
             runSingleFileTest("extractMethodLike", /*placeOpenBraceOnNewLineForFunctions*/ true, text, /*validateNodes*/ true, (sourceFile, changeTracker) => {
-                const statements = (<FunctionDeclaration>findChild("foo", sourceFile)).body!.statements.slice(1);
+                const statements = (findChild("foo", sourceFile) as FunctionDeclaration).body!.statements.slice(1);
                 const newFunction = factory.createFunctionDeclaration(
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
@@ -329,7 +329,7 @@ namespace M {
         }
 
         function findConstructor(sourceFile: SourceFile): ConstructorDeclaration {
-            const classDecl = <ClassDeclaration>sourceFile.statements[0];
+            const classDecl = sourceFile.statements[0] as ClassDeclaration;
             return find<ClassElement, ConstructorDeclaration>(classDecl.members, (m): m is ConstructorDeclaration => isConstructorDeclaration(m) && !!m.body)!;
         }
         function createTestSuperCall() {

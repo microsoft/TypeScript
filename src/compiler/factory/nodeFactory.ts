@@ -34,10 +34,10 @@ namespace ts {
         const getJSDocPrimaryTypeCreateFunction = memoizeOne(<T extends JSDocType>(kind: T["kind"]) => () => createJSDocPrimaryTypeWorker(kind));
         const getJSDocUnaryTypeCreateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (type: T["type"]) => createJSDocUnaryTypeWorker<T>(kind, type));
         const getJSDocUnaryTypeUpdateFunction = memoizeOne(<T extends JSDocType & { readonly type: TypeNode | undefined; }>(kind: T["kind"]) => (node: T, type: T["type"]) => updateJSDocUnaryTypeWorker<T>(kind, node, type));
-        const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: string) => createJSDocSimpleTagWorker(kind, tagName, comment));
-        const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: string) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
-        const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
-        const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) => updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment));
+        const getJSDocSimpleTagCreateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => createJSDocSimpleTagWorker(kind, tagName, comment));
+        const getJSDocSimpleTagUpdateFunction = memoizeOne(<T extends JSDocTag>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, comment?: NodeArray<JSDocComment>) => updateJSDocSimpleTagWorker(kind, node, tagName, comment));
+        const getJSDocTypeLikeTagCreateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => createJSDocTypeLikeTagWorker(kind, tagName, typeExpression, comment));
+        const getJSDocTypeLikeTagUpdateFunction = memoizeOne(<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"]) => (node: T, tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: NodeArray<JSDocComment>) => updateJSDocTypeLikeTagWorker(kind, node, tagName, typeExpression, comment));
 
         const factory: NodeFactory = {
             get parenthesizer() { return parenthesizerRules(); },
@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createClassStaticBlockDeclaration,
+            updateClassStaticBlockDeclaration,
             createTemplateLiteralTypeSpan,
             updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
@@ -345,6 +347,14 @@ namespace ts {
             updateJSDocSeeTag,
             createJSDocNameReference,
             updateJSDocNameReference,
+            createJSDocMemberName,
+            updateJSDocMemberName,
+            createJSDocLink,
+            updateJSDocLink,
+            createJSDocLinkCode,
+            updateJSDocLinkCode,
+            createJSDocLinkPlain,
+            updateJSDocLinkPlain,
             // lazily load factory members for JSDoc tags with similar structure
             get createJSDocTypeTag() { return getJSDocTypeLikeTagCreateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
             get updateJSDocTypeTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocTypeTag>(SyntaxKind.JSDocTypeTag); },
@@ -366,10 +376,14 @@ namespace ts {
             get updateJSDocProtectedTag() { return getJSDocSimpleTagUpdateFunction<JSDocProtectedTag>(SyntaxKind.JSDocProtectedTag); },
             get createJSDocReadonlyTag() { return getJSDocSimpleTagCreateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
             get updateJSDocReadonlyTag() { return getJSDocSimpleTagUpdateFunction<JSDocReadonlyTag>(SyntaxKind.JSDocReadonlyTag); },
+            get createJSDocOverrideTag() { return getJSDocSimpleTagCreateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
+            get updateJSDocOverrideTag() { return getJSDocSimpleTagUpdateFunction<JSDocOverrideTag>(SyntaxKind.JSDocOverrideTag); },
             get createJSDocDeprecatedTag() { return getJSDocSimpleTagCreateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             get updateJSDocDeprecatedTag() { return getJSDocSimpleTagUpdateFunction<JSDocDeprecatedTag>(SyntaxKind.JSDocDeprecatedTag); },
             createJSDocUnknownTag,
             updateJSDocUnknownTag,
+            createJSDocText,
+            updateJSDocText,
             createJSDocComment,
             updateJSDocComment,
             createJsxElement,
@@ -482,8 +496,11 @@ namespace ts {
             createArraySliceCall,
             createArrayConcatCall,
             createObjectDefinePropertyCall,
+            createReflectGetCall,
+            createReflectSetCall,
             createPropertyDescriptor,
             createCallBinding,
+            createAssignmentTargetWrapper,
 
             // Utilities
             inlineExpressions,
@@ -513,19 +530,32 @@ namespace ts {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
-                // Ensure the transform flags have been aggregated for this NodeArray
-                if (elements.transformFlags === undefined) {
-                    aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
+                    // Ensure the transform flags have been aggregated for this NodeArray
+                    if (elements.transformFlags === undefined) {
+                        aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                    }
+                    Debug.attachNodeArrayDebugInfo(elements);
+                    return elements;
                 }
-                Debug.attachNodeArrayDebugInfo(elements);
-                return elements;
+
+                // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
+                // array with the same elements, text range, and transform flags but with the updated
+                // value for `hasTrailingComma`
+                const array = elements.slice() as MutableNodeArray<T>;
+                array.pos = elements.pos;
+                array.end = elements.end;
+                array.hasTrailingComma = hasTrailingComma;
+                array.transformFlags = elements.transformFlags;
+                Debug.attachNodeArrayDebugInfo(array);
+                return array;
             }
 
             // Since the element list of a node array is typically created by starting with an empty array and
             // repeatedly calling push(), the list may not have the optimal memory layout. We invoke slice() for
             // small arrays (1 to 4 elements) to give the VM a chance to allocate an optimal representation.
             const length = elements.length;
-            const array = <MutableNodeArray<T>>(length >= 1 && length <= 4 ? elements.slice() : elements);
+            const array = (length >= 1 && length <= 4 ? elements.slice() : elements) as MutableNodeArray<T>;
             setTextRangePosEnd(array, -1, -1);
             array.hasTrailingComma = !!hasTrailingComma;
             aggregateChildrenFlags(array);
@@ -551,9 +581,9 @@ namespace ts {
             // NOTE: The following properties are commonly set by the binder and are added here to
             // ensure declarations have a stable shape.
             node.symbol = undefined!; // initialized by binder
-            node.localSymbol = undefined!; // initialized by binder
-            node.locals = undefined!; // initialized by binder
-            node.nextContainer = undefined!; // initialized by binder
+            node.localSymbol = undefined; // initialized by binder
+            node.locals = undefined; // initialized by binder
+            node.nextContainer = undefined; // initialized by binder
             return node;
         }
 
@@ -883,8 +913,10 @@ namespace ts {
 
         /** Create a unique temporary variable for use in a loop. */
         // @api
-        function createLoopVariable(): Identifier {
-            return createBaseGeneratedIdentifier("", GeneratedIdentifierFlags.Loop);
+        function createLoopVariable(reservedInNestedScopes?: boolean): Identifier {
+            let flags = GeneratedIdentifierFlags.Loop;
+            if (reservedInNestedScopes) flags |= GeneratedIdentifierFlags.ReservedInNestedScopes;
+            return createBaseGeneratedIdentifier("", flags);
         }
 
         /** Create a unique name based on the supplied text. */
@@ -960,6 +992,7 @@ namespace ts {
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
+                case SyntaxKind.OverrideKeyword:
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.BooleanKeyword:
                 case SyntaxKind.SymbolKeyword:
@@ -968,8 +1001,10 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
-                case SyntaxKind.StaticKeyword:
                 case SyntaxKind.SuperKeyword:
+                    transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+                    break;
+                case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:
@@ -1033,6 +1068,7 @@ namespace ts {
             if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
             if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
             if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
+            if (flags & ModifierFlags.Override) { result.push(createModifier(SyntaxKind.OverrideKeyword)); }
             if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
             if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
             return result;
@@ -1387,6 +1423,38 @@ namespace ts {
         }
 
         // @api
+        function createClassStaticBlockDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                decorators,
+                modifiers,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.body = body;
+            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.decorators !== decorators
+                || node.modifier !== modifiers
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
+                : node;
+        }
+
+        // @api
         function createConstructorDeclaration(
             decorators: readonly Decorator[] | undefined,
             modifiers: readonly Modifier[] | undefined,
@@ -1700,7 +1768,14 @@ namespace ts {
         }
 
         // @api
-        function createConstructorTypeNode(
+        function createConstructorTypeNode(...args: Parameters<typeof createConstructorTypeNode1 | typeof createConstructorTypeNode2>) {
+            return args.length === 4 ? createConstructorTypeNode1(...args) :
+                args.length === 3 ? createConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function createConstructorTypeNode1(
+            modifiers: readonly Modifier[] | undefined,
             typeParameters: readonly TypeParameterDeclaration[] | undefined,
             parameters: readonly ParameterDeclaration[],
             type: TypeNode | undefined
@@ -1708,7 +1783,7 @@ namespace ts {
             const node = createBaseSignatureDeclaration<ConstructorTypeNode>(
                 SyntaxKind.ConstructorType,
                 /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                modifiers,
                 /*name*/ undefined,
                 typeParameters,
                 parameters,
@@ -1718,18 +1793,45 @@ namespace ts {
             return node;
         }
 
+        /** @deprecated */
+        function createConstructorTypeNode2(
+            typeParameters: readonly TypeParameterDeclaration[] | undefined,
+            parameters: readonly ParameterDeclaration[],
+            type: TypeNode | undefined
+        ): ConstructorTypeNode {
+            return createConstructorTypeNode1(/*modifiers*/ undefined, typeParameters, parameters, type);
+        }
+
         // @api
-        function updateConstructorTypeNode(
+        function updateConstructorTypeNode(...args: Parameters<typeof updateConstructorTypeNode1 | typeof updateConstructorTypeNode2>) {
+            return args.length === 5 ? updateConstructorTypeNode1(...args) :
+                args.length === 4 ? updateConstructorTypeNode2(...args) :
+                Debug.fail("Incorrect number of arguments specified.");
+        }
+
+        function updateConstructorTypeNode1(
+            node: ConstructorTypeNode,
+            modifiers: readonly Modifier[] | undefined,
+            typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
+            parameters: NodeArray<ParameterDeclaration>,
+            type: TypeNode | undefined
+        ) {
+            return node.modifiers !== modifiers
+                || node.typeParameters !== typeParameters
+                || node.parameters !== parameters
+                || node.type !== type
+                ? updateBaseSignatureDeclaration(createConstructorTypeNode(modifiers, typeParameters, parameters, type), node)
+                : node;
+        }
+
+        /** @deprecated */
+        function updateConstructorTypeNode2(
             node: ConstructorTypeNode,
             typeParameters: NodeArray<TypeParameterDeclaration> | undefined,
             parameters: NodeArray<ParameterDeclaration>,
             type: TypeNode | undefined
         ) {
-            return node.typeParameters !== typeParameters
-                || node.parameters !== parameters
-                || node.type !== type
-                ? updateBaseSignatureDeclaration(createConstructorTypeNode(typeParameters, parameters, type), node)
-                : node;
+            return updateConstructorTypeNode1(node, node.modifiers, typeParameters, parameters, type);
         }
 
         // @api
@@ -1852,13 +1954,13 @@ namespace ts {
 
         function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
             return node.types !== types
-                ? update(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
+                ? update(createUnionOrIntersectionTypeNode(node.kind, types) as T, node)
                 : node;
         }
 
         // @api
         function createUnionTypeNode(types: readonly TypeNode[]): UnionTypeNode {
-            return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
+            return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types) as UnionTypeNode;
         }
 
         // @api
@@ -1868,7 +1970,7 @@ namespace ts {
 
         // @api
         function createIntersectionTypeNode(types: readonly TypeNode[]): IntersectionTypeNode {
-            return <IntersectionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types);
+            return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types) as IntersectionTypeNode;
         }
 
         // @api
@@ -2095,7 +2197,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 name,
-                initializer
+                initializer && parenthesizerRules().parenthesizeExpressionForDisallowedComma(initializer)
             );
             node.propertyName = asName(propertyName);
             node.dotDotDotToken = dotDotDotToken;
@@ -2134,7 +2236,12 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
+            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
+            // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
+            // a trailing comma.
+            const lastElement = elements && lastOrUndefined(elements);
+            const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
+            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             return node;
@@ -2522,7 +2629,7 @@ namespace ts {
                 propagateChildFlags(node.equalsGreaterThanToken) |
                 TransformFlags.ContainsES2015;
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -2677,7 +2784,7 @@ namespace ts {
                 node.transformFlags |= TransformFlags.ContainsES2016;
             }
             else if (isLogicalOrCoalescingAssignmentOperator(operatorKind)) {
-                node.transformFlags |= TransformFlags.ContainsESNext;
+                node.transformFlags |= TransformFlags.ContainsES2021;
             }
             return node;
         }
@@ -2805,22 +2912,22 @@ namespace ts {
 
         // @api
         function createTemplateHead(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateHead>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateHead, text, rawText, templateFlags) as TemplateHead;
         }
 
         // @api
         function createTemplateMiddle(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateMiddle>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateMiddle, text, rawText, templateFlags) as TemplateMiddle;
         }
 
         // @api
         function createTemplateTail(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <TemplateTail>createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.TemplateTail, text, rawText, templateFlags) as TemplateTail;
         }
 
         // @api
         function createNoSubstitutionTemplateLiteral(text: string | undefined, rawText?: string, templateFlags?: TokenFlags) {
-            return <NoSubstitutionTemplateLiteral>createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags);
+            return createTemplateLiteralLikeNodeChecked(SyntaxKind.NoSubstitutionTemplateLiteral, text, rawText, templateFlags) as NoSubstitutionTemplateLiteral;
         }
 
         // @api
@@ -4200,7 +4307,7 @@ namespace ts {
         }
 
         // @api
-        function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | undefined) {
+        function createBaseJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined) {
             const node = createBaseNode<T>(kind);
             node.tagName = tagName;
             node.comment = comment;
@@ -4208,7 +4315,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string): JSDocTemplateTag {
+        function createJSDocTemplateTag(tagName: Identifier | undefined, constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment?: string | NodeArray<JSDocComment>): JSDocTemplateTag {
             const node = createBaseJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName ?? createIdentifier("template"), comment);
             node.constraint = constraint;
             node.typeParameters = createNodeArray(typeParameters);
@@ -4216,7 +4323,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | undefined): JSDocTemplateTag {
+        function updateJSDocTemplateTag(node: JSDocTemplateTag, tagName: Identifier = getDefaultTagName(node), constraint: JSDocTypeExpression | undefined, typeParameters: readonly TypeParameterDeclaration[], comment: string | NodeArray<JSDocComment> | undefined): JSDocTemplateTag {
             return node.tagName !== tagName
                 || node.constraint !== constraint
                 || node.typeParameters !== typeParameters
@@ -4226,7 +4333,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocTypedefTag {
+        function createJSDocTypedefTag(tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocTypedefTag {
             const node = createBaseJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName ?? createIdentifier("typedef"), comment);
             node.typeExpression = typeExpression;
             node.fullName = fullName;
@@ -4235,7 +4342,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocTypedefTag {
+        function updateJSDocTypedefTag(node: JSDocTypedefTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocTypedefTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4245,7 +4352,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocParameterTag {
+        function createJSDocParameterTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocParameterTag {
             const node = createBaseJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, tagName ?? createIdentifier("param"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4255,7 +4362,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocParameterTag {
+        function updateJSDocParameterTag(node: JSDocParameterTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocParameterTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4267,7 +4374,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string): JSDocPropertyTag {
+        function createJSDocPropertyTag(tagName: Identifier | undefined, name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, isNameFirst?: boolean, comment?: string | NodeArray<JSDocComment>): JSDocPropertyTag {
             const node = createBaseJSDocTag<JSDocPropertyTag>(SyntaxKind.JSDocPropertyTag, tagName ?? createIdentifier("prop"), comment);
             node.typeExpression = typeExpression;
             node.name = name;
@@ -4277,7 +4384,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | undefined): JSDocPropertyTag {
+        function updateJSDocPropertyTag(node: JSDocPropertyTag, tagName: Identifier = getDefaultTagName(node), name: EntityName, isBracketed: boolean, typeExpression: JSDocTypeExpression | undefined, isNameFirst: boolean, comment: string | NodeArray<JSDocComment> | undefined): JSDocPropertyTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.isBracketed !== isBracketed
@@ -4289,7 +4396,7 @@ namespace ts {
         }
 
         // @api
-        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string): JSDocCallbackTag {
+        function createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag {
             const node = createBaseJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName ?? createIdentifier("callback"), comment);
             node.typeExpression = typeExpression;
             node.fullName = fullName;
@@ -4298,7 +4405,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | undefined): JSDocCallbackTag {
+        function updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.fullName !== fullName
@@ -4308,14 +4415,14 @@ namespace ts {
         }
 
         // @api
-        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag {
+        function createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag {
             const node = createBaseJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName ?? createIdentifier("augments"), comment);
             node.class = className;
             return node;
         }
 
         // @api
-        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: string | undefined): JSDocAugmentsTag {
+        function updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -4324,21 +4431,21 @@ namespace ts {
         }
 
         // @api
-        function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string): JSDocImplementsTag {
+        function createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag {
             const node = createBaseJSDocTag<JSDocImplementsTag>(SyntaxKind.JSDocImplementsTag, tagName ?? createIdentifier("implements"), comment);
             node.class = className;
             return node;
         }
 
         // @api
-        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+        function createJSDocSeeTag(tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
             const node = createBaseJSDocTag<JSDocSeeTag>(SyntaxKind.JSDocSeeTag, tagName ?? createIdentifier("see"), comment);
             node.name = name;
             return node;
         }
 
         // @api
-        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string): JSDocSeeTag {
+        function updateJSDocSeeTag(node: JSDocSeeTag, tagName: Identifier | undefined, name: JSDocNameReference | undefined, comment?: string | NodeArray<JSDocComment>): JSDocSeeTag {
             return node.tagName !== tagName
                 || node.name !== name
                 || node.comment !== comment
@@ -4347,21 +4454,85 @@ namespace ts {
         }
 
         // @api
-        function createJSDocNameReference(name: EntityName): JSDocNameReference {
+        function createJSDocNameReference(name: EntityName | JSDocMemberName): JSDocNameReference {
             const node = createBaseNode<JSDocNameReference>(SyntaxKind.JSDocNameReference);
             node.name = name;
             return node;
         }
 
         // @api
-        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName): JSDocNameReference {
+        function updateJSDocNameReference(node: JSDocNameReference, name: EntityName | JSDocMemberName): JSDocNameReference {
             return node.name !== name
                 ? update(createJSDocNameReference(name), node)
                 : node;
         }
 
         // @api
-        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: string | undefined): JSDocImplementsTag {
+        function createJSDocMemberName(left: EntityName | JSDocMemberName, right: Identifier) {
+            const node = createBaseNode<JSDocMemberName>(SyntaxKind.JSDocMemberName);
+            node.left = left;
+            node.right = right;
+            node.transformFlags |=
+                propagateChildFlags(node.left) |
+                propagateChildFlags(node.right);
+            return node;
+        }
+
+        // @api
+        function updateJSDocMemberName(node: JSDocMemberName, left: EntityName | JSDocMemberName, right: Identifier) {
+            return node.left !== left
+                || node.right !== right
+                ? update(createJSDocMemberName(left, right), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocLink(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
+            const node = createBaseNode<JSDocLink>(SyntaxKind.JSDocLink);
+            node.name = name;
+            node.text = text;
+            return node;
+        }
+
+        // @api
+        function updateJSDocLink(node: JSDocLink, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLink {
+            return node.name !== name
+                ? update(createJSDocLink(name, text), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocLinkCode(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
+            const node = createBaseNode<JSDocLinkCode>(SyntaxKind.JSDocLinkCode);
+            node.name = name;
+            node.text = text;
+            return node;
+        }
+
+        // @api
+        function updateJSDocLinkCode(node: JSDocLinkCode, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkCode {
+            return node.name !== name
+                ? update(createJSDocLinkCode(name, text), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocLinkPlain(name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
+            const node = createBaseNode<JSDocLinkPlain>(SyntaxKind.JSDocLinkPlain);
+            node.name = name;
+            node.text = text;
+            return node;
+        }
+
+        // @api
+        function updateJSDocLinkPlain(node: JSDocLinkPlain, name: EntityName | JSDocMemberName | undefined, text: string): JSDocLinkPlain {
+            return node.name !== name
+                ? update(createJSDocLinkPlain(name, text), node)
+                : node;
+        }
+
+        // @api
+        function updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier = getDefaultTagName(node), className: JSDocImplementsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocImplementsTag {
             return node.tagName !== tagName
                 || node.class !== className
                 || node.comment !== comment
@@ -4377,7 +4548,7 @@ namespace ts {
         // createJSDocProtectedTag
         // createJSDocReadonlyTag
         // createJSDocDeprecatedTag
-        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: string) {
+        function createJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>) {
             const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
             return node;
         }
@@ -4390,7 +4561,7 @@ namespace ts {
         // updateJSDocProtectedTag
         // updateJSDocReadonlyTag
         // updateJSDocDeprecatedTag
-        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | undefined) {
+        function updateJSDocSimpleTagWorker<T extends JSDocTag>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), comment: string | NodeArray<JSDocComment> | undefined) {
             return node.tagName !== tagName
                 || node.comment !== comment
                 ? update(createJSDocSimpleTagWorker(kind, tagName, comment), node) :
@@ -4402,7 +4573,7 @@ namespace ts {
         // createJSDocReturnTag
         // createJSDocThisTag
         // createJSDocEnumTag
-        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string) {
+        function createJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], tagName: Identifier | undefined, typeExpression?: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>) {
             const node = createBaseJSDocTag<T>(kind, tagName ?? createIdentifier(getDefaultTagNameForKind(kind)), comment);
             node.typeExpression = typeExpression;
             return node;
@@ -4413,7 +4584,7 @@ namespace ts {
         // updateJSDocReturnTag
         // updateJSDocThisTag
         // updateJSDocEnumTag
-        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | undefined) {
+        function updateJSDocTypeLikeTagWorker<T extends JSDocTag & { typeExpression?: JSDocTypeExpression }>(kind: T["kind"], node: T, tagName: Identifier = getDefaultTagName(node), typeExpression: JSDocTypeExpression | undefined, comment: string | NodeArray<JSDocComment> | undefined) {
             return node.tagName !== tagName
                 || node.typeExpression !== typeExpression
                 || node.comment !== comment
@@ -4422,13 +4593,13 @@ namespace ts {
         }
 
         // @api
-        function createJSDocUnknownTag(tagName: Identifier, comment?: string): JSDocUnknownTag {
+        function createJSDocUnknownTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocUnknownTag {
             const node = createBaseJSDocTag<JSDocUnknownTag>(SyntaxKind.JSDocTag, tagName, comment);
             return node;
         }
 
         // @api
-        function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | undefined): JSDocUnknownTag {
+        function updateJSDocUnknownTag(node: JSDocUnknownTag, tagName: Identifier, comment: string | NodeArray<JSDocComment> | undefined): JSDocUnknownTag {
             return node.tagName !== tagName
                 || node.comment !== comment
                 ? update(createJSDocUnknownTag(tagName, comment), node)
@@ -4436,7 +4607,21 @@ namespace ts {
         }
 
         // @api
-        function createJSDocComment(comment?: string | undefined, tags?: readonly JSDocTag[] | undefined) {
+        function createJSDocText(text: string): JSDocText {
+            const node = createBaseNode<JSDocText>(SyntaxKind.JSDocText);
+            node.text = text;
+            return node;
+        }
+
+        // @api
+        function updateJSDocText(node: JSDocText, text: string): JSDocText {
+            return node.text !== text
+                ? update(createJSDocText(text), node)
+                : node;
+        }
+
+        // @api
+        function createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined) {
             const node = createBaseNode<JSDoc>(SyntaxKind.JSDocComment);
             node.comment = comment;
             node.tags = asNodeArray(tags);
@@ -4444,7 +4629,7 @@ namespace ts {
         }
 
         // @api
-        function updateJSDocComment(node: JSDoc, comment: string | undefined, tags: readonly JSDocTag[] | undefined) {
+        function updateJSDocComment(node: JSDoc, comment: string | NodeArray<JSDocComment> | undefined, tags: readonly JSDocTag[] | undefined) {
             return node.comment !== comment
                 || node.tags !== tags
                 ? update(createJSDocComment(comment, tags), node)
@@ -5255,6 +5440,15 @@ namespace ts {
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+            // Preserve the optionality of `object`.
+            if (isCallChain(object)) {
+                return createCallChain(
+                    createPropertyAccessChain(object, /*questionDotToken*/ undefined, methodName),
+                    /*questionDotToken*/ undefined,
+                    /*typeArguments*/ undefined,
+                    argumentsList
+                );
+            }
             return createCallExpression(
                 createPropertyAccessExpression(object, methodName),
                 /*typeArguments*/ undefined,
@@ -5288,6 +5482,14 @@ namespace ts {
 
         function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
             return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+        }
+
+        function createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "get", receiver ? [target, propertyKey, receiver] : [target, propertyKey]);
+        }
+
+        function createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
         }
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
@@ -5384,13 +5586,13 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return false;
                 case SyntaxKind.ArrayLiteralExpression:
-                    const elements = (<ArrayLiteralExpression>target).elements;
+                    const elements = (target as ArrayLiteralExpression).elements;
                     if (elements.length === 0) {
                         return false;
                     }
                     return true;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return (<ObjectLiteralExpression>target).properties.length > 0;
+                    return (target as ObjectLiteralExpression).properties.length > 0;
                 default:
                     return true;
             }
@@ -5408,7 +5610,7 @@ namespace ts {
                 thisArg = createThis();
                 target = languageVersion !== undefined && languageVersion < ScriptTarget.ES2015
                     ? setTextRange(createIdentifier("_super"), callee)
-                    : <PrimaryExpression>callee;
+                    : callee as PrimaryExpression;
             }
             else if (getEmitFlags(callee) & EmitFlags.HelperName) {
                 thisArg = createVoidZero();
@@ -5465,6 +5667,34 @@ namespace ts {
             return { target, thisArg };
         }
 
+        function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression {
+            return createPropertyAccessExpression(
+                // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+                createParenthesizedExpression(
+                    createObjectLiteralExpression([
+                        createSetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            "value",
+                            [createParameterDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
+                                paramName,
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
+                            )],
+                            createBlock([
+                                createExpressionStatement(expression)
+                            ])
+                        )
+                    ])
+                ),
+                "value"
+            );
+        }
+
         function inlineExpressions(expressions: readonly Expression[]) {
             // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
             // stack size exceeded" errors.
@@ -5473,7 +5703,7 @@ namespace ts {
                 : reduceLeft(expressions, factory.createComma)!;
         }
 
-        function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
+        function getName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags: EmitFlags = 0) {
             const nodeName = getNameOfDeclaration(node);
             if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
                 // TODO(rbuckton): Does this need to be parented?
@@ -5537,7 +5767,7 @@ namespace ts {
          * @param allowComments A value indicating whether comments may be emitted for the name.
          * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
          */
-        function getDeclarationName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        function getDeclarationName(node: Declaration | undefined, allowComments?: boolean, allowSourceMaps?: boolean) {
             return getName(node, allowComments, allowSourceMaps);
         }
 
@@ -5673,7 +5903,7 @@ namespace ts {
          */
         function liftToBlock(nodes: readonly Node[]): Statement {
             Debug.assert(every(nodes, isStatementOrBlock), "Cannot lift nodes to a Block.");
-            return <Statement>singleOrUndefined(nodes) || createBlock(<readonly Statement[]>nodes);
+            return singleOrUndefined(nodes) as Statement || createBlock(nodes as readonly Statement[]);
         }
 
         function findSpanEnd<T>(array: readonly T[], test: (value: T) => boolean, start: number) {
@@ -5865,6 +6095,7 @@ namespace ts {
             case SyntaxKind.JSDocPrivateTag: return "private";
             case SyntaxKind.JSDocProtectedTag: return "protected";
             case SyntaxKind.JSDocReadonlyTag: return "readonly";
+            case SyntaxKind.JSDocOverrideTag: return "override";
             case SyntaxKind.JSDocTemplateTag: return "template";
             case SyntaxKind.JSDocTypedefTag: return "typedef";
             case SyntaxKind.JSDocParameterTag: return "param";
@@ -6350,7 +6581,7 @@ namespace ts {
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-        if (flags) destEmitNode.flags = flags;
+        if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);

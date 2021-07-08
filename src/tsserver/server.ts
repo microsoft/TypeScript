@@ -15,7 +15,7 @@ namespace ts.server {
             const l = level.toLowerCase();
             for (const name in LogLevel) {
                 if (isNaN(+name) && l === name.toLowerCase()) {
-                    return <LogLevel><any>LogLevel[name];
+                    return LogLevel[name] as any as LogLevel;
                 }
             }
         }

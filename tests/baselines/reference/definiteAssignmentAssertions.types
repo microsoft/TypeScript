@@ -158,3 +158,10 @@ declare let v1!: number;
 declare var v2!: number;
 >v2 : number
 
+declare namespace foo {
+>foo : typeof foo
+
+	var v!: number;
+>v : number
+}
+

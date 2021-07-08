@@ -3,10 +3,13 @@ namespace ts.codefix {
     const fixId = "fixSpelling";
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
+        Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Could_not_find_name_0_Did_you_mean_1.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
         Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,
+        Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1.code,
         // for JSX class components
         Diagnostics.No_overload_matches_this_call.code,
         // for JSX FC
@@ -46,7 +49,7 @@ namespace ts.codefix {
 
         let suggestedSymbol: Symbol | undefined;
         if (isPropertyAccessExpression(parent) && parent.name === node) {
-            Debug.assert(isIdentifierOrPrivateIdentifier(node), "Expected an identifier for spelling (property access)");
+            Debug.assert(isMemberName(node), "Expected an identifier for spelling (property access)");
             let containingType = checker.getTypeAtLocation(parent.expression);
             if (parent.flags & NodeFlags.OptionalChain) {
                 containingType = checker.getNonNullableType(containingType);
@@ -73,6 +76,14 @@ namespace ts.codefix {
             const props = checker.getContextualTypeForArgumentAtIndex(tag, 0);
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentJSXAttribute(node, props!);
         }
+        else if (hasSyntacticModifier(parent, ModifierFlags.Override) && isClassElement(parent) && parent.name === node) {
+            const baseDeclaration = findAncestor(node, isClassLike);
+            const baseTypeNode = baseDeclaration ? getEffectiveBaseTypeNode(baseDeclaration) : undefined;
+            const baseType = baseTypeNode ? checker.getTypeAtLocation(baseTypeNode) : undefined;
+            if (baseType) {
+                suggestedSymbol = checker.getSuggestedSymbolForNonexistentClassMember(getTextOfNode(node), baseType);
+            }
+        }
         else {
             const meaning = getMeaningFromLocation(node);
             const name = getTextOfNode(node);
@@ -87,7 +98,7 @@ namespace ts.codefix {
         const suggestion = symbolName(suggestedSymbol);
         if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
             const valDecl = suggestedSymbol.valueDeclaration;
-            if (isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
+            if (valDecl && isNamedDeclaration(valDecl) && isPrivateIdentifier(valDecl.name)) {
                 changes.replaceNode(sourceFile, node, factory.createIdentifier(suggestion));
             }
             else {

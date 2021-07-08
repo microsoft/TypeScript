@@ -5,3 +5,7 @@ declare function dec(target: Object, propertyKey: string | symbol, parameterInde
 class C {
     method(@dec this: C) {}
 }
+
+class C2 {
+    method(@dec allowed: C2, @dec this: C2) {}
+}

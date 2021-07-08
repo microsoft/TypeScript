@@ -27,6 +27,17 @@ namespace ts.tscWatch {
                 changes,
                 baselineIncremental
             });
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `incremental/${subScenario}`,
+                commandLineArgs: ["--w", "--i"],
+                sys: () => createWatchedSystem(
+                    [...files(), configFile(), lib?.() || libFile],
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental
+            });
         }
 
         function changeCompilerOptions(input: VerifyEmitAndErrorUpdates, additionalOptions: CompilerOptions): File {
@@ -98,6 +109,16 @@ console.log(b.c.d);`
                     files: () => [aFile, bFile, cFile],
                     changes: [
                         {
+                            caption: "Rename property d to d2 of class C to initialize signatures",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property d2 to d of class C to revert back to original text",
+                            change: sys => sys.writeFile(cFile.path, cFile.content.replace("d2", "d")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
                             caption: "Rename property d to d2 of class C",
                             change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
                             timeouts: runQueuedTimeoutCallbacks,
@@ -105,7 +126,6 @@ console.log(b.c.d);`
                     ],
                 });
             }
-
             describe("updates errors when deep import file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.ts`,
@@ -123,12 +143,11 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import file changes",
+                    "errors for .ts change",
                     bFile,
                     cFile
                 );
             });
-
             describe("updates errors when deep import through declaration file changes", () => {
                 const bFile: File = {
                     path: `${projectRoot}/b.d.ts`,
@@ -146,7 +165,7 @@ export class B
 }`
                 };
                 verifyDeepImportChange(
-                    "updates errors when deep import through declaration file changes",
+                    "errors for .d.ts change",
                     bFile,
                     cFile
                 );
@@ -198,14 +217,23 @@ getPoint().c.x;`
                 files: () => [aFile, bFile, cFile, dFile, eFile],
                 changes: [
                     {
+                        caption: "Rename property x2 to x of interface Coords to initialize signatures",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
+                        caption: "Rename property x to x2 of interface Coords to revert back to original text",
+                        change: sys => sys.writeFile(aFile.path, aFile.content.replace("x: number", "x2: number")),
+                        timeouts: runQueuedTimeoutCallbacks,
+                    },
+                    {
                         caption: "Rename property x2 to x of interface Coords",
                         change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
                         timeouts: runQueuedTimeoutCallbacks,
-                    }
+                    },
                 ]
             });
         });
-
         describe("updates errors when file transitively exported file changes", () => {
             const config: File = {
                 path: `${projectRoot}/tsconfig.json`,
@@ -256,10 +284,20 @@ export class Data {
 
             function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
                 verifyEmitAndErrorUpdates({
-                    subScenario: `updates errors when file transitively exported file changes/${subScenario}`,
+                    subScenario: `transitive exports/${subScenario}`,
                     files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
                     configFile: () => config,
                     changes: [
+                        {
+                            caption: "Rename property title to title2 of interface ITest to initialize signatures",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
+                        {
+                            caption: "Rename property title2 to title of interface ITest to revert back to original text",
+                            change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
+                            timeouts: runQueuedTimeoutCallbacks,
+                        },
                         {
                             caption: "Rename property title to title2 of interface ITest",
                             change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
@@ -270,11 +308,10 @@ export class Data {
             }
             describe("when there are no circular import and exports", () => {
                 verifyTransitiveExports(
-                    "when there are no circular import and exports",
+                    "no circular import/export",
                     [lib2Data]
                 );
             });
-
             describe("when there are circular import and exports", () => {
                 const lib2Data: File = {
                     path: `${projectRoot}/lib2/data.ts`,
@@ -296,7 +333,7 @@ export class Data2 {
 }`
                 };
                 verifyTransitiveExports(
-                    "when there are circular import and exports",
+                    "yes circular import/exports",
                     [lib2Data, lib2Data2]
                 );
             });

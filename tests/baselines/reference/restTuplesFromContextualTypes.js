@@ -101,12 +101,14 @@ const funcUnionTupleRest: TupleUnionFunc = (...params) => {
 
 //// [restTuplesFromContextualTypes.js]
 "use strict";
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 (function (a, b, c) { }).apply(void 0, t1);
 (function () {
@@ -208,31 +210,31 @@ f2(function (a, b, c) {
         x[_i - 3] = arguments[_i];
     }
 });
-(function (a, b, c) { }).apply(void 0, __spreadArrays([1], t3));
+(function (a, b, c) { }).apply(void 0, __spreadArray([1], t3, false));
 (function () {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
     }
-}).apply(void 0, __spreadArrays([1], t3));
+}).apply(void 0, __spreadArray([1], t3, false));
 (function (a) {
     var x = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         x[_i - 1] = arguments[_i];
     }
-}).apply(void 0, __spreadArrays([1], t3));
+}).apply(void 0, __spreadArray([1], t3, false));
 (function (a, b) {
     var x = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         x[_i - 2] = arguments[_i];
     }
-}).apply(void 0, __spreadArrays([1], t3));
+}).apply(void 0, __spreadArray([1], t3, false));
 (function (a, b, c) {
     var x = [];
     for (var _i = 3; _i < arguments.length; _i++) {
         x[_i - 3] = arguments[_i];
     }
-}).apply(void 0, __spreadArrays([1], t3));
+}).apply(void 0, __spreadArray([1], t3, false));
 f3(function (a, b, c) { });
 f3(function () {
     var x = [];
@@ -270,13 +272,13 @@ function f4(t) {
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
-    }).apply(void 0, __spreadArrays([1], t));
+    }).apply(void 0, __spreadArray([1], t, false));
     (function (a) {
         var x = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             x[_i - 1] = arguments[_i];
         }
-    }).apply(void 0, __spreadArrays([1, 2], t));
+    }).apply(void 0, __spreadArray([1, 2], t, false));
     function f(cb) { }
     f(function () {
         var x = [];

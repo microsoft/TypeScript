@@ -137,29 +137,27 @@ class C11 {
 //// [strictPropertyInitialization.js]
 "use strict";
 // Properties with non-undefined types require initialization
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _f, _g, _h, _i, _d, _e, _f_1, _b, _b_1, _b_2, _d_1, _b_3;
+var _C1_f, _C1_g, _C1_h, _C1_i, _C4_d, _C4_e, _C4_f, _C5_b, _C6_b, _C7_b, _C10_d, _C11_b;
 class C1 {
     constructor() {
-        _f.set(this, void 0); //Error
-        _g.set(this, void 0);
-        _h.set(this, void 0); //Error
-        _i.set(this, void 0);
+        _C1_f.set(this, void 0); //Error
+        _C1_g.set(this, void 0);
+        _C1_h.set(this, void 0); //Error
+        _C1_i.set(this, void 0);
     }
 }
-_f = new WeakMap(), _g = new WeakMap(), _h = new WeakMap(), _i = new WeakMap();
+_C1_f = new WeakMap(), _C1_g = new WeakMap(), _C1_h = new WeakMap(), _C1_i = new WeakMap();
 // No strict initialization checks for static members
 class C3 {
 }
@@ -169,46 +167,46 @@ class C4 {
         this.a = 0;
         this.b = 0;
         this.c = "abc";
-        _d.set(this, 0);
-        _e.set(this, 0);
-        _f_1.set(this, "abc");
+        _C4_d.set(this, 0);
+        _C4_e.set(this, 0);
+        _C4_f.set(this, "abc");
     }
 }
-_d = new WeakMap(), _e = new WeakMap(), _f_1 = new WeakMap();
+_C4_d = new WeakMap(), _C4_e = new WeakMap(), _C4_f = new WeakMap();
 // Assignment in constructor satisfies strict initialization check
 class C5 {
     constructor() {
-        _b.set(this, void 0);
+        _C5_b.set(this, void 0);
         this.a = 0;
-        __classPrivateFieldSet(this, _b, 0);
+        __classPrivateFieldSet(this, _C5_b, 0, "f");
     }
 }
-_b = new WeakMap();
+_C5_b = new WeakMap();
 // All code paths must contain assignment
 class C6 {
     constructor(cond) {
-        _b_1.set(this, void 0);
+        _C6_b.set(this, void 0);
         if (cond) {
             return;
         }
         this.a = 0;
-        __classPrivateFieldSet(this, _b_1, 0);
+        __classPrivateFieldSet(this, _C6_b, 0, "f");
     }
 }
-_b_1 = new WeakMap();
+_C6_b = new WeakMap();
 class C7 {
     constructor(cond) {
-        _b_2.set(this, void 0);
+        _C7_b.set(this, void 0);
         if (cond) {
             this.a = 1;
-            __classPrivateFieldSet(this, _b_2, 1);
+            __classPrivateFieldSet(this, _C7_b, 1, "f");
             return;
         }
         this.a = 0;
-        __classPrivateFieldSet(this, _b_2, 1);
+        __classPrivateFieldSet(this, _C7_b, 1, "f");
     }
 }
-_b_2 = new WeakMap();
+_C7_b = new WeakMap();
 // Properties with string literal names aren't checked
 class C8 {
 }
@@ -219,24 +217,24 @@ class C9 {
 // within their constructor
 class C10 {
     constructor() {
-        _d_1.set(this, void 0);
+        _C10_d.set(this, void 0);
         let x = this.a; // Error
         this.a = this.b; // Error
-        this.b = __classPrivateFieldGet(this, _d_1); //Error
+        this.b = __classPrivateFieldGet(this, _C10_d, "f"); //Error
         this.b = x;
-        __classPrivateFieldSet(this, _d_1, x);
+        __classPrivateFieldSet(this, _C10_d, x, "f");
         let y = this.c;
     }
 }
-_d_1 = new WeakMap();
+_C10_d = new WeakMap();
 class C11 {
     constructor() {
-        _b_3.set(this, void 0);
+        _C11_b.set(this, void 0);
         this.a = someValue();
-        __classPrivateFieldSet(this, _b_3, someValue());
+        __classPrivateFieldSet(this, _C11_b, someValue(), "f");
     }
 }
-_b_3 = new WeakMap();
+_C11_b = new WeakMap();
 
 
 //// [strictPropertyInitialization.d.ts]

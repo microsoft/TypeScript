@@ -1,5 +1,5 @@
 namespace ts {
-    describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects and emits them correctly", () => {
+    describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         verifyTsc({
             scenario: "javascriptProjectEmit",
             subScenario: `loads js-based projects and emits them correctly`,
@@ -87,12 +87,11 @@ namespace ts {
             }, symbolLibContent),
             commandLineArgs: ["-b", "/src"]
         });
-    });
 
-    describe("unittests:: tsbuild:: javascriptProjectEmit:: loads outfile js projects and concatenates them correctly", () => {
-        let projFs: vfs.FileSystem;
-        before(() => {
-            projFs = loadProjectFromFiles({
+        verifyTscSerializedIncrementalEdits({
+            scenario: "javascriptProjectEmit",
+            subScenario: `modifies outfile js projects and concatenates them correctly`,
+            fs: () => loadProjectFromFiles({
                 "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -105,7 +104,7 @@ namespace ts {
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "common.js",
-                            "bundledPackageName": "common"
+                            
                         },
                         "include": ["nominal.js"]
                     }`,
@@ -121,7 +120,7 @@ namespace ts {
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "sub-project.js",
-                            "bundledPackageName": "sub"
+                            
                         },
                         "references": [
                             { "path": "../common", "prepend": true }
@@ -146,7 +145,7 @@ namespace ts {
                         "compilerOptions": {
                             "composite": true,
                             "outFile": "sub-project-2.js",
-                            "bundledPackageName": "sub-2"
+                            
                         },
                         "references": [
                             { "path": "../sub-project", "prepend": true }
@@ -175,30 +174,14 @@ namespace ts {
                             "declaration": true
                         }
                     }`,
-            }, symbolLibContent);
-        });
-        after(() => {
-            projFs = undefined!;
-        });
-        verifyTsc({
-            scenario: "javascriptProjectEmit",
-            subScenario: `loads outfile js projects and concatenates them correctly`,
-            fs: () => projFs,
-            commandLineArgs: ["-b", "/src"]
-        });
-        verifyTscSerializedIncrementalEdits({
-            scenario: "javascriptProjectEmit",
-            subScenario: `modifies outfile js projects and concatenates them correctly`,
-            fs: () => projFs,
+            }, symbolLibContent),
             commandLineArgs: ["-b", "/src"],
             incrementalScenarios: [{
                 buildKind: BuildKind.IncrementalDtsUnchanged,
                 modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
             }]
         });
-    });
 
-    describe("unittests:: tsbuild:: javascriptProjectEmit:: loads js-based projects with non-moved json files and emits them correctly", () => {
         verifyTsc({
             scenario: "javascriptProjectEmit",
             subScenario: `loads js-based projects with non-moved json files and emits them correctly`,

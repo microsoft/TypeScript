@@ -1,0 +1,10 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock21.ts ===
+class C {
+>C : C
+
+    /* jsdocs */
+    static {
+        // something
+    }
+}
+

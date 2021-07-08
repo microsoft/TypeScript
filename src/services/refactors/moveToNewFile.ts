@@ -1,11 +1,26 @@
 /* @internal */
 namespace ts.refactor {
     const refactorName = "Move to a new file";
+    const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
+
+    const moveToNewFileAction = {
+        name: refactorName,
+        description,
+        kind: "refactor.move.newFile",
+    };
     registerRefactor(refactorName, {
+        kinds: [moveToNewFileAction.kind],
         getAvailableActions(context): readonly ApplicableRefactorInfo[] {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
-            const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
-            return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
+            const statements = getStatementsToMove(context);
+            if (context.preferences.allowTextChangesInNewFiles && statements) {
+                return [{ name: refactorName, description, actions: [moveToNewFileAction] }];
+            }
+            if (context.preferences.provideRefactorNotApplicableReason) {
+                return [{ name: refactorName, description, actions:
+                    [{ ...moveToNewFileAction, notApplicableReason: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_statement_or_statements) }]
+                }];
+            }
+            return emptyArray;
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === refactorName, "Wrong refactor invoked");
@@ -428,6 +443,9 @@ namespace ts.refactor {
         const oldFileNamedImports: string[] = [];
         const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
         newFileImportsFromOldFile.forEach(symbol => {
+            if (!symbol.declarations) {
+                return;
+            }
             for (const decl of symbol.declarations) {
                 if (!isTopLevelDeclaration(decl)) continue;
                 const name = nameOfTopLevelDeclaration(decl);

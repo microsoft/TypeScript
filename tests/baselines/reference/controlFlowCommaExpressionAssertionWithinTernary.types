@@ -23,7 +23,7 @@ function foo2(param: number | null | undefined): number | null {
 >assert(param !== undefined) : void
 >assert : (value: any) => asserts value
 >param !== undefined : boolean
->param : number | null | undefined
+>param : number | null
 >undefined : undefined
 >param : number | null
 >null : null

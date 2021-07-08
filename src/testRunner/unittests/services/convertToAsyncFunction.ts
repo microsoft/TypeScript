@@ -539,6 +539,7 @@ function [#|f|]():Promise<void | Response> {
 }
 `
         );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_NoRes3", `
 function [#|f|]():Promise<void | Response> {
     return fetch('https://typescriptlang.org').catch(rej => console.log(rej));
@@ -600,6 +601,7 @@ function [#|f|]():Promise<void> {
 }
 `
         );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_ResRef", `
 function [#|f|]():Promise<boolean> {
     return fetch('https://typescriptlang.org').then(res);
@@ -609,6 +611,75 @@ function res(result){
 }
 `
         );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef1", `
+class Foo {
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo(res) {
+        return res.ok;
+    }
+}
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef2", `
+class Foo {
+    public [#|method|](): Promise<Response> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo = res => res;
+}
+        `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRef3", `
+const res = (result) => {
+    return result.ok;
+}
+function [#|f|](): Promise<boolean> {
+    return fetch('https://typescriptlang.org').then(res);
+}
+        `
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef1", `
+const res = 1;
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef2", `
+class Foo {
+    private foo = 1;
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef3", `
+const res = undefined;
+function [#|f|]() {
+    return fetch('https://typescriptlang.org').then(res);
+}
+`
+        );
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_NoSuggestionResRef4", `
+class Foo {
+    private foo = undefined;
+    public [#|method|](): Promise<boolean> {
+        return fetch('a').then(this.foo);
+    }
+}
+`
+        );
+
         _testConvertToAsyncFunction("convertToAsyncFunction_ResRefNoReturnVal", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res);
@@ -618,6 +689,19 @@ function res(result){
 }
 `
         );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_ResRefNoReturnVal1", `
+class Foo {
+    public [#|method|](): Promise<void> {
+        return fetch('a').then(this.foo);
+    }
+
+    private foo(res) {
+        console.log(res);
+    }
+}
+        `);
+
         _testConvertToAsyncFunction("convertToAsyncFunction_NoBrackets", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => console.log(result));
@@ -1579,10 +1663,58 @@ function [#|f|]() {
 }
 `);
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch1", `
+function [#|f|]() {
+    return Promise.resolve().catch();
+}
+`);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_emptyCatch2", `
+function [#|f|]() {
+    return Promise.resolve(0).then(x => x).catch();
+}
+`);
+
         _testConvertToAsyncFunctionWithModule("convertToAsyncFunction_importedFunction", `
 import { fn } from "./module";
 function [#|f|]() {
     return Promise.resolve(0).then(fn);
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements1", `
+function f(x: number): Promise<void>;
+function f(): void;
+function [#|f|](x?: number): Promise<void> | void {
+    if (!x) return;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements2", `
+function f(x: number): Promise<void>;
+function f(): number;
+function [#|f|](x?: number): Promise<void> | number {
+    if (x) return x;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInGetters", `
+class Foo {
+    get [#|m|](): Promise<number> {
+        return Promise.resolve(1).then(n => n);
+    }
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionForGeneratorCallbacks", `
+function [#|foo|](p: Promise<string[]>) {
+    return p.then(function* (strings) {
+        for (const s of strings) {
+            yield s.toUpperCase();
+        }
+    });
 }
 `);
 

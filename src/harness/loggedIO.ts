@@ -93,10 +93,10 @@ namespace Playback {
 
     function memoize<T>(func: (s: string) => T): Memoized<T> {
         let lookup: { [s: string]: T } = {};
-        const run: Memoized<T> = <Memoized<T>>((s: string) => {
+        const run: Memoized<T> = ((s: string) => {
             if (lookup.hasOwnProperty(s)) return lookup[s];
             return lookup[s] = func(s);
-        });
+        }) as Memoized<T>;
         run.reset = () => {
             lookup = undefined!; // TODO: GH#18217
         };
@@ -209,7 +209,7 @@ namespace Playback {
     function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
     function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
         ts.forEach(Object.keys(underlying), prop => {
-            (<any>wrapper)[prop] = (<any>underlying)[prop];
+            (wrapper as any)[prop] = (underlying as any)[prop];
         });
 
         wrapper.startReplayFromString = logString => {
@@ -325,7 +325,7 @@ namespace Playback {
 
         wrapper.readDirectory = recordReplay(wrapper.readDirectory, underlying)(
             (path, extensions, exclude, include, depth) => {
-                const result = (<ts.System>underlying).readDirectory(path, extensions, exclude, include, depth);
+                const result = (underlying as ts.System).readDirectory(path, extensions, exclude, include, depth);
                 recordLog!.directoriesRead.push({ path, extensions, exclude, include, depth, result });
                 return result;
             },
@@ -364,7 +364,7 @@ namespace Playback {
     function recordReplay<T extends ts.AnyFunction>(original: T, underlying: any) {
         function createWrapper(record: T, replay: T): T {
             // eslint-disable-next-line only-arrow-functions
-            return <any>(function () {
+            return (function () {
                 if (replayLog !== undefined) {
                     return replay.apply(undefined, arguments);
                 }
@@ -374,14 +374,14 @@ namespace Playback {
                 else {
                     return original.apply(underlying, arguments);
                 }
-            });
+            } as any);
         }
         return createWrapper;
     }
 
     function callAndRecord<T, U>(underlyingResult: T, logArray: U[], logEntry: U): T {
         if (underlyingResult !== undefined) {
-            (<any>logEntry).result = underlyingResult;
+            (logEntry as any).result = underlyingResult;
         }
         logArray.push(logEntry);
         return underlyingResult;
@@ -389,7 +389,7 @@ namespace Playback {
 
     function findResultByFields<T>(logArray: { result?: T }[], expectedFields: {}, defaultValue?: T): T | undefined {
         const predicate = (entry: { result?: T }) => {
-            return Object.getOwnPropertyNames(expectedFields).every((name) => (<any>entry)[name] === (<any>expectedFields)[name]);
+            return Object.getOwnPropertyNames(expectedFields).every((name) => (entry as any)[name] === (expectedFields as any)[name]);
         };
         const results = logArray.filter(entry => predicate(entry));
         if (results.length === 0) {
@@ -425,7 +425,7 @@ namespace Playback {
     }
 
     export function wrapIO(underlying: Harness.IO): PlaybackIO {
-        const wrapper: PlaybackIO = <any>{};
+        const wrapper: PlaybackIO = {} as any;
         initWrapper(wrapper, underlying);
 
         wrapper.directoryName = notSupported;
@@ -442,7 +442,7 @@ namespace Playback {
     }
 
     export function wrapSystem(underlying: ts.System): PlaybackSystem {
-        const wrapper: PlaybackSystem = <any>{};
+        const wrapper: PlaybackSystem = {} as any;
         initWrapper(wrapper, underlying);
         return wrapper;
     }

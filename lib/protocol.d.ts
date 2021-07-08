@@ -20,6 +20,7 @@ declare namespace ts.server.protocol {
         DefinitionAndBoundSpan = "definitionAndBoundSpan",
         Implementation = "implementation",
         Exit = "exit",
+        FileReferences = "fileReferences",
         Format = "format",
         Formatonkey = "formatonkey",
         Geterr = "geterr",
@@ -65,9 +66,14 @@ declare namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        ToggleLineComment = "toggleLineComment",
+        ToggleMultilineComment = "toggleMultilineComment",
+        CommentSelection = "commentSelection",
+        UncommentSelection = "uncommentSelection",
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
-        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls"
+        ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
+        ProvideInlayHints = "provideInlayHints"
     }
     /**
      * A TypeScript Server message
@@ -156,6 +162,10 @@ declare namespace ts.server.protocol {
          * Time spent updating the program graph, in milliseconds.
          */
         updateGraphDurationMs?: number;
+        /**
+         * The time spent creating or updating the auto-import program, in milliseconds.
+         */
+        createAutoImportProviderProgramDurationMs?: number;
     }
     /**
      * Arguments for FileRequest messages.
@@ -397,6 +407,7 @@ declare namespace ts.server.protocol {
     }
     type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs & {
         triggerReason?: RefactorTriggerReason;
+        kind?: string;
     };
     type RefactorTriggerReason = "implicit" | "invoked";
     /**
@@ -444,6 +455,15 @@ declare namespace ts.server.protocol {
          * so this description should make sense by itself if the parent is inlineable=true
          */
         description: string;
+        /**
+         * A message to show to the user if the refactoring cannot be applied in
+         * the current context.
+         */
+        notApplicableReason?: string;
+        /**
+         * The hierarchical dotted name of the refactor action.
+         */
+        kind?: string;
     }
     interface GetEditsForRefactorRequest extends Request {
         command: CommandTypes.GetEditsForRefactor;
@@ -482,6 +502,7 @@ declare namespace ts.server.protocol {
     type OrganizeImportsScope = GetCombinedCodeFixScope;
     interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        skipDestructiveCodeActions?: boolean;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
@@ -585,6 +606,41 @@ declare namespace ts.server.protocol {
         body?: string[];
     }
     /**
+     * A request to get encoded semantic classifications for a span in the file
+     */
+    interface EncodedSemanticClassificationsRequest extends FileRequest {
+        arguments: EncodedSemanticClassificationsRequestArgs;
+    }
+    /**
+     * Arguments for EncodedSemanticClassificationsRequest request.
+     */
+    interface EncodedSemanticClassificationsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+        /**
+         * Optional parameter for the semantic highlighting response, if absent it
+         * defaults to "original".
+         */
+        format?: "original" | "2020";
+    }
+    /** The response for a EncodedSemanticClassificationsRequest */
+    interface EncodedSemanticClassificationsResponse extends Response {
+        body?: EncodedSemanticClassificationsResponseBody;
+    }
+    /**
+     * Implementation response message. Gives series of text spans depending on the format ar.
+     */
+    interface EncodedSemanticClassificationsResponseBody {
+        endOfLineState: EndOfLineState;
+        spans: number[];
+    }
+    /**
      * Arguments in document highlight request; include: filesToSearch, file,
      * line, offset.
      */
@@ -653,21 +709,36 @@ declare namespace ts.server.protocol {
          */
         file: string;
     }
+    interface JSDocTagInfo {
+        /** Name of the JSDoc tag */
+        name: string;
+        /**
+         * Comment text after the JSDoc tag -- the text after the tag name until the next tag or end of comment
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
+         */
+        text?: string | SymbolDisplayPart[];
+    }
     interface TextSpanWithContext extends TextSpan {
         contextStart?: Location;
         contextEnd?: Location;
     }
     interface FileSpanWithContext extends FileSpan, TextSpanWithContext {
     }
+    interface DefinitionInfo extends FileSpanWithContext {
+        /**
+         * When true, the file may or may not exist.
+         */
+        unverified?: boolean;
+    }
     interface DefinitionInfoAndBoundSpan {
-        definitions: readonly FileSpanWithContext[];
+        definitions: readonly DefinitionInfo[];
         textSpan: TextSpan;
     }
     /**
      * Definition response message.  Gives text range for definition.
      */
     interface DefinitionResponse extends Response {
-        body?: FileSpanWithContext[];
+        body?: DefinitionInfo[];
     }
     interface DefinitionInfoAndBoundSpanResponse extends Response {
         body?: DefinitionInfoAndBoundSpan;
@@ -819,6 +890,22 @@ declare namespace ts.server.protocol {
      */
     interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
+    }
+    interface FileReferencesRequest extends FileRequest {
+        command: CommandTypes.FileReferences;
+    }
+    interface FileReferencesResponseBody {
+        /**
+         * The file locations referencing the symbol.
+         */
+        refs: readonly ReferencesResponseItem[];
+        /**
+         * The name of the symbol.
+         */
+        symbolName: string;
+    }
+    interface FileReferencesResponse extends Response {
+        body?: FileReferencesResponseBody;
     }
     /**
      * Argument for RenameRequest request.
@@ -1035,24 +1122,29 @@ declare namespace ts.server.protocol {
         FixedPollingInterval = "FixedPollingInterval",
         PriorityPollingInterval = "PriorityPollingInterval",
         DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling",
         UseFsEvents = "UseFsEvents",
         UseFsEventsOnParentDirectory = "UseFsEventsOnParentDirectory"
     }
     const enum WatchDirectoryKind {
         UseFsEvents = "UseFsEvents",
         FixedPollingInterval = "FixedPollingInterval",
-        DynamicPriorityPolling = "DynamicPriorityPolling"
+        DynamicPriorityPolling = "DynamicPriorityPolling",
+        FixedChunkSizePolling = "FixedChunkSizePolling"
     }
     const enum PollingWatchKind {
         FixedInterval = "FixedInterval",
         PriorityInterval = "PriorityInterval",
-        DynamicPriority = "DynamicPriority"
+        DynamicPriority = "DynamicPriority",
+        FixedChunkSize = "FixedChunkSize"
     }
     interface WatchOptions {
         watchFile?: WatchFileKind | ts.WatchFileKind;
         watchDirectory?: WatchDirectoryKind | ts.WatchDirectoryKind;
         fallbackPolling?: PollingWatchKind | ts.PollingWatchKind;
         synchronousWatchDirectory?: boolean;
+        excludeDirectories?: string[];
+        excludeFiles?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
     /**
@@ -1092,6 +1184,22 @@ declare namespace ts.server.protocol {
     interface SelectionRange {
         textSpan: TextSpan;
         parent?: SelectionRange;
+    }
+    interface ToggleLineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleLineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface ToggleMultilineCommentRequest extends FileRequest {
+        command: CommandTypes.ToggleMultilineComment;
+        arguments: FileRangeRequestArgs;
+    }
+    interface CommentSelectionRequest extends FileRequest {
+        command: CommandTypes.CommentSelection;
+        arguments: FileRangeRequestArgs;
+    }
+    interface UncommentSelectionRequest extends FileRequest {
+        command: CommandTypes.UncommentSelection;
+        arguments: FileRangeRequestArgs;
     }
     /**
      *  Information found in an "open" request.
@@ -1212,6 +1320,10 @@ declare namespace ts.server.protocol {
         closedFiles?: string[];
     }
     /**
+     * External projects have a typeAcquisition option so they need to be added separately to compiler options for inferred projects.
+     */
+    type InferredProjectCompilerOptions = ExternalProjectCompilerOptions & TypeAcquisition;
+    /**
      * Request to set compiler options for inferred projects.
      * External projects are opened / closed explicitly.
      * Configured projects are opened when user opens loose file that has 'tsconfig.json' or 'jsconfig.json' anywhere in one of containing folders.
@@ -1231,7 +1343,7 @@ declare namespace ts.server.protocol {
         /**
          * Compiler options to be used with inferred projects.
          */
-        options: ExternalProjectCompilerOptions;
+        options: InferredProjectCompilerOptions;
         /**
          * Specifies the project root path used to scope compiler options.
          * It is an error to provide this property if the server has not been started with
@@ -1326,6 +1438,7 @@ declare namespace ts.server.protocol {
      */
     interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
+        arguments: FileLocationRequestArgs;
     }
     /**
      * Body of QuickInfoResponse.
@@ -1353,8 +1466,9 @@ declare namespace ts.server.protocol {
         displayString: string;
         /**
          * Documentation associated with symbol.
+         * Display parts when UserPreferences.displayPartsForJSDoc is true, flattened to string otherwise.
          */
-        documentation: string;
+        documentation: string | SymbolDisplayPart[];
         /**
          * JSDoc tags associated with symbol.
          */
@@ -1475,7 +1589,15 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
-    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#";
+    type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+    const enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3
+    }
     /**
      * Arguments for completions messages.
      */
@@ -1489,6 +1611,7 @@ declare namespace ts.server.protocol {
          * Should be `undefined` if a user manually requested completion.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /**
          * @deprecated Use UserPreferences.includeCompletionsForModuleExports
          */
@@ -1520,6 +1643,7 @@ declare namespace ts.server.protocol {
     interface CompletionEntryIdentifier {
         name: string;
         source?: string;
+        data?: unknown;
     }
     /**
      * Completion entry details request; value of command field is
@@ -1543,6 +1667,11 @@ declare namespace ts.server.protocol {
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
         kind: string;
+    }
+    /** A part of a symbol description that links from a jsdoc @link tag to a declaration */
+    interface JSDocLinkDisplayPart extends SymbolDisplayPart {
+        /** The location of the declaration that the @link tag links to. */
+        target: FileSpan;
     }
     /**
      * An item found in a completion response.
@@ -1572,6 +1701,10 @@ declare namespace ts.server.protocol {
          */
         insertText?: string;
         /**
+         * `insertText` should be interpreted as a snippet if true.
+         */
+        isSnippet?: true;
+        /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
          * It will be set if the required span differs from the one generated by the default replacement behavior.
@@ -1587,6 +1720,10 @@ declare namespace ts.server.protocol {
          */
         source?: string;
         /**
+         * Human-readable description of the `source`.
+         */
+        sourceDisplay?: SymbolDisplayPart[];
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -1597,6 +1734,22 @@ declare namespace ts.server.protocol {
          * and therefore may not be accurate.
          */
         isFromUncheckedFile?: true;
+        /**
+         * If true, this completion was for an auto-import of a module not yet in the program, but listed
+         * in the project package.json. Used for telemetry reporting.
+         */
+        isPackageJsonImport?: true;
+        /**
+         * If true, this completion was an auto-import-style completion of an import statement (i.e., the
+         * module specifier was inserted along with the imported identifier). Used for telemetry reporting.
+         */
+        isImportStatementCompletion?: true;
+        /**
+         * A property to be sent back to TS Server in the CompletionDetailsRequest, along with `name`,
+         * that allows TS Server to look up the symbol represented by the completion item, disambiguating
+         * items with the same name.
+         */
+        data?: unknown;
     }
     /**
      * Additional completion entry details, available on demand
@@ -1631,9 +1784,13 @@ declare namespace ts.server.protocol {
          */
         codeActions?: CodeAction[];
         /**
-         * Human-readable description of the `source` from the CompletionEntry.
+         * @deprecated Use `sourceDisplay` instead.
          */
         source?: SymbolDisplayPart[];
+        /**
+         * Human-readable description of the `source` from the CompletionEntry.
+         */
+        sourceDisplay?: SymbolDisplayPart[];
     }
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
     interface CompletionsResponse extends Response {
@@ -1646,6 +1803,13 @@ declare namespace ts.server.protocol {
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
+        /**
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
+         * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
+         * must be used to commit that completion entry.
+         */
+        readonly optionalReplacementSpan?: TextSpan;
+        readonly isIncomplete?: boolean;
         readonly entries: readonly CompletionEntry[];
     }
     interface CompletionDetailsResponse extends Response {
@@ -1789,6 +1953,35 @@ declare namespace ts.server.protocol {
      */
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
+    }
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
+    }
+    interface InlayHintsRequestArgs extends FileRequestArgs {
+        /**
+         * Start position of the span.
+         */
+        start: number;
+        /**
+         * Length of the span.
+         */
+        length: number;
+    }
+    interface InlayHintsRequest extends Request {
+        command: CommandTypes.ProvideInlayHints;
+        arguments: InlayHintsRequestArgs;
+    }
+    interface InlayHintItem {
+        text: string;
+        position: Location;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+    interface InlayHintsResponse extends Response {
+        body?: InlayHintItem[];
     }
     /**
      * Synchronous request for semantic diagnostics of one file.
@@ -2407,6 +2600,7 @@ declare namespace ts.server.protocol {
         insertSpaceAfterConstructor?: boolean;
         insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
         insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
@@ -2428,6 +2622,15 @@ declare namespace ts.server.protocol {
          */
         readonly includeCompletionsForModuleExports?: boolean;
         /**
+         * Enables auto-import-style completions on partially-typed import statements. E.g., allows
+         * `import write|` to be completed to `import { writeFile } from "fs"`.
+         */
+        readonly includeCompletionsForImportStatements?: boolean;
+        /**
+         * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
+         */
+        readonly includeCompletionsWithSnippetText?: boolean;
+        /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
          */
@@ -2438,13 +2641,18 @@ declare namespace ts.server.protocol {
          * values, with insertion text to replace preceding `.` tokens with `?.`.
          */
         readonly includeAutomaticOptionalChainCompletions?: boolean;
-        readonly importModuleSpecifierPreference?: "auto" | "relative" | "non-relative";
+        readonly allowIncompleteCompletions?: boolean;
+        readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
+        readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
+        readonly displayPartsForJSDoc?: boolean;
+        readonly generateReturnInDocTemplate?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -2552,7 +2760,35 @@ declare namespace ts.server.protocol {
         ES2018 = "ES2018",
         ES2019 = "ES2019",
         ES2020 = "ES2020",
+        ES2021 = "ES2021",
         ESNext = "ESNext"
+    }
+    const enum ClassificationType {
+        comment = 1,
+        identifier = 2,
+        keyword = 3,
+        numericLiteral = 4,
+        operator = 5,
+        stringLiteral = 6,
+        regularExpressionLiteral = 7,
+        whiteSpace = 8,
+        text = 9,
+        punctuation = 10,
+        className = 11,
+        enumName = 12,
+        interfaceName = 13,
+        moduleName = 14,
+        typeParameterName = 15,
+        typeAliasName = 16,
+        parameterName = 17,
+        docCommentTagName = 18,
+        jsxOpenTagName = 19,
+        jsxCloseTagName = 20,
+        jsxSelfClosingTagName = 21,
+        jsxAttribute = 22,
+        jsxText = 23,
+        jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25
     }
 }
 declare namespace ts.server.protocol {
@@ -2636,7 +2872,10 @@ declare namespace ts.server.protocol {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
-        /** class X { constructor() { } } */
+        /**
+         * class X { constructor() { } }
+         * class X { static { } }
+         */
         constructorImplementationElement = "constructor",
         /** interface Y { ():number; } */
         callSignatureElement = "call",
@@ -2659,7 +2898,13 @@ declare namespace ts.server.protocol {
          */
         jsxAttribute = "JSX attribute",
         /** String literal */
-        string = "string"
+        string = "string",
+        /** Jsdoc @link: in `{@link C link text}`, the before and after text "{@link " and "}" */
+        link = "link",
+        /** Jsdoc @link: in `{@link C link text}`, the entity name "C" */
+        linkName = "link name",
+        /** Jsdoc @link: in `{@link C link text}`, the link text "link text" */
+        linkText = "link text"
     }
 
     export interface TypeAcquisition {
@@ -2671,20 +2916,16 @@ declare namespace ts.server.protocol {
         enable?: boolean;
         include?: string[];
         exclude?: string[];
-        [option: string]: string[] | boolean | undefined;
+        disableFilenameBasedTypeAcquisition?: boolean;
+        [option: string]: CompilerOptionsValue | undefined;
     }
+
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
 
     export interface FileExtensionInfo {
         extension: string;
         isMixedContent: boolean;
         scriptKind?: ScriptKind;
-    }
-
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
-
-    interface JSDocTagInfo {
-        name: string;
-        text?: string;
     }
 
     /**
@@ -2713,6 +2954,7 @@ declare namespace ts.server.protocol {
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
+    export type EndOfLineState = never;
     export type ScriptKind = never;
     export type WatchFileKind = never;
     export type WatchDirectoryKind = never;

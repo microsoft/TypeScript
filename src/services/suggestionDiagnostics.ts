@@ -57,7 +57,7 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
+            if (canBeConvertedToAsync(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
@@ -114,14 +114,13 @@ namespace ts {
         return !isAsyncFunction(node) &&
             node.body &&
             isBlock(node.body) &&
-            hasReturnStatementWithPromiseHandler(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body, checker) &&
             returnsPromise(node, checker);
     }
 
-    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
-        const functionType = checker.getTypeAtLocation(node);
-        const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
-        const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
+    export function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        const signature = checker.getSignatureFromDeclaration(node);
+        const returnType = signature ? checker.getReturnTypeOfSignature(signature) : undefined;
         return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 
@@ -129,25 +128,25 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function hasReturnStatementWithPromiseHandler(body: Block): boolean {
-        return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
+    function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker): boolean {
+        return !!forEachReturnStatement(body, statement => isReturnStatementWithFixablePromiseHandler(statement, checker));
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement & { expression: CallExpression } {
-        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
+    export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement & { expression: CallExpression } {
+        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
     }
 
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
-    export function isFixablePromiseHandler(node: Node): boolean {
+    export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
+        if (!isPromiseHandler(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
             return false;
         }
 
         // ensure all chained calls are valid
         let currentNode = node.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
+            if (isCallExpression(currentNode) && !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
                 return false;
             }
             currentNode = currentNode.expression;
@@ -171,16 +170,29 @@ namespace ts {
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
-    function isFixablePromiseArgument(arg: Expression): boolean {
+    function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolean {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through
             case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier: // identifier includes undefined
                 return true;
+            case SyntaxKind.Identifier:
+            case SyntaxKind.PropertyAccessExpression: {
+                const symbol = checker.getSymbolAtLocation(arg);
+                if (!symbol) {
+                    return false;
+                }
+                return checker.isUndefinedSymbol(symbol) ||
+                    some(skipAlias(symbol, checker).declarations, d => isFunctionLike(d) || hasInitializer(d) && !!d.initializer && isFunctionLike(d.initializer));
+            }
             default:
                 return false;
         }
@@ -205,5 +217,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

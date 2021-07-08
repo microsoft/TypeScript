@@ -1,5 +1,6 @@
 /*@internal*/
 namespace ts {
+
     export function transformModule(context: TransformationContext) {
         interface AsynchronousDependencies {
             aliasedModuleNames: Expression[];
@@ -32,6 +33,8 @@ namespace ts {
         const previousOnEmitNode = context.onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
         context.onEmitNode = onEmitNode;
+        context.enableSubstitution(SyntaxKind.CallExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
+        context.enableSubstitution(SyntaxKind.TaggedTemplateExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
@@ -507,31 +510,31 @@ namespace ts {
         function sourceElementVisitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
-                    return visitImportDeclaration(<ImportDeclaration>node);
+                    return visitImportDeclaration(node as ImportDeclaration);
 
                 case SyntaxKind.ImportEqualsDeclaration:
-                    return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
 
                 case SyntaxKind.ExportDeclaration:
-                    return visitExportDeclaration(<ExportDeclaration>node);
+                    return visitExportDeclaration(node as ExportDeclaration);
 
                 case SyntaxKind.ExportAssignment:
-                    return visitExportAssignment(<ExportAssignment>node);
+                    return visitExportAssignment(node as ExportAssignment);
 
                 case SyntaxKind.VariableStatement:
-                    return visitVariableStatement(<VariableStatement>node);
+                    return visitVariableStatement(node as VariableStatement);
 
                 case SyntaxKind.FunctionDeclaration:
-                    return visitFunctionDeclaration(<FunctionDeclaration>node);
+                    return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.ClassDeclaration:
-                    return visitClassDeclaration(<ClassDeclaration>node);
+                    return visitClassDeclaration(node as ClassDeclaration);
 
                 case SyntaxKind.MergeDeclarationMarker:
-                    return visitMergeDeclarationMarker(<MergeDeclarationMarker>node);
+                    return visitMergeDeclarationMarker(node as MergeDeclarationMarker);
 
                 case SyntaxKind.EndOfDeclarationMarker:
-                    return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
+                    return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
 
                 default:
                     return visitEachChild(node, moduleExpressionElementVisitor, context);
@@ -609,7 +612,10 @@ namespace ts {
         }
 
         function visitImportCallExpression(node: ImportCall): Expression {
-            const argument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+            const firstArgument = visitNode(firstOrUndefined(node.arguments), moduleExpressionElementVisitor);
+            // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
+            const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
             const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
             switch (compilerOptions.module) {
                 case ModuleKind.AMD:
@@ -1339,7 +1345,7 @@ namespace ts {
             // statement.
             if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
                 const id = getOriginalNodeId(node);
-                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], <VariableStatement>node.original);
+                deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement);
             }
 
             return node;
@@ -1666,7 +1672,7 @@ namespace ts {
          */
         function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
             if (node.kind === SyntaxKind.SourceFile) {
-                currentSourceFile = <SourceFile>node;
+                currentSourceFile = node as SourceFile;
                 currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
                 noSubstitution = [];
 
@@ -1698,7 +1704,7 @@ namespace ts {
             }
 
             if (hint === EmitHint.Expression) {
-                return substituteExpression(<Expression>node);
+                return substituteExpression(node as Expression);
             }
             else if (isShorthandPropertyAssignment(node)) {
                 return substituteShorthandPropertyAssignment(node);
@@ -1736,14 +1742,55 @@ namespace ts {
         function substituteExpression(node: Expression) {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return substituteExpressionIdentifier(<Identifier>node);
+                    return substituteExpressionIdentifier(node as Identifier);
+                case SyntaxKind.CallExpression:
+                    return substituteCallExpression(node as CallExpression);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return substituteTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.BinaryExpression:
-                    return substituteBinaryExpression(<BinaryExpression>node);
+                    return substituteBinaryExpression(node as BinaryExpression);
                 case SyntaxKind.PostfixUnaryExpression:
                 case SyntaxKind.PrefixUnaryExpression:
-                    return substituteUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
+                    return substituteUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression);
             }
 
+            return node;
+        }
+
+        function substituteCallExpression(node: CallExpression) {
+            if (isIdentifier(node.expression)) {
+                const expression = substituteExpressionIdentifier(node.expression);
+                noSubstitution[getNodeId(expression)] = true;
+                if (!isIdentifier(expression)) {
+                    return addEmitFlags(
+                        factory.updateCallExpression(node,
+                            expression,
+                            /*typeArguments*/ undefined,
+                            node.arguments
+                        ),
+                        EmitFlags.IndirectCall
+                    );
+
+                }
+            }
+            return node;
+        }
+
+        function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (isIdentifier(node.tag)) {
+                const tag = substituteExpressionIdentifier(node.tag);
+                noSubstitution[getNodeId(tag)] = true;
+                if (!isIdentifier(tag)) {
+                    return addEmitFlags(
+                        factory.updateTaggedTemplateExpression(node,
+                            tag,
+                            /*typeArguments*/ undefined,
+                            node.template
+                        ),
+                        EmitFlags.IndirectCall
+                    );
+                }
+            }
             return node;
         }
 
@@ -1759,11 +1806,9 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
                 }
-
                 return node;
             }
-
-            if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
+            else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
                 const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
                 if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
                     return setTextRange(
@@ -1774,7 +1819,6 @@ namespace ts {
                         /*location*/ node
                     );
                 }
-
                 const importDeclaration = resolver.getReferencedImportDeclaration(node);
                 if (importDeclaration) {
                     if (isImportClause(importDeclaration)) {
@@ -1790,7 +1834,7 @@ namespace ts {
                         const name = importDeclaration.propertyName || importDeclaration.name;
                         return setTextRange(
                             factory.createPropertyAccessExpression(
-                                factory.getGeneratedNameForNode(importDeclaration.parent.parent.parent),
+                                factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                                 factory.cloneNode(name)
                             ),
                             /*location*/ node
@@ -1861,10 +1905,9 @@ namespace ts {
                 if (exportedNames) {
                     let expression: Expression = node.kind === SyntaxKind.PostfixUnaryExpression
                         ? setTextRange(
-                            factory.createBinaryExpression(
-                                node.operand,
-                                factory.createToken(node.operator === SyntaxKind.PlusPlusToken ? SyntaxKind.PlusEqualsToken : SyntaxKind.MinusEqualsToken),
-                                factory.createNumericLiteral(1)
+                            factory.createPrefixUnaryExpression(
+                                node.operator,
+                                node.operand
                             ),
                             /*location*/ node)
                         : node;
@@ -1873,7 +1916,12 @@ namespace ts {
                         noSubstitution[getNodeId(expression)] = true;
                         expression = createExportExpression(exportName, expression);
                     }
-
+                    if (node.kind === SyntaxKind.PostfixUnaryExpression) {
+                        noSubstitution[getNodeId(expression)] = true;
+                        expression = node.operator === SyntaxKind.PlusPlusToken
+                            ? factory.createSubtract(expression, factory.createNumericLiteral(1))
+                            : factory.createAdd(expression, factory.createNumericLiteral(1));
+                    }
                     return expression;
                 }
             }

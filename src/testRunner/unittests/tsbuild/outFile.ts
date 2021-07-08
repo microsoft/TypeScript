@@ -465,7 +465,7 @@ namespace ts {
                 }
 
                 function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
-                    const internal = jsDocStyle ? `/**@internal*/` : `/*@internal*/`;
+                    const internal: string = jsDocStyle ? `/**@internal*/` : `/*@internal*/`;
                     if (removeCommentsDisabled) {
                         diableRemoveCommentsInAll(fs);
                     }
@@ -666,8 +666,7 @@ ${internal} enum internalEnum { a, b, c }`);
                                 declarationMap: true,
                                 skipDefaultLibCheck: true,
                                 sourceMap: true,
-                                outFile: "./bin/first-output.js",
-                                bundledPackageName: "first"
+                                outFile: "./bin/first-output.js"
                             },
                             files: [sources[Project.first][Source.ts][Part.one]]
                         }));
@@ -679,7 +678,6 @@ ${internal} enum internalEnum { a, b, c }`);
                                 stripInternal: true,
                                 sourceMap: true,
                                 outFile: "./thirdjs/output/third-output.js",
-                                bundledPackageName: "third"
                             },
                             references: [{ path: "../first", prepend: true }],
                             files: [sources[Project.third][Source.ts][Part.one]]

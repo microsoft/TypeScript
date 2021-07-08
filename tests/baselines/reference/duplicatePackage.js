@@ -48,5 +48,5 @@ exports.__esModule = true;
 var a_1 = require("a");
 var b_1 = require("b");
 var c_1 = require("c");
-a_1.a(b_1.b); // Works
-a_1.a(c_1.c); // Error, these are from different versions of the library.
+(0, a_1.a)(b_1.b); // Works
+(0, a_1.a)(c_1.c); // Error, these are from different versions of the library.

@@ -46,6 +46,10 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/lib/app.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -102,6 +106,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts (used version)
+/user/username/projects/myproject/lib/app.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

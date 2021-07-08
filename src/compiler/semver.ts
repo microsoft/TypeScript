@@ -204,7 +204,7 @@ namespace ts {
     // range-set    ::= range ( logical-or range ) *
     // range        ::= hyphen | simple ( ' ' simple ) * | ''
     // logical-or   ::= ( ' ' ) * '||' ( ' ' ) *
-    const logicalOrRegExp = /\s*\|\|\s*/g;
+    const logicalOrRegExp = /\|\|/g;
     const whitespaceRegExp = /\s+/g;
 
     // https://github.com/npm/node-semver#range-grammar
@@ -230,20 +230,21 @@ namespace ts {
     // primitive    ::= ( '<' | '>' | '>=' | '<=' | '=' ) partial
     // tilde        ::= '~' partial
     // caret        ::= '^' partial
-    const rangeRegExp = /^\s*(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
+    const rangeRegExp = /^(~|\^|<|<=|>|>=|=)?\s*([a-z0-9-+.*]+)$/i;
 
     function parseRange(text: string) {
         const alternatives: Comparator[][] = [];
-        for (const range of text.trim().split(logicalOrRegExp)) {
+        for (let range of trimString(text).split(logicalOrRegExp)) {
             if (!range) continue;
             const comparators: Comparator[] = [];
+            range = trimString(range);
             const match = hyphenRegExp.exec(range);
             if (match) {
                 if (!parseHyphen(match[1], match[2], comparators)) return undefined;
             }
             else {
                 for (const simple of range.split(whitespaceRegExp)) {
-                    const match = rangeRegExp.exec(simple);
+                    const match = rangeRegExp.exec(trimString(simple));
                     if (!match || !parseComparator(match[1], match[2], comparators)) return undefined;
                 }
             }

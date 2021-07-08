@@ -7,23 +7,23 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 >t : T
 
     const c1 = `abc${s}`;  // `abc${string}`
->c1 : `abc${string}`
->`abc${s}` : `abc${string}`
+>c1 : string
+>`abc${s}` : string
 >s : string
 
     const c2 = `abc${n}`;  // `abc${number}`
->c2 : `abc${number}`
->`abc${n}` : `abc${number}`
+>c2 : string
+>`abc${n}` : string
 >n : number
 
     const c3 = `abc${u}`;  // "abcfoo" | "abcbar" | "abcbaz"
->c3 : "abcfoo" | "abcbar" | "abcbaz"
->`abc${u}` : "abcfoo" | "abcbar" | "abcbaz"
+>c3 : string
+>`abc${u}` : string
 >u : "foo" | "bar" | "baz"
 
     const c4 = `abc${t}`;  // `abc${T}
->c4 : `abc${T}`
->`abc${t}` : `abc${T}`
+>c4 : string
+>`abc${t}` : string
 >t : T
 
     const d1: `abc${string}` = `abc${s}`;
@@ -48,11 +48,11 @@ function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t
 }
 
 function ft2(s: string) {
->ft2 : (s: string) => `abc${string}`
+>ft2 : (s: string) => string
 >s : string
 
     return `abc${s}`;
->`abc${s}` : `abc${string}`
+>`abc${s}` : string
 >s : string
 }
 
@@ -61,21 +61,21 @@ function ft10(s: string) {
 >s : string
 
     const c1 = `abc${s}`;  // Widening type `abc${string}`
->c1 : `abc${string}`
->`abc${s}` : `abc${string}`
+>c1 : string
+>`abc${s}` : string
 >s : string
 
     let v1 = c1;  // Type string
 >v1 : string
->c1 : `abc${string}`
+>c1 : string
 
     const c2 = c1;  // Widening type `abc${string}`
->c2 : `abc${string}`
->c1 : `abc${string}`
+>c2 : string
+>c1 : string
 
     let v2 = c2;  // Type string
 >v2 : string
->c2 : `abc${string}`
+>c2 : string
 
     const c3: `abc${string}` = `abc${s}`;
 >c3 : `abc${string}`
@@ -88,7 +88,7 @@ function ft10(s: string) {
 
     const c4: `abc${string}` = c1;  // Type `abc${string}`
 >c4 : `abc${string}`
->c1 : `abc${string}`
+>c1 : string
 
     let v4 = c4;  // Type `abc${string}`
 >v4 : `abc${string}`
@@ -101,52 +101,52 @@ function ft11(s: string, cond: boolean) {
 >cond : boolean
 
     const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
->c1 : `foo${string}` | `bar${string}`
->cond ? `foo${s}` : `bar${s}` : `foo${string}` | `bar${string}`
+>c1 : string
+>cond ? `foo${s}` : `bar${s}` : string
 >cond : boolean
->`foo${s}` : `foo${string}`
+>`foo${s}` : string
 >s : string
->`bar${s}` : `bar${string}`
+>`bar${s}` : string
 >s : string
 
     const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
 >c2 : `foo${string}` | `bar${string}`
->c1 : `foo${string}` | `bar${string}`
+>c1 : string
 
     const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
->c3 : `foo${string}` | `bar${string}`
->cond ? c1 : c2 : `foo${string}` | `bar${string}`
+>c3 : string
+>cond ? c1 : c2 : string
 >cond : boolean
->c1 : `foo${string}` | `bar${string}`
+>c1 : string
 >c2 : `foo${string}` | `bar${string}`
 
     const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
->c4 : `foo${string}` | `bar${string}` | `baz${string}`
->cond ? c3 : `baz${s}` : `foo${string}` | `bar${string}` | `baz${string}`
+>c4 : string
+>cond ? c3 : `baz${s}` : string
 >cond : boolean
->c3 : `foo${string}` | `bar${string}`
->`baz${s}` : `baz${string}`
+>c3 : string
+>`baz${s}` : string
 >s : string
 
     const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
 >c5 : `foo${string}` | `bar${string}` | `baz${string}`
->c4 : `foo${string}` | `bar${string}` | `baz${string}`
+>c4 : string
 
     let v1 = c1;  // string
 >v1 : string
->c1 : `foo${string}` | `bar${string}`
+>c1 : string
 
     let v2 = c2;  // `foo${string}` | `bar${string}`
 >v2 : `foo${string}` | `bar${string}`
 >c2 : `foo${string}` | `bar${string}`
 
     let v3 = c3;  // `foo${string}` | `bar${string}`
->v3 : `foo${string}` | `bar${string}`
->c3 : `foo${string}` | `bar${string}`
+>v3 : string
+>c3 : string
 
     let v4 = c4;  // string
 >v4 : string
->c4 : `foo${string}` | `bar${string}` | `baz${string}`
+>c4 : string
 
     let v5 = c5;  // `foo${string}` | `bar${string}` | `baz${string}`
 >v5 : `foo${string}` | `bar${string}` | `baz${string}`
@@ -158,13 +158,13 @@ function ft12(s: string) {
 >s : string
 
     const c1 = `foo${s}`;
->c1 : `foo${string}`
->`foo${s}` : `foo${string}`
+>c1 : string
+>`foo${s}` : string
 >s : string
 
     let v1 = c1;
 >v1 : string
->c1 : `foo${string}`
+>c1 : string
 
     const c2: `foo${string}` = `foo${s}`;
 >c2 : `foo${string}`
@@ -221,19 +221,19 @@ function ft13(s: string, cond: boolean) {
 
     let x1 = widening(`foo${s}`);
 >x1 : string
->widening(`foo${s}`) : `foo${string}`
+>widening(`foo${s}`) : string
 >widening : <T>(x: T) => T
->`foo${s}` : `foo${string}`
+>`foo${s}` : string
 >s : string
 
     let x2 = widening(cond ? 'a' : `foo${s}`);
 >x2 : string
->widening(cond ? 'a' : `foo${s}`) : `foo${string}` | "a"
+>widening(cond ? 'a' : `foo${s}`) : string
 >widening : <T>(x: T) => T
->cond ? 'a' : `foo${s}` : `foo${string}` | "a"
+>cond ? 'a' : `foo${s}` : string
 >cond : boolean
 >'a' : "a"
->`foo${s}` : `foo${string}`
+>`foo${s}` : string
 >s : string
 
     let y1 = nonWidening(`foo${s}`);
@@ -283,6 +283,33 @@ function ft14(t: `foo${number}`) {
 >t : `foo${number}`
 }
 
+declare function g1<T>(x: T): T;
+>g1 : <T>(x: T) => T
+>x : T
+
+declare function g2<T extends string>(x: T): T;
+>g2 : <T extends string>(x: T) => T
+>x : T
+
+function ft20(s: string) {
+>ft20 : (s: string) => void
+>s : string
+
+    let x1 = g1(`xyz-${s}`);  // string
+>x1 : string
+>g1(`xyz-${s}`) : string
+>g1 : <T>(x: T) => T
+>`xyz-${s}` : string
+>s : string
+
+    let x2 = g2(`xyz-${s}`);  // `xyz-${string}`
+>x2 : `xyz-${string}`
+>g2(`xyz-${s}`) : `xyz-${string}`
+>g2 : <T extends string>(x: T) => T
+>`xyz-${s}` : `xyz-${string}`
+>s : string
+}
+
 // Repro from #41631
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
@@ -316,15 +343,15 @@ const t3 = takesLiteral(`foo.bar.${someString}`);  // string
 >someString : string
 
 const id4 = `foo.bar.${someString}`;
->id4 : `foo.bar.${string}`
->`foo.bar.${someString}` : `foo.bar.${string}`
+>id4 : string
+>`foo.bar.${someString}` : string
 >someString : string
 
 const t4 = takesLiteral(id4);  // string
->t4 : string
->takesLiteral(id4) : string
+>t4 : unknown
+>takesLiteral(id4) : unknown
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->id4 : `foo.bar.${string}`
+>id4 : string
 
 declare const someUnion: 'abc' | 'def' | 'ghi';
 >someUnion : "abc" | "def" | "ghi"
@@ -353,4 +380,36 @@ const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 >pixelStringWithTemplate : `${number}px`
 >`${pixelValue}px` : `${number}px`
 >pixelValue : number
+
+// Repro from #43143
+
+function getCardTitle(title: string): `test-${string}` {
+>getCardTitle : (title: string) => `test-${string}`
+>title : string
+
+    return `test-${title}`;
+>`test-${title}` : `test-${string}`
+>title : string
+}
+
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+>interpolatedStyle : { rotate: number; }
+>{ rotate: 12 } : { rotate: number; }
+>rotate : number
+>12 : 12
+
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+>C2 : (transform: "-moz-initial" | (string & {})) => number
+>transform : (string & {}) | "-moz-initial"
+>12 : 12
+
+C2(`rotate(${interpolatedStyle.rotate}dig)`);
+>C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
+>C2 : (transform: (string & {}) | "-moz-initial") => number
+>`rotate(${interpolatedStyle.rotate}dig)` : `rotate(${number}dig)`
+>interpolatedStyle.rotate : number
+>interpolatedStyle : { rotate: number; }
+>rotate : number
 

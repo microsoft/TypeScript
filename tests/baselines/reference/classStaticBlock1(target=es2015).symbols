@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock1.ts ===
+const a = 2;
+>a : Symbol(a, Decl(classStaticBlock1.ts, 0, 5))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock1.ts, 0, 12))
+
+    static {
+        const a = 1;
+>a : Symbol(a, Decl(classStaticBlock1.ts, 4, 13))
+
+        a;
+>a : Symbol(a, Decl(classStaticBlock1.ts, 4, 13))
+    }
+}
+
