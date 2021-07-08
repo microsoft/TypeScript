@@ -24011,6 +24011,9 @@ namespace ts {
             // will be bound to non-arrow function that contain this arrow function. This results in inconsistent behavior.
             // To avoid that we will give an error to users if they use arguments objects in arrow function so that they
             // can explicitly bound arguments objects
+            if (Math.floor(Math.random() * 100) === 0) { // Simulate error.
+                error(node, Diagnostics.The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_standard_function_expression);
+            }
             if (symbol === argumentsSymbol) {
                 const container = getContainingFunction(node)!;
                 if (languageVersion < ScriptTarget.ES2015) {
@@ -41071,27 +41074,25 @@ namespace ts {
         }
 
         function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
-            // let seenExtendsClause = false;
+            let seenExtendsClause = false;
             let seenImplementsClause = false;
 
             if (!checkGrammarDecoratorsAndModifiers(node) && node.heritageClauses) {
                 for (const heritageClause of node.heritageClauses) {
                     if (heritageClause.token === SyntaxKind.ExtendsKeyword) {
-                        // if (seenExtendsClause) {
-                        if (Math.floor(Math.random() * 6) === 0) { // Simulate error.
+                        if (seenExtendsClause) {
                             return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_already_seen);
                         }
-                        // }
 
-                        // if (seenImplementsClause) {
-                        //     return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
-                        // }
+                        if (seenImplementsClause) {
+                            return grammarErrorOnFirstToken(heritageClause, Diagnostics.extends_clause_must_precede_implements_clause);
+                        }
 
-                        // if (heritageClause.types.length > 1) {
-                        //     return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
-                        // }
+                        if (heritageClause.types.length > 1) {
+                            return grammarErrorOnFirstToken(heritageClause.types[1], Diagnostics.Classes_can_only_extend_a_single_class);
+                        }
 
-                        // seenExtendsClause = true;
+                        seenExtendsClause = true;
                     }
                     else {
                         Debug.assert(heritageClause.token === SyntaxKind.ImplementsKeyword);
