@@ -2288,8 +2288,10 @@ namespace ts.server {
             // If any of the project is still watching wild cards dont close the watcher
             if (forEachEntry(configFileExistenceInfo.config.projects, identity)) return;
 
-            clearMap(configFileExistenceInfo.config.watchedDirectories!, closeFileWatcherOf);
-            configFileExistenceInfo.config.watchedDirectories = undefined;
+            if (configFileExistenceInfo.config.watchedDirectories) {
+                clearMap(configFileExistenceInfo.config.watchedDirectories, closeFileWatcherOf);
+                configFileExistenceInfo.config.watchedDirectories = undefined;
+            }
             configFileExistenceInfo.config.watchedDirectoriesStale = undefined;
         }
 
