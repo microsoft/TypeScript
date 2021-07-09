@@ -401,16 +401,13 @@ namespace ts {
                     visitNode(cbNode, (node as ImportDeclaration).moduleSpecifier) ||
                     visitNode(cbNode, (node as ImportDeclaration).assertClause);
             case SyntaxKind.ImportClause:
-                return visitNode(cbNode, (<ImportClause>node).name) ||
-                    visitNode(cbNode, (<ImportClause>node).namedBindings);
-            case SyntaxKind.AssertClause:
-                return visitNodes(cbNode, cbNodes, (<AssertClause>node).elements);
-            case SyntaxKind.AssertEntry:
-                return visitNode(cbNode, (<AssertEntry>node).name) ||
-                    visitNode(cbNode, (<AssertEntry>node).value);
-            case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (node as ImportClause).name) ||
                     visitNode(cbNode, (node as ImportClause).namedBindings);
+            case SyntaxKind.AssertClause:
+                return visitNodes(cbNode, cbNodes, (node as AssertClause).elements);
+            case SyntaxKind.AssertEntry:
+                return visitNode(cbNode, (node as AssertEntry).name) ||
+                    visitNode(cbNode, (node as AssertEntry).value);
             case SyntaxKind.NamespaceExportDeclaration:
                 return visitNode(cbNode, (node as NamespaceExportDeclaration).name);
             case SyntaxKind.NamespaceImport:
