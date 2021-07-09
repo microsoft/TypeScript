@@ -19,4 +19,3 @@ and limitations under the License.
 
 
 /// <reference lib="es2021" />
-/// <reference lib="esnext.intl" />
