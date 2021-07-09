@@ -71,7 +71,6 @@ namespace ts {
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
-        ["es2021.string", "lib.es2021.string.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],

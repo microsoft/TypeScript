@@ -1,3 +1,5 @@
+/// <reference lib="es2019.array" />
+
 interface Array<T> {
     /**
      * Access item by relative indexing.
@@ -5,7 +7,6 @@ interface Array<T> {
      */
     at(index: number): T | undefined;
 }
-
 
 interface ReadonlyArray<T> {
     /**
