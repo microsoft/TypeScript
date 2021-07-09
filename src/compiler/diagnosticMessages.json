@@ -4918,6 +4918,10 @@
         "category": "Message",
         "code": 6257
     },
+    "'{0}' should be set inside the 'compilerOptions' object of the tsconfig.json": {
+        "category": "Error",
+        "code": 6258
+    },
 
     "Projects to reference": {
         "category": "Message",

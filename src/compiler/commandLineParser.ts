@@ -2890,9 +2890,22 @@ namespace ts {
                         return;
                 }
             },
-            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
+            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, _valueNode: Expression) {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+                }
+                if (key === "target") {
+                    const possibleValidEntries = arrayFrom(targetOptionDeclaration.type.keys());
+                    if (contains(possibleValidEntries, value)) {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json, "target"));
+                    }
+                }
+                if (key === "module") {
+                    const moduleOption = commandOptionsWithoutBuild.find(opt => opt.name === "module")!;
+                    const possibleValidEntries = arrayFrom((moduleOption.type as Map<string>).keys());
+                    if (contains(possibleValidEntries, value)) {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json, "module"));
+                    }
                 }
             }
         };

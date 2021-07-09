@@ -663,6 +663,47 @@ namespace ts {
             });
         });
 
+
+        it("raises an error if you've set module to a correct string in the root", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "module": "esnext",
+                "compilerOptions": {
+                    "target": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    target: ScriptTarget.ESNext
+                },
+                errors: [{
+                    ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json,
+                    messageText: "'module' should be set inside the 'compilerOptions' object of the tsconfig.json.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("raises an error if you've set target to a correct string in the root", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "target": "esnext",
+                "compilerOptions": {
+                    "module": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    module: ModuleKind.ESNext
+                },
+                errors: [{
+                    ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json,
+                    messageText: "'target' should be set inside the 'compilerOptions' object of the tsconfig.json.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
         it("Don't crash when root expression is not objecty at all", () => {
             assertCompilerOptionsWithJsonText(`42`, "tsconfig.json", {
                 compilerOptions: {},
