@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
         a.foo = foo;
     })(a = exports.a || (exports.a = {}));
     exports.b = a.foo;
-    exports.bVal = exports.b(10);
+    exports.bVal = (0, exports.b)(10);
     exports.bVal2 = exports.b;
 });
 

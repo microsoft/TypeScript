@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createClassStaticBlockDeclaration,
+            updateClassStaticBlockDeclaration,
             createTemplateLiteralTypeSpan,
             updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
@@ -498,8 +500,11 @@ namespace ts {
             createArraySliceCall,
             createArrayConcatCall,
             createObjectDefinePropertyCall,
+            createReflectGetCall,
+            createReflectSetCall,
             createPropertyDescriptor,
             createCallBinding,
+            createAssignmentTargetWrapper,
 
             // Utilities
             inlineExpressions,
@@ -1000,8 +1005,10 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
-                case SyntaxKind.StaticKeyword:
                 case SyntaxKind.SuperKeyword:
+                    transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+                    break;
+                case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:
@@ -1416,6 +1423,38 @@ namespace ts {
                 || node.type !== type
                 || node.body !== body
                 ? updateBaseFunctionLikeDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                : node;
+        }
+
+        // @api
+        function createClassStaticBlockDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                decorators,
+                modifiers,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.body = body;
+            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.decorators !== decorators
+                || node.modifier !== modifiers
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
                 : node;
         }
 
@@ -2594,7 +2633,7 @@ namespace ts {
                 propagateChildFlags(node.equalsGreaterThanToken) |
                 TransformFlags.ContainsES2015;
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -5447,6 +5486,15 @@ namespace ts {
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+            // Preserve the optionality of `object`.
+            if (isCallChain(object)) {
+                return createCallChain(
+                    createPropertyAccessChain(object, /*questionDotToken*/ undefined, methodName),
+                    /*questionDotToken*/ undefined,
+                    /*typeArguments*/ undefined,
+                    argumentsList
+                );
+            }
             return createCallExpression(
                 createPropertyAccessExpression(object, methodName),
                 /*typeArguments*/ undefined,
@@ -5480,6 +5528,14 @@ namespace ts {
 
         function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
             return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+        }
+
+        function createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "get", receiver ? [target, propertyKey, receiver] : [target, propertyKey]);
+        }
+
+        function createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
         }
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
@@ -5655,6 +5711,34 @@ namespace ts {
             }
 
             return { target, thisArg };
+        }
+
+        function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression {
+            return createPropertyAccessExpression(
+                // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+                createParenthesizedExpression(
+                    createObjectLiteralExpression([
+                        createSetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            "value",
+                            [createParameterDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
+                                paramName,
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
+                            )],
+                            createBlock([
+                                createExpressionStatement(expression)
+                            ])
+                        )
+                    ])
+                ),
+                "value"
+            );
         }
 
         function inlineExpressions(expressions: readonly Expression[]) {

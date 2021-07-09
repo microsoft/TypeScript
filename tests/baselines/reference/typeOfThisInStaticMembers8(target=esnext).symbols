@@ -1,0 +1,46 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers8.ts, 0, 0))
+
+    static f = 1;
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers8.ts, 0, 9))
+
+    static arrowFunctionBoundary = () => this.f + 1;
+>arrowFunctionBoundary : Symbol(C.arrowFunctionBoundary, Decl(typeOfThisInStaticMembers8.ts, 1, 17))
+>this.f : Symbol(C.f, Decl(typeOfThisInStaticMembers8.ts, 0, 9))
+>this : Symbol(C, Decl(typeOfThisInStaticMembers8.ts, 0, 0))
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers8.ts, 0, 9))
+
+    static functionExprBoundary = function () { return this.f + 2 };
+>functionExprBoundary : Symbol(C.functionExprBoundary, Decl(typeOfThisInStaticMembers8.ts, 2, 52))
+
+    static classExprBoundary = class { a = this.f + 3 };
+>classExprBoundary : Symbol(C.classExprBoundary, Decl(typeOfThisInStaticMembers8.ts, 3, 68))
+>a : Symbol((Anonymous class).a, Decl(typeOfThisInStaticMembers8.ts, 4, 38))
+>this : Symbol((Anonymous class), Decl(typeOfThisInStaticMembers8.ts, 4, 30))
+
+    static functionAndClassDeclBoundary = (() => {
+>functionAndClassDeclBoundary : Symbol(C.functionAndClassDeclBoundary, Decl(typeOfThisInStaticMembers8.ts, 4, 56))
+
+        function foo () {
+>foo : Symbol(foo, Decl(typeOfThisInStaticMembers8.ts, 5, 50))
+
+            return this.f + 4
+        }
+        class CC {
+>CC : Symbol(CC, Decl(typeOfThisInStaticMembers8.ts, 8, 9))
+
+            a = this.f + 5
+>a : Symbol(CC.a, Decl(typeOfThisInStaticMembers8.ts, 9, 18))
+>this : Symbol(CC, Decl(typeOfThisInStaticMembers8.ts, 8, 9))
+
+            method () {
+>method : Symbol(CC.method, Decl(typeOfThisInStaticMembers8.ts, 10, 26))
+
+                return this.f + 6
+>this : Symbol(CC, Decl(typeOfThisInStaticMembers8.ts, 8, 9))
+            }
+        }
+    })();
+}
+

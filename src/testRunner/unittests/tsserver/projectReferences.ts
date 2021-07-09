@@ -1353,5 +1353,120 @@ bar;`
             });
             baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
         });
+
+        describe("find refs to symbol from other project", () => {
+            const indexA: File = {
+                path: `${tscWatch.projectRoot}/a/index.ts`,
+                content: `import { B } from "../b/lib";
+
+const b: B = new B();`
+            };
+
+            const configB: File = {
+                path: `${tscWatch.projectRoot}/b/tsconfig.json`,
+                content: `{
+"compilerOptions": {
+    "declarationMap": true,
+    "outDir": "lib",
+    "composite": true
+}
+}`
+            };
+
+            const indexB: File = {
+                path: `${tscWatch.projectRoot}/b/index.ts`,
+                content: `export class B {
+    M() {}
+}`
+            };
+
+            const helperB: File = {
+                path: `${tscWatch.projectRoot}/b/helper.ts`,
+                content: `import { B } from ".";
+
+const b: B = new B();`
+            };
+
+            const dtsB: File = {
+                path: `${tscWatch.projectRoot}/b/lib/index.d.ts`,
+                content: `export declare class B {
+    M(): void;
+}
+//# sourceMappingURL=index.d.ts.map`
+            };
+
+            const dtsMapB: File = {
+                path: `${tscWatch.projectRoot}/b/lib/index.d.ts.map`,
+                content: `{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}`
+            };
+
+            function baselineDisableReferencedProjectLoad(
+                projectAlreadyLoaded: boolean,
+                disableReferencedProjectLoad: boolean,
+                disableSourceOfProjectReferenceRedirect: boolean,
+                dtsMapPresent: boolean) {
+
+                // Mangled to stay under windows path length limit
+                const subScenario =
+                    `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded ` +
+                    ` and refd proj loading is ${disableReferencedProjectLoad ? "disabled" : "enabled"}` +
+                    ` and proj ref redirects are ${disableSourceOfProjectReferenceRedirect ? "disabled" : "enabled"}` +
+                    ` and a decl map is ${dtsMapPresent ? "present" : "missing"}`;
+                const compilerOptions: CompilerOptions = {
+                    disableReferencedProjectLoad,
+                    disableSourceOfProjectReferenceRedirect,
+                    composite: true
+                };
+
+                it(subScenario, () => {
+                    const configA: File = {
+                        path: `${tscWatch.projectRoot}/a/tsconfig.json`,
+                        content: `{
+        "compilerOptions": ${JSON.stringify(compilerOptions)},
+        "references": [{ "path": "../b" }]
+    }`
+                    };
+
+                    const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
+                    openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
+
+                    session.executeCommandSeq<protocol.ReferencesRequest>({
+                        command: protocol.CommandTypes.References,
+                        arguments: protocolFileLocationFromSubstring(indexA, `B`, { index: 1 })
+                    });
+                    baselineTsserverLogs("projectReferences", `find all references to a symbol declared in another project ${subScenario}`, session);
+                });
+            }
+
+            /* eslint-disable boolean-trivia */
+
+            // Pre-loaded = A file from project B is already open when FAR is invoked
+            // dRPL = Project A has disableReferencedProjectLoad
+            // dSOPRR = Project A has disableSourceOfProjectReferenceRedirect
+            // Map = The declaration map file b/lib/index.d.ts.map exists
+            // B refs = files under directory b in which references are found (all scenarios find all references in a/index.ts)
+
+            //                                   Pre-loaded | dRPL   | dSOPRR | Map      | B state    | Notes        | B refs              | Notes
+            //                                   -----------+--------+--------+----------+------------+--------------+---------------------+---------------------------------------------------
+            baselineDisableReferencedProjectLoad(true,        true,    true,    true);  // Pre-loaded |              | index.ts, helper.ts | Via map and pre-loaded project
+            baselineDisableReferencedProjectLoad(true,        true,    true,    false); // Pre-loaded |              | lib/index.d.ts      | Even though project is loaded
+            baselineDisableReferencedProjectLoad(true,        true,    false,   true);  // Pre-loaded |              | index.ts, helper.ts |
+            baselineDisableReferencedProjectLoad(true,        true,    false,   false); // Pre-loaded |              | index.ts, helper.ts |
+            baselineDisableReferencedProjectLoad(true,        false,   true,    true);  // Pre-loaded |              | index.ts, helper.ts | Via map and pre-loaded project
+            baselineDisableReferencedProjectLoad(true,        false,   true,    false); // Pre-loaded |              | lib/index.d.ts      | Even though project is loaded
+            baselineDisableReferencedProjectLoad(true,        false,   false,   true);  // Pre-loaded |              | index.ts, helper.ts |
+            baselineDisableReferencedProjectLoad(true,        false,   false,   false); // Pre-loaded |              | index.ts, helper.ts |
+            baselineDisableReferencedProjectLoad(false,       true,    true,    true);  // Not loaded |              | lib/index.d.ts      | Even though map is present
+            baselineDisableReferencedProjectLoad(false,       true,    true,    false); // Not loaded |              | lib/index.d.ts      |
+            baselineDisableReferencedProjectLoad(false,       true,    false,   true);  // Not loaded |              | index.ts            | But not helper.ts, which is not referenced from a
+            baselineDisableReferencedProjectLoad(false,       true,    false,   false); // Not loaded |              | index.ts            | But not helper.ts, which is not referenced from a
+            baselineDisableReferencedProjectLoad(false,       false,   true,    true);  // Loaded     | Via map      | index.ts, helper.ts | Via map and newly loaded project
+            baselineDisableReferencedProjectLoad(false,       false,   true,    false); // Not loaded |              | lib/index.d.ts      |
+            baselineDisableReferencedProjectLoad(false,       false,   false,   true);  // Loaded     | Via redirect | index.ts, helper.ts |
+            baselineDisableReferencedProjectLoad(false,       false,   false,   false); // Loaded     | Via redirect | index.ts, helper.ts |
+
+            /* eslint-enable boolean-trivia */
+        });
     });
 }

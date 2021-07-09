@@ -274,190 +274,191 @@ declare namespace ts {
         PropertyDeclaration = 166,
         MethodSignature = 167,
         MethodDeclaration = 168,
-        Constructor = 169,
-        GetAccessor = 170,
-        SetAccessor = 171,
-        CallSignature = 172,
-        ConstructSignature = 173,
-        IndexSignature = 174,
-        TypePredicate = 175,
-        TypeReference = 176,
-        FunctionType = 177,
-        ConstructorType = 178,
-        TypeQuery = 179,
-        TypeLiteral = 180,
-        ArrayType = 181,
-        TupleType = 182,
-        OptionalType = 183,
-        RestType = 184,
-        UnionType = 185,
-        IntersectionType = 186,
-        ConditionalType = 187,
-        InferType = 188,
-        ParenthesizedType = 189,
-        ThisType = 190,
-        TypeOperator = 191,
-        IndexedAccessType = 192,
-        MappedType = 193,
-        LiteralType = 194,
-        NamedTupleMember = 195,
-        TemplateLiteralType = 196,
-        TemplateLiteralTypeSpan = 197,
-        ImportType = 198,
-        ObjectBindingPattern = 199,
-        ArrayBindingPattern = 200,
-        BindingElement = 201,
-        ArrayLiteralExpression = 202,
-        ObjectLiteralExpression = 203,
-        PropertyAccessExpression = 204,
-        ElementAccessExpression = 205,
-        CallExpression = 206,
-        NewExpression = 207,
-        TaggedTemplateExpression = 208,
-        TypeAssertionExpression = 209,
-        ParenthesizedExpression = 210,
-        FunctionExpression = 211,
-        ArrowFunction = 212,
-        DeleteExpression = 213,
-        TypeOfExpression = 214,
-        VoidExpression = 215,
-        AwaitExpression = 216,
-        PrefixUnaryExpression = 217,
-        PostfixUnaryExpression = 218,
-        BinaryExpression = 219,
-        ConditionalExpression = 220,
-        TemplateExpression = 221,
-        YieldExpression = 222,
-        SpreadElement = 223,
-        ClassExpression = 224,
-        OmittedExpression = 225,
-        ExpressionWithTypeArguments = 226,
-        AsExpression = 227,
-        NonNullExpression = 228,
-        MetaProperty = 229,
-        SyntheticExpression = 230,
-        TemplateSpan = 231,
-        SemicolonClassElement = 232,
-        Block = 233,
-        EmptyStatement = 234,
-        VariableStatement = 235,
-        ExpressionStatement = 236,
-        IfStatement = 237,
-        DoStatement = 238,
-        WhileStatement = 239,
-        ForStatement = 240,
-        ForInStatement = 241,
-        ForOfStatement = 242,
-        ContinueStatement = 243,
-        BreakStatement = 244,
-        ReturnStatement = 245,
-        WithStatement = 246,
-        SwitchStatement = 247,
-        LabeledStatement = 248,
-        ThrowStatement = 249,
-        TryStatement = 250,
-        DebuggerStatement = 251,
-        VariableDeclaration = 252,
-        VariableDeclarationList = 253,
-        FunctionDeclaration = 254,
-        ClassDeclaration = 255,
-        InterfaceDeclaration = 256,
-        TypeAliasDeclaration = 257,
-        EnumDeclaration = 258,
-        ModuleDeclaration = 259,
-        ModuleBlock = 260,
-        CaseBlock = 261,
-        NamespaceExportDeclaration = 262,
-        ImportEqualsDeclaration = 263,
-        ImportDeclaration = 264,
-        ImportClause = 265,
-        NamespaceImport = 266,
-        NamedImports = 267,
-        ImportSpecifier = 268,
-        ExportAssignment = 269,
-        ExportDeclaration = 270,
-        NamedExports = 271,
-        NamespaceExport = 272,
-        ExportSpecifier = 273,
-        MissingDeclaration = 274,
-        ExternalModuleReference = 275,
-        JsxElement = 276,
-        JsxSelfClosingElement = 277,
-        JsxOpeningElement = 278,
-        JsxClosingElement = 279,
-        JsxFragment = 280,
-        JsxOpeningFragment = 281,
-        JsxClosingFragment = 282,
-        JsxAttribute = 283,
-        JsxAttributes = 284,
-        JsxSpreadAttribute = 285,
-        JsxExpression = 286,
-        CaseClause = 287,
-        DefaultClause = 288,
-        HeritageClause = 289,
-        CatchClause = 290,
-        AssertClause = 291,
-        AssertEntry = 292,
-        PropertyAssignment = 293,
-        ShorthandPropertyAssignment = 294,
-        SpreadAssignment = 295,
-        EnumMember = 296,
-        UnparsedPrologue = 297,
-        UnparsedPrepend = 298,
-        UnparsedText = 299,
-        UnparsedInternalText = 300,
-        UnparsedSyntheticReference = 301,
-        SourceFile = 302,
-        Bundle = 303,
-        UnparsedSource = 304,
-        InputFiles = 305,
-        JSDocTypeExpression = 306,
-        JSDocNameReference = 307,
-        JSDocMemberName = 308,
-        JSDocAllType = 309,
-        JSDocUnknownType = 310,
-        JSDocNullableType = 311,
-        JSDocNonNullableType = 312,
-        JSDocOptionalType = 313,
-        JSDocFunctionType = 314,
-        JSDocVariadicType = 315,
-        JSDocNamepathType = 316,
-        JSDocComment = 317,
-        JSDocText = 318,
-        JSDocTypeLiteral = 319,
-        JSDocSignature = 320,
-        JSDocLink = 321,
-        JSDocLinkCode = 322,
-        JSDocLinkPlain = 323,
-        JSDocTag = 324,
-        JSDocAugmentsTag = 325,
-        JSDocImplementsTag = 326,
-        JSDocAuthorTag = 327,
-        JSDocDeprecatedTag = 328,
-        JSDocClassTag = 329,
-        JSDocPublicTag = 330,
-        JSDocPrivateTag = 331,
-        JSDocProtectedTag = 332,
-        JSDocReadonlyTag = 333,
-        JSDocOverrideTag = 334,
-        JSDocCallbackTag = 335,
-        JSDocEnumTag = 336,
-        JSDocParameterTag = 337,
-        JSDocReturnTag = 338,
-        JSDocThisTag = 339,
-        JSDocTypeTag = 340,
-        JSDocTemplateTag = 341,
-        JSDocTypedefTag = 342,
-        JSDocSeeTag = 343,
-        JSDocPropertyTag = 344,
-        SyntaxList = 345,
-        NotEmittedStatement = 346,
-        PartiallyEmittedExpression = 347,
-        CommaListExpression = 348,
-        MergeDeclarationMarker = 349,
-        EndOfDeclarationMarker = 350,
-        SyntheticReferenceExpression = 351,
-        Count = 352,
+        ClassStaticBlockDeclaration = 169,
+        Constructor = 170,
+        GetAccessor = 171,
+        SetAccessor = 172,
+        CallSignature = 173,
+        ConstructSignature = 174,
+        IndexSignature = 175,
+        TypePredicate = 176,
+        TypeReference = 177,
+        FunctionType = 178,
+        ConstructorType = 179,
+        TypeQuery = 180,
+        TypeLiteral = 181,
+        ArrayType = 182,
+        TupleType = 183,
+        OptionalType = 184,
+        RestType = 185,
+        UnionType = 186,
+        IntersectionType = 187,
+        ConditionalType = 188,
+        InferType = 189,
+        ParenthesizedType = 190,
+        ThisType = 191,
+        TypeOperator = 192,
+        IndexedAccessType = 193,
+        MappedType = 194,
+        LiteralType = 195,
+        NamedTupleMember = 196,
+        TemplateLiteralType = 197,
+        TemplateLiteralTypeSpan = 198,
+        ImportType = 199,
+        ObjectBindingPattern = 200,
+        ArrayBindingPattern = 201,
+        BindingElement = 202,
+        ArrayLiteralExpression = 203,
+        ObjectLiteralExpression = 204,
+        PropertyAccessExpression = 205,
+        ElementAccessExpression = 206,
+        CallExpression = 207,
+        NewExpression = 208,
+        TaggedTemplateExpression = 209,
+        TypeAssertionExpression = 210,
+        ParenthesizedExpression = 211,
+        FunctionExpression = 212,
+        ArrowFunction = 213,
+        DeleteExpression = 214,
+        TypeOfExpression = 215,
+        VoidExpression = 216,
+        AwaitExpression = 217,
+        PrefixUnaryExpression = 218,
+        PostfixUnaryExpression = 219,
+        BinaryExpression = 220,
+        ConditionalExpression = 221,
+        TemplateExpression = 222,
+        YieldExpression = 223,
+        SpreadElement = 224,
+        ClassExpression = 225,
+        OmittedExpression = 226,
+        ExpressionWithTypeArguments = 227,
+        AsExpression = 228,
+        NonNullExpression = 229,
+        MetaProperty = 230,
+        SyntheticExpression = 231,
+        TemplateSpan = 232,
+        SemicolonClassElement = 233,
+        Block = 234,
+        EmptyStatement = 235,
+        VariableStatement = 236,
+        ExpressionStatement = 237,
+        IfStatement = 238,
+        DoStatement = 239,
+        WhileStatement = 240,
+        ForStatement = 241,
+        ForInStatement = 242,
+        ForOfStatement = 243,
+        ContinueStatement = 244,
+        BreakStatement = 245,
+        ReturnStatement = 246,
+        WithStatement = 247,
+        SwitchStatement = 248,
+        LabeledStatement = 249,
+        ThrowStatement = 250,
+        TryStatement = 251,
+        DebuggerStatement = 252,
+        VariableDeclaration = 253,
+        VariableDeclarationList = 254,
+        FunctionDeclaration = 255,
+        ClassDeclaration = 256,
+        InterfaceDeclaration = 257,
+        TypeAliasDeclaration = 258,
+        EnumDeclaration = 259,
+        ModuleDeclaration = 260,
+        ModuleBlock = 261,
+        CaseBlock = 262,
+        NamespaceExportDeclaration = 263,
+        ImportEqualsDeclaration = 264,
+        ImportDeclaration = 265,
+        ImportClause = 266,
+        NamespaceImport = 267,
+        NamedImports = 268,
+        ImportSpecifier = 269,
+        ExportAssignment = 270,
+        ExportDeclaration = 271,
+        NamedExports = 272,
+        NamespaceExport = 273,
+        ExportSpecifier = 274,
+        MissingDeclaration = 275,
+        ExternalModuleReference = 276,
+        JsxElement = 277,
+        JsxSelfClosingElement = 278,
+        JsxOpeningElement = 279,
+        JsxClosingElement = 280,
+        JsxFragment = 281,
+        JsxOpeningFragment = 282,
+        JsxClosingFragment = 283,
+        JsxAttribute = 284,
+        JsxAttributes = 285,
+        JsxSpreadAttribute = 286,
+        JsxExpression = 287,
+        CaseClause = 288,
+        DefaultClause = 289,
+        HeritageClause = 290,
+        CatchClause = 291,
+        AssertClause = 292,
+        AssertEntry = 293,
+        PropertyAssignment = 294,
+        ShorthandPropertyAssignment = 295,
+        SpreadAssignment = 296,
+        EnumMember = 297,
+        UnparsedPrologue = 298,
+        UnparsedPrepend = 299,
+        UnparsedText = 300,
+        UnparsedInternalText = 301,
+        UnparsedSyntheticReference = 302,
+        SourceFile = 303,
+        Bundle = 304,
+        UnparsedSource = 305,
+        InputFiles = 306,
+        JSDocTypeExpression = 307,
+        JSDocNameReference = 308,
+        JSDocMemberName = 309,
+        JSDocAllType = 310,
+        JSDocUnknownType = 311,
+        JSDocNullableType = 312,
+        JSDocNonNullableType = 313,
+        JSDocOptionalType = 314,
+        JSDocFunctionType = 315,
+        JSDocVariadicType = 316,
+        JSDocNamepathType = 317,
+        JSDocComment = 318,
+        JSDocText = 319,
+        JSDocTypeLiteral = 320,
+        JSDocSignature = 321,
+        JSDocLink = 322,
+        JSDocLinkCode = 323,
+        JSDocLinkPlain = 324,
+        JSDocTag = 325,
+        JSDocAugmentsTag = 326,
+        JSDocImplementsTag = 327,
+        JSDocAuthorTag = 328,
+        JSDocDeprecatedTag = 329,
+        JSDocClassTag = 330,
+        JSDocPublicTag = 331,
+        JSDocPrivateTag = 332,
+        JSDocProtectedTag = 333,
+        JSDocReadonlyTag = 334,
+        JSDocOverrideTag = 335,
+        JSDocCallbackTag = 336,
+        JSDocEnumTag = 337,
+        JSDocParameterTag = 338,
+        JSDocReturnTag = 339,
+        JSDocThisTag = 340,
+        JSDocTypeTag = 341,
+        JSDocTemplateTag = 342,
+        JSDocTypedefTag = 343,
+        JSDocSeeTag = 344,
+        JSDocPropertyTag = 345,
+        SyntaxList = 346,
+        NotEmittedStatement = 347,
+        PartiallyEmittedExpression = 348,
+        CommaListExpression = 349,
+        MergeDeclarationMarker = 350,
+        EndOfDeclarationMarker = 351,
+        SyntheticReferenceExpression = 352,
+        Count = 353,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -468,8 +469,8 @@ declare namespace ts {
         LastKeyword = 159,
         FirstFutureReservedWord = 117,
         LastFutureReservedWord = 125,
-        FirstTypeNode = 175,
-        LastTypeNode = 198,
+        FirstTypeNode = 176,
+        LastTypeNode = 199,
         FirstPunctuation = 18,
         LastPunctuation = 78,
         FirstToken = 0,
@@ -482,13 +483,13 @@ declare namespace ts {
         LastTemplateToken = 17,
         FirstBinaryOperator = 29,
         LastBinaryOperator = 78,
-        FirstStatement = 235,
-        LastStatement = 251,
+        FirstStatement = 236,
+        LastStatement = 252,
         FirstNode = 160,
-        FirstJSDocNode = 306,
-        LastJSDocNode = 344,
-        FirstJSDocTagNode = 324,
-        LastJSDocTagNode = 344,
+        FirstJSDocNode = 307,
+        LastJSDocNode = 345,
+        FirstJSDocTagNode = 325,
+        LastJSDocTagNode = 345,
     }
     export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -571,7 +572,7 @@ declare namespace ts {
     }
     export interface JSDocContainer {
     }
-    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | EmptyStatement | DebuggerStatement | Block | VariableStatement | ExpressionStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | LabeledStatement | ThrowStatement | TryStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
+    export type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ClassStaticBlockDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | EmptyStatement | DebuggerStatement | Block | VariableStatement | ExpressionStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | LabeledStatement | ThrowStatement | TryStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | EndOfFileToken;
     export type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     export type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     export type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -853,6 +854,11 @@ declare namespace ts {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
         readonly type: TypeNode;
+    }
+    export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
+        readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
+        readonly parent: ClassDeclaration | ClassExpression;
+        readonly body: Block;
     }
     export interface TypeNode extends Node {
         _typeNodeBrand: any;
@@ -2211,6 +2217,7 @@ declare namespace ts {
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
+        getIndexInfosOfType(type: Type): readonly IndexInfo[];
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
@@ -2227,7 +2234,7 @@ declare namespace ts {
             typeArguments?: NodeArray<TypeNode>;
         } | undefined;
         /** Note that the resulting nodes cannot be checked. */
-        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): IndexSignatureDeclaration | undefined;
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -2625,8 +2632,7 @@ declare namespace ts {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
-        declaredStringIndexInfo?: IndexInfo;
-        declaredNumberIndexInfo?: IndexInfo;
+        declaredIndexInfos: IndexInfo[];
     }
     /**
      * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
@@ -2740,6 +2746,7 @@ declare namespace ts {
         Number = 1
     }
     export interface IndexInfo {
+        keyType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
@@ -2872,6 +2879,7 @@ declare namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
@@ -2932,7 +2940,6 @@ declare namespace ts {
         strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
-        strictOptionalProperties?: boolean;
         stripInternal?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
@@ -3310,6 +3317,8 @@ declare namespace ts {
         updateIndexSignature(node: IndexSignatureDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
         createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
         updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
+        createClassStaticBlockDeclaration(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
+        updateClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, body: Block): ClassStaticBlockDeclaration;
         createKeywordTypeNode<TKind extends KeywordTypeSyntaxKind>(kind: TKind): KeywordTypeNode<TKind>;
         createTypePredicateNode(assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode | string, type: TypeNode | undefined): TypePredicateNode;
         updateTypePredicateNode(node: TypePredicateNode, assertsModifier: AssertsKeyword | undefined, parameterName: Identifier | ThisTypeNode, type: TypeNode | undefined): TypePredicateNode;
@@ -3974,6 +3983,7 @@ declare namespace ts {
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "auto" | "minimal" | "index" | "js";
@@ -4005,6 +4015,7 @@ declare namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -4478,6 +4489,7 @@ declare namespace ts {
     function isPropertyDeclaration(node: Node): node is PropertyDeclaration;
     function isMethodSignature(node: Node): node is MethodSignature;
     function isMethodDeclaration(node: Node): node is MethodDeclaration;
+    function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration;
     function isConstructorDeclaration(node: Node): node is ConstructorDeclaration;
     function isGetAccessorDeclaration(node: Node): node is GetAccessorDeclaration;
     function isSetAccessorDeclaration(node: Node): node is SetAccessorDeclaration;
@@ -5540,6 +5552,11 @@ declare namespace ts {
         PartialSemantic = 1,
         Syntactic = 2
     }
+    interface IncompleteCompletionsCache {
+        get(): CompletionInfo | undefined;
+        set(response: CompletionInfo): void;
+        clear(): void;
+    }
     interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
@@ -5701,6 +5718,7 @@ declare namespace ts {
         prepareCallHierarchy(fileName: string, position: number): CallHierarchyItem | CallHierarchyItem[] | undefined;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5751,16 +5769,34 @@ declare namespace ts {
         skipDestructiveCodeActions?: boolean;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
+    enum CompletionTriggerKind {
+        /** Completion was triggered by typing an identifier, manual invocation (e.g Ctrl+Space) or via API. */
+        Invoked = 1,
+        /** Completion was triggered by a trigger character. */
+        TriggerCharacter = 2,
+        /** Completion was re-triggered as the current completion list is incomplete. */
+        TriggerForIncompleteCompletions = 3
+    }
     interface GetCompletionsAtPositionOptions extends UserPreferences {
         /**
          * If the editor is asking for completions because a certain character was typed
          * (as opposed to when the user explicitly requested them) this should be set.
          */
         triggerCharacter?: CompletionsTriggerCharacter;
+        triggerKind?: CompletionTriggerKind;
         /** @deprecated Use includeCompletionsForModuleExports */
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     type SignatureHelpTriggerCharacter = "," | "(" | "<";
     type SignatureHelpRetriggerCharacter = SignatureHelpTriggerCharacter | ")";
@@ -5866,6 +5902,18 @@ declare namespace ts {
     interface CallHierarchyOutgoingCall {
         to: CallHierarchyItem;
         fromSpans: TextSpan[];
+    }
+    enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum"
+    }
+    interface InlayHint {
+        text: string;
+        position: number;
+        kind?: InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -6430,7 +6478,10 @@ declare namespace ts {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
-        /** class X { constructor() { } } */
+        /**
+         * class X { constructor() { } }
+         * class X { static { } }
+         */
         constructorImplementationElement = "constructor",
         /** interface Y { ():number; } */
         callSignatureElement = "call",
@@ -6531,6 +6582,14 @@ declare namespace ts {
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
         bigintLiteral = 25
+    }
+    interface InlayHintsContext {
+        file: SourceFile;
+        program: Program;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
+        span: TextSpan;
+        preferences: InlayHintsOptions;
     }
 }
 declare namespace ts {

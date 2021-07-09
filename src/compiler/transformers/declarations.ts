@@ -569,6 +569,8 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
             }
             return false;
         }
