@@ -53,6 +53,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/linked-package/dist/index.d.ts
 /user/username/projects/myproject/main/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/other.d.ts (used version)
+/user/username/projects/myproject/linked-package/dist/index.d.ts (used version)
+/user/username/projects/myproject/main/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/main/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/main/tsconfig.json","pollingInterval":250}

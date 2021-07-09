@@ -168,6 +168,10 @@ namespace ts {
                     visitNode(cbNode, (node as FunctionLikeDeclaration).type) ||
                     visitNode(cbNode, (node as ArrowFunction).equalsGreaterThanToken) ||
                     visitNode(cbNode, (node as FunctionLikeDeclaration).body);
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return visitNodes(cbNode, cbNodes, node.decorators) ||
+                    visitNodes(cbNode, cbNodes, node.modifiers) ||
+                    visitNode(cbNode, (node as ClassStaticBlockDeclaration).body);
             case SyntaxKind.TypeReference:
                 return visitNode(cbNode, (node as TypeReferenceNode).typeName) ||
                     visitNodes(cbNode, cbNodes, (node as TypeReferenceNode).typeArguments);
@@ -500,8 +504,8 @@ namespace ts {
                             visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
                             (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
                         : visitNode(cbNode, (node as JSDocPropertyLikeTag).typeExpression) ||
-                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name)) ||
-                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
+                            visitNode(cbNode, (node as JSDocPropertyLikeTag).name) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined)));
             case SyntaxKind.JSDocAuthorTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
@@ -1501,6 +1505,8 @@ namespace ts {
             if (token() === SyntaxKind.Identifier) {
                 return true;
             }
+
+            // `let await`/`let yield` in [Yield] or [Await] are allowed here and disallowed in the binder.
             return token() > SyntaxKind.LastReservedWord;
         }
 
@@ -2423,7 +2429,10 @@ namespace ts {
 
         function parsingContextErrors(context: ParsingContext) {
             switch (context) {
-                case ParsingContext.SourceElements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
+                case ParsingContext.SourceElements:
+                    return token() === SyntaxKind.DefaultKeyword
+                        ? parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.ExportKeyword))
+                        : parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
                 case ParsingContext.BlockStatements: return parseErrorAtCurrentToken(Diagnostics.Declaration_or_statement_expected);
                 case ParsingContext.SwitchClauses: return parseErrorAtCurrentToken(Diagnostics.case_or_default_expected);
                 case ParsingContext.SwitchClauseStatements: return parseErrorAtCurrentToken(Diagnostics.Statement_expected);
@@ -5571,10 +5580,8 @@ namespace ts {
             //
             // FunctionExpression:
             //      function BindingIdentifier[opt](FormalParameters){ FunctionBody }
-            const saveDecoratorContext = inDecoratorContext();
-            if (saveDecoratorContext) {
-                setDecoratorContext(/*val*/ false);
-            }
+            const savedDecoratorContext = inDecoratorContext();
+            setDecoratorContext(/*val*/ false);
 
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
@@ -5583,8 +5590,7 @@ namespace ts {
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
             const isGenerator = asteriskToken ? SignatureFlags.Yield : SignatureFlags.None;
             const isAsync = some(modifiers, isAsyncModifier) ? SignatureFlags.Await : SignatureFlags.None;
-            const name =
-                isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalBindingIdentifier) :
+            const name = isGenerator && isAsync ? doInYieldAndAwaitContext(parseOptionalBindingIdentifier) :
                 isGenerator ? doInYieldContext(parseOptionalBindingIdentifier) :
                 isAsync ? doInAwaitContext(parseOptionalBindingIdentifier) :
                 parseOptionalBindingIdentifier();
@@ -5594,9 +5600,7 @@ namespace ts {
             const type = parseReturnType(SyntaxKind.ColonToken, /*isType*/ false);
             const body = parseFunctionBlock(isGenerator | isAsync);
 
-            if (saveDecoratorContext) {
-                setDecoratorContext(/*val*/ true);
-            }
+            setDecoratorContext(savedDecoratorContext);
 
             const node = factory.createFunctionExpression(modifiers, asteriskToken, name, typeParameters, parameters, type, body);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -6122,15 +6126,15 @@ namespace ts {
             }
         }
 
-        function nextTokenIsIdentifierOrStartOfDestructuring() {
+        function nextTokenIsBindingIdentifierOrStartOfDestructuring() {
             nextToken();
-            return isIdentifier() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
+            return isBindingIdentifier() || token() === SyntaxKind.OpenBraceToken || token() === SyntaxKind.OpenBracketToken;
         }
 
         function isLetDeclaration() {
             // In ES6 'let' always starts a lexical declaration if followed by an identifier or {
             // or [.
-            return lookAhead(nextTokenIsIdentifierOrStartOfDestructuring);
+            return lookAhead(nextTokenIsBindingIdentifierOrStartOfDestructuring);
         }
 
         function parseStatement(): Statement {
@@ -6420,7 +6424,7 @@ namespace ts {
             // So we need to look ahead to determine if 'of' should be treated as a keyword in
             // this context.
             // The checker will then give an error that there is an empty declaration list.
-            let declarations;
+            let declarations: readonly VariableDeclaration[];
             if (token() === SyntaxKind.OfKeyword && lookAhead(canFollowContextualOfKeyword)) {
                 declarations = createMissingList<VariableDeclaration>();
             }
@@ -6452,6 +6456,7 @@ namespace ts {
 
         function parseFunctionDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): FunctionDeclaration {
             const savedAwaitContext = inAwaitContext();
+
             const modifierFlags = modifiersToFlags(modifiers);
             parseExpected(SyntaxKind.FunctionKeyword);
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -6647,6 +6652,27 @@ namespace ts {
             return false;
         }
 
+        function parseClassStaticBlockDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: ModifiersArray | undefined): ClassStaticBlockDeclaration {
+            parseExpectedToken(SyntaxKind.StaticKeyword);
+            const body = parseClassStaticBlockBody();
+            return withJSDoc(finishNode(factory.createClassStaticBlockDeclaration(decorators, modifiers, body), pos), hasJSDoc);
+        }
+
+        function parseClassStaticBlockBody() {
+            const savedYieldContext = inYieldContext();
+            const savedAwaitContext = inAwaitContext();
+
+            setYieldContext(false);
+            setAwaitContext(true);
+
+            const body = parseBlock(/*ignoreMissingOpenBrace*/ false);
+
+            setYieldContext(savedYieldContext);
+            setAwaitContext(savedAwaitContext);
+
+            return body;
+        }
+
         function parseDecoratorExpression() {
             if (inAwaitContext() && token() === SyntaxKind.AwaitKeyword) {
                 // `@await` is is disallowed in an [Await] context, but can cause parsing to go off the rails
@@ -6678,7 +6704,7 @@ namespace ts {
             return list && createNodeArray(list, pos);
         }
 
-        function tryParseModifier(permitInvalidConstAsModifier?: boolean): Modifier | undefined {
+        function tryParseModifier(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
             const pos = getNodePos();
             const kind = token();
 
@@ -6688,6 +6714,9 @@ namespace ts {
                 if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
                     return undefined;
                 }
+            }
+            else if (stopOnStartOfClassStaticBlock && token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return undefined;
             }
             else {
                 if (!parseAnyContextualModifier()) {
@@ -6705,10 +6734,10 @@ namespace ts {
          *
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
-        function parseModifiers(permitInvalidConstAsModifier?: boolean): NodeArray<Modifier> | undefined {
+        function parseModifiers(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
             const pos = getNodePos();
             let list, modifier;
-            while (modifier = tryParseModifier(permitInvalidConstAsModifier)) {
+            while (modifier = tryParseModifier(permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock)) {
                 list = append(list, modifier);
             }
             return list && createNodeArray(list, pos);
@@ -6734,7 +6763,10 @@ namespace ts {
 
             const hasJSDoc = hasPrecedingJSDocComment();
             const decorators = parseDecorators();
-            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
+            const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+            if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
+                return parseClassStaticBlockDeclaration(pos, hasJSDoc, decorators, modifiers);
+            }
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
                 return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
@@ -6795,6 +6827,7 @@ namespace ts {
         function parseClassDeclarationOrExpression(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined, kind: ClassLikeDeclaration["kind"]): ClassLikeDeclaration {
             const savedAwaitContext = inAwaitContext();
             parseExpected(SyntaxKind.ClassKeyword);
+
             // We don't parse the name here in await context, instead we will report a grammar error in the checker.
             const name = parseNameOfClassDeclarationOrExpression();
             const typeParameters = parseTypeParameters();
@@ -6994,6 +7027,10 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
+        }
+
+        function nextTokenIsOpenBrace() {
+            return nextToken() === SyntaxKind.OpenBraceToken;
         }
 
         function nextTokenIsSlash() {

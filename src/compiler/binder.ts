@@ -410,13 +410,15 @@ namespace ts {
          * @param includes - The SymbolFlags that node has in addition to its declaration type (eg: export, ambient, etc.)
          * @param excludes - The flags which node cannot be declared alongside in a symbol table. Used to report forbidden declarations.
          */
-        function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean): Symbol {
-            Debug.assert(!hasDynamicName(node));
+        function declareSymbol(symbolTable: SymbolTable, parent: Symbol | undefined, node: Declaration, includes: SymbolFlags, excludes: SymbolFlags, isReplaceableByMethod?: boolean, isComputedName?: boolean): Symbol {
+            Debug.assert(isComputedName || !hasDynamicName(node));
 
             const isDefaultExport = hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node) && node.name.escapedText === "default";
 
             // The exported symbol for an export default function/class node is always named "default"
-            const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
+            const name = isComputedName ? InternalSymbolName.Computed
+                : isDefaultExport && parent ? InternalSymbolName.Default
+                : getDeclarationName(node);
 
             let symbol: Symbol | undefined;
             if (name === undefined) {
@@ -667,7 +669,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -676,10 +678,10 @@ namespace ts {
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
-                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration).body)) {
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
                     if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
-                    (node as FunctionLikeDeclaration).endFlowNode = currentFlow;
+                    (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
@@ -689,8 +691,8 @@ namespace ts {
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
-                    if (node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
-                        (node as FunctionLikeDeclaration).returnFlowNode = currentFlow;
+                    if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                        (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                     }
                 }
                 if (!isIIFE) {
@@ -1830,6 +1832,7 @@ namespace ts {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
                 case SyntaxKind.FunctionExpression:
@@ -1865,7 +1868,7 @@ namespace ts {
                     // By not creating a new block-scoped-container here, we ensure that both 'var x'
                     // and 'let x' go into the Function-container's locals, and we do get a collision
                     // conflict.
-                    return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+                    return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
 
             return ContainerFlags.None;
@@ -1927,6 +1930,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
@@ -1940,7 +1944,7 @@ namespace ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return hasSyntacticModifier(node, ModifierFlags.Static)
+            return isStatic(node)
                 ? declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members!, container.symbol, node, symbolFlags, symbolExcludes);
         }
@@ -1977,19 +1981,17 @@ namespace ts {
                     declareModuleSymbol(node);
                 }
                 else {
-                    let pattern: Pattern | undefined;
+                    let pattern: string | Pattern | undefined;
                     if (node.name.kind === SyntaxKind.StringLiteral) {
                         const { text } = node.name;
-                        if (hasZeroOrOneAsteriskCharacter(text)) {
-                            pattern = tryParsePattern(text);
-                        }
-                        else {
+                        pattern = tryParsePattern(text);
+                        if (pattern === undefined) {
                             errorOnFirstToken(node.name, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, text);
                         }
                     }
 
                     const symbol = declareSymbolAndAddToSymbolTable(node, SymbolFlags.ValueModule, SymbolFlags.ValueModuleExcludes)!;
-                    file.patternAmbientModules = append<PatternAmbientModule>(file.patternAmbientModules, pattern && { pattern, symbol });
+                    file.patternAmbientModules = append<PatternAmbientModule>(file.patternAmbientModules, pattern && !isString(pattern) ? { pattern, symbol } : undefined);
                 }
             }
             else {
@@ -2328,7 +2330,7 @@ namespace ts {
                 // Report error if function is not top level function declaration
                 if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
                     blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
-                    !isFunctionLike(blockScopeContainer)) {
+                    !isFunctionLikeOrClassStaticBlockDeclaration(blockScopeContainer)) {
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
                     const errorSpan = getErrorSpanForNode(file, node);
@@ -2712,7 +2714,7 @@ namespace ts {
                     updateStrictModeStatementList((node as SourceFile).statements);
                     return bindSourceFileIfExternalModule();
                 case SyntaxKind.Block:
-                    if (!isFunctionLike(node.parent)) {
+                    if (!isFunctionLikeOrClassStaticBlockDeclaration(node.parent)) {
                         return;
                     }
                     // falls through
@@ -2931,7 +2933,7 @@ namespace ts {
                         constructorSymbol.members = constructorSymbol.members || createSymbolTable();
                         // It's acceptable for multiple 'this' assignments of the same identifier to occur
                         if (hasDynamicName(node)) {
-                            bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol);
+                            bindDynamicallyNamedThisPropertyAssignment(node, constructorSymbol, constructorSymbol.members);
                         }
                         else {
                             declareSymbol(constructorSymbol.members, constructorSymbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.PropertyExcludes & ~SymbolFlags.Property);
@@ -2948,9 +2950,9 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
-                    const symbolTable = hasSyntacticModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
+                    const symbolTable = isStatic(thisContainer) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     if (hasDynamicName(node)) {
-                        bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol);
+                        bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                     }
                     else {
                         declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property | SymbolFlags.Assignment, SymbolFlags.None, /*isReplaceableByMethod*/ true);
@@ -2974,8 +2976,8 @@ namespace ts {
             }
         }
 
-        function bindDynamicallyNamedThisPropertyAssignment(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol) {
-            bindAnonymousDeclaration(node, SymbolFlags.Property, InternalSymbolName.Computed);
+        function bindDynamicallyNamedThisPropertyAssignment(node: BinaryExpression | DynamicNamedDeclaration, symbol: Symbol, symbolTable: SymbolTable) {
+            declareSymbol(symbolTable, symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true, /*isComputedName*/ true);
             addLateBoundAssignmentDeclarationToSymbol(node, symbol);
         }
 

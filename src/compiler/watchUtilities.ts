@@ -184,7 +184,7 @@ namespace ts {
             const rootResult = tryReadDirectory(rootDir, rootDirPath);
             let rootSymLinkResult: FileSystemEntries | undefined;
             if (rootResult !== undefined) {
-                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
+                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath, directoryExists);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
@@ -473,7 +473,7 @@ namespace ts {
 
         // We want to ignore emit file check if file is not going to be emitted next to source file
         // In that case we follow config file inclusion rules
-        if (options.outFile || options.outDir) return false;
+        if (outFile(options) || options.outDir) return false;
 
         // File if emitted next to input needs to be ignored
         if (fileExtensionIs(fileOrDirectoryPath, Extension.Dts)) {

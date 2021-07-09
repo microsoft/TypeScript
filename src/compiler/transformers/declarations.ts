@@ -380,7 +380,6 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            /*preferences*/ undefined,
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -570,6 +569,8 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
             }
             return false;
         }

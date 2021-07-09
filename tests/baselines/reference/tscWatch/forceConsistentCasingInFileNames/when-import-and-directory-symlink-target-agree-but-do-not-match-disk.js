@@ -68,6 +68,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -183,6 +185,8 @@ Program files::
 /user/username/projects/myproject/b.ts
 
 No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:

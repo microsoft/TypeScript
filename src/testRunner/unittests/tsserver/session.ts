@@ -48,7 +48,7 @@ namespace ts.server {
                 typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: projectSystem.nullLogger,
+                logger: projectSystem.nullLogger(),
                 canUseEvents: true
             };
             return new TestSession(opts);
@@ -278,6 +278,7 @@ namespace ts.server {
                 CommandNames.ToggleMultilineComment,
                 CommandNames.CommentSelection,
                 CommandNames.UncommentSelection,
+                CommandNames.ProvideInlayHints
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {
@@ -469,7 +470,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.nullLogger,
+                    logger: projectSystem.nullLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler(command, this.exceptionRaisingHandler);
@@ -516,7 +517,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.createHasErrorMessageLogger().logger,
+                    logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -584,7 +585,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.createHasErrorMessageLogger().logger,
+                    logger: projectSystem.createHasErrorMessageLogger(),
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({

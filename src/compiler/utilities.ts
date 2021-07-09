@@ -96,7 +96,15 @@ namespace ts {
     }
 
     export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
-        return moduleResolutionOptionDeclarations.some(o =>
+        return optionsHaveChanges(oldOptions, newOptions, moduleResolutionOptionDeclarations);
+    }
+
+    export function changesAffectingProgramStructure(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
+        return optionsHaveChanges(oldOptions, newOptions, optionsAffectingProgramStructure);
+    }
+
+    export function optionsHaveChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions, optionDeclarations: readonly CommandLineOption[]) {
+        return oldOptions !== newOptions && optionDeclarations.some(o =>
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
@@ -266,6 +274,10 @@ namespace ts {
         return node as SourceFile;
     }
 
+    export function getSourceFileOfModule(module: Symbol) {
+        return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
+    }
+
     export function isStatementWithLocals(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Block:
@@ -273,6 +285,7 @@ namespace ts {
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
+            case SyntaxKind.ClassStaticBlockDeclaration:
                 return true;
         }
         return false;
@@ -523,37 +536,6 @@ namespace ts {
         return text;
     }
 
-    /**
-     * Removes the leading and trailing white space and line terminator characters from a string.
-     */
-    export const trimString = !!String.prototype.trim ? ((s: string) => s.trim()) : (s: string) => trimStringEnd(trimStringStart(s));
-
-    /**
-     * Returns a copy with trailing whitespace removed.
-     */
-    export const trimStringEnd = !!String.prototype.trimEnd ? ((s: string) => s.trimEnd()) : trimEndImpl;
-
-
-    /**
-     * Returns a copy with leading whitespace removed.
-     */
-     export const trimStringStart = !!String.prototype.trimStart ? ((s: string) => s.trimStart()) : (s: string) => s.replace(/^\s+/g, "");
-
-    /**
-     * https://jsbench.me/gjkoxld4au/1
-     * The simple regex for this, /\s+$/g is O(n^2) in v8.
-     * The native .trimEnd method is by far best, but since that's technically ES2019,
-     * we provide a (still much faster than the simple regex) fallback.
-     */
-    function trimEndImpl(s: string) {
-        let end = s.length - 1;
-        while (end >= 0) {
-            if (!isWhiteSpaceLike(s.charCodeAt(end))) break;
-            end--;
-        }
-        return s.slice(0, end + 1);
-    }
-
     export function getTextOfNode(node: Node, includeTrivia = false): string {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
@@ -782,7 +764,7 @@ namespace ts {
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
-            isFunctionLike(node);
+            isFunctionLikeOrClassStaticBlockDeclaration(node);
     }
 
     export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
@@ -872,7 +854,7 @@ namespace ts {
             case SyntaxKind.Block:
                 // function block is not considered block-scope container
                 // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                return !isFunctionLike(parentNode);
+                return !isFunctionLikeOrClassStaticBlockDeclaration(parentNode);
         }
 
         return false;
@@ -1596,6 +1578,19 @@ namespace ts {
         return findAncestor(node.parent, isClassLike);
     }
 
+    export function getContainingClassStaticBlock(node: Node): Node | undefined {
+        return findAncestor(node.parent, n => {
+            if (isClassLike(n) || isFunctionLike(n)) {
+                return "quit";
+            }
+            return isClassStaticBlockDeclaration(n);
+        });
+    }
+
+    export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
+        return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {
@@ -1641,6 +1636,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1714,6 +1710,7 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
@@ -1871,10 +1868,17 @@ namespace ts {
                 return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
                 return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
             default:
                 return false;
         }
+    }
+
+    export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
+        if (nodeIsDecorated(node)) return true;
+        const constructor = getFirstConstructorWithBody(node);
+        return !!constructor && childIsDecorated(constructor, node);
     }
 
     export function isJSXTagName(node: Node) {
@@ -4371,6 +4375,18 @@ namespace ts {
         return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
     }
 
+    export function isThisInTypeQuery(node: Node): boolean {
+        if (!isThisIdentifier(node)) {
+            return false;
+        }
+
+        while (isQualifiedName(node.parent) && node.parent.left === node) {
+            node = node.parent;
+        }
+
+        return node.parent.kind === SyntaxKind.TypeQuery;
+    }
+
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
@@ -4396,7 +4412,7 @@ namespace ts {
         else {
             forEach(declarations, member => {
                 if (isAccessor(member)
-                    && hasSyntacticModifier(member, ModifierFlags.Static) === hasSyntacticModifier(accessor, ModifierFlags.Static)) {
+                    && isStatic(member) === isStatic(accessor)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -4705,6 +4721,11 @@ namespace ts {
 
     export function hasSyntacticModifier(node: Node, flags: ModifierFlags): boolean {
         return !!getSelectedSyntacticModifierFlags(node, flags);
+    }
+
+    export function isStatic(node: Node) {
+        // https://tc39.es/ecma262/#sec-static-semantics-isstatic
+        return isClassElement(node) && hasStaticModifier(node) || isClassStaticBlockDeclaration(node);
     }
 
     export function hasStaticModifier(node: Node): boolean {
@@ -6110,6 +6131,7 @@ namespace ts {
         | "strictBindCallApply"
         | "strictPropertyInitialization"
         | "alwaysStrict"
+        | "useUnknownInCatchVariables"
         ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
@@ -6125,13 +6147,11 @@ namespace ts {
     }
 
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
-        return oldOptions !== newOptions &&
-            semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(oldOptions, newOptions, semanticDiagnosticsOptionDeclarations);
     }
 
     export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
-        return oldOptions !== newOptions &&
-            affectsEmitOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+        return optionsHaveChanges(oldOptions, newOptions, affectsEmitOptionDeclarations);
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
@@ -6190,12 +6210,25 @@ namespace ts {
         setSymlinkedFile(symlinkPath: Path, real: string): void;
         /*@internal*/
         setSymlinkedDirectoryFromSymlinkedFile(symlink: string, real: string): void;
+        /**
+         * @internal
+         * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
+         * don't include automatic type reference directives. Must be called only when
+         * `hasProcessedResolutions` returns false (once per cache instance).
+         */
+        setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ReadonlyESMap<string, ResolvedTypeReferenceDirective | undefined> | undefined): void;
+        /**
+         * @internal
+         * Whether `setSymlinksFromResolutions` has already been called.
+         */
+        hasProcessedResolutions(): boolean;
     }
 
     export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
         let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
         let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
         let symlinkedFiles: ESMap<Path, string> | undefined;
+        let hasProcessedResolutions = false;
         return {
             getSymlinkedFiles: () => symlinkedFiles,
             getSymlinkedDirectories: () => symlinkedDirectories,
@@ -6224,28 +6257,28 @@ namespace ts {
                     });
                 }
             },
+            setSymlinksFromResolutions(files, typeReferenceDirectives) {
+                Debug.assert(!hasProcessedResolutions);
+                hasProcessedResolutions = true;
+                for (const file of files) {
+                    file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                }
+                typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            },
+            hasProcessedResolutions: () => hasProcessedResolutions,
         };
-    }
 
-    export function discoverProbableSymlinks(files: readonly SourceFile[], getCanonicalFileName: GetCanonicalFileName, cwd: string): SymlinkCache {
-        const cache = createSymlinkCache(cwd, getCanonicalFileName);
-        const symlinks = flatMap(files, sf => {
-            const pairs = sf.resolvedModules && arrayFrom(mapDefinedIterator(sf.resolvedModules.values(), res =>
-                res?.originalPath ? [res.resolvedFileName, res.originalPath] as const : undefined));
-            return concatenate(pairs, sf.resolvedTypeReferenceDirectiveNames && arrayFrom(mapDefinedIterator(sf.resolvedTypeReferenceDirectiveNames.values(), res =>
-                res?.originalPath && res.resolvedFileName ? [res.resolvedFileName, res.originalPath] as const : undefined)));
-        });
-
-        for (const [resolvedPath, originalPath] of symlinks) {
-            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedPath);
-            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedPath, originalPath, cwd, getCanonicalFileName) || emptyArray;
+        function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
+            if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
+            const { resolvedFileName, originalPath } = resolution;
+            cache.setSymlinkedFile(toPath(originalPath, cwd, getCanonicalFileName), resolvedFileName);
+            const [commonResolved, commonOriginal] = guessDirectorySymlink(resolvedFileName, originalPath, cwd, getCanonicalFileName) || emptyArray;
             if (commonResolved && commonOriginal) {
                 cache.setSymlinkedDirectory(
                     commonOriginal,
                     { real: commonResolved, realPath: toPath(commonResolved, cwd, getCanonicalFileName) });
             }
         }
-        return cache;
     }
 
     function guessDirectorySymlink(a: string, b: string, cwd: string, getCanonicalFileName: GetCanonicalFileName): [string, string] | undefined {
@@ -6489,7 +6522,7 @@ namespace ts {
     }
 
     /** @param path directory of the tsconfig.json */
-    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
+    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string, directoryExists: (path: string) => boolean): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -6505,7 +6538,9 @@ namespace ts {
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
-            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+            if (directoryExists(basePath)) {
+                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+            }
         }
 
         return flatten(results);
@@ -6769,14 +6804,25 @@ namespace ts {
         return changeAnyExtension(path, newExtension, extensionsToRemove, /*ignoreCase*/ false) as T;
     }
 
-    export function tryParsePattern(pattern: string): Pattern | undefined {
-        // This should be verified outside of here and a proper error thrown.
-        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+    /**
+     * Returns the input if there are no stars, a pattern if there is exactly one,
+     * and undefined if there are more.
+     */
+    export function tryParsePattern(pattern: string): string | Pattern | undefined {
         const indexOfStar = pattern.indexOf("*");
-        return indexOfStar === -1 ? undefined : {
-            prefix: pattern.substr(0, indexOfStar),
-            suffix: pattern.substr(indexOfStar + 1)
-        };
+        if (indexOfStar === -1) {
+            return pattern;
+        }
+        return pattern.indexOf("*", indexOfStar + 1) !== -1
+            ? undefined
+            : {
+                prefix: pattern.substr(0, indexOfStar),
+                suffix: pattern.substr(indexOfStar + 1)
+            };
+    }
+
+    export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[] {
+        return mapDefined(getOwnKeys(paths), path => tryParsePattern(path));
     }
 
     export function positionIsSynthesized(pos: number): boolean {
@@ -6822,21 +6868,19 @@ namespace ts {
 
 
     /**
-     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * patternOrStrings contains both patterns (containing "*") and regular strings.
      * Return an exact match if possible, or a pattern match, or undefined.
      * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
      */
-    export function matchPatternOrExact(patternStrings: readonly string[], candidate: string): string | Pattern | undefined {
+    export function matchPatternOrExact(patternOrStrings: readonly (string | Pattern)[], candidate: string): string | Pattern | undefined {
         const patterns: Pattern[] = [];
-        for (const patternString of patternStrings) {
-            if (!hasZeroOrOneAsteriskCharacter(patternString)) continue;
-            const pattern = tryParsePattern(patternString);
-            if (pattern) {
-                patterns.push(pattern);
+        for (const patternOrString of patternOrStrings) {
+            if (patternOrString === candidate) {
+                return candidate;
             }
-            else if (patternString === candidate) {
-                // pattern was matched as is - no need to search further
-                return patternString;
+
+            if (!isString(patternOrString)) {
+                patterns.push(patternOrString);
             }
         }
 
@@ -6999,11 +7043,15 @@ namespace ts {
             || isPartOfTypeQuery(useSite)
             || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
-            || !isExpressionNode(useSite);
+            || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
     }
 
     export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
         return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
+    }
+
+    function isShorthandPropertyNameUseSite(useSite: Node) {
+        return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
     }
 
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {

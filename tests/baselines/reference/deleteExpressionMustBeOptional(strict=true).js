@@ -40,6 +40,7 @@ delete a.b
 delete b.a
 delete b.b
 
+
 //// [deleteExpressionMustBeOptional.js]
 "use strict";
 delete f.a;
