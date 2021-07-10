@@ -959,6 +959,7 @@ namespace ts {
         const potentialThisCollisions: Node[] = [];
         const potentialNewTargetCollisions: Node[] = [];
         const potentialWeakMapSetCollisions: Node[] = [];
+        const potentialReflectCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
         const diagnostics = createDiagnosticCollection();
@@ -24873,6 +24874,18 @@ namespace ts {
 
             if (isStatic(container) || isCallExpression) {
                 nodeCheckFlag = NodeCheckFlags.SuperStatic;
+                if (!isCallExpression &&
+                    languageVersion >= ScriptTarget.ES2015 && languageVersion <= ScriptTarget.ES2021 &&
+                    (isPropertyDeclaration(container) || isClassStaticBlockDeclaration(container))) {
+                    // for `super.x` or `super[x]` in a static initializer, mark all enclosing
+                    // block scope containers so that we can report potential collisions with
+                    // `Reflect`.
+                    forEachEnclosingBlockScopeContainer(node.parent, current => {
+                        if (!isSourceFile(current) || isExternalOrCommonJsModule(current)) {
+                            getNodeLinks(current).flags |= NodeCheckFlags.ContainsSuperPropertyInStaticInitializer;
+                        }
+                    });
+                }
             }
             else {
                 nodeCheckFlag = NodeCheckFlags.SuperInstance;
@@ -31159,6 +31172,10 @@ namespace ts {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
             checkNodeDeferred(node);
 
+            if (isFunctionExpression(node)) {
+                checkCollisionsForDeclarationName(node, node.name);
+            }
+
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode && checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
@@ -34946,8 +34963,7 @@ namespace ts {
             if (produceDiagnostics) {
                 checkFunctionOrMethodDeclaration(node);
                 checkGrammarForGenerator(node);
-                checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
-                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
+                checkCollisionsForDeclarationName(node, node.name);
             }
         }
 
@@ -35470,8 +35486,13 @@ namespace ts {
             });
         }
 
+        /**
+         * Checks whether an {@link Identifier}, in the context of another {@link Node}, would collide with a runtime value
+         * of {@link name} in an outer scope. This is used to check for collisions for downlevel transformations that
+         * require names like `Object`, `Promise`, `Reflect`, `require`, `exports`, etc.
+         */
         function needCollisionCheckForIdentifier(node: Node, identifier: Identifier | undefined, name: string): boolean {
-            if (!(identifier && identifier.escapedText === name)) {
+            if (identifier?.escapedText !== name) {
                 return false;
             }
 
@@ -35480,8 +35501,9 @@ namespace ts {
                 node.kind === SyntaxKind.MethodDeclaration ||
                 node.kind === SyntaxKind.MethodSignature ||
                 node.kind === SyntaxKind.GetAccessor ||
-                node.kind === SyntaxKind.SetAccessor) {
-                // it is ok to have member named '_super' or '_this' - member access is always qualified
+                node.kind === SyntaxKind.SetAccessor ||
+                node.kind === SyntaxKind.PropertyAssignment) {
+                // it is ok to have member named '_super', '_this', `Promise`, etc. - member access is always qualified
                 return false;
             }
 
@@ -35490,8 +35512,15 @@ namespace ts {
                 return false;
             }
 
+            if (isImportClause(node) || isImportEqualsDeclaration(node) || isImportSpecifier(node)) {
+                // type-only imports do not require collision checks against runtime values.
+                if (isTypeOnlyImportOrExportDeclaration(node)) {
+                    return false;
+                }
+            }
+
             const root = getRootDeclaration(node);
-            if (root.kind === SyntaxKind.Parameter && nodeIsMissing((root.parent as FunctionLikeDeclaration).body)) {
+            if (isParameter(root) && nodeIsMissing((root.parent as FunctionLikeDeclaration).body)) {
                 // just an overload - no codegen impact
                 return false;
             }
@@ -35532,21 +35561,13 @@ namespace ts {
             });
         }
 
-        function checkWeakMapSetCollision(node: Node) {
-            const enclosingBlockScope = getEnclosingBlockScopeContainer(node);
-            if (getNodeCheckFlags(enclosingBlockScope) & NodeCheckFlags.ContainsClassWithPrivateIdentifiers) {
-                Debug.assert(isNamedDeclaration(node) && isIdentifier(node.name) && typeof node.name.escapedText === "string", "The target of a WeakMap/WeakSet collision check should be an identifier");
-                errorSkippedOn("noEmit", node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, node.name.escapedText);
-            }
-        }
-
-        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier) {
+        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
             // No need to check for require or exports for ES6 modules and later
             if (moduleKind >= ModuleKind.ES2015) {
                 return;
             }
 
-            if (!needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
+            if (!name || !needCollisionCheckForIdentifier(node, name, "require") && !needCollisionCheckForIdentifier(node, name, "exports")) {
                 return;
             }
 
@@ -35564,8 +35585,8 @@ namespace ts {
             }
         }
 
-        function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier): void {
-            if (languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
+        function checkCollisionWithGlobalPromiseInGeneratedCode(node: Node, name: Identifier | undefined): void {
+            if (!name || languageVersion >= ScriptTarget.ES2017 || !needCollisionCheckForIdentifier(node, name, "Promise")) {
                 return;
             }
 
@@ -35580,6 +35601,76 @@ namespace ts {
                 // If the declaration happens to be in external module, report error that Promise is a reserved identifier.
                 errorSkippedOn("noEmit", name, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_in_top_level_scope_of_a_module_containing_async_functions,
                     declarationNameToString(name), declarationNameToString(name));
+            }
+        }
+
+        function recordPotentialCollisionWithWeakMapSetInGeneratedCode(node: Node, name: Identifier): void {
+            if (languageVersion <= ScriptTarget.ES2021
+                && (needCollisionCheckForIdentifier(node, name, "WeakMap") || needCollisionCheckForIdentifier(node, name, "WeakSet"))) {
+                potentialWeakMapSetCollisions.push(node);
+            }
+        }
+
+        function checkWeakMapSetCollision(node: Node) {
+            const enclosingBlockScope = getEnclosingBlockScopeContainer(node);
+            if (getNodeCheckFlags(enclosingBlockScope) & NodeCheckFlags.ContainsClassWithPrivateIdentifiers) {
+                Debug.assert(isNamedDeclaration(node) && isIdentifier(node.name) && typeof node.name.escapedText === "string", "The target of a WeakMap/WeakSet collision check should be an identifier");
+                errorSkippedOn("noEmit", node, Diagnostics.Compiler_reserves_name_0_when_emitting_private_identifier_downlevel, node.name.escapedText);
+            }
+        }
+
+        function recordPotentialCollisionWithReflectInGeneratedCode(node: Node, name: Identifier | undefined): void {
+            if (name && languageVersion >= ScriptTarget.ES2015 && languageVersion <= ScriptTarget.ES2021
+                && needCollisionCheckForIdentifier(node, name, "Reflect")) {
+                potentialReflectCollisions.push(node);
+            }
+        }
+
+        function checkReflectCollision(node: Node) {
+            let hasCollision = false;
+            if (isClassExpression(node)) {
+                // ClassExpression names don't contribute to their containers, but do matter for any of their block-scoped members.
+                for (const member of node.members) {
+                    if (getNodeCheckFlags(member) & NodeCheckFlags.ContainsSuperPropertyInStaticInitializer) {
+                        hasCollision = true;
+                        break;
+                    }
+                }
+            }
+            else if (isFunctionExpression(node)) {
+                // FunctionExpression names don't contribute to their containers, but do matter for their contents
+                if (getNodeCheckFlags(node) & NodeCheckFlags.ContainsSuperPropertyInStaticInitializer) {
+                    hasCollision = true;
+                }
+            }
+            else {
+                const container = getEnclosingBlockScopeContainer(node);
+                if (container && getNodeCheckFlags(container) & NodeCheckFlags.ContainsSuperPropertyInStaticInitializer) {
+                    hasCollision = true;
+                }
+            }
+            if (hasCollision) {
+                Debug.assert(isNamedDeclaration(node) && isIdentifier(node.name), "The target of a Reflect collision check should be an identifier");
+                errorSkippedOn("noEmit", node, Diagnostics.Duplicate_identifier_0_Compiler_reserves_name_1_when_emitting_super_references_in_static_initializers,
+                    declarationNameToString(node.name),
+                    "Reflect");
+            }
+        }
+
+        function checkCollisionsForDeclarationName(node: Node, name: Identifier | undefined) {
+            if (!name) return;
+            checkCollisionWithRequireExportsInGeneratedCode(node, name);
+            checkCollisionWithGlobalPromiseInGeneratedCode(node, name);
+            recordPotentialCollisionWithWeakMapSetInGeneratedCode(node, name);
+            recordPotentialCollisionWithReflectInGeneratedCode(node, name);
+            if (isClassLike(node)) {
+                checkTypeNameIsReserved(name, Diagnostics.Class_name_cannot_be_0);
+                if (!(node.flags & NodeFlags.Ambient)) {
+                    checkClassNameCollisionWithObject(name);
+                }
+            }
+            else if (isEnumDeclaration(node)) {
+                checkTypeNameIsReserved(name, Diagnostics.Enum_name_cannot_be_0);
             }
         }
 
@@ -35801,12 +35892,7 @@ namespace ts {
                 if (node.kind === SyntaxKind.VariableDeclaration || node.kind === SyntaxKind.BindingElement) {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
-                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-                if (languageVersion < ScriptTarget.ESNext
-                    && (needCollisionCheckForIdentifier(node, node.name, "WeakMap") || needCollisionCheckForIdentifier(node, node.name, "WeakSet"))) {
-                    potentialWeakMapSetCollisions.push(node);
-                }
+                checkCollisionsForDeclarationName(node, node.name);
             }
         }
 
@@ -37365,14 +37451,7 @@ namespace ts {
         function checkClassLikeDeclaration(node: ClassLikeDeclaration) {
             checkGrammarClassLikeDeclaration(node);
             checkDecorators(node);
-            if (node.name) {
-                checkTypeNameIsReserved(node.name, Diagnostics.Class_name_cannot_be_0);
-                checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
-                if (!(node.flags & NodeFlags.Ambient)) {
-                    checkClassNameCollisionWithObject(node.name);
-                }
-            }
+            checkCollisionsForDeclarationName(node, node.name);
             checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
             checkExportsOnMergedDeclarations(node);
             const symbol = getSymbolOfNode(node);
@@ -38099,9 +38178,7 @@ namespace ts {
             // Grammar checking
             checkGrammarDecoratorsAndModifiers(node);
 
-            checkTypeNameIsReserved(node.name, Diagnostics.Enum_name_cannot_be_0);
-            checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+            checkCollisionsForDeclarationName(node, node.name);
             checkExportsOnMergedDeclarations(node);
             node.members.forEach(checkEnumMember);
 
@@ -38210,8 +38287,7 @@ namespace ts {
                 }
 
                 if (isIdentifier(node.name)) {
-                    checkCollisionWithRequireExportsInGeneratedCode(node, node.name);
-                    checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name);
+                    checkCollisionsForDeclarationName(node, node.name);
                 }
 
                 checkExportsOnMergedDeclarations(node);
@@ -38428,8 +38504,7 @@ namespace ts {
         }
 
         function checkImportBinding(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier) {
-            checkCollisionWithRequireExportsInGeneratedCode(node, node.name!);
-            checkCollisionWithGlobalPromiseInGeneratedCode(node, node.name!);
+            checkCollisionsForDeclarationName(node, node.name);
             checkAliasSymbol(node);
             if (node.kind === SyntaxKind.ImportSpecifier &&
                 idText(node.propertyName || node.name) === "default" &&
@@ -39147,6 +39222,7 @@ namespace ts {
                 clear(potentialThisCollisions);
                 clear(potentialNewTargetCollisions);
                 clear(potentialWeakMapSetCollisions);
+                clear(potentialReflectCollisions);
 
                 forEach(node.statements, checkSourceElement);
                 checkSourceElement(node.endOfFileToken);
@@ -39189,6 +39265,11 @@ namespace ts {
                 if (potentialWeakMapSetCollisions.length) {
                     forEach(potentialWeakMapSetCollisions, checkWeakMapSetCollision);
                     clear(potentialWeakMapSetCollisions);
+                }
+
+                if (potentialReflectCollisions.length) {
+                    forEach(potentialReflectCollisions, checkReflectCollision);
+                    clear(potentialReflectCollisions);
                 }
 
                 links.flags |= NodeCheckFlags.TypeChecked;
@@ -40303,7 +40384,9 @@ namespace ts {
         }
 
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
-            return getNodeLinks(node).flags || 0;
+            const nodeId = node.id || 0;
+            if (nodeId < 0 || nodeId >= nodeLinks.length) return 0;
+            return nodeLinks[nodeId]?.flags || 0;
         }
 
         function getEnumMemberValue(node: EnumMember): string | number | undefined {
