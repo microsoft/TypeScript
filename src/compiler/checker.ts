@@ -35561,7 +35561,7 @@ namespace ts {
             });
         }
 
-       function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
+        function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
             // No need to check for require or exports for ES6 modules and later
             if (moduleKind >= ModuleKind.ES2015) {
                 return;
@@ -35661,7 +35661,7 @@ namespace ts {
             if (!name) return;
             checkCollisionWithRequireExportsInGeneratedCode(node, name);
             checkCollisionWithGlobalPromiseInGeneratedCode(node, name);
-            // recordPotentialCollisionWithWeakMapSetInGeneratedCode(node, name);
+            recordPotentialCollisionWithWeakMapSetInGeneratedCode(node, name);
             recordPotentialCollisionWithReflectInGeneratedCode(node, name);
             if (isClassLike(node)) {
                 checkTypeNameIsReserved(name, Diagnostics.Class_name_cannot_be_0);
@@ -35674,7 +35674,7 @@ namespace ts {
             }
         }
 
-         function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
+        function checkVarDeclaredNamesNotShadowed(node: VariableDeclaration | BindingElement) {
             // - ScriptBody : StatementList
             // It is a Syntax Error if any element of the LexicallyDeclaredNames of StatementList
             // also occurs in the VarDeclaredNames of StatementList.
@@ -35893,8 +35893,6 @@ namespace ts {
                     checkVarDeclaredNamesNotShadowed(node);
                 }
                 checkCollisionsForDeclarationName(node, node.name);
-                // TODO(rbuckton): remove next line when merged into above function.
-                recordPotentialCollisionWithWeakMapSetInGeneratedCode(node, node.name);
             }
         }
 
