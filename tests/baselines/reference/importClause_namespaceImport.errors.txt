@@ -17,11 +17,11 @@
     types;
     ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     types.Value;
     ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     let v: types.Value;
                  ~~~~~
 !!! error TS2694: Namespace '"/a"' has no exported member 'Value'.
@@ -37,5 +37,5 @@
     const d = { types };
                 ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     
