@@ -2724,6 +2724,14 @@ namespace ts {
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand);
             node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if ((operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) &&
+                isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
@@ -2739,7 +2747,14 @@ namespace ts {
             const node = createBaseExpression<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand);
-            node.transformFlags = propagateChildFlags(node.operand);
+            node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if (isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
