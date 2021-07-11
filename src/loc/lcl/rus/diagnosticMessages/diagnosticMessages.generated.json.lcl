@@ -5138,6 +5138,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_identifier_0_Compiler_reserves_name_1_when_emitting_super_references_in_static_initializer_2818" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Дублированный идентификатор "{0}". Компилятор резервирует имя "{1}" при выпуске ссылок "super" в статических инициализаторах.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions_2520" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.]]></Val>
