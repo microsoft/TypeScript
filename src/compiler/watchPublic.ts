@@ -462,7 +462,7 @@ namespace ts {
             compilerHost.hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
             builderProgram = createProgram(rootFileNames, compilerOptions, compilerHost, builderProgram, configFileParsingDiagnostics, projectReferences);
             // map package json cache entries to their realpaths so we don't try to watch across symlinks
-            const packageCacheEntries = map(resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache().entries(), ([path, data]) => ([compilerHost.realpath ? compilerHost.realpath(path) as Path : path, data] as const));
+            const packageCacheEntries = map(resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache().entries(), ([path, data]) => ([compilerHost.realpath ? toPath(compilerHost.realpath(path)) : path, data] as const));
             resolutionCache.finishCachingPerDirectoryResolution();
 
             // Update watches
