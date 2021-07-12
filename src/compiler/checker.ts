@@ -25381,15 +25381,13 @@ namespace ts {
             }
             if (isPropertyAccessExpression(e)) {
                 const lhsType = getTypeOfExpression(e.expression);
-                const prop = isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
-                return prop;
+                return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
             }
             return undefined;
 
             function tryGetPrivateIdentifierPropertyOfType(type: Type, id: PrivateIdentifier) {
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(id.escapedText, id);
-                const prop = lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(type, lexicallyScopedSymbol);
-                return prop;
+                return lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(type, lexicallyScopedSymbol);
             }
         }
 
@@ -25399,6 +25397,7 @@ namespace ts {
             const kind = getAssignmentDeclarationKind(binaryExpression);
             switch (kind) {
                 case AssignmentDeclarationKind.None:
+                case AssignmentDeclarationKind.ThisProperty:
                     const lhsSymbol = getSymbolForExpression(binaryExpression.left);
                     const decl = lhsSymbol && lhsSymbol.valueDeclaration;
                     // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor.
@@ -25408,8 +25407,9 @@ namespace ts {
                         return (overallAnnotation && getTypeFromTypeNode(overallAnnotation)) ||
                             (decl.initializer && getTypeOfExpression(binaryExpression.left));
                     }
-                    return getTypeOfExpression(binaryExpression.left);
-                case AssignmentDeclarationKind.ThisProperty:
+                    if (kind === AssignmentDeclarationKind.None) {
+                        return getTypeOfExpression(binaryExpression.left);
+                    }
                     return getContextualTypeForThisPropertyAssignment(binaryExpression);
                 case AssignmentDeclarationKind.Property:
                     if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
