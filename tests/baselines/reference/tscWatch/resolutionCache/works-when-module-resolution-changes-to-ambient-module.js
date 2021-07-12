@@ -41,6 +41,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/foo.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/foo.ts (used version)
+
 WatchedFiles::
 /a/b/foo.ts:
   {"fileName":"/a/b/foo.ts","pollingInterval":250}
@@ -101,6 +105,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/foo.ts
 /a/b/node_modules/@types/node/index.d.ts
+
+Shape signatures in builder refreshed for::
+/a/b/foo.ts (computed .d.ts)
+/a/b/node_modules/@types/node/index.d.ts (used version)
 
 WatchedFiles::
 /a/b/foo.ts:

@@ -1351,6 +1351,8 @@ namespace ts {
                         return emitMethodSignature(node as MethodSignature);
                     case SyntaxKind.MethodDeclaration:
                         return emitMethodDeclaration(node as MethodDeclaration);
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                     case SyntaxKind.Constructor:
                         return emitConstructor(node as ConstructorDeclaration);
                     case SyntaxKind.GetAccessor:
@@ -2063,6 +2065,13 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
+        function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword("static");
+            emitBlockFunctionBody(node.body);
+        }
+
         function emitConstructor(node: ConstructorDeclaration) {
             emitModifiers(node, node.modifiers);
             writeKeyword("constructor");
@@ -2473,7 +2482,17 @@ namespace ts {
         }
 
         function emitCallExpression(node: CallExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
@@ -2488,7 +2507,17 @@ namespace ts {
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.tag, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);

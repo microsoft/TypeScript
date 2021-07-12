@@ -84,6 +84,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
+        session?: Session<unknown>;
         config: any;
     }
 
@@ -250,7 +251,7 @@ namespace ts.server {
         public readonly getCanonicalFileName: GetCanonicalFileName;
 
         /*@internal*/
-        private exportMapCache = createExportMapCache();
+        private exportMapCache: ExportInfoMap | undefined;
         /*@internal*/
         private changedFilesForExportMapCache: Set<Path> | undefined;
         /*@internal*/
@@ -792,6 +793,7 @@ namespace ts.server {
             this.cachedUnresolvedImportsPerFile = undefined!;
             this.moduleSpecifierCache = undefined!;
             this.directoryStructureHost = undefined!;
+            this.exportMapCache = undefined;
             this.projectErrors = undefined;
 
             // Clean up file watchers waiting for missing files
@@ -989,7 +991,7 @@ namespace ts.server {
         /*@internal*/
         markFileAsDirty(changedFile: Path) {
             this.markAsDirty();
-            if (!this.exportMapCache.isEmpty()) {
+            if (this.exportMapCache && !this.exportMapCache.isEmpty()) {
                 (this.changedFilesForExportMapCache ||= new Set()).add(changedFile);
             }
         }
@@ -1191,7 +1193,8 @@ namespace ts.server {
                 }
             }
 
-            if (!this.exportMapCache.isEmpty()) {
+            if (this.exportMapCache && !this.exportMapCache.isEmpty()) {
+                this.exportMapCache.releaseSymbols();
                 if (this.hasAddedorRemovedFiles || oldProgram && !this.program!.structureIsReused) {
                     this.exportMapCache.clear();
                 }
@@ -1200,10 +1203,10 @@ namespace ts.server {
                         const oldSourceFile = oldProgram.getSourceFileByPath(fileName);
                         const sourceFile = this.program!.getSourceFileByPath(fileName);
                         if (!oldSourceFile || !sourceFile) {
-                            this.exportMapCache.clear();
+                            this.exportMapCache!.clear();
                             return true;
                         }
-                        return this.exportMapCache.onFileChanged(oldSourceFile, sourceFile, !!this.getTypeAcquisition().enable);
+                        return this.exportMapCache!.onFileChanged(oldSourceFile, sourceFile, !!this.getTypeAcquisition().enable);
                     });
                 }
             }
@@ -1610,7 +1613,8 @@ namespace ts.server {
                     project: this,
                     languageService: this.languageService,
                     languageServiceHost: this,
-                    serverHost: this.projectService.host
+                    serverHost: this.projectService.host,
+                    session: this.projectService.session
                 };
 
                 const pluginModule = pluginModuleFactory({ typescript: ts });
@@ -1664,8 +1668,13 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getExportMapCache() {
-            return this.exportMapCache;
+        getCachedExportInfoMap() {
+            return this.exportMapCache ||= createCacheableExportInfoMap(this);
+        }
+
+        /*@internal*/
+        clearCachedExportInfoMap() {
+            this.exportMapCache?.clear();
         }
 
         /*@internal*/
@@ -1741,6 +1750,11 @@ namespace ts.server {
         /*@internal*/
         watchNodeModulesForPackageJsonChanges(directoryPath: string) {
             return this.projectService.watchPackageJsonsInNodeModules(this.toPath(directoryPath), this);
+        }
+
+        /*@internal*/
+        getIncompleteCompletionsCache() {
+            return this.projectService.getIncompleteCompletionsCache();
         }
     }
 
@@ -2010,7 +2024,7 @@ namespace ts.server {
             const oldProgram = this.getCurrentProgram();
             const hasSameSetOfFiles = super.updateGraph();
             if (oldProgram && oldProgram !== this.getCurrentProgram()) {
-                this.hostProject.getExportMapCache().clear();
+                this.hostProject.clearCachedExportInfoMap();
             }
             return hasSameSetOfFiles;
         }
@@ -2119,7 +2133,7 @@ namespace ts.server {
                 /*compileOnSaveEnabled*/ false,
                 /*watchOptions*/ undefined,
                 cachedDirectoryStructureHost,
-                getDirectoryPath(configFileName),
+                getDirectoryPath(configFileName)
             );
         }
 

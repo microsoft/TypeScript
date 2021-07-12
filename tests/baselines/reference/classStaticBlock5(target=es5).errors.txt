@@ -1,0 +1,28 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(8,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(12,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts(13,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock5.ts (3 errors) ====
+    class B {
+        static a = 1;
+        static b = 2;
+    }
+    
+    class C extends B {
+        static b = 3;
+        static c = super.a
+                         ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+    
+        static {
+            this.b;
+            super.b;
+                  ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+            super.a;
+                  ~
+!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+        }
+    }
+    

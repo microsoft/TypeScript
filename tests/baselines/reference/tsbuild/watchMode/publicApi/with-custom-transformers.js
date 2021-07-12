@@ -66,6 +66,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/shared/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/shared/index.ts (used version)
+
 Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
 Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
 Program structureReused: Not
@@ -76,6 +80,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/webpack/index.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/webpack/index.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/shared/tsconfig.json:
@@ -275,6 +283,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/shared/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/shared/index.ts (computed .d.ts)
+
 Program root files: ["/user/username/projects/myproject/webpack/index.ts"]
 Program options: {"composite":true,"configFilePath":"/user/username/projects/myproject/webpack/tsconfig.json"}
 Program structureReused: Not
@@ -283,6 +294,8 @@ Program files::
 /user/username/projects/myproject/webpack/index.ts
 
 Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /user/username/projects/myproject/shared/tsconfig.json:

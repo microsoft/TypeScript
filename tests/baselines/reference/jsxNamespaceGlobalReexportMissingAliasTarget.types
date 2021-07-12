@@ -90,13 +90,13 @@ import { JSXInternal } from '..';
 >JSXInternal : any
 
 export function jsx(
->jsx : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild; }, key?: string | undefined): VNode<any>; }
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -110,13 +110,13 @@ export function jsx(
 
 ): VNode<any>;
 export function jsx<P>(
->jsx : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; }
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild;}, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
 
     props: Attributes & P & { children?: ComponentChild },
->props : P & { children?: ComponentChild; }
+>props : P & { children?: ComponentChild | undefined; }
 >children : ComponentChild | undefined
 
     key?: string
@@ -125,13 +125,13 @@ export function jsx<P>(
 ): VNode<any>;
 
 export function jsxs(
->jsxs : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[]; }, key?: string | undefined): VNode<any>; }
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[]; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -145,13 +145,13 @@ export function jsxs(
 
 ): VNode<any>;
 export function jsxs<P>(
->jsxs : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[]; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; }
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChild[];}, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
 
     props: Attributes & P & { children?: ComponentChild[] },
->props : P & { children?: ComponentChild[]; }
+>props : P & { children?: ComponentChild[] | undefined; }
 >children : ComponentChild[] | undefined
 
     key?: string
@@ -160,13 +160,13 @@ export function jsxs<P>(
 ): VNode<any>;
 
 export function jsxDEV(
->jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren; }, key?: string | undefined): VNode<any>; }
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes & JSXInternal.SVGAttributes & Record<string, any> & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -180,13 +180,13 @@ export function jsxDEV(
 
 ): VNode<any>;
 export function jsxDEV<P>(
->jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; }
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: Attributes & P & {    children?: ComponentChildren;}, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
 
     props: Attributes & P & { children?: ComponentChildren },
->props : P & { children?: ComponentChildren; }
+>props : P & { children?: ComponentChildren | undefined; }
 >children : ComponentChildren | undefined
 
     key?: string

@@ -18,7 +18,7 @@ tests/cases/compiler/strictOptionalProperties1.ts(106,55): error TS2322: Type 'u
 tests/cases/compiler/strictOptionalProperties1.ts(107,45): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/compiler/strictOptionalProperties1.ts(107,56): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/compiler/strictOptionalProperties1.ts(111,31): error TS2322: Type 'undefined' is not assignable to type 'number'.
-tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to string index type 'string'.
+tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
 
 
 ==== tests/cases/compiler/strictOptionalProperties1.ts (17 errors) ====
@@ -180,7 +180,7 @@ tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property
         foo?: string;  // Should be ok
         bar?: string | undefined;  // Error
         ~~~
-!!! error TS2411: Property 'bar' of type 'string | undefined' is not assignable to string index type 'string'.
+!!! error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
     }
     
     // Strict optional properties and inference

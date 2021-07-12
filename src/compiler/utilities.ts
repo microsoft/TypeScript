@@ -274,6 +274,10 @@ namespace ts {
         return node as SourceFile;
     }
 
+    export function getSourceFileOfModule(module: Symbol) {
+        return getSourceFileOfNode(module.valueDeclaration || getNonAugmentationDeclaration(module));
+    }
+
     export function isStatementWithLocals(node: Node) {
         switch (node.kind) {
             case SyntaxKind.Block:
@@ -759,7 +763,7 @@ namespace ts {
     export function isBlockScopedContainerTopLevel(node: Node): boolean {
         return node.kind === SyntaxKind.SourceFile ||
             node.kind === SyntaxKind.ModuleDeclaration ||
-            isFunctionLike(node);
+            isFunctionLikeOrClassStaticBlockDeclaration(node);
     }
 
     export function isGlobalScopeAugmentation(module: ModuleDeclaration): boolean {
@@ -828,7 +832,7 @@ namespace ts {
         return false;
     }
 
-    export function isBlockScope(node: Node, parentNode: Node): boolean {
+    export function isBlockScope(node: Node, parentNode: Node | undefined): boolean {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
@@ -844,12 +848,14 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.ClassStaticBlockDeclaration:
                 return true;
 
             case SyntaxKind.Block:
                 // function block is not considered block-scope container
                 // see comment in binder.ts: bind(...), case for SyntaxKind.Block
-                return !isFunctionLike(parentNode);
+                return !isFunctionLikeOrClassStaticBlockDeclaration(parentNode);
         }
 
         return false;
@@ -936,6 +942,14 @@ namespace ts {
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
         return findAncestor(node.parent, current => isBlockScope(current, current.parent))!;
+    }
+
+    export function forEachEnclosingBlockScopeContainer(node: Node, cb: (container: Node) => void): void {
+        let container = getEnclosingBlockScopeContainer(node);
+        while (container) {
+            cb(container);
+            container = getEnclosingBlockScopeContainer(container);
+        }
     }
 
     // Return display name of an identifier
@@ -1109,6 +1123,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+            case SyntaxKind.NamespaceImport:
                 errorNode = (node as NamedDeclaration).name;
                 break;
             case SyntaxKind.ArrowFunction:
@@ -1573,6 +1588,19 @@ namespace ts {
         return findAncestor(node.parent, isClassLike);
     }
 
+    export function getContainingClassStaticBlock(node: Node): Node | undefined {
+        return findAncestor(node.parent, n => {
+            if (isClassLike(n) || isFunctionLike(n)) {
+                return "quit";
+            }
+            return isClassStaticBlockDeclaration(n);
+        });
+    }
+
+    export function getContainingFunctionOrClassStaticBlock(node: Node): SignatureDeclaration | ClassStaticBlockDeclaration | undefined {
+        return findAncestor(node.parent, isFunctionLikeOrClassStaticBlockDeclaration);
+    }
+
     export function getThisContainer(node: Node, includeArrowFunctions: boolean): Node {
         Debug.assert(node.kind !== SyntaxKind.SourceFile);
         while (true) {
@@ -1618,6 +1646,7 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1691,6 +1720,7 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return node;
                 case SyntaxKind.Decorator:
                     // Decorators are always applied outside of the body of a class or method.
@@ -1848,10 +1878,17 @@ namespace ts {
                 return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
                 return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
             default:
                 return false;
         }
+    }
+
+    export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
+        if (nodeIsDecorated(node)) return true;
+        const constructor = getFirstConstructorWithBody(node);
+        return !!constructor && childIsDecorated(constructor, node);
     }
 
     export function isJSXTagName(node: Node) {
@@ -4348,6 +4385,18 @@ namespace ts {
         return !!node && node.kind === SyntaxKind.Identifier && identifierIsThisKeyword(node as Identifier);
     }
 
+    export function isThisInTypeQuery(node: Node): boolean {
+        if (!isThisIdentifier(node)) {
+            return false;
+        }
+
+        while (isQualifiedName(node.parent) && node.parent.left === node) {
+            node = node.parent;
+        }
+
+        return node.parent.kind === SyntaxKind.TypeQuery;
+    }
+
     export function identifierIsThisKeyword(id: Identifier): boolean {
         return id.originalKeywordKind === SyntaxKind.ThisKeyword;
     }
@@ -4373,7 +4422,7 @@ namespace ts {
         else {
             forEach(declarations, member => {
                 if (isAccessor(member)
-                    && hasSyntacticModifier(member, ModifierFlags.Static) === hasSyntacticModifier(accessor, ModifierFlags.Static)) {
+                    && isStatic(member) === isStatic(accessor)) {
                     const memberName = getPropertyNameForPropertyNameNode(member.name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
@@ -4682,6 +4731,11 @@ namespace ts {
 
     export function hasSyntacticModifier(node: Node, flags: ModifierFlags): boolean {
         return !!getSelectedSyntacticModifierFlags(node, flags);
+    }
+
+    export function isStatic(node: Node) {
+        // https://tc39.es/ecma262/#sec-static-semantics-isstatic
+        return isClassElement(node) && hasStaticModifier(node) || isClassStaticBlockDeclaration(node);
     }
 
     export function hasStaticModifier(node: Node): boolean {
@@ -6086,7 +6140,6 @@ namespace ts {
         | "strictFunctionTypes"
         | "strictBindCallApply"
         | "strictPropertyInitialization"
-        | "strictOptionalProperties"
         | "alwaysStrict"
         | "useUnknownInCatchVariables"
         ;
@@ -6479,7 +6532,7 @@ namespace ts {
     }
 
     /** @param path directory of the tsconfig.json */
-    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string): string[] {
+    export function matchFiles(path: string, extensions: readonly string[] | undefined, excludes: readonly string[] | undefined, includes: readonly string[] | undefined, useCaseSensitiveFileNames: boolean, currentDirectory: string, depth: number | undefined, getFileSystemEntries: (path: string) => FileSystemEntries, realpath: (path: string) => string, directoryExists: (path: string) => boolean): string[] {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
@@ -6495,7 +6548,9 @@ namespace ts {
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
-            visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+            if (directoryExists(basePath)) {
+                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+            }
         }
 
         return flatten(results);
@@ -6998,11 +7053,15 @@ namespace ts {
             || isPartOfTypeQuery(useSite)
             || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
-            || !isExpressionNode(useSite);
+            || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
     }
 
     export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
         return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
+    }
+
+    function isShorthandPropertyNameUseSite(useSite: Node) {
+        return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
     }
 
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {

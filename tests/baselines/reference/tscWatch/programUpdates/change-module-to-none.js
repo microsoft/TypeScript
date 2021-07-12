@@ -40,6 +40,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/f1.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
@@ -94,6 +98,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/f1.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/f1.ts (used version)
 
 WatchedFiles::
 /a/b/tsconfig.json:

@@ -5,9 +5,12 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(81,11): error TS2
 tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(90,44): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(91,11): error TS2339: Property 'foo' does not exist on type 'MyUnion'.
   Property 'foo' does not exist on type 'AA'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(156,16): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(167,9): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2532: Object is possibly 'undefined'.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts (5 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts (8 errors) ====
     function f1<T extends string | undefined>(x: T, y: { a: T }, z: [T]): string {
         if (x) {
             x;
@@ -158,5 +161,47 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(91,11): error TS2
     function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
         emittingObject.off(eventName, 0);
         emittingObject.off(eventName as typeof eventName, 0);
+    }
+    
+    // In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
+    // a generic type without a nullable constraint and x is a generic type. This is because when both obj
+    // and x are of generic types T and K, we want the resulting type to be T[K].
+    
+    function fx1<T, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];
+        const x2 = obj && obj[key];
+    }
+    
+    function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];
+        const x2 = obj && obj[key];
+    }
+    
+    function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
+        const x1 = obj[key];  // Error
+                   ~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        const x2 = obj && obj[key];
+    }
+    
+    // Repro from #44166
+    
+    class TableBaseEnum<
+        PublicSpec extends Record<keyof InternalSpec, any>,
+        InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
+        m() {
+            let iSpec = null! as InternalSpec;
+            iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
+            ~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+            iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+            ~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+            if (iSpec === undefined) {
+                return;
+            }
+            iSpec[null! as keyof InternalSpec];
+            iSpec[null! as keyof PublicSpec];
+        }
     }
     

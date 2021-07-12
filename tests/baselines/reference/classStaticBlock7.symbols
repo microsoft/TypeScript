@@ -1,0 +1,65 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock7.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock7.ts, 0, 0))
+
+    static {
+        await 1;
+        yield 1;
+        return 1;
+    }
+}
+
+async function f1 () {
+>f1 : Symbol(f1, Decl(classStaticBlock7.ts, 6, 1))
+
+    class C {
+>C : Symbol(C, Decl(classStaticBlock7.ts, 8, 22))
+
+        static {
+            await 1;
+
+            async function ff () {
+>ff : Symbol(ff, Decl(classStaticBlock7.ts, 11, 20))
+
+                await 1;
+            }
+        }
+    }
+}
+
+function * f2 () {
+>f2 : Symbol(f2, Decl(classStaticBlock7.ts, 18, 1))
+
+    class C {
+>C : Symbol(C, Decl(classStaticBlock7.ts, 20, 18))
+
+        static {
+            yield 1;
+
+            function * ff () {
+>ff : Symbol(ff, Decl(classStaticBlock7.ts, 23, 20))
+
+                yield 1;
+            }
+        }
+    }
+}
+
+function f3 () {
+>f3 : Symbol(f3, Decl(classStaticBlock7.ts, 30, 1))
+
+    class C {
+>C : Symbol(C, Decl(classStaticBlock7.ts, 32, 16))
+
+        static {
+            return 1;
+
+            function ff () {
+>ff : Symbol(ff, Decl(classStaticBlock7.ts, 35, 21))
+
+                return 1
+            }
+        }
+    }
+}
+

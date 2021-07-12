@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock23.ts ===
+const nums = [1, 2, 3].map(n => Promise.resolve(n))
+>nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock23.ts, 0, 51))
+
+  static {
+    for await (const nn of nums) {
+>nn : Symbol(nn, Decl(classStaticBlock23.ts, 4, 20))
+>nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+
+        console.log(nn)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>nn : Symbol(nn, Decl(classStaticBlock23.ts, 4, 20))
+    }
+  }
+}
+
+async function foo () {
+>foo : Symbol(foo, Decl(classStaticBlock23.ts, 8, 1))
+
+  class C {
+>C : Symbol(C, Decl(classStaticBlock23.ts, 10, 23))
+
+    static {
+      for await (const nn of nums) {
+>nn : Symbol(nn, Decl(classStaticBlock23.ts, 13, 22))
+>nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
+
+          console.log(nn)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>nn : Symbol(nn, Decl(classStaticBlock23.ts, 13, 22))
+      }
+    }
+  }
+}
