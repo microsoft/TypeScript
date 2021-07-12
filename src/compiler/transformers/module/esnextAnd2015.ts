@@ -86,7 +86,7 @@ namespace ts {
         /**
          * Creates a `require()` call to import an external module.
          *
-         * @param importNode The declararation to import.
+         * @param importNode The declaration to import.
          */
          function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
             const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);

@@ -3549,7 +3549,7 @@ namespace ts {
         languageVersion: ScriptTarget;
 
         /**
-         * When `module` is `Node12` or `NodeNext`, this field controls weather the
+         * When `module` is `Node12` or `NodeNext`, this field controls whether the
          * source file in question is an ESNext-output-format file, or a CommonJS-output-format
          * module. This is derived by the module resolver as it looks up the file, since
          * it is derived from either the file extension of the module, or the containing
@@ -5931,7 +5931,7 @@ namespace ts {
         NodeJs   = 2,
         // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
         // to better support ecmascript modules and their use within node - more features are still being added, so
-        // we can expect it co change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
+        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
         // version-anchored resolution target
         Node12   = 3,
         NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
