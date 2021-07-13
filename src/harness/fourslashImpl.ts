@@ -1,3 +1,4 @@
+
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -833,6 +834,22 @@ namespace FourSlash {
             ts.zipWith(emit.outputFiles, expected, (outputFile, expected) => {
                 assert.equal(outputFile.name, expected.name, "FileName");
                 assert.equal(outputFile.text, expected.text, "Content");
+            });
+        }
+
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+            const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
+            assert.equal(hints.length, expected.length, "Number of hints");
+
+            const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+                return a.position - b.position;
+            };
+            ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
+                assert.equal(actual.text, expected.text, "Text");
+                assert.equal(actual.position, expected.position, "Position");
+                assert.equal(actual.kind, expected.kind, "Kind");
+                assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
+                assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });
         }
 

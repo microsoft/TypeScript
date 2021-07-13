@@ -89,21 +89,30 @@ namespace ts {
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
         node = getAdjustedReferenceLocation(node);
+        const parent = node.parent;
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment
-            || node.parent.kind === SyntaxKind.ExternalModuleReference
-            || node.parent.kind === SyntaxKind.ImportSpecifier
-            || node.parent.kind === SyntaxKind.ImportClause
-            || isImportEqualsDeclaration(node.parent) && node === node.parent.name) {
+        else if (isExportAssignment(parent)
+            || isExportSpecifier(parent)
+            || isExternalModuleReference(parent)
+            || isImportSpecifier(parent)
+            || isImportClause(parent)
+            || isImportEqualsDeclaration(parent) && node === parent.name) {
+            let decl: Node = parent;
+            while (decl) {
+                if (isImportEqualsDeclaration(decl) || isImportClause(decl) || isExportDeclaration(decl)) {
+                    return decl.isTypeOnly ? SemanticMeaning.Type : SemanticMeaning.All;
+                }
+                decl = decl.parent;
+            }
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node as Identifier);
         }
         else if (isDeclarationName(node)) {
-            return getMeaningFromDeclaration(node.parent);
+            return getMeaningFromDeclaration(parent);
         }
         else if (isEntityName(node) && findAncestor(node, or(isJSDocNameReference, isJSDocLinkLike, isJSDocMemberName))) {
             return SemanticMeaning.All;
@@ -114,11 +123,11 @@ namespace ts {
         else if (isNamespaceReference(node)) {
             return SemanticMeaning.Namespace;
         }
-        else if (isTypeParameterDeclaration(node.parent)) {
-            Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
+        else if (isTypeParameterDeclaration(parent)) {
+            Debug.assert(isJSDocTemplateTag(parent.parent)); // Else would be handled by isDeclarationName
             return SemanticMeaning.Type;
         }
-        else if (isLiteralTypeNode(node.parent)) {
+        else if (isLiteralTypeNode(parent)) {
             // This might be T["name"], which is actually referencing a property and not a type. So allow both meanings.
             return SemanticMeaning.Type | SemanticMeaning.Value;
         }
@@ -407,7 +416,9 @@ namespace ts {
             case SyntaxKind.IndexSignature: return ScriptElementKind.indexSignatureElement;
             case SyntaxKind.ConstructSignature: return ScriptElementKind.constructSignatureElement;
             case SyntaxKind.CallSignature: return ScriptElementKind.callSignatureElement;
-            case SyntaxKind.Constructor: return ScriptElementKind.constructorImplementationElement;
+            case SyntaxKind.Constructor:
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                return ScriptElementKind.constructorImplementationElement;
             case SyntaxKind.TypeParameter: return ScriptElementKind.typeParameterElement;
             case SyntaxKind.EnumMember: return ScriptElementKind.enumMemberElement;
             case SyntaxKind.Parameter: return hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier) ? ScriptElementKind.memberVariableElement : ScriptElementKind.parameterElement;
@@ -1611,7 +1622,7 @@ namespace ts {
         if (flags & ModifierFlags.Private) result.push(ScriptElementKindModifier.privateMemberModifier);
         if (flags & ModifierFlags.Protected) result.push(ScriptElementKindModifier.protectedMemberModifier);
         if (flags & ModifierFlags.Public) result.push(ScriptElementKindModifier.publicMemberModifier);
-        if (flags & ModifierFlags.Static) result.push(ScriptElementKindModifier.staticModifier);
+        if (flags & ModifierFlags.Static || isClassStaticBlockDeclaration(node)) result.push(ScriptElementKindModifier.staticModifier);
         if (flags & ModifierFlags.Abstract) result.push(ScriptElementKindModifier.abstractModifier);
         if (flags & ModifierFlags.Export) result.push(ScriptElementKindModifier.exportedModifier);
         if (flags & ModifierFlags.Deprecated) result.push(ScriptElementKindModifier.deprecatedModifier);
@@ -2377,9 +2388,14 @@ namespace ts {
     }
 
     function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
-        const visited = replaceNode ?
-            visitEachChild(node, n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode), nullTransformationContext) :
-            visitEachChild(node, getSynthesizedDeepClone, nullTransformationContext);
+        const nodeClone: (n: T) => T = replaceNode
+            ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+            : getSynthesizedDeepClone;
+        const nodesClone: (ns: NodeArray<T>) => NodeArray<T> = replaceNode
+            ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+            : ns => ns && getSynthesizedDeepClones(ns);
+        const visited =
+            visitEachChild(node, nodeClone, nullTransformationContext, nodesClone, nodeClone);
 
         if (visited === node) {
             // This only happens for leaf nodes - internal nodes always see their children change.
@@ -2390,8 +2406,8 @@ namespace ts {
             return setTextRange(clone, node);
         }
 
-        // PERF: As an optimization, rather than calling getSynthesizedClone, we'll update
-        // the new node created by visitEachChild with the extra changes getSynthesizedClone
+        // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
+        // the new node created by visitEachChild with the extra changes factory.cloneNode
         // would have made.
         (visited as Mutable<T>).parent = undefined!;
         return visited;
@@ -2894,7 +2910,7 @@ namespace ts {
         allowsImportingSpecifier: (moduleSpecifier: string) => boolean;
     }
 
-    export function createPackageJsonImportFilter(fromFile: SourceFile, host: LanguageServiceHost): PackageJsonImportFilter {
+    export function createPackageJsonImportFilter(fromFile: SourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
         const packageJsons = (
             (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
           ).filter(p => p.parseable);
@@ -2980,6 +2996,7 @@ namespace ts {
                 fromFile.path,
                 importedFileName,
                 moduleSpecifierResolutionHost,
+                preferences,
             );
 
             if (!specifier) {
@@ -3148,212 +3165,6 @@ namespace ts {
         }
         // If the file is a module written in TypeScript, it still might be in a `declare global` augmentation
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
-    }
-
-    export const enum ImportKind {
-        Named,
-        Default,
-        Namespace,
-        CommonJS,
-    }
-
-    export const enum ExportKind {
-        Named,
-        Default,
-        ExportEquals,
-        UMD,
-    }
-
-    /** Information about how a symbol is exported from a module. */
-    export interface SymbolExportInfo {
-        symbol: Symbol;
-        moduleSymbol: Symbol;
-        exportKind: ExportKind;
-        /** If true, can't use an es6 import from a js file. */
-        exportedSymbolIsTypeOnly: boolean;
-        /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
-        isFromPackageJson: boolean;
-    }
-
-    export interface ExportMapCache {
-        clear(): void;
-        get(file: Path, checker: TypeChecker, projectVersion?: string): MultiMap<string, SymbolExportInfo> | undefined;
-        set(suggestions: MultiMap<string, SymbolExportInfo>, projectVersion?: string): void;
-        isEmpty(): boolean;
-        /** @returns Whether the change resulted in the cache being cleared */
-        onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean): boolean;
-    }
-    export function createExportMapCache(): ExportMapCache {
-        let cache: MultiMap<string, SymbolExportInfo> | undefined;
-        let projectVersion: string | undefined;
-        let usableByFileName: Path | undefined;
-        const wrapped: ExportMapCache = {
-            isEmpty() {
-                return !cache;
-            },
-            clear() {
-                cache = undefined;
-                projectVersion = undefined;
-            },
-            set(suggestions, version) {
-                cache = suggestions;
-                if (version) {
-                    projectVersion = version;
-                }
-            },
-            get: (file, checker, version) => {
-                if (usableByFileName && file !== usableByFileName) {
-                    return undefined;
-                }
-                if (version && projectVersion === version) {
-                    return cache;
-                }
-                cache?.forEach(infos => {
-                    for (const info of infos) {
-                        // If the symbol/moduleSymbol was a merged symbol, it will have a new identity
-                        // in the checker, even though the symbols to merge are the same (guaranteed by
-                        // cache invalidation in synchronizeHostData).
-                        if (info.symbol.declarations?.length) {
-                            info.symbol = checker.getMergedSymbol(info.exportKind === ExportKind.Default
-                                ? info.symbol.declarations[0].localSymbol ?? info.symbol.declarations[0].symbol
-                                : info.symbol.declarations[0].symbol);
-                        }
-                        if (info.moduleSymbol.declarations?.length) {
-                            info.moduleSymbol = checker.getMergedSymbol(info.moduleSymbol.declarations[0].symbol);
-                        }
-                    }
-                });
-                  return cache;
-            },
-            onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean) {
-                if (fileIsGlobalOnly(oldSourceFile) && fileIsGlobalOnly(newSourceFile)) {
-                    // File is purely global; doesn't affect export map
-                    return false;
-                }
-                if (
-                    usableByFileName && usableByFileName !== newSourceFile.path ||
-                    // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
-                    // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
-                    typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
-                    // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
-                    // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
-                    // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
-                    !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
-                    !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
-                ) {
-                    this.clear();
-                    return true;
-                }
-                usableByFileName = newSourceFile.path;
-                return false;
-            },
-        };
-        if (Debug.isDebugging) {
-            Object.defineProperty(wrapped, "__cache", { get: () => cache });
-        }
-        return wrapped;
-
-        function fileIsGlobalOnly(file: SourceFile) {
-            return !file.commonJsModuleIndicator && !file.externalModuleIndicator && !file.moduleAugmentations && !file.ambientModuleNames;
-        }
-
-        function ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
-            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
-                return false;
-            }
-            let oldFileStatementIndex = -1;
-            let newFileStatementIndex = -1;
-            for (const ambientModuleName of newSourceFile.ambientModuleNames) {
-                const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
-                oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
-                newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
-                if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    export function createModuleSpecifierCache(): ModuleSpecifierCache {
-        let cache: ESMap<Path, boolean | readonly ModulePath[]> | undefined;
-        let importingFileName: Path | undefined;
-        const wrapped: ModuleSpecifierCache = {
-            get(fromFileName, toFileName) {
-                if (!cache || fromFileName !== importingFileName) return undefined;
-                return cache.get(toFileName);
-            },
-            set(fromFileName, toFileName, moduleSpecifiers) {
-                if (cache && fromFileName !== importingFileName) {
-                    cache.clear();
-                }
-                importingFileName = fromFileName;
-                (cache ||= new Map()).set(toFileName, moduleSpecifiers);
-            },
-            clear() {
-                cache = undefined;
-                importingFileName = undefined;
-            },
-            count() {
-                return cache ? cache.size : 0;
-            }
-        };
-        if (Debug.isDebugging) {
-            Object.defineProperty(wrapped, "__cache", { get: () => cache });
-        }
-        return wrapped;
-    }
-
-    export function isImportableFile(
-        program: Program,
-        from: SourceFile,
-        to: SourceFile,
-        packageJsonFilter: PackageJsonImportFilter | undefined,
-        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
-        moduleSpecifierCache: ModuleSpecifierCache | undefined,
-    ): boolean {
-        if (from === to) return false;
-        const cachedResult = moduleSpecifierCache?.get(from.path, to.path);
-        if (cachedResult !== undefined) {
-            return !!cachedResult;
-        }
-
-        const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
-        const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
-        const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-            from.fileName,
-            to.fileName,
-            moduleSpecifierResolutionHost,
-            /*preferSymlinks*/ false,
-            toPath => {
-                const toFile = program.getSourceFile(toPath);
-                // Determine to import using toPath only if toPath is what we were looking at
-                // or there doesnt exist the file in the program by the symlink
-                return (toFile === to || !toFile) &&
-                    isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
-            }
-        );
-
-        if (packageJsonFilter) {
-            const isImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.set(from.path, to.path, isImportable);
-            return isImportable;
-        }
-
-        return hasImportablePath;
-    }
-
-    /**
-     * Don't include something from a `node_modules` that isn't actually reachable by a global import.
-     * A relative import to node_modules is usually a bad idea.
-     */
-    function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
-        // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-        const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
-        const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
-        return toNodeModulesParent === undefined
-            || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
-            || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
     }
 
     export function isDeprecatedDeclaration(decl: Declaration) {

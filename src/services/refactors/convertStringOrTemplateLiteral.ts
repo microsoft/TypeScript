@@ -20,7 +20,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const maybeBinary = getParentBinaryExpression(node);
         const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
-        if (isBinaryExpression(maybeBinary) && isStringConcatenationValid(maybeBinary)) {
+        if (isBinaryExpression(maybeBinary) && treeToArray(maybeBinary).isValidConcatenation) {
             refactorInfo.actions.push(convertStringAction);
             return [refactorInfo];
         }
@@ -36,7 +36,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
         const node = getTokenAtPosition(file, startPosition);
         const nestedBinary = getParentBinaryExpression(node);
-        const isNonStringBinary = !isStringConcatenationValid(nestedBinary);
+        const isNonStringBinary = !treeToArray(nestedBinary).isValidConcatenation;
 
         if (
             isNonStringBinary &&
@@ -101,32 +101,31 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             }
         });
 
-        return container || expr;
+        return (container || expr) as Expression;
     }
 
-    function isStringConcatenationValid(node: Node): boolean {
-        const { containsString, areOperatorsValid } = treeToArray(node);
-        return containsString && areOperatorsValid;
-    }
+    function treeToArray(current: Expression) {
+        const loop = (current: Node): { nodes: Expression[], operators: Token<BinaryOperator>[], hasString: boolean, validOperators: boolean} => {
+            if (!isBinaryExpression(current)) {
+                return { nodes: [current as Expression], operators: [], validOperators: true,
+                         hasString: isStringLiteral(current) || isNoSubstitutionTemplateLiteral(current) };
+            }
+            const { nodes, operators, hasString: leftHasString, validOperators: leftOperatorValid } = loop(current.left);
 
-    function treeToArray(current: Node): { nodes: Expression[], operators: Token<BinaryOperator>[], containsString: boolean, areOperatorsValid: boolean} {
-        if (isBinaryExpression(current)) {
-            const { nodes, operators, containsString: leftHasString, areOperatorsValid: leftOperatorValid } = treeToArray(current.left);
-
-            if (!leftHasString && !isStringLiteral(current.right) && !isTemplateExpression(current.right)) {
-                return { nodes: [current], operators: [], containsString: false, areOperatorsValid: true };
+            if (!(leftHasString || isStringLiteral(current.right) || isTemplateExpression(current.right))) {
+                return { nodes: [current], operators: [], hasString: false, validOperators: true };
             }
 
             const currentOperatorValid = current.operatorToken.kind === SyntaxKind.PlusToken;
-            const areOperatorsValid = leftOperatorValid && currentOperatorValid;
+            const validOperators = leftOperatorValid && currentOperatorValid;
 
             nodes.push(current.right);
             operators.push(current.operatorToken);
 
-            return { nodes, operators, containsString: true, areOperatorsValid };
-        }
-
-        return { nodes: [current as Expression], operators: [], containsString: isStringLiteral(current), areOperatorsValid: true };
+            return { nodes, operators, hasString: true, validOperators };
+        };
+        const { nodes, operators, validOperators, hasString } = loop(current);
+        return { nodes, operators, isValidConcatenation: validOperators && hasString };
     }
 
     // to copy comments following the operator
@@ -153,7 +152,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         let text = "";
         while (index < nodes.length) {
             const node = nodes[index];
-            if (isStringLiteralLike(node)) {
+            if (isStringLiteralLike(node)) { // includes isNoSubstitutionTemplateLiteral(node)
                 text = text + node.text;
                 indexes.push(index);
                 index++;

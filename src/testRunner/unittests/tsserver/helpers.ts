@@ -423,6 +423,7 @@ namespace ts.projectSystem {
             super({
                 host,
                 logger,
+                session: undefined,
                 cancellationToken,
                 useSingleInferredProject,
                 useInferredProjectPerProjectRoot: false,

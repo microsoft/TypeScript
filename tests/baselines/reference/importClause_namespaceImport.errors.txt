@@ -3,6 +3,7 @@
 /b.ts(4,14): error TS2694: Namespace '"/a"' has no exported member 'Value'.
 /b.ts(5,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'A'.
 /b.ts(6,7): error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
+/b.ts(8,13): error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
 
 
 ==== /a.ts (0 errors) ====
@@ -11,16 +12,16 @@
     export type C<T> = T;
     export const Value = {};
     
-==== /b.ts (5 errors) ====
+==== /b.ts (6 errors) ====
     import type * as types from './a';
     types;
     ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     types.Value;
     ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 /b.ts:1:13: 'types' was imported here.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     let v: types.Value;
                  ~~~~~
 !!! error TS2694: Namespace '"/a"' has no exported member 'Value'.
@@ -33,4 +34,8 @@
 !!! error TS2741: Property 'b' is missing in type '{}' but required in type 'B'.
 !!! related TS2728 /a.ts:2:18: 'b' is declared here.
     const c: types.C<string> = "";
+    const d = { types };
+                ~~~~~
+!!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /b.ts:1:18: 'types' was imported here.
     

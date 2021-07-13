@@ -473,7 +473,7 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (initialLocation) {
-            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation!);
+            const defaultDefinition = getDefinitionLocation(defaultProject, initialLocation);
             if (defaultDefinition) {
                 const getGeneratedDefinition = memoize(() => defaultProject.isSourceOfProjectReferenceRedirect(defaultDefinition.fileName) ?
                     defaultDefinition :
@@ -629,9 +629,7 @@ namespace ts.server {
         CommandNames.CompilerOptionsDiagnosticsFull,
         CommandNames.EncodedSemanticClassificationsFull,
         CommandNames.SemanticDiagnosticsSync,
-        CommandNames.SyntacticDiagnosticsSync,
         CommandNames.SuggestionDiagnosticsSync,
-        CommandNames.Geterr,
         CommandNames.GeterrForProject,
         CommandNames.Reload,
         CommandNames.ReloadProjects,
@@ -776,6 +774,7 @@ namespace ts.server {
                 typesMapLocation: opts.typesMapLocation,
                 syntaxOnly: opts.syntaxOnly,
                 serverMode: opts.serverMode,
+                session: this
             };
             this.projectService = new ProjectService(settings);
             this.projectService.setPerformanceEventHandler(this.performanceEventHandler.bind(this));
@@ -1055,7 +1054,7 @@ namespace ts.server {
 
                 const { fileName, project } = item;
 
-                // Ensure the project is upto date before checking if this file is present in the project
+                // Ensure the project is up to date before checking if this file is present in the project.
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
@@ -1066,6 +1065,11 @@ namespace ts.server {
                     return;
                 }
 
+                // Don't provide semantic diagnostics unless we're in full semantic mode.
+                if (project.projectService.serverMode !== LanguageServiceMode.Semantic) {
+                    goNext();
+                    return;
+                }
                 next.immediate(() => {
                     this.semanticCheck(fileName, project);
                     if (this.changeSeq !== seq) {
@@ -1074,13 +1078,12 @@ namespace ts.server {
 
                     if (this.getPreferences(fileName).disableSuggestions) {
                         goNext();
+                        return;
                     }
-                    else {
-                        next.immediate(() => {
-                            this.suggestionCheck(fileName, project);
-                            goNext();
-                        });
-                    }
+                    next.immediate(() => {
+                        this.suggestionCheck(fileName, project);
+                        goNext();
+                    });
                 });
             };
 
@@ -1448,6 +1451,17 @@ namespace ts.server {
                     }))
                 };
             });
+        }
+
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
+
+            return hints.map(hint => ({
+                ...hint,
+                position: scriptInfo.positionToLineOffset(hint.position),
+            }));
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -1830,6 +1844,7 @@ namespace ts.server {
             const completions = project.getLanguageService().getCompletionsAtPosition(file, position, {
                 ...convertUserPreferences(this.getPreferences(file)),
                 triggerCharacter: args.triggerCharacter,
+                triggerKind: args.triggerKind as CompletionTriggerKind | undefined,
                 includeExternalModuleExports: args.includeExternalModuleExports,
                 includeInsertTextCompletions: args.includeInsertTextCompletions
             });
@@ -2964,6 +2979,9 @@ namespace ts.server {
             [CommandNames.UncommentSelectionFull]: (request: protocol.UncommentSelectionRequest) => {
                 return this.requiredResponse(this.uncommentSelection(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
+                return this.requiredResponse(this.provideInlayHints(request.arguments));
+            }
         }));
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

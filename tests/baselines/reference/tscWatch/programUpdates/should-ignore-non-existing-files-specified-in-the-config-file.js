@@ -55,6 +55,10 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}

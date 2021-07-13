@@ -7,26 +7,28 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, span, program } = context;
-            const variableStatement = getVariableStatement(sourceFile, span.start, program);
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, variableStatement));
+            const range = getConstTokenRange(sourceFile, span.start, program);
+            if (range === undefined) return;
+
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, range));
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_const_to_let)];
         },
         fixIds: [fixId]
     });
 
-    function getVariableStatement(sourceFile: SourceFile, pos: number, program: Program) {
-        const token = getTokenAtPosition(sourceFile, pos);
+    function getConstTokenRange(sourceFile: SourceFile, pos: number, program: Program) {
         const checker = program.getTypeChecker();
-        const symbol = checker.getSymbolAtLocation(token);
-        if (symbol?.valueDeclaration) {
-            return symbol.valueDeclaration.parent.parent as VariableStatement;
-        }
+        const symbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, pos));
+        const declaration = tryCast(symbol?.valueDeclaration?.parent, isVariableDeclarationList);
+        if (declaration === undefined) return;
+
+        const constToken = findChildOfKind(declaration, SyntaxKind.ConstKeyword, sourceFile);
+        if (constToken === undefined) return;
+
+        return createRange(constToken.pos, constToken.end);
     }
-    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, variableStatement?: VariableStatement) {
-        if (!variableStatement) {
-            return;
-        }
-        const start = variableStatement.getStart();
-        changes.replaceRangeWithText(sourceFile, { pos: start, end: start + 5 }, "let");
+
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, range: TextRange) {
+        changes.replaceRangeWithText(sourceFile, range, "let");
     }
 }

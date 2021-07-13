@@ -304,6 +304,67 @@ namespace ts {
     }
 
     /**
+     * Expand the read and increment/decrement operations a pre- or post-increment or pre- or post-decrement expression.
+     *
+     * ```ts
+     * // input
+     * <expression>++
+     * // output (if result is not discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <resultVariable> = <temp>++, <temp>)
+     * // output (if result is discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <temp>++, <temp>)
+     *
+     * // input
+     * ++<expression>
+     * // output (if result is not discarded)
+     * var <temp>;
+     * (<temp> = <expression>, <resultVariable> = ++<temp>)
+     * // output (if result is discarded)
+     * var <temp>;
+     * (<temp> = <expression>, ++<temp>)
+     * ```
+     *
+     * It is up to the caller to supply a temporary variable for `<resultVariable>` if one is needed.
+     * The temporary variable `<temp>` is injected so that `++` and `--` work uniformly with `number` and `bigint`.
+     * The result of the expression is always the final result of incrementing or decrementing the expression, so that it can be used for storage.
+     *
+     * @param factory {@link NodeFactory} used to create the expanded representation.
+     * @param node The original prefix or postfix unary node.
+     * @param expression The expression to use as the value to increment or decrement
+     * @param resultVariable A temporary variable in which to store the result. Pass `undefined` if the result is discarded, or if the value of `<temp>` is the expected result.
+     */
+    export function expandPreOrPostfixIncrementOrDecrementExpression(factory: NodeFactory, node: PrefixUnaryExpression | PostfixUnaryExpression, expression: Expression, recordTempVariable: (node: Identifier) => void, resultVariable: Identifier | undefined) {
+        const operator = node.operator;
+        Debug.assert(operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken, "Expected 'node' to be a pre- or post-increment or pre- or post-decrement expression");
+
+        const temp = factory.createTempVariable(recordTempVariable);
+        expression = factory.createAssignment(temp, expression);
+        setTextRange(expression, node.operand);
+
+        let operation: Expression = isPrefixUnaryExpression(node) ?
+            factory.createPrefixUnaryExpression(operator, temp) :
+            factory.createPostfixUnaryExpression(temp, operator);
+        setTextRange(operation, node);
+
+        if (resultVariable) {
+            operation = factory.createAssignment(resultVariable, operation);
+            setTextRange(operation, node);
+        }
+
+        expression = factory.createComma(expression, operation);
+        setTextRange(expression, node);
+
+        if (isPostfixUnaryExpression(node)) {
+            expression = factory.createComma(expression, temp);
+            setTextRange(expression, node);
+        }
+
+        return expression;
+    }
+
+    /**
      * Gets whether an identifier should only be referred to by its internal name.
      */
     export function isInternalName(node: Identifier) {

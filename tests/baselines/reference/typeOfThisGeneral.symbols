@@ -1,0 +1,460 @@
+=== tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts ===
+class MyTestClass {
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+    private canary: number;
+>canary : Symbol(MyTestClass.canary, Decl(typeOfThisGeneral.ts, 0, 19))
+
+    static staticCanary: number;
+>staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+
+    constructor() {
+        //type of 'this' in constructor body is the class instance type
+        var p = this.canary;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 6, 11), Decl(typeOfThisGeneral.ts, 7, 11))
+>this.canary : Symbol(MyTestClass.canary, Decl(typeOfThisGeneral.ts, 0, 19))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+>canary : Symbol(MyTestClass.canary, Decl(typeOfThisGeneral.ts, 0, 19))
+
+        var p: number;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 6, 11), Decl(typeOfThisGeneral.ts, 7, 11))
+
+        this.canary = 3;
+>this.canary : Symbol(MyTestClass.canary, Decl(typeOfThisGeneral.ts, 0, 19))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+>canary : Symbol(MyTestClass.canary, Decl(typeOfThisGeneral.ts, 0, 19))
+    }
+
+    //type of 'this' in member function param list is the class instance type
+    memberFunc(t = this) {
+>memberFunc : Symbol(MyTestClass.memberFunc, Decl(typeOfThisGeneral.ts, 9, 5))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 12, 15), Decl(typeOfThisGeneral.ts, 13, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var t: MyTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 12, 15), Decl(typeOfThisGeneral.ts, 13, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        //type of 'this' in member function body is the class instance type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 16, 11), Decl(typeOfThisGeneral.ts, 17, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 16, 11), Decl(typeOfThisGeneral.ts, 17, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+    }
+
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+>prop : Symbol(MyTestClass.prop, Decl(typeOfThisGeneral.ts, 18, 5), Decl(typeOfThisGeneral.ts, 25, 5))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 22, 11), Decl(typeOfThisGeneral.ts, 23, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 22, 11), Decl(typeOfThisGeneral.ts, 23, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        return this;
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+    }
+    set prop(v) {
+>prop : Symbol(MyTestClass.prop, Decl(typeOfThisGeneral.ts, 18, 5), Decl(typeOfThisGeneral.ts, 25, 5))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 26, 13))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 27, 11), Decl(typeOfThisGeneral.ts, 28, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 27, 11), Decl(typeOfThisGeneral.ts, 28, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        p = v;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 27, 11), Decl(typeOfThisGeneral.ts, 28, 11))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 26, 13))
+
+        v = p;
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 26, 13))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 27, 11), Decl(typeOfThisGeneral.ts, 28, 11))
+    }
+
+    someFunc = () => {
+>someFunc : Symbol(MyTestClass.someFunc, Decl(typeOfThisGeneral.ts, 31, 5))
+
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 35, 11), Decl(typeOfThisGeneral.ts, 36, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var t: MyTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 35, 11), Decl(typeOfThisGeneral.ts, 36, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+    };
+
+    //type of 'this' in static function param list is constructor function type
+    static staticFn(t = this) {
+>staticFn : Symbol(MyTestClass.staticFn, Decl(typeOfThisGeneral.ts, 37, 6))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 40, 20), Decl(typeOfThisGeneral.ts, 41, 11), Decl(typeOfThisGeneral.ts, 42, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var t: typeof MyTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 40, 20), Decl(typeOfThisGeneral.ts, 41, 11), Decl(typeOfThisGeneral.ts, 42, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var t = MyTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 40, 20), Decl(typeOfThisGeneral.ts, 41, 11), Decl(typeOfThisGeneral.ts, 42, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        t.staticCanary;
+>t.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 40, 20), Decl(typeOfThisGeneral.ts, 41, 11), Decl(typeOfThisGeneral.ts, 42, 11))
+>staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+
+        //type of 'this' in static function body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 46, 11), Decl(typeOfThisGeneral.ts, 47, 11), Decl(typeOfThisGeneral.ts, 48, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: typeof MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 46, 11), Decl(typeOfThisGeneral.ts, 47, 11), Decl(typeOfThisGeneral.ts, 48, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p = MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 46, 11), Decl(typeOfThisGeneral.ts, 47, 11), Decl(typeOfThisGeneral.ts, 48, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 46, 11), Decl(typeOfThisGeneral.ts, 47, 11), Decl(typeOfThisGeneral.ts, 48, 11))
+>staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+    }
+
+    static get staticProp() {
+>staticProp : Symbol(MyTestClass.staticProp, Decl(typeOfThisGeneral.ts, 50, 5), Decl(typeOfThisGeneral.ts, 59, 5))
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 54, 11), Decl(typeOfThisGeneral.ts, 55, 11), Decl(typeOfThisGeneral.ts, 56, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: typeof MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 54, 11), Decl(typeOfThisGeneral.ts, 55, 11), Decl(typeOfThisGeneral.ts, 56, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p = MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 54, 11), Decl(typeOfThisGeneral.ts, 55, 11), Decl(typeOfThisGeneral.ts, 56, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 54, 11), Decl(typeOfThisGeneral.ts, 55, 11), Decl(typeOfThisGeneral.ts, 56, 11))
+>staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+
+        return this;
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+    }
+    static set staticProp(v: typeof MyTestClass) {
+>staticProp : Symbol(MyTestClass.staticProp, Decl(typeOfThisGeneral.ts, 50, 5), Decl(typeOfThisGeneral.ts, 59, 5))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 60, 26))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 62, 11), Decl(typeOfThisGeneral.ts, 63, 11), Decl(typeOfThisGeneral.ts, 64, 11))
+>this : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p: typeof MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 62, 11), Decl(typeOfThisGeneral.ts, 63, 11), Decl(typeOfThisGeneral.ts, 64, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        var p = MyTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 62, 11), Decl(typeOfThisGeneral.ts, 63, 11), Decl(typeOfThisGeneral.ts, 64, 11))
+>MyTestClass : Symbol(MyTestClass, Decl(typeOfThisGeneral.ts, 0, 0))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 62, 11), Decl(typeOfThisGeneral.ts, 63, 11), Decl(typeOfThisGeneral.ts, 64, 11))
+>staticCanary : Symbol(MyTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 1, 27))
+    }
+}
+
+class MyGenericTestClass<T, U> {
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+
+    private canary: number;
+>canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThisGeneral.ts, 69, 32))
+
+    static staticCanary: number;
+>staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+
+    constructor() {
+        //type of 'this' in constructor body is the class instance type
+        var p = this.canary;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 75, 11), Decl(typeOfThisGeneral.ts, 76, 11))
+>this.canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThisGeneral.ts, 69, 32))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThisGeneral.ts, 69, 32))
+
+        var p: number;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 75, 11), Decl(typeOfThisGeneral.ts, 76, 11))
+
+        this.canary = 3;
+>this.canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThisGeneral.ts, 69, 32))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>canary : Symbol(MyGenericTestClass.canary, Decl(typeOfThisGeneral.ts, 69, 32))
+    }
+
+    //type of 'this' in member function param list is the class instance type
+    memberFunc(t = this) {
+>memberFunc : Symbol(MyGenericTestClass.memberFunc, Decl(typeOfThisGeneral.ts, 78, 5))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 81, 15), Decl(typeOfThisGeneral.ts, 82, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var t: MyGenericTestClass<T, U>;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 81, 15), Decl(typeOfThisGeneral.ts, 82, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+
+        //type of 'this' in member function body is the class instance type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 85, 11), Decl(typeOfThisGeneral.ts, 86, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: MyGenericTestClass<T, U>;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 85, 11), Decl(typeOfThisGeneral.ts, 86, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+    }
+
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+>prop : Symbol(MyGenericTestClass.prop, Decl(typeOfThisGeneral.ts, 87, 5), Decl(typeOfThisGeneral.ts, 94, 5))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 91, 11), Decl(typeOfThisGeneral.ts, 92, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: MyGenericTestClass<T, U>;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 91, 11), Decl(typeOfThisGeneral.ts, 92, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+
+        return this;
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+    }
+    set prop(v) {
+>prop : Symbol(MyGenericTestClass.prop, Decl(typeOfThisGeneral.ts, 87, 5), Decl(typeOfThisGeneral.ts, 94, 5))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 95, 13))
+
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 96, 11), Decl(typeOfThisGeneral.ts, 97, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: MyGenericTestClass<T, U>;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 96, 11), Decl(typeOfThisGeneral.ts, 97, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+
+        p = v;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 96, 11), Decl(typeOfThisGeneral.ts, 97, 11))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 95, 13))
+
+        v = p;
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 95, 13))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 96, 11), Decl(typeOfThisGeneral.ts, 97, 11))
+    }
+
+    someFunc = () => {
+>someFunc : Symbol(MyGenericTestClass.someFunc, Decl(typeOfThisGeneral.ts, 100, 5))
+
+        //type of 'this' in member variable initializer is the class instance type
+        var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 104, 11), Decl(typeOfThisGeneral.ts, 105, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var t: MyGenericTestClass<T, U>;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 104, 11), Decl(typeOfThisGeneral.ts, 105, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+>T : Symbol(T, Decl(typeOfThisGeneral.ts, 69, 25))
+>U : Symbol(U, Decl(typeOfThisGeneral.ts, 69, 27))
+
+    };
+
+    //type of 'this' in static function param list is constructor function type
+    static staticFn(t = this) {
+>staticFn : Symbol(MyGenericTestClass.staticFn, Decl(typeOfThisGeneral.ts, 106, 6))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 109, 20), Decl(typeOfThisGeneral.ts, 110, 11), Decl(typeOfThisGeneral.ts, 111, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var t: typeof MyGenericTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 109, 20), Decl(typeOfThisGeneral.ts, 110, 11), Decl(typeOfThisGeneral.ts, 111, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var t = MyGenericTestClass;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 109, 20), Decl(typeOfThisGeneral.ts, 110, 11), Decl(typeOfThisGeneral.ts, 111, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        t.staticCanary;
+>t.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 109, 20), Decl(typeOfThisGeneral.ts, 110, 11), Decl(typeOfThisGeneral.ts, 111, 11))
+>staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+
+        //type of 'this' in static function body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 115, 11), Decl(typeOfThisGeneral.ts, 116, 11), Decl(typeOfThisGeneral.ts, 117, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: typeof MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 115, 11), Decl(typeOfThisGeneral.ts, 116, 11), Decl(typeOfThisGeneral.ts, 117, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p = MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 115, 11), Decl(typeOfThisGeneral.ts, 116, 11), Decl(typeOfThisGeneral.ts, 117, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 115, 11), Decl(typeOfThisGeneral.ts, 116, 11), Decl(typeOfThisGeneral.ts, 117, 11))
+>staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+    }
+
+    static get staticProp() {
+>staticProp : Symbol(MyGenericTestClass.staticProp, Decl(typeOfThisGeneral.ts, 119, 5), Decl(typeOfThisGeneral.ts, 128, 5))
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 123, 11), Decl(typeOfThisGeneral.ts, 124, 11), Decl(typeOfThisGeneral.ts, 125, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: typeof MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 123, 11), Decl(typeOfThisGeneral.ts, 124, 11), Decl(typeOfThisGeneral.ts, 125, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p = MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 123, 11), Decl(typeOfThisGeneral.ts, 124, 11), Decl(typeOfThisGeneral.ts, 125, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 123, 11), Decl(typeOfThisGeneral.ts, 124, 11), Decl(typeOfThisGeneral.ts, 125, 11))
+>staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+
+        return this;
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+    }
+    static set staticProp(v: typeof MyGenericTestClass) {
+>staticProp : Symbol(MyGenericTestClass.staticProp, Decl(typeOfThisGeneral.ts, 119, 5), Decl(typeOfThisGeneral.ts, 128, 5))
+>v : Symbol(v, Decl(typeOfThisGeneral.ts, 129, 26))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 131, 11), Decl(typeOfThisGeneral.ts, 132, 11), Decl(typeOfThisGeneral.ts, 133, 11))
+>this : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p: typeof MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 131, 11), Decl(typeOfThisGeneral.ts, 132, 11), Decl(typeOfThisGeneral.ts, 133, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        var p = MyGenericTestClass;
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 131, 11), Decl(typeOfThisGeneral.ts, 132, 11), Decl(typeOfThisGeneral.ts, 133, 11))
+>MyGenericTestClass : Symbol(MyGenericTestClass, Decl(typeOfThisGeneral.ts, 67, 1))
+
+        p.staticCanary;
+>p.staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+>p : Symbol(p, Decl(typeOfThisGeneral.ts, 131, 11), Decl(typeOfThisGeneral.ts, 132, 11), Decl(typeOfThisGeneral.ts, 133, 11))
+>staticCanary : Symbol(MyGenericTestClass.staticCanary, Decl(typeOfThisGeneral.ts, 70, 27))
+    }
+}
+
+//type of 'this' in a function declaration param list is Any
+function fn(s = this) {
+>fn : Symbol(fn, Decl(typeOfThisGeneral.ts, 136, 1))
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 139, 12), Decl(typeOfThisGeneral.ts, 140, 7))
+
+    var s: any;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 139, 12), Decl(typeOfThisGeneral.ts, 140, 7))
+
+    s.spaaaaaaace = 4;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 139, 12), Decl(typeOfThisGeneral.ts, 140, 7))
+
+    //type of 'this' in a function declaration body is Any
+    var t: any;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 144, 7), Decl(typeOfThisGeneral.ts, 145, 7))
+
+    var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 144, 7), Decl(typeOfThisGeneral.ts, 145, 7))
+
+    this.spaaaaace = 4;
+}
+
+//type of 'this' in a function expression param list list is Any
+var q1 = function (s = this) {
+>q1 : Symbol(q1, Decl(typeOfThisGeneral.ts, 150, 3))
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 150, 19), Decl(typeOfThisGeneral.ts, 151, 7))
+
+    var s: any;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 150, 19), Decl(typeOfThisGeneral.ts, 151, 7))
+
+    s.spaaaaaaace = 4;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 150, 19), Decl(typeOfThisGeneral.ts, 151, 7))
+
+    //type of 'this' in a function expression body is Any
+    var t: any;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 155, 7), Decl(typeOfThisGeneral.ts, 156, 7))
+
+    var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 155, 7), Decl(typeOfThisGeneral.ts, 156, 7))
+
+    this.spaaaaace = 4;
+}
+
+//type of 'this' in a fat arrow expression param list is typeof globalThis
+var q2 = (s = this) => {
+>q2 : Symbol(q2, Decl(typeOfThisGeneral.ts, 161, 3))
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 161, 10), Decl(typeOfThisGeneral.ts, 162, 7))
+>this : Symbol(globalThis)
+
+    var s: typeof globalThis;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 161, 10), Decl(typeOfThisGeneral.ts, 162, 7))
+>globalThis : Symbol(globalThis)
+
+    s.spaaaaaaace = 4;
+>s : Symbol(s, Decl(typeOfThisGeneral.ts, 161, 10), Decl(typeOfThisGeneral.ts, 162, 7))
+
+    //type of 'this' in a fat arrow expression body is typeof globalThis
+    var t: typeof globalThis;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 166, 7), Decl(typeOfThisGeneral.ts, 167, 7))
+>globalThis : Symbol(globalThis)
+
+    var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 166, 7), Decl(typeOfThisGeneral.ts, 167, 7))
+>this : Symbol(globalThis)
+
+    this.spaaaaace = 4;
+>this : Symbol(globalThis)
+}
+
+//type of 'this' in global module is GlobalThis
+var t: typeof globalThis;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 172, 3), Decl(typeOfThisGeneral.ts, 173, 3))
+>globalThis : Symbol(globalThis)
+
+var t = this;
+>t : Symbol(t, Decl(typeOfThisGeneral.ts, 172, 3), Decl(typeOfThisGeneral.ts, 173, 3))
+>this : Symbol(globalThis)
+
+this.spaaaaace = 4;
+>this : Symbol(globalThis)
+
+

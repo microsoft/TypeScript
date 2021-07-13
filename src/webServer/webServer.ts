@@ -122,7 +122,6 @@ namespace ts.server {
                 const webPath = getWebPath(path);
                 return webPath && host.readFile(webPath);
             },
-
             write: host.writeMessage.bind(host),
             watchFile: returnNoopFileWatcher,
             watchDirectory: returnNoopFileWatcher,

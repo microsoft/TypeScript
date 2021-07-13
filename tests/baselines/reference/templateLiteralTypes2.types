@@ -255,7 +255,7 @@ function ft13(s: string, cond: boolean) {
 }
 
 type T0 = string | `${number}px`;
->T0 : T0
+>T0 : string
 
 function ft14(t: `foo${number}`) {
 >ft14 : (t: `foo${number}`) => void

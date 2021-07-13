@@ -55,6 +55,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts
 /user/username/projects/myproject/src/main.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/foo.d.ts (used version)
+/user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
+/user/username/projects/myproject/src/main.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -66,6 +72,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/bar/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/bar/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -81,7 +89,7 @@ exitCode:: ExitStatus.undefined
 "use strict";
 exports.__esModule = true;
 var bar_1 = require("bar");
-bar_1.foo();
+(0, bar_1.foo)();
 
 
 
@@ -103,6 +111,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/node_modules/bar/foo.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/bar/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/bar/package.json","pollingInterval":250}
 
 FsWatches::
 

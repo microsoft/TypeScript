@@ -258,7 +258,7 @@ namespace ts.server {
         /* eslint-enable no-restricted-globals */
 
         if (typeof global !== "undefined" && global.gc) {
-            sys.gc = () => global.gc();
+            sys.gc = () => global.gc?.();
         }
 
         sys.require = (initialDir: string, moduleName: string): RequireResult => {

@@ -412,10 +412,10 @@ type TM1<U extends unknown[]> = Arrayify<readonly [string, number?, ...U, ...boo
 >TM1 : readonly [string[], (number | undefined)[]?, ...Arrayify<U>, ...boolean[][]]
 
 type TP1<T extends unknown[]> = Partial<[string, ...T, number]>;  // [string?, Partial<T>, number?]
->TP1 : [string?, ...Partial<T>, number?]
+>TP1 : [(string | undefined)?, ...Partial<T>, (number | undefined)?]
 
 type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;  // [string?, Partial<T>, ...(number | undefined)[]]
->TP2 : [string?, ...Partial<T>, ...(number | undefined)[]]
+>TP2 : [(string | undefined)?, ...Partial<T>, ...(number | undefined)[]]
 
 // Reverse mapping through mapped type applied to variadic tuple type
 
@@ -897,7 +897,7 @@ type T34 = DropLast<[symbol, ...string[]]>;
 >T34 : [symbol, ...string[]]
 
 type T35 = DropLast<[string?]>;
->T35 : [string?]
+>T35 : [(string | undefined)?]
 
 type T36 = DropLast<string[]>;
 >T36 : string[]
@@ -1181,11 +1181,11 @@ curry2(fn10, ['hello'], [42, true]);
 declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
 >t1 : [...T]
->t2 : [...T, number?]
+>t2 : [...T, (number | undefined)?]
 
 ft([1, 2, 3], [1, 2, 3]);
 >ft([1, 2, 3], [1, 2, 3]) : [number, number, number]
->ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
 >[1, 2, 3] : [number, number, number]
 >1 : 1
 >2 : 2
@@ -1197,7 +1197,7 @@ ft([1, 2, 3], [1, 2, 3]);
 
 ft([1, 2], [1, 2, 3]);
 >ft([1, 2], [1, 2, 3]) : [number, number]
->ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
 >[1, 2] : [number, number]
 >1 : 1
 >2 : 2
@@ -1208,7 +1208,7 @@ ft([1, 2], [1, 2, 3]);
 
 ft(['a', 'b'], ['c', 'd'])
 >ft(['a', 'b'], ['c', 'd']) : [string, string]
->ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
 >['a', 'b'] : [string, string]
 >'a' : "a"
 >'b' : "b"
@@ -1218,7 +1218,7 @@ ft(['a', 'b'], ['c', 'd'])
 
 ft(['a', 'b'], ['c', 'd', 42])
 >ft(['a', 'b'], ['c', 'd', 42]) : [string, string]
->ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
+>ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
 >['a', 'b'] : [string, string]
 >'a' : "a"
 >'b' : "b"
@@ -1257,22 +1257,22 @@ call(...sa, (...x) => 42);
 
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 >f20 : <T extends unknown[] = []>(args: [...T, number?]) => T
->args : [...T, number?]
+>args : [...T, (number | undefined)?]
 
 function f21<U extends string[]>(args: [...U, number?]) {
 >f21 : <U extends string[]>(args: [...U, number?]) => void
->args : [...U, number?]
+>args : [...U, (number | undefined)?]
 
     let v1 = f20(args);  // U
 >v1 : U
 >f20(args) : U
->f20 : <T extends unknown[] = []>(args: [...T, number?]) => T
->args : [...U, number?]
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
+>args : [...U, (number | undefined)?]
 
     let v2 = f20(["foo", "bar"]);  // [string]
 >v2 : [string]
 >f20(["foo", "bar"]) : [string]
->f20 : <T extends unknown[] = []>(args: [...T, number?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", "bar"] : [string, string]
 >"foo" : "foo"
 >"bar" : "bar"
@@ -1280,7 +1280,7 @@ function f21<U extends string[]>(args: [...U, number?]) {
     let v3 = f20(["foo", 42]);  // [string]
 >v3 : [string]
 >f20(["foo", 42]) : [string]
->f20 : <T extends unknown[] = []>(args: [...T, number?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", 42] : [string, number]
 >"foo" : "foo"
 >42 : 42
@@ -1349,16 +1349,16 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 // Repro from #39607
 
 declare function getUser(id: string, options?: { x?: string }): string;
->getUser : (id: string, options?: { x?: string; } | undefined) => string
+>getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
 >id : string
->options : { x?: string; } | undefined
+>options : { x?: string | undefined; } | undefined
 >x : string | undefined
 
 declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
->getOrgUser : (id: string, orgId: number, options?: { y?: number; z?: boolean; } | undefined) => void
+>getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
 >id : string
 >orgId : number
->options : { y?: number; z?: boolean; } | undefined
+>options : { y?: number | undefined; z?: boolean | undefined; } | undefined
 >y : number | undefined
 >z : boolean | undefined
 
@@ -1380,12 +1380,12 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 callApi(getUser);
 >callApi(getUser) : (id: string) => string
 >callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->getUser : (id: string, options?: { x?: string; } | undefined) => string
+>getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
 
 callApi(getOrgUser);
 >callApi(getOrgUser) : (id: string, orgId: number) => void
 >callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->getOrgUser : (id: string, orgId: number, options?: { y?: number; z?: boolean; } | undefined) => void
+>getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
 
 // Repro from #40235
 
