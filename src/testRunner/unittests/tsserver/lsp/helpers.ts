@@ -8,6 +8,12 @@ namespace ts.projectSystem {
 
     export class TestLspSession extends server.Session<lsp.Message, LspMessage> {
         private id = 0;
+        public logger: Logger;
+
+        constructor(opts: TestSessionOptions) {
+            super(opts);
+            this.logger = opts.logger;
+        }
 
         protected override parseMessage(message: lsp.Message): LspMessage {
             return lsp.parseMessage(message);
@@ -57,10 +63,10 @@ namespace ts.projectSystem {
         }
     }
 
-    export function createLspSession(host: server.ServerHost, opts: Partial<server.SessionOptions & { canUseEvents: never }> = {}) {
+    export function createLspSession(host: server.ServerHost, opts: Partial<TestSessionOptions & { canUseEvents: never }> = {}) {
         const typingsInstaller = opts.typingsInstaller ?? new TestTypingsInstaller("/a/data/", /*throttleLimit*/ 5, host);
 
-        const sessionOptions: server.SessionOptions = {
+        const sessionOptions: TestSessionOptions = {
             host,
             cancellationToken: server.nullCancellationToken,
             useSingleInferredProject: true,
@@ -68,7 +74,7 @@ namespace ts.projectSystem {
             typingsInstaller,
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: createHasErrorMessageLogger(),
+            logger: opts.logger ?? createHasErrorMessageLogger(),
             canUseEvents: false
         };
 

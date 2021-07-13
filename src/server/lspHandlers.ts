@@ -237,8 +237,10 @@ namespace ts.server.lsp {
         switch (documentUri.scheme) {
             case "file":
                 path = documentUri.path;
+                break;
             default:
                 path = inMemoryResourcePrefix + documentUri.toString(true);
+                break;
         }
 
         return normalizePath(path) as NormalizedPath;

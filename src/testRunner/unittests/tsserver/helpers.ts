@@ -107,7 +107,7 @@ namespace ts.projectSystem {
         };
     }
 
-    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService) {
+    export function baselineTsserverLogs(scenario: string, subScenario: string, sessionOrService: TestSession | TestProjectService | TestLspSession) {
         Debug.assert(sessionOrService.logger.logs.length); // Ensure caller used in memory logger
         Harness.Baseline.runBaseline(`tsserver/${scenario}/${subScenario.split(" ").join("-")}.js`, sessionOrService.logger.logs.join("\r\n"));
     }
