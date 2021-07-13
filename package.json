@@ -97,6 +97,7 @@
         "typescript": "^4.2.3",
         "vinyl": "latest",
         "vinyl-sourcemaps-apply": "latest",
+        "vscode-uri": "^3.0.2",
         "xml2js": "^0.4.19"
     },
     "scripts": {

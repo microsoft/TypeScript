@@ -23,17 +23,17 @@ namespace ts.server.lsp {
     export interface RequestMessage extends Message {
         id: number | string;
         method: string;
-        params?: unknown[] | object;
+        params?: unknown[] | {};
     }
 
     export interface NotificationMessage extends Message {
         method: string;
-        params?: unknown[] | object;
+        params?: unknown[] | {};
     }
 
     export interface ResponseMessage extends Message {
         id: number | string | null;
-        result?: string | number | boolean | object | null;
+        result?: string | number | boolean | {} | null;
     }
 
     export interface Position {

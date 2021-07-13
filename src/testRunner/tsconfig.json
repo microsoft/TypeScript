@@ -226,6 +226,9 @@
         "unittests/tsserver/versionCache.ts",
         "unittests/tsserver/watchEnvironment.ts",
         "unittests/tsserver/webServer.ts",
-        "unittests/debugDeprecation.ts"
+        "unittests/debugDeprecation.ts",
+
+        "unittests/tsserver/lsp/helpers.ts",
+        "unittests/tsserver/lsp/hover.ts"
     ]
 }
