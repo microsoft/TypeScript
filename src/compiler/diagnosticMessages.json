@@ -1698,6 +1698,10 @@
         "category": "Error",
         "code": 2374
     },
+    "Type '{0}' is not assignable to type '{1}' with exactOptionalPropertyTypes: true. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2375
+    },
     "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
@@ -7057,6 +7061,14 @@
     "Add all missing properties": {
         "category": "Message",
         "code": 95166
+    },
+    "Add 'undefined' to all optional properties": {
+        "category": "Message",
+        "code": 95167
+    },
+    "Add 'undefined' to optional property type": {
+        "category": "Message",
+        "code": 95168
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

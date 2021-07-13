@@ -4301,6 +4301,7 @@ namespace ts {
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
         /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
+        /* @internal */ getExactOptionalUnassignableProperties(source: Type, target: Type): Symbol[];
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
