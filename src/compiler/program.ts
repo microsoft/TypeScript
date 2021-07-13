@@ -1054,6 +1054,7 @@ namespace ts {
             getSourceFileByPath,
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
+            getModuleResolutionCache: () => moduleResolutionCache,
             getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
