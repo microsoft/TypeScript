@@ -1053,14 +1053,13 @@ namespace ts.server {
 
                 const { fileName, project } = item;
 
-                // Ensure the project is upto date before checking if this file is present in the project
+                // Ensure the project is up to date before checking if this file is present in the project.
                 updateProjectIfDirty(project);
                 if (!project.containsFile(fileName, requireOpen)) {
                     return;
                 }
 
                 this.syntacticCheck(fileName, project);
-                // Only try to provide semantic diagnostics if we're clean of syntactic diagnostics.
                 if (this.changeSeq !== seq) {
                     return;
                 }
