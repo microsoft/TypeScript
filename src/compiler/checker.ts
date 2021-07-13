@@ -16260,7 +16260,7 @@ namespace ts {
                 return type;
             }
             if (instantiationDepth >= compilerOptions.instantiationDepthLimit || instantiationCount >= compilerOptions.instantiationCountLimit) {
-                // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
+                // We have reached the limitation threshold of recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
                 tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
