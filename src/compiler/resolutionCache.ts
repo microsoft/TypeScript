@@ -25,6 +25,8 @@ namespace ts {
         updateTypeRootsWatch(): void;
         closeTypeRootsWatch(): void;
 
+        getModuleResolutionCache(): ModuleResolutionCache;
+
         clear(): void;
     }
 
@@ -203,6 +205,7 @@ namespace ts {
         const typeRootsWatches = new Map<string, FileWatcher>();
 
         return {
+            getModuleResolutionCache: () => moduleResolutionCache,
             startRecordingFilesWithChangedResolutions,
             finishRecordingFilesWithChangedResolutions,
             // perDirectoryResolvedModuleNames and perDirectoryResolvedTypeReferenceDirectives could be non empty if there was exception during program update

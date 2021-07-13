@@ -63,6 +63,8 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/tslib/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -120,6 +122,9 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/index.tsx (used version)
 
 WatchedFiles::
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/index.tsx:

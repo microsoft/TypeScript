@@ -257,6 +257,8 @@ namespace ts {
         readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
         readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
         readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
+        readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
+        readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
 
         timerToBuildInvalidatedProject: any;
         reportFileChangeDetected: boolean;
@@ -336,6 +338,8 @@ namespace ts {
             allWatchedInputFiles: new Map(),
             allWatchedConfigFiles: new Map(),
             allWatchedExtendedConfigFiles: new Map(),
+            allWatchedPackageJsonFiles: new Map(),
+            lastCachedPackageJsonLookups: new Map(),
 
             timerToBuildInvalidatedProject: undefined,
             reportFileChangeDetected: false,
@@ -495,6 +499,12 @@ namespace ts {
 
             mutateMapSkippingNewValues(
                 state.allWatchedInputFiles,
+                currentProjects,
+                { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
+            );
+
+            mutateMapSkippingNewValues(
+                state.allWatchedPackageJsonFiles,
                 currentProjects,
                 { onDeleteValue: existingMap => existingMap.forEach(closeFileWatcher) }
             );
@@ -861,6 +871,11 @@ namespace ts {
                 getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
+            state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
+                state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
+                ([path, data]) => ([state.host.realpath ? toPath(state, state.host.realpath(path)) : path, data] as const)
+            ));
+
             if (state.watch) {
                 state.builderPrograms.set(projectPath, program);
             }
@@ -1192,12 +1207,14 @@ namespace ts {
                 watchExtendedConfigFiles(state, projectPath, config);
                 watchWildCardDirectories(state, project, projectPath, config);
                 watchInputFiles(state, project, projectPath, config);
+                watchPackageJsonFiles(state, project, projectPath, config);
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 config.fileNames = getFileNamesFromConfigSpecs(config.options.configFile!.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
                 updateErrorForNoInputFiles(config.fileNames, project, config.options.configFile!.configFileSpecs!, config.errors, canJsonReportNoInputFiles(config.raw));
                 watchInputFiles(state, project, projectPath, config);
+                watchPackageJsonFiles(state, project, projectPath, config);
             }
 
             const status = getUpToDateStatus(state, config, projectPath);
@@ -1490,6 +1507,13 @@ namespace ts {
             // Check extended config time
             const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(state, configFile, oldestOutputFileTime, oldestOutputFileName));
             if (extendedConfigStatus) return extendedConfigStatus;
+
+            // Check package file time
+            const dependentPackageFileStatus = forEach(
+                state.lastCachedPackageJsonLookups.get(resolvedPath) || emptyArray,
+                ([path]) => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName)
+            );
+            if (dependentPackageFileStatus) return dependentPackageFileStatus;
         }
 
         if (!force && !state.buildInfoChecked.has(resolvedPath)) {
@@ -1862,6 +1886,25 @@ namespace ts {
         );
     }
 
+    function watchPackageJsonFiles(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
+        if (!state.watch || !state.lastCachedPackageJsonLookups) return;
+        mutateMap(
+            getOrCreateValueMapFromConfigFileMap(state.allWatchedPackageJsonFiles, resolvedPath),
+            new Map(state.lastCachedPackageJsonLookups.get(resolvedPath)),
+            {
+                createNewValue: (path, _input) => state.watchFile(
+                    path,
+                    () => invalidateProjectAndScheduleBuilds(state, resolvedPath, ConfigFileProgramReloadLevel.Full),
+                    PollingInterval.High,
+                    parsed?.watchOptions,
+                    WatchType.PackageJson,
+                    resolved
+                ),
+                onDeleteValue: closeFileWatcher,
+            }
+        );
+    }
+
     function startWatching(state: SolutionBuilderState, buildOrder: AnyBuildOrder) {
         if (!state.watchAllProjectsPending) return;
         state.watchAllProjectsPending = false;
@@ -1877,6 +1920,9 @@ namespace ts {
 
                 // Watch input files
                 watchInputFiles(state, resolved, resolvedPath, cfg);
+
+                // Watch package json files
+                watchPackageJsonFiles(state, resolved, resolvedPath, cfg);
             }
         }
     }
@@ -1886,6 +1932,7 @@ namespace ts {
         clearMap(state.allWatchedExtendedConfigFiles, closeFileWatcherOf);
         clearMap(state.allWatchedWildcardDirectories, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcherOf));
         clearMap(state.allWatchedInputFiles, watchedWildcardDirectories => clearMap(watchedWildcardDirectories, closeFileWatcher));
+        clearMap(state.allWatchedPackageJsonFiles, watchedPacageJsonFiles => clearMap(watchedPacageJsonFiles, closeFileWatcher));
     }
 
     /**

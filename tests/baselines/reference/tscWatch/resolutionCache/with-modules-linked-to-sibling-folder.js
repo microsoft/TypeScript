@@ -70,6 +70,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/linked-package/dist/other.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/linked-package/package.json:
+  {"fileName":"/user/username/projects/myproject/linked-package/package.json","pollingInterval":250}
 
 FsWatches::
 
