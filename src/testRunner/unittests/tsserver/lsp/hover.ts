@@ -22,7 +22,25 @@ namespace ts.projectSystem {
                         uri: createUriFromPath(path),
                     }
                 }));
-            assert.isDefined(hover);
+            assert.deepEqual(hover as lsp.Hover, {
+                range: {
+                    start: {
+                        line: 0,
+                        character: 6
+                    },
+                    end: {
+                        line: 0,
+                        character: 9,
+                    },
+                },
+                contents: [
+                    {
+                        language: "typescript",
+                        value: "const foo: 5",
+                    },
+                    ""
+                ]
+            })
         });
     });
 }

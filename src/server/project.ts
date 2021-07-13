@@ -84,7 +84,7 @@ namespace ts.server {
         languageService: LanguageService;
         languageServiceHost: LanguageServiceHost;
         serverHost: ServerHost;
-        session?: Session<unknown>;
+        session?: Session<unknown, unknown>;
         config: any;
     }
 

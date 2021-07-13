@@ -411,7 +411,7 @@ namespace ts.server {
         /** @deprecated use serverMode instead */
         syntaxOnly?: boolean;
         serverMode?: LanguageServiceMode;
-        session: Session<unknown> | undefined;
+        session: Session<unknown, unknown> | undefined;
     }
 
     interface OriginalFileInfo { fileName: NormalizedPath; path: Path; }
@@ -798,7 +798,7 @@ namespace ts.server {
         /*@internal*/
         private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
         /*@internal*/
-        readonly session: Session<unknown> | undefined;
+        readonly session: Session<unknown, unknown> | undefined;
 
 
         private performanceEventHandler?: PerformanceEventHandler;

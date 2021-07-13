@@ -49,11 +49,11 @@ namespace ts.projectSystem {
         public executeLspRequest<T extends lsp.RequestMessage>(request: Partial<T>) {
             this.id++;
             request.id = this.id;
-            return this.executeCommand(request as T);
+            return this.executeCommand(request as T).response;
         }
 
         public executeLspNotification(notification: lsp.NotificationMessage) {
-            return this.executeCommand(notification);
+            this.executeCommand(notification);
         }
     }
 
