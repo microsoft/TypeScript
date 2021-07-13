@@ -25309,6 +25309,10 @@ namespace ts {
             if (signature && !isResolvingReturnTypeOfSignature(signature)) {
                 return getReturnTypeOfSignature(signature);
             }
+            const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
+            if (iife) {
+                return getContextualType(iife);
+            }
             return undefined;
         }
 
