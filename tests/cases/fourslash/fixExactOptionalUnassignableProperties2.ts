@@ -24,6 +24,22 @@
 //// interface ID {
 ////     a?: number
 //// }
+//// interface More {
+////     a?: number
+////     b?: number
+//// }
+//// interface Assignment {
+////     a?: number
+//// }
+//// interface PropertyAssignment {
+////     a?: number
+//// }
+//// interface ShorthandPropertyAssignment {
+////     a?: number
+//// }
+//// interface FPA {
+////     a?: number
+//// }
 //// interface J {
 ////     a?: number | undefined
 //// }
@@ -54,6 +70,13 @@
 //// }
 //// declare var pwpd: PartialWrongPropertyDescriptor
 //// pd = pwpd
+//// declare var more: More
+//// more = j
+//// var assignment: Assignment = j
+//// var opa: { pa: PropertyAssignment } = { pa: j }
+//// var ospa: { j: ShorthandPropertyAssignment } = { j }
+//// declare function fpa(fpa: { fpa: FPA }): void
+//// fpa({ fpa: j })
 
 verify.codeFixAll({
     fixId: "addOptionalPropertyUndefined",
@@ -78,7 +101,23 @@ interface ICP {
     a?: number | undefined
 }
 interface ID {
-    a?: number
+    a?: number | undefined
+}
+interface More {
+    a?: number | undefined
+    b?: number
+}
+interface Assignment {
+    a?: number | undefined
+}
+interface PropertyAssignment {
+    a?: number | undefined
+}
+interface ShorthandPropertyAssignment {
+    a?: number | undefined
+}
+interface FPA {
+    a?: number | undefined
 }
 interface J {
     a?: number | undefined
@@ -109,6 +148,13 @@ interface PartialWrongPropertyDescriptor {
     configurable?: boolean | undefined
 }
 declare var pwpd: PartialWrongPropertyDescriptor
-pd = pwpd`,
+pd = pwpd
+declare var more: More
+more = j
+var assignment: Assignment = j
+var opa: { pa: PropertyAssignment } = { pa: j }
+var ospa: { j: ShorthandPropertyAssignment } = { j }
+declare function fpa(fpa: { fpa: FPA }): void
+fpa({ fpa: j })`,
 });
 

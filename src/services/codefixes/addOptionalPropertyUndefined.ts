@@ -44,46 +44,55 @@ namespace ts.codefix {
         },
     });
 
-    function getTarget(file: SourceFile, pos: number) {
+    // The target of the incorrect assignment
+    // eg
+    // this.definite = 1; -OR- definite = source
+    // ^^^^                    ^^^^^^^^
+    // TODO: More examples here
+    function getTarget(file: SourceFile, pos: number): MemberName | PropertyAccessExpression | undefined {
         const start = getTokenAtPosition(file, pos)
-        if (isPropertyAccessExpression(start.parent) && start.parent.expression === start) {
-            return start.parent
-        }
-        else if (isIdentifier(start) || isPrivateIdentifier(start)) {
-            return start
-        }
-        return undefined
+        return isPropertyAccessExpression(start.parent) && start.parent.expression === start ? start.parent
+            : isIdentifier(start) || isPrivateIdentifier(start) ? start
+            : undefined;
     }
 
-    function getSourceTarget(file: SourceFile, pos: number, checker: TypeChecker) {
-        const target = getTarget(file, pos)
+    function getSourceTarget(target: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
         if (!target) return undefined
         if (isBinaryExpression(target.parent) && target.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
-            return [target.parent.right, target]
+            return { source: target.parent.right, target: target.parent.left }
+        }
+        else if (isVariableDeclaration(target.parent) && target.parent.initializer) {
+            return { source: target.parent.initializer, target: target.parent.name }
         }
         else if (isCallExpression(target.parent)) {
             const n = checker.getSymbolAtLocation(target.parent.expression)
             if (!n?.valueDeclaration) return undefined
-            if (!isIdentifier(target)) return undefined;
+            if (!isExpression(target)) return undefined;
             const i = target.parent.arguments.indexOf(target)
             const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name
-            if (isIdentifier(name)) return [target, name]
+            if (isIdentifier(name)) return { source: target, target: name }
         }
-        // It's possible to handle destructuring by recording the path up through the structure
-        // and following the reverse path down through the right-hand-side, but that's not worth the effort
+        else if (isPropertyAssignment(target.parent) && isIdentifier(target.parent.name) ||
+            isShorthandPropertyAssignment(target.parent)) {
+            const parentTarget = getSourceTarget(target.parent.parent, checker)
+            if (!parentTarget) return undefined
+            const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (target.parent.name as Identifier).text)
+            const declaration = prop?.declarations?.[0]
+            if (!declaration) return undefined
+            return {
+                source: isPropertyAssignment(target.parent) ? target.parent.initializer : target.parent.name,
+                target: declaration
+            }
+        }
         return undefined
     }
 
     function getInfo(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
-        // The target of the incorrect assignment
-        // eg
-        // this.definite = 1; -OR- definite = source
-        // ^^^^                    ^^^^^^^^
-        const sourceTarget = getSourceTarget(file, pos, checker)
+        const sourceTarget = getSourceTarget(getTarget(file, pos), checker)
         if (!sourceTarget) return []
-        const [sourceNode, targetNode] = sourceTarget
+        const { source: sourceNode, target: targetNode } = sourceTarget
         const target = checker.getTypeAtLocation(targetNode)
-        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib)/))) return [];
+        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib\.)/))) return [];
         return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target)
     }
 
