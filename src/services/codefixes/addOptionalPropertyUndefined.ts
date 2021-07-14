@@ -11,16 +11,11 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const typeChecker = context.program.getTypeChecker();
-            const info = getInfo(context.sourceFile, context.span.start, typeChecker);
-            if (!info.length) {
+            const toAdd = getPropertiesToAdd(context.sourceFile, context.span.start, typeChecker);
+            if (!toAdd.length) {
                 return undefined;
             }
-            // if method, it has to be rewritten to property
-            // skip any and unions with any
-            // add to existing unions
-            // parenthesise conditional types and arrows (the printer should take care of that, but it needs a test)
-            // test with destructuring, I've no idea what to do there
-            const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, info));
+            const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
             return [createCodeFixAction(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type, addOptionalPropertyUndefined, Diagnostics.Add_undefined_to_all_optional_properties)];
         },
         fixIds: [addOptionalPropertyUndefined],
@@ -30,81 +25,96 @@ namespace ts.codefix {
             const seen = new Map<string, true>();
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, checker);
-                    if (!info.length) {
+                    const toAdd = getPropertiesToAdd(diag.file, diag.start, checker);
+                    if (!toAdd.length) {
                         return;
                     }
-                    for (const add of info) {
-                        if (addToSeen(seen, add.id + "")) {
-                            addUndefinedToOptionalProperty(changes, info);
+                    let untouched = true;
+                    for (const add of toAdd) {
+                        if (!addToSeen(seen, add.id + "")) {
+                            untouched = false;
                         }
                     }
+                    if (untouched) {addUndefinedToOptionalProperty(changes, toAdd);}
                 });
             }));
         },
     });
 
-    // The target of the incorrect assignment
-    // eg
-    // this.definite = 1; -OR- definite = source
-    // ^^^^                    ^^^^^^^^
-    // TODO: More examples here
-    function getTarget(file: SourceFile, pos: number): MemberName | PropertyAccessExpression | undefined {
-        const start = getTokenAtPosition(file, pos)
+    function getPropertiesToAdd(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
+        const sourceTarget = getSourceTarget(getErrorNode(file, pos), checker);
+        if (!sourceTarget) {
+            return [];
+        }
+        const { source: sourceNode, target: targetNode } = sourceTarget;
+        const target = checker.getTypeAtLocation(targetNode);
+        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib\.)/))) {
+            return [];
+        }
+        return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target);
+    }
+
+    /**
+     * Get the part of the incorrect assignment that is useful for type-checking
+     * eg
+     * this.definite = 1; ---> `this.definite`
+     * ^^^^
+     * definite = source  ----> `definite`
+     * ^^^^^^^^
+     */
+    function getErrorNode(file: SourceFile, pos: number): MemberName | PropertyAccessExpression | undefined {
+        const start = getTokenAtPosition(file, pos);
         return isPropertyAccessExpression(start.parent) && start.parent.expression === start ? start.parent
             : isIdentifier(start) || isPrivateIdentifier(start) ? start
             : undefined;
     }
 
-    function getSourceTarget(target: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
-        if (!target) return undefined
-        if (isBinaryExpression(target.parent) && target.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
-            return { source: target.parent.right, target: target.parent.left }
+    /**
+     * Find the source and target of the incorrect assignment.
+     * The call is recursive for property assignments.
+     */
+    function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
+        if (!errorNode) {
+            return undefined;
         }
-        else if (isVariableDeclaration(target.parent) && target.parent.initializer) {
-            return { source: target.parent.initializer, target: target.parent.name }
+        else if (isBinaryExpression(errorNode.parent) && errorNode.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return { source: errorNode.parent.right, target: errorNode.parent.left };
         }
-        else if (isCallExpression(target.parent)) {
-            const n = checker.getSymbolAtLocation(target.parent.expression)
-            if (!n?.valueDeclaration) return undefined
-            if (!isExpression(target)) return undefined;
-            const i = target.parent.arguments.indexOf(target)
-            const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name
-            if (isIdentifier(name)) return { source: target, target: name }
+        else if (isVariableDeclaration(errorNode.parent) && errorNode.parent.initializer) {
+            return { source: errorNode.parent.initializer, target: errorNode.parent.name };
         }
-        else if (isPropertyAssignment(target.parent) && isIdentifier(target.parent.name) ||
-            isShorthandPropertyAssignment(target.parent)) {
-            const parentTarget = getSourceTarget(target.parent.parent, checker)
-            if (!parentTarget) return undefined
-            const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (target.parent.name as Identifier).text)
-            const declaration = prop?.declarations?.[0]
-            if (!declaration) return undefined
+        else if (isCallExpression(errorNode.parent)) {
+            const n = checker.getSymbolAtLocation(errorNode.parent.expression);
+            if (!n?.valueDeclaration) return undefined;
+            if (!isExpression(errorNode)) return undefined;
+            const i = errorNode.parent.arguments.indexOf(errorNode);
+            const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
+            if (isIdentifier(name)) return { source: errorNode, target: name };
+        }
+        else if (isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
+            isShorthandPropertyAssignment(errorNode.parent)) {
+            const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
+            if (!parentTarget) return undefined;
+            const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);
+            const declaration = prop?.declarations?.[0];
+            if (!declaration) return undefined;
             return {
-                source: isPropertyAssignment(target.parent) ? target.parent.initializer : target.parent.name,
+                source: isPropertyAssignment(errorNode.parent) ? errorNode.parent.initializer : errorNode.parent.name,
                 target: declaration
-            }
+            };
         }
-        return undefined
-    }
-
-    function getInfo(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
-        const sourceTarget = getSourceTarget(getTarget(file, pos), checker)
-        if (!sourceTarget) return []
-        const { source: sourceNode, target: targetNode } = sourceTarget
-        const target = checker.getTypeAtLocation(targetNode)
-        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib\.)/))) return [];
-        return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target)
+        return undefined;
     }
 
     function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAdd: Symbol[]) {
         for (const add of toAdd) {
-            const d = add.valueDeclaration
+            const d = add.valueDeclaration;
             if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {
                 const t = factory.createUnionTypeNode([
                     ...d.type.kind === SyntaxKind.UnionType ? (d.type as UnionTypeNode).types : [d.type],
                     factory.createTypeReferenceNode("undefined")
-                ])
-                changes.replaceNode(d.getSourceFile(), d.type, t)
+                ]);
+                changes.replaceNode(d.getSourceFile(), d.type, t);
             }
         }
     }
