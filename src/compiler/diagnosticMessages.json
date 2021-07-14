@@ -1368,6 +1368,46 @@
         "category": "Error",
         "code": 1433
     },
+    "Unexpected keyword or identifier.": {
+        "category": "Error",
+        "code": 1434
+    },
+    "Unknown keyword or identifier. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 1435
+    },
+    "Decorators must precede the name and all keywords of property declarations.": {
+        "category": "Error",
+        "code": 1436
+    },
+    "Namespace must be given a name.": {
+        "category": "Error",
+        "code": 1437
+    },
+    "Interface must be given a name.": {
+        "category": "Error",
+        "code": 1438
+    },
+    "Type alias must be given a name.": {
+        "category": "Error",
+        "code": 1439
+    },
+    "Variable declaration not allowed at this location.": {
+        "category": "Error",
+        "code": 1440
+    },
+    "Cannot start a function call in a type annotation.": {
+        "category": "Error",
+        "code": 1441
+    },
+    "Missing '=' before default property value.": {
+        "category": "Error",
+        "code": 1442
+    },
+    "Module declaration names may only use ' or \" quoted strings.": {
+        "category": "Error",
+        "code": 1443
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3355,6 +3395,10 @@
     "Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.": {
         "category": "Error",
         "code": 2818
+    },
+    "Namespace name cannot be '{0}'.": {
+        "category": "Error",
+        "code": 2819
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
