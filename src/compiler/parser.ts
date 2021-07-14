@@ -1556,7 +1556,6 @@ namespace ts {
          * known common variants of a missing semicolon, such as from a mispelled names.
          *
          * @param node Node preceding the expected semicolon location.
-         * @remarks
          */
         function parseErrorForMissingSemicolonAfter(node: Expression | PropertyName): void {
             // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
