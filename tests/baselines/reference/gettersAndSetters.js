@@ -39,6 +39,15 @@ interface I1 {
 
 var i:I1 = function (n) {return n;}
 
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+  let obj = {
+    set prop(_: any) { x.toUpperCase(); },
+    get prop() { return x.toUpperCase() },
+    method() { return x.toUpperCase() }
+  }
+}
 
 //// [gettersAndSetters.js]
 // classes
@@ -80,3 +89,12 @@ var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
 var ofg = o.Foo;
 o.Foo = 0;
 var i = function (n) { return n; };
+// Repro from #45006
+var x = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+    var obj = {
+        set prop(_) { x.toUpperCase(); },
+        get prop() { return x.toUpperCase(); },
+        method: function () { return x.toUpperCase(); }
+    };
+}

@@ -55,30 +55,3 @@ class C {
 >value : Symbol(value, Decl(getterControlFlowStrictNull.ts, 27, 10))
     }
 }
-
-// Repro from #45006
-const x: string | number = Math.random() < 0.5 ? "str" : 123;
->x : Symbol(x, Decl(getterControlFlowStrictNull.ts, 32, 5))
->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
-
-if (typeof x === "string") {
->x : Symbol(x, Decl(getterControlFlowStrictNull.ts, 32, 5))
-
-  let obj = {
->obj : Symbol(obj, Decl(getterControlFlowStrictNull.ts, 34, 5))
-
-    get prop() { return x.toUpperCase() },
->prop : Symbol(prop, Decl(getterControlFlowStrictNull.ts, 34, 13))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(getterControlFlowStrictNull.ts, 32, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
-
-    method() { return x.toUpperCase() }
->method : Symbol(method, Decl(getterControlFlowStrictNull.ts, 35, 42))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
->x : Symbol(x, Decl(getterControlFlowStrictNull.ts, 32, 5))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
-  }
-}
