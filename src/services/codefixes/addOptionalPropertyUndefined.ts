@@ -3,7 +3,8 @@ namespace ts.codefix {
     const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
     const errorCodes = [
-        Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code
+        Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
+        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code
     ];
 
     registerCodeFix({
@@ -43,23 +44,47 @@ namespace ts.codefix {
         },
     });
 
-    function getInfo(sourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Symbol[] {
+    function getTarget(file: SourceFile, pos: number) {
+        const start = getTokenAtPosition(file, pos)
+        if (isPropertyAccessExpression(start.parent) && start.parent.expression === start) {
+            return start.parent
+        }
+        else if (isIdentifier(start) || isPrivateIdentifier(start)) {
+            return start
+        }
+        return undefined
+    }
+
+    function getSourceTarget(file: SourceFile, pos: number, checker: TypeChecker) {
+        const target = getTarget(file, pos)
+        if (!target) return undefined
+        if (isBinaryExpression(target.parent) && target.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return [target.parent.right, target]
+        }
+        else if (isCallExpression(target.parent)) {
+            const n = checker.getSymbolAtLocation(target.parent.expression)
+            if (!n?.valueDeclaration) return undefined
+            if (!isIdentifier(target)) return undefined;
+            const i = target.parent.arguments.indexOf(target)
+            const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name
+            if (isIdentifier(name)) return [target, name]
+        }
+        // It's possible to handle destructuring by recording the path up through the structure
+        // and following the reverse path down through the right-hand-side, but that's not worth the effort
+        return undefined
+    }
+
+    function getInfo(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
         // The target of the incorrect assignment
         // eg
         // this.definite = 1; -OR- definite = source
         // ^^^^                    ^^^^^^^^
-        const targetToken = getTokenAtPosition(sourceFile, tokenPos);
-        const isOK = (isIdentifier(targetToken) || isPrivateIdentifier(targetToken))
-            && isBinaryExpression(targetToken.parent)
-            && targetToken.parent.operatorToken.kind === SyntaxKind.EqualsToken;
-        if (!isOK) {
-            // TODO: Walk up through lhs instead
-            return [];
-        }
-        const sourceNode = targetToken.parent.right;
-        // TODO: Also can apply to function calls, and then you have to get the signature, then its parameters, then the type of a particular parameter
-        // TODO: Also skip 'any' and node_modules and if target is not in node_modules or is built-in
-        return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), checker.getTypeAtLocation(targetToken))
+        const sourceTarget = getSourceTarget(file, pos, checker)
+        if (!sourceTarget) return []
+        const [sourceNode, targetNode] = sourceTarget
+        const target = checker.getTypeAtLocation(targetNode)
+        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib)/))) return [];
+        return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target)
     }
 
     function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAdd: Symbol[]) {

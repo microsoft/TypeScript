@@ -1714,6 +1714,10 @@
         "category": "Error",
         "code": 2378
     },
+    "Argument of type '{0}' is not assignable to parameter of type '{1}' with exactOptionalPropertyTypes: true. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2379
+    },
     "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
         "code": 2380

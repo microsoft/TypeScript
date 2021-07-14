@@ -17657,9 +17657,17 @@ namespace ts {
                     else if (sourceType === targetType) {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
                     }
+                    else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
+                    }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
+                }
+                else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
+                    && exactOptionalPropertyTypes
+                    && getExactOptionalUnassignableProperties(source, target).length) {
+                    message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
                 }
 
                 reportError(message, generalizedSourceType, targetType);
@@ -17875,7 +17883,6 @@ namespace ts {
 
                 function reportErrorResults(source: Type, target: Type, result: Ternary, isComparingJsxAttributes: boolean) {
                     if (!result && reportErrors) {
-                        let message = headMessage
                         const sourceHasBase = !!getSingleBaseForNonAugmentingSubtype(originalSource);
                         const targetHasBase = !!getSingleBaseForNonAugmentingSubtype(originalTarget);
                         source = (originalSource.aliasSymbol || sourceHasBase) ? originalSource : source;
@@ -17907,18 +17914,15 @@ namespace ts {
                                 return result;
                             }
                         }
-                        else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
-                            message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties
-                        }
                         else {
                             errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
                         }
-                        if (!message && maybeSuppress) {
+                        if (!headMessage && maybeSuppress) {
                             lastSkippedInfo = [source, target];
                             // Used by, eg, missing property checking to replace the top-level message with a more informative one
                             return result;
                         }
-                        reportRelationError(message, source, target);
+                        reportRelationError(headMessage, source, target);
                     }
                 }
             }
@@ -19580,7 +19584,6 @@ namespace ts {
             return isUnitType(type) || !!(type.flags & TypeFlags.TemplateLiteral);
         }
 
-        // TODO: Only issue with source has undefined, target does not, and they are otherwise assignable/the same (or who cares)
         function getExactOptionalUnassignableProperties(source: Type, target: Type) {
             return checker.getPropertiesOfType(target).filter(targetProp => {
                 const sourceProp = getPropertyOfType(source, targetProp.escapedName)
