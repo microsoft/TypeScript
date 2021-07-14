@@ -30,6 +30,15 @@ class C {
     }
 }
 
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+  let obj = {
+    get prop() { return x.toUpperCase() },
+    method() { return x.toUpperCase() }
+  }
+}
+
 //// [getterControlFlowStrictNull.js]
 var A = /** @class */ (function () {
     function A() {
@@ -74,3 +83,11 @@ var C = /** @class */ (function () {
     });
     return C;
 }());
+// Repro from #45006
+var x = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+    var obj = {
+        get prop() { return x.toUpperCase(); },
+        method: function () { return x.toUpperCase(); }
+    };
+}

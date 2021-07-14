@@ -1823,7 +1823,6 @@ namespace ts {
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.JSDocSignature:
@@ -1835,6 +1834,7 @@ namespace ts {
                 case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
+                case SyntaxKind.GetAccessor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
@@ -3372,7 +3372,7 @@ namespace ts {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 
-            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+            if (currentFlow && (node.kind === SyntaxKind.GetAccessor || isObjectLiteralOrClassExpressionMethod(node))) {
                 node.flowNode = currentFlow;
             }
 

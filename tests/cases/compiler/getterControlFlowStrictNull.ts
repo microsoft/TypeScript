@@ -30,3 +30,12 @@ class C {
     set a(value: number) {
     }
 }
+
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+  let obj = {
+    get prop() { return x.toUpperCase() },
+    method() { return x.toUpperCase() }
+  }
+}
