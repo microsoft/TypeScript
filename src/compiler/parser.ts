@@ -1568,7 +1568,7 @@ namespace ts {
             }
 
             // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
-            const expressionText = getExpressionText(node);
+            const expressionText = ts.isIdentifier(node) ? idText(node) : undefined;
             if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
                 parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 return;
@@ -1691,10 +1691,6 @@ namespace ts {
             }
 
             parseErrorForMissingSemicolonAfter(name);
-        }
-
-        function getExpressionText(expression: Expression | PropertyName) {
-            return ts.isIdentifier(expression) ? idText(expression) : undefined;
         }
 
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
