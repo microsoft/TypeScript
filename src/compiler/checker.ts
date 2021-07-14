@@ -9008,10 +9008,6 @@ namespace ts {
         }
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
-            if (!symbol.valueDeclaration && symbol.escapedName === "meta") {
-                return getGlobalImportMetaType();
-            }
-
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
@@ -9033,6 +9029,9 @@ namespace ts {
             // CommonsJS require and module both have type any.
             if (symbol === requireSymbol) {
                 return anyType;
+            }
+            if (!symbol.valueDeclaration && symbol.escapedName === "meta") {
+                return getGlobalImportMetaType();
             }
             if (symbol.flags & SymbolFlags.ModuleExports && symbol.valueDeclaration) {
                 const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
