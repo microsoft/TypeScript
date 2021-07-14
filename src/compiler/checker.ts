@@ -12290,7 +12290,7 @@ namespace ts {
 
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = isOptionalJSDocPropertyLikeTag(param) ||
-                        param.initializer || param.questionToken || param.dotDotDotToken ||
+                        param.initializer || param.questionToken || isRestParameter(param) ||
                         iife && parameters.length > iife.arguments.length && !type ||
                         isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
