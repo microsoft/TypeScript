@@ -12290,7 +12290,7 @@ namespace ts {
 
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = isOptionalJSDocPropertyLikeTag(param) ||
-                        param.initializer || param.questionToken || param.dotDotDotToken ||
+                        param.initializer || param.questionToken || isRestParameter(param) ||
                         iife && parameters.length > iife.arguments.length && !type ||
                         isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
@@ -18363,7 +18363,7 @@ namespace ts {
                     // parameter 'T extends 1 | 2', the intersection 'T & 1' should be reduced to '1' such that it doesn't
                     // appear to be comparable to '2'.
                     if (relation === comparableRelation && target.flags & TypeFlags.Primitive) {
-                        const constraints = sameMap((source as IntersectionType).types, t => t.flags & TypeFlags.Primitive ? t : getBaseConstraintOfType(t) || unknownType);
+                        const constraints = sameMap((source as IntersectionType).types, getBaseConstraintOrType);
                         if (constraints !== (source as IntersectionType).types) {
                             source = getIntersectionType(constraints);
                             if (!(source.flags & TypeFlags.Intersection)) {
