@@ -9008,6 +9008,10 @@ namespace ts {
         }
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
+            if (!symbol.valueDeclaration && symbol.escapedName === "meta") {
+                return getGlobalImportMetaType();
+            }
+
             const links = getSymbolLinks(symbol);
             if (!links.type) {
                 const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
