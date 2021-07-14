@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -187,6 +193,7 @@ declare namespace FourSlashInterface {
         markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesInFile(fileName?: string): Range[];
         spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
@@ -395,6 +402,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
+            start: number;
+            length: number;
+        }, preference?: InlayHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -625,10 +636,22 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
+        /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -730,6 +753,14 @@ declare namespace FourSlashInterface {
         readonly description: string;
         readonly actions?: ReadonlyArray<{ readonly type: string, readonly data: {} }>;
         readonly commands?: ReadonlyArray<{}>;
+    }
+
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: VerifyInlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     interface VerifyNavigateToOptions {

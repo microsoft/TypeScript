@@ -1,0 +1,94 @@
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(4,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(7,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(13,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(16,14): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(19,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(29,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts(32,12): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+
+
+==== tests/cases/conformance/classes/classStaticBlock/classStaticBlock22.ts (7 errors) ====
+    let await: "any";
+    class C {
+      static {
+        let await: any; // illegal, cannot declare a new binding for await
+            ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        let { await } = {} as any; // illegal, cannot declare a new binding for await
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        let { await: other } = {} as any; // legal
+      }
+      static {
+        let await; // illegal, cannot declare a new binding for await
+            ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        function await() { }; // illegal
+                 ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        class await { }; // illegal
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+    
+      static {
+        class D {
+          await = 1; // legal
+          x = await; // legal (initializers have an implicit function boundary)
+        };
+      }
+      static {
+        (function await() { }); // legal, 'await' in function expression name not bound inside of static block
+                  ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        (class await { }); // legal, 'await' in class expression name not bound inside of static block
+               ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+      }
+      static {
+        (function () { return await; }); // legal, 'await' is inside of a new function boundary
+      }
+      static {
+        (() => await); // legal, 'await' is inside of a new function boundary
+      }
+    
+      static {
+        class E {
+          constructor() { await; }
+          method() { await; }
+          get accessor() {
+            await;
+            return 1;
+          }
+          set accessor(v: any) {
+            await;
+          }
+          propLambda = () => { await; }
+          propFunc = function () { await; }
+        }
+      }
+      static {
+        class S {
+          static method() { await; }
+          static get accessor() {
+            await;
+            return 1;
+          }
+          static set accessor(v: any) {
+            await;
+          }
+          static propLambda = () => { await; }
+          static propFunc = function () { await; }
+        }
+      }
+    }

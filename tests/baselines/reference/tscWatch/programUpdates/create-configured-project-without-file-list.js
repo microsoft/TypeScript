@@ -53,6 +53,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/c/f1.ts
 /a/b/d/f2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/c/f1.ts (used version)
+/a/b/d/f2.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}

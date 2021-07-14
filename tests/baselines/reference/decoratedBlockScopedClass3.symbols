@@ -1,0 +1,51 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+function decorator() {
+>decorator : Symbol(decorator, Decl(a.ts, 0, 0))
+
+    return (target: new (...args: any[]) => any) => {}
+>target : Symbol(target, Decl(a.ts, 1, 12))
+>args : Symbol(args, Decl(a.ts, 1, 25))
+}
+
+@decorator()
+>decorator : Symbol(decorator, Decl(a.ts, 0, 0))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 2, 1))
+
+    public static func(): Foo {
+>func : Symbol(Foo.func, Decl(a.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(a.ts, 2, 1))
+
+        return new Foo();
+>Foo : Symbol(Foo, Decl(a.ts, 2, 1))
+    }
+}
+Foo.func();
+>Foo.func : Symbol(Foo.func, Decl(a.ts, 5, 11))
+>Foo : Symbol(Foo, Decl(a.ts, 2, 1))
+>func : Symbol(Foo.func, Decl(a.ts, 5, 11))
+
+try {
+    @decorator()
+>decorator : Symbol(decorator, Decl(a.ts, 0, 0))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(a.ts, 12, 5))
+
+        public static func(): Foo {
+>func : Symbol(Foo.func, Decl(a.ts, 14, 15))
+>Foo : Symbol(Foo, Decl(a.ts, 12, 5))
+
+            return new Foo();
+>Foo : Symbol(Foo, Decl(a.ts, 12, 5))
+        }
+    }
+    Foo.func();
+>Foo.func : Symbol(Foo.func, Decl(a.ts, 14, 15))
+>Foo : Symbol(Foo, Decl(a.ts, 12, 5))
+>func : Symbol(Foo.func, Decl(a.ts, 14, 15))
+}
+catch (e) {}
+>e : Symbol(e, Decl(a.ts, 21, 7))
+

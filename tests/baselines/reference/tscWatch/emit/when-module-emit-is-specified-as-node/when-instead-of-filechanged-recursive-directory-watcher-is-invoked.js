@@ -44,6 +44,11 @@ Semantic diagnostics in builder refreshed for::
 /a/rootFolder/project/Scripts/Javascript.js
 /a/rootFolder/project/Scripts/TypeScript.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/rootfolder/project/scripts/javascript.js (used version)
+/a/rootfolder/project/scripts/typescript.ts (used version)
+
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:
   {"fileName":"/a/rootFolder/project/tsconfig.json","pollingInterval":250}
@@ -100,6 +105,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/rootFolder/project/Scripts/Javascript.js
 /a/rootFolder/project/Scripts/TypeScript.ts
+
+Shape signatures in builder refreshed for::
+/a/rootfolder/project/scripts/typescript.ts (computed .d.ts)
+/a/rootfolder/project/scripts/javascript.js (computed .d.ts)
 
 WatchedFiles::
 /a/rootfolder/project/tsconfig.json:

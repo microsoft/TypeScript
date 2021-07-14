@@ -154,6 +154,26 @@ namespace ts {
             }).outputText;
         });
 
+        testBaseline("issue44068", () => {
+            return transformSourceFile(`
+                const FirstVar = null;
+                const SecondVar = null;
+            `, [
+                context => file => {
+                    const firstVarName = (file.statements[0] as VariableStatement)
+                        .declarationList.declarations[0].name as Identifier;
+                    const secondVarName = (file.statements[0] as VariableStatement)
+                        .declarationList.declarations[0].name as Identifier;
+
+                    return context.factory.updateSourceFile(file, file.statements.concat([
+                        context.factory.createExpressionStatement(
+                            context.factory.createArrayLiteralExpression([firstVarName, secondVarName])
+                        ),
+                    ]));
+                }
+            ]);
+        });
+
         testBaseline("rewrittenNamespace", () => {
             return transpileModule(`namespace Reflect { const x = 1; }`, {
                 transformers: {

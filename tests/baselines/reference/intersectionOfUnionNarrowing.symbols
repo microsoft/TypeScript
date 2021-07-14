@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/intersection/intersectionOfUnionNarrowing.ts ===
+interface X {
+>X : Symbol(X, Decl(intersectionOfUnionNarrowing.ts, 0, 0))
+
+  a?: { aProp: string };
+>a : Symbol(X.a, Decl(intersectionOfUnionNarrowing.ts, 0, 13))
+>aProp : Symbol(aProp, Decl(intersectionOfUnionNarrowing.ts, 1, 7))
+
+  b?: { bProp: string };
+>b : Symbol(X.b, Decl(intersectionOfUnionNarrowing.ts, 1, 24))
+>bProp : Symbol(bProp, Decl(intersectionOfUnionNarrowing.ts, 2, 7))
+}
+type AorB = { a: object; b: undefined } | { a: undefined; b: object };
+>AorB : Symbol(AorB, Decl(intersectionOfUnionNarrowing.ts, 3, 1))
+>a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 4, 13))
+>b : Symbol(b, Decl(intersectionOfUnionNarrowing.ts, 4, 24))
+>a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 4, 43))
+>b : Symbol(b, Decl(intersectionOfUnionNarrowing.ts, 4, 57))
+
+declare const q: X & AorB;
+>q : Symbol(q, Decl(intersectionOfUnionNarrowing.ts, 6, 13))
+>X : Symbol(X, Decl(intersectionOfUnionNarrowing.ts, 0, 0))
+>AorB : Symbol(AorB, Decl(intersectionOfUnionNarrowing.ts, 3, 1))
+
+if (q.a !== undefined) {
+>q.a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 13), Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 43))
+>q : Symbol(q, Decl(intersectionOfUnionNarrowing.ts, 6, 13))
+>a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 13), Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 43))
+>undefined : Symbol(undefined)
+
+  q.a.aProp;
+>q.a.aProp : Symbol(aProp, Decl(intersectionOfUnionNarrowing.ts, 1, 7))
+>q.a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 13))
+>q : Symbol(q, Decl(intersectionOfUnionNarrowing.ts, 6, 13))
+>a : Symbol(a, Decl(intersectionOfUnionNarrowing.ts, 0, 13), Decl(intersectionOfUnionNarrowing.ts, 4, 13))
+>aProp : Symbol(aProp, Decl(intersectionOfUnionNarrowing.ts, 1, 7))
+
+} else {
+  // q.b is previously incorrectly inferred as potentially undefined
+  q.b.bProp;
+>q.b.bProp : Symbol(bProp, Decl(intersectionOfUnionNarrowing.ts, 2, 7))
+>q.b : Symbol(b, Decl(intersectionOfUnionNarrowing.ts, 1, 24), Decl(intersectionOfUnionNarrowing.ts, 4, 57))
+>q : Symbol(q, Decl(intersectionOfUnionNarrowing.ts, 6, 13))
+>b : Symbol(b, Decl(intersectionOfUnionNarrowing.ts, 1, 24), Decl(intersectionOfUnionNarrowing.ts, 4, 57))
+>bProp : Symbol(bProp, Decl(intersectionOfUnionNarrowing.ts, 2, 7))
+}
+

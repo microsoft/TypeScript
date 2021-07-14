@@ -70,7 +70,7 @@ namespace ts.codefix {
         function createMissingIndexSignatureDeclaration(type: InterfaceType, kind: IndexKind): void {
             const indexInfoOfKind = checker.getIndexInfoOfType(type, kind);
             if (indexInfoOfKind) {
-                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, kind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
+                insertInterfaceMemberNode(sourceFile, classDeclaration, checker.indexInfoToIndexSignatureDeclaration(indexInfoOfKind, classDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context))!);
             }
         }
 

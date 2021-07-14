@@ -33,6 +33,8 @@ namespace ts {
         const previousOnEmitNode = context.onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
         context.onEmitNode = onEmitNode;
+        context.enableSubstitution(SyntaxKind.CallExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
+        context.enableSubstitution(SyntaxKind.TaggedTemplateExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
         context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
         context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
         context.enableSubstitution(SyntaxKind.PrefixUnaryExpression); // Substitutes updates to exported symbols.
@@ -1741,6 +1743,10 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return substituteExpressionIdentifier(node as Identifier);
+                case SyntaxKind.CallExpression:
+                    return substituteCallExpression(node as CallExpression);
+                case SyntaxKind.TaggedTemplateExpression:
+                    return substituteTaggedTemplateExpression(node as TaggedTemplateExpression);
                 case SyntaxKind.BinaryExpression:
                     return substituteBinaryExpression(node as BinaryExpression);
                 case SyntaxKind.PostfixUnaryExpression:
@@ -1748,6 +1754,43 @@ namespace ts {
                     return substituteUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression);
             }
 
+            return node;
+        }
+
+        function substituteCallExpression(node: CallExpression) {
+            if (isIdentifier(node.expression)) {
+                const expression = substituteExpressionIdentifier(node.expression);
+                noSubstitution[getNodeId(expression)] = true;
+                if (!isIdentifier(expression)) {
+                    return addEmitFlags(
+                        factory.updateCallExpression(node,
+                            expression,
+                            /*typeArguments*/ undefined,
+                            node.arguments
+                        ),
+                        EmitFlags.IndirectCall
+                    );
+
+                }
+            }
+            return node;
+        }
+
+        function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            if (isIdentifier(node.tag)) {
+                const tag = substituteExpressionIdentifier(node.tag);
+                noSubstitution[getNodeId(tag)] = true;
+                if (!isIdentifier(tag)) {
+                    return addEmitFlags(
+                        factory.updateTaggedTemplateExpression(node,
+                            tag,
+                            /*typeArguments*/ undefined,
+                            node.template
+                        ),
+                        EmitFlags.IndirectCall
+                    );
+                }
+            }
             return node;
         }
 

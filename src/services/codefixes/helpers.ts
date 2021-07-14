@@ -127,7 +127,7 @@ namespace ts.codefix {
                 }
 
                 for (const signature of signatures) {
-                    // Need to ensure nodes are fresh each time so they can have different positions.
+                    // Ensure nodes are fresh so they can have different positions when going through formatting.
                     outputMethod(quotePreference, signature, getSynthesizedDeepClones(modifiers, /*includeTrivia*/ false), getSynthesizedDeepClone(name, /*includeTrivia*/ false));
                 }
 
@@ -145,27 +145,28 @@ namespace ts.codefix {
         }
 
         function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = signatureToMethodDeclaration(context, quotePreference, signature, enclosingDeclaration, modifiers, name, optional, body, importAdder);
+            const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional, enclosingDeclaration, importAdder);
             if (method) addClassElement(method);
         }
     }
 
-    function signatureToMethodDeclaration(
+    export function createSignatureDeclarationFromSignature(
+        kind: SyntaxKind.MethodDeclaration | SyntaxKind.FunctionExpression | SyntaxKind.ArrowFunction,
         context: TypeConstructionContext,
         quotePreference: QuotePreference,
         signature: Signature,
-        enclosingDeclaration: ClassLikeDeclaration,
-        modifiers: NodeArray<Modifier> | undefined,
-        name: PropertyName,
-        optional: boolean,
         body: Block | undefined,
-        importAdder: ImportAdder | undefined,
-    ): MethodDeclaration | undefined {
+        name: PropertyName | undefined,
+        modifiers: NodeArray<Modifier> | undefined,
+        optional: boolean | undefined,
+        enclosingDeclaration: Node | undefined,
+        importAdder: ImportAdder | undefined
+     ) {
         const program = context.program;
         const checker = program.getTypeChecker();
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const flags = NodeBuilderFlags.NoTruncation | NodeBuilderFlags.NoUndefinedOptionalParameterType | NodeBuilderFlags.SuppressAnyReturnType | (quotePreference === QuotePreference.Single ? NodeBuilderFlags.UseSingleQuotesForStringLiteralType : 0);
-        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as MethodDeclaration;
+        const signatureDeclaration = checker.signatureToSignatureDeclaration(signature, kind, enclosingDeclaration, flags, getNoopSymbolTrackerWithResolver(context)) as ArrowFunction | FunctionExpression | MethodDeclaration;
         if (!signatureDeclaration) {
             return undefined;
         }
@@ -233,18 +234,18 @@ namespace ts.codefix {
             }
         }
 
-        return factory.updateMethodDeclaration(
-            signatureDeclaration,
-            /*decorators*/ undefined,
-            modifiers,
-            signatureDeclaration.asteriskToken,
-            name,
-            optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
-            typeParameters,
-            parameters,
-            type,
-            body
-        );
+        const questionToken = optional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
+        const asteriskToken = signatureDeclaration.asteriskToken;
+        if (isFunctionExpression(signatureDeclaration)) {
+            return factory.updateFunctionExpression(signatureDeclaration, modifiers, signatureDeclaration.asteriskToken, tryCast(name, isIdentifier), typeParameters, parameters, type, body ?? signatureDeclaration.body);
+        }
+        if (isArrowFunction(signatureDeclaration)) {
+            return factory.updateArrowFunction(signatureDeclaration, modifiers, typeParameters, parameters, type, signatureDeclaration.equalsGreaterThanToken, body ?? signatureDeclaration.body);
+        }
+        if (isMethodDeclaration(signatureDeclaration)) {
+            return factory.updateMethodDeclaration(signatureDeclaration, /* decorators */ undefined, modifiers, asteriskToken, name ?? factory.createIdentifier(""), questionToken, typeParameters, parameters, type, body);
+        }
+        return undefined;
     }
 
     export function createSignatureDeclarationFromCallExpression(
@@ -310,15 +311,16 @@ namespace ts.codefix {
     }
 
     export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
-        const typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
+        let typeNode = checker.typeToTypeNode(type, contextNode, flags, tracker);
         if (typeNode && isImportTypeNode(typeNode)) {
             const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
             if (importableReference) {
                 importSymbols(importAdder, importableReference.symbols);
-                return importableReference.typeNode;
+                typeNode = importableReference.typeNode;
             }
         }
-        return typeNode;
+        // Ensure nodes are fresh so they can have different positions when going through formatting.
+        return getSynthesizedDeepClone(typeNode);
     }
 
     function createDummyParameters(argCount: number, names: (string | undefined)[] | undefined, types: (TypeNode | undefined)[] | undefined, minArgumentCount: number | undefined, inJs: boolean): ParameterDeclaration[] {

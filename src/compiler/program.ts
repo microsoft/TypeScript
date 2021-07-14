@@ -1054,6 +1054,7 @@ namespace ts {
             getSourceFileByPath,
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
+            getModuleResolutionCache: () => moduleResolutionCache,
             getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1896,7 +1897,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return concatenate(
-                filterSemanticDiagnotics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
+                filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
                 getProgramDiagnostics(sourceFile)
             );
         }
@@ -1918,8 +1919,8 @@ namespace ts {
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
@@ -2370,7 +2371,7 @@ namespace ts {
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                     else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                        imports = append(imports, node.arguments[0] as StringLiteralLike);
+                        imports = append(imports, node.arguments[0]);
                     }
                     else if (isLiteralImportTypeNode(node)) {
                         imports = append(imports, node.argument.literal);
@@ -3043,6 +3044,9 @@ namespace ts {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
+            if (options.exactOptionalPropertyTypes && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
+            }
 
             if (options.isolatedModules) {
                 if (options.out) {
@@ -3665,10 +3669,13 @@ namespace ts {
             if (host.getSymlinkCache) {
                 return host.getSymlinkCache();
             }
-            return symlinks || (symlinks = discoverProbableSymlinks(
-                files,
-                getCanonicalFileName,
-                host.getCurrentDirectory()));
+            if (!symlinks) {
+                symlinks = createSymlinkCache(currentDirectory, getCanonicalFileName);
+            }
+            if (files && resolvedTypeReferenceDirectives && !symlinks.hasProcessedResolutions()) {
+                symlinks.setSymlinksFromResolutions(files, resolvedTypeReferenceDirectives);
+            }
+            return symlinks;
         }
     }
 
@@ -3888,7 +3895,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function filterSemanticDiagnotics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
+    export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
         return filter(diagnostic, d => !d.skippedOn || !option[d.skippedOn]);
     }
 
