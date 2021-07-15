@@ -9030,9 +9030,6 @@ namespace ts {
             if (symbol === requireSymbol) {
                 return anyType;
             }
-            if (!symbol.valueDeclaration && symbol.escapedName === "meta") {
-                return getGlobalImportMetaType();
-            }
             if (symbol.flags & SymbolFlags.ModuleExports && symbol.valueDeclaration) {
                 const fileSymbol = getSymbolOfNode(getSourceFileOfNode(symbol.valueDeclaration));
                 const result = createSymbol(fileSymbol.flags, "exports" as __String);
