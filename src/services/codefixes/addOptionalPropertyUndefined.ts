@@ -48,7 +48,7 @@ namespace ts.codefix {
         }
         const { source: sourceNode, target: targetNode } = sourceTarget;
         const target = checker.getTypeAtLocation(targetNode);
-        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/(node_modules|^lib\.)/))) {
+        if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/\.d\.ts$/))) {
             return [];
         }
         return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target);
