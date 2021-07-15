@@ -39,6 +39,7 @@ verify.completions({
 
 edit.insert("N");
 
+// Should not crash
 verify.completions({
   marker: "",
   preferences: {

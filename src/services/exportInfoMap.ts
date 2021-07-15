@@ -327,7 +327,9 @@ namespace ts {
             const seenExports = new Map<Symbol, true>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && !checker.isUndefinedSymbol(defaultInfo.symbol)) {
+            // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
+            // can cause it to happen: see 'completionsImport_mergedReExport.ts'
+            if (defaultInfo && !checker.isUndefinedSymbol(defaultInfo.symbol) && defaultInfo.symbol.name[0] !== `"`) {
                 cache.add(
                     importingFile.path,
                     defaultInfo.symbol,
@@ -339,7 +341,7 @@ namespace ts {
                     checker);
             }
             for (const exported of checker.getExportsAndPropertiesOfModule(moduleSymbol)) {
-                if (exported !== defaultInfo?.symbol && addToSeen(seenExports, exported)) {
+                if (exported !== defaultInfo?.symbol && !isKnownSymbol(exported) && exported.name[0] !== `"` && addToSeen(seenExports, exported)) {
                     cache.add(
                         importingFile.path,
                         exported,
