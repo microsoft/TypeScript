@@ -1171,7 +1171,6 @@ namespace ts {
     }
 
     const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
-        "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
         "getCompilerOptionsDiagnostics",

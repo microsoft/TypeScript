@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts(12,20): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts(12,22): error TS1442: Missing '=' before default property value.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariables/parserErrorRecovery_IncompleteMemberVariable2.ts (2 errors) ====
@@ -18,7 +18,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/IncompleteMemberVariabl
                        ~
 !!! error TS2304: Cannot find name 'C'.
                          ~~~~~~~
-!!! error TS1005: ';' expected.
+!!! error TS1442: Missing '=' before default property value.
             // Constructor
             constructor (public x: number, public y: number) { }
     

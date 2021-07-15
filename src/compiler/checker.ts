@@ -12291,7 +12291,7 @@ namespace ts {
 
                     // Record a new minimum argument count if this is not an optional parameter
                     const isOptionalParameter = isOptionalJSDocPropertyLikeTag(param) ||
-                        param.initializer || param.questionToken || param.dotDotDotToken ||
+                        param.initializer || param.questionToken || isRestParameter(param) ||
                         iife && parameters.length > iife.arguments.length && !type ||
                         isJSDocOptionalParameter(param);
                     if (!isOptionalParameter) {
@@ -15162,7 +15162,7 @@ namespace ts {
             let extraTypes: Type[] | undefined;
             // We loop here for an immediately nested conditional type in the false position, effectively treating
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
-            // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
+            // purposes of resolution. This means such types aren't subject to the instantiation depth limiter.
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
@@ -18372,7 +18372,7 @@ namespace ts {
                     // parameter 'T extends 1 | 2', the intersection 'T & 1' should be reduced to '1' such that it doesn't
                     // appear to be comparable to '2'.
                     if (relation === comparableRelation && target.flags & TypeFlags.Primitive) {
-                        const constraints = sameMap((source as IntersectionType).types, t => t.flags & TypeFlags.Primitive ? t : getBaseConstraintOfType(t) || unknownType);
+                        const constraints = sameMap((source as IntersectionType).types, getBaseConstraintOrType);
                         if (constraints !== (source as IntersectionType).types) {
                             source = getIntersectionType(constraints);
                             if (!(source.flags & TypeFlags.Intersection)) {

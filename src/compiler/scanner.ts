@@ -77,7 +77,8 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
+    /** @internal */
+    export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
         abstract: SyntaxKind.AbstractKeyword,
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
