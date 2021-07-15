@@ -1664,7 +1664,7 @@ namespace ts {
                     parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 }
                 else {
-                    parseErrorAtCurrentToken(Diagnostics.Missing_before_default_property_value);
+                    parseErrorAtCurrentToken(Diagnostics.Expected_for_property_initializer);
                 }
                 return;
             }
