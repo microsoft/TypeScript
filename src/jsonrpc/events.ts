@@ -1,3 +1,5 @@
+/* eslint-disable only-arrow-functions */
+/* eslint-disable @typescript-eslint/prefer-function-type */
 /* @internal */
 namespace ts.server.rpc {
     /**
@@ -31,6 +33,7 @@ namespace ts.server.rpc {
 
         public add(
             callback: Function,
+            // eslint-disable-next-line no-null/no-null
             context: any = null,
             bucket?: Disposable[]
         ): void {
@@ -46,6 +49,7 @@ namespace ts.server.rpc {
             }
         }
 
+        // eslint-disable-next-line no-null/no-null
         public remove(callback: Function, context: any = null): void {
             if (!this._callbacks) {
                 return;
@@ -59,7 +63,8 @@ namespace ts.server.rpc {
                         this._callbacks.splice(i, 1);
                         this._contexts!.splice(i, 1);
                         return;
-                    } else {
+                    }
+                    else {
                         foundCallbackWithDifferentContext = true;
                     }
                 }
@@ -84,7 +89,8 @@ namespace ts.server.rpc {
             for (let i = 0, len = callbacks.length; i < len; i++) {
                 try {
                     ret.push(callbacks[i].apply(contexts[i], args));
-                } catch (e) {
+                }
+                catch (e) {
                     // eslint-disable-next-line no-console
                     RAL().console.error(e);
                 }

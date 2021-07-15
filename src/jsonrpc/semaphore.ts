@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-function-type */
 /*@internal*/
 namespace ts.server.rpc {
     interface Thunk<T> {
@@ -16,9 +17,9 @@ namespace ts.server.rpc {
         private _active: number;
         private _waiting: Waiting<T>[];
 
-        public constructor(capacity: number = 1) {
+        public constructor(capacity = 1) {
             if (capacity <= 0) {
-                throw new Error('Capacity must be greater than 0');
+                throw new Error("Capacity must be greater than 0");
             }
             this._capacity = capacity;
             this._active = 0;
@@ -36,7 +37,7 @@ namespace ts.server.rpc {
             return this._active;
         }
 
-        private runNext():  void {
+        private runNext(): void {
             if (this._waiting.length === 0 || this._active === this._capacity) {
                 return;
             }
@@ -64,12 +65,14 @@ namespace ts.server.rpc {
                         next.reject(err);
                         this.runNext();
                     });
-                } else {
+                }
+                else {
                     this._active--;
                     next.resolve(result);
                     this.runNext();
                 }
-            } catch (err) {
+            }
+            catch (err) {
                 this._active--;
                 next.reject(err);
                 this.runNext();

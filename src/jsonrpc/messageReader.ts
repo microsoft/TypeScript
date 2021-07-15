@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/prefer-function-type */
 /*@internal*/
 namespace ts.server.rpc {
     namespace Is {
         export const func = is.func;
+        // eslint-disable-next-line no-keywords
         export const string = is.string;
     }
 
@@ -43,7 +45,7 @@ namespace ts.server.rpc {
 
     export namespace MessageReader {
         export function is(value: any): value is MessageReader {
-            let candidate: MessageReader = value;
+            const candidate: MessageReader = value;
             return (
                 candidate &&
                 Is.func(candidate.listen) &&
@@ -85,7 +87,7 @@ namespace ts.server.rpc {
         }
 
         protected fireClose(): void {
-            this.closeEmitter.fire(undefined);
+            this.closeEmitter.fire(/*event*/ undefined);
         }
 
         public get onPartialMessage(): Event<PartialMessageInfo> {
@@ -99,7 +101,8 @@ namespace ts.server.rpc {
         private asError(error: any): Error {
             if (error instanceof Error) {
                 return error;
-            } else {
+            }
+            else {
                 return new Error(
                     `Reader received error. Reason: ${
                         Is.string(error.message) ? error.message : "unknown"
@@ -140,7 +143,8 @@ namespace ts.server.rpc {
                 new Map();
             if (options === undefined || typeof options === "string") {
                 charset = options ?? "utf-8";
-            } else {
+            }
+            else {
                 charset = options.charset ?? "utf-8";
                 if (options.contentDecoder !== undefined) {
                     contentDecoder = options.contentDecoder;
@@ -259,7 +263,8 @@ namespace ts.server.rpc {
                 let p: Promise<Uint8Array>;
                 if (this.options.contentDecoder !== undefined) {
                     p = this.options.contentDecoder.decode(body);
-                } else {
+                }
+                else {
                     p = Promise.resolve(body);
                 }
                 p.then(

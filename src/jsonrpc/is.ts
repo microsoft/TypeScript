@@ -25,6 +25,6 @@ namespace ts.server.rpc.is {
     }
 
     export function stringArray(value: any): value is string[] {
-        return array(value) && (<any[]>value).every((elem) => string(elem));
+        return array(value) && (value as any[]).every((elem) => string(elem));
     }
 }

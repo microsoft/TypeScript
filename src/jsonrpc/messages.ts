@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* @internal */
 namespace ts.server.rpc {
     /**
@@ -33,11 +34,11 @@ namespace ts.server.rpc {
      */
     export namespace ErrorCodes {
         // Defined by JSON RPC
-        export const ParseError: number = -32700;
-        export const InvalidRequest: number = -32600;
-        export const MethodNotFound: number = -32601;
-        export const InvalidParams: number = -32602;
-        export const InternalError: number = -32603;
+        export const ParseError = -32700;
+        export const InvalidRequest = -32600;
+        export const MethodNotFound = -32601;
+        export const InvalidParams = -32602;
+        export const InternalError = -32603;
 
         /**
          * This is the start range of JSON RPC reserved error codes.
@@ -47,29 +48,29 @@ namespace ts.server.rpc {
          * are left in the range.
          *
          * @since 3.16.0
-        */
-        export const jsonrpcReservedErrorRangeStart: number = -32099;
-        /** @deprecated use  jsonrpcReservedErrorRangeStart */
+         */
+        export const jsonrpcReservedErrorRangeStart = -32099;
+        /** @deprecated use jsonrpcReservedErrorRangeStart */
         export const serverErrorStart: number = jsonrpcReservedErrorRangeStart;
 
-        export const MessageWriteError: number = -32099;
-        export const MessageReadError: number = -32098;
+        export const MessageWriteError = -32099;
+        export const MessageReadError = -32098;
 
         /**
          * Error code indicating that a server received a notification or
          * request before the server has received the `initialize` request.
          */
-        export const ServerNotInitialized: number = -32002;
-        export const UnknownErrorCode: number = -32001;
+        export const ServerNotInitialized = -32002;
+        export const UnknownErrorCode = -32001;
 
         /**
          * This is the end range of JSON RPC reserved error codes.
          * It doesn't denote a real error code.
          *
          * @since 3.16.0
-        */
+         */
         export const jsonrpcReservedErrorRangeEnd = -32000;
-        /** @deprecated use  jsonrpcReservedErrorRangeEnd */
+        /** @deprecated use jsonrpcReservedErrorRangeEnd */
         export const serverErrorEnd: number = jsonrpcReservedErrorRangeEnd;
     }
 
@@ -144,12 +145,12 @@ namespace ts.server.rpc {
      * A LSP Log Entry.
      */
     export type LSPMessageType =
-        | 'send-request'
-        | 'receive-request'
-        | 'send-response'
-        | 'receive-response'
-        | 'send-notification'
-        | 'receive-notification';
+        | "send-request"
+        | "receive-request"
+        | "send-response"
+        | "receive-response"
+        | "send-notification"
+        | "receive-notification";
 
     export interface LSPLogMessage {
         type: LSPMessageType;
@@ -162,20 +163,20 @@ namespace ts.server.rpc {
          * The parameter structure is automatically inferred on the number of parameters
          * and the parameter type in case of a single param.
          */
-        public static readonly auto = new ParameterStructures('auto');
+        public static readonly auto = new ParameterStructures("auto");
 
         /**
          * Forces `byPosition` parameter structure. This is useful if you have a single
          * parameter which has a literal type.
          */
-        public static readonly byPosition = new ParameterStructures('byPosition');
+        public static readonly byPosition = new ParameterStructures("byPosition");
 
         /**
          * Forces `byName` parameter structure. This is only useful when having a single
          * parameter. The library will report errors if used with a different number of
          * parameters.
          */
-        public static readonly byName = new ParameterStructures('byName');
+        public static readonly byName = new ParameterStructures("byName");
 
         private constructor(private readonly kind: string) {
         }
@@ -481,7 +482,7 @@ namespace ts.server.rpc {
      * Tests if the given message is a request message
      */
     export function isRequestMessage(message: Message | undefined): message is RequestMessage {
-        const candidate = <RequestMessage>message;
+        const candidate = message as RequestMessage;
         return candidate && is.string(candidate.method) && (is.string(candidate.id) || is.number(candidate.id));
     }
 
@@ -489,15 +490,16 @@ namespace ts.server.rpc {
      * Tests if the given message is a notification message
      */
     export function isNotificationMessage(message: Message | undefined): message is NotificationMessage {
-        const candidate = <NotificationMessage>message;
-        return candidate && is.string(candidate.method) && (<any>message).id === void 0;
+        const candidate = message as NotificationMessage;
+        return candidate && is.string(candidate.method) && (message as any).id === void 0;
     }
 
     /**
      * Tests if the given message is a response message
      */
     export function isResponseMessage(message: Message | undefined): message is ResponseMessage {
-        const candidate = <ResponseMessage>message;
+        const candidate = message as ResponseMessage;
+        // eslint-disable-next-line no-null/no-null
         return candidate && (candidate.result !== void 0 || !!candidate.error) && (is.string(candidate.id) || is.number(candidate.id) || candidate.id === null);
     }
 

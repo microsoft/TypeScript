@@ -5,7 +5,7 @@ namespace ts.projectSystem {
         it("basic hover should work", () => {
             const path = "/a/file.js";
             const file: File = {
-                path: path,
+                path,
                 content: "const foo = 5;",
             };
 

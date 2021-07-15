@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* @internal */
 namespace ts.server.rpc {
     interface _MessageBuffer {
@@ -27,7 +28,7 @@ namespace ts.server.rpc {
         tryReadBody(length: number): Uint8Array | undefined;
     }
 
-    type _MessageBufferEncoding = 'ascii' | 'utf-8';
+    type _MessageBufferEncoding = "ascii" | "utf-8";
 
     interface _ReadableStream {
         onData(listener: (data: Uint8Array) => void): Disposable;

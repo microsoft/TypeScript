@@ -1,8 +1,8 @@
 /*@internal*/
 namespace ts.server.rpc {
-    const CR: number = 13;
-    const LF: number = 10;
-    const CRLF: string = "\r\n";
+    const CR = 13;
+    const LF = 10;
+    const CRLF = "\r\n";
 
     export abstract class AbstractMessageBuffer implements RAL.MessageBuffer {
         private _encoding: RAL.MessageBufferEncoding;
@@ -50,10 +50,11 @@ namespace ts.server.rpc {
             let state = 0;
             let chunkIndex = 0;
             let offset = 0;
-            let chunkBytesRead: number = 0;
+            let chunkBytesRead = 0;
             row: while (chunkIndex < this._chunks.length) {
                 const chunk = this._chunks[chunkIndex];
                 offset = 0;
+                // eslint-disable-next-line no-unused-labels
                 column: while (offset < chunk.length) {
                     const value = chunk[offset];
                     switch (value) {
@@ -158,7 +159,7 @@ namespace ts.server.rpc {
 
             const result = this.allocNative(byteCount);
             let resultOffset = 0;
-            let chunkIndex = 0;
+            const chunkIndex = 0;
             while (byteCount > 0) {
                 const chunk = this._chunks[chunkIndex];
                 if (chunk.byteLength > byteCount) {
@@ -169,7 +170,8 @@ namespace ts.server.rpc {
                     this._chunks[chunkIndex] = chunk.slice(byteCount);
                     this._totalLength -= byteCount;
                     byteCount -= byteCount;
-                } else {
+                }
+                else {
                     // this chunk will be entirely read
                     result.set(chunk, resultOffset);
                     resultOffset += chunk.byteLength;

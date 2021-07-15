@@ -2,10 +2,11 @@
 namespace ts.server.rpc {
     namespace Is {
         export const func = is.func;
+        // eslint-disable-next-line no-keywords
         export const string = is.string;
     }
 
-    const ContentLength: string = "Content-Length: ";
+    const ContentLength = "Content-Length: ";
     const CRLF = "\r\n";
 
     /** Writes JSON-RPC messages to an underlying transport. */
@@ -33,7 +34,7 @@ namespace ts.server.rpc {
 
     export namespace MessageWriter {
         export function is(value: any): value is MessageWriter {
-            let candidate: MessageWriter = value;
+            const candidate: MessageWriter = value;
             return (
                 candidate &&
                 Is.func(candidate.dispose) &&
@@ -79,13 +80,14 @@ namespace ts.server.rpc {
         }
 
         protected fireClose(): void {
-            this.closeEmitter.fire(undefined);
+            this.closeEmitter.fire(/*event*/ undefined);
         }
 
         private asError(error: any): Error {
             if (error instanceof Error) {
                 return error;
-            } else {
+            }
+            else {
                 return new Error(
                     `Writer received error. Reason: ${
                         Is.string(error.message) ? error.message : "unknown"
@@ -119,7 +121,8 @@ namespace ts.server.rpc {
                     charset: options ?? "utf-8",
                     contentTypeEncoder: RAL().applicationJson.encoder,
                 };
-            } else {
+            }
+            else {
                 return {
                     charset: options.charset ?? "utf-8",
                     contentEncoder: options.contentEncoder,
@@ -131,10 +134,7 @@ namespace ts.server.rpc {
         }
     }
 
-    export class WriteableStreamMessageWriter
-        extends AbstractMessageWriter
-        implements MessageWriter
-    {
+    export class WriteableStreamMessageWriter extends AbstractMessageWriter implements MessageWriter {
         private writable: RAL.WritableStream;
         private options: ResolvedMessageWriterOptions;
         private errorCount: number;
@@ -160,7 +160,8 @@ namespace ts.server.rpc {
                     .then((buffer) => {
                         if (this.options.contentEncoder !== undefined) {
                             return this.options.contentEncoder.encode(buffer);
-                        } else {
+                        }
+                        else {
                             return buffer;
                         }
                     });
@@ -191,7 +192,8 @@ namespace ts.server.rpc {
             try {
                 await this.writable.write(headers.join(""), "ascii");
                 return this.writable.write(data);
-            } catch (error) {
+            }
+            catch (error) {
                 this.handleError(error, msg);
                 return Promise.reject(error);
             }

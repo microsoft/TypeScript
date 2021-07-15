@@ -70,7 +70,7 @@ namespace ts.server.rpc {
             if (distribute > 1000) {
                 throw new Error(`Quality value can only have three decimal digits but trying to distribute ${encodings.length} elements.`);
             }
-            const digits =  Math.ceil(Math.log10(distribute));
+            const digits = Math.ceil(Math.log10(distribute));
             const factor = Math.pow(10,digits);
             const diff = Math.floor((1 / distribute) * factor) / factor;
 
@@ -80,7 +80,7 @@ namespace ts.server.rpc {
                 result.push(`${encoding.name};q=${q === 1 || q === 0 ? q.toFixed(0) : q.toFixed(digits)}`);
                 q = q - diff;
             }
-            return result.join(', ');
+            return result.join(", ");
         }
 
         export function parseEncodingHeaderValue(value: string): string[] {
@@ -88,7 +88,7 @@ namespace ts.server.rpc {
             const encodings = value.split(/\s*,\s*/);
             for (const value of encodings) {
                 const [encoding, q] = parseEncoding(value);
-                if (encoding === '*') {
+                if (encoding === "*") {
                     continue;
                 }
                 let values = map.get(q);
@@ -108,16 +108,17 @@ namespace ts.server.rpc {
         }
 
         function parseEncoding(value: string): [string, number] {
-            let q: number = 1;
+            let q = 1;
             let encoding: string;
-            const index = value.indexOf(';q=');
+            const index = value.indexOf(";q=");
             if (index !== -1) {
                 const parsed = parseFloat(value.substr(index));
-                if (parsed !== NaN) {
+                if (!isNaN(parsed)) {
                     q = parsed;
                 }
                 encoding = value.substr(0, index);
-            } else {
+            }
+            else {
                 encoding = value;
             }
             return [encoding, q];
