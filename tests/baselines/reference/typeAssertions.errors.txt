@@ -18,9 +18,9 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): erro
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): error TS2749: 'numOrStr' refers to a value, but is being used as a type here. Did you mean 'typeof numOrStr'?
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS1005: ')' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS1005: ';' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1005: ';' expected.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1128: Declaration or statement expected.
 
 
 ==== tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts (18 errors) ====
@@ -111,11 +111,11 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
                                             ~~
 !!! error TS2304: Cannot find name 'is'.
                                                ~~~~~~
-!!! error TS1005: ';' expected.
+!!! error TS1434: Unexpected keyword or identifier.
                                                ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                      ~
-!!! error TS1005: ';' expected.
+!!! error TS1128: Declaration or statement expected.
     }
     
     

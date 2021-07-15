@@ -1549,6 +1549,149 @@ namespace ts {
             return false;
         }
 
+        const viableKeywordSuggestions = Object.keys(textToKeywordObj).filter(keyword => keyword.length > 2);
+
+        /**
+         * Provides a better error message than the generic "';' expected" if possible for
+         * known common variants of a missing semicolon, such as from a mispelled names.
+         *
+         * @param node Node preceding the expected semicolon location.
+         */
+        function parseErrorForMissingSemicolonAfter(node: Expression | PropertyName): void {
+            // Tagged template literals are sometimes used in places where only simple strings are allowed, i.e.:
+            //   module `M1` {
+            //   ^^^^^^^^^^^ This block is parsed as a template literal like module`M1`.
+            if (isTaggedTemplateExpression(node)) {
+                parseErrorAt(skipTrivia(sourceText, node.template.pos), node.template.end, Diagnostics.Module_declaration_names_may_only_use_or_quoted_strings);
+                return;
+            }
+
+            // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
+            const expressionText = ts.isIdentifier(node) ? idText(node) : undefined;
+            if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
+                parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                return;
+            }
+
+            const pos = skipTrivia(sourceText, node.pos);
+
+            // Some known keywords are likely signs of syntax being used improperly.
+            switch (expressionText) {
+                case "const":
+                case "let":
+                case "var":
+                    parseErrorAt(pos, node.end, Diagnostics.Variable_declaration_not_allowed_at_this_location);
+                    return;
+
+                case "declare":
+                    // If a declared node failed to parse, it would have emitted a diagnostic already.
+                    return;
+
+                case "interface":
+                    parseErrorForInvalidName(Diagnostics.Interface_name_cannot_be_0, Diagnostics.Interface_must_be_given_a_name, SyntaxKind.OpenBraceToken);
+                    return;
+
+                case "is":
+                    parseErrorAt(pos, scanner.getTextPos(), Diagnostics.A_type_predicate_is_only_allowed_in_return_type_position_for_functions_and_methods);
+                    return;
+
+                case "module":
+                case "namespace":
+                    parseErrorForInvalidName(Diagnostics.Namespace_name_cannot_be_0, Diagnostics.Namespace_must_be_given_a_name, SyntaxKind.OpenBraceToken);
+                    return;
+
+                case "type":
+                    parseErrorForInvalidName(Diagnostics.Type_alias_name_cannot_be_0, Diagnostics.Type_alias_must_be_given_a_name, SyntaxKind.EqualsToken);
+                    return;
+            }
+
+            // The user alternatively might have misspelled or forgotten to add a space after a common keyword.
+            const suggestion = getSpellingSuggestion(expressionText, viableKeywordSuggestions, n => n) ?? getSpaceSuggestion(expressionText);
+            if (suggestion) {
+                parseErrorAt(pos, node.end, Diagnostics.Unknown_keyword_or_identifier_Did_you_mean_0, suggestion);
+                return;
+            }
+
+            // Unknown tokens are handled with their own errors in the scanner
+            if (token() === SyntaxKind.Unknown) {
+                return;
+            }
+
+            // Otherwise, we know this some kind of unknown word, not just a missing expected semicolon.
+            parseErrorAt(pos, node.end, Diagnostics.Unexpected_keyword_or_identifier);
+        }
+
+        /**
+         * Reports a diagnostic error for the current token being an invalid name.
+         *
+         * @param blankDiagnostic Diagnostic to report for the case of the name being blank (matched tokenIfBlankName).
+         * @param nameDiagnostic Diagnostic to report for all other cases.
+         * @param tokenIfBlankName Current token if the name was invalid for being blank (not provided / skipped).
+         */
+        function parseErrorForInvalidName(nameDiagnostic: DiagnosticMessage, blankDiagnostic: DiagnosticMessage, tokenIfBlankName: SyntaxKind) {
+            if (token() === tokenIfBlankName) {
+                parseErrorAtCurrentToken(blankDiagnostic);
+            }
+            else {
+                parseErrorAtCurrentToken(nameDiagnostic, tokenToString(token()));
+            }
+        }
+
+        function getSpaceSuggestion(expressionText: string) {
+            for (const keyword of viableKeywordSuggestions) {
+                if (expressionText.length > keyword.length + 2 && startsWith(expressionText, keyword)) {
+                    return `${keyword} ${expressionText.slice(keyword.length)}`;
+                }
+            }
+
+            return undefined;
+        }
+
+        function parseSemicolonAfterPropertyName(name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
+            switch (token()) {
+                case SyntaxKind.AtToken:
+                    parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_the_name_and_all_keywords_of_property_declarations);
+                    return;
+
+                case SyntaxKind.OpenParenToken:
+                    parseErrorAtCurrentToken(Diagnostics.Cannot_start_a_function_call_in_a_type_annotation);
+                    nextToken();
+                    return;
+            }
+
+            if (type && !canParseSemicolon()) {
+                if (initializer) {
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                }
+                else {
+                    parseErrorAtCurrentToken(Diagnostics.Missing_before_default_property_value);
+                }
+                return;
+            }
+
+            if (tryParseSemicolon()) {
+                return;
+            }
+
+            // If an initializer was parsed but there is still an error in finding the next semicolon,
+            // we generally know there was an error already reported in the initializer...
+            //   class Example { a = new Map([), ) }
+            //                                ~
+            if (initializer) {
+                // ...unless we've found the start of a block after a property declaration, in which
+                // case we can know that regardless of the initializer we should complain on the block.
+                //   class Example { a = 0 {} }
+                //                         ~
+                if (token() === SyntaxKind.OpenBraceToken) {
+                    parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
+                }
+
+                return;
+            }
+
+            parseErrorForMissingSemicolonAfter(name);
+        }
+
         function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
             if (token() === kind) {
                 nextTokenJSDoc();
@@ -1618,18 +1761,21 @@ namespace ts {
             return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EndOfFileToken || scanner.hasPrecedingLineBreak();
         }
 
-        function parseSemicolon(): boolean {
-            if (canParseSemicolon()) {
-                if (token() === SyntaxKind.SemicolonToken) {
-                    // consume the semicolon if it was explicitly provided.
-                    nextToken();
-                }
+        function tryParseSemicolon() {
+            if (!canParseSemicolon()) {
+                return false;
+            }
 
-                return true;
+            if (token() === SyntaxKind.SemicolonToken) {
+                // consume the semicolon if it was explicitly provided.
+                nextToken();
             }
-            else {
-                return parseExpected(SyntaxKind.SemicolonToken);
-            }
+
+            return true;
+        }
+
+        function parseSemicolon(): boolean {
+            return tryParseSemicolon() || parseExpected(SyntaxKind.SemicolonToken);
         }
 
         function createNodeArray<T extends Node>(elements: T[], pos: number, end?: number, hasTrailingComma?: boolean): NodeArray<T> {
@@ -5888,7 +6034,9 @@ namespace ts {
                 identifierCount++;
                 expression = finishNode(factory.createIdentifier(""), getNodePos());
             }
-            parseSemicolon();
+            if (!tryParseSemicolon()) {
+                parseErrorForMissingSemicolonAfter(expression);
+            }
             return withJSDoc(finishNode(factory.createThrowStatement(expression), pos), hasJSDoc);
         }
 
@@ -5951,7 +6099,9 @@ namespace ts {
                 node = factory.createLabeledStatement(expression, parseStatement());
             }
             else {
-                parseSemicolon();
+                if (!tryParseSemicolon()) {
+                    parseErrorForMissingSemicolonAfter(expression);
+                }
                 node = factory.createExpressionStatement(expression);
                 if (hasParen) {
                     // do not parse the same jsdoc twice
@@ -6546,7 +6696,7 @@ namespace ts {
             const exclamationToken = !questionToken && !scanner.hasPrecedingLineBreak() ? parseOptionalToken(SyntaxKind.ExclamationToken) : undefined;
             const type = parseTypeAnnotation();
             const initializer = doOutsideOfContext(NodeFlags.YieldContext | NodeFlags.AwaitContext | NodeFlags.DisallowInContext, parseInitializer);
-            parseSemicolon();
+            parseSemicolonAfterPropertyName(name, type, initializer);
             const node = factory.createPropertyDeclaration(decorators, modifiers, name, questionToken || exclamationToken, type, initializer);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
