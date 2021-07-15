@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /*@internal*/
 namespace ts.server.uri {
     // !!!!!

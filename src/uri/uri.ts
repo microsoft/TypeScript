@@ -1,3 +1,6 @@
+/* eslint-disable no-null/no-null */
+/* eslint-disable jsdoc/check-alignment */
+
 /*@internal*/
 namespace ts.server.uri {
     const _schemePattern = /^\w[\w\d+.-]*$/;
@@ -30,7 +33,8 @@ namespace ts.server.uri {
                         '[UriError]: If a URI contains an authority component, then the path component must either be empty or begin with a slash ("/") character'
                     );
                 }
-            } else {
+            }
+            else {
                 if (_doubleSlashStart.test(ret.path)) {
                     throw new Error(
                         '[UriError]: If a URI does not contain an authority component, then the path cannot begin with two slash characters ("//")'
@@ -63,7 +67,8 @@ namespace ts.server.uri {
             case "file":
                 if (!path) {
                     path = _slash;
-                } else if (path[0] !== _slash) {
+                }
+                else if (path[0] !== _slash) {
                     path = _slash + path;
                 }
                 break;
@@ -101,14 +106,14 @@ namespace ts.server.uri {
                 return false;
             }
             return (
-                typeof (<URI>thing).authority === "string" &&
-                typeof (<URI>thing).fragment === "string" &&
-                typeof (<URI>thing).path === "string" &&
-                typeof (<URI>thing).query === "string" &&
-                typeof (<URI>thing).scheme === "string" &&
-                typeof (<URI>thing).fsPath === "function" &&
-                typeof (<URI>thing).with === "function" &&
-                typeof (<URI>thing).toString === "function"
+                typeof (thing as URI).authority === "string" &&
+                typeof (thing as URI).fragment === "string" &&
+                typeof (thing as URI).path === "string" &&
+                typeof (thing as URI).query === "string" &&
+                typeof (thing as URI).scheme === "string" &&
+                typeof (thing as URI).fsPath === "function" &&
+                typeof (thing as URI).with === "function" &&
+                typeof (thing as URI).toString === "function"
             );
         }
 
@@ -165,7 +170,7 @@ namespace ts.server.uri {
             path?: string,
             query?: string,
             fragment?: string,
-            _strict: boolean = false
+            _strict = false
         ) {
             if (typeof schemeOrData === "object") {
                 this.scheme = schemeOrData.scheme || _empty;
@@ -176,7 +181,8 @@ namespace ts.server.uri {
                 // no validation because it's this URI
                 // that creates uri components.
                 // _validateUri(this);
-            } else {
+            }
+            else {
                 this.scheme = _schemeFix(schemeOrData, _strict);
                 this.authority = authority || _empty;
                 this.path = _referenceResolution(this.scheme, path || _empty);
@@ -190,34 +196,34 @@ namespace ts.server.uri {
         // ---- filesystem path -----------------------
 
         /**
-	 * Returns a string representing the corresponding file system path of this URI.
-	 * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
-	 * platform specific path separator.
-	 *
-	 * * Will *not* validate the path for invalid characters and semantics.
-	 * * Will *not* look at the scheme of this URI.
-	 * * The result shall *not* be used for display purposes but for accessing a file on disk.
-	 *
-	 *
-	 * The *difference* to `URI#path` is the use of the platform specific separator and the handling
-	 * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
-	 *
-	 * ```ts
-		const u = URI.parse('file://server/c$/folder/file.txt')
-		u.authority === 'server'
-		u.path === '/shares/c$/file.txt'
-		u.fsPath === '\\server\c$\folder\file.txt'
-	```
-	 *
-	 * Using `URI#path` to read a file (using fs-apis) would not be enough because parts of the path,
-	 * namely the server name, would be missing. Therefore `URI#fsPath` exists - it's sugar to ease working
-	 * with URIs that represent files on disk (`file` scheme).
-	 */
+         * Returns a string representing the corresponding file system path of this URI.
+         * Will handle UNC paths, normalizes windows drive letters to lower-case, and uses the
+         * platform specific path separator.
+         *
+         * * Will *not* validate the path for invalid characters and semantics.
+         * * Will *not* look at the scheme of this URI.
+         * * The result shall *not* be used for display purposes but for accessing a file on disk.
+         *
+         *
+         * The *difference* to `URI#path` is the use of the platform specific separator and the handling
+         * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
+         *
+         * ```ts
+            const u = URI.parse('file://server/c$/folder/file.txt')
+            u.authority === 'server'
+            u.path === '/shares/c$/file.txt'
+            u.fsPath === '\\server\c$\folder\file.txt'
+        ```
+        *
+        * Using `URI#path` to read a file (using fs-apis) would not be enough because parts of the path,
+        * namely the server name, would be missing. Therefore `URI#fsPath` exists - it's sugar to ease working
+        * with URIs that represent files on disk (`file` scheme).
+        */
         get fsPath(): string {
             // if (this.scheme !== 'file') {
             // 	console.warn(`[UriError] calling fsPath with scheme ${this.scheme}`);
             // }
-            return uriToFsPath(this, false);
+            return uriToFsPath(this, /*keepDriveLetterCasing*/ false);
         }
 
         // ---- modify to new -------------------------
@@ -236,27 +242,32 @@ namespace ts.server.uri {
             let { scheme, authority, path, query, fragment } = change;
             if (scheme === undefined) {
                 scheme = this.scheme;
-            } else if (scheme === null) {
+            }
+            else if (scheme === null) {
                 scheme = _empty;
             }
             if (authority === undefined) {
                 authority = this.authority;
-            } else if (authority === null) {
+            }
+            else if (authority === null) {
                 authority = _empty;
             }
             if (path === undefined) {
                 path = this.path;
-            } else if (path === null) {
+            }
+            else if (path === null) {
                 path = _empty;
             }
             if (query === undefined) {
                 query = this.query;
-            } else if (query === null) {
+            }
+            else if (query === null) {
                 query = _empty;
             }
             if (fragment === undefined) {
                 fragment = this.fragment;
-            } else if (fragment === null) {
+            }
+            else if (fragment === null) {
                 fragment = _empty;
             }
 
@@ -281,7 +292,7 @@ namespace ts.server.uri {
          *
          * @param value A string which represents an URI (see `URI#toString`).
          */
-        static parse(value: string, _strict: boolean = false): URI {
+        static parse(value: string, _strict = false): URI {
             const match = _regexp.exec(value);
             if (!match) {
                 return new Uri(_empty, _empty, _empty, _empty, _empty);
@@ -297,26 +308,26 @@ namespace ts.server.uri {
         }
 
         /**
-	 * Creates a new URI from a file system path, e.g. `c:\my\files`,
-	 * `/usr/home`, or `\\server\share\some\path`.
-	 *
-	 * The *difference* between `URI#parse` and `URI#file` is that the latter treats the argument
-	 * as path, not as stringified-uri. E.g. `URI.file(path)` is **not the same as**
-	 * `URI.parse('file://' + path)` because the path might contain characters that are
-	 * interpreted (# and ?). See the following sample:
-	 * ```ts
-	const good = URI.file('/coding/c#/project1');
-	good.scheme === 'file';
-	good.path === '/coding/c#/project1';
-	good.fragment === '';
-	const bad = URI.parse('file://' + '/coding/c#/project1');
-	bad.scheme === 'file';
-	bad.path === '/coding/c'; // path is now broken
-	bad.fragment === '/project1';
-	```
-	 *
-	 * @param path A file system path (see `URI#fsPath`)
-	 */
+         * Creates a new URI from a file system path, e.g. `c:\my\files`,
+         * `/usr/home`, or `\\server\share\some\path`.
+         *
+         * The *difference* between `URI#parse` and `URI#file` is that the latter treats the argument
+         * as path, not as stringified-uri. E.g. `URI.file(path)` is **not the same as**
+         * `URI.parse('file://' + path)` because the path might contain characters that are
+         * interpreted (# and ?). See the following sample:
+         * ```ts
+        const good = URI.file('/coding/c#/project1');
+        good.scheme === 'file';
+        good.path === '/coding/c#/project1';
+        good.fragment === '';
+        const bad = URI.parse('file://' + '/coding/c#/project1');
+        bad.scheme === 'file';
+        bad.path === '/coding/c'; // path is now broken
+        bad.fragment === '/project1';
+        ```
+        *
+        * @param path A file system path (see `URI#fsPath`)
+        */
         static file(path: string): URI {
             let authority = _empty;
 
@@ -334,7 +345,8 @@ namespace ts.server.uri {
                 if (idx === -1) {
                     authority = path.substring(2);
                     path = _slash;
-                } else {
+                }
+                else {
                     authority = path.substring(2, idx);
                     path = path.substring(idx) || _slash;
                 }
@@ -372,7 +384,7 @@ namespace ts.server.uri {
          *
          * @param skipEncoding Do not encode the result, default is `false`
          */
-        toString(skipEncoding: boolean = false): string {
+        toString(skipEncoding = false): string {
             return _asFormatted(this, skipEncoding);
         }
 
@@ -390,15 +402,17 @@ namespace ts.server.uri {
             data: UriComponents | URI | undefined | null
         ): URI | undefined | null {
             if (!data) {
-                return <any>data;
-            } else if (data instanceof URI) {
+                return data as any;
+            }
+            else if (data instanceof URI) {
                 return data;
-            } else {
+            }
+            else {
                 const result = new Uri(data);
-                result._formatted = (<UriState>data).external;
+                result._formatted = (data as UriState).external;
                 result._fsPath =
-                    (<UriState>data)._sep === _pathSepMarker
-                        ? (<UriState>data).fsPath
+                    (data as UriState)._sep === _pathSepMarker
+                        ? (data as UriState).fsPath
                         : null;
                 return result;
             }
@@ -429,27 +443,28 @@ namespace ts.server.uri {
 
         get fsPath(): string {
             if (!this._fsPath) {
-                this._fsPath = uriToFsPath(this, false);
+                this._fsPath = uriToFsPath(this, /*keepDriveLetterCasing*/ false);
             }
             return this._fsPath;
         }
 
-        toString(skipEncoding: boolean = false): string {
+        toString(skipEncoding = false): string {
             if (!skipEncoding) {
                 if (!this._formatted) {
-                    this._formatted = _asFormatted(this, false);
+                    this._formatted = _asFormatted(this, /*skipEncoding*/ false);
                 }
                 return this._formatted;
-            } else {
+            }
+            else {
                 // we don't cache that
-                return _asFormatted(this, true);
+                return _asFormatted(this, /*skipEncoding*/ true);
             }
         }
 
         toJSON(): UriComponents {
-            const res = <UriState>{
+            const res = {
                 $mid: 1,
-            };
+            } as UriState;
             // cached state
             if (this._fsPath) {
                 res.fsPath = this._fsPath;
@@ -507,7 +522,7 @@ namespace ts.server.uri {
         uriComponent: string,
         allowSlash: boolean
     ): string {
-        let res: string | undefined = undefined;
+        let res: string | undefined;
         let nativeEncodePos = -1;
 
         for (let pos = 0; pos < uriComponent.length; pos++) {
@@ -535,7 +550,8 @@ namespace ts.server.uri {
                 if (res !== undefined) {
                     res += uriComponent.charAt(pos);
                 }
-            } else {
+            }
+            else {
                 // encoding needed, we need to allocate a new string
                 if (res === undefined) {
                     res = uriComponent.substr(0, pos);
@@ -554,7 +570,8 @@ namespace ts.server.uri {
 
                     // append escaped variant to result
                     res += escaped;
-                } else if (nativeEncodePos === -1) {
+                }
+                else if (nativeEncodePos === -1) {
                     // use native encode only when needed
                     nativeEncodePos = pos;
                 }
@@ -569,7 +586,7 @@ namespace ts.server.uri {
     }
 
     function encodeURIComponentMinimal(path: string): string {
-        let res: string | undefined = undefined;
+        let res: string | undefined;
         for (let pos = 0; pos < path.length; pos++) {
             const code = path.charCodeAt(pos);
             if (code === CharCode.Hash || code === CharCode.QuestionMark) {
@@ -577,7 +594,8 @@ namespace ts.server.uri {
                     res = path.substr(0, pos);
                 }
                 res += encodeTable[code];
-            } else {
+            }
+            else {
                 if (res !== undefined) {
                     res += path[pos];
                 }
@@ -597,7 +615,8 @@ namespace ts.server.uri {
         if (uri.authority && uri.path.length > 1 && uri.scheme === "file") {
             // unc path: file://shares/c$/far/boo
             value = `//${uri.authority}${uri.path}`;
-        } else if (
+        }
+        else if (
             uri.path.charCodeAt(0) === CharCode.Slash &&
             ((uri.path.charCodeAt(1) >= CharCode.A &&
                 uri.path.charCodeAt(1) <= CharCode.Z) ||
@@ -608,10 +627,12 @@ namespace ts.server.uri {
             if (!keepDriveLetterCasing) {
                 // windows drive letter: file:///c:/far/boo
                 value = uri.path[1].toLowerCase() + uri.path.substr(2);
-            } else {
+            }
+            else {
                 value = uri.path.substr(1);
             }
-        } else {
+        }
+        else {
             // other path
             value = uri.path;
         }
@@ -630,6 +651,7 @@ namespace ts.server.uri {
             : encodeURIComponentMinimal;
 
         let res = "";
+        // eslint-disable-next-line prefer-const
         let { scheme, authority, path, query, fragment } = uri;
         if (scheme) {
             res += scheme;
@@ -647,22 +669,24 @@ namespace ts.server.uri {
                 authority = authority.substr(idx + 1);
                 idx = userinfo.indexOf(":");
                 if (idx === -1) {
-                    res += encoder(userinfo, false);
-                } else {
+                    res += encoder(userinfo, /*allowSlash*/ false);
+                }
+                else {
                     // <user>:<pass>@<auth>
-                    res += encoder(userinfo.substr(0, idx), false);
+                    res += encoder(userinfo.substr(0, idx), /*allowSlash*/ false);
                     res += ":";
-                    res += encoder(userinfo.substr(idx + 1), false);
+                    res += encoder(userinfo.substr(idx + 1), /*allowSlash*/ false);
                 }
                 res += "@";
             }
             authority = authority.toLowerCase();
             idx = authority.indexOf(":");
             if (idx === -1) {
-                res += encoder(authority, false);
-            } else {
+                res += encoder(authority, /*allowSlash*/ false);
+            }
+            else {
                 // <auth>:<port>
-                res += encoder(authority.substr(0, idx), false);
+                res += encoder(authority.substr(0, idx), /*allowSlash*/ false);
                 res += authority.substr(idx);
             }
         }
@@ -679,7 +703,8 @@ namespace ts.server.uri {
                         3
                     )}`; // "/c:".length === 3
                 }
-            } else if (
+            }
+            else if (
                 path.length >= 2 &&
                 path.charCodeAt(1) === CharCode.Colon
             ) {
@@ -691,16 +716,16 @@ namespace ts.server.uri {
                 }
             }
             // encode the rest of the path
-            res += encoder(path, true);
+            res += encoder(path, /*allowSlash*/ true);
         }
         if (query) {
             res += "?";
-            res += encoder(query, false);
+            res += encoder(query, /*allowSlash*/ false);
         }
         if (fragment) {
             res += "#";
             res += !skipEncoding
-                ? encodeURIComponentFast(fragment, false)
+                ? encodeURIComponentFast(fragment, /*allowSlash*/ false)
                 : fragment;
         }
         return res;
@@ -711,12 +736,14 @@ namespace ts.server.uri {
     function decodeURIComponentGraceful(str: string): string {
         try {
             return decodeURIComponent(str);
-        } catch {
+        }
+        catch {
             if (str.length > 3) {
                 return (
                     str.substr(0, 3) + decodeURIComponentGraceful(str.substr(3))
                 );
-            } else {
+            }
+            else {
                 return str;
             }
         }

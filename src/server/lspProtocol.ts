@@ -72,8 +72,8 @@ namespace ts.server.lsp {
     }
 
     export enum MarkupKind {
-        PlainText = 'plaintext',
-        Markdown = 'markdown',
+        PlainText = "plaintext",
+        Markdown = "markdown",
     }
 
     export interface MarkupContent {
@@ -137,7 +137,7 @@ namespace ts.server.lsp {
         text: string;
     } | {
         text: string;
-    }
+    };
 
     export interface DidCloseTextDocumentNotification extends NotificationMessage {
         method: Methods.DidClose,

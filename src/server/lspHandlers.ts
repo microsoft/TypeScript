@@ -2,20 +2,20 @@
 namespace ts.server.lsp {
     const inMemoryResourcePrefix = "^";
 
-    export function parseMessage(message: lsp.Message): lsp.RequestMessage | lsp.NotificationMessage {
-        return message as lsp.RequestMessage;
+    export function parseMessage(message: Message): RequestMessage | NotificationMessage {
+        return message as RequestMessage;
     }
 
-    export function getCommandFromRequest(request: lsp.RequestMessage | lsp.NotificationMessage) {
+    export function getCommandFromRequest(request: RequestMessage | NotificationMessage) {
         return request.method;
     }
 
-    export function getSeqFromRequest(request: lsp.RequestMessage | lsp.NotificationMessage) {
-        if (!("id" in request)) {
-            return -1 // TODO: will the language server choke on this?
+    export function getSeqFromRequest(request: (RequestMessage | NotificationMessage) & { id?: null | number | string }) {
+        if (!hasProperty(request, "id")) {
+            return -1; // TODO: will the language server choke on this?
         }
 
-        if (request.id === null) {
+        if (request.id === null) { // eslint-disable-line no-null/no-null
             return -1; // TODO: should never happen, allowable by JSONRPC but not LSP
         }
 
@@ -26,7 +26,7 @@ namespace ts.server.lsp {
         return Number(request.id);
     }
 
-    export function toStringMessage(message: lsp.RequestMessage) {
+    export function toStringMessage(message: RequestMessage) {
         return JSON.stringify(message);
     }
 
@@ -45,25 +45,25 @@ namespace ts.server.lsp {
         return new Map(
             getEntries<
                 (
-                    request: lsp.RequestMessage | lsp.NotificationMessage
+                    request: RequestMessage | NotificationMessage
                 ) => HandlerResponse
             >({
                 // General messages
-                [lsp.Methods.Initialize]: (request: lsp.InitializeRequest) =>
+                [Methods.Initialize]: (request: InitializeRequest) =>
                     session.requiredResponse(getInitializeResult(request.params)),
-                [lsp.Methods.Initialized]: (
-                    _request: lsp.InitializedNotification
+                [Methods.Initialized]: (
+                    _request: InitializedNotification
                 ) => session.notRequired(),
-                [lsp.Methods.Shutdown]: (
-                    _request: lsp.RequestMessage & { params: never }
-                ) => session.requiredResponse(undefined),
-                [lsp.Methods.Exit]: (
-                    _request: lsp.NotificationMessage & { params: never }
+                [Methods.Shutdown]: (
+                    _request: RequestMessage & { params: never }
+                ) => session.requiredResponse(/*response*/ undefined),
+                [Methods.Exit]: (
+                    _request: NotificationMessage & { params: never }
                 ) => session.exit(),
 
                 // Text synchronization messages
-                [lsp.Methods.DidOpen]: (
-                    request: lsp.DidOpenTextDocumentNotification
+                [Methods.DidOpen]: (
+                    request: DidOpenTextDocumentNotification
                 ) => {
                     const filePath = textDocumentToNormalizedPath(
                         request.params.textDocument.uri
@@ -76,18 +76,18 @@ namespace ts.server.lsp {
                         filePath,
                         request.params.textDocument.text,
                         convertScriptKindName(scriptKind),
-                        undefined // TODO - workspace folders
+                        /*projectRootPath*/ undefined // TODO - workspace folders
                     );
                     return session.notRequired();
                 },
-                [lsp.Methods.DidChange]: (
-                    request: lsp.DidChangeTextDocumentNotification
+                [Methods.DidChange]: (
+                    request: DidChangeTextDocumentNotification
                 ) => {
                     const filePath = textDocumentToNormalizedPath(
                         request.params.textDocument.uri
                     );
                     for (const contentChange of request.params.contentChanges) {
-                        if ("range" in contentChange) {
+                        if ("range" in contentChange) { // eslint-disable-line no-in-operator
                             const { line, offset } =
                                 getLineAndOffsetFromPosition(
                                     contentChange.range.start
@@ -104,7 +104,8 @@ namespace ts.server.lsp {
                                 endOffset,
                                 contentChange.text
                             );
-                        } else {
+                        }
+                        else {
                             // replace whole file
                             const scriptInfo =
                                 session.projectService.getScriptInfo(filePath)!;
@@ -114,14 +115,14 @@ namespace ts.server.lsp {
                     }
                     return session.notRequired();
                 },
-                [lsp.Methods.DidClose]: (
-                    _request: lsp.DidCloseTextDocumentNotification
+                [Methods.DidClose]: (
+                    _request: DidCloseTextDocumentNotification
                 ) => {
                     return session.notRequired();
                 },
 
                 // Language features
-                [lsp.Methods.Hover]: (request: lsp.HoverRequest) => {
+                [Methods.Hover]: (request: HoverRequest) => {
                     const filePath = textDocumentToNormalizedPath(
                         request.params.textDocument.uri
                     );
@@ -136,28 +137,28 @@ namespace ts.server.lsp {
                         return session.requiredResponse(/*response*/ undefined);
                     }
 
-                    const parts: lsp.MarkedString[] = [];
+                    const parts: MarkedString[] = [];
                     parts.push({
                         language: "typescript",
                         value: quickInfo.displayString,
                     });
                     parts.push(
-                        lsp.markdownDocumentation(
+                        markdownDocumentation(
                             quickInfo.documentation,
                             quickInfo.tags
                         ).value
                     );
 
                     //todo: documentation and tags
-                    const range: lsp.Range = {
+                    const range: Range = {
                         start: getLspPositionFromLocation(quickInfo.start),
                         end: getLspPositionFromLocation(quickInfo.end),
                     };
-                    const result: lsp.Hover = { contents: parts, range };
+                    const result: Hover = { contents: parts, range };
                     return session.requiredResponse(result);
                 },
-                [lsp.Methods.SignatureHelp]: (
-                    request: lsp.SignatureHelpRequest
+                [Methods.SignatureHelp]: (
+                    request: SignatureHelpRequest
                 ) => {
                     const filePath = textDocumentToNormalizedPath(
                         request.params.textDocument.uri
@@ -182,7 +183,7 @@ namespace ts.server.lsp {
                         signatures
                     );
                     const activeParameter = getActiveParameter(info);
-                    const result: lsp.SignatureHelp = {
+                    const result: SignatureHelp = {
                         signatures,
                         activeSignature,
                         activeParameter,
@@ -193,7 +194,7 @@ namespace ts.server.lsp {
         );
     }
 
-    enum languageModeIds {
+    enum LanguageModeIds {
         typescript = "typescript",
         typescriptreact = "typescriptreact",
         javascript = "javascript",
@@ -204,33 +205,33 @@ namespace ts.server.lsp {
         mode: string
     ): "TS" | "TSX" | "JS" | "JSX" | undefined {
         switch (mode) {
-            case languageModeIds.typescript:
+            case LanguageModeIds.typescript:
                 return "TS";
-            case languageModeIds.typescriptreact:
+            case LanguageModeIds.typescriptreact:
                 return "TSX";
-            case languageModeIds.javascript:
+            case LanguageModeIds.javascript:
                 return "JS";
-            case languageModeIds.javascriptreact:
+            case LanguageModeIds.javascriptreact:
                 return "JSX";
         }
         return undefined;
     }
 
-    function getLineAndOffsetFromPosition(position: lsp.Position) {
+    function getLineAndOffsetFromPosition(position: Position) {
         // TS assumes the client is 1-based
         return { line: position.line + 1, offset: position.character + 1 };
     }
 
     function getLspPositionFromLocation(
         location: protocol.Location
-    ): lsp.Position {
+    ): Position {
         return {
             line: Math.max(0, location.line - 1),
             character: Math.max(0, location.offset - 1),
         };
     }
 
-    function textDocumentToNormalizedPath(textDocument: lsp.DocumentUri) {
+    function textDocumentToNormalizedPath(textDocument: DocumentUri) {
         const documentUri = uri.URI.parse(textDocument);
 
         let path;
@@ -239,7 +240,7 @@ namespace ts.server.lsp {
                 path = documentUri.path;
                 break;
             default:
-                path = inMemoryResourcePrefix + documentUri.toString(true);
+                path = inMemoryResourcePrefix + documentUri.toString(/*skipEncoding*/ true);
                 break;
         }
 
@@ -247,11 +248,11 @@ namespace ts.server.lsp {
     }
 
     function getInitializeResult(
-        _request: lsp.InitializeParams
-    ): lsp.InitializeResult {
+        _request: InitializeParams
+    ): InitializeResult {
         return {
             capabilities: {
-                textDocumentSync: lsp.TextDocumentSyncKind.Incremental,
+                textDocumentSync: TextDocumentSyncKind.Incremental,
                 hoverProvider: true,
                 signatureHelpProvider: {
                     triggerCharacters: ["(", ",", "<"],
@@ -270,25 +271,25 @@ namespace ts.server.lsp {
             case SignatureHelpTriggerKind.TriggerCharacter:
                 if (context.triggerCharacter) {
                     if (context.isRetrigger) {
-                        return { kind: 'retrigger', triggerCharacter: context.triggerCharacter as any };
+                        return { kind: "retrigger", triggerCharacter: context.triggerCharacter as any };
                     }
 
-                    return { kind: 'characterTyped', triggerCharacter: context.triggerCharacter as any };
+                    return { kind: "characterTyped", triggerCharacter: context.triggerCharacter as any };
                 }
 
-                return { kind: 'invoked' };
+                return { kind: "invoked" };
             case SignatureHelpTriggerKind.ContentChange:
-                return context.isRetrigger ? { kind: 'retrigger' } : { kind: 'invoked' };
+                return context.isRetrigger ? { kind: "retrigger" } : { kind: "invoked" };
             case SignatureHelpTriggerKind.Invoked:
             default:
-                return { kind: 'invoked' };
+                return { kind: "invoked" };
         }
     }
 
     function convertSignature(item: protocol.SignatureHelpItem): SignatureInformation {
         const signature: SignatureInformation = {
             label: plain(item.prefixDisplayParts),
-            documentation: markdownDocumentation(item.documentation, item.tags.filter(x => x.name !== 'param')),
+            documentation: markdownDocumentation(item.documentation, item.tags.filter(x => x.name !== "param")),
         };
         let textIndex = signature.label.length;
         const separatorLabel = plain(item.separatorDisplayParts);
@@ -316,28 +317,28 @@ namespace ts.server.lsp {
         return signature;
     }
 
+    function getActiveParameter(info: protocol.SignatureHelpItems): number {
+        const activeSignature = info.items[info.selectedItemIndex];
+        if (activeSignature && activeSignature.isVariadic) {
+            return Math.min(info.argumentIndex, activeSignature.parameters.length - 1);
+        }
+        return info.argumentIndex;
+    }
+
     function getActiveSignature(context: SignatureHelpContext | undefined, info: protocol.SignatureHelpItems, signatures: readonly SignatureInformation[]): number {
         if (!context?.activeSignatureHelp?.activeSignature) {
             return info.selectedItemIndex;
         }
 
-		// Try matching the previous active signature's label to keep it selected
-		const previouslyActiveSignature = context.activeSignatureHelp.signatures[context.activeSignatureHelp.activeSignature];
-		if (previouslyActiveSignature && context.isRetrigger) {
-			const existingIndex = signatures.findIndex(other => other.label === previouslyActiveSignature?.label);
-			if (existingIndex >= 0) {
-				return existingIndex;
-			}
-		}
+        // Try matching the previous active signature's label to keep it selected
+        const previouslyActiveSignature = context.activeSignatureHelp.signatures[context.activeSignatureHelp.activeSignature];
+        if (previouslyActiveSignature && context.isRetrigger) {
+            const existingIndex = signatures.findIndex(other => other.label === previouslyActiveSignature?.label);
+            if (existingIndex >= 0) {
+                return existingIndex;
+            }
+        }
 
-		return info.selectedItemIndex;
+        return info.selectedItemIndex;
     }
-
-    function getActiveParameter(info: protocol.SignatureHelpItems): number {
-		const activeSignature = info.items[info.selectedItemIndex];
-		if (activeSignature && activeSignature.isVariadic) {
-			return Math.min(info.argumentIndex, activeSignature.parameters.length - 1);
-		}
-		return info.argumentIndex;
-	}
 }
