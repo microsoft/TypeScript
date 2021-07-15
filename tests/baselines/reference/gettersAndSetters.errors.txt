@@ -80,3 +80,4 @@ tests/cases/compiler/gettersAndSetters.ts(46,9): error TS1056: Accessors are onl
         method() { return x.toUpperCase() }
       }
     }
+    

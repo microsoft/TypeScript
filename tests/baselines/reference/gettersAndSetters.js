@@ -49,6 +49,7 @@ if (typeof x === "string") {
   }
 }
 
+
 //// [gettersAndSetters.js]
 // classes
 var C = /** @class */ (function () {

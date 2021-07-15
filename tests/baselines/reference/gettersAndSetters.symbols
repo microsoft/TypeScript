@@ -147,3 +147,4 @@ if (typeof x === "string") {
 >toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
   }
 }
+
