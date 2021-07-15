@@ -1,0 +1,36 @@
+=== tests/cases/conformance/expressions/nullishCoalescingOperator/nullishCoalescingOperator13.ts ===
+// Repro from #44988
+type T =
+>T : T
+
+  | { a: string; b: string }
+>a : string
+>b : string
+
+  | { a: string; b?: undefined }
+>a : string
+>b : undefined
+
+  | { a?: undefined; b: string };
+>a : undefined
+>b : string
+
+const getResult1 = (value1: string | undefined, value2: T): string => {
+>getResult1 : (value1: string | undefined, value2: T) => string
+>(value1: string | undefined, value2: T): string => {  return value1 ?? value2.a ?? value2.b;} : (value1: string | undefined, value2: T) => string
+>value1 : string | undefined
+>value2 : T
+
+  return value1 ?? value2.a ?? value2.b;
+>value1 ?? value2.a ?? value2.b : string
+>value1 ?? value2.a : string | undefined
+>value1 : string | undefined
+>value2.a : string | undefined
+>value2 : T
+>a : string | undefined
+>value2.b : string
+>value2 : { a?: undefined; b: string; }
+>b : string
+
+};
+

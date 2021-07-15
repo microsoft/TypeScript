@@ -24075,7 +24075,8 @@ namespace ts {
             function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
                 if (isExpressionOfOptionalChainRoot(expr) ||
-                    isBinaryExpression(expr.parent) && expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken && expr.parent.left === expr) {
+                    isBinaryExpression(expr.parent) && expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken && (expr.parent.left === expr ||
+                    (expr.parent.right === expr && isBinaryExpression(expr.parent.parent) && expr.parent.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken))) {
                     return narrowTypeByOptionality(type, expr, assumeTrue);
                 }
                 switch (expr.kind) {
