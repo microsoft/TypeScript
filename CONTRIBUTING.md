@@ -81,6 +81,10 @@ This repository includes a [development container](https://code.visualstudio.com
 
 The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
 
+### Filename too long on Windows
+
+You might need to run `git config --system core.longpaths true` before cloning Typescript on Windows.
+
 ### Using local builds
 
 Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
