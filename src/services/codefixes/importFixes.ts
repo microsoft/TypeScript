@@ -670,14 +670,15 @@ namespace ts.codefix {
 
     function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
         const allowSyntheticDefaults = getAllowSyntheticDefaultImports(compilerOptions);
-        // 1. 'import =' will not work in es2015+, so the decision is between a default
+        const isJS = isInJSFile(importingFile);
+        // 1. 'import =' will not work in es2015+ TS files, so the decision is between a default
         //    and a namespace import, based on allowSyntheticDefaultImports/esModuleInterop.
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+        if (!isJS && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return allowSyntheticDefaults ? ImportKind.Default : ImportKind.Namespace;
         }
         // 2. 'import =' will not work in JavaScript, so the decision is between a default
         //    and const/require.
-        if (isInJSFile(importingFile)) {
+        if (isJS) {
             return isExternalModule(importingFile) ? ImportKind.Default : ImportKind.CommonJS;
         }
         // 3. At this point the most correct choice is probably 'import =', but people
