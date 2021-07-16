@@ -15161,7 +15161,7 @@ namespace ts {
             let extraTypes: Type[] | undefined;
             // We loop here for an immediately nested conditional type in the false position, effectively treating
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
-            // purposes of resolution. This means such types aren't subject to the instatiation depth limiter.
+            // purposes of resolution. This means such types aren't subject to the instantiation depth limiter.
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
@@ -25368,14 +25368,48 @@ namespace ts {
             }
         }
 
+        /**
+         * Try to find a resolved symbol for an expression without also resolving its type, as
+         * getSymbolAtLocation would (as that could be reentrant into contextual typing)
+         */
+         function getSymbolForExpression(e: Expression) {
+            if (e.symbol) {
+                return e.symbol;
+            }
+            if (isIdentifier(e)) {
+                return getResolvedSymbol(e);
+            }
+            if (isPropertyAccessExpression(e)) {
+                const lhsType = getTypeOfExpression(e.expression);
+                return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
+            }
+            return undefined;
+
+            function tryGetPrivateIdentifierPropertyOfType(type: Type, id: PrivateIdentifier) {
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(id.escapedText, id);
+                return lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(type, lexicallyScopedSymbol);
+            }
+        }
+
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for assignment declarations unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function getContextualTypeForAssignmentDeclaration(binaryExpression: BinaryExpression): Type | undefined {
             const kind = getAssignmentDeclarationKind(binaryExpression);
             switch (kind) {
                 case AssignmentDeclarationKind.None:
-                    return getTypeOfExpression(binaryExpression.left);
                 case AssignmentDeclarationKind.ThisProperty:
+                    const lhsSymbol = getSymbolForExpression(binaryExpression.left);
+                    const decl = lhsSymbol && lhsSymbol.valueDeclaration;
+                    // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor.
+                    // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case.
+                    if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl))) {
+                        const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
+                        return (overallAnnotation && getTypeFromTypeNode(overallAnnotation)) ||
+                            (decl.initializer && getTypeOfExpression(binaryExpression.left));
+                    }
+                    if (kind === AssignmentDeclarationKind.None) {
+                        return getTypeOfExpression(binaryExpression.left);
+                    }
                     return getContextualTypeForThisPropertyAssignment(binaryExpression);
                 case AssignmentDeclarationKind.Property:
                     if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
@@ -27875,7 +27909,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined {
-            return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
+            return getSpellingSuggestionForName(name, getPropertiesOfType(baseType), SymbolFlags.ClassMember);
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
