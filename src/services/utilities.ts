@@ -3171,5 +3171,14 @@ namespace ts {
         return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
     }
 
+    export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+        const decisionFromFile = firstDefined(file.imports, node => {
+            if (JsTyping.nodeCoreModules.has(node.text)) {
+                return startsWith(node.text, "node:");
+            }
+        });
+        return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
+    }
+
     // #endregion
 }
