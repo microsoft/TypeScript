@@ -3216,6 +3216,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_start_a_function_call_in_a_type_annotation_1441" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot start a function call in a type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[형식 주석에서 함수 호출을 시작할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_update_output_of_project_0_because_there_was_error_reading_file_1_6376" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot update output of project '{0}' because there was error reading file '{1}']]></Val>
@@ -4565,6 +4574,15 @@
           <Val><![CDATA[Decorators may not be applied to 'this' parameters.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[데코레이터는 '이' 매개 변수에 적용되지 않을 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Decorators_must_precede_the_name_and_all_keywords_of_property_declarations_1436" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorators must precede the name and all keywords of property declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[데코레이터는 속성 선언의 이름 및 모든 키워드 앞에 와야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7536,6 +7554,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interface_must_be_given_a_name_1438" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Interface must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[인터페이스에 이름을 지정해야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interface_name_cannot_be_0_2427" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Interface name cannot be '{0}'.]]></Val>
@@ -8262,6 +8289,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Missing_before_default_property_value_1442" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Missing '=' before default property value.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[기본 속성 값 앞에 '='가 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Modifiers_cannot_appear_here_1184" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Modifiers cannot appear here.]]></Val>
@@ -8418,6 +8454,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Module_declaration_names_may_only_use_or_quoted_strings_1443" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module declaration names may only use ' or " quoted strings.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[모듈 선언 이름에는 ' 또는 " 인용 문자열만 사용할 수 있습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Module_name_0_matched_pattern_1_6092" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module name '{0}', matched pattern '{1}'.]]></Val>
@@ -8552,6 +8597,24 @@
           <Val><![CDATA[Namespace '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 네임스페이스에 내보낸 멤버 '{1}'이(가) 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_must_be_given_a_name_1437" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[네임스페이스에 이름을 지정해야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_name_cannot_be_0_2819" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace name cannot be '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[네임스페이스 이름은 '{0}'일 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13842,6 +13905,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_alias_must_be_given_a_name_1439" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type alias must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[형식 별칭에 이름을 지정해야 합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_alias_name_cannot_be_0_2457" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type alias name cannot be '{0}'.]]></Val>
@@ -14379,6 +14451,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unexpected_keyword_or_identifier_1434" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unexpected keyword or identifier.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[예기치 않은 키워드 또는 식별자입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Unexpected_token_1012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token.]]></Val>
@@ -14465,6 +14546,15 @@
           <Val><![CDATA[Unknown compiler option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[알 수 없는 컴파일러 옵션 '{0}'입니다. '{1}'을(를) 사용하시겠습니까?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Unknown_keyword_or_identifier_Did_you_mean_0_1435" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unknown keyword or identifier. Did you mean '{0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[알 수 없는 키워드 또는 식별자입니다. '{0}'을(를) 의미했나요?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14771,6 +14861,15 @@
           <Val><![CDATA[Variable declaration list cannot be empty.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[변수 선언 목록은 비워 둘 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Variable_declaration_not_allowed_at_this_location_1440" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variable declaration not allowed at this location.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 위치에서는 변수 선언을 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
