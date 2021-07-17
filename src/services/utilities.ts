@@ -796,16 +796,9 @@ namespace ts {
         return lastTypeNode;
     }
 
-    export function getContextualTypeOrAncestorTypeNodeType(node: Expression, checker: TypeChecker) {
-        const contextualType = checker.getContextualType(node);
-        if (contextualType) {
-            return contextualType;
-        }
-
-        const parent = node.parent;
-        if (parent && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)) {
-            return checker.getTypeAtLocation(node === parent.left ? parent.right : parent.left);
-        }
+    export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+        const contextualType = getContextualTypeFromParent(node, checker);
+        if (contextualType) return contextualType;
 
         const ancestorTypeNode = getAncestorTypeNode(node);
         return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
