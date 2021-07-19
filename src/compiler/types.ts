@@ -4295,6 +4295,7 @@ namespace ts {
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ isInfinityOrNaNString(name: string | __String): boolean;
 
         /**
          * True if `contextualType` should not be considered for completions because
