@@ -632,7 +632,6 @@ namespace ts {
             isArrayType,
             isTupleType,
             isArrayLikeType,
-            isInfinityOrNaNString,
             isTypeInvalidDueToUnionDiscriminant,
             getAllPossiblePropertiesOfTypes,
             getSuggestedSymbolForNonexistentProperty,
