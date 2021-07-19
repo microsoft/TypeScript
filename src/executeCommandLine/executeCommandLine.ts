@@ -68,7 +68,7 @@ namespace ts {
     }
 
     function defaultIsPretty(sys: System) {
-        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
     }
 
     function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
@@ -90,7 +90,7 @@ namespace ts {
     }
 
     function createColors(sys: System) {
-        const showColors = defaultIsPretty(sys) && !sys.getEnvironmentVariable("NO_COLOR");
+        const showColors = defaultIsPretty(sys);
         if (!showColors) {
             return {
                 bold: (str: string) => str,
