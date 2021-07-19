@@ -226,7 +226,7 @@ namespace ts.classifier.v2020 {
     }
 
     function isInfinityOrNaNString(name: __String): boolean {
-        return name === "Infinity" || name === "-Infinity" || name === "NaN";
+        return name === "Infinity" || name === "NaN";
     }
 
     const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
