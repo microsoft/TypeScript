@@ -90,7 +90,7 @@ namespace ts {
     }
 
     function createColors(sys: System) {
-        const showColors = defaultIsPretty(sys) || !!sys.getEnvironmentVariable("NO_COLOR");
+        const showColors = defaultIsPretty(sys) && !sys.getEnvironmentVariable("NO_COLOR");
         if (!showColors) {
             return {
                 bold: (str: string) => str,
