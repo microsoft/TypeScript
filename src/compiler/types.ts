@@ -3964,6 +3964,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: ESMap<Path, string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsMap: MultiMap<Path, string>;
+        /** Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers. */
+        /* @internal */ readonly usesUriStyleNodeCoreModules: boolean;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;

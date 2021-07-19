@@ -1959,6 +1959,10 @@ namespace ts.Completions {
             function isImportableExportInfo(info: SymbolExportInfo) {
                 const moduleFile = tryCast(info.moduleSymbol.valueDeclaration, isSourceFile);
                 if (!moduleFile) {
+                    const moduleName = stripQuotes(info.moduleSymbol.name);
+                    if (JsTyping.nodeCoreModules.has(moduleName) && startsWith(moduleName, "node:") !== shouldUseUriStyleNodeCoreModules(sourceFile, program)) {
+                        return false;
+                    }
                     return packageJsonFilter
                         ? packageJsonFilter.allowsImportingAmbientModule(info.moduleSymbol, getModuleSpecifierResolutionHost(info.isFromPackageJson))
                         : true;
