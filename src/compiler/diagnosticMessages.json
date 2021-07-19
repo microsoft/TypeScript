@@ -1400,7 +1400,7 @@
         "category": "Error",
         "code": 1441
     },
-    "Missing '=' before default property value.": {
+    "Expected '=' for property initializer.": {
         "category": "Error",
         "code": 1442
     },

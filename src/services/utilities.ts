@@ -802,6 +802,11 @@ namespace ts {
             return contextualType;
         }
 
+        const parent = node.parent;
+        if (parent && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)) {
+            return checker.getTypeAtLocation(node === parent.left ? parent.right : parent.left);
+        }
+
         const ancestorTypeNode = getAncestorTypeNode(node);
         return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
     }
