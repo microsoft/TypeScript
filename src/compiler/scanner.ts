@@ -2048,8 +2048,12 @@ namespace ts {
                             return token = SyntaxKind.Unknown;
                         }
                         pos++;
-                        scanIdentifier(codePointAt(text, pos), languageVersion);
-                        return token = SyntaxKind.PrivateIdentifier;
+                        if (pos < end) {
+                            scanIdentifier(codePointAt(text, pos), languageVersion);
+                            return token = SyntaxKind.PrivateIdentifier;
+                        }
+                        error(Diagnostics.Invalid_character);
+                        return token = SyntaxKind.Unknown;
                     default:
                         const identifierKind = scanIdentifier(ch, languageVersion);
                         if (identifierKind) {

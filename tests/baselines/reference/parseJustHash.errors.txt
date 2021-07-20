@@ -1,0 +1,10 @@
+tests/cases/compiler/parseJustHash.ts(1,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/parseJustHash.ts(1,2): error TS1127: Invalid character.
+
+
+==== tests/cases/compiler/parseJustHash.ts (2 errors) ====
+    #
+    ~
+!!! error TS1128: Declaration or statement expected.
+     
+!!! error TS1127: Invalid character.
