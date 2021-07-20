@@ -1902,6 +1902,11 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
+            const program = hostProject.getCurrentProgram();
+            if (!program) {
+                return ts.emptyArray;
+            }
+
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1918,7 +1923,6 @@ namespace ts.server {
                     compilerOptions,
                     moduleResolutionHost));
 
-                const program = hostProject.getCurrentProgram()!;
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
