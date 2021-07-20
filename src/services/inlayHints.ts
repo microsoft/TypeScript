@@ -163,7 +163,7 @@ namespace ts.InlayHints {
                 const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (identifierNameInfo) {
                     const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
-                    const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !isIdentifier(arg) || arg.text !== parameterName;
+                    const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                     if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                         continue;
                     }
@@ -176,6 +176,16 @@ namespace ts.InlayHints {
                     addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
                 }
             }
+        }
+
+        function identifierOrAccessExpressionPostfixMatchesParameterName(expr: Expression, parameterName: __String) {
+            if (isIdentifier(expr)) {
+                return expr.text === parameterName;
+            }
+            if (isPropertyAccessExpression(expr)) {
+                return expr.name.text === parameterName;
+            }
+            return false;
         }
 
         function leadingCommentsContainsParameterName(node: Node, name: string) {
