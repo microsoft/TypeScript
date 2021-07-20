@@ -1070,7 +1070,7 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
-            const isFirstLoad = this.projectProgramVersion === 0;
+            const isFirstLoad = this.projectProgramVersion === 0 && hasNewProgram;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
