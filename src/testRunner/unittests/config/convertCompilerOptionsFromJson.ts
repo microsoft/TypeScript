@@ -667,9 +667,7 @@ namespace ts {
             assertCompilerOptionsWithJsonText(`{
                 "module": "esnext",
             }`, "tsconfig.json", {
-                compilerOptions: {
-                    target: ScriptTarget.ESNext
-                },
+                compilerOptions: {},
                 errors: [{
                     ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
                     messageText: "'module' should be set inside the 'compilerOptions' object of the config json file.",
