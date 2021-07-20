@@ -2852,6 +2852,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        const rootCompilerOptions: PropertyName[] = [];
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2890,22 +2891,12 @@ namespace ts {
                         return;
                 }
             },
-            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, _valueNode: Expression) {
+            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
-                if (key === "target") {
-                    const possibleValidEntries = arrayFrom(targetOptionDeclaration.type.keys());
-                    if (contains(possibleValidEntries, value)) {
-                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json, "target"));
-                    }
-                }
-                if (key === "module") {
-                    const moduleOption = commandOptionsWithoutBuild.find(opt => opt.name === "module")!;
-                    const possibleValidEntries = arrayFrom((moduleOption.type as Map<string>).keys());
-                    if (contains(possibleValidEntries, value)) {
-                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_tsconfig_json, "module"));
-                    }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions.push(keyNode);
                 }
             }
         };
@@ -2924,6 +2915,11 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        // eslint-disable-next-line no-in-operator
+        if (rootCompilerOptions.length && json && !("compilerOptions" in json)) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
