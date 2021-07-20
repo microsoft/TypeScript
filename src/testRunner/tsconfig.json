@@ -233,6 +233,7 @@
         "unittests/debugDeprecation.ts",
 
         "unittests/tsserver/lsp/helpers.ts",
-        "unittests/tsserver/lsp/hover.ts"
+        "unittests/tsserver/lsp/hover.ts",
+        "unittests/tsserver/lsp/signatureHelp.ts"
     ]
 }
