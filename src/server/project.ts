@@ -1070,7 +1070,7 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
-            const isFirstLoad = this.projectProgramVersion === 0 && hasNewProgram;
+            const isFirstProgramLoad = this.projectProgramVersion === 0 && hasNewProgram;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
@@ -1078,7 +1078,7 @@ namespace ts.server {
                 if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
                 this.autoImportProviderHost?.markAsDirty();
             }
-            if (isFirstLoad) {
+            if (isFirstProgramLoad) {
                 // Preload auto import provider so it's not created during completions request
                 this.getPackageJsonAutoImportProvider();
             }
