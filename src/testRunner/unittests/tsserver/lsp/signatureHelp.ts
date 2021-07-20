@@ -77,13 +77,14 @@ foo()`,
         });
 
         it("retrigger and active signature", () => {
+            // based on https://github.com/microsoft/vscode/issues/94834
             const path = "/a/file.ts";
             const file: File = {
                 path,
                 content: `declare function foo(a: number, b: 'abc'): void;
-    declare function foo(a: number, c: 'xyz'): void;
+declare function foo(a: number, c: 'xyz'): void;
 
-    foo()`,
+foo()`,
             };
 
             const host = createServerHost([file]);
@@ -93,7 +94,7 @@ foo()`,
             openFilesForLspSession([file], session);
 
             // invoke signature help
-            session.executeLspRequest<lsp.SignatureHelpRequest>(
+            const initialSignatureHelp = session.executeLspRequest<lsp.SignatureHelpRequest>(
                 makeLspMessage(lsp.Methods.SignatureHelp, {
                     position: {
                         line: 3,
@@ -107,7 +108,7 @@ foo()`,
                         isRetrigger: false,
                     },
                 })
-            );
+            ) as lsp.SignatureHelp;
 
             // type 1
             const didChangeArgs: lsp.DidChangeTextDocumentParams = {
@@ -134,7 +135,7 @@ foo()`,
             );
 
             // retrigger signature help on change
-            session.executeLspRequest<lsp.SignatureHelpRequest>(
+            const secondSignatureHelp = session.executeLspRequest<lsp.SignatureHelpRequest>(
                 makeLspMessage(lsp.Methods.SignatureHelp, {
                     position: {
                         line: 3,
@@ -146,9 +147,60 @@ foo()`,
                     context: {
                         triggerKind: lsp.SignatureHelpTriggerKind.ContentChange,
                         isRetrigger: true,
+                        activeSignatureHelp: initialSignatureHelp,
                     },
                 })
+            ) as lsp.SignatureHelp;
+
+            // navigate to second signature
+            secondSignatureHelp.activeSignature = 1;
+
+            // type comma
+            const didChangeArgsForComma: lsp.DidChangeTextDocumentParams = {
+                textDocument: {
+                    uri: createUriFromPath(path),
+                    version: 2,
+                },
+                contentChanges: [{
+                    range: {
+                        start: {
+                            line: 3,
+                            character: 5,
+                        },
+                        end: {
+                            line: 3,
+                            character: 5,
+                        },
+                    },
+                    text: ",",
+                }]
+            };
+            session.executeLspNotification(
+                makeLspMessage(lsp.Methods.DidChange, didChangeArgsForComma) as lsp.NotificationMessage
             );
+
+            // retrigger signature help on comma trigger
+            const result = session.executeLspRequest<lsp.SignatureHelpRequest>(
+                makeLspMessage(lsp.Methods.SignatureHelp, {
+                    position: {
+                        line: 3,
+                        character: 6,
+                    },
+                    textDocument: {
+                        uri: createUriFromPath(path),
+                    },
+                    context: {
+                        triggerKind: lsp.SignatureHelpTriggerKind.TriggerCharacter,
+                        isRetrigger: true,
+                        activeSignatureHelp: secondSignatureHelp,
+                    },
+                })
+            ) as lsp.SignatureHelp;
+
+
+            // verify that the response focuses on the second parameter of the second overload
+            assert.equal(result.activeSignature, 1);
+            assert.equal(result.activeParameter, 1);
 
             // baseline to ensure signature help request and response stay correct
             baselineTsserverLogs("lsp signature help", "retrigger and active signature", session);
