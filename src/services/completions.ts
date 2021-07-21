@@ -217,7 +217,8 @@ namespace ts.Completions {
         position: number,
         preferences: UserPreferences,
         triggerCharacter: CompletionsTriggerCharacter | undefined,
-        completionKind?: CompletionTriggerKind,
+        completionKind: CompletionTriggerKind | undefined,
+        cancellationToken: CancellationToken,
     ): CompletionInfo | undefined {
         const { previousToken } = getRelevantTokens(position, sourceFile);
         if (triggerCharacter && !isInString(sourceFile, position, previousToken) && !isValidTrigger(sourceFile, triggerCharacter, previousToken, position)) {
@@ -239,7 +240,7 @@ namespace ts.Completions {
         const compilerOptions = program.getCompilerOptions();
         const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
         if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
-            const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences);
+            const incompleteContinuation = continuePreviousIncompleteResponse(incompleteCompletionsCache, sourceFile, previousToken, program, host, preferences, cancellationToken);
             if (incompleteContinuation) {
                 return incompleteContinuation;
             }
@@ -258,7 +259,7 @@ namespace ts.Completions {
             return getLabelCompletionAtPosition(previousToken.parent);
         }
 
-        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host);
+        const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, preferences, /*detailsEntryId*/ undefined, host, cancellationToken);
         if (!completionData) {
             return undefined;
         }
@@ -292,12 +293,13 @@ namespace ts.Completions {
         program: Program,
         host: LanguageServiceHost,
         preferences: UserPreferences,
+        cancellationToken: CancellationToken,
     ): CompletionInfo | undefined {
         const previousResponse = cache.get();
         if (!previousResponse) return undefined;
 
         const lowerCaseTokenText = location.text.toLowerCase();
-        const exportMap = getExportInfoMap(file, host, program);
+        const exportMap = getExportInfoMap(file, host, program, cancellationToken);
         const checker = program.getTypeChecker();
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.();
         const autoImportProviderChecker = autoImportProvider?.getTypeChecker();
@@ -1202,7 +1204,8 @@ namespace ts.Completions {
         position: number,
         preferences: UserPreferences,
         detailsEntryId: CompletionEntryIdentifier | undefined,
-        host: LanguageServiceHost
+        host: LanguageServiceHost,
+        cancellationToken?: CancellationToken,
     ): CompletionData | Request | undefined {
         const typeChecker = program.getTypeChecker();
 
@@ -1914,7 +1917,8 @@ namespace ts.Completions {
 
             const moduleSpecifierCache = host.getModuleSpecifierCache?.();
             const lowerCaseTokenText = previousToken && isIdentifier(previousToken) ? previousToken.text.toLowerCase() : "";
-            const exportInfo = getExportInfoMap(sourceFile, host, program);
+            const exportInfo = getExportInfoMap(sourceFile, host, program, cancellationToken);
+
             const packageJsonAutoImportProvider = host.getPackageJsonAutoImportProvider?.();
             const packageJsonFilter = detailsEntryId ? undefined : createPackageJsonImportFilter(sourceFile, preferences, host);
             resolvingModuleSpecifiers(
@@ -1928,7 +1932,7 @@ namespace ts.Completions {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
-                        if (isCompletionDetailsMatch || charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
+                        if (isCompletionDetailsMatch || !detailsEntryId && charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             const defaultExportInfo = find(info, isImportableExportInfo);
                             if (!defaultExportInfo) {
                                 return;
