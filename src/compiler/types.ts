@@ -384,6 +384,7 @@ namespace ts {
         JSDocTag,
         JSDocAugmentsTag,
         JSDocImplementsTag,
+        JSDocAbstractTag,
         JSDocAuthorTag,
         JSDocDeprecatedTag,
         JSDocClassTag,
@@ -3257,6 +3258,10 @@ namespace ts {
     export interface JSDocImplementsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocImplementsTag;
         readonly class: ExpressionWithTypeArguments & { readonly expression: Identifier | PropertyAccessEntityNameExpression };
+    }
+
+    export interface JSDocAbstractTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocAbstractTag;
     }
 
     export interface JSDocAuthorTag extends JSDocTag {
@@ -7379,6 +7384,8 @@ namespace ts {
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag;
         createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
         updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
+        createJSDocAbstractTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocAbstractTag;
+        updateJSDocAbstractTag(node: JSDocAbstractTag, tagName: Identifier | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocAbstractTag;
         createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
         updateJSDocImplementsTag(node: JSDocImplementsTag, tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocImplementsTag;
         createJSDocAuthorTag(tagName: Identifier | undefined, comment?: string | NodeArray<JSDocComment>): JSDocAuthorTag;

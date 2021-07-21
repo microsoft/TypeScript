@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract1.js ===
+/** @abstract */
+class A {
+>A : Symbol(A, Decl(jsdocAbstract1.js, 0, 0))
+}
+new A()
+>A : Symbol(A, Decl(jsdocAbstract1.js, 0, 0))
+

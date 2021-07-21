@@ -1,0 +1,187 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract4.js ===
+/** @abstract */
+class C1 {
+>C1 : C1
+
+    /** @abstract */
+    m() {}
+>m : () => void
+
+    /** @abstract */
+    set p1(value) {}
+>p1 : void
+>value : void
+
+    /** @abstract */
+    get p1() {}
+>p1 : void
+}
+
+/** @abstract */
+class C2 {
+>C2 : C2
+
+    /** @abstract */
+    m() {
+>m : () => void
+
+        throw new Error("Method not implemented.")
+>new Error("Method not implemented.") : Error
+>Error : ErrorConstructor
+>"Method not implemented." : "Method not implemented."
+    }
+
+    /** @abstract */
+    set p1(value) {
+>p1 : void
+>value : void
+
+        throw new Error("Method not implemented.")
+>new Error("Method not implemented.") : Error
+>Error : ErrorConstructor
+>"Method not implemented." : "Method not implemented."
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : void
+
+        throw new Error("Method not implemented.")
+>new Error("Method not implemented.") : Error
+>Error : ErrorConstructor
+>"Method not implemented." : "Method not implemented."
+    }
+}
+
+/** @abstract */
+class C3 {
+>C3 : C3
+
+    /** @abstract */
+    m() {
+>m : () => never
+
+        /** @type {never} */
+        let x;
+>x : never
+
+        return x;
+>x : never
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : never
+
+        /** @type {never} */
+        let x;
+>x : never
+
+        return x;
+>x : never
+    }
+}
+
+/** @abstract */
+class C4 {
+>C4 : C4
+
+    /** @abstract */
+    m() {
+>m : () => number
+
+        const x = 1;
+>x : 1
+>1 : 1
+
+        const y = 1;
+>y : 1
+>1 : 1
+
+        return x + y;
+>x + y : number
+>x : 1
+>y : 1
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : number
+
+        const x = 1;
+>x : 1
+>1 : 1
+
+        const y = 1;
+>y : 1
+>1 : 1
+
+        return x + y;
+>x + y : number
+>x : 1
+>y : 1
+    }
+
+    /** @abstract */
+    set p1(value) {
+>p1 : number
+>value : number
+
+        this.p1 = value;
+>this.p1 = value : number
+>this.p1 : number
+>this : this
+>p1 : number
+>value : number
+    }
+}
+
+/** @abstract */
+class C5 {
+>C5 : C5
+
+    /** @abstract */
+    m() {
+>m : () => number
+
+        const x = 1;
+>x : 1
+>1 : 1
+
+        /** @type {never} */
+        let y;
+>y : never
+
+        if (x) {
+>x : 1
+
+            return x;
+>x : 1
+        }
+        return y;
+>y : never
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : number
+
+        const x = 1;
+>x : 1
+>1 : 1
+
+        /** @type {never} */
+        let y;
+>y : never
+
+        if (x) {
+>x : 1
+
+            return x;
+>x : 1
+        }
+        return y;
+>y : never
+    }
+}
+

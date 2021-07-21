@@ -1,0 +1,11 @@
+tests/cases/conformance/jsdoc/jsdocAbstract1.js(4,1): error TS2511: Cannot create an instance of an abstract class.
+
+
+==== tests/cases/conformance/jsdoc/jsdocAbstract1.js (1 errors) ====
+    /** @abstract */
+    class A {
+    }
+    new A()
+    ~~~~~~~
+!!! error TS2511: Cannot create an instance of an abstract class.
+    

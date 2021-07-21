@@ -840,6 +840,10 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocAugmentsTag;
     }
 
+    export function isJSDocAbstractTag(node: Node): node is JSDocAbstractTag {
+        return node.kind === SyntaxKind.JSDocAbstractTag;
+    }
+
     export function isJSDocAuthorTag(node: Node): node is JSDocAuthorTag {
         return node.kind === SyntaxKind.JSDocAuthorTag;
     }

@@ -4813,6 +4813,7 @@ namespace ts {
                 if (getJSDocProtectedTagNoCache(node)) flags |= ModifierFlags.Protected;
                 if (getJSDocReadonlyTagNoCache(node)) flags |= ModifierFlags.Readonly;
                 if (getJSDocOverrideTagNoCache(node)) flags |= ModifierFlags.Override;
+                if (getJSDocAbstractTagNoCache(node)) flags |= ModifierFlags.Abstract;
             }
             if (getJSDocDeprecatedTagNoCache(node)) flags |= ModifierFlags.Deprecated;
         }
