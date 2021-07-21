@@ -1600,7 +1600,8 @@ namespace ts {
                 position,
                 fullPreferences,
                 options.triggerCharacter,
-                options.triggerKind);
+                options.triggerKind,
+                cancellationToken);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
