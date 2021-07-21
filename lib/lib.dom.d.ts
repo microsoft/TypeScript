@@ -17254,6 +17254,7 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
      */
     close(): void;
     confirm(message?: string): boolean;
+    console: Console;
     /**
      * Moves the focus to the window's browsing context, if any.
      */
