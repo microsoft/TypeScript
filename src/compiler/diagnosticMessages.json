@@ -3801,6 +3801,10 @@
         "category": "Error",
         "code": 4117
     },
+    "The type of this node cannot be serialized because its property '{0}' cannot be serialized.": {
+        "category": "Error",
+        "code": 4118
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
