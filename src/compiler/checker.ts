@@ -24242,17 +24242,13 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        function containsGenericType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, containsGenericType));
-        }
-
         function hasNonBindingPatternContextualTypeWithNoGenericTypes(node: Node) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 getContextualType(node, ContextFlags.SkipBindingPatterns);
-            return contextualType && !someType(contextualType, containsGenericType);
+            return contextualType && !(isGenericObjectType(contextualType) || isGenericIndexType(contextualType));
         }
 
         function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
