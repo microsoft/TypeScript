@@ -21,6 +21,9 @@ if ((stringB as 'b') in c) {
     c; // narrowed to `B`
 }
 
+if ((stringB as ('a' | 'b')) in c) {
+    c; // not narrowed
+}
 
 //// [controlFlowForInStatement2.js]
 var keywordA = 'a';
@@ -34,4 +37,7 @@ if (keywordA in c) {
 var stringB = 'b';
 if (stringB in c) {
     c; // narrowed to `B`
+}
+if (stringB in c) {
+    c; // not narrowed
 }

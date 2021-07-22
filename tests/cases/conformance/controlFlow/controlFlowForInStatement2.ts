@@ -19,3 +19,7 @@ let stringB: string = 'b';
 if ((stringB as 'b') in c) {
     c; // narrowed to `B`
 }
+
+if ((stringB as ('a' | 'b')) in c) {
+    c; // not narrowed
+}

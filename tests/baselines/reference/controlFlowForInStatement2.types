@@ -53,3 +53,13 @@ if ((stringB as 'b') in c) {
 >c : B
 }
 
+if ((stringB as ('a' | 'b')) in c) {
+>(stringB as ('a' | 'b')) in c : boolean
+>(stringB as ('a' | 'b')) : "a" | "b"
+>stringB as ('a' | 'b') : "a" | "b"
+>stringB : string
+>c : A | B
+
+    c; // not narrowed
+>c : A | B
+}

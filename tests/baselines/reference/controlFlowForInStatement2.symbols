@@ -46,3 +46,10 @@ if ((stringB as 'b') in c) {
 >c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
 }
 
+if ((stringB as ('a' | 'b')) in c) {
+>stringB : Symbol(stringB, Decl(controlFlowForInStatement2.ts, 16, 3))
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+
+    c; // not narrowed
+>c : Symbol(c, Decl(controlFlowForInStatement2.ts, 6, 13))
+}
