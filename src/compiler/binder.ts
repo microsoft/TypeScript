@@ -916,8 +916,8 @@ namespace ts {
             return isTypeOfExpression(expr1) && isNarrowableOperand(expr1.expression) && isStringLiteralLike(expr2);
         }
 
-        function isNarrowableInOperands(left: Expression, right: Expression) {
-            return isNarrowingExpression(right) && (isIdentifier(left) || isStringLiteralLike(left));
+        function isNarrowableInRightOperand(expr: Expression) {
+            return isNarrowingExpression(expr);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
@@ -936,7 +936,7 @@ namespace ts {
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
                 case SyntaxKind.InKeyword:
-                    return isNarrowableInOperands(expr.left, expr.right);
+                    return isNarrowableInRightOperand(expr.right);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
