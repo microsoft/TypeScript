@@ -80,7 +80,7 @@ namespace ts {
             reportNonlocalAugmentation,
             reportNonSerializableProperty
         };
-        let errorNameNode: DeclarationName | undefined;
+        let errorNameNode: DeclarationName | undefined; // What's this??
         let errorFallbackNode: Declaration | undefined;
 
         let currentSourceFile: SourceFile;
