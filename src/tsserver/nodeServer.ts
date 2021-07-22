@@ -786,6 +786,8 @@ namespace ts.server {
         class LSPSession extends NodeSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
             readonly reader = new rpc.StreamMessageReader(process.stdin);
             readonly writer = new rpc.StreamMessageWriter(process.stdout);
+            readonly messageQueue: rpc.Message[] = [];
+            timer: rpc.Disposable | undefined;
 
             listen() {
                 this.reader.listen(message => {
@@ -795,6 +797,46 @@ namespace ts.server {
                 rl.on("close", () => {
                     this.exit();
                 });
+            }
+
+            public override onMessage(message: rpc.Message) {
+                try {
+                    // todo
+                    this.addMessageToQueue(message);
+                }
+                finally {
+                    this.triggerMessageQueue();
+                }
+            }
+
+            private addMessageToQueue(message: rpc.Message) {
+                // TODO: make the queue queryable
+                this.messageQueue.push(message);
+            }
+
+            triggerMessageQueue() {
+                if (this.timer || this.messageQueue.length === 0) {
+                    return;
+                }
+
+                this.timer = rpc.RAL().timer.setImmediate(() => {
+                    this.timer = undefined;
+                    this.processMessageQueue();
+                });
+            }
+
+            processMessageQueue() {
+                if (this.messageQueue.length === 0) {
+                    return;
+                }
+
+                const message = this.messageQueue.shift()!;
+                try {
+                    super.onMessage(message);
+                }
+                finally {
+                    this.triggerMessageQueue();
+                }
             }
 
             protected override parseMessage(message: rpc.Message): rpc.RequestMessage | rpc.NotificationMessage {
@@ -837,6 +879,7 @@ namespace ts.server {
                 const lspMsg: rpc.ResponseMessage = {
                     jsonrpc: "2.0",
                     id: (msg as protocol.Response).request_seq,
+                    // eslint-disable-next-line no-null/no-null
                     result: typeof body === "undefined" ? null : body // LSP doesn't allow returning undefined unless there's an error
                 };
                 this.writer.write(lspMsg);
