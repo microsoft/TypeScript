@@ -182,10 +182,7 @@ namespace ts {
          * Get the referencedFile from the imported module symbol
          */
         function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
-            return mapDefined(symbol.declarations, declaration => {
-                const declarationSourceFile = getSourceFileOfNode(declaration);
-                return declarationSourceFile && declarationSourceFile.resolvedPath;
-            });
+            return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
         }
 
         /**
