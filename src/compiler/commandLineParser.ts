@@ -2852,7 +2852,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
-        const rootCompilerOptions: PropertyName[] = [];
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2896,7 +2896,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
                 if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
-                    rootCompilerOptions.push(keyNode);
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
                 }
             }
         };
@@ -2918,7 +2918,7 @@ namespace ts {
         }
 
         // eslint-disable-next-line no-in-operator
-        if (rootCompilerOptions.length && json && !("compilerOptions" in json)) {
+        if (rootCompilerOptions && json && !("compilerOptions" in json)) {
             errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
