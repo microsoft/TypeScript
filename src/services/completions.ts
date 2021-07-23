@@ -1932,7 +1932,7 @@ namespace ts.Completions {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
-                        if (!isTypeOnlyLocation && !(info[0].targetFlags & SymbolFlags.Value)) return;
+                        if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
                         if (isTypeOnlyLocation && !(info[0].targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return;
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || !detailsEntryId && charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
