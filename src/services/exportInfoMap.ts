@@ -20,8 +20,7 @@ namespace ts {
         /** Set if `moduleSymbol` is an external module, not an ambient module */
         moduleFileName: string | undefined;
         exportKind: ExportKind;
-        /** If true, can't use an es6 import from a js file. */
-        isTypeOnly: boolean;
+        targetFlags: SymbolFlags;
         /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
         isFromPackageJson: boolean;
     }
@@ -38,7 +37,7 @@ namespace ts {
         readonly moduleSymbol: Symbol | undefined;
         moduleFileName: string | undefined;
         exportKind: ExportKind;
-        isTypeOnly: boolean;
+        targetFlags: SymbolFlags;
         isFromPackageJson: boolean;
     }
 
@@ -92,7 +91,7 @@ namespace ts {
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
                     exportKind,
-                    isTypeOnly: !(skipAlias(symbol, checker).flags & SymbolFlags.Value),
+                    targetFlags: skipAlias(symbol, checker).flags,
                     isFromPackageJson,
                     symbol: storedSymbol,
                     moduleSymbol: storedModuleSymbol,
@@ -143,7 +142,7 @@ namespace ts {
 
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
-            const { id, exportKind, isTypeOnly, isFromPackageJson, moduleFileName } = info;
+            const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
             const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
@@ -151,7 +150,7 @@ namespace ts {
                     moduleSymbol: cachedModuleSymbol,
                     moduleFileName,
                     exportKind,
-                    isTypeOnly,
+                    targetFlags,
                     isFromPackageJson,
                 };
             }
@@ -173,7 +172,7 @@ namespace ts {
                 moduleSymbol,
                 moduleFileName,
                 exportKind,
-                isTypeOnly,
+                targetFlags,
                 isFromPackageJson,
             };
         }

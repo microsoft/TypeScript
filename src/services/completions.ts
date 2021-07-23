@@ -1452,7 +1452,7 @@ namespace ts.Completions {
         const symbolToOriginInfoMap: SymbolOriginInfoMap = [];
         const symbolToSortTextIdMap: SymbolSortTextIdMap = [];
         const seenPropertySymbols = new Map<SymbolId, true>();
-        const isTypeOnly = isTypeOnlyCompletion();
+        const isTypeOnlyLocation = isTypeOnlyCompletion();
         const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
             return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
         });
@@ -1506,7 +1506,7 @@ namespace ts.Completions {
             isJsxInitializer,
             insideJsDocTagTypeExpression,
             symbolToSortTextIdMap,
-            isTypeOnlyLocation: isTypeOnly,
+            isTypeOnlyLocation,
             isJsxIdentifierExpected,
             importCompletionNode,
             hasUnresolvedAutoImports,
@@ -1806,7 +1806,7 @@ namespace ts.Completions {
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
             isInSnippetScope = isSnippetScope(scopeNode);
 
-            const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
+            const symbolMeanings = (isTypeOnlyLocation ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = concatenate(symbols, typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
             Debug.assertEachIsDefined(symbols, "getSymbolsInScope() should all be defined");
@@ -1829,7 +1829,7 @@ namespace ts.Completions {
                 }
             }
             collectAutoImports();
-            if (isTypeOnly) {
+            if (isTypeOnlyLocation) {
                 keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
                     ? KeywordCompletionFilters.TypeAssertionKeywords
                     : KeywordCompletionFilters.TypeKeywords;
@@ -1931,6 +1931,9 @@ namespace ts.Completions {
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
+                        // `targetFlags` should be the same for each `info`
+                        if (!isTypeOnlyLocation && !(info[0].targetFlags & SymbolFlags.Value)) return;
+                        if (isTypeOnlyLocation && !(info[0].targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return;
                         const isCompletionDetailsMatch = detailsEntryId && some(info, i => detailsEntryId.source === stripQuotes(i.moduleSymbol.name));
                         if (isCompletionDetailsMatch || !detailsEntryId && charactersFuzzyMatchInString(symbolName, lowerCaseTokenText)) {
                             const defaultExportInfo = find(info, isImportableExportInfo);
