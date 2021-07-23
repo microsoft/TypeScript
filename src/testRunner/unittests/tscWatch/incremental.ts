@@ -355,5 +355,22 @@ export const Fragment: unique symbol;
                 }
             });
         });
+
+        describe("editing module augmentation", () => {
+            verifyIncrementalWatchEmit({
+                subScenario: "editing module augmentation",
+                files: () => [
+                    { path: libFile.path, content: libContent },
+                    { path: `${project}/node_modules/classnames/index.d.ts`, content: `export interface Result {} export default function classNames(): Result;` },
+                    { path: `${project}/src/types/classnames.d.ts`, content: `export {}; declare module "classnames" { interface Result { foo } }` },
+                    { path: `${project}/src/index.ts`, content: `import classNames from "classnames"; classNames().foo;` },
+                    { path: configFile.path, content: JSON.stringify({ compilerOptions: { module: "commonjs", incremental: true } }) },
+                ],
+                modifyFs: host => {
+                    // delete 'foo'
+                    host.writeFile(`${project}/src/types/classnames.d.ts`, `export {}; declare module "classnames" { interface Result {} }`);
+                },
+            });
+        });
     });
 }
