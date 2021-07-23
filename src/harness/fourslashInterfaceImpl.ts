@@ -255,6 +255,10 @@ namespace FourSlashInterface {
             this.state.verifyInlayHints(expected, span, preference);
         }
 
+        public getInlineValues(options: VerifyInlineValuesOptions) {
+            this.state.verifyInlineValues(options);
+        }
+
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
@@ -1680,6 +1684,30 @@ namespace FourSlashInterface {
         kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
+    }
+
+    export enum InlineValuesType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+
+    export interface VerifyInlineVariableLookupValues {
+        readonly type: InlineValuesType.VariableLookup;
+        readonly range: FourSlash.Range;
+        readonly variableName: string;
+    }
+
+    export interface VerifyInlineEvaluatableExpressionValues {
+        readonly type: InlineValuesType.EvaluatableExpression;
+        readonly range: FourSlash.Range;
+        readonly expression: string;
+    }
+
+    export type VerifyInlineValues = VerifyInlineVariableLookupValues | VerifyInlineEvaluatableExpressionValues;
+
+    export interface VerifyInlineValuesOptions {
+        position: number;
+        expected: VerifyInlineValues[]
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];

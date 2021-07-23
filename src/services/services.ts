@@ -1187,7 +1187,8 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
-        "provideInlayHints"
+        "provideInlayHints",
+        "provideInlineValues"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -2517,6 +2518,16 @@ namespace ts {
             };
         }
 
+        function getInlineValuesContext(file: SourceFile, position: number): InlineValuesContext {
+            return {
+                file,
+                position,
+                program: getProgram()!,
+                host,
+                cancellationToken,
+            };
+        }
+
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
@@ -2575,6 +2586,12 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
+        }
+
+        function provideInlineValues(fileName: string, position: number): InlineValue[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            return InlineValues.provideInlineValues(getInlineValuesContext(sourceFile, position));
         }
 
         const ls: LanguageService = {
@@ -2643,6 +2660,7 @@ namespace ts {
             commentSelection,
             uncommentSelection,
             provideInlayHints,
+            provideInlineValues
         };
 
         switch (languageServiceMode) {

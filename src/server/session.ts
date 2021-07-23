@@ -1452,15 +1452,45 @@ namespace ts.server {
             });
         }
 
-        private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs): protocol.InlayHintItem[] {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
 
             return hints.map(hint => ({
                 ...hint,
+                kind: hint.kind as protocol.InlayHintKind | undefined,
                 position: scriptInfo.positionToLineOffset(hint.position),
             }));
+        }
+
+        private provideInlineValues(args: protocol.FileLocationRequestArgs): protocol.InlineValue[] {
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
+            const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
+            const values = languageService.provideInlineValues(file, position);
+
+            return values.map(value => {
+                const span: protocol.TextSpan = {
+                    start: scriptInfo.positionToLineOffset(value.span.start),
+                    end: scriptInfo.positionToLineOffset(value.span.start + value.span.length)
+                };
+
+                if (value.type === InlineValueType.VariableLookup) {
+                    return {
+                        ...value,
+                        type: protocol.InlineValuesType.VariableLookup,
+                        span
+                    };
+                }
+                else {
+                    return {
+                        ...value,
+                        type: protocol.InlineValuesType.EvaluatableExpression,
+                        span
+                    };
+                }
+            });
         }
 
         private setCompilerOptionsForInferredProjects(args: protocol.SetCompilerOptionsForInferredProjectsArgs): void {
@@ -2979,6 +3009,9 @@ namespace ts.server {
             },
             [CommandNames.ProvideInlayHints]: (request: protocol.InlayHintsRequest) => {
                 return this.requiredResponse(this.provideInlayHints(request.arguments));
+            },
+            [CommandNames.ProvideInlineValues]: (request: protocol.InlineValuesRequest) => {
+                return this.requiredResponse(this.provideInlineValues(request.arguments));
             }
         }));
 

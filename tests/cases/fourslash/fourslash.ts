@@ -72,6 +72,11 @@ declare module ts {
         Enum = "Enum",
     }
 
+    const enum InlineValuesType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -406,6 +411,7 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, preference?: InlayHintsOptions);
+        getInlineValues(options: VerifyInlineValuesOptions): void;
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -755,10 +761,35 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
+    export const enum VerifyInlineValuesType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+
+    export interface VerifyInlineVariableLookupValues {
+        readonly type: VerifyInlineValuesType.VariableLookup;
+        readonly range: Range;
+        readonly variableName: string;
+    }
+
+    export interface VerifyInlineEvaluatableExpressionValues {
+        readonly type: VerifyInlineValuesType.EvaluatableExpression;
+        readonly range: Range;
+        readonly expression: string;
+    }
+
+    export type VerifyInlineValues = VerifyInlineVariableLookupValues | VerifyInlineEvaluatableExpressionValues;
+
+    export interface VerifyInlineValuesOptions {
+        position: number;
+        expected: VerifyInlineValues[]
+    }
+
+
     export interface VerifyInlayHintsOptions {
         text: string;
         position: number;
-        kind?: VerifyInlayHintKind;
+        kind?: ts.InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

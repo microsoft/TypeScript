@@ -481,7 +481,8 @@ namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
-        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[]
+        provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
+        provideInlineValues(fileName: string, position: number): InlineValue[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -724,6 +725,25 @@ namespace ts {
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
+
+    export enum InlineValueType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+
+    export interface InlineValueVariableLookup {
+        readonly type: InlineValueType.VariableLookup;
+        readonly span: TextSpan;
+        readonly variableName: string;
+    }
+
+    export interface InlineValueEvaluatableExpression {
+        readonly type: InlineValueType.EvaluatableExpression;
+        readonly span: TextSpan;
+        readonly expression: string;
+    }
+
+    export type InlineValue = InlineValueVariableLookup | InlineValueEvaluatableExpression;
 
     export interface TodoCommentDescriptor {
         text: string;
@@ -1599,5 +1619,13 @@ namespace ts {
         host: LanguageServiceHost;
         span: TextSpan;
         preferences: InlayHintsOptions;
+    }
+
+    export interface InlineValuesContext {
+        file: SourceFile;
+        position: number;
+        program: Program;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
     }
 }

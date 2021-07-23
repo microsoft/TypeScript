@@ -602,6 +602,9 @@ namespace Harness.LanguageService {
         provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.InlayHintsOptions) {
             return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
         }
+        provideInlineValues(fileName: string, position: number) {
+            return unwrapJSONCallResult(this.shim.provideInlineHints(fileName, position));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }

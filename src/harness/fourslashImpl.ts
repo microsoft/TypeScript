@@ -853,6 +853,27 @@ namespace FourSlash {
             });
         }
 
+        public verifyInlineValues(options: FourSlashInterface.VerifyInlineValuesOptions) {
+            const { expected, position } = options;
+            const items = this.languageService.provideInlineValues(this.activeFile.fileName, position);
+            this.assertObjectsEqual(items, expected.map((e): ts.InlineValue => {
+                if (e.type === FourSlashInterface.InlineValuesType.EvaluatableExpression) {
+                    return {
+                        ...e,
+                        type: ts.InlineValueType.EvaluatableExpression,
+                        span: ts.createTextSpanFromRange(e.range),
+                    };
+                }
+                else {
+                    return {
+                        ...e,
+                        type: ts.InlineValueType.VariableLookup,
+                        span: ts.createTextSpanFromRange(e.range),
+                    };
+                }
+            }));
+        }
+
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
             if (options.marker === undefined) {
                 this.verifyCompletionsWorker(options);

@@ -658,6 +658,29 @@ namespace ts.server {
             }));
         }
 
+        provideInlineValues(file: string, position: number): InlineValue[] {
+            const args = this.createFileLocationRequestArgs(file, position);
+            const request = this.processRequest<protocol.InlineValuesRequest>(CommandNames.ProvideInlineValues, args);
+            const response = this.processResponse<protocol.InlineValuesResponse>(request);
+
+            return response.body.map(item => {
+                if (item.type === protocol.InlineValuesType.VariableLookup) {
+                    return {
+                        ...item,
+                        span: this.decodeSpan(item.span, file),
+                        type: InlineValueType.VariableLookup
+                    };
+                }
+                else {
+                    return {
+                        ...item,
+                        span: this.decodeSpan(item.span, file),
+                        type: InlineValueType.EvaluatableExpression
+                    };
+                }
+            });
+        }
+
         private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             return typeof positionOrRange === "number"
                 ? this.createFileLocationRequestArgs(fileName, positionOrRange)
