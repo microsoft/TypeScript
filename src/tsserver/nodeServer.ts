@@ -786,8 +786,9 @@ namespace ts.server {
         class LSPSession extends NodeSession<rpc.Message, rpc.RequestMessage | rpc.NotificationMessage> {
             readonly reader = new rpc.StreamMessageReader(process.stdin);
             readonly writer = new rpc.StreamMessageWriter(process.stdout);
-            readonly messageQueue: rpc.Message[] = [];
+            readonly messageQueue = new LinkedMap<string, rpc.Message>();
             timer: rpc.Disposable | undefined;
+            notificationSequenceNumber = 0;
 
             listen() {
                 this.reader.listen(message => {
@@ -810,12 +811,17 @@ namespace ts.server {
             }
 
             private addMessageToQueue(message: rpc.Message) {
-                // TODO: make the queue queryable
-                this.messageQueue.push(message);
+                // eslint-disable-next-line no-in-operator, no-null/no-null
+                if (rpc.isRequestMessage(message) && message.id !== null) {
+                    this.messageQueue.set("req-" + message.id.toString(), message);
+                }
+                else {
+                    this.messageQueue.set("not-" + (this.notificationSequenceNumber++).toString(), message);
+                }
             }
 
-            triggerMessageQueue() {
-                if (this.timer || this.messageQueue.length === 0) {
+            private triggerMessageQueue() {
+                if (this.timer || this.messageQueue.size === 0) {
                     return;
                 }
 
@@ -825,8 +831,8 @@ namespace ts.server {
                 });
             }
 
-            processMessageQueue() {
-                if (this.messageQueue.length === 0) {
+            private processMessageQueue() {
+                if (this.messageQueue.size === 0) {
                     return;
                 }
 

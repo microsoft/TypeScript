@@ -8,6 +8,7 @@
         ]
     },
     "files": [
+        "linkedMap.ts",
         "nodeServer.ts",
         "webServer.ts",
         "server.ts"
