@@ -1,16 +1,16 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution2.ts ===
 function foo1(strs: TemplateStringsArray, x: number): string;
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
->strs : TemplateStringsArray
+>strs : TemplateStringsArray<readonly string[]>
 >x : number
 
 function foo1(strs: string[], x: number): number;
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>foo1 : { (strs: TemplateStringsArray<readonly string[]>, x: number): string; (strs: string[], x: number): number; }
 >strs : string[]
 >x : number
 
 function foo1(...stuff: any[]): any {
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>foo1 : { (strs: TemplateStringsArray<readonly string[]>, x: number): string; (strs: string[], x: number): number; }
 >stuff : any[]
 
     return undefined;
@@ -20,29 +20,29 @@ function foo1(...stuff: any[]): any {
 var a = foo1 `${1}`;
 >a : string
 >foo1 `${1}` : string
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>foo1 : { (strs: TemplateStringsArray<readonly string[]>, x: number): string; (strs: string[], x: number): number; }
 >`${1}` : string
 >1 : 1
 
 var b = foo1([], 1);
 >b : number
 >foo1([], 1) : number
->foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
+>foo1 : { (strs: TemplateStringsArray<readonly string[]>, x: number): string; (strs: string[], x: number): number; }
 >[] : undefined[]
 >1 : 1
 
 function foo2(strs: string[], x: number): number;
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray<readonly string[]>, x: number): string; }
 >strs : string[]
 >x : number
 
 function foo2(strs: TemplateStringsArray, x: number): string;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
->strs : TemplateStringsArray
+>strs : TemplateStringsArray<readonly string[]>
 >x : number
 
 function foo2(...stuff: any[]): any {
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray<readonly string[]>, x: number): string; }
 >stuff : any[]
 
     return undefined;
@@ -52,14 +52,14 @@ function foo2(...stuff: any[]): any {
 var c = foo2 `${1}`;
 >c : string
 >foo2 `${1}` : string
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray<readonly string[]>, x: number): string; }
 >`${1}` : string
 >1 : 1
 
 var d = foo2([], 1);
 >d : number
 >foo2([], 1) : number
->foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
+>foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray<readonly string[]>, x: number): string; }
 >[] : undefined[]
 >1 : 1
 

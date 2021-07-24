@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithIncompatibleTypedTags.ts ===
 interface I {
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
->stringParts : TemplateStringsArray
+>stringParts : TemplateStringsArray<readonly string[]>
 >rest : boolean[]
 
     g: I;

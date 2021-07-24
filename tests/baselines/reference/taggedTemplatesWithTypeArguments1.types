@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
 declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 >f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
->strs : TemplateStringsArray
+>strs : TemplateStringsArray<readonly string[]>
 >callbacks : ((x: T) => any)[]
 >x : T
 
@@ -19,7 +19,7 @@ interface Stuff {
 export const a = f<Stuff> `
 >a : void
 >f<Stuff> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : void
->f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
+>f : <T>(strs: TemplateStringsArray<readonly string[]>, ...callbacks: ((x: T) => any)[]) => void
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 
     hello
@@ -52,7 +52,7 @@ declare function g<Input, T, U, V>(
 >g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
 
     strs: TemplateStringsArray,
->strs : TemplateStringsArray
+>strs : TemplateStringsArray<readonly string[]>
 
     t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
 >t : (i: Input) => T
@@ -65,7 +65,7 @@ declare function g<Input, T, U, V>(
 export const b = g<Stuff, number, string, boolean> `
 >b : string | number | boolean
 >g<Stuff, number, string, boolean> `    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string | number | boolean
->g : <Input, T, U, V>(strs: TemplateStringsArray, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
+>g : <Input, T, U, V>(strs: TemplateStringsArray<readonly string[]>, t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V) => T | U | V
 >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
 
     hello
@@ -99,7 +99,7 @@ declare let obj: {
 
     prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
 >prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->strs : TemplateStringsArray
+>strs : TemplateStringsArray<readonly string[]>
 >x : (input: T) => T
 >input : T
 
@@ -111,8 +111,8 @@ declare let obj: {
 export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
 >c : { returnedObjProp: Stuff; }
 >obj["prop"]<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
->obj["prop"] : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
+>obj["prop"] : <T>(strs: TemplateStringsArray<readonly string[]>, x: (input: T) => T) => { returnedObjProp: T; }
+>obj : { prop: <T>(strs: TemplateStringsArray<readonly string[]>, x: (input: T) => T) => { returnedObjProp: T; }; }
 >"prop" : "prop"
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
@@ -146,9 +146,9 @@ c = obj.prop<Stuff> `${(input) => ({ ...input })}`
 >c = obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
 >c : { returnedObjProp: Stuff; }
 >obj.prop<Stuff> `${(input) => ({ ...input })}` : { returnedObjProp: Stuff; }
->obj.prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
->obj : { prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }; }
->prop : <T>(strs: TemplateStringsArray, x: (input: T) => T) => { returnedObjProp: T; }
+>obj.prop : <T>(strs: TemplateStringsArray<readonly string[]>, x: (input: T) => T) => { returnedObjProp: T; }
+>obj : { prop: <T>(strs: TemplateStringsArray<readonly string[]>, x: (input: T) => T) => { returnedObjProp: T; }; }
+>prop : <T>(strs: TemplateStringsArray<readonly string[]>, x: (input: T) => T) => { returnedObjProp: T; }
 >`${(input) => ({ ...input })}` : string
 >(input) => ({ ...input }) : (input: Stuff) => { x: number; y: string; z: boolean; }
 >input : Stuff
