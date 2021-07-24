@@ -23570,13 +23570,12 @@ namespace ts {
                 return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 if (type.flags & TypeFlags.Union
                     || type.flags & TypeFlags.Object && declaredType !== type
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
-                    const propName = escapeLeadingUnderscores(literal.text);
-                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
                 return type;
             }
@@ -23634,13 +23633,15 @@ namespace ts {
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
                         const target = getReferenceCandidate(expr.right);
-                        if (isStringLiteralLike(expr.left)) {
+                        const leftType = getTypeOfNode(expr.left);
+                        if (leftType.flags & TypeFlags.StringLiteral) {
+                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === escapeLeadingUnderscores(expr.left.text)) {
+                                getAccessedPropertyName(reference) === name) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, expr.left, assumeTrue);
+                                return narrowByInKeyword(type, name, assumeTrue);
                             }
                         }
                         break;

@@ -20,8 +20,7 @@ namespace ts {
         /** Set if `moduleSymbol` is an external module, not an ambient module */
         moduleFileName: string | undefined;
         exportKind: ExportKind;
-        /** If true, can't use an es6 import from a js file. */
-        isTypeOnly: boolean;
+        targetFlags: SymbolFlags;
         /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
         isFromPackageJson: boolean;
     }
@@ -38,7 +37,7 @@ namespace ts {
         readonly moduleSymbol: Symbol | undefined;
         moduleFileName: string | undefined;
         exportKind: ExportKind;
-        isTypeOnly: boolean;
+        targetFlags: SymbolFlags;
         isFromPackageJson: boolean;
     }
 
@@ -92,7 +91,7 @@ namespace ts {
                     moduleFile,
                     moduleFileName: moduleFile?.fileName,
                     exportKind,
-                    isTypeOnly: !(skipAlias(symbol, checker).flags & SymbolFlags.Value),
+                    targetFlags: skipAlias(symbol, checker).flags,
                     isFromPackageJson,
                     symbol: storedSymbol,
                     moduleSymbol: storedModuleSymbol,
@@ -143,7 +142,7 @@ namespace ts {
 
         function rehydrateCachedInfo(info: CachedSymbolExportInfo): SymbolExportInfo {
             if (info.symbol && info.moduleSymbol) return info as SymbolExportInfo;
-            const { id, exportKind, isTypeOnly, isFromPackageJson, moduleFileName } = info;
+            const { id, exportKind, targetFlags, isFromPackageJson, moduleFileName } = info;
             const [cachedSymbol, cachedModuleSymbol] = symbols.get(id) || emptyArray;
             if (cachedSymbol && cachedModuleSymbol) {
                 return {
@@ -151,7 +150,7 @@ namespace ts {
                     moduleSymbol: cachedModuleSymbol,
                     moduleFileName,
                     exportKind,
-                    isTypeOnly,
+                    targetFlags,
                     isFromPackageJson,
                 };
             }
@@ -173,7 +172,7 @@ namespace ts {
                 moduleSymbol,
                 moduleFileName,
                 exportKind,
-                isTypeOnly,
+                targetFlags,
                 isFromPackageJson,
             };
         }
@@ -304,7 +303,7 @@ namespace ts {
         }
     }
 
-    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program): ExportInfoMap {
+    export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, cancellationToken: CancellationToken | undefined): ExportInfoMap {
         const start = timestamp();
         // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
         // which will invalidate the export map cache if things change, so pull it before
@@ -323,7 +322,9 @@ namespace ts {
         host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
         const compilerOptions = program.getCompilerOptions();
         const scriptTarget = getEmitScriptTarget(compilerOptions);
+        let moduleCount = 0;
         forEachExternalModuleToImportFrom(program, host, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
+            if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
             const seenExports = new Map<Symbol, true>();
             const checker = program.getTypeChecker();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
