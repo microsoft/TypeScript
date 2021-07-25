@@ -918,7 +918,7 @@ namespace ts {
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalAsyncGeneratorType: GenericType;
-        let deferredGlobalTemplateStringsArrayType: Symbol;
+        let deferredGlobalTemplateStringsArraySymbol: Symbol;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
@@ -13309,9 +13309,8 @@ namespace ts {
             return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
         }
 
-        function getGlobalTemplateStringsArrayType() {
-            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalSymbol("TemplateStringsArray" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
-            // return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+        function getGlobalTemplateStringsArraySymbol() {
+            return deferredGlobalTemplateStringsArraySymbol || (deferredGlobalTemplateStringsArraySymbol = getGlobalSymbol("TemplateStringsArray" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
         function getGlobalImportMetaType() {
@@ -28805,36 +28804,30 @@ namespace ts {
          */
         function getEffectiveCallArguments(node: CallLikeExpression): readonly Expression[] {
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
-                // const template = node.template;
-                // const args: Expression[] = [createSyntheticExpression(template, getGlobalTemplateStringsArrayType())];
-                // if (template.kind === SyntaxKind.TemplateExpression) {
-                //     forEach(template.templateSpans, span => {
-                //         args.push(span.expression);
-                //     });
-                // }
-                // return args;
                 const template = node.template;
                 const args: Expression[] = [];
+
+                let templateStringsArrayTypeParameter: Type;
+
                 if (template.kind === SyntaxKind.TemplateExpression) {
                     const templateStringParts: Type[] = [getStringLiteralType(template.head.text)];
                     const flags: ElementFlags[] = [ElementFlags.Required];
-                    // args.push(templateStringParts);
                     forEach(template.templateSpans, span => {
                         args.push(span.expression);
-                        const str = getStringLiteralType(span.literal.text);
-                        templateStringParts.push(str);
+                        templateStringParts.push(getStringLiteralType(span.literal.text));
                         flags.push(ElementFlags.Required);
                     });
-                    const tsa = getGlobalTemplateStringsArrayType();
-                    const expr = createSyntheticExpression(template,
-                        getTypeAliasInstantiation(tsa, [createTupleType(templateStringParts, flags)]));
-                    args.unshift(expr);
+                    templateStringsArrayTypeParameter = createTupleType(templateStringParts, flags);
                 }
                 else {
-                  const tsa = getGlobalTemplateStringsArrayType();
-                  args.push(createSyntheticExpression(template,
-                      getTypeAliasInstantiation(tsa, [createArrayType(stringType, true)])));
+                    templateStringsArrayTypeParameter = createArrayType(stringType, /* readonly */ true);
                 }
+
+                const templateStringsArray = getGlobalTemplateStringsArraySymbol();
+                const expr = createSyntheticExpression(template,
+                    getTypeAliasInstantiation(templateStringsArray, [templateStringsArrayTypeParameter]));
+                args.unshift(expr);
+
                 return args;
             }
             if (node.kind === SyntaxKind.Decorator) {
