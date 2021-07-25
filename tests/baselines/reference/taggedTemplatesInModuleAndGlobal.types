@@ -11,20 +11,20 @@ namespace n {
     }
 
     function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
 
         return id`hello world`;
->id`hello world` : TemplateStringsArray
+>id`hello world` : TemplateStringsArray<readonly string[]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
     }
     let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory() : TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory() : TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
 }
 === tests/cases/compiler/module.ts ===
 export { }
@@ -37,18 +37,18 @@ function id<T>(x: T): T {
 }
 
 function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
 
     return id`hello world`;
->id`hello world` : TemplateStringsArray
+>id`hello world` : TemplateStringsArray<readonly string[]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 }
 let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
->templateObjectFactory() : TemplateStringsArray
->templateObjectFactory : () => TemplateStringsArray
+>templateObjectFactory() : TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory() : TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly string[]>
 

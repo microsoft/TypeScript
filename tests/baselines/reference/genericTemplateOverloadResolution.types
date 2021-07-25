@@ -1,10 +1,10 @@
 === tests/cases/compiler/genericTemplateOverloadResolution.ts ===
 interface IFooFn {
     (strings: TemplateStringsArray): Promise<{}>;
->strings : TemplateStringsArray
+>strings : TemplateStringsArray<readonly string[]>
 
     <T>(strings: TemplateStringsArray): Promise<T>;
->strings : TemplateStringsArray
+>strings : TemplateStringsArray<readonly string[]>
 }
 
 declare const fooFn: IFooFn;

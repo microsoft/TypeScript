@@ -342,4 +342,26 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 var arr: any[];
 >arr : Symbol(arr, Decl(taggedTemplateStringsTypeArgumentInference.ts, 87, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 88, 3))
 
+// Generic tag with 
+function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): [...T, ...U] {
+>someGenerics10 : Symbol(someGenerics10, Decl(taggedTemplateStringsTypeArgumentInference.ts, 88, 15))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 24))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 52))
+>strs : Symbol(strs, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 83))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 24))
+>args : Symbol(args, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 113))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 52))
+>T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 24))
+>U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInference.ts, 91, 52))
+
+    return null;
+}
+var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
+>a10a : Symbol(a10a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 94, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 95, 3))
+>someGenerics10 : Symbol(someGenerics10, Decl(taggedTemplateStringsTypeArgumentInference.ts, 88, 15))
+
+var a10a: {};
+>a10a : Symbol(a10a, Decl(taggedTemplateStringsTypeArgumentInference.ts, 94, 3), Decl(taggedTemplateStringsTypeArgumentInference.ts, 95, 3))
+
 

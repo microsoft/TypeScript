@@ -39,7 +39,7 @@ export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme,
 export interface StyledInterface {
     div: (a: TemplateStringsArray) => StyledComponent<"div">;
 >div : (a: TemplateStringsArray) => StyledComponent<"div">
->a : TemplateStringsArray
+>a : TemplateStringsArray<readonly string[]>
 }
 
 declare const styled: StyledInterface;
@@ -55,25 +55,25 @@ import styled from "styled-components";
 const A = styled.div``;
 >A : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >`` : ""
 
 const B = styled.div``;
 >B : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >`` : ""
 
 export const C = styled.div``;
 >C : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled.div`` : import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
->styled.div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>styled.div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >styled : import("tests/cases/compiler/node_modules/styled-components/index").StyledInterface
->div : (a: TemplateStringsArray) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
+>div : (a: TemplateStringsArray<readonly string[]>) => import("tests/cases/compiler/node_modules/styled-components/index").StyledComponent<"div", import("tests/cases/compiler/node_modules/styled-components/index").DefaultTheme, {}, never>
 >`` : ""
 
 export default Object.assign(A, {

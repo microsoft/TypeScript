@@ -50,8 +50,8 @@ function foo2(...stuff: any[]): any {
 }
 
 var c = foo2 `${1}`;
->c : string
->foo2 `${1}` : string
+>c : number
+>foo2 `${1}` : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray<readonly string[]>, x: number): string; }
 >`${1}` : string
 >1 : 1

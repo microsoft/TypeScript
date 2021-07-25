@@ -1,12 +1,12 @@
 === tests/cases/compiler/taggedTemplatesInDifferentScopes.ts ===
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : (parts: TemplateStringsArray, ...values: any[]) => string
->parts : TemplateStringsArray
+>parts : TemplateStringsArray<readonly string[]>
 >values : any[]
 
     return parts[0];
 >parts[0] : string
->parts : TemplateStringsArray
+>parts : TemplateStringsArray<readonly string[]>
 >0 : 0
 }
 function foo() {
@@ -14,12 +14,12 @@ function foo() {
 
     tag `foo`;
 >tag `foo` : string
->tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>tag : (parts: TemplateStringsArray<readonly string[]>, ...values: any[]) => string
 >`foo` : "foo"
 
     tag `foo2`;
 >tag `foo2` : string
->tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>tag : (parts: TemplateStringsArray<readonly string[]>, ...values: any[]) => string
 >`foo2` : "foo2"
 }
 
@@ -28,12 +28,12 @@ function bar() {
 
     tag `bar`;
 >tag `bar` : string
->tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>tag : (parts: TemplateStringsArray<readonly string[]>, ...values: any[]) => string
 >`bar` : "bar"
 
     tag `bar2`;
 >tag `bar2` : string
->tag : (parts: TemplateStringsArray, ...values: any[]) => string
+>tag : (parts: TemplateStringsArray<readonly string[]>, ...values: any[]) => string
 >`bar2` : "bar2"
 }
 

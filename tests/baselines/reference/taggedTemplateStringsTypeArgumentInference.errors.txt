@@ -1,9 +1,10 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(96,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '["part1", "part2", "part3", "", string, number, any[]]', but here has type '{}'.
 
 
-==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts (3 errors) ====
+==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts (4 errors) ====
     // Generic tag with one parameter
     function noParams<T>(n: T) { }
     noParams ``;
@@ -102,4 +103,13 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
     var arr: any[];
     
+    // Generic tag with 
+    function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): [...T, ...U] {
+        return null;
+    }
+    var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
+    var a10a: {};
+        ~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '["part1", "part2", "part3", "", string, number, any[]]', but here has type '{}'.
+!!! related TS6203 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts:95:5: 'a10a' was also declared here.
     
