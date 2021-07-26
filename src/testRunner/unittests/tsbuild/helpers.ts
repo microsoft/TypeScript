@@ -236,24 +236,24 @@ interface Symbol {
         }
     }
 
-    type ProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
-    type ProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
-    interface ProgramBuildInfo {
+    type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ReusableDiagnostic[]];
+    type ReadableProgramBuilderInfoFilePendingEmit = [string, "DtsOnly" | "Full"];
+    interface ReadableProgramBuildInfo {
         fileNames: readonly string[];
         fileNamesList: readonly (readonly string[])[] | undefined;
         fileInfos: MapLike<BuilderState.FileInfo>;
         options: CompilerOptions | undefined;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
-        semanticDiagnosticsPerFile?: readonly ProgramBuildInfoDiagnostic[];
-        affectedFilesPendingEmit?: readonly ProgramBuilderInfoFilePendingEmit[];
+        semanticDiagnosticsPerFile?: readonly ReadableProgramBuildInfoDiagnostic[];
+        affectedFilesPendingEmit?: readonly ReadableProgramBuilderInfoFilePendingEmit[];
     }
-    type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ProgramBuildInfo | undefined; size: number; };
+    type ReadableBuildInfo = Omit<BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
     function generateBuildInfoProgramBaseline(sys: System, originalWriteFile: System["writeFile"], buildInfoPath: string, buildInfo: BuildInfo) {
-        const fileInfos: ProgramBuildInfo["fileInfos"] = {};
-        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1)] = toBuilderStateFileInfo(fileInfo));
+        const fileInfos: ReadableProgramBuildInfo["fileInfos"] = {};
+        buildInfo.program?.fileInfos.forEach((fileInfo, index) => fileInfos[toFileName(index + 1 as ProgramBuildInfoFileId)] = toBuilderStateFileInfo(fileInfo));
         const fileNamesList = buildInfo.program?.fileIdsList?.map(fileIdsListId => fileIdsListId.map(toFileName));
-        const program: ProgramBuildInfo | undefined = buildInfo.program && {
+        const program: ReadableProgramBuildInfo | undefined = buildInfo.program && {
             fileNames: buildInfo.program.fileNames,
             fileNamesList,
             fileInfos,
@@ -282,11 +282,11 @@ interface Symbol {
         // For now its just JSON.stringify
         originalWriteFile.call(sys, `${buildInfoPath}.readable.baseline.txt`, JSON.stringify(result, /*replacer*/ undefined, 2));
 
-        function toFileName(fileId: number) {
+        function toFileName(fileId: ProgramBuildInfoFileId) {
             return buildInfo.program!.fileNames[fileId - 1];
         }
 
-        function toFileNames(fileIdsListId: number) {
+        function toFileNames(fileIdsListId: ProgramBuildInfoFileIdListId) {
             return fileNamesList![fileIdsListId - 1];
         }
 

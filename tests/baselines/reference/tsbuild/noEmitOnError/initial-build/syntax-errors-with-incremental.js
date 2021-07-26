@@ -67,6 +67,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 
 
 
@@ -101,6 +103,8 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+No shapes updated in the builder::
+
 
 
 
@@ -131,6 +135,12 @@ Semantic diagnostics in builder refreshed for::
 /src/shared/types/db.ts
 /src/src/main.ts
 /src/src/other.ts
+
+Shape signatures in builder refreshed for::
+/lib/lib.d.ts (used version)
+/src/shared/types/db.ts (used version)
+/src/src/main.ts (used version)
+/src/src/other.ts (used version)
 
 
 //// [/src/dev-build/shared/types/db.js]

@@ -182,6 +182,10 @@ namespace ts {
         return node.kind === SyntaxKind.MethodDeclaration;
     }
 
+    export function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration {
+        return node.kind === SyntaxKind.ClassStaticBlockDeclaration;
+    }
+
     export function isConstructorDeclaration(node: Node): node is ConstructorDeclaration {
         return node.kind === SyntaxKind.Constructor;
     }

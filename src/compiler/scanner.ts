@@ -77,7 +77,8 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
+    /** @internal */
+    export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
         abstract: SyntaxKind.AbstractKeyword,
         any: SyntaxKind.AnyKeyword,
         as: SyntaxKind.AsKeyword,
@@ -2063,8 +2064,9 @@ namespace ts {
                             pos += charSize(ch);
                             continue;
                         }
-                        error(Diagnostics.Invalid_character);
-                        pos += charSize(ch);
+                        const size = charSize(ch);
+                        error(Diagnostics.Invalid_character, pos, size);
+                        pos += size;
                         return token = SyntaxKind.Unknown;
                 }
             }

@@ -59,6 +59,13 @@ Semantic diagnostics in builder refreshed for::
 /a/b/project/src/main.ts
 /a/b/project/src/main2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/output/anotherdependency/file1.d.ts (used version)
+/a/b/dependencies/file2.d.ts (used version)
+/a/b/project/src/main.ts (used version)
+/a/b/project/src/main2.ts (used version)
+
 WatchedFiles::
 /a/b/project/tsconfig.json:
   {"fileName":"/a/b/project/tsconfig.json","pollingInterval":250}

@@ -1,0 +1,51 @@
+=== tests/cases/compiler/ignoredJsxAttributes.tsx ===
+/// <reference path="react16.d.ts" />
+
+// Repro from #44797
+
+import * as React from "react";
+>React : typeof React
+
+interface Props {
+    foo: string;
+>foo : string
+
+    [dataProp: string]: string;
+>dataProp : string
+}
+
+declare function Yadda(props: Props): JSX.Element;
+>Yadda : (props: Props) => JSX.Element
+>props : Props
+>JSX : any
+
+let props: Props = {
+>props : Props
+>{    foo: "",    "data-yadda": 42,  // Error} : { foo: string; "data-yadda": number; }
+
+    foo: "",
+>foo : string
+>"" : ""
+
+    "data-yadda": 42,  // Error
+>"data-yadda" : number
+>42 : 42
+
+};
+
+let x1 = <Yadda foo="hello" data-yadda={42}/>;
+>x1 : JSX.Element
+><Yadda foo="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
+>foo : string
+>data-yadda : number
+>42 : 42
+
+let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
+>x2 : JSX.Element
+><Yadda bar="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
+>bar : string
+>data-yadda : number
+>42 : 42
+

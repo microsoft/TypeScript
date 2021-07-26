@@ -63,19 +63,19 @@
 
 verify.quickInfos({
     1: "var r1: Date",
-    2: "var r2: any",
+    2: "var r2: Date",
     3: "var r3: RegExp",
     4: "var r4: RegExp",
     5: "var r5: Date",
-    6: "var r6: any",
+    6: "var r6: Date",
     7: "var r7: RegExp",
     8: "var r8: RegExp",
     9: "var r9: Date",
-    10: "var r10: any",
+    10: "var r10: Date",
     11: "var r11: Date",
     12: "var r12: Date",
     13: "var r13: Ty<Date>",
-    14: "var r14: any",
+    14: "var r14: Ty<Date>",
     15: "var r15: {\n    [x: number]: Date;\n}",
-    16: "var r16: any"
+    16: "var r16: {\n    [x: number]: Date;\n}"
 });

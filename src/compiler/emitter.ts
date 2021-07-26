@@ -1351,6 +1351,8 @@ namespace ts {
                         return emitMethodSignature(node as MethodSignature);
                     case SyntaxKind.MethodDeclaration:
                         return emitMethodDeclaration(node as MethodDeclaration);
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                     case SyntaxKind.Constructor:
                         return emitConstructor(node as ConstructorDeclaration);
                     case SyntaxKind.GetAccessor:
@@ -2067,6 +2069,13 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
+        function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword("static");
+            emitBlockFunctionBody(node.body);
+        }
+
         function emitConstructor(node: ConstructorDeclaration) {
             emitModifiers(node, node.modifiers);
             writeKeyword("constructor");
@@ -2477,7 +2486,17 @@ namespace ts {
         }
 
         function emitCallExpression(node: CallExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
@@ -2492,7 +2511,17 @@ namespace ts {
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
             emitExpression(node.tag, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);
@@ -4578,16 +4607,26 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
-                    return getEffectiveLines(
-                        includeComments => getLinesBetweenRangeEndAndRangeStart(
-                            previousNode,
-                            nextNode,
-                            currentSourceFile!,
-                            includeComments));
-                }
-                else if (!preserveSourceNewlines && !nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
-                    return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
+                    if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
+                        return getEffectiveLines(
+                            includeComments => getLinesBetweenRangeEndAndRangeStart(
+                                previousNode,
+                                nextNode,
+                                currentSourceFile!,
+                                includeComments));
+                    }
+                    // If `preserveSourceNewlines` is `false` we do not intend to preserve the effective lines between the
+                    // previous and next node. Instead we naively check whether nodes are on separate lines within the
+                    // same node parent. If so, we intend to preserve a single line terminator. This is less precise and
+                    // expensive than checking with `preserveSourceNewlines` as above, but the goal is not to preserve the
+                    // effective source lines between two sibling nodes.
+                    else if (!preserveSourceNewlines && originalNodesHaveSameParent(previousNode, nextNode)) {
+                        return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                    }
+                    // If the two nodes are not comparable, add a line terminator based on the format that can indicate
+                    // whether new lines are preferred or not.
+                    return format & ListFormat.PreferNewLine ? 1 : 0;
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
                     return 1;
@@ -5314,11 +5353,14 @@ namespace ts {
 
         }
 
-        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
-            if (nodeIsSynthesized(previousNode) || nodeIsSynthesized(nextNode)) {
-                return false;
-            }
+        function originalNodesHaveSameParent(nodeA: Node, nodeB: Node) {
+            nodeA = getOriginalNode(nodeA);
+            // For performance, do not call `getOriginalNode` for `nodeB` if `nodeA` doesn't even
+            // have a parent node.
+            return nodeA.parent && nodeA.parent === getOriginalNode(nodeB).parent;
+        }
 
+        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
             if (nextNode.pos < previousNode.end) {
                 return false;
             }

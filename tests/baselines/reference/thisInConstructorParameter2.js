@@ -36,6 +36,8 @@ var P = /** @class */ (function () {
         if (zz === void 0) { zz = this; }
         zz.y;
     };
-    P.y = this;
+    var _a;
+    _a = P;
+    P.y = _a;
     return P;
 }());

@@ -171,33 +171,40 @@ namespace ts {
             }
         }
 
+        function errorDeclarationNameWithFallback() {
+            return errorNameNode ? declarationNameToString(errorNameNode) :
+                errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
+                errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
+                "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
+        }
+
         function reportInaccessibleUniqueSymbolError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "unique symbol"));
             }
         }
 
         function reportCyclicStructureError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode)));
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback()));
             }
         }
 
         function reportInaccessibleThisError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "this"));
             }
         }
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     specifier));
             }
         }
@@ -380,7 +387,6 @@ namespace ts {
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            /*preferences*/ undefined,
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -570,6 +576,8 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
             }
             return false;
         }

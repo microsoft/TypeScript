@@ -25,7 +25,7 @@ exports.createNamed = createNamed;
 exports.__esModule = true;
 exports.Value = void 0;
 var b_1 = require("./b");
-exports.Value = b_1.createNamed();
+exports.Value = (0, b_1.createNamed)();
 
 
 //// [b.d.ts]

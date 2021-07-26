@@ -1,5 +1,5 @@
 tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(1,10): error TS2394: This overload signature is not compatible with its implementation signature.
-tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(6,5): error TS2411: Property 'prop' of type 'number' is not assignable to string index type 'string'.
+tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(6,5): error TS2411: Property 'prop' of type 'number' is not assignable to 'string' index type 'string'.
 
 
 ==== tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts (2 errors) ====
@@ -13,5 +13,5 @@ tests/cases/compiler/functionAndInterfaceWithSeparateErrors.ts(6,5): error TS241
         [s: string]: string;
         prop: number;
         ~~~~
-!!! error TS2411: Property 'prop' of type 'number' is not assignable to string index type 'string'.
+!!! error TS2411: Property 'prop' of type 'number' is not assignable to 'string' index type 'string'.
     }

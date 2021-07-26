@@ -94,6 +94,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/d.ts
 /user/username/projects/myproject/e.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -151,7 +159,7 @@ exports.getPoint = getPoint;
 "use strict";
 exports.__esModule = true;
 var c_1 = require("./c");
-c_1.getPoint().c.x;
+(0, c_1.getPoint)().c.x;
 
 
 //// [/user/username/projects/myproject/e.js]
@@ -342,6 +350,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/d.ts
 /user/username/projects/myproject/e.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -370,7 +385,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2103509937-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}","signature":"696351195-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}\n"},{"version":"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","signature":"-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"},{"version":"-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","signature":"-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"},{"version":"-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","signature":"-3531856636-export {};\n"},{"version":"-5185546240-import \"./d\";","signature":"-3619301366-import \"./d\";\n"}],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2103509937-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}","signature":"696351195-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}\n"},"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","-5185546240-import \"./d\";"],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[5,3],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -409,19 +424,19 @@ exitCode:: ExitStatus.undefined
       },
       "./b.ts": {
         "version": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}",
-        "signature": "-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"
+        "signature": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}"
       },
       "./c.ts": {
         "version": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};",
-        "signature": "-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"
+        "signature": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};"
       },
       "./d.ts": {
         "version": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;"
       },
       "./e.ts": {
         "version": "-5185546240-import \"./d\";",
-        "signature": "-3619301366-import \"./d\";\n"
+        "signature": "-5185546240-import \"./d\";"
       }
     },
     "referencedMap": {
@@ -445,6 +460,9 @@ exitCode:: ExitStatus.undefined
       "./c.ts": [
         "./b.ts"
       ],
+      "./d.ts": [
+        "./c.ts"
+      ],
       "./e.ts": [
         "./d.ts"
       ]
@@ -459,7 +477,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1756
+  "size": 1405
 }
 
 
@@ -517,6 +535,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -546,7 +572,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"9889814467-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x2: number;\n    y: number;\n}","signature":"8536297517-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x2: number;\n    y: number;\n}\n"},{"version":"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","signature":"-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"},{"version":"-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","signature":"-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"},{"version":"-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","signature":"-3531856636-export {};\n"},{"version":"-5185546240-import \"./d\";","signature":"-3619301366-import \"./d\";\n"}],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,[4,[{"file":"./c.ts","start":139,"length":4,"code":2322,"category":1,"messageText":{"messageText":"Type '{ x: number; y: number; }' is not assignable to type 'Coords'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.","category":1,"code":2353}]},"relatedInformation":[{"file":"./a.ts","start":47,"length":1,"messageText":"The expected type comes from property 'c' which is declared here on type 'PointWrapper'","category":3,"code":6500}]}]],[5,[{"file":"./d.ts","start":45,"length":1,"code":2339,"category":1,"messageText":"Property 'x' does not exist on type 'Coords'."}]],6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"9889814467-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x2: number;\n    y: number;\n}","signature":"8536297517-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x2: number;\n    y: number;\n}\n"},"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","-5185546240-import \"./d\";"],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[5,3],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,[4,[{"file":"./c.ts","start":139,"length":4,"code":2322,"category":1,"messageText":{"messageText":"Type '{ x: number; y: number; }' is not assignable to type 'Coords'.","category":1,"code":2322,"next":[{"messageText":"Object literal may only specify known properties, and 'x' does not exist in type 'Coords'.","category":1,"code":2353}]},"relatedInformation":[{"file":"./a.ts","start":47,"length":1,"messageText":"The expected type comes from property 'c' which is declared here on type 'PointWrapper'","category":3,"code":6500}]}]],[5,[{"file":"./d.ts","start":45,"length":1,"code":2339,"category":1,"messageText":"Property 'x' does not exist on type 'Coords'."}]],6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -585,19 +611,19 @@ exitCode:: ExitStatus.undefined
       },
       "./b.ts": {
         "version": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}",
-        "signature": "-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"
+        "signature": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}"
       },
       "./c.ts": {
         "version": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};",
-        "signature": "-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"
+        "signature": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};"
       },
       "./d.ts": {
         "version": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;"
       },
       "./e.ts": {
         "version": "-5185546240-import \"./d\";",
-        "signature": "-3619301366-import \"./d\";\n"
+        "signature": "-5185546240-import \"./d\";"
       }
     },
     "referencedMap": {
@@ -620,6 +646,9 @@ exitCode:: ExitStatus.undefined
       ],
       "./c.ts": [
         "./b.ts"
+      ],
+      "./d.ts": [
+        "./c.ts"
       ],
       "./e.ts": [
         "./d.ts"
@@ -680,7 +709,7 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 2421
+  "size": 2070
 }
 
 
@@ -722,6 +751,14 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/d.ts
+/user/username/projects/myproject/e.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/a.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (used version)
+/user/username/projects/myproject/c.ts (used version)
+/user/username/projects/myproject/d.ts (used version)
+/user/username/projects/myproject/e.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -751,7 +788,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js] file written with same contents
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2103509937-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}","signature":"696351195-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}\n"},{"version":"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","signature":"-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"},{"version":"-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","signature":"-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"},{"version":"-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","signature":"-3531856636-export {};\n"},{"version":"-5185546240-import \"./d\";","signature":"-3619301366-import \"./d\";\n"}],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts","./c.ts","./d.ts","./e.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2103509937-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}","signature":"696351195-export interface Point {\n    name: string;\n    c: Coords;\n}\nexport interface Coords {\n    x: number;\n    y: number;\n}\n"},"-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}","-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};","-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;","-5185546240-import \"./d\";"],"fileIdsList":[[2],[3],[4],[5]],"referencedMap":[[3,1],[4,2],[5,3],[6,4]],"exportedModulesMap":[[3,1],[4,2],[5,3],[6,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -790,19 +827,19 @@ exitCode:: ExitStatus.undefined
       },
       "./b.ts": {
         "version": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}",
-        "signature": "-7279094804-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}\n"
+        "signature": "-8029610078-import { Point } from \"./a\";\nexport interface PointWrapper extends Point {\n}"
       },
       "./c.ts": {
         "version": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};",
-        "signature": "-3387333988-import { PointWrapper } from \"./b\";\nexport declare function getPoint(): PointWrapper;\n"
+        "signature": "-37232372138-import { PointWrapper } from \"./b\";\nexport function getPoint(): PointWrapper {\n    return {\n        name: \"test\",\n        c: {\n            x: 1,\n            y: 2\n        }\n    }\n};"
       },
       "./d.ts": {
         "version": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;",
-        "signature": "-3531856636-export {};\n"
+        "signature": "-17875457076-import { getPoint } from \"./c\";\ngetPoint().c.x;"
       },
       "./e.ts": {
         "version": "-5185546240-import \"./d\";",
-        "signature": "-3619301366-import \"./d\";\n"
+        "signature": "-5185546240-import \"./d\";"
       }
     },
     "referencedMap": {
@@ -826,6 +863,9 @@ exitCode:: ExitStatus.undefined
       "./c.ts": [
         "./b.ts"
       ],
+      "./d.ts": [
+        "./c.ts"
+      ],
       "./e.ts": [
         "./d.ts"
       ]
@@ -840,6 +880,6 @@ exitCode:: ExitStatus.undefined
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1756
+  "size": 1405
 }
 

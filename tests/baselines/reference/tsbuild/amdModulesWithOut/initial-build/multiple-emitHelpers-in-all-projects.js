@@ -407,10 +407,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -431,7 +435,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -465,11 +469,11 @@ function appfile4Spread() {
     }
 }
 var appfile4_ar = [20, 30];
-appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;IACM,SAAS,eAAe;QAClD,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;ACHD,IAAM,KAAK,GAAG,EAAE,CAAC;AACjB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -498,10 +502,14 @@ sourceFile:../lib/file0.ts
 >>>    }
 >>>    return ar;
 >>>};
->>>var __spreadArray = (this && this.__spreadArray) || function (to, from) {
->>>    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
->>>        to[j] = from[i];
->>>    return to;
+>>>var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+>>>    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+>>>        if (ar || !(i in from)) {
+>>>            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+>>>            ar[i] = from[i];
+>>>        }
+>>>    }
+>>>    return to.concat(ar || from);
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -528,12 +536,12 @@ sourceFile:../lib/file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(33, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(33, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(33, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(33, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(33, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(33, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(37, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(37, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(37, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(37, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(37, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(37, 17) Source(1, 19) + SourceIndex(0)
 ---
 >>>function libfile0Spread() {
 1->
@@ -543,9 +551,9 @@ sourceFile:../lib/file0.ts
   >
 2 >function 
 3 >         libfile0Spread
-1->Emitted(34, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(34, 10) Source(2, 10) + SourceIndex(0)
-3 >Emitted(34, 24) Source(2, 24) + SourceIndex(0)
+1->Emitted(38, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(38, 10) Source(2, 10) + SourceIndex(0)
+3 >Emitted(38, 24) Source(2, 24) + SourceIndex(0)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -553,8 +561,8 @@ sourceFile:../lib/file0.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(35, 5) Source(2, 25) + SourceIndex(0)
-2 >Emitted(35, 16) Source(2, 39) + SourceIndex(0)
+1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
+2 >Emitted(39, 16) Source(2, 39) + SourceIndex(0)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -569,20 +577,20 @@ sourceFile:../lib/file0.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(36, 10) Source(2, 25) + SourceIndex(0)
-2 >Emitted(36, 20) Source(2, 39) + SourceIndex(0)
-3 >Emitted(36, 22) Source(2, 25) + SourceIndex(0)
-4 >Emitted(36, 43) Source(2, 39) + SourceIndex(0)
-5 >Emitted(36, 45) Source(2, 25) + SourceIndex(0)
-6 >Emitted(36, 49) Source(2, 39) + SourceIndex(0)
+1->Emitted(40, 10) Source(2, 25) + SourceIndex(0)
+2 >Emitted(40, 20) Source(2, 39) + SourceIndex(0)
+3 >Emitted(40, 22) Source(2, 25) + SourceIndex(0)
+4 >Emitted(40, 43) Source(2, 39) + SourceIndex(0)
+5 >Emitted(40, 45) Source(2, 25) + SourceIndex(0)
+6 >Emitted(40, 49) Source(2, 39) + SourceIndex(0)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(37, 9) Source(2, 25) + SourceIndex(0)
-2 >Emitted(37, 31) Source(2, 39) + SourceIndex(0)
+1 >Emitted(41, 9) Source(2, 25) + SourceIndex(0)
+2 >Emitted(41, 31) Source(2, 39) + SourceIndex(0)
 ---
 >>>    }
 >>>}
@@ -591,8 +599,8 @@ sourceFile:../lib/file0.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(39, 1) Source(2, 43) + SourceIndex(0)
-2 >Emitted(39, 2) Source(2, 44) + SourceIndex(0)
+1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
+2 >Emitted(43, 2) Source(2, 44) + SourceIndex(0)
 ---
 >>>var libfile0_ar = [20, 30];
 1->
@@ -605,7 +613,7 @@ sourceFile:../lib/file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -617,25 +625,25 @@ sourceFile:../lib/file0.ts
 8 >                       30
 9 >                         ]
 10>                          ;
-1->Emitted(40, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(40, 5) Source(3, 7) + SourceIndex(0)
-3 >Emitted(40, 16) Source(3, 18) + SourceIndex(0)
-4 >Emitted(40, 19) Source(3, 21) + SourceIndex(0)
-5 >Emitted(40, 20) Source(3, 22) + SourceIndex(0)
-6 >Emitted(40, 22) Source(3, 24) + SourceIndex(0)
-7 >Emitted(40, 24) Source(3, 26) + SourceIndex(0)
-8 >Emitted(40, 26) Source(3, 28) + SourceIndex(0)
-9 >Emitted(40, 27) Source(3, 29) + SourceIndex(0)
-10>Emitted(40, 28) Source(3, 30) + SourceIndex(0)
+1->Emitted(44, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(44, 5) Source(3, 7) + SourceIndex(0)
+3 >Emitted(44, 16) Source(3, 18) + SourceIndex(0)
+4 >Emitted(44, 19) Source(3, 21) + SourceIndex(0)
+5 >Emitted(44, 20) Source(3, 22) + SourceIndex(0)
+6 >Emitted(44, 22) Source(3, 24) + SourceIndex(0)
+7 >Emitted(44, 24) Source(3, 26) + SourceIndex(0)
+8 >Emitted(44, 26) Source(3, 28) + SourceIndex(0)
+9 >Emitted(44, 27) Source(3, 29) + SourceIndex(0)
+10>Emitted(44, 28) Source(3, 30) + SourceIndex(0)
 ---
->>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+>>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >libfile0Spread
@@ -644,13 +652,13 @@ sourceFile:../lib/file0.ts
 5 >                                              , ...
 6 >                                                        libfile0_ar
 7 >                                                                   );
-1->Emitted(41, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(41, 15) Source(4, 15) + SourceIndex(0)
-3 >Emitted(41, 45) Source(4, 16) + SourceIndex(0)
-4 >Emitted(41, 47) Source(4, 18) + SourceIndex(0)
-5 >Emitted(41, 57) Source(4, 23) + SourceIndex(0)
-6 >Emitted(41, 68) Source(4, 34) + SourceIndex(0)
-7 >Emitted(41, 72) Source(4, 36) + SourceIndex(0)
+1->Emitted(45, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(45, 15) Source(4, 15) + SourceIndex(0)
+3 >Emitted(45, 45) Source(4, 16) + SourceIndex(0)
+4 >Emitted(45, 47) Source(4, 18) + SourceIndex(0)
+5 >Emitted(45, 57) Source(4, 23) + SourceIndex(0)
+6 >Emitted(45, 68) Source(4, 34) + SourceIndex(0)
+7 >Emitted(45, 79) Source(4, 36) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -674,12 +682,12 @@ sourceFile:../lib/file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1 >Emitted(46, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(46, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(46, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(46, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(46, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(46, 20) Source(1, 21) + SourceIndex(1)
+1 >Emitted(50, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(50, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(50, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(50, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(50, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(50, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    function forlibfile1Rest() {
 1->^^^^
@@ -689,9 +697,9 @@ sourceFile:../lib/file1.ts
 1->
 2 >    function 
 3 >             forlibfile1Rest
-1->Emitted(47, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(47, 14) Source(1, 30) + SourceIndex(1)
-3 >Emitted(47, 29) Source(1, 45) + SourceIndex(1)
+1->Emitted(51, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(51, 14) Source(1, 30) + SourceIndex(1)
+3 >Emitted(51, 29) Source(1, 45) + SourceIndex(1)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -745,31 +753,31 @@ sourceFile:../lib/file1.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(48, 9) Source(2, 1) + SourceIndex(1)
-2 >Emitted(48, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(48, 18) Source(2, 24) + SourceIndex(1)
-4 >Emitted(48, 20) Source(2, 26) + SourceIndex(1)
-5 >Emitted(48, 21) Source(2, 27) + SourceIndex(1)
-6 >Emitted(48, 23) Source(2, 29) + SourceIndex(1)
-7 >Emitted(48, 25) Source(2, 31) + SourceIndex(1)
-8 >Emitted(48, 27) Source(2, 33) + SourceIndex(1)
-9 >Emitted(48, 28) Source(2, 34) + SourceIndex(1)
-10>Emitted(48, 30) Source(2, 36) + SourceIndex(1)
-11>Emitted(48, 32) Source(2, 38) + SourceIndex(1)
-12>Emitted(48, 34) Source(2, 40) + SourceIndex(1)
-13>Emitted(48, 36) Source(2, 42) + SourceIndex(1)
-14>Emitted(48, 38) Source(2, 44) + SourceIndex(1)
-15>Emitted(48, 40) Source(2, 46) + SourceIndex(1)
-16>Emitted(48, 42) Source(2, 48) + SourceIndex(1)
-17>Emitted(48, 44) Source(2, 9) + SourceIndex(1)
-18>Emitted(48, 45) Source(2, 10) + SourceIndex(1)
-19>Emitted(48, 52) Source(2, 10) + SourceIndex(1)
-20>Emitted(48, 54) Source(2, 15) + SourceIndex(1)
-21>Emitted(48, 58) Source(2, 19) + SourceIndex(1)
-22>Emitted(48, 72) Source(2, 7) + SourceIndex(1)
-23>Emitted(48, 77) Source(2, 21) + SourceIndex(1)
-24>Emitted(48, 78) Source(2, 48) + SourceIndex(1)
-25>Emitted(48, 79) Source(2, 49) + SourceIndex(1)
+1->Emitted(52, 9) Source(2, 1) + SourceIndex(1)
+2 >Emitted(52, 13) Source(2, 7) + SourceIndex(1)
+3 >Emitted(52, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(52, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(52, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(52, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(52, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(52, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(52, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(52, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(52, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(52, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(52, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(52, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(52, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(52, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(52, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(52, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(52, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(52, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(52, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(52, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(52, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(52, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(52, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -777,8 +785,8 @@ sourceFile:../lib/file1.ts
 1 >
   >
 2 >    }
-1 >Emitted(49, 5) Source(3, 1) + SourceIndex(1)
-2 >Emitted(49, 6) Source(3, 2) + SourceIndex(1)
+1 >Emitted(53, 5) Source(3, 1) + SourceIndex(1)
+2 >Emitted(53, 6) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -802,12 +810,12 @@ sourceFile:../lib/file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(55, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(55, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(55, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(55, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(55, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(55, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(59, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(59, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(59, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(59, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(59, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(59, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -828,12 +836,12 @@ sourceFile:../lib/global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(57, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(57, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(57, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(57, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(57, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(57, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(61, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(61, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(61, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(61, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(61, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(61, 22) Source(1, 24) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -857,12 +865,12 @@ sourceFile:file3.ts
 4 >              = 
 5 >                30
 6 >                  ;
-1->Emitted(62, 5) Source(1, 14) + SourceIndex(4)
-2 >Emitted(62, 13) Source(1, 14) + SourceIndex(4)
-3 >Emitted(62, 14) Source(1, 15) + SourceIndex(4)
-4 >Emitted(62, 17) Source(1, 18) + SourceIndex(4)
-5 >Emitted(62, 19) Source(1, 20) + SourceIndex(4)
-6 >Emitted(62, 20) Source(1, 21) + SourceIndex(4)
+1->Emitted(66, 5) Source(1, 14) + SourceIndex(4)
+2 >Emitted(66, 13) Source(1, 14) + SourceIndex(4)
+3 >Emitted(66, 14) Source(1, 15) + SourceIndex(4)
+4 >Emitted(66, 17) Source(1, 18) + SourceIndex(4)
+5 >Emitted(66, 19) Source(1, 20) + SourceIndex(4)
+6 >Emitted(66, 20) Source(1, 21) + SourceIndex(4)
 ---
 >>>    function forappfile3Rest() {
 1->^^^^
@@ -873,9 +881,9 @@ sourceFile:file3.ts
   >import { x } from "file1";
 2 >    function 
 3 >             forappfile3Rest
-1->Emitted(63, 5) Source(2, 27) + SourceIndex(4)
-2 >Emitted(63, 14) Source(2, 36) + SourceIndex(4)
-3 >Emitted(63, 29) Source(2, 51) + SourceIndex(4)
+1->Emitted(67, 5) Source(2, 27) + SourceIndex(4)
+2 >Emitted(67, 14) Source(2, 36) + SourceIndex(4)
+3 >Emitted(67, 29) Source(2, 51) + SourceIndex(4)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -929,31 +937,31 @@ sourceFile:file3.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(64, 9) Source(3, 1) + SourceIndex(4)
-2 >Emitted(64, 13) Source(3, 7) + SourceIndex(4)
-3 >Emitted(64, 18) Source(3, 24) + SourceIndex(4)
-4 >Emitted(64, 20) Source(3, 26) + SourceIndex(4)
-5 >Emitted(64, 21) Source(3, 27) + SourceIndex(4)
-6 >Emitted(64, 23) Source(3, 29) + SourceIndex(4)
-7 >Emitted(64, 25) Source(3, 31) + SourceIndex(4)
-8 >Emitted(64, 27) Source(3, 33) + SourceIndex(4)
-9 >Emitted(64, 28) Source(3, 34) + SourceIndex(4)
-10>Emitted(64, 30) Source(3, 36) + SourceIndex(4)
-11>Emitted(64, 32) Source(3, 38) + SourceIndex(4)
-12>Emitted(64, 34) Source(3, 40) + SourceIndex(4)
-13>Emitted(64, 36) Source(3, 42) + SourceIndex(4)
-14>Emitted(64, 38) Source(3, 44) + SourceIndex(4)
-15>Emitted(64, 40) Source(3, 46) + SourceIndex(4)
-16>Emitted(64, 42) Source(3, 48) + SourceIndex(4)
-17>Emitted(64, 44) Source(3, 9) + SourceIndex(4)
-18>Emitted(64, 45) Source(3, 10) + SourceIndex(4)
-19>Emitted(64, 52) Source(3, 10) + SourceIndex(4)
-20>Emitted(64, 54) Source(3, 15) + SourceIndex(4)
-21>Emitted(64, 58) Source(3, 19) + SourceIndex(4)
-22>Emitted(64, 72) Source(3, 7) + SourceIndex(4)
-23>Emitted(64, 77) Source(3, 21) + SourceIndex(4)
-24>Emitted(64, 78) Source(3, 48) + SourceIndex(4)
-25>Emitted(64, 79) Source(3, 49) + SourceIndex(4)
+1->Emitted(68, 9) Source(3, 1) + SourceIndex(4)
+2 >Emitted(68, 13) Source(3, 7) + SourceIndex(4)
+3 >Emitted(68, 18) Source(3, 24) + SourceIndex(4)
+4 >Emitted(68, 20) Source(3, 26) + SourceIndex(4)
+5 >Emitted(68, 21) Source(3, 27) + SourceIndex(4)
+6 >Emitted(68, 23) Source(3, 29) + SourceIndex(4)
+7 >Emitted(68, 25) Source(3, 31) + SourceIndex(4)
+8 >Emitted(68, 27) Source(3, 33) + SourceIndex(4)
+9 >Emitted(68, 28) Source(3, 34) + SourceIndex(4)
+10>Emitted(68, 30) Source(3, 36) + SourceIndex(4)
+11>Emitted(68, 32) Source(3, 38) + SourceIndex(4)
+12>Emitted(68, 34) Source(3, 40) + SourceIndex(4)
+13>Emitted(68, 36) Source(3, 42) + SourceIndex(4)
+14>Emitted(68, 38) Source(3, 44) + SourceIndex(4)
+15>Emitted(68, 40) Source(3, 46) + SourceIndex(4)
+16>Emitted(68, 42) Source(3, 48) + SourceIndex(4)
+17>Emitted(68, 44) Source(3, 9) + SourceIndex(4)
+18>Emitted(68, 45) Source(3, 10) + SourceIndex(4)
+19>Emitted(68, 52) Source(3, 10) + SourceIndex(4)
+20>Emitted(68, 54) Source(3, 15) + SourceIndex(4)
+21>Emitted(68, 58) Source(3, 19) + SourceIndex(4)
+22>Emitted(68, 72) Source(3, 7) + SourceIndex(4)
+23>Emitted(68, 77) Source(3, 21) + SourceIndex(4)
+24>Emitted(68, 78) Source(3, 48) + SourceIndex(4)
+25>Emitted(68, 79) Source(3, 49) + SourceIndex(4)
 ---
 >>>    }
 1 >^^^^
@@ -961,8 +969,8 @@ sourceFile:file3.ts
 1 >
   >
 2 >    }
-1 >Emitted(65, 5) Source(4, 1) + SourceIndex(4)
-2 >Emitted(65, 6) Source(4, 2) + SourceIndex(4)
+1 >Emitted(69, 5) Source(4, 1) + SourceIndex(4)
+2 >Emitted(69, 6) Source(4, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -983,12 +991,12 @@ sourceFile:file4.ts
 4 >          = 
 5 >            30
 6 >              ;
-1 >Emitted(67, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(67, 5) Source(1, 7) + SourceIndex(5)
-3 >Emitted(67, 10) Source(1, 12) + SourceIndex(5)
-4 >Emitted(67, 13) Source(1, 15) + SourceIndex(5)
-5 >Emitted(67, 15) Source(1, 17) + SourceIndex(5)
-6 >Emitted(67, 16) Source(1, 18) + SourceIndex(5)
+1 >Emitted(71, 1) Source(1, 1) + SourceIndex(5)
+2 >Emitted(71, 5) Source(1, 7) + SourceIndex(5)
+3 >Emitted(71, 10) Source(1, 12) + SourceIndex(5)
+4 >Emitted(71, 13) Source(1, 15) + SourceIndex(5)
+5 >Emitted(71, 15) Source(1, 17) + SourceIndex(5)
+6 >Emitted(71, 16) Source(1, 18) + SourceIndex(5)
 ---
 >>>function appfile4Spread() {
 1->
@@ -998,9 +1006,9 @@ sourceFile:file4.ts
   >
 2 >function 
 3 >         appfile4Spread
-1->Emitted(68, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(68, 10) Source(2, 10) + SourceIndex(5)
-3 >Emitted(68, 24) Source(2, 24) + SourceIndex(5)
+1->Emitted(72, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(72, 10) Source(2, 10) + SourceIndex(5)
+3 >Emitted(72, 24) Source(2, 24) + SourceIndex(5)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -1008,8 +1016,8 @@ sourceFile:file4.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(69, 5) Source(2, 25) + SourceIndex(5)
-2 >Emitted(69, 16) Source(2, 39) + SourceIndex(5)
+1 >Emitted(73, 5) Source(2, 25) + SourceIndex(5)
+2 >Emitted(73, 16) Source(2, 39) + SourceIndex(5)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -1024,20 +1032,20 @@ sourceFile:file4.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(70, 10) Source(2, 25) + SourceIndex(5)
-2 >Emitted(70, 20) Source(2, 39) + SourceIndex(5)
-3 >Emitted(70, 22) Source(2, 25) + SourceIndex(5)
-4 >Emitted(70, 43) Source(2, 39) + SourceIndex(5)
-5 >Emitted(70, 45) Source(2, 25) + SourceIndex(5)
-6 >Emitted(70, 49) Source(2, 39) + SourceIndex(5)
+1->Emitted(74, 10) Source(2, 25) + SourceIndex(5)
+2 >Emitted(74, 20) Source(2, 39) + SourceIndex(5)
+3 >Emitted(74, 22) Source(2, 25) + SourceIndex(5)
+4 >Emitted(74, 43) Source(2, 39) + SourceIndex(5)
+5 >Emitted(74, 45) Source(2, 25) + SourceIndex(5)
+6 >Emitted(74, 49) Source(2, 39) + SourceIndex(5)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(71, 9) Source(2, 25) + SourceIndex(5)
-2 >Emitted(71, 31) Source(2, 39) + SourceIndex(5)
+1 >Emitted(75, 9) Source(2, 25) + SourceIndex(5)
+2 >Emitted(75, 31) Source(2, 39) + SourceIndex(5)
 ---
 >>>    }
 >>>}
@@ -1046,8 +1054,8 @@ sourceFile:file4.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(73, 1) Source(2, 43) + SourceIndex(5)
-2 >Emitted(73, 2) Source(2, 44) + SourceIndex(5)
+1 >Emitted(77, 1) Source(2, 43) + SourceIndex(5)
+2 >Emitted(77, 2) Source(2, 44) + SourceIndex(5)
 ---
 >>>var appfile4_ar = [20, 30];
 1->
@@ -1060,7 +1068,7 @@ sourceFile:file4.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1072,25 +1080,25 @@ sourceFile:file4.ts
 8 >                       30
 9 >                         ]
 10>                          ;
-1->Emitted(74, 1) Source(3, 1) + SourceIndex(5)
-2 >Emitted(74, 5) Source(3, 7) + SourceIndex(5)
-3 >Emitted(74, 16) Source(3, 18) + SourceIndex(5)
-4 >Emitted(74, 19) Source(3, 21) + SourceIndex(5)
-5 >Emitted(74, 20) Source(3, 22) + SourceIndex(5)
-6 >Emitted(74, 22) Source(3, 24) + SourceIndex(5)
-7 >Emitted(74, 24) Source(3, 26) + SourceIndex(5)
-8 >Emitted(74, 26) Source(3, 28) + SourceIndex(5)
-9 >Emitted(74, 27) Source(3, 29) + SourceIndex(5)
-10>Emitted(74, 28) Source(3, 30) + SourceIndex(5)
+1->Emitted(78, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(78, 5) Source(3, 7) + SourceIndex(5)
+3 >Emitted(78, 16) Source(3, 18) + SourceIndex(5)
+4 >Emitted(78, 19) Source(3, 21) + SourceIndex(5)
+5 >Emitted(78, 20) Source(3, 22) + SourceIndex(5)
+6 >Emitted(78, 22) Source(3, 24) + SourceIndex(5)
+7 >Emitted(78, 24) Source(3, 26) + SourceIndex(5)
+8 >Emitted(78, 26) Source(3, 28) + SourceIndex(5)
+9 >Emitted(78, 27) Source(3, 29) + SourceIndex(5)
+10>Emitted(78, 28) Source(3, 30) + SourceIndex(5)
 ---
->>>appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+>>>appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >appfile4Spread
@@ -1099,18 +1107,18 @@ sourceFile:file4.ts
 5 >                                              , ...
 6 >                                                        appfile4_ar
 7 >                                                                   );
-1->Emitted(75, 1) Source(4, 1) + SourceIndex(5)
-2 >Emitted(75, 15) Source(4, 15) + SourceIndex(5)
-3 >Emitted(75, 45) Source(4, 16) + SourceIndex(5)
-4 >Emitted(75, 47) Source(4, 18) + SourceIndex(5)
-5 >Emitted(75, 57) Source(4, 23) + SourceIndex(5)
-6 >Emitted(75, 68) Source(4, 34) + SourceIndex(5)
-7 >Emitted(75, 72) Source(4, 36) + SourceIndex(5)
+1->Emitted(79, 1) Source(4, 1) + SourceIndex(5)
+2 >Emitted(79, 15) Source(4, 15) + SourceIndex(5)
+3 >Emitted(79, 45) Source(4, 16) + SourceIndex(5)
+4 >Emitted(79, 47) Source(4, 18) + SourceIndex(5)
+5 >Emitted(79, 57) Source(4, 23) + SourceIndex(5)
+6 >Emitted(79, 68) Source(4, 34) + SourceIndex(5)
+7 >Emitted(79, 79) Source(4, 36) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":697,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":699,"end":1199,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1201,"end":2024,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1201,"end":2024,"kind":"text"}]},{"pos":2024,"end":2614,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":2200,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1370,"end":2200,"kind":"text"}]},{"pos":2200,"end":2797,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1134,14 +1142,18 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-697):: typescript:spreadArray
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+emitHelpers: (506-866):: typescript:spreadArray
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 ----------------------------------------------------------------------
-emitHelpers: (699-1199):: typescript:rest
+emitHelpers: (868-1368):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1154,9 +1166,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1201-2024):: ../lib/module.js texts:: 1
+prepend: (1370-2200):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1201-2024)
+text: (1370-2200)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1165,7 +1177,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1184,7 +1196,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2024-2614)
+text: (2200-2797)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1202,7 +1214,7 @@ function appfile4Spread() {
     }
 }
 var appfile4_ar = [20, 30];
-appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar)));
+appfile4Spread.apply(void 0, __spreadArray([10], __read(appfile4_ar), false));
 
 ======================================================================
 ======================================================================
@@ -1251,32 +1263,32 @@ declare const appfile4_ar: number[];
         },
         {
           "pos": 506,
-          "end": 697,
+          "end": 866,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 699,
-          "end": 1199,
+          "pos": 868,
+          "end": 1368,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1201,
-          "end": 2024,
+          "pos": 1370,
+          "end": 2200,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1201,
-              "end": 2024,
+              "pos": 1370,
+              "end": 2200,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2024,
-          "end": 2614,
+          "pos": 2200,
+          "end": 2797,
           "kind": "text"
         }
       ],
@@ -1516,10 +1528,14 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -1540,7 +1556,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1560,7 +1576,7 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,IAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;AAClB,SAAS,cAAc;IAAC,WAAc;SAAd,UAAc,EAAd,qBAAc,EAAd,IAAc;QAAd,sBAAc;;AAAI,CAAC;AAC3C,IAAM,WAAW,GAAG,CAAC,EAAE,EAAE,EAAE,CAAC,CAAC;AAC7B,cAAc,8BAAC,EAAE,UAAK,WAAW,WAAE;;;;;ICHtB,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,SAAS,eAAe;QAC5C,IAAM,KAAiB,EAAE,CAAC,EAAE,EAAE,EAAE,CAAC,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAE,EAAvC,CAAC,OAAA,EAAK,IAAI,cAAZ,KAAc,CAA2B,CAAC;IAChD,CAAC;;;;;;ICFY,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
@@ -1589,10 +1605,14 @@ sourceFile:file0.ts
 >>>    }
 >>>    return ar;
 >>>};
->>>var __spreadArray = (this && this.__spreadArray) || function (to, from) {
->>>    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
->>>        to[j] = from[i];
->>>    return to;
+>>>var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+>>>    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+>>>        if (ar || !(i in from)) {
+>>>            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+>>>            ar[i] = from[i];
+>>>        }
+>>>    }
+>>>    return to.concat(ar || from);
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -1619,12 +1639,12 @@ sourceFile:file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(33, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(33, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(33, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(33, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(33, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(33, 17) Source(1, 19) + SourceIndex(0)
+1 >Emitted(37, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(37, 5) Source(1, 7) + SourceIndex(0)
+3 >Emitted(37, 11) Source(1, 13) + SourceIndex(0)
+4 >Emitted(37, 14) Source(1, 16) + SourceIndex(0)
+5 >Emitted(37, 16) Source(1, 18) + SourceIndex(0)
+6 >Emitted(37, 17) Source(1, 19) + SourceIndex(0)
 ---
 >>>function libfile0Spread() {
 1->
@@ -1634,9 +1654,9 @@ sourceFile:file0.ts
   >
 2 >function 
 3 >         libfile0Spread
-1->Emitted(34, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(34, 10) Source(2, 10) + SourceIndex(0)
-3 >Emitted(34, 24) Source(2, 24) + SourceIndex(0)
+1->Emitted(38, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(38, 10) Source(2, 10) + SourceIndex(0)
+3 >Emitted(38, 24) Source(2, 24) + SourceIndex(0)
 ---
 >>>    var b = [];
 1 >^^^^
@@ -1644,8 +1664,8 @@ sourceFile:file0.ts
 3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >(
 2 >    ...b: number[]
-1 >Emitted(35, 5) Source(2, 25) + SourceIndex(0)
-2 >Emitted(35, 16) Source(2, 39) + SourceIndex(0)
+1 >Emitted(39, 5) Source(2, 25) + SourceIndex(0)
+2 >Emitted(39, 16) Source(2, 39) + SourceIndex(0)
 ---
 >>>    for (var _i = 0; _i < arguments.length; _i++) {
 1->^^^^^^^^^
@@ -1660,20 +1680,20 @@ sourceFile:file0.ts
 4 >                     ...b: number[]
 5 >                                          
 6 >                                            ...b: number[]
-1->Emitted(36, 10) Source(2, 25) + SourceIndex(0)
-2 >Emitted(36, 20) Source(2, 39) + SourceIndex(0)
-3 >Emitted(36, 22) Source(2, 25) + SourceIndex(0)
-4 >Emitted(36, 43) Source(2, 39) + SourceIndex(0)
-5 >Emitted(36, 45) Source(2, 25) + SourceIndex(0)
-6 >Emitted(36, 49) Source(2, 39) + SourceIndex(0)
+1->Emitted(40, 10) Source(2, 25) + SourceIndex(0)
+2 >Emitted(40, 20) Source(2, 39) + SourceIndex(0)
+3 >Emitted(40, 22) Source(2, 25) + SourceIndex(0)
+4 >Emitted(40, 43) Source(2, 39) + SourceIndex(0)
+5 >Emitted(40, 45) Source(2, 25) + SourceIndex(0)
+6 >Emitted(40, 49) Source(2, 39) + SourceIndex(0)
 ---
 >>>        b[_i] = arguments[_i];
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >        ...b: number[]
-1 >Emitted(37, 9) Source(2, 25) + SourceIndex(0)
-2 >Emitted(37, 31) Source(2, 39) + SourceIndex(0)
+1 >Emitted(41, 9) Source(2, 25) + SourceIndex(0)
+2 >Emitted(41, 31) Source(2, 39) + SourceIndex(0)
 ---
 >>>    }
 >>>}
@@ -1682,8 +1702,8 @@ sourceFile:file0.ts
 3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >) { 
 2 >}
-1 >Emitted(39, 1) Source(2, 43) + SourceIndex(0)
-2 >Emitted(39, 2) Source(2, 44) + SourceIndex(0)
+1 >Emitted(43, 1) Source(2, 43) + SourceIndex(0)
+2 >Emitted(43, 2) Source(2, 44) + SourceIndex(0)
 ---
 >>>var libfile0_ar = [20, 30];
 1->
@@ -1696,7 +1716,7 @@ sourceFile:file0.ts
 8 >                       ^^
 9 >                         ^
 10>                          ^
-11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+11>                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >const 
@@ -1708,25 +1728,25 @@ sourceFile:file0.ts
 8 >                       30
 9 >                         ]
 10>                          ;
-1->Emitted(40, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(40, 5) Source(3, 7) + SourceIndex(0)
-3 >Emitted(40, 16) Source(3, 18) + SourceIndex(0)
-4 >Emitted(40, 19) Source(3, 21) + SourceIndex(0)
-5 >Emitted(40, 20) Source(3, 22) + SourceIndex(0)
-6 >Emitted(40, 22) Source(3, 24) + SourceIndex(0)
-7 >Emitted(40, 24) Source(3, 26) + SourceIndex(0)
-8 >Emitted(40, 26) Source(3, 28) + SourceIndex(0)
-9 >Emitted(40, 27) Source(3, 29) + SourceIndex(0)
-10>Emitted(40, 28) Source(3, 30) + SourceIndex(0)
+1->Emitted(44, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(44, 5) Source(3, 7) + SourceIndex(0)
+3 >Emitted(44, 16) Source(3, 18) + SourceIndex(0)
+4 >Emitted(44, 19) Source(3, 21) + SourceIndex(0)
+5 >Emitted(44, 20) Source(3, 22) + SourceIndex(0)
+6 >Emitted(44, 22) Source(3, 24) + SourceIndex(0)
+7 >Emitted(44, 24) Source(3, 26) + SourceIndex(0)
+8 >Emitted(44, 26) Source(3, 28) + SourceIndex(0)
+9 >Emitted(44, 27) Source(3, 29) + SourceIndex(0)
+10>Emitted(44, 28) Source(3, 30) + SourceIndex(0)
 ---
->>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+>>>libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                                            ^^
 5 >                                              ^^^^^^^^^^
 6 >                                                        ^^^^^^^^^^^
-7 >                                                                   ^^^^
+7 >                                                                   ^^^^^^^^^^^
 1->
   >
 2 >libfile0Spread
@@ -1735,13 +1755,13 @@ sourceFile:file0.ts
 5 >                                              , ...
 6 >                                                        libfile0_ar
 7 >                                                                   );
-1->Emitted(41, 1) Source(4, 1) + SourceIndex(0)
-2 >Emitted(41, 15) Source(4, 15) + SourceIndex(0)
-3 >Emitted(41, 45) Source(4, 16) + SourceIndex(0)
-4 >Emitted(41, 47) Source(4, 18) + SourceIndex(0)
-5 >Emitted(41, 57) Source(4, 23) + SourceIndex(0)
-6 >Emitted(41, 68) Source(4, 34) + SourceIndex(0)
-7 >Emitted(41, 72) Source(4, 36) + SourceIndex(0)
+1->Emitted(45, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(45, 15) Source(4, 15) + SourceIndex(0)
+3 >Emitted(45, 45) Source(4, 16) + SourceIndex(0)
+4 >Emitted(45, 47) Source(4, 18) + SourceIndex(0)
+5 >Emitted(45, 57) Source(4, 23) + SourceIndex(0)
+6 >Emitted(45, 68) Source(4, 34) + SourceIndex(0)
+7 >Emitted(45, 79) Source(4, 36) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1765,12 +1785,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1 >Emitted(46, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(46, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(46, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(46, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(46, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(46, 20) Source(1, 21) + SourceIndex(1)
+1 >Emitted(50, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(50, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(50, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(50, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(50, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(50, 20) Source(1, 21) + SourceIndex(1)
 ---
 >>>    function forlibfile1Rest() {
 1->^^^^
@@ -1780,9 +1800,9 @@ sourceFile:file1.ts
 1->
 2 >    function 
 3 >             forlibfile1Rest
-1->Emitted(47, 5) Source(1, 21) + SourceIndex(1)
-2 >Emitted(47, 14) Source(1, 30) + SourceIndex(1)
-3 >Emitted(47, 29) Source(1, 45) + SourceIndex(1)
+1->Emitted(51, 5) Source(1, 21) + SourceIndex(1)
+2 >Emitted(51, 14) Source(1, 30) + SourceIndex(1)
+3 >Emitted(51, 29) Source(1, 45) + SourceIndex(1)
 ---
 >>>        var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
 1->^^^^^^^^
@@ -1836,31 +1856,31 @@ sourceFile:file1.ts
 23>                                                                       { b, ...rest }
 24>                                                                             = { a: 10, b: 30, yy: 30 }
 25>                                                                             ;
-1->Emitted(48, 9) Source(2, 1) + SourceIndex(1)
-2 >Emitted(48, 13) Source(2, 7) + SourceIndex(1)
-3 >Emitted(48, 18) Source(2, 24) + SourceIndex(1)
-4 >Emitted(48, 20) Source(2, 26) + SourceIndex(1)
-5 >Emitted(48, 21) Source(2, 27) + SourceIndex(1)
-6 >Emitted(48, 23) Source(2, 29) + SourceIndex(1)
-7 >Emitted(48, 25) Source(2, 31) + SourceIndex(1)
-8 >Emitted(48, 27) Source(2, 33) + SourceIndex(1)
-9 >Emitted(48, 28) Source(2, 34) + SourceIndex(1)
-10>Emitted(48, 30) Source(2, 36) + SourceIndex(1)
-11>Emitted(48, 32) Source(2, 38) + SourceIndex(1)
-12>Emitted(48, 34) Source(2, 40) + SourceIndex(1)
-13>Emitted(48, 36) Source(2, 42) + SourceIndex(1)
-14>Emitted(48, 38) Source(2, 44) + SourceIndex(1)
-15>Emitted(48, 40) Source(2, 46) + SourceIndex(1)
-16>Emitted(48, 42) Source(2, 48) + SourceIndex(1)
-17>Emitted(48, 44) Source(2, 9) + SourceIndex(1)
-18>Emitted(48, 45) Source(2, 10) + SourceIndex(1)
-19>Emitted(48, 52) Source(2, 10) + SourceIndex(1)
-20>Emitted(48, 54) Source(2, 15) + SourceIndex(1)
-21>Emitted(48, 58) Source(2, 19) + SourceIndex(1)
-22>Emitted(48, 72) Source(2, 7) + SourceIndex(1)
-23>Emitted(48, 77) Source(2, 21) + SourceIndex(1)
-24>Emitted(48, 78) Source(2, 48) + SourceIndex(1)
-25>Emitted(48, 79) Source(2, 49) + SourceIndex(1)
+1->Emitted(52, 9) Source(2, 1) + SourceIndex(1)
+2 >Emitted(52, 13) Source(2, 7) + SourceIndex(1)
+3 >Emitted(52, 18) Source(2, 24) + SourceIndex(1)
+4 >Emitted(52, 20) Source(2, 26) + SourceIndex(1)
+5 >Emitted(52, 21) Source(2, 27) + SourceIndex(1)
+6 >Emitted(52, 23) Source(2, 29) + SourceIndex(1)
+7 >Emitted(52, 25) Source(2, 31) + SourceIndex(1)
+8 >Emitted(52, 27) Source(2, 33) + SourceIndex(1)
+9 >Emitted(52, 28) Source(2, 34) + SourceIndex(1)
+10>Emitted(52, 30) Source(2, 36) + SourceIndex(1)
+11>Emitted(52, 32) Source(2, 38) + SourceIndex(1)
+12>Emitted(52, 34) Source(2, 40) + SourceIndex(1)
+13>Emitted(52, 36) Source(2, 42) + SourceIndex(1)
+14>Emitted(52, 38) Source(2, 44) + SourceIndex(1)
+15>Emitted(52, 40) Source(2, 46) + SourceIndex(1)
+16>Emitted(52, 42) Source(2, 48) + SourceIndex(1)
+17>Emitted(52, 44) Source(2, 9) + SourceIndex(1)
+18>Emitted(52, 45) Source(2, 10) + SourceIndex(1)
+19>Emitted(52, 52) Source(2, 10) + SourceIndex(1)
+20>Emitted(52, 54) Source(2, 15) + SourceIndex(1)
+21>Emitted(52, 58) Source(2, 19) + SourceIndex(1)
+22>Emitted(52, 72) Source(2, 7) + SourceIndex(1)
+23>Emitted(52, 77) Source(2, 21) + SourceIndex(1)
+24>Emitted(52, 78) Source(2, 48) + SourceIndex(1)
+25>Emitted(52, 79) Source(2, 49) + SourceIndex(1)
 ---
 >>>    }
 1 >^^^^
@@ -1868,8 +1888,8 @@ sourceFile:file1.ts
 1 >
   >
 2 >    }
-1 >Emitted(49, 5) Source(3, 1) + SourceIndex(1)
-2 >Emitted(49, 6) Source(3, 2) + SourceIndex(1)
+1 >Emitted(53, 5) Source(3, 1) + SourceIndex(1)
+2 >Emitted(53, 6) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1893,12 +1913,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(55, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(55, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(55, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(55, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(55, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(55, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(59, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(59, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(59, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(59, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(59, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(59, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -1919,17 +1939,17 @@ sourceFile:global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(57, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(57, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(57, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(57, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(57, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(57, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(61, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(61, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(61, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(61, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(61, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(61, 22) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":697,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":699,"end":1199,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1201,"end":2024,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":2200,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1953,14 +1973,18 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-697):: typescript:spreadArray
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+emitHelpers: (506-866):: typescript:spreadArray
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 ----------------------------------------------------------------------
-emitHelpers: (699-1199):: typescript:rest
+emitHelpers: (868-1368):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1973,7 +1997,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-text: (1201-2024)
+text: (1370-2200)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1982,7 +2006,7 @@ function libfile0Spread() {
     }
 }
 var libfile0_ar = [20, 30];
-libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar)));
+libfile0Spread.apply(void 0, __spreadArray([10], __read(libfile0_ar), false));
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2038,19 +2062,19 @@ declare const globalConst = 10;
         },
         {
           "pos": 506,
-          "end": 697,
+          "end": 866,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 699,
-          "end": 1199,
+          "pos": 868,
+          "end": 1368,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1201,
-          "end": 2024,
+          "pos": 1370,
+          "end": 2200,
           "kind": "text"
         }
       ],

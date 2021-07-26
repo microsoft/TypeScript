@@ -28,4 +28,4 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // https://github.com/microsoft/TypeScript/issues/39149
 const a_1 = __importDefault(require("a"));
-a_1.default();
+(0, a_1.default)();

@@ -38,12 +38,12 @@ class Bar<T extends string> {
 >Bar : Symbol(Bar, Decl(variance.ts, 11, 25))
 >T : Symbol(T, Decl(variance.ts, 16, 10))
 
-  private static instance: Bar<string>[];
+  private static instance: Bar<string>[] = [];
 >instance : Symbol(Bar.instance, Decl(variance.ts, 16, 29))
 >Bar : Symbol(Bar, Decl(variance.ts, 11, 25))
 
   cast(_name: ([T] extends [string] ? string : string)) { }
->cast : Symbol(Bar.cast, Decl(variance.ts, 17, 41))
+>cast : Symbol(Bar.cast, Decl(variance.ts, 17, 46))
 >_name : Symbol(_name, Decl(variance.ts, 19, 7))
 >T : Symbol(T, Decl(variance.ts, 16, 10))
   

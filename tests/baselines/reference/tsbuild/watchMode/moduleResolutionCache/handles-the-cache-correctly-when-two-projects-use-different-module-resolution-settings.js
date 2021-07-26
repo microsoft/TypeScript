@@ -79,6 +79,13 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
 /user/username/projects/myproject/node_modules/@types/bar/index.d.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project1/node_modules/file/index.d.ts (used version)
+/user/username/projects/myproject/project1/index.ts (used version)
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
+/user/username/projects/myproject/node_modules/@types/bar/index.d.ts (used version)
+
 Program root files: ["/user/username/projects/myproject/project2/index.ts"]
 Program options: {"composite":true,"types":["foo"],"moduleResolution":1,"watch":true,"configFilePath":"/user/username/projects/myproject/project2/tsconfig.json"}
 Program structureReused: Not
@@ -94,11 +101,26 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/project2/index.ts
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/project2/file.d.ts (used version)
+/user/username/projects/myproject/project2/index.ts (used version)
+/user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/project1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/project1/index.ts:
   {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/project1/node_modules/file/package.json:
+  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types/foo/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types/bar/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
 /user/username/projects/myproject/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/project2/index.ts:
@@ -289,11 +311,23 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/project1/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/project1/index.ts (computed .d.ts)
+
 WatchedFiles::
 /user/username/projects/myproject/project1/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project1/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/project1/index.ts:
   {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
+/user/username/projects/myproject/project1/node_modules/file/package.json:
+  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types/foo/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@types/bar/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
+  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
 /user/username/projects/myproject/project2/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
 /user/username/projects/myproject/project2/index.ts:

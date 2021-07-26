@@ -34,13 +34,13 @@ exports.__esModule = true;
  * @jsxFrag Fragment
  */
 var renderer_1 = require("./renderer");
-renderer_1.h(renderer_1.Fragment, null,
-    renderer_1.h("div", null));
+(0, renderer_1.h)(renderer_1.Fragment, null,
+    (0, renderer_1.h)("div", null));
 //// [snabbdomy.js]
 "use strict";
 exports.__esModule = true;
 /* @jsx jsx */
 /* @jsxfrag null */
 var renderer_1 = require("./renderer");
-renderer_1.jsx(null, null,
-    renderer_1.jsx("span", null));
+(0, renderer_1.jsx)(null, null,
+    (0, renderer_1.jsx)("span", null));
