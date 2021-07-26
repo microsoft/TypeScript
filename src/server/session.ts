@@ -1464,11 +1464,11 @@ namespace ts.server {
             }));
         }
 
-        private provideInlineValues(args: protocol.FileLocationRequestArgs): protocol.InlineValue[] {
+        private provideInlineValues(args: protocol.InlineValuesArgs): protocol.InlineValue[] {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = scriptInfo.lineOffsetToPosition(args.line, args.offset);
-            const values = languageService.provideInlineValues(file, position);
+            const values = languageService.provideInlineValues(file, args, position);
 
             return values.map(value => {
                 const span: protocol.TextSpan = {
@@ -1479,14 +1479,14 @@ namespace ts.server {
                 if (value.type === InlineValueType.VariableLookup) {
                     return {
                         ...value,
-                        type: protocol.InlineValuesType.VariableLookup,
+                        type: protocol.InlineValueType.VariableLookup,
                         span
                     };
                 }
                 else {
                     return {
                         ...value,
-                        type: protocol.InlineValuesType.EvaluatableExpression,
+                        type: protocol.InlineValueType.EvaluatableExpression,
                         span
                     };
                 }

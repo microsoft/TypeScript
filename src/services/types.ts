@@ -482,7 +482,7 @@ namespace ts {
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
 
         provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
-        provideInlineValues(fileName: string, position: number): InlineValue[];
+        provideInlineValues(fileName: string, span: TextSpan, position: number): InlineValue[];
 
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
@@ -1625,6 +1625,7 @@ namespace ts {
         file: SourceFile;
         position: number;
         program: Program;
+        span: TextSpan;
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
     }

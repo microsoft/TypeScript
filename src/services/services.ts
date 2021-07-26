@@ -2518,11 +2518,12 @@ namespace ts {
             };
         }
 
-        function getInlineValuesContext(file: SourceFile, position: number): InlineValuesContext {
+        function getInlineValuesContext(file: SourceFile, span: TextSpan, position: number): InlineValuesContext {
             return {
                 file,
                 position,
                 program: getProgram()!,
+                span,
                 host,
                 cancellationToken,
             };
@@ -2588,10 +2589,10 @@ namespace ts {
             return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
         }
 
-        function provideInlineValues(fileName: string, position: number): InlineValue[] {
+        function provideInlineValues(fileName: string, span: TextSpan, position: number): InlineValue[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
-            return InlineValues.provideInlineValues(getInlineValuesContext(sourceFile, position));
+            return InlineValues.provideInlineValues(getInlineValuesContext(sourceFile, span, position));
         }
 
         const ls: LanguageService = {

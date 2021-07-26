@@ -1686,19 +1686,19 @@ namespace FourSlashInterface {
         whitespaceAfter?: boolean;
     }
 
-    export enum InlineValuesType {
+    export enum InlineValueType {
         VariableLookup = "VariableLookup",
         EvaluatableExpression = "EvaluatableExpression"
     }
 
     export interface VerifyInlineVariableLookupValues {
-        readonly type: InlineValuesType.VariableLookup;
+        readonly type: InlineValueType.VariableLookup;
         readonly range: FourSlash.Range;
         readonly variableName: string;
     }
 
     export interface VerifyInlineEvaluatableExpressionValues {
-        readonly type: InlineValuesType.EvaluatableExpression;
+        readonly type: InlineValueType.EvaluatableExpression;
         readonly range: FourSlash.Range;
         readonly expression: string;
     }
@@ -1707,6 +1707,10 @@ namespace FourSlashInterface {
 
     export interface VerifyInlineValuesOptions {
         position: number;
+        textSpan?: {
+            start: number;
+            length: number;
+        };
         expected: VerifyInlineValues[]
     }
 

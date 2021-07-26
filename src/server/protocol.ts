@@ -155,7 +155,7 @@ namespace ts.server.protocol {
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
         ProvideInlayHints = "provideInlayHints",
-        ProvideInlineValues = "ProvideInlineValues"
+        ProvideInlineValues = "provideInlineValues"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `testRunner/unittests/tsserver/session.ts`.
     }
@@ -2597,27 +2597,33 @@ namespace ts.server.protocol {
         body?: InlayHintItem[];
     }
 
-    export interface InlineValuesRequest extends FileLocationRequest {
+    export interface InlineValuesArgs extends FileLocationRequestArgs {
+        start: number;
+        length: number;
+    }
+
+    export interface InlineValuesRequest extends Request {
         command: CommandTypes.ProvideInlineValues;
+        arguments: InlineValuesArgs;
     }
 
     export interface InlineValuesResponse extends Response {
         body: InlineValue[]
     }
 
-    export const enum InlineValuesType {
+    export const enum InlineValueType {
         VariableLookup = "VariableLookup",
         EvaluatableExpression = "EvaluatableExpression"
     }
 
     export interface InlineValueVariableLookup {
-        readonly type: InlineValuesType.VariableLookup
+        readonly type: InlineValueType.VariableLookup
         readonly span: TextSpan;
         readonly variableName: string;
     }
 
     export interface InlineValueEvaluatableExpression {
-        readonly type: InlineValuesType.EvaluatableExpression;
+        readonly type: InlineValueType.EvaluatableExpression;
         readonly span: TextSpan;
         readonly expression: string;
     }

@@ -658,13 +658,15 @@ namespace ts.server {
             }));
         }
 
-        provideInlineValues(file: string, position: number): InlineValue[] {
-            const args = this.createFileLocationRequestArgs(file, position);
+        provideInlineValues(file: string, span: TextSpan, position: number): InlineValue[] {
+            const { start, length } = span;
+            const { line, offset } = this.positionToOneBasedLineOffset(file, position);
+            const args: protocol.InlineValuesArgs = { line, offset, file, start, length };
             const request = this.processRequest<protocol.InlineValuesRequest>(CommandNames.ProvideInlineValues, args);
             const response = this.processResponse<protocol.InlineValuesResponse>(request);
 
             return response.body.map(item => {
-                if (item.type === protocol.InlineValuesType.VariableLookup) {
+                if (item.type === protocol.InlineValueType.VariableLookup) {
                     return {
                         ...item,
                         span: this.decodeSpan(item.span, file),

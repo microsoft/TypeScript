@@ -854,19 +854,19 @@ namespace FourSlash {
         }
 
         public verifyInlineValues(options: FourSlashInterface.VerifyInlineValuesOptions) {
-            const { expected, position } = options;
-            const items = this.languageService.provideInlineValues(this.activeFile.fileName, position);
+            const { expected, textSpan = { start: 0, length: this.activeFile.content.length }, position } = options;
+            const items = this.languageService.provideInlineValues(this.activeFile.fileName, textSpan, position);
             this.assertObjectsEqual(items, expected.map((e): ts.InlineValue => {
-                if (e.type === FourSlashInterface.InlineValuesType.EvaluatableExpression) {
+                if (e.type === FourSlashInterface.InlineValueType.EvaluatableExpression) {
                     return {
-                        ...e,
+                        expression: e.expression,
                         type: ts.InlineValueType.EvaluatableExpression,
                         span: ts.createTextSpanFromRange(e.range),
                     };
                 }
                 else {
                     return {
-                        ...e,
+                        variableName: e.variableName,
                         type: ts.InlineValueType.VariableLookup,
                         span: ts.createTextSpanFromRange(e.range),
                     };

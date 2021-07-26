@@ -71,7 +71,7 @@ namespace ts.InlineValues {
     }
 
     export function provideInlineValues(context: InlineValuesContext): InlineValue[] {
-        const { file, position } = context;
+        const { file, span, position } = context;
 
         const currentToken = getTokenAtPosition(file, position);
         const scopes = findScopes(currentToken);
@@ -82,7 +82,7 @@ namespace ts.InlineValues {
 
         const scopeSet = new Set<Node>(scopes);
         const values: InlineValue[] = [];
-        defaultVisitor(topLevelScope);
+        visitor(topLevelScope);
         return values;
 
         function appendEvaluatableExpressionValue(expr: Expression): void {
@@ -105,7 +105,7 @@ namespace ts.InlineValues {
             }
         }
 
-        function defaultVisitor(node: Node | undefined): true | undefined {
+        function visitor(node: Node | undefined): true | undefined {
             if (!node || node.getFullWidth() === 0) {
                 return;
             }
@@ -118,6 +118,10 @@ namespace ts.InlineValues {
                 if (isBlock(node)) {
                     return;
                 }
+            }
+
+            if (!textSpanIntersectsWith(span, node.pos, node.getFullWidth())) {
+                return;
             }
 
             if (isTypeNode(node)) {
@@ -176,7 +180,7 @@ namespace ts.InlineValues {
                     visitCaseOrDefaultClause(node as CaseClause);
                     break;
                 default:
-                    forEachChild(node, defaultVisitor);
+                    forEachChild(node, visitor);
                     break;
             }
         }
@@ -191,7 +195,7 @@ namespace ts.InlineValues {
             }
             // TODO: class members
             // TODO: binding elements
-            defaultVisitor(decl.initializer);
+            visitor(decl.initializer);
         }
 
         function visitExpressionStatement(stmt: ExpressionStatement) {
@@ -205,7 +209,7 @@ namespace ts.InlineValues {
             else {
                 appendEvaluatableExpressionValue(stmt.expression.left);
             }
-            defaultVisitor(stmt.expression);
+            visitor(stmt.expression);
         }
 
         function visitPropertyAssignment(assignment: PropertyAssignment) {
@@ -220,14 +224,14 @@ namespace ts.InlineValues {
             if (isCaseClause(clause)) {
                 appendEvaluatableExpressionValue(clause.expression);
             }
-            clause.statements.map(defaultVisitor);
+            clause.statements.forEach(visitor);
         }
 
         function visitIfStatement(stmt: IfStatement) {
             appendEvaluatableExpressionValue(stmt.expression);
 
-            defaultVisitor(stmt.thenStatement);
-            defaultVisitor(stmt.elseStatement);
+            visitor(stmt.thenStatement);
+            visitor(stmt.elseStatement);
         }
 
         function visitForInitializer(initializer: ForInitializer) {
@@ -251,36 +255,36 @@ namespace ts.InlineValues {
                  * We may use comma expression to combine multiple incrementor.
                  */
                 if (isBinaryExpression(stmt.incrementor) && stmt.incrementor.operatorToken.kind === SyntaxKind.CommaToken) {
-                    defaultVisitor(stmt.incrementor);
+                    visitor(stmt.incrementor);
                 }
                 else {
                     appendEvaluatableExpressionValue(stmt.incrementor);
                 }
             }
 
-            defaultVisitor(stmt.statement);
+            visitor(stmt.statement);
         }
 
         function visitWhileStatement(stmt: WhileStatement) {
             appendEvaluatableExpressionValue(stmt.expression);
-            defaultVisitor(stmt.statement);
+            visitor(stmt.statement);
         }
 
         function visitDoStatement(stmt: DoStatement) {
             appendEvaluatableExpressionValue(stmt.expression);
-            defaultVisitor(stmt.statement);
+            visitor(stmt.statement);
         }
 
         function visitSwitchStatement(stmt: SwitchStatement) {
             appendEvaluatableExpressionValue(stmt.expression);
-            defaultVisitor(stmt.caseBlock);
+            visitor(stmt.caseBlock);
         }
 
         function visitCatchClause(clause: CatchClause) {
             if (clause.variableDeclaration) {
                 visitVariableOrParameterDeclaration(clause.variableDeclaration);
             }
-            defaultVisitor(clause.block);
+            visitor(clause.block);
         }
 
         function visitFunctionLike(node: FunctionLikeDeclaration) {
@@ -290,7 +294,7 @@ namespace ts.InlineValues {
 
             if (scopeSet.has(node)) {
                 node.parameters.forEach(visitVariableOrParameterDeclaration);
-                defaultVisitor(node.body);
+                visitor(node.body);
             }
         }
 
@@ -301,14 +305,14 @@ namespace ts.InlineValues {
             }
 
             if (scopeSet.has(node)) {
-                node.members.map(defaultVisitor);
+                node.members.forEach(visitor);
             }
         }
 
         function visitForInOrOfStatement(stmt: ForInOrOfStatement) {
             visitForInitializer(stmt.initializer);
             appendEvaluatableExpressionValue(stmt.expression);
-            defaultVisitor(stmt.statement);
+            visitor(stmt.statement);
         }
     }
 }

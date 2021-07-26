@@ -72,7 +72,7 @@ declare module ts {
         Enum = "Enum",
     }
 
-    const enum InlineValuesType {
+    const enum InlineValueType {
         VariableLookup = "VariableLookup",
         EvaluatableExpression = "EvaluatableExpression"
     }
@@ -761,19 +761,14 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
-    export const enum VerifyInlineValuesType {
-        VariableLookup = "VariableLookup",
-        EvaluatableExpression = "EvaluatableExpression"
-    }
-
     export interface VerifyInlineVariableLookupValues {
-        readonly type: VerifyInlineValuesType.VariableLookup;
+        readonly type: ts.InlineValueType.VariableLookup;
         readonly range: Range;
         readonly variableName: string;
     }
 
     export interface VerifyInlineEvaluatableExpressionValues {
-        readonly type: VerifyInlineValuesType.EvaluatableExpression;
+        readonly type: ts.InlineValueType.EvaluatableExpression;
         readonly range: Range;
         readonly expression: string;
     }
@@ -782,6 +777,10 @@ declare namespace FourSlashInterface {
 
     export interface VerifyInlineValuesOptions {
         position: number;
+        textSpan?: {
+            start: number;
+            length: number;
+        };
         expected: VerifyInlineValues[]
     }
 
