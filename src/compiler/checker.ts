@@ -28817,10 +28817,12 @@ namespace ts {
                         templateStringParts.push(getStringLiteralType(span.literal.text));
                         flags.push(ElementFlags.Required);
                     });
-                    templateStringsArrayTypeParameter = createTupleType(templateStringParts, flags);
+                    templateStringsArrayTypeParameter = createTupleType(
+                        templateStringParts, flags, /* readonly */ true);
                 }
-                else {
-                    templateStringsArrayTypeParameter = createArrayType(stringType, /* readonly */ true);
+                else /* if (template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) */ {
+                    templateStringsArrayTypeParameter = createTupleType(
+                        [getStringLiteralType(template.text)], [ElementFlags.Required], /* readonly */ true);
                 }
 
                 const templateStringsArray = getGlobalTemplateStringsArraySymbol();

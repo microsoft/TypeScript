@@ -10,7 +10,7 @@
 verify.signatureHelp({
     marker: test.markers(),
     overloadsCount: 3,
-    text: "f(templateStrings: TemplateStringsArray, p1_o3: string, p2_o3: boolean, p3_o3: number): boolean",
+    text: "f(templateStrings: TemplateStringsArray<readonly string[]>, p1_o3: string, p2_o3: boolean, p3_o3: number): boolean",
     argumentCount: 3,
     parameterCount: 4,
     parameterName: "p1_o3",

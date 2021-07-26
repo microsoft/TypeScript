@@ -89,12 +89,15 @@ var a: any;
 var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 var arr: any[];
 
-// Generic tag with 
-function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): [...T, ...U] {
+// Generic tag with a generic type for TemplateStringsArray
+function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): {parts: T; args: U} {
     return null;
 }
 var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
 var a10a: {};
+
+var a10b = someGenerics10 `no substitution`;
+var a10b: {};
 
 
 
@@ -162,9 +165,11 @@ var a;
 // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = someGenerics9 `${[]}${null}${undefined}`;
 var arr;
-// Generic tag with 
+// Generic tag with a generic type for TemplateStringsArray
 function someGenerics10(strs, ...args) {
     return null;
 }
 var a10a = someGenerics10 `part1${''}part2${0}part3${[]}`;
 var a10a;
+var a10b = someGenerics10 `no substitution`;
+var a10b;

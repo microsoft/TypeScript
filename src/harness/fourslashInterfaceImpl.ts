@@ -1043,7 +1043,7 @@ namespace FourSlashInterface {
             interfaceEntry("BooleanConstructor"),
             varEntry("Number"),
             interfaceEntry("NumberConstructor"),
-            interfaceEntry("TemplateStringsArray"),
+            typeEntry("TemplateStringsArray"),
             interfaceEntry("ImportMeta"),
             varEntry("Math"),
             varEntry("Date"),

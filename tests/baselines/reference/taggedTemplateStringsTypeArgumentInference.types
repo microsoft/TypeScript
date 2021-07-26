@@ -399,25 +399,36 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 var arr: any[];
 >arr : any[]
 
-// Generic tag with 
-function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): [...T, ...U] {
->someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => [...T, ...U]
+// Generic tag with a generic type for TemplateStringsArray
+function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): {parts: T; args: U} {
+>someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => {    parts: T;    args: U;}
 >strs : TemplateStringsArray<T>
+>args : U
+>parts : T
 >args : U
 
     return null;
 >null : null
 }
 var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
->a10a : ["part1", "part2", "part3", "", string, number, any[]]
->someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }` : ["part1", "part2", "part3", "", string, number, any[]]
->someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => [...T, ...U]
+>a10a : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+>someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }` : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+>someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => { parts: T; args: U; }
 >`part1${ '' }part2${ 0 }part3${ [] }` : string
 >'' : ""
 >0 : 0
 >[] : undefined[]
 
 var a10a: {};
->a10a : ["part1", "part2", "part3", "", string, number, any[]]
+>a10a : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+
+var a10b = someGenerics10 `no substitution`;
+>a10b : { parts: readonly ["no substitution"]; args: []; }
+>someGenerics10 `no substitution` : { parts: readonly ["no substitution"]; args: []; }
+>someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => { parts: T; args: U; }
+>`no substitution` : "no substitution"
+
+var a10b: {};
+>a10b : { parts: readonly ["no substitution"]; args: []; }
 
 

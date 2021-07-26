@@ -342,8 +342,8 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 var arr: any[];
 >arr : Symbol(arr, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 87, 3), Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 88, 3))
 
-// Generic tag with 
-function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): [...T, ...U] {
+// Generic tag with a generic type for TemplateStringsArray
+function someGenerics10<T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U): {parts: T; args: U} {
 >someGenerics10 : Symbol(someGenerics10, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 88, 15))
 >T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 24))
 >U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 52))
@@ -352,7 +352,9 @@ function someGenerics10<T extends readonly string[], U extends readonly unknown[
 >T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 24))
 >args : Symbol(args, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 113))
 >U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 52))
+>parts : Symbol(parts, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 128))
 >T : Symbol(T, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 24))
+>args : Symbol(args, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 137))
 >U : Symbol(U, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 91, 52))
 
     return null;
@@ -363,5 +365,12 @@ var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
 
 var a10a: {};
 >a10a : Symbol(a10a, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 94, 3), Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 95, 3))
+
+var a10b = someGenerics10 `no substitution`;
+>a10b : Symbol(a10b, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 97, 3), Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 98, 3))
+>someGenerics10 : Symbol(someGenerics10, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 88, 15))
+
+var a10b: {};
+>a10b : Symbol(a10b, Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 97, 3), Decl(taggedTemplateStringsTypeArgumentInferenceES6.ts, 98, 3))
 
 

@@ -11,20 +11,20 @@ namespace n {
     }
 
     function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
 
         return id`hello world`;
->id`hello world` : TemplateStringsArray<readonly string[]>
+>id`hello world` : TemplateStringsArray<readonly ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
     }
     let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray<readonly string[]>
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
->templateObjectFactory() : TemplateStringsArray<readonly string[]>
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory() : TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
 }
 === tests/cases/compiler/module.ts ===
 export { }
@@ -37,18 +37,18 @@ function id<T>(x: T): T {
 }
 
 function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
 
     return id`hello world`;
->id`hello world` : TemplateStringsArray<readonly string[]>
+>id`hello world` : TemplateStringsArray<readonly ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 }
 let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray<readonly string[]>
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
->templateObjectFactory() : TemplateStringsArray<readonly string[]>
->templateObjectFactory : () => TemplateStringsArray<readonly string[]>
+>templateObjectFactory() : TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<readonly ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<readonly ["hello world"]>
 
