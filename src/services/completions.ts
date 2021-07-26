@@ -406,6 +406,14 @@ namespace ts.Completions {
             : Debug.assertNever(node.keywordToken);
     }
 
+    function getMetaPropertyTypeName(node: MetaProperty) {
+        return node.keywordToken === SyntaxKind.NewKeyword
+            ? "NewableFunction"
+            : node.keywordToken === SyntaxKind.ImportKeyword
+            ? "ImportMeta"
+            : Debug.assertNever(node.keywordToken);
+    }
+
     function getOptionalReplacementSpan(location: Node | undefined) {
         // StringLiteralLike locations are handled separately in stringCompletions.ts
         return location?.kind === SyntaxKind.Identifier ? createTextSpanFromNode(location) : undefined;
@@ -1037,7 +1045,7 @@ namespace ts.Completions {
                     case CompletionDataKind.Keywords:
                         return request.keywords.indexOf(stringToToken(name)!) > -1 ? createSimpleDetails(name, ScriptElementKind.keyword, SymbolDisplayPartKind.keyword) : undefined;
                     case CompletionDataKind.MetaProperty:
-                        return createImportMetaDetails(request.node);
+                        return createMetaPropertyDetails(request.node);
                     default:
                         return Debug.assertNever(request);
                 }
@@ -1063,7 +1071,7 @@ namespace ts.Completions {
         return createCompletionDetails(name, ScriptElementKindModifier.none, kind, [displayPart(name, kind2)]);
     }
 
-    function createImportMetaDetails(node: MetaProperty): CompletionEntryDetails {
+    function createMetaPropertyDetails(node: MetaProperty): CompletionEntryDetails {
         return {
             name: getMetaPropertyName(node),
             kind: ScriptElementKind.memberVariableElement,
@@ -1076,7 +1084,7 @@ namespace ts.Completions {
                 displayPart(getMetaPropertyName(node), SymbolDisplayPartKind.propertyName),
                 displayPart(":", SymbolDisplayPartKind.punctuation),
                 displayPart(" ", SymbolDisplayPartKind.space),
-                displayPart("ImportMeta", SymbolDisplayPartKind.interfaceName),
+                displayPart(getMetaPropertyTypeName(node), SymbolDisplayPartKind.interfaceName),
             ]
         };
     }

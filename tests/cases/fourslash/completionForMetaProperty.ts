@@ -10,6 +10,6 @@ verify.completions(
     },
     {
         marker: "2",
-        exact: [{ name: "target", text: "(property) target: ImportMeta" }]
+        exact: [{ name: "target", text: "(property) target: NewableFunction" }]
     },
 );
