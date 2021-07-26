@@ -1162,6 +1162,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -1265,6 +1266,7 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
+            let hitSystemWatcherLimit = false;
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -1307,6 +1309,9 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
+                },
+                getWidthOfTerminal(){
+                    return process.stdout.columns;
                 },
                 writeOutputIsTTY() {
                     return process.stdout.isTTY;
@@ -1370,7 +1375,7 @@ namespace ts {
                 disableCPUProfiler,
                 cpuProfilingEnabled: () => !!activeSession || contains(process.execArgv, "--cpu-prof") || contains(process.execArgv, "--prof"),
                 realpath,
-                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
+                debugMode: !!process.env.NODE_INSPECTOR_IPC || !!process.env.VSCODE_INSPECTOR_OPTIONS || some(process.execArgv as string[], arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
@@ -1615,6 +1620,12 @@ namespace ts {
                             options = { persistent: true };
                         }
                     }
+
+                    if (hitSystemWatcherLimit) {
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
+                        return watchPresentFileSystemEntryWithFsWatchFile();
+                    }
+
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1631,6 +1642,8 @@ namespace ts {
                         // Catch the exception and use polling instead
                         // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                         // so instead of throwing error, use fs.watchFile
+                        hitSystemWatcherLimit ||= e.code === "ENOSPC";
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
                 }
@@ -1652,7 +1665,6 @@ namespace ts {
                  * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                  */
                 function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
-                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                     return watchFile(
                         fileOrDirectory,
                         createFileWatcherCallback(callback),
@@ -1792,7 +1804,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {

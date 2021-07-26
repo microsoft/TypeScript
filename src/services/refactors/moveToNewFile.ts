@@ -453,7 +453,7 @@ namespace ts.refactor {
 
                 const top = getTopLevelDeclarationStatement(decl);
                 if (markSeenTop(top)) {
-                    addExportToChanges(oldFile, top, changes, useEs6ModuleSyntax);
+                    addExportToChanges(oldFile, top, name, changes, useEs6ModuleSyntax);
                 }
                 if (hasSyntacticModifier(decl, ModifierFlags.Default)) {
                     oldFileDefault = name;
@@ -759,8 +759,8 @@ namespace ts.refactor {
         }
     }
 
-    function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
-        if (isExported(sourceFile, decl, useEs6Exports)) return;
+    function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
+        if (isExported(sourceFile, decl, useEs6Exports, name)) return;
         if (useEs6Exports) {
             if (!isExpressionStatement(decl)) changes.insertExportModifier(sourceFile, decl);
         }
@@ -770,13 +770,11 @@ namespace ts.refactor {
         }
     }
 
-    function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean): boolean {
+    function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, useEs6Exports: boolean, name?: Identifier): boolean {
         if (useEs6Exports) {
-            return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export);
+            return !isExpressionStatement(decl) && hasSyntacticModifier(decl, ModifierFlags.Export) || !!(name && sourceFile.symbol.exports?.has(name.escapedText));
         }
-        else {
-            return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
-        }
+        return getNamesToExportInCommonJS(decl).some(name => sourceFile.symbol.exports!.has(escapeLeadingUnderscores(name)));
     }
 
     function addExport(decl: TopLevelDeclarationStatement, useEs6Exports: boolean): readonly Statement[] | undefined {

@@ -68,6 +68,7 @@ import { something } from "something";
                     hasAction: undefined,
                     insertText: undefined,
                     isPackageJsonImport: undefined,
+                    isImportStatementCompletion: undefined,
                     isRecommended: undefined,
                     replacementSpan: undefined,
                     source: undefined,
@@ -108,6 +109,46 @@ import { something } from "something";
                 hasException = true;
             }
             assert.isTrue(hasException);
+        });
+
+        it("allows syntactic diagnostic commands", () => {
+            const file1: File = {
+                path: `${tscWatch.projectRoot}/a.ts`,
+                content: `if (a < (b + c) { }`
+            };
+            const configFile: File = {
+                path: `${tscWatch.projectRoot}/tsconfig.json`,
+                content: `{}`
+            };
+            const expectedErrorMessage = "')' expected.";
+
+            const host = createServerHost([file1, libFile, configFile]);
+            const session = createSession(host, {
+                serverMode: LanguageServiceMode.PartialSemantic,
+                useSingleInferredProject: true,
+                logger: createLoggerWithInMemoryLogs()
+            });
+
+            const service = session.getProjectService();
+            openFilesForSession([file1], session);
+            const request: protocol.SyntacticDiagnosticsSyncRequest = {
+                type: "request",
+                seq: 1,
+                command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                arguments: { file: file1.path }
+            };
+            const response = session.executeCommandSeq(request).response as protocol.SyntacticDiagnosticsSyncResponse["body"];
+            assert.isDefined(response);
+            assert.equal(response!.length, 1);
+            assert.equal((response![0] as protocol.Diagnostic).text, expectedErrorMessage);
+
+            const project = service.inferredProjects[0];
+            const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file1.path);
+            assert.isTrue(diagnostics.length === 1);
+            assert.equal(diagnostics[0].messageText, expectedErrorMessage);
+
+            verifyGetErrRequest({ session, host, files: [file1], skip: [{ semantic: true, suggestion: true }] });
+            baselineTsserverLogs("partialSemanticServer", "syntactic diagnostics are returned with no error", session);
         });
 
         it("should not include auto type reference directives", () => {
@@ -218,7 +259,7 @@ function fooB() { }`
             assert.deepEqual(response.definitions, [{
                 file: file2.path,
                 start: { line: 1, offset: 1 },
-                end: { line: 1, offset: 1 }
+                end: { line: 1, offset: 1 },
             }]);
         });
     });

@@ -129,6 +129,52 @@ function get<K extends keyof A>(key: K, obj: A): number {
     return 0;
 };
 
+// Repro from #44093
+
+class EventEmitter<ET> {
+    off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
+}
+function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
+    emittingObject.off(eventName, 0);
+    emittingObject.off(eventName as typeof eventName, 0);
+}
+
+// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
+// a generic type without a nullable constraint and x is a generic type. This is because when both obj
+// and x are of generic types T and K, we want the resulting type to be T[K].
+
+function fx1<T, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
+}
+
+function fx2<T extends Record<keyof T, string>, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
+}
+
+function fx3<T extends Record<keyof T, string> | undefined, K extends keyof T>(obj: T, key: K) {
+    const x1 = obj[key];  // Error
+    const x2 = obj && obj[key];
+}
+
+// Repro from #44166
+
+class TableBaseEnum<
+    PublicSpec extends Record<keyof InternalSpec, any>,
+    InternalSpec extends Record<keyof PublicSpec, any>  | undefined = undefined> {
+    m() {
+        let iSpec = null! as InternalSpec;
+        iSpec[null! as keyof InternalSpec];  // Error, object possibly undefined
+        iSpec[null! as keyof PublicSpec];    // Error, object possibly undefined
+        if (iSpec === undefined) {
+            return;
+        }
+        iSpec[null! as keyof InternalSpec];
+        iSpec[null! as keyof PublicSpec];
+    }
+}
+
 
 //// [controlFlowGenericTypes.js]
 "use strict";
@@ -220,3 +266,50 @@ function get(key, obj) {
     return 0;
 }
 ;
+// Repro from #44093
+var EventEmitter = /** @class */ (function () {
+    function EventEmitter() {
+    }
+    EventEmitter.prototype.off = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
+    return EventEmitter;
+}());
+function once(emittingObject, eventName) {
+    emittingObject.off(eventName, 0);
+    emittingObject.off(eventName, 0);
+}
+// In an element access obj[x], we consider obj to be in a constraint position, except when obj is of
+// a generic type without a nullable constraint and x is a generic type. This is because when both obj
+// and x are of generic types T and K, we want the resulting type to be T[K].
+function fx1(obj, key) {
+    var x1 = obj[key];
+    var x2 = obj && obj[key];
+}
+function fx2(obj, key) {
+    var x1 = obj[key];
+    var x2 = obj && obj[key];
+}
+function fx3(obj, key) {
+    var x1 = obj[key]; // Error
+    var x2 = obj && obj[key];
+}
+// Repro from #44166
+var TableBaseEnum = /** @class */ (function () {
+    function TableBaseEnum() {
+    }
+    TableBaseEnum.prototype.m = function () {
+        var iSpec = null;
+        iSpec[null]; // Error, object possibly undefined
+        iSpec[null]; // Error, object possibly undefined
+        if (iSpec === undefined) {
+            return;
+        }
+        iSpec[null];
+        iSpec[null];
+    };
+    return TableBaseEnum;
+}());

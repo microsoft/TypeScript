@@ -35,8 +35,8 @@ namespace ts {
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.BinaryExpression:
-                    if ((<BinaryExpression>node).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
-                        return transformNullishCoalescingExpression(<BinaryExpression>node);
+                    if ((node as BinaryExpression).operatorToken.kind === SyntaxKind.QuestionQuestionToken) {
+                        return transformNullishCoalescingExpression(node as BinaryExpression);
                     }
                     return visitEachChild(node, visitor, context);
                 case SyntaxKind.DeleteExpression:

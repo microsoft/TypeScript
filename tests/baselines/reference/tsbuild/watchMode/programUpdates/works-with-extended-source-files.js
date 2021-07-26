@@ -68,6 +68,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/commonfile1.ts (used version)
+/a/b/commonfile2.ts (used version)
+
 Program root files: ["/a/b/other.ts"]
 Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
@@ -78,6 +83,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/other.ts (used version)
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -118,7 +127,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","signature":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","signature":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project1.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -146,9 +155,7 @@ declare let y: number;
       }
     },
     "options": {
-      "composite": true,
-      "watch": true,
-      "configFilePath": "./project1.tsconfig.json"
+      "composite": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -159,7 +166,7 @@ declare let y: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1253
+  "size": 753
 }
 
 //// [/a/b/other.js]
@@ -171,7 +178,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","signature":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","signature":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true,"watch":true,"configFilePath":"./project2.tsconfig.json"},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -193,9 +200,7 @@ declare let z: number;
       }
     },
     "options": {
-      "composite": true,
-      "watch": true,
-      "configFilePath": "./project2.tsconfig.json"
+      "composite": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -205,7 +210,7 @@ declare let z: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1132
+  "size": 666
 }
 
 
@@ -240,6 +245,8 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -294,6 +301,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -352,6 +361,8 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -412,6 +423,11 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+
+Shape signatures in builder refreshed for::
+/a/b/commonfile1.ts (computed .d.ts)
+/a/b/commonfile2.ts (computed .d.ts)
+/a/b/other.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:
@@ -485,6 +501,8 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 
+No shapes updated in the builder::
+
 WatchedFiles::
 /a/b/project1.tsconfig.json:
   {"fileName":"/a/b/project1.tsconfig.json","pollingInterval":250}
@@ -544,6 +562,8 @@ Semantic diagnostics in builder refreshed for::
 /a/b/commonFile1.ts
 /a/b/commonFile2.ts
 /a/b/other.ts
+
+No shapes updated in the builder::
 
 WatchedFiles::
 /a/b/project1.tsconfig.json:

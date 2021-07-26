@@ -22,6 +22,27 @@ class Test {
 >p4 : number
 >0 : 0
 
+    p5?: number;
+>p5 : number
+
+    p6?: string;
+>p6 : string
+
+    p7 = {
+>p7 : { hello: string; }
+>{        hello: (this.p6 = "string"),    } : { hello: string; }
+
+        hello: (this.p6 = "string"),
+>hello : string
+>(this.p6 = "string") : "string"
+>this.p6 = "string" : "string"
+>this.p6 : string
+>this : this
+>p6 : string
+>"string" : "string"
+
+    };
+
     directlyAssigned: any = this.directlyAssigned;
 >directlyAssigned : any
 >this.directlyAssigned : any
@@ -94,6 +115,12 @@ class Test {
 >this.withinClassDeclarationExtension : any
 >this : this
 >withinClassDeclarationExtension : any
+
+    fromOptional = this.p5;
+>fromOptional : number
+>this.p5 : number
+>this : this
+>p5 : number
 
     // These error cases are ignored (not checked by control flow analysis)
 

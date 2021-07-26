@@ -1,0 +1,72 @@
+=== tests/cases/conformance/controlFlow/controlFlowInOperator.ts ===
+const a = 'a';
+>a : "a"
+>'a' : "a"
+
+const b = 'b';
+>b : "b"
+>'b' : "b"
+
+const d = 'd';
+>d : "d"
+>'d' : "d"
+
+type A = { [a]: number; };
+>A : A
+>[a] : number
+>a : "a"
+
+type B = { [b]: string; };
+>B : B
+>[b] : string
+>b : "b"
+
+declare const c: A | B;
+>c : A | B
+
+if ('a' in c) {
+>'a' in c : boolean
+>'a' : "a"
+>c : A | B
+
+    c;      // A
+>c : A
+
+    c['a']; // number;
+>c['a'] : number
+>c : A
+>'a' : "a"
+}
+
+if ('d' in c) {
+>'d' in c : boolean
+>'d' : "d"
+>c : A | B
+
+    c; // never
+>c : never
+}
+
+if (a in c) {
+>a in c : boolean
+>a : "a"
+>c : A | B
+
+    c;    // A
+>c : A
+
+    c[a]; // number;
+>c[a] : number
+>c : A
+>a : "a"
+}
+
+if (d in c) {
+>d in c : boolean
+>d : "d"
+>c : A | B
+
+    c; // never
+>c : never
+}
+

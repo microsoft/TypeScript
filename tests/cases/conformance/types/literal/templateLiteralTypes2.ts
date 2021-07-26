@@ -113,3 +113,9 @@ const pixelStringWithTemplate: PixelValueType = `${pixelValue}px`;
 function getCardTitle(title: string): `test-${string}` {
     return `test-${title}`;
 }
+
+// Repro from #43424
+
+const interpolatedStyle = { rotate: 12 };
+function C2(transform: "-moz-initial" | (string & {})) { return 12; }
+C2(`rotate(${interpolatedStyle.rotate}dig)`);

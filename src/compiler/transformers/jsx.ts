@@ -126,16 +126,16 @@ namespace ts {
         function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
-                    return visitJsxElement(<JsxElement>node, /*isChild*/ false);
+                    return visitJsxElement(node as JsxElement, /*isChild*/ false);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ false);
+                    return visitJsxSelfClosingElement(node as JsxSelfClosingElement, /*isChild*/ false);
 
                 case SyntaxKind.JsxFragment:
-                    return visitJsxFragment(<JsxFragment>node, /*isChild*/ false);
+                    return visitJsxFragment(node as JsxFragment, /*isChild*/ false);
 
                 case SyntaxKind.JsxExpression:
-                    return visitJsxExpression(<JsxExpression>node);
+                    return visitJsxExpression(node as JsxExpression);
 
                 default:
                     return visitEachChild(node, visitor, context);

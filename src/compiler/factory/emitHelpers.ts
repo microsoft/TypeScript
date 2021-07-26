@@ -19,7 +19,7 @@ namespace ts {
         // ES2015 Helpers
         createExtendsHelper(name: Identifier): Expression;
         createTemplateObjectHelper(cooked: ArrayLiteralExpression, raw: ArrayLiteralExpression): Expression;
-        createSpreadArrayHelper(to: Expression, from: Expression): Expression;
+        createSpreadArrayHelper(to: Expression, from: Expression, packFrom: boolean): Expression;
         // ES2015 Destructuring Helpers
         createValuesHelper(expression: Expression): Expression;
         createReadHelper(iteratorRecord: Expression, count: number | undefined): Expression;
@@ -38,6 +38,9 @@ namespace ts {
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
         const factory = context.factory;
+        const immutableTrue = memoize(() => setEmitFlags(factory.createTrue(), EmitFlags.Immutable));
+        const immutableFalse = memoize(() => setEmitFlags(factory.createFalse(), EmitFlags.Immutable));
+
         return {
             getUnscopedHelperName,
             // TypeScript Helpers
@@ -282,12 +285,12 @@ namespace ts {
             );
         }
 
-        function createSpreadArrayHelper(to: Expression, from: Expression) {
+        function createSpreadArrayHelper(to: Expression, from: Expression, packFrom: boolean) {
             context.requestEmitHelper(spreadArrayHelper);
             return factory.createCallExpression(
                 getUnscopedHelperName("__spreadArray"),
                 /*typeArguments*/ undefined,
-                [to, from]
+                [to, from, packFrom ? immutableTrue() : immutableFalse()]
             );
         }
 
@@ -637,10 +640,14 @@ namespace ts {
         importName: "__spreadArray",
         scoped: false,
         text: `
-            var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-                for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-                    to[j] = from[i];
-                return to;
+            var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+                if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+                    if (ar || !(i in from)) {
+                        if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+                        ar[i] = from[i];
+                    }
+                }
+                return to.concat(ar || from);
             };`
     };
 
@@ -1001,10 +1008,10 @@ namespace ts {
             })(name => super[name], (name, value) => super[name] = value);`
     };
 
-    export function isCallToHelper(firstSegment: Expression, helperName: __String) {
+    export function isCallToHelper(firstSegment: Expression, helperName: __String): boolean {
         return isCallExpression(firstSegment)
             && isIdentifier(firstSegment.expression)
-            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName)
+            && (getEmitFlags(firstSegment.expression) & EmitFlags.HelperName) !== 0
             && firstSegment.expression.escapedText === helperName;
     }
 }

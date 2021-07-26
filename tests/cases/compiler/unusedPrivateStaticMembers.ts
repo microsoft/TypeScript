@@ -1,5 +1,6 @@
 // @noUnusedLocals: true
 // @target: esnext
+// @useDefineForClassFields: false
 
 class Test1 {
     private static m1() {}

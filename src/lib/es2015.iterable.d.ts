@@ -143,7 +143,7 @@ interface MapConstructor {
 interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<readonly [K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {

@@ -72,6 +72,11 @@ Program files::
 
 No cached semantic diagnostics in the builder::
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
+/user/username/projects/myproject/index.tsx (used version)
+
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
   {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
@@ -81,6 +86,10 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/index.tsx","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/user/username/projects/myproject/node_modules/react/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 

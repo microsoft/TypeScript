@@ -350,12 +350,14 @@ declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
 declare var g1: (...args: any[]) => {
     sum: number;
     nested: {
-        mul: any;
+        mul: string;
     };
 };
 declare var g2: (...args: any[]) => {
     foo: {
-        bar: any;
+        bar: {
+            baz: boolean;
+        };
     };
 };
 declare const foo: <T>(object: T, partial: Partial<T>) => T;
