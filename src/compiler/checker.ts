@@ -5258,8 +5258,8 @@ namespace ts {
                             }
                         }
                     }
-                    else if (context.tracker?.reportNonSerializableProperty) {
-                        context.tracker.reportNonSerializableProperty(propertySymbol);
+                    else {
+                        context.tracker?.reportNonSerializableProperty?.(propertySymbol);
                     }
                 }
                 context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
