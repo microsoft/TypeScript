@@ -19,9 +19,16 @@ tests/cases/compiler/strictOptionalProperties1.ts(107,45): error TS2322: Type 'u
 tests/cases/compiler/strictOptionalProperties1.ts(107,56): error TS2322: Type 'undefined' is not assignable to type 'boolean'.
 tests/cases/compiler/strictOptionalProperties1.ts(111,31): error TS2322: Type 'undefined' is not assignable to type 'number'.
 tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
+tests/cases/compiler/strictOptionalProperties1.ts(192,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'string | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/compiler/strictOptionalProperties1.ts(193,1): error TS2322: Type '{ a: number; b?: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'string | undefined' is not assignable to type 'string | number'.
 
 
-==== tests/cases/compiler/strictOptionalProperties1.ts (17 errors) ====
+==== tests/cases/compiler/strictOptionalProperties1.ts (19 errors) ====
     function f1(obj: { a?: string, b?: string | undefined }) {
         let a = obj.a;  // string | undefined
         let b = obj.b;  // string | undefined
@@ -242,4 +249,26 @@ tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property
     }
     
     declare function bb(input: number): void;
+    
+    // Repro from #44437
+    
+    declare var a: {[x: string]: number | string }
+    declare var b: {a: number, b: string}
+    declare var c: {a: number, b?: string}
+    declare var d: {a: number, b: string | undefined }
+    declare var e: {a: number, b?: string | undefined }
+    
+    a = b;
+    a = c;
+    a = d;  // Error
+    ~
+!!! error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+    a = e;  // Error
+    ~
+!!! error TS2322: Type '{ a: number; b?: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string | number'.
     
