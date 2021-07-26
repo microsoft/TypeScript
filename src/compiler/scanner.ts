@@ -2047,8 +2047,15 @@ namespace ts {
                             pos++;
                             return token = SyntaxKind.Unknown;
                         }
-                        pos++;
-                        scanIdentifier(codePointAt(text, pos), languageVersion);
+
+                        if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {
+                            pos++;
+                            scanIdentifier(codePointAt(text, pos), languageVersion);
+                        }
+                        else {
+                            tokenValue = String.fromCharCode(codePointAt(text, pos));
+                            error(Diagnostics.Invalid_character, pos++, charSize(ch));
+                        }
                         return token = SyntaxKind.PrivateIdentifier;
                     default:
                         const identifierKind = scanIdentifier(ch, languageVersion);
