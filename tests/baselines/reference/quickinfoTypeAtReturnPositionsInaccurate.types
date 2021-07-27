@@ -226,7 +226,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 
     const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
 >x : Program
->isBuilderProgram(program) ? program.getProgram() : program : Program | T
+>isBuilderProgram(program) ? program.getProgram() : program : Program
 >isBuilderProgram(program) : boolean
 >isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
 >program : Program | T
@@ -234,5 +234,5 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 >program.getProgram : () => Program
 >program : T
 >getProgram : () => Program
->program : Program | T
+>program : Program
 }
