@@ -614,20 +614,6 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
 interface ImportMeta {
 }
 
-/**
- * The type of `import` in `import.meta`.
- */
-interface ImportMetaExpression {
-    meta: ImportMeta;
-}
-
-/**
- * The type of `new` in `new.target`.
- */
-interface NewTargetExpression<T extends NewableFunction> {
-    target: T;
-}
-
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     readonly E: number;
