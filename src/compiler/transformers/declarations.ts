@@ -80,7 +80,7 @@ namespace ts {
             reportNonlocalAugmentation,
             reportNonSerializableProperty
         };
-        let errorNameNode: DeclarationName | undefined; // What's this??
+        let errorNameNode: DeclarationName | undefined;
         let errorFallbackNode: Declaration | undefined;
 
         let currentSourceFile: SourceFile;
@@ -229,9 +229,9 @@ namespace ts {
             }
         }
 
-        function reportNonSerializableProperty(symbol: Symbol) {
+        function reportNonSerializableProperty(propertyName: string) {
             if (errorNameNode || errorFallbackNode) {
-                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, symbolName(symbol)));
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
         }
 
