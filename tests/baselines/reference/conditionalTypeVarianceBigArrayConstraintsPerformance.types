@@ -1,0 +1,24 @@
+=== tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
+/// <reference path="react16.d.ts" />
+
+type Stuff<T> =
+>Stuff : Stuff<T>
+
+    T extends keyof JSX.IntrinsicElements
+>JSX : any
+
+        ? JSX.IntrinsicElements[T]
+>JSX : any
+
+        : any;
+
+function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
+>F : <T, U>(p1: Stuff<T>, p2: Stuff<U>) => void
+>p1 : Stuff<T>
+>p2 : Stuff<U>
+
+    p1 = p2; // Error
+>p1 = p2 : Stuff<U>
+>p1 : Stuff<T>
+>p2 : Stuff<U>
+}

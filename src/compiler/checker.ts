@@ -17408,7 +17408,8 @@ namespace ts {
             let sourceStack: Type[];
             let targetStack: Type[];
             let maybeCount = 0;
-            let depth = 0;
+            let sourceDepth = 0;
+            let targetDepth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let overrideNextErrorInfo = 0; // How many `reportRelationError` calls should be skipped in the elaboration pyramid
@@ -17423,7 +17424,7 @@ namespace ts {
                 reportIncompatibleStack();
             }
             if (overflow) {
-                tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth });
+                tracing?.instant(tracing.Phase.CheckTypes, "checkTypeRelatedTo_DepthLimit", { sourceId: source.id, targetId: target.id, depth: sourceDepth, targetDepth });
                 const diag = error(errorNode || currentNode, Diagnostics.Excessive_stack_depth_comparing_types_0_and_1, typeToString(source), typeToString(target));
                 if (errorOutputContainer) {
                     (errorOutputContainer.errors || (errorOutputContainer.errors = [])).push(diag);
@@ -18272,20 +18273,27 @@ namespace ts {
                             return Ternary.Maybe;
                         }
                     }
-                    if (depth === 100) {
+                    if (sourceDepth === 100 || targetDepth === 100) {
                         overflow = true;
                         return Ternary.False;
                     }
                 }
+                const constantSource = sourceStack[sourceDepth] === source;
+                const constantTarget = targetStack[targetDepth] === target;
                 const maybeStart = maybeCount;
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
-                sourceStack[depth] = source;
-                targetStack[depth] = target;
-                depth++;
+                if (!constantSource) {
+                    sourceStack[sourceDepth] = source;
+                    sourceDepth++;
+                }
+                if (!constantTarget) {
+                    targetStack[targetDepth] = target;
+                    targetDepth++;
+                }
                 const saveExpandingFlags = expandingFlags;
-                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= ExpandingFlags.Source;
-                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= ExpandingFlags.Target;
+                if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, sourceDepth)) expandingFlags |= ExpandingFlags.Source;
+                if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
                 let originalHandler: typeof outofbandVarianceMarkerHandler;
                 let propagatingVarianceFlags: RelationComparisonResult = 0;
                 if (outofbandVarianceMarkerHandler) {
@@ -18302,7 +18310,8 @@ namespace ts {
                         sourceIdStack: sourceStack.map(t => t.id),
                         targetId: target.id,
                         targetIdStack: targetStack.map(t => t.id),
-                        depth,
+                        depth: sourceDepth,
+                        targetDepth
                     });
                 }
 
@@ -18311,9 +18320,14 @@ namespace ts {
                     outofbandVarianceMarkerHandler = originalHandler;
                 }
                 expandingFlags = saveExpandingFlags;
-                depth--;
+                if (!constantSource) {
+                    sourceDepth--;
+                }
+                if (!constantTarget) {
+                    targetDepth--;
+                }
                 if (result) {
-                    if (result === Ternary.True || depth === 0) {
+                    if (result === Ternary.True || (sourceDepth === 0 && targetDepth === 0)) {
                         if (result === Ternary.True || result === Ternary.Maybe) {
                             // If result is definitely true, record all maybe keys as having succeeded. Also, record Ternary.Maybe
                             // results as having succeeded once we reach depth 0, but never record Ternary.Unknown results.
@@ -18597,9 +18611,10 @@ namespace ts {
                     }
 
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
-                    let localResult: Ternary | undefined;
-                    if (skipTrue || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
-                        if (!skipFalse) {
+                    const expanding = isDeeplyNestedType(target, targetStack, targetDepth);
+                    let localResult: Ternary | undefined = expanding ? Ternary.Maybe : undefined;
+                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), /*reportErrors*/ false))) {
+                        if (!skipFalse && !expanding) {
                             localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), /*reportErrors*/ false);
                         }
                     }
@@ -18676,27 +18691,32 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
-                        // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
-                        // and Y1 is related to Y2.
-                        const sourceParams = (source as ConditionalType).root.inferTypeParameters;
-                        let sourceExtends = (source as ConditionalType).extendsType;
-                        let mapper: TypeMapper | undefined;
-                        if (sourceParams) {
-                            // If the source has infer type parameters, we instantiate them in the context of the target
-                            const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
-                            inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
-                            sourceExtends = instantiateType(sourceExtends, ctx.mapper);
-                            mapper = ctx.mapper;
-                        }
-                        if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
-                            (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType))) {
-                            if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), reportErrors);
+                        // If one of the conditionals under comparison seems to be infinitely expanding, stop comparing it - back out, try
+                        // the constraint, and failing that, give up trying to relate the two. This is the only way we can handle recursive conditional
+                        // types, which might expand forever.
+                        if (!isDeeplyNestedType(source, sourceStack, sourceDepth) && !isDeeplyNestedType(target, targetStack, targetDepth)) {
+                            // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
+                            // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                            // and Y1 is related to Y2.
+                            const sourceParams = (source as ConditionalType).root.inferTypeParameters;
+                            let sourceExtends = (source as ConditionalType).extendsType;
+                            let mapper: TypeMapper | undefined;
+                            if (sourceParams) {
+                                // If the source has infer type parameters, we instantiate them in the context of the target
+                                const ctx = createInferenceContext(sourceParams, /*signature*/ undefined, InferenceFlags.None, isRelatedTo);
+                                inferTypes(ctx.inferences, (target as ConditionalType).extendsType, sourceExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                                sourceExtends = instantiateType(sourceExtends, ctx.mapper);
+                                mapper = ctx.mapper;
                             }
-                            if (result) {
-                                resetErrorInfo(saveErrorInfo);
-                                return result;
+                            if (isTypeIdenticalTo(sourceExtends, (target as ConditionalType).extendsType) &&
+                                (isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType) || isRelatedTo((target as ConditionalType).checkType, (source as ConditionalType).checkType))) {
+                                if (result = isRelatedTo(instantiateType(getTrueTypeFromConditionalType(source as ConditionalType), mapper), getTrueTypeFromConditionalType(target as ConditionalType), reportErrors)) {
+                                    result &= isRelatedTo(getFalseTypeFromConditionalType(source as ConditionalType), getFalseTypeFromConditionalType(target as ConditionalType), reportErrors);
+                                }
+                                if (result) {
+                                    resetErrorInfo(saveErrorInfo);
+                                    return result;
+                                }
                             }
                         }
                     }
@@ -18711,13 +18731,19 @@ namespace ts {
                             }
                         }
                     }
-                    // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
-                    // when `O` is a conditional (`never` is trivially aissgnable to `O`, as is `O`!).
-                    const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
-                    if (defaultConstraint) {
-                        if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
-                            resetErrorInfo(saveErrorInfo);
-                            return result;
+
+
+                    // We'll repeatedly decompose source side conditionals if they're recursive - check if we've already recured on the constraint a lot and, if so, bail
+                    // on the comparison.
+                    if (!isDeeplyNestedType(source, sourceStack, sourceDepth)) {
+                        // conditionals _can_ be related to one another via normal constraint, as, eg, `A extends B ? O : never` should be assignable to `O`
+                        // when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
+                        const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
+                        if (defaultConstraint) {
+                            if (result = isRelatedTo(defaultConstraint, target, reportErrors)) {
+                                resetErrorInfo(saveErrorInfo);
+                                return result;
+                            }
                         }
                     }
                 }
