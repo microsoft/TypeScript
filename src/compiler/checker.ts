@@ -920,6 +920,8 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalImportMetaExpressionType: ObjectType;
+        let deferredGlobalNewTargetExpressionType: GenericType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
@@ -13322,6 +13324,14 @@ namespace ts {
 
         function getGlobalImportMetaType() {
             return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
+        function getGlobalImportMetaExpressionType() {
+            return deferredGlobalImportMetaExpressionType || (deferredGlobalImportMetaExpressionType = getGlobalType("ImportMetaExpression" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
+        function getGlobalNewTargetExpressionType() {
+            return deferredGlobalNewTargetExpressionType || (deferredGlobalNewTargetExpressionType = getGlobalType("NewTargetExpression" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
@@ -30465,6 +30475,22 @@ namespace ts {
             return Debug.assertNever(node.keywordToken);
         }
 
+        function checkMetaPropertyExpression(node: MetaProperty): Type {
+            switch (node.keywordToken) {
+                case SyntaxKind.ImportKeyword:
+                    return getGlobalImportMetaExpressionType();
+                case SyntaxKind.NewKeyword:
+                    const targetSymbol = getSymbolAtLocation(node);
+                    if (targetSymbol) {
+                        const type = getTypeOfSymbolAtLocation(targetSymbol, node);
+                        return createNewTargetExpressionType(type);
+                    }
+                    return errorType;
+                default:
+                    Debug.assertNever(node.keywordToken);
+            }
+        }
+
         function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
@@ -30487,7 +30513,6 @@ namespace ts {
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
         }
 
@@ -30847,6 +30872,16 @@ namespace ts {
             }
 
             return promiseType;
+        }
+
+        function createNewTargetExpressionType(targetType: Type): Type {
+            // creates a `NewTargetExpression<T>` type where `T` is the target type
+            const newTargetExpressionType = getGlobalNewTargetExpressionType();
+            if (newTargetExpressionType !== emptyGenericType) {
+                return createTypeReference(newTargetExpressionType, [targetType]);
+            }
+
+            return errorType;
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
@@ -33140,6 +33175,12 @@ namespace ts {
                     return checkNonNullAssertion(node as NonNullExpression);
                 case SyntaxKind.MetaProperty:
                     return checkMetaProperty(node as MetaProperty);
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.NewKeyword:
+                    if (isMetaProperty(node.parent)) {
+                        return checkMetaPropertyExpression(node.parent);
+                    }
+                    break;
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(node as DeleteExpression);
                 case SyntaxKind.VoidExpression:
@@ -39784,6 +39825,13 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
+                else if (parent.kind === SyntaxKind.MetaProperty) {
+                    const parentType = getTypeOfNode(parent);
+                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                }
             }
 
             switch (node.kind) {
@@ -39857,6 +39905,12 @@ namespace ts {
 
                 case SyntaxKind.ExportKeyword:
                     return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
+
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.NewKeyword:
+                    return isImportMeta(node.parent) ? checkExpression(node as Expression).symbol : undefined;
+                case SyntaxKind.MetaProperty:
+                    return checkExpression(node as Expression).symbol;
 
                 default:
                     return undefined;
