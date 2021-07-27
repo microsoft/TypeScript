@@ -62,6 +62,7 @@ class C2 extends Base {
         var t = new.target;
 >t : typeof C2
 >new.target : typeof C2
+>new : NewTargetExpression<typeof C2>
 >target : any
 
         var y = _newTarget;

@@ -2,5 +2,6 @@
 function foo(){new.targ}
 >foo : () => void
 >new.targ : () => void
+>new : NewTargetExpression<() => void>
 >targ : any
 
