@@ -24004,6 +24004,9 @@ namespace ts {
                         if (!isRelated(t, candidate)) {
                             return true;
                         }
+                        if (candidate === t) {
+                            return false;
+                        }
                         const constraint = getBaseConstraintOfType(t);
                         if (constraint && constraint !== t) {
                             return !isRelated(constraint, candidate);
