@@ -1,3 +1,4 @@
+
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -836,6 +837,22 @@ namespace FourSlash {
             });
         }
 
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+            const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
+            assert.equal(hints.length, expected.length, "Number of hints");
+
+            const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+                return a.position - b.position;
+            };
+            ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
+                assert.equal(actual.text, expected.text, "Text");
+                assert.equal(actual.position, expected.position, "Position");
+                assert.equal(actual.kind, expected.kind, "Kind");
+                assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
+                assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
+            });
+        }
+
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
             if (options.marker === undefined) {
                 this.verifyCompletionsWorker(options);
@@ -879,7 +896,13 @@ namespace FourSlash {
                     nameToEntries.set(entry.name, [entry]);
                 }
                 else {
-                    if (entries.some(e => e.source === entry.source && this.deepEqual(e.data, entry.data))) {
+                    if (entries.some(e =>
+                        e.source === entry.source &&
+                        e.data?.exportName === entry.data?.exportName &&
+                        e.data?.fileName === entry.data?.fileName &&
+                        e.data?.moduleSpecifier === entry.data?.moduleSpecifier &&
+                        e.data?.ambientModuleName === entry.data?.ambientModuleName
+                    )) {
                         this.raiseError(`Duplicate completions for ${entry.name}`);
                     }
                     entries.push(entry);
@@ -1278,16 +1301,6 @@ namespace FourSlash {
             }
             recur(fullActual, fullExpected, "");
 
-        }
-
-        private deepEqual(a: unknown, b: unknown) {
-            try {
-                this.assertObjectsEqual(a, b);
-                return true;
-            }
-            catch {
-                return false;
-            }
         }
 
         public verifyDisplayPartsOfReferencedSymbol(expected: ts.SymbolDisplayPart[]) {
@@ -3177,7 +3190,7 @@ namespace FourSlash {
             for (const markerName in map) {
                 this.goToMarker(markerName);
                 const actual = this.languageService.getJsxClosingTagAtPosition(this.activeFile.fileName, this.currentCaretPosition);
-                assert.deepEqual(actual, map[markerName]);
+                assert.deepEqual(actual, map[markerName], markerName);
             }
         }
 

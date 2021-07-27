@@ -591,7 +591,11 @@ namespace ts {
     }
 
     function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration, cb: (symbol: Symbol) => T[] | undefined): T[] | undefined {
-        return firstDefined(declaration.parent ? getAllSuperTypeNodes(declaration.parent) : emptyArray, superTypeNode => {
+        const classOrInterfaceDeclaration = declaration.parent?.kind === SyntaxKind.Constructor ? declaration.parent.parent : declaration.parent;
+        if (!classOrInterfaceDeclaration) {
+            return;
+        }
+        return firstDefined(getAllSuperTypeNodes(classOrInterfaceDeclaration), superTypeNode => {
             const symbol = checker.getPropertyOfType(checker.getTypeAtLocation(superTypeNode), declaration.symbol.name);
             return symbol ? cb(symbol) : undefined;
         });
@@ -1167,7 +1171,6 @@ namespace ts {
     }
 
     const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
-        "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
         "getCompilerOptionsDiagnostics",
@@ -1184,6 +1187,7 @@ namespace ts {
         "prepareCallHierarchy",
         "provideCallHierarchyIncomingCalls",
         "provideCallHierarchyOutgoingCalls",
+        "provideInlayHints"
     ];
 
     const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -1595,7 +1599,9 @@ namespace ts {
                 getValidSourceFile(fileName),
                 position,
                 fullPreferences,
-                options.triggerCharacter);
+                options.triggerCharacter,
+                options.triggerKind,
+                cancellationToken);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
@@ -2500,6 +2506,17 @@ namespace ts {
             };
         }
 
+        function getInlayHintsContext(file: SourceFile, span: TextSpan, preferences: UserPreferences): InlayHintsContext {
+            return {
+                file,
+                program: getProgram()!,
+                host,
+                span,
+                preferences,
+                cancellationToken,
+            };
+        }
+
         function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
             return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
@@ -2552,6 +2569,12 @@ namespace ts {
             const sourceFile = getValidSourceFile(fileName);
             const declaration = firstOrOnly(CallHierarchy.resolveCallHierarchyDeclaration(program, position === 0 ? sourceFile : getTouchingPropertyName(sourceFile, position)));
             return declaration ? CallHierarchy.getOutgoingCalls(program, declaration) : [];
+        }
+
+        function provideInlayHints(fileName: string, span: TextSpan, preferences: InlayHintsOptions = emptyOptions): InlayHint[] {
+            synchronizeHostData();
+            const sourceFile = getValidSourceFile(fileName);
+            return InlayHints.provideInlayHints(getInlayHintsContext(sourceFile, span, preferences));
         }
 
         const ls: LanguageService = {
@@ -2619,6 +2642,7 @@ namespace ts {
             toggleMultilineComment,
             commentSelection,
             uncommentSelection,
+            provideInlayHints,
         };
 
         switch (languageServiceMode) {

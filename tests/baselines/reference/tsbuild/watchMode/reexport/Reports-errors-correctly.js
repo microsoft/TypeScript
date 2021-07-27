@@ -99,6 +99,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/session.ts
 /user/username/projects/reexport/src/pure/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/reexport/src/pure/session.ts (used version)
+/user/username/projects/reexport/src/pure/index.ts (used version)
+
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
@@ -114,6 +119,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts
 /user/username/projects/reexport/src/main/index.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/reexport/out/pure/session.d.ts (used version)
+/user/username/projects/reexport/out/pure/index.d.ts (used version)
+/user/username/projects/reexport/src/main/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
@@ -125,6 +136,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -284,6 +297,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/session.ts
 /user/username/projects/reexport/src/pure/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/index.ts (used version)
+
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
@@ -298,6 +315,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts
 /user/username/projects/reexport/src/main/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/out/pure/session.d.ts (used version)
+/user/username/projects/reexport/out/pure/index.d.ts (used version)
+/user/username/projects/reexport/src/main/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
@@ -309,6 +331,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -430,6 +454,10 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/src/pure/session.ts
 /user/username/projects/reexport/src/pure/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/src/pure/session.ts (computed .d.ts)
+/user/username/projects/reexport/src/pure/index.ts (used version)
+
 Program root files: ["/user/username/projects/reexport/src/main/index.ts"]
 Program options: {"outDir":"/user/username/projects/reexport/out","rootDir":"/user/username/projects/reexport/src","watch":true,"configFilePath":"/user/username/projects/reexport/src/main/tsconfig.json"}
 Program structureReused: Not
@@ -444,6 +472,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/reexport/out/pure/index.d.ts
 /user/username/projects/reexport/src/main/index.ts
 
+Shape signatures in builder refreshed for::
+/user/username/projects/reexport/out/pure/session.d.ts (used version)
+/user/username/projects/reexport/out/pure/index.d.ts (used version)
+/user/username/projects/reexport/src/main/index.ts (used version)
+
 WatchedFiles::
 /user/username/projects/reexport/src/pure/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/pure/tsconfig.json","pollingInterval":250}
@@ -455,6 +488,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 

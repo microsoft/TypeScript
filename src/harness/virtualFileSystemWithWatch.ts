@@ -870,6 +870,7 @@ interface Array<T> { length: number; [n: number]: T; }`
             const fsEntry = this.fs.get(path);
             if (fsEntry) {
                 fsEntry.modifiedTime = date;
+                this.invokeFileAndFsWatches(fsEntry.fullPath, FileWatcherEventKind.Changed);
             }
         }
 
@@ -921,7 +922,7 @@ interface Array<T> { length: number; [n: number]: T; }`
                     });
                 }
                 return { directories, files };
-            }, path => this.realpath(path));
+            }, path => this.realpath(path), path => this.directoryExists(path));
         }
 
         createHash(s: string): string {

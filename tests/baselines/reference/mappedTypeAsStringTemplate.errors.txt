@@ -1,0 +1,16 @@
+tests/cases/compiler/mappedTypeAsStringTemplate.ts(7,5): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ xy: number; }'.
+  Property 'xy' is missing in type '{ x: number; }' but required in type '{ xy: number; }'.
+
+
+==== tests/cases/compiler/mappedTypeAsStringTemplate.ts (1 errors) ====
+    // Repro from #44220
+    
+    function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }
+    
+    const c = { x: 1 };
+    
+    foo(c);
+        ~
+!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type '{ xy: number; }'.
+!!! error TS2345:   Property 'xy' is missing in type '{ x: number; }' but required in type '{ xy: number; }'.
+    

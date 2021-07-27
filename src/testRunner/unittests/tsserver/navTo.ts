@@ -61,20 +61,13 @@ namespace ts.projectSystem {
 export const ghijkl = a.abcdef;`
             };
             const host = createServerHost([configFile1, file1, configFile2, file2]);
-            const logger = createHasErrorMessageLogger().logger;
-            const logs: string[] = [];
-            logger.info = s => logs.push(s);
-            const session = createSession(host, { logger });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1, file2], session);
-            logs.length = 0;
 
             const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef", file: file1.path });
-            const items = session.executeCommand(request).response as protocol.NavtoItem[];
-            assert.strictEqual(items.length, 1);
-            const item = items[0];
-            assert.strictEqual(item.name, "abcdef");
-            assert.strictEqual(item.file, file1.path);
-            assert.deepEqual(logs, []);
+            session.executeCommand(request).response as protocol.NavtoItem[];
+
+            baselineTsserverLogs("navTo", "should de-duplicate symbols", session);
         });
 
         it("should de-duplicate symbols when searching all projects", () => {
@@ -114,22 +107,12 @@ export const ghijkl = a.abcdef;`
 export const ghijkl = a.abcdef;`
             };
             const host = createServerHost([configFile1, file1, configFile2, file2, solutionConfig]);
-            const logger = createHasErrorMessageLogger().logger;
-            const logs: string[] = [];
-            logger.info = s => logs.push(s);
-            const session = createSession(host, { logger });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs() });
             openFilesForSession([file1], session);
-            logs.length = 0;
 
             const request = makeSessionRequest<protocol.NavtoRequestArgs>(CommandNames.Navto, { searchValue: "abcdef" });
-            const items = session.executeCommand(request).response as protocol.NavtoItem[];
-            assert.strictEqual(items.length, 1);
-            const item = items[0];
-            assert.strictEqual(item.name, "abcdef");
-            assert.strictEqual(item.file, file1.path);
-            // Cannt check logs as empty since it loads projects and writes information for those in the log
-            assert.isFalse(contains(logs, "Search path: /a"));
-            assert.isFalse(contains(logs, "For info: /a/index.ts :: Config file name: /a/tsconfig.json"));
+            session.executeCommand(request).response as protocol.NavtoItem[];
+            baselineTsserverLogs("navTo", "should de-duplicate symbols when searching all projects", session);
         });
 
         it("should work with Deprecated", () => {

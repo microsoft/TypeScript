@@ -41,8 +41,8 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             exports_1("x", x = 1);
-            exports_1("x", ++x) - 1;
-            exports_1("x", --x) + 1;
+            exports_1("x", (x++, x));
+            exports_1("x", (x--, x));
             exports_1("x", ++x);
             exports_1("x", --x);
             exports_1("x", x += 1);
@@ -55,8 +55,8 @@ System.register([], function (exports_1, context_1) {
             x - 1;
             x & 1;
             x | 1;
-            for (exports_1("x", x = 5);; exports_1("x", ++x) - 1) { }
-            for (exports_1("x", x = 8);; exports_1("x", --x) + 1) { }
+            for (exports_1("x", x = 5);; exports_1("x", (x++, x))) { }
+            for (exports_1("x", x = 8);; exports_1("x", (x--, x))) { }
             for (exports_1("x", x = 15);; exports_1("x", ++x)) { }
             for (exports_1("x", x = 18);; exports_1("x", --x)) { }
             for (var x_1 = 50;;) { }

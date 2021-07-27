@@ -11,14 +11,16 @@ tests/cases/compiler/classUpdateTests.ts(95,1): error TS1128: Declaration or sta
 tests/cases/compiler/classUpdateTests.ts(99,3): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(101,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(105,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(105,14): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(105,10): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/classUpdateTests.ts(105,14): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/compiler/classUpdateTests.ts(107,1): error TS1128: Declaration or statement expected.
 tests/cases/compiler/classUpdateTests.ts(111,3): error TS1128: Declaration or statement expected.
-tests/cases/compiler/classUpdateTests.ts(111,15): error TS1005: ';' expected.
+tests/cases/compiler/classUpdateTests.ts(111,11): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/classUpdateTests.ts(111,15): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/classUpdateTests.ts (16 errors) ====
+==== tests/cases/compiler/classUpdateTests.ts (18 errors) ====
     //
     // test codegen for instance properties
     //
@@ -154,8 +156,10 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     		public this.p1 = 0; // ERROR
     		~~~~~~
 !!! error TS1128: Declaration or statement expected.
+    		       ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
     		           ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     	}
     }
     ~
@@ -166,8 +170,10 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     		private this.p1 = 0; // ERROR
     		~~~~~~~
 !!! error TS1128: Declaration or statement expected.
+    		        ~~~~
+!!! error TS1434: Unexpected keyword or identifier.
     		            ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
     	}
     }
     ~

@@ -59,6 +59,14 @@ Semantic diagnostics in builder refreshed for::
 /a/b/globalFile3.ts
 /a/b/moduleFile2.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/a/b/modulefile1.ts (used version)
+/a/b/file1consumer1.ts (used version)
+/a/b/file1consumer2.ts (used version)
+/a/b/globalfile3.ts (used version)
+/a/b/modulefile2.ts (used version)
+
 WatchedFiles::
 /a/b/tsconfig.json:
   {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
@@ -147,6 +155,10 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/b/moduleFile1.ts
 /a/b/file1Consumer1.ts
+
+Shape signatures in builder refreshed for::
+/a/b/modulefile1.ts (computed .d.ts)
+/a/b/file1consumer1.ts (computed .d.ts)
 
 WatchedFiles::
 /a/b/tsconfig.json:

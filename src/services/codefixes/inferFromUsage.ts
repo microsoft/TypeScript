@@ -282,6 +282,7 @@ namespace ts.codefix {
         program: Program,
         host: LanguageServiceHost,
         cancellationToken: CancellationToken,
+
     ): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
@@ -380,7 +381,7 @@ namespace ts.codefix {
     }
 
     export function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
-        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as (JSDocText | JSDocLink)[];
+        const comments = flatMap(parent.jsDoc, j => typeof j.comment === "string" ? factory.createJSDocText(j.comment) : j.comment) as JSDocComment[];
         const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);
@@ -954,13 +955,15 @@ namespace ts.codefix {
                 }
                 calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
                 constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
-                if (anon.stringIndexInfo) {
-                    stringIndices.push(anon.stringIndexInfo.type);
-                    stringIndexReadonly = stringIndexReadonly || anon.stringIndexInfo.isReadonly;
+                const stringIndexInfo = checker.getIndexInfoOfType(anon, IndexKind.String);
+                if (stringIndexInfo) {
+                    stringIndices.push(stringIndexInfo.type);
+                    stringIndexReadonly = stringIndexReadonly || stringIndexInfo.isReadonly;
                 }
-                if (anon.numberIndexInfo) {
-                    numberIndices.push(anon.numberIndexInfo.type);
-                    numberIndexReadonly = numberIndexReadonly || anon.numberIndexInfo.isReadonly;
+                const numberIndexInfo = checker.getIndexInfoOfType(anon, IndexKind.Number);
+                if (numberIndexInfo) {
+                    numberIndices.push(numberIndexInfo.type);
+                    numberIndexReadonly = numberIndexReadonly || numberIndexInfo.isReadonly;
                 }
             }
             const members = mapEntries(props, (name, types) => {
@@ -969,13 +972,15 @@ namespace ts.codefix {
                 s.type = checker.getUnionType(types);
                 return [name, s];
             });
+            const indexInfos = [];
+            if (stringIndices.length) indexInfos.push(checker.createIndexInfo(checker.getStringType(), checker.getUnionType(stringIndices), stringIndexReadonly));
+            if (numberIndices.length) indexInfos.push(checker.createIndexInfo(checker.getNumberType(), checker.getUnionType(numberIndices), numberIndexReadonly));
             return checker.createAnonymousType(
                 anons[0].symbol,
                 members as UnderscoreEscapedMap<TransientSymbol>,
                 calls,
                 constructs,
-                stringIndices.length ? checker.createIndexInfo(checker.getUnionType(stringIndices), stringIndexReadonly) : undefined,
-                numberIndices.length ? checker.createIndexInfo(checker.getUnionType(numberIndices), numberIndexReadonly) : undefined);
+                indexInfos);
         }
 
         function inferTypes(usage: Usage): Type[] {
@@ -1014,8 +1019,8 @@ namespace ts.codefix {
             }
             const callSignatures: Signature[] = usage.calls ? [getSignatureFromCalls(usage.calls)] : [];
             const constructSignatures: Signature[] = usage.constructs ? [getSignatureFromCalls(usage.constructs)] : [];
-            const stringIndexInfo = usage.stringIndex && checker.createIndexInfo(combineFromUsage(usage.stringIndex), /*isReadonly*/ false);
-            return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined);
+            const indexInfos = usage.stringIndex ? [checker.createIndexInfo(checker.getStringType(), combineFromUsage(usage.stringIndex), /*isReadonly*/ false)] : [];
+            return checker.createAnonymousType(/*symbol*/ undefined, members, callSignatures, constructSignatures, indexInfos);
         }
 
         function inferNamedTypesFromProperties(usage: Usage): Type[] {
@@ -1120,7 +1125,7 @@ namespace ts.codefix {
         }
 
         function getFunctionFromCalls(calls: CallUsage[]) {
-            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+            return checker.createAnonymousType(/*symbol*/ undefined, createSymbolTable(), [getSignatureFromCalls(calls)], emptyArray, emptyArray);
         }
 
         function getSignatureFromCalls(calls: CallUsage[]): Signature {
@@ -1135,8 +1140,7 @@ namespace ts.codefix {
                 parameters.push(symbol);
             }
             const returnType = combineFromUsage(combineUsages(calls.map(call => call.return_)));
-            // TODO: GH#18217
-            return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
+            return checker.createSignature(/*declaration*/ undefined, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, length, SignatureFlags.None);
         }
 
         function addCandidateType(usage: Usage, type: Type | undefined) {

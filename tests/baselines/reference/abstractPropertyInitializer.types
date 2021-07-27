@@ -1,0 +1,9 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/abstractPropertyInitializer.ts ===
+abstract class C {
+>C : C
+
+    abstract prop = 1
+>prop : number
+>1 : 1
+}
+

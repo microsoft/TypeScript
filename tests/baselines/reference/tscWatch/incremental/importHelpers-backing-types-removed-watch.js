@@ -49,6 +49,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
@@ -58,6 +63,8 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/tslib/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -76,7 +83,7 @@ exitCode:: ExitStatus.undefined
 exports.__esModule = true;
 exports.x = void 0;
 var tslib_1 = require("tslib");
-exports.x = tslib_1.__assign({});
+exports.x = (0, tslib_1.__assign)({});
 
 
 
@@ -110,7 +117,14 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
+/users/username/projects/project/node_modules/tslib/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
+  {"fileName":"/users/username/projects/project/node_modules/tslib/package.json","pollingInterval":250}
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
 /users/username/projects/project/index.tsx:

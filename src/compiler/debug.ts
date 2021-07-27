@@ -471,6 +471,9 @@ namespace ts {
                             // An `Array` with extra properties is rendered as `[A, B, prop1: 1, prop2: 2]`. Most of
                             // these aren't immediately useful so we trim off the `prop1: ..., prop2: ...` part from the
                             // formatted string.
+                            // This regex can trigger slow backtracking because of overlapping potential captures.
+                            // We don't care, this is debug code that's only enabled with a debugger attached -
+                            // we're just taking note of it for anyone checking regex performance in the future.
                             defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
                             return `NodeArray ${defaultValue}`;
                         }

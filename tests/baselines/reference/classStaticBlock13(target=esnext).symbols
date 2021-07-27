@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock13.ts ===
+class C {
+>C : Symbol(C, Decl(classStaticBlock13.ts, 0, 0))
+
+  static #x = 123;
+>#x : Symbol(C.#x, Decl(classStaticBlock13.ts, 0, 9))
+  
+  static {
+    console.log(C.#x)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>C.#x : Symbol(C.#x, Decl(classStaticBlock13.ts, 0, 9))
+>C : Symbol(C, Decl(classStaticBlock13.ts, 0, 0))
+  }
+
+  foo () {
+>foo : Symbol(C.foo, Decl(classStaticBlock13.ts, 5, 3))
+
+    return C.#x;
+>C.#x : Symbol(C.#x, Decl(classStaticBlock13.ts, 0, 9))
+>C : Symbol(C, Decl(classStaticBlock13.ts, 0, 0))
+  }
+}
+

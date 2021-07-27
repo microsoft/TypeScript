@@ -4,15 +4,16 @@ namespace ts {
     export interface WatchTypeRegistry {
         ClosedScriptInfo: "Closed Script info",
         ConfigFileForInferredRoot: "Config file for the inferred project root",
-        NodeModulesForClosedScriptInfo: "node_modules for closed script infos in them",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
         MissingSourceMapFile: "Missing source map file",
         NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
         MissingGeneratedFile: "Missing generated file",
-        PackageJsonFile: "package.json file for import suggestions"
+        PackageJsonFile: "package.json file for import suggestions",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
     WatchType.ClosedScriptInfo = "Closed Script info";
     WatchType.ConfigFileForInferredRoot = "Config file for the inferred project root";
-    WatchType.NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them";
+    WatchType.NodeModules = "node_modules for closed script infos and package.jsons affecting module specifier cache";
     WatchType.MissingSourceMapFile = "Missing source map file";
     WatchType.NoopConfigFileForInferredRoot = "Noop Config file for the inferred project root";
     WatchType.MissingGeneratedFile = "Missing generated file";

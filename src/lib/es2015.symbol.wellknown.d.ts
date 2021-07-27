@@ -219,9 +219,9 @@ interface String {
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
-     * Replaces text in a string, using an object that supports replacement within a string.
-     * @param searchValue A object can search for and replace matches within a string.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * Replaces first match with string or all matches with RegExp.
+     * @param searchValue A string or RegExp search value.
+     * @param replaceValue A string containing the text to replace for match.
      */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
