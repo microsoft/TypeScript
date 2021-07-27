@@ -10492,7 +10492,7 @@ interface Node extends EventTarget {
     /**
      * Returns a copy of node. If deep is true, the copy also includes the node's descendants.
      */
-    cloneNode(deep?: boolean): Node;
+    cloneNode<T extends this>(deep?: boolean): T;
     /**
      * Returns a bitmask indicating the position of other relative to node.
      */
