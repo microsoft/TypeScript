@@ -1961,9 +1961,6 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.ThisKeyword:
                 return isInExpressionContext(node);
-            case SyntaxKind.ImportKeyword: // import.meta
-            case SyntaxKind.NewKeyword: // new.target
-                return isMetaProperty(node.parent);
             default:
                 return false;
         }

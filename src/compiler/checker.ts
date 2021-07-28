@@ -30475,7 +30475,7 @@ namespace ts {
             return Debug.assertNever(node.keywordToken);
         }
 
-        function checkMetaPropertyExpression(node: MetaProperty): Type {
+        function checkMetaPropertyKeyword(node: MetaProperty): Type {
             switch (node.keywordToken) {
                 case SyntaxKind.ImportKeyword:
                     return getGlobalImportMetaExpressionType();
@@ -33175,12 +33175,6 @@ namespace ts {
                     return checkNonNullAssertion(node as NonNullExpression);
                 case SyntaxKind.MetaProperty:
                     return checkMetaProperty(node as MetaProperty);
-                case SyntaxKind.ImportKeyword:
-                case SyntaxKind.NewKeyword:
-                    if (isMetaProperty(node.parent)) {
-                        return checkMetaPropertyExpression(node.parent);
-                    }
-                    break;
                 case SyntaxKind.DeleteExpression:
                     return checkDeleteExpression(node as DeleteExpression);
                 case SyntaxKind.VoidExpression:
@@ -39908,7 +39902,7 @@ namespace ts {
 
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.NewKeyword:
-                    return isImportMeta(node.parent) ? checkExpression(node as Expression).symbol : undefined;
+                    return isImportMeta(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
                 case SyntaxKind.MetaProperty:
                     return checkExpression(node as Expression).symbol;
 
@@ -40009,6 +40003,10 @@ namespace ts {
                     const declaredType = getDeclaredTypeOfSymbol(symbol);
                     return declaredType !== errorType ? declaredType : getTypeOfSymbol(symbol);
                 }
+            }
+
+            if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
+                return checkMetaPropertyKeyword(node.parent);
             }
 
             return errorType;

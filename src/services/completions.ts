@@ -1358,7 +1358,7 @@ namespace ts.Completions {
                         node = parent;
                         break;
                     case SyntaxKind.MetaProperty:
-                        node = parent.getFirstToken(sourceFile)!; // the `import` or `new` keyword
+                        node = parent.getFirstToken(sourceFile)!;
                         Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword);
                         break;
                     default:
