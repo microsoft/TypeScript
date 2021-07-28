@@ -11,6 +11,7 @@ namespace ts.InlineValues {
         SwitchStatement |
         ClassStaticBlockDeclaration |
         ModuleDeclaration |
+        AccessorDeclaration |
         CatchClause |
         CaseOrDefaultClause |
         ForInOrOfStatement |
@@ -102,10 +103,7 @@ namespace ts.InlineValues {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    visitFunctionLike(node as FunctionLikeDeclaration);
+                    visitFunctionLike(node as FunctionDeclaration | FunctionExpression | ArrowFunction);
                     break;
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
@@ -160,7 +158,6 @@ namespace ts.InlineValues {
             else {
                 visitor(decl.name);
             }
-            // TODO: class members
             visitor(decl.initializer);
         }
 
@@ -186,7 +183,9 @@ namespace ts.InlineValues {
             if (isIdentifier(target)) {
                 appendVariableLookup(target);
             }
-            // TODO: element access
+            else if (isAccessExpression(target)) {
+                appendEvaluatableExpressionValue(target);
+            }
 
             if (isAssignmentExpression(expr)) {
                 visitor(expr.right);
@@ -303,7 +302,7 @@ namespace ts.InlineValues {
             visitor(clause.block);
         }
 
-        function visitFunctionLike(node: FunctionLikeDeclaration) {
+        function visitFunctionLike(node: FunctionDeclaration | FunctionExpression | ArrowFunction) {
             if (isFunctionDeclaration(node) && node.name) {
                 appendVariableLookup(node.name);
             }
@@ -341,7 +340,7 @@ namespace ts.InlineValues {
     }
 
     function isProvideableScope(node: Node): node is ProvideableScope {
-        if (isFunctionLikeDeclaration(node) || isClassLike(node) || isForInOrOfStatement(node) || isCaseOrDefaultClause(node)) {
+        if (isFunctionLikeDeclaration(node) || isAccessExpression(node) || isClassLike(node) || isForInOrOfStatement(node) || isCaseOrDefaultClause(node)) {
             return true;
         }
 
