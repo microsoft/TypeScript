@@ -90,7 +90,8 @@ namespace ts.InlineValues {
             switch (node.kind) {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
-                    visitVariableOrParameterDeclaration(node as VariableDeclaration | ParameterDeclaration);
+                case SyntaxKind.BindingElement:
+                    visitVariableLikeDeclaration(node as VariableDeclaration | ParameterDeclaration | BindingElement);
                     break;
                 case SyntaxKind.PropertyAssignment:
                     visitPropertyAssignment(node as PropertyAssignment);
@@ -148,7 +149,7 @@ namespace ts.InlineValues {
             }
         }
 
-        function visitVariableOrParameterDeclaration(decl: VariableDeclaration | ParameterDeclaration) {
+        function visitVariableLikeDeclaration(decl: VariableDeclaration | ParameterDeclaration | BindingElement) {
             if (!decl.name) {
                 return;
             }
@@ -156,8 +157,10 @@ namespace ts.InlineValues {
             if (isIdentifier(decl.name)) {
                 appendVariableLookup(decl.name);
             }
+            else {
+                visitor(decl.name);
+            }
             // TODO: class members
-            // TODO: binding elements
             visitor(decl.initializer);
         }
 
@@ -226,7 +229,7 @@ namespace ts.InlineValues {
 
         function visitForInitializer(initializer: ForInitializer) {
             if (isVariableDeclarationList(initializer)) {
-                initializer.declarations.forEach(visitVariableOrParameterDeclaration);
+                initializer.declarations.forEach(visitVariableLikeDeclaration);
             }
             else {
                 appendEvaluatableExpressionValue(initializer);
@@ -295,7 +298,7 @@ namespace ts.InlineValues {
             }
 
             if (clause.variableDeclaration) {
-                visitVariableOrParameterDeclaration(clause.variableDeclaration);
+                visitVariableLikeDeclaration(clause.variableDeclaration);
             }
             visitor(clause.block);
         }
@@ -309,7 +312,7 @@ namespace ts.InlineValues {
                 return;
             }
 
-            node.parameters.forEach(visitVariableOrParameterDeclaration);
+            node.parameters.forEach(visitVariableLikeDeclaration);
             visitor(node.body);
         }
 
