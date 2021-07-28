@@ -276,8 +276,7 @@ namespace ts {
             case SyntaxKind.NonNullExpression:
                 return visitNode(cbNode, (node as NonNullExpression).expression);
             case SyntaxKind.MetaProperty:
-                return visitNode(cbNode, (node as MetaProperty).expression) ||
-                    visitNode(cbNode, (node as MetaProperty).name);
+                return visitNode(cbNode, (node as MetaProperty).name);
             case SyntaxKind.ConditionalExpression:
                 return visitNode(cbNode, (node as ConditionalExpression).condition) ||
                     visitNode(cbNode, (node as ConditionalExpression).questionToken) ||
@@ -4937,11 +4936,9 @@ namespace ts {
                 else if (lookAhead(nextTokenIsDot)) {
                     // This is an 'import.*' metaproperty (i.e. 'import.meta')
                     nextToken(); // advance past the 'import'
-                    const importEnd = scanner.getStartPos();
                     nextToken(); // advance past the dot
                     const metaProperty = factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName());
                     expression = finishNode(metaProperty, pos);
-                    setTextRangePosEnd(metaProperty.expression, pos, importEnd);
                     sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
                 }
                 else {
@@ -5763,11 +5760,9 @@ namespace ts {
         function parseNewExpressionOrNewDotTarget(): NewExpression | MetaProperty {
             const pos = getNodePos();
             parseExpected(SyntaxKind.NewKeyword);
-            const newKeywordEnd = scanner.getStartPos();
             if (parseOptional(SyntaxKind.DotToken)) {
                 const name = parseIdentifierName();
                 const metaProperty = factory.createMetaProperty(SyntaxKind.NewKeyword, name);
-                setTextRangePosEnd(metaProperty.expression, pos, newKeywordEnd);
                 return finishNode(metaProperty, pos);
             }
 

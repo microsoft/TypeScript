@@ -2491,7 +2491,6 @@ namespace ts {
     export interface MetaProperty extends PrimaryExpression {
         readonly kind: SyntaxKind.MetaProperty;
         readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
-        readonly expression: Token<SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword>;
         readonly name: Identifier;
     }
 

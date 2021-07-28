@@ -6,7 +6,6 @@ declare global { interface ImportMeta {foo?: () => void} };
 if (import.meta.foo) {
 >import.meta.foo : (() => void) | undefined
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >foo : (() => void) | undefined
 
@@ -14,7 +13,6 @@ if (import.meta.foo) {
 >import.meta.foo() : void
 >import.meta.foo : () => void
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >foo : () => void
 }

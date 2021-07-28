@@ -17,7 +17,6 @@
 >"../hamsters.jpg" : "../hamsters.jpg"
 >import.meta.url : string
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >url : string
 >toString : () => string
@@ -37,7 +36,6 @@
 >import.meta.scriptElement.dataset : any
 >import.meta.scriptElement : any
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >scriptElement : any
 >dataset : any
@@ -86,13 +84,11 @@
 export let x = import.meta;
 >x : ImportMeta
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 
 export let y = import.metal;
 >y : any
 >import.metal : any
->import : ImportMetaExpression
 >metal : any
 
 export let z = import.import.import.malkovich;
@@ -100,7 +96,6 @@ export let z = import.import.import.malkovich;
 >import.import.import.malkovich : any
 >import.import.import : any
 >import.import : any
->import : ImportMetaExpression
 >import : any
 >import : any
 >malkovich : any
@@ -109,13 +104,11 @@ export let z = import.import.import.malkovich;
 let globalA = import.meta;
 >globalA : ImportMeta
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 
 let globalB = import.metal;
 >globalB : any
 >import.metal : any
->import : ImportMetaExpression
 >metal : any
 
 let globalC = import.import.import.malkovich;
@@ -123,7 +116,6 @@ let globalC = import.import.import.malkovich;
 >import.import.import.malkovich : any
 >import.import.import : any
 >import.import : any
->import : ImportMetaExpression
 >import : any
 >import : any
 >malkovich : any
@@ -134,23 +126,19 @@ export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta
 >import.meta.blah = import.meta.blue = import.meta : ImportMeta
 >import.meta.blah : any
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >blah : any
 >import.meta.blue = import.meta : ImportMeta
 >import.meta.blue : any
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >blue : any
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 
 import.meta = foo;
 >import.meta = foo : ImportMeta
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >foo : ImportMeta
 
@@ -173,7 +161,6 @@ const { a, b, c } = import.meta.wellKnownProperty;
 >c : boolean
 >import.meta.wellKnownProperty : { a: number; b: string; c: boolean; }
 >import.meta : ImportMeta
->import : ImportMetaExpression
 >meta : any
 >wellKnownProperty : { a: number; b: string; c: boolean; }
 

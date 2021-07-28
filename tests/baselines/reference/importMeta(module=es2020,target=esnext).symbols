@@ -8,7 +8,6 @@
 >URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 >url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 >toString : Symbol(URL.toString, Decl(lib.dom.d.ts, --, --))
 
@@ -21,7 +20,6 @@
   const size = import.meta.scriptElement.dataset.size || 300;
 >size : Symbol(size, Decl(example.ts, 5, 7))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 
   const image = new Image();
 >image : Symbol(image, Decl(example.ts, 7, 7))
@@ -59,7 +57,6 @@
 export let x = import.meta;
 >x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 
 export let y = import.metal;
 >y : Symbol(y, Decl(moduleLookingFile01.ts, 1, 10))
@@ -71,7 +68,6 @@ export let z = import.import.import.malkovich;
 let globalA = import.meta;
 >globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 
 let globalB = import.metal;
 >globalB : Symbol(globalB, Decl(scriptLookingFile01.ts, 1, 3))
@@ -84,15 +80,11 @@ export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 
 import.meta = foo;
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 
 // @Filename augmentations.ts
@@ -116,6 +108,5 @@ const { a, b, c } = import.meta.wellKnownProperty;
 >c : Symbol(c, Decl(assignmentTargets.ts, 10, 13))
 >import.meta.wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
 >import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
->import : Symbol(ImportMetaExpression, Decl(lib.es5.d.ts, --, --))
 >wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
 

@@ -3128,7 +3128,6 @@ namespace ts {
                 default:
                     return Debug.assertNever(keywordToken);
             }
-            node.expression = createToken(keywordToken);
             return node;
         }
 

@@ -1358,7 +1358,8 @@ namespace ts.Completions {
                         node = parent;
                         break;
                     case SyntaxKind.MetaProperty:
-                        node = (parent as MetaProperty).expression;
+                        node = parent.getFirstToken(sourceFile)!; // the `import` or `new` keyword
+                        Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword);
                         break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
