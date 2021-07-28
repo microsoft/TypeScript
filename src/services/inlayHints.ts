@@ -67,7 +67,7 @@ namespace ts.InlayHints {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionExpressionLike(node)) {
                     visitFunctionExpressionLikeForParameterType(node);
                 }
-                if (preferences.includeInlayFunctionLikeReturnTypeHints && isFunctionDeclarationLike(node)) {
+                if (preferences.includeInlayFunctionLikeReturnTypeHints && isFunctionLikeDeclaration(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
                 }
             }
@@ -76,10 +76,6 @@ namespace ts.InlayHints {
 
         function isFunctionExpressionLike(node: Node): node is ArrowFunction | FunctionExpression {
             return isArrowFunction(node) || isFunctionExpression(node);
-        }
-
-        function isFunctionDeclarationLike(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration {
-            return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node);
         }
 
         function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
@@ -206,7 +202,7 @@ namespace ts.InlayHints {
             return isLiteralExpression(node) || isBooleanLiteral(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
         }
 
-        function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+        function visitFunctionDeclarationLikeForReturnType(decl: FunctionLikeDeclaration) {
             if (isArrowFunction(decl)) {
                 if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
                     return;
@@ -218,9 +214,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            const type = checker.getTypeAtLocation(decl);
-            const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-            const signature = firstOrUndefined(signatures);
+            const signature = checker.getSignatureFromDeclaration(decl);
             if (!signature) {
                 return;
             }
@@ -238,7 +232,7 @@ namespace ts.InlayHints {
             addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
         }
 
-        function getTypeAnnotationPosition(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+        function getTypeAnnotationPosition(decl: FunctionLikeDeclaration) {
             const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
             if (closeParenToken) {
                 return closeParenToken.end;
