@@ -4937,8 +4937,7 @@ namespace ts {
                     // This is an 'import.*' metaproperty (i.e. 'import.meta')
                     nextToken(); // advance past the 'import'
                     nextToken(); // advance past the dot
-                    const metaProperty = factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName());
-                    expression = finishNode(metaProperty, pos);
+                    expression = finishNode(factory.createMetaProperty(SyntaxKind.ImportKeyword, parseIdentifierName()), pos);
                     sourceFlags |= NodeFlags.PossiblyContainsImportMeta;
                 }
                 else {
@@ -5762,8 +5761,7 @@ namespace ts {
             parseExpected(SyntaxKind.NewKeyword);
             if (parseOptional(SyntaxKind.DotToken)) {
                 const name = parseIdentifierName();
-                const metaProperty = factory.createMetaProperty(SyntaxKind.NewKeyword, name);
-                return finishNode(metaProperty, pos);
+                return finishNode(factory.createMetaProperty(SyntaxKind.NewKeyword, name), pos);
             }
 
             const expressionPos = getNodePos();
