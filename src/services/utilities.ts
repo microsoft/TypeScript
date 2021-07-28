@@ -225,10 +225,6 @@ namespace ts {
         return isCalleeWorker(node, isCallOrNewExpression, selectExpressionOfCallOrNewExpressionOrDecorator, includeElementAccess, skipPastOuterExpressions);
     }
 
-    export function isMetaPropertyExpression(node: Node) {
-        return node.parent && isMetaProperty(node.parent) && node.kind === node.parent.keywordToken;
-    }
-
     export function isTaggedTemplateTag(node: Node, includeElementAccess = false, skipPastOuterExpressions = false): boolean {
         return isCalleeWorker(node, isTaggedTemplateExpression, selectTagOfTaggedTemplateExpression, includeElementAccess, skipPastOuterExpressions);
     }
