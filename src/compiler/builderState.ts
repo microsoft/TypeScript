@@ -499,7 +499,7 @@ namespace ts {
                 if (state.previousCache) {
                     if (state.previousCache.id === cacheId && state.previousCache.version === cacheVersion) {
                         // If this is the same cache at the same version as last time this BuilderState
-                        // was updated, there's not need to update again
+                        // was updated, there's no need to update again
                         return;
                     }
                     state.previousCache.id = cacheId;
