@@ -8238,6 +8238,7 @@ namespace ts {
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
         reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
+        reportNonSerializableProperty?(propertyName: string): void;
     }
 
     export interface TextSpan {
