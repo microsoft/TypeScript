@@ -30480,12 +30480,8 @@ namespace ts {
                 case SyntaxKind.ImportKeyword:
                     return getGlobalImportMetaExpressionType();
                 case SyntaxKind.NewKeyword:
-                    const targetSymbol = getSymbolAtLocation(node);
-                    if (targetSymbol) {
-                        const type = getTypeOfSymbolAtLocation(targetSymbol, node);
-                        return createNewTargetExpressionType(type);
-                    }
-                    return errorType;
+                    const type = checkNewTargetMetaProperty(node);
+                    return type === errorType ? errorType : createNewTargetExpressionType(type);
                 default:
                     Debug.assertNever(node.keywordToken);
             }
