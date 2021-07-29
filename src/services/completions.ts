@@ -713,12 +713,12 @@ namespace ts.Completions {
             origin.exportName === InternalSymbolName.ExportEquals ? ExportKind.ExportEquals :
             ExportKind.Named;
         const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
-        const importKind = codefix.getImportKind(sourceFile, exportKind, options);
+        const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
         const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
             case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
             case ImportKind.Default: return { replacementSpan, insertText: `import ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name} from ${quotedModuleSpecifier}${suffix}` };
             case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
         }
     }

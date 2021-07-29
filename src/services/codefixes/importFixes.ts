@@ -560,17 +560,21 @@ namespace ts.codefix {
             : undefined;
     }
 
-    export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions): ImportKind {
+    /**
+     * @param forceImportKeyword Indicates that the user has already typed `import`, so the result must start with `import`.
+     * (In other words, do not allow `const x = require("...")` for JS files.)
+     */
+    export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
         switch (exportKind) {
             case ExportKind.Named: return ImportKind.Named;
             case ExportKind.Default: return ImportKind.Default;
-            case ExportKind.ExportEquals: return getExportEqualsImportKind(importingFile, compilerOptions);
-            case ExportKind.UMD: return getUmdImportKind(importingFile, compilerOptions);
+            case ExportKind.ExportEquals: return getExportEqualsImportKind(importingFile, compilerOptions, !!forceImportKeyword);
+            case ExportKind.UMD: return getUmdImportKind(importingFile, compilerOptions, !!forceImportKeyword);
             default: return Debug.assertNever(exportKind);
         }
     }
 
-    function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
+    function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
         // Import a synthetic `default` if enabled.
         if (getAllowSyntheticDefaultImports(compilerOptions)) {
             return ImportKind.Default;
@@ -583,7 +587,7 @@ namespace ts.codefix {
             case ModuleKind.CommonJS:
             case ModuleKind.UMD:
                 if (isInJSFile(importingFile)) {
-                    return isExternalModule(importingFile) ? ImportKind.Namespace : ImportKind.CommonJS;
+                    return isExternalModule(importingFile) || forceImportKeyword ? ImportKind.Namespace : ImportKind.CommonJS;
                 }
                 return ImportKind.CommonJS;
             case ModuleKind.System:
@@ -671,7 +675,7 @@ namespace ts.codefix {
         return originalSymbolToExportInfos;
     }
 
-    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
+    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
         const allowSyntheticDefaults = getAllowSyntheticDefaultImports(compilerOptions);
         const isJS = isInJSFile(importingFile);
         // 1. 'import =' will not work in es2015+ TS files, so the decision is between a default
@@ -679,10 +683,12 @@ namespace ts.codefix {
         if (!isJS && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return allowSyntheticDefaults ? ImportKind.Default : ImportKind.Namespace;
         }
-        // 2. 'import =' will not work in JavaScript, so the decision is between a default
-        //    and const/require.
+        // 2. 'import =' will not work in JavaScript, so the decision is between a default import,
+        //    a namespace import, and const/require.
         if (isJS) {
-            return isExternalModule(importingFile) ? ImportKind.Default : ImportKind.CommonJS;
+            return isExternalModule(importingFile) || forceImportKeyword
+                ? allowSyntheticDefaults ? ImportKind.Default : ImportKind.Namespace
+                : ImportKind.CommonJS;
         }
         // 3. At this point the most correct choice is probably 'import =', but people
         //    really hate that, so look to see if the importing file has any precedent
