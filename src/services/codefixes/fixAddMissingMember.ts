@@ -171,7 +171,7 @@ namespace ts.codefix {
         if (isIdentifier(token) && isCallExpression(parent.parent)) {
             const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
             const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
-            if (moduleDeclaration && moduleDeclarationSourceFile && !program.isSourceFileFromExternalLibrary(moduleDeclarationSourceFile)) {
+            if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
                 return { kind: InfoKind.Function, token, call: parent.parent, sourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
             }
 
@@ -180,7 +180,7 @@ namespace ts.codefix {
                 return;
             }
 
-            if (moduleSourceFile && !program.isSourceFileFromExternalLibrary(moduleSourceFile)) {
+            if (moduleSourceFile && !isSourceFileFromLibrary(program, moduleSourceFile)) {
                 return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleSourceFile };
             }
         }
@@ -193,7 +193,7 @@ namespace ts.codefix {
 
         // Prefer to change the class instead of the interface if they are merged
         const classOrInterface = classDeclaration || find(symbol.declarations, isInterfaceDeclaration);
-        if (classOrInterface && !program.isSourceFileFromExternalLibrary(classOrInterface.getSourceFile())) {
+        if (classOrInterface && !isSourceFileFromLibrary(program, classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) {
                 return undefined;
@@ -207,10 +207,14 @@ namespace ts.codefix {
         }
 
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration && !isPrivateIdentifier(token) && !program.isSourceFileFromExternalLibrary(enumDeclaration.getSourceFile())) {
+        if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;
+    }
+
+    function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
     }
 
     function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: ClassOrInterfaceInfo): CodeFixAction[] | undefined {
