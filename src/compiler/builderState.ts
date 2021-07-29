@@ -80,6 +80,7 @@ namespace ts {
         }
 
         export interface ReadonlyManyToManyPathMap {
+            readonly id: number;
             clone(): ManyToManyPathMap;
             forEach(action: (v: ReadonlySet<Path>, k: Path) => void): void;
             getKeys(v: Path): ReadonlySet<Path> | undefined;
@@ -96,13 +97,18 @@ namespace ts {
         }
 
         export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
+            version(): number; // Incremented each time the contents are changed
             deleteKey(k: Path): boolean;
             set(k: Path, v: ReadonlySet<Path>): void;
         }
 
+        let manyToManyPathMapCount = 0;
         export function createManyToManyPathMap(): ManyToManyPathMap {
             function create(forward: ESMap<Path, ReadonlySet<Path>>, reverse: ESMap<Path, Set<Path>>, deleted: Set<Path> | undefined): ManyToManyPathMap {
+                let version = 0;
                 const map: ManyToManyPathMap = {
+                    id: manyToManyPathMapCount++,
+                    version: () => version,
                     clone: () => create(new Map(forward), new Map(reverse), deleted && new Set(deleted)),
                     forEach: fn => forward.forEach(fn),
                     getKeys: v => reverse.get(v),
@@ -121,25 +127,32 @@ namespace ts {
 
                         set.forEach(v => deleteFromMultimap(reverse, v, k));
                         forward.delete(k);
+                        version++;
                         return true;
                     },
                     set: (k, vSet) => {
-                        deleted?.delete(k);
+                        let changed = !!deleted?.delete(k);
 
                         const existingVSet = forward.get(k);
                         forward.set(k, vSet);
 
                         existingVSet?.forEach(v => {
                             if (!vSet.has(v)) {
+                                changed = true;
                                 deleteFromMultimap(reverse, v, k);
                             }
                         });
 
                         vSet.forEach(v => {
                             if (!existingVSet?.has(v)) {
+                                changed = true;
                                 addToMultimap(reverse, v, k);
                             }
                         });
+
+                        if (changed) {
+                            version++;
+                        }
 
                         return map;
                     },
