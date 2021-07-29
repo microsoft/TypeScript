@@ -48,6 +48,11 @@ namespace ts {
          */
         readonly exportedModulesMap: BuilderState.ManyToManyPathMap | undefined;
 
+        previousCache?: {
+            id: number,
+            version: number,
+        };
+
         /**
          * true if file version is used as signature
          * This helps in delaying the calculation of the d.ts hash as version for the file till reasonable time
@@ -488,6 +493,22 @@ namespace ts {
         export function updateExportedFilesMapFromCache(state: BuilderState, exportedModulesMapCache: ManyToManyPathMap | undefined) {
             if (exportedModulesMapCache) {
                 Debug.assert(!!state.exportedModulesMap);
+
+                const cacheId = exportedModulesMapCache.id;
+                const cacheVersion = exportedModulesMapCache.version();
+                if (state.previousCache) {
+                    if (state.previousCache.id === cacheId && state.previousCache.version === cacheVersion) {
+                        // If this is the same cache at the same version as last time this BuilderState
+                        // was updated, there's not need to update again
+                        return;
+                    }
+                    state.previousCache.id = cacheId;
+                    state.previousCache.version = cacheVersion;
+                }
+                else {
+                    state.previousCache = { id: cacheId, version: cacheVersion };
+                }
+
                 exportedModulesMapCache.deletedKeys()?.forEach(path => state.exportedModulesMap!.deleteKey(path));
                 exportedModulesMapCache.forEach((exportedModules, path) => state.exportedModulesMap!.set(path, exportedModules));
             }
