@@ -5692,6 +5692,7 @@ declare namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
         provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
+        provideInlineValues(fileName: string, span: TextSpan, position: number): InlineValue[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5888,6 +5889,21 @@ declare namespace ts {
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
+    enum InlineValueType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+    interface InlineValueVariableLookup {
+        readonly type: InlineValueType.VariableLookup;
+        readonly span: TextSpan;
+        readonly variableName: string;
+    }
+    interface InlineValueEvaluatableExpression {
+        readonly type: InlineValueType.EvaluatableExpression;
+        readonly span: TextSpan;
+        readonly expression: string;
+    }
+    type InlineValue = InlineValueVariableLookup | InlineValueEvaluatableExpression;
     interface TodoCommentDescriptor {
         text: string;
         priority: number;
@@ -6564,6 +6580,14 @@ declare namespace ts {
         span: TextSpan;
         preferences: InlayHintsOptions;
     }
+    interface InlineValuesContext {
+        file: SourceFile;
+        position: number;
+        program: Program;
+        span: TextSpan;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
+    }
 }
 declare namespace ts {
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
@@ -6856,7 +6880,8 @@ declare namespace ts.server.protocol {
         PrepareCallHierarchy = "prepareCallHierarchy",
         ProvideCallHierarchyIncomingCalls = "provideCallHierarchyIncomingCalls",
         ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
-        ProvideInlayHints = "provideInlayHints"
+        ProvideInlayHints = "provideInlayHints",
+        ProvideInlineValues = "provideInlineValues"
     }
     /**
      * A TypeScript Server message
@@ -8766,6 +8791,32 @@ declare namespace ts.server.protocol {
     interface InlayHintsResponse extends Response {
         body?: InlayHintItem[];
     }
+    interface InlineValuesArgs extends FileLocationRequestArgs {
+        start: number;
+        length: number;
+    }
+    interface InlineValuesRequest extends Request {
+        command: CommandTypes.ProvideInlineValues;
+        arguments: InlineValuesArgs;
+    }
+    interface InlineValuesResponse extends Response {
+        body: InlineValue[];
+    }
+    enum InlineValueType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+    interface InlineValueVariableLookup {
+        readonly type: InlineValueType.VariableLookup;
+        readonly span: TextSpan;
+        readonly variableName: string;
+    }
+    interface InlineValueEvaluatableExpression {
+        readonly type: InlineValueType.EvaluatableExpression;
+        readonly span: TextSpan;
+        readonly expression: string;
+    }
+    type InlineValue = InlineValueVariableLookup | InlineValueEvaluatableExpression;
     /**
      * Synchronous request for semantic diagnostics of one file.
      */
@@ -10398,6 +10449,7 @@ declare namespace ts.server {
         private getJsxClosingTag;
         private getDocumentHighlights;
         private provideInlayHints;
+        private provideInlineValues;
         private setCompilerOptionsForInferredProjects;
         private getProjectInfo;
         private getProjectInfoWorker;

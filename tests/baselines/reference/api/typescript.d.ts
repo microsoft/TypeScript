@@ -5692,6 +5692,7 @@ declare namespace ts {
         provideCallHierarchyIncomingCalls(fileName: string, position: number): CallHierarchyIncomingCall[];
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): CallHierarchyOutgoingCall[];
         provideInlayHints(fileName: string, span: TextSpan, preferences: UserPreferences | undefined): InlayHint[];
+        provideInlineValues(fileName: string, span: TextSpan, position: number): InlineValue[];
         getOutliningSpans(fileName: string): OutliningSpan[];
         getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[];
         getBraceMatchingAtPosition(fileName: string, position: number): TextSpan[];
@@ -5888,6 +5889,21 @@ declare namespace ts {
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
+    enum InlineValueType {
+        VariableLookup = "VariableLookup",
+        EvaluatableExpression = "EvaluatableExpression"
+    }
+    interface InlineValueVariableLookup {
+        readonly type: InlineValueType.VariableLookup;
+        readonly span: TextSpan;
+        readonly variableName: string;
+    }
+    interface InlineValueEvaluatableExpression {
+        readonly type: InlineValueType.EvaluatableExpression;
+        readonly span: TextSpan;
+        readonly expression: string;
+    }
+    type InlineValue = InlineValueVariableLookup | InlineValueEvaluatableExpression;
     interface TodoCommentDescriptor {
         text: string;
         priority: number;
@@ -6563,6 +6579,14 @@ declare namespace ts {
         host: LanguageServiceHost;
         span: TextSpan;
         preferences: InlayHintsOptions;
+    }
+    interface InlineValuesContext {
+        file: SourceFile;
+        position: number;
+        program: Program;
+        span: TextSpan;
+        cancellationToken: CancellationToken;
+        host: LanguageServiceHost;
     }
 }
 declare namespace ts {
