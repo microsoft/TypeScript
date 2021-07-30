@@ -1,0 +1,63 @@
+=== tests/cases/conformance/controlFlow/controlFlowInOperator.ts ===
+const a = 'a';
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+
+const b = 'b';
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+
+const d = 'd';
+>d : Symbol(d, Decl(controlFlowInOperator.ts, 2, 5))
+
+type A = { [a]: number; };
+>A : Symbol(A, Decl(controlFlowInOperator.ts, 2, 14))
+>[a] : Symbol([a], Decl(controlFlowInOperator.ts, 4, 10))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+
+type B = { [b]: string; };
+>B : Symbol(B, Decl(controlFlowInOperator.ts, 4, 26))
+>[b] : Symbol([b], Decl(controlFlowInOperator.ts, 5, 10))
+>b : Symbol(b, Decl(controlFlowInOperator.ts, 1, 5))
+
+declare const c: A | B;
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+>A : Symbol(A, Decl(controlFlowInOperator.ts, 2, 14))
+>B : Symbol(B, Decl(controlFlowInOperator.ts, 4, 26))
+
+if ('a' in c) {
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c;      // A
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c['a']; // number;
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+>'a' : Symbol([a], Decl(controlFlowInOperator.ts, 4, 10))
+}
+
+if ('d' in c) {
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c; // never
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+}
+
+if (a in c) {
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c;    // A
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c[a]; // number;
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+>a : Symbol(a, Decl(controlFlowInOperator.ts, 0, 5))
+}
+
+if (d in c) {
+>d : Symbol(d, Decl(controlFlowInOperator.ts, 2, 5))
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+
+    c; // never
+>c : Symbol(c, Decl(controlFlowInOperator.ts, 7, 13))
+}
+

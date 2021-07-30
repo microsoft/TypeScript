@@ -886,6 +886,7 @@ namespace ts {
         let sourceFileToPackageName = new Map<Path, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
+        let usesUriStyleNodeCoreModules = false;
 
         /**
          * map with
@@ -1087,6 +1088,7 @@ namespace ts {
             getLibFileFromReference,
             sourceFileToPackageName,
             redirectTargetsMap,
+            usesUriStyleNodeCoreModules,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1635,6 +1637,7 @@ namespace ts {
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
+            usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
 
             return StructureIsReused.Completely;
         }
@@ -2327,6 +2330,9 @@ namespace ts {
                     // only through top - level external module names. Relative external module names are not permitted.
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
                         imports = append(imports, moduleNameExpr);
+                        if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
+                            usesUriStyleNodeCoreModules = startsWith(moduleNameExpr.text, "node:");
+                        }
                     }
                 }
                 else if (isModuleDeclaration(node)) {

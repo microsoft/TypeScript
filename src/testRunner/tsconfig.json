@@ -99,6 +99,7 @@
         "unittests/evaluation/optionalCall.ts",
         "unittests/evaluation/objectRest.ts",
         "unittests/evaluation/superInStaticInitializer.ts",
+        "unittests/evaluation/updateExpressionInModule.ts",
         "unittests/services/cancellableLanguageServiceOperations.ts",
         "unittests/services/colorization.ts",
         "unittests/services/convertToAsyncFunction.ts",

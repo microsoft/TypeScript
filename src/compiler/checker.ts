@@ -4537,6 +4537,7 @@ namespace ts {
                     reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
                     reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
                     reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
+                    reportNonSerializableProperty: wrapReportedDiagnostic(tracker.reportNonSerializableProperty),
                     trackSymbol: oldTrackSymbol && ((...args) => {
                         const result = oldTrackSymbol(...args);
                         if (result) {
@@ -5244,17 +5245,22 @@ namespace ts {
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
-                    const decl = first(propertySymbol.declarations!);
-                    if (propertySymbol.declarations && hasLateBindableName(decl)) {
-                        if (isBinaryExpression(decl)) {
-                            const name = getNameOfDeclaration(decl);
-                            if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
-                                trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                    if (propertySymbol.declarations) {
+                        const decl = first(propertySymbol.declarations);
+                        if (hasLateBindableName(decl)) {
+                            if (isBinaryExpression(decl)) {
+                                const name = getNameOfDeclaration(decl);
+                                if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
+                                    trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                                }
+                            }
+                            else {
+                                trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
                             }
                         }
-                        else {
-                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
-                        }
+                    }
+                    else if (context.tracker?.reportNonSerializableProperty) {
+                        context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                     }
                 }
                 context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
@@ -14247,8 +14253,10 @@ namespace ts {
             // a symbol-like type and a type known to be non-symbol-like, or
             // a void-like type and a type known to be non-void-like, or
             // a non-primitive type and a type known to be primitive.
-            if (includes & TypeFlags.Never ||
-                strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
+            if (includes & TypeFlags.Never) {
+                return contains(typeSet, silentNeverType) ? silentNeverType : neverType;
+            }
+            if (strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
                 includes & TypeFlags.NonPrimitive && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
                 includes & TypeFlags.StringLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
                 includes & TypeFlags.NumberLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
@@ -23587,13 +23595,12 @@ namespace ts {
                 return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 if (type.flags & TypeFlags.Union
                     || type.flags & TypeFlags.Object && declaredType !== type
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
-                    const propName = escapeLeadingUnderscores(literal.text);
-                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
                 return type;
             }
@@ -23651,13 +23658,15 @@ namespace ts {
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
                         const target = getReferenceCandidate(expr.right);
-                        if (isStringLiteralLike(expr.left)) {
+                        const leftType = getTypeOfNode(expr.left);
+                        if (leftType.flags & TypeFlags.StringLiteral) {
+                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === escapeLeadingUnderscores(expr.left.text)) {
+                                getAccessedPropertyName(reference) === name) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, expr.left, assumeTrue);
+                                return narrowByInKeyword(type, name, assumeTrue);
                             }
                         }
                         break;
@@ -25387,14 +25396,48 @@ namespace ts {
             }
         }
 
+        /**
+         * Try to find a resolved symbol for an expression without also resolving its type, as
+         * getSymbolAtLocation would (as that could be reentrant into contextual typing)
+         */
+         function getSymbolForExpression(e: Expression) {
+            if (e.symbol) {
+                return e.symbol;
+            }
+            if (isIdentifier(e)) {
+                return getResolvedSymbol(e);
+            }
+            if (isPropertyAccessExpression(e)) {
+                const lhsType = getTypeOfExpression(e.expression);
+                return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
+            }
+            return undefined;
+
+            function tryGetPrivateIdentifierPropertyOfType(type: Type, id: PrivateIdentifier) {
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(id.escapedText, id);
+                return lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(type, lexicallyScopedSymbol);
+            }
+        }
+
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for assignment declarations unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function getContextualTypeForAssignmentDeclaration(binaryExpression: BinaryExpression): Type | undefined {
             const kind = getAssignmentDeclarationKind(binaryExpression);
             switch (kind) {
                 case AssignmentDeclarationKind.None:
-                    return getTypeOfExpression(binaryExpression.left);
                 case AssignmentDeclarationKind.ThisProperty:
+                    const lhsSymbol = getSymbolForExpression(binaryExpression.left);
+                    const decl = lhsSymbol && lhsSymbol.valueDeclaration;
+                    // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor.
+                    // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case.
+                    if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl))) {
+                        const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
+                        return (overallAnnotation && getTypeFromTypeNode(overallAnnotation)) ||
+                            (decl.initializer && getTypeOfExpression(binaryExpression.left));
+                    }
+                    if (kind === AssignmentDeclarationKind.None) {
+                        return getTypeOfExpression(binaryExpression.left);
+                    }
                     return getContextualTypeForThisPropertyAssignment(binaryExpression);
                 case AssignmentDeclarationKind.Property:
                     if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
@@ -27764,6 +27807,7 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
+                    case SyntaxKind.ArrowFunction:
                     case SyntaxKind.ExpressionStatement:
                         return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
                     default:
@@ -27894,7 +27938,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined {
-            return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
+            return getSpellingSuggestionForName(name, getPropertiesOfType(baseType), SymbolFlags.ClassMember);
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {

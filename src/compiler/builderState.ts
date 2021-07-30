@@ -178,22 +178,16 @@ namespace ts {
          */
         export type ComputeHash = ((data: string) => string) | undefined;
 
-        /**
-         * Get the referencedFile from the imported module symbol
-         */
-        function getReferencedFileFromImportedModuleSymbol(symbol: Symbol) {
-            if (symbol.declarations && symbol.declarations[0]) {
-                const declarationSourceFile = getSourceFileOfNode(symbol.declarations[0]);
-                return declarationSourceFile && declarationSourceFile.resolvedPath;
-            }
+        function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
+            return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
         }
 
         /**
-         * Get the referencedFile from the import name node from file
+         * Get the module source file and all augmenting files from the import name node from file
          */
-        function getReferencedFileFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike) {
+        function getReferencedFilesFromImportLiteral(checker: TypeChecker, importName: StringLiteralLike): Path[] | undefined {
             const symbol = checker.getSymbolAtLocation(importName);
-            return symbol && getReferencedFileFromImportedModuleSymbol(symbol);
+            return symbol && getReferencedFilesFromImportedModuleSymbol(symbol);
         }
 
         /**
@@ -215,10 +209,8 @@ namespace ts {
             if (sourceFile.imports && sourceFile.imports.length > 0) {
                 const checker: TypeChecker = program.getTypeChecker();
                 for (const importName of sourceFile.imports) {
-                    const declarationSourceFilePath = getReferencedFileFromImportLiteral(checker, importName);
-                    if (declarationSourceFilePath) {
-                        addReferencedFile(declarationSourceFilePath);
-                    }
+                    const declarationSourceFilePaths = getReferencedFilesFromImportLiteral(checker, importName);
+                    declarationSourceFilePaths?.forEach(addReferencedFile);
                 }
             }
 
@@ -458,7 +450,7 @@ namespace ts {
             }
 
             let exportedModules: Set<Path> | undefined;
-            exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFileFromImportedModuleSymbol(symbol)));
+            exportedModulesFromDeclarationEmit.forEach(symbol => addExportedModule(getReferencedFilesFromImportedModuleSymbol(symbol)));
             if (exportedModules) {
                 exportedModulesMapCache.set(sourceFile.resolvedPath, exportedModules);
             }
@@ -466,12 +458,12 @@ namespace ts {
                 exportedModulesMapCache.deleteKey(sourceFile.resolvedPath);
             }
 
-            function addExportedModule(exportedModulePath: Path | undefined) {
-                if (exportedModulePath) {
+            function addExportedModule(exportedModulePaths: Path[] | undefined) {
+                if (exportedModulePaths?.length) {
                     if (!exportedModules) {
                         exportedModules = new Set();
                     }
-                    exportedModules.add(exportedModulePath);
+                    exportedModulePaths.forEach(path => exportedModules!.add(path));
                 }
             }
         }
