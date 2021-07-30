@@ -1045,8 +1045,6 @@ namespace FourSlashInterface {
             interfaceEntry("NumberConstructor"),
             interfaceEntry("TemplateStringsArray"),
             interfaceEntry("ImportMeta"),
-            interfaceEntry("ImportMetaExpression"),
-            interfaceEntry("NewTargetExpression"),
             varEntry("Math"),
             varEntry("Date"),
             interfaceEntry("DateConstructor"),

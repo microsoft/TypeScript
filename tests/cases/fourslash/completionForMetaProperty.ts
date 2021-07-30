@@ -15,6 +15,6 @@ verify.completions(
     },
     {
         marker: "3",
-        exact: [{ name: "target", text: "(property) NewTargetExpression<() => void>.target: () => void" }]
+        exact: [{ name: "target", text: "(property) NewTargetExpression.target: () => void" }]
     },
 );

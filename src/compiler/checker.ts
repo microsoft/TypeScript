@@ -920,9 +920,8 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
-        let deferredGlobalImportMetaExpressionType: ObjectType;
-        let deferredGlobalNewTargetExpressionType: GenericType;
         let deferredGlobalImportMetaType: ObjectType;
+        let deferredGlobalImportMetaExpressionType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
@@ -13327,11 +13326,21 @@ namespace ts {
         }
 
         function getGlobalImportMetaExpressionType() {
-            return deferredGlobalImportMetaExpressionType || (deferredGlobalImportMetaExpressionType = getGlobalType("ImportMetaExpression" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
-        }
+            if (!deferredGlobalImportMetaExpressionType) {
+                // Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
+                const symbol = createSymbol(SymbolFlags.None, "ImportMetaExpression" as __String);
+                const importMetaType = getGlobalImportMetaType();
 
-        function getGlobalNewTargetExpressionType() {
-            return deferredGlobalNewTargetExpressionType || (deferredGlobalNewTargetExpressionType = getGlobalType("NewTargetExpression" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String);
+                metaPropertySymbol.parent = symbol;
+                metaPropertySymbol.type = importMetaType;
+
+                const members = createSymbolTable([metaPropertySymbol]);
+                symbol.members = members;
+
+                deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+            }
+            return deferredGlobalImportMetaExpressionType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
@@ -30871,13 +30880,16 @@ namespace ts {
         }
 
         function createNewTargetExpressionType(targetType: Type): Type {
-            // creates a `NewTargetExpression<T>` type where `T` is the target type
-            const newTargetExpressionType = getGlobalNewTargetExpressionType();
-            if (newTargetExpressionType !== emptyGenericType) {
-                return createTypeReference(newTargetExpressionType, [targetType]);
-            }
+            // Create a synthetic type `NewTargetExpression { target: TargetType; }`
+            const symbol = createSymbol(SymbolFlags.None, "NewTargetExpression" as __String);
 
-            return errorType;
+            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String);
+            targetPropertySymbol.parent = symbol;
+            targetPropertySymbol.type = targetType;
+
+            const members = createSymbolTable([targetPropertySymbol]);
+            symbol.members = members;
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
