@@ -802,6 +802,11 @@ namespace ts {
             return contextualType;
         }
 
+        const parent = node.parent;
+        if (parent && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)) {
+            return checker.getTypeAtLocation(node === parent.left ? parent.right : parent.left);
+        }
+
         const ancestorTypeNode = getAncestorTypeNode(node);
         return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
     }
@@ -3169,6 +3174,15 @@ namespace ts {
 
     export function isDeprecatedDeclaration(decl: Declaration) {
         return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
+
+    export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+        const decisionFromFile = firstDefined(file.imports, node => {
+            if (JsTyping.nodeCoreModules.has(node.text)) {
+                return startsWith(node.text, "node:");
+            }
+        });
+        return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
     }
 
     // #endregion

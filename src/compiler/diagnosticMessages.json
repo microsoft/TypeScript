@@ -1368,6 +1368,46 @@
         "category": "Error",
         "code": 1433
     },
+    "Unexpected keyword or identifier.": {
+        "category": "Error",
+        "code": 1434
+    },
+    "Unknown keyword or identifier. Did you mean '{0}'?": {
+        "category": "Error",
+        "code": 1435
+    },
+    "Decorators must precede the name and all keywords of property declarations.": {
+        "category": "Error",
+        "code": 1436
+    },
+    "Namespace must be given a name.": {
+        "category": "Error",
+        "code": 1437
+    },
+    "Interface must be given a name.": {
+        "category": "Error",
+        "code": 1438
+    },
+    "Type alias must be given a name.": {
+        "category": "Error",
+        "code": 1439
+    },
+    "Variable declaration not allowed at this location.": {
+        "category": "Error",
+        "code": 1440
+    },
+    "Cannot start a function call in a type annotation.": {
+        "category": "Error",
+        "code": 1441
+    },
+    "Expected '=' for property initializer.": {
+        "category": "Error",
+        "code": 1442
+    },
+    "Module declaration names may only use ' or \" quoted strings.": {
+        "category": "Error",
+        "code": 1443
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3352,6 +3392,14 @@
         "category": "Error",
         "code": 2817
     },
+    "Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.": {
+        "category": "Error",
+        "code": 2818
+    },
+    "Namespace name cannot be '{0}'.": {
+        "category": "Error",
+        "code": 2819
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3752,6 +3800,10 @@
     "This member cannot have an 'override' modifier because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 4117
+    },
+    "The type of this node cannot be serialized because its property '{0}' cannot be serialized.": {
+        "category": "Error",
+        "code": 4118
     },
 
     "The current host does not support the '{0}' option.": {

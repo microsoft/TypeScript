@@ -1,12 +1,13 @@
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(1,1): error TS2304: Cannot find name 'cla'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(1,6): error TS2304: Cannot find name 'ss'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(1,9): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,3): error TS1434: Unexpected keyword or identifier.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,3): error TS2304: Cannot find name '_'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,5): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,5): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,15): error TS1005: '{' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts (6 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts (7 errors) ====
     cla <ss {
     ~~~
 !!! error TS2304: Cannot find name 'cla'.
@@ -16,9 +17,11 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts(2,15): e
 !!! error TS1005: ';' expected.
       _ static try
       ~
+!!! error TS1434: Unexpected keyword or identifier.
+      ~
 !!! error TS2304: Cannot find name '_'.
         ~~~~~~
-!!! error TS1005: ';' expected.
+!!! error TS1128: Declaration or statement expected.
                   
 !!! error TS1005: '{' expected.
 !!! related TS1007 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserFuzz1.ts:1:9: The parser expected to find a '}' to match the '{' token here.
