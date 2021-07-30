@@ -130,7 +130,7 @@ namespace ts.server {
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
-            setTimeout: (cb, ms, args) => setTimeout(cb, ms, args),
+            setTimeout: (cb, ms, ...args) => setTimeout(cb, ms, ...args),
             clearTimeout: handle => clearTimeout(handle),
             setImmediate: x => setTimeout(x, 0),
             clearImmediate: handle => clearTimeout(handle),
