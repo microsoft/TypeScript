@@ -4536,6 +4536,7 @@ namespace ts {
                     reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
                     reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
                     reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
+                    reportNonSerializableProperty: wrapReportedDiagnostic(tracker.reportNonSerializableProperty),
                     trackSymbol: oldTrackSymbol && ((...args) => {
                         const result = oldTrackSymbol(...args);
                         if (result) {
@@ -5243,17 +5244,22 @@ namespace ts {
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
-                    const decl = first(propertySymbol.declarations!);
-                    if (propertySymbol.declarations && hasLateBindableName(decl)) {
-                        if (isBinaryExpression(decl)) {
-                            const name = getNameOfDeclaration(decl);
-                            if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
-                                trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                    if (propertySymbol.declarations) {
+                        const decl = first(propertySymbol.declarations);
+                        if (hasLateBindableName(decl)) {
+                            if (isBinaryExpression(decl)) {
+                                const name = getNameOfDeclaration(decl);
+                                if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
+                                    trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                                }
+                            }
+                            else {
+                                trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
                             }
                         }
-                        else {
-                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
-                        }
+                    }
+                    else if (context.tracker?.reportNonSerializableProperty) {
+                        context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                     }
                 }
                 context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;

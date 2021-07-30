@@ -121,8 +121,12 @@ namespace ts.InlayHints {
         }
 
         function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
+            if (!decl.initializer || isBindingPattern(decl.name)) {
+                return;
+            }
+
             const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(decl);
-            if (effectiveTypeAnnotation || !decl.initializer) {
+            if (effectiveTypeAnnotation) {
                 return;
             }
 
