@@ -13331,7 +13331,7 @@ namespace ts {
                 const symbol = createSymbol(SymbolFlags.None, "ImportMetaExpression" as __String);
                 const importMetaType = getGlobalImportMetaType();
 
-                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String);
+                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String, CheckFlags.Readonly);
                 metaPropertySymbol.parent = symbol;
                 metaPropertySymbol.type = importMetaType;
 
@@ -30883,7 +30883,7 @@ namespace ts {
             // Create a synthetic type `NewTargetExpression { target: TargetType; }`
             const symbol = createSymbol(SymbolFlags.None, "NewTargetExpression" as __String);
 
-            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String);
+            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String, CheckFlags.Readonly);
             targetPropertySymbol.parent = symbol;
             targetPropertySymbol.type = targetType;
 
