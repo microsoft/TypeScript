@@ -8,6 +8,8 @@ namespace ts {
             projFs = undefined!;
         });
 
+        // This is pretty close but the example only has one project. Still it's worth debugging it to see.
+        // (for initial debugging, it's STILl probably easier to attach to ~/dmp/buildbasic/test though)
         function verifyEmitDeclarationOnly(disableMap?: true) {
             verifyTscSerializedIncrementalEdits({
                 subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,

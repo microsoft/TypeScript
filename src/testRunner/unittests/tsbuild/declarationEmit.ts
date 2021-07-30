@@ -114,5 +114,12 @@ export function fn4() {
             }),
             commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"]
         });
+        verifyTsc({
+            scenario: "doubleEmit",
+            subScenario: "cache declaration emit from build",
+            fs: () => loadProjectFromFiles({
+            }),
+            commandLineArgs: ["--b", "/src/packages/pkg2/tsconfig.json", "--verbose"]
+        });
     });
 }

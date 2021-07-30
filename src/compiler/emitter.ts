@@ -438,6 +438,8 @@ namespace ts {
             if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
         }
 
+        const horrible: Record<string, readonly SourceFile[]> = {}
+
         function emitDeclarationFileOrBundle(
             sourceFileOrBundle: SourceFile | Bundle | undefined,
             declarationFilePath: string | undefined,
@@ -449,6 +451,13 @@ namespace ts {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            const key = sourceFiles.map(f => f.fileName).join("|")
+            console.log(key)
+            horrible[key] = sourceFiles
+            // Let's do this WRONG
+            // 1. cache with key=filesForEmit, value=[emit, diagnostics]
+            // 2. include custom transformers in the key, plus "other api things" (??)
+            // Afterward, need to measure performance to see which projects this helps/how much. Ask Andrew about this.
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
             const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;

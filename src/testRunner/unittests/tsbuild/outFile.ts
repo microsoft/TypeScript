@@ -201,6 +201,9 @@ namespace ts {
             modifyFs: fs => replaceText(fs, sources[Project.third][Source.config], `"composite": true,`, ""),
         });
 
+        it("only generates declaration emit once on subsequent edits and recompiles", () => {
+        })
+
         it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
             const { fs, tick } = getFsWithTime(outFileFs);
             const host = fakes.SolutionBuilderHost.create(fs);
