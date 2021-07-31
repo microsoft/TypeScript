@@ -2013,7 +2013,8 @@ namespace ts.Completions {
             const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                 isSolelyIdentifierDefinitionLocation(contextToken) ||
                 isDotOfNumericLiteral(contextToken) ||
-                isInJsxText(contextToken);
+                isInJsxText(contextToken) ||
+                isBigIntLiteral(contextToken);
             log("getCompletionsAtPosition: isCompletionListBlocker: " + (timestamp() - start));
             return result;
         }
