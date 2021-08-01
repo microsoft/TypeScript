@@ -1,0 +1,76 @@
+=== tests/cases/conformance/es6/templates/taggedTemplateStringsWithGenericStringPartsES6.ts ===
+type DataTypes = 'string'|'number'|'boolean';
+>DataTypes : Symbol(DataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 0, 0))
+
+interface DataTypesToTypeScriptType {
+>DataTypesToTypeScriptType : Symbol(DataTypesToTypeScriptType, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 0, 45))
+
+  string: string;
+>string : Symbol(DataTypesToTypeScriptType.string, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 2, 37))
+
+  number: number;
+>number : Symbol(DataTypesToTypeScriptType.number, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 3, 17))
+
+  boolean: boolean;
+>boolean : Symbol(DataTypesToTypeScriptType.boolean, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 4, 17))
+}
+
+type ArgsFor<TParts extends readonly unknown[]> =
+>ArgsFor : Symbol(ArgsFor, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 6, 1))
+>TParts : Symbol(TParts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 8, 13))
+
+    TParts extends [infer THead, ...infer TTail]
+>TParts : Symbol(TParts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 8, 13))
+>THead : Symbol(THead, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 25))
+>TTail : Symbol(TTail, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 41))
+
+        ? THead extends DataTypes
+>THead : Symbol(THead, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 25))
+>DataTypes : Symbol(DataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 0, 0))
+
+            ? [DataTypesToTypeScriptType[THead], ...ArgsFor<TTail>]
+>DataTypesToTypeScriptType : Symbol(DataTypesToTypeScriptType, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 0, 45))
+>THead : Symbol(THead, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 25))
+>ArgsFor : Symbol(ArgsFor, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 6, 1))
+>TTail : Symbol(TTail, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 41))
+
+            : [never, ...ArgsFor<TTail>]
+>ArgsFor : Symbol(ArgsFor, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 6, 1))
+>TTail : Symbol(TTail, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 9, 41))
+
+        : []
+
+declare function dataTypes<TParts extends readonly string[], TArgs extends ArgsFor<TParts>>(
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+>TParts : Symbol(TParts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 27))
+>TArgs : Symbol(TArgs, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 60))
+>ArgsFor : Symbol(ArgsFor, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 6, 1))
+>TParts : Symbol(TParts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 27))
+
+  parts: TemplateStringsArray<readonly [...TParts, '']>,
+>parts : Symbol(parts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 92))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TParts : Symbol(TParts, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 27))
+
+  ...args: TArgs): unknown;
+>args : Symbol(args, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 16, 56))
+>TArgs : Symbol(TArgs, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 15, 60))
+
+dataTypes `string${'abc'}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
+dataTypes `number${5}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
+dataTypes `boolean${true}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
+dataTypes `unknown${[]}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
+dataTypes `string${3}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
+dataTypes `string${'abc'}string${'def'}number${10}boolean${false}`;
+>dataTypes : Symbol(dataTypes, Decl(taggedTemplateStringsWithGenericStringPartsES6.ts, 13, 12))
+
