@@ -40351,11 +40351,11 @@ namespace ts {
             let isTypeOnly = false;
             if (isQualifiedName(typeName)) {
                 const rootValueSymbol = resolveEntityName(getFirstIdentifier(typeName), SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
-                isTypeOnly = rootValueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration) || false;
+                isTypeOnly = !!rootValueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration);
             }
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
             const resolvedSymbol = valueSymbol && valueSymbol.flags & SymbolFlags.Alias ? resolveAlias(valueSymbol) : valueSymbol;
-            isTypeOnly ||= valueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration) || false;
+            isTypeOnly ||= !!valueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration);
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
