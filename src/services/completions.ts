@@ -27,7 +27,7 @@ namespace ts.Completions {
         DeprecatedAutoImportSuggestions = "24"
     }
 
-    enum SortTextId {
+    const enum SortTextId {
         LocalDeclarationPriority = 10,
         LocationPriority = 11,
         OptionalMember = 12,
@@ -35,10 +35,14 @@ namespace ts.Completions {
         SuggestedClassMembers = 14,
         GlobalsOrKeywords = 15,
         AutoImportSuggestions = 16,
-    }
 
-    // for JavaScript identifiers since they are preferred over deprecated symbols
-    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2;
+        // Don't use these directly.
+        _JavaScriptIdentifiers = 17,
+        _DeprecatedStart = 18,
+        _First = LocalDeclarationPriority,
+
+        DeprecatedOffset = _DeprecatedStart - _First,
+    }
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
@@ -790,7 +794,7 @@ namespace ts.Completions {
 
             const { name, needsConvertPropertyAccess } = info;
             const sortTextId = symbolToSortTextIdMap?.[getSymbolId(symbol)] ?? SortTextId.LocationPriority;
-            const sortText = (isDeprecated(symbol, typeChecker) ? DeprecatedSortTextStart + sortTextId : sortTextId).toString() as SortText;
+            const sortText = (isDeprecated(symbol, typeChecker) ? SortTextId.DeprecatedOffset + sortTextId : sortTextId).toString() as SortText;
             const entry = createCompletionEntry(
                 symbol,
                 sortText,
