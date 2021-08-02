@@ -580,6 +580,7 @@ namespace ts {
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
+            forEachExportAndPropertyOfModule,
             getSymbolWalker: createGetSymbolWalker(
                 getRestTypeOfSignature,
                 getTypePredicateOfSignature,
@@ -3528,6 +3529,25 @@ namespace ts {
                 }
             }
             return exports;
+        }
+
+        function forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void {
+            const exports = getExportsOfModule(moduleSymbol);
+            exports.forEach((symbol, key) => {
+                if (!isReservedMemberName(key)) {
+                    cb(symbol, key);
+                }
+            });
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals !== moduleSymbol) {
+                const type = getTypeOfSymbol(exportEquals);
+                if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
+                    getPropertiesOfType(type).forEach(symbol => {
+                        Debug.assert(getPropertyOfType(type, symbol.escapedName) === symbol);
+                        cb(symbol, symbol.escapedName);
+                    });
+                }
+            }
         }
 
         function tryGetMemberInModuleExports(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
