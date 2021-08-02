@@ -336,7 +336,7 @@ namespace ts {
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'
-            if (defaultInfo && !checker.isUndefinedSymbol(defaultInfo.symbol)) {
+            if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                 cache.add(
                     importingFile.path,
                     defaultInfo.symbol,
@@ -349,7 +349,7 @@ namespace ts {
                     checker);
             }
             checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
-                if (exported !== defaultInfo?.symbol && addToSeen(seenExports, exported)) {
+                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, exported)) {
                     cache.add(
                         importingFile.path,
                         exported,
@@ -374,6 +374,10 @@ namespace ts {
         const { symbol, exportKind } = exported;
         const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
         return info && { symbol, exportKind, ...info };
+    }
+
+    function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
+        return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
     }
 
     function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly exportKind: ExportKind } | undefined {
