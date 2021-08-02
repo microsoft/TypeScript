@@ -25413,7 +25413,7 @@ namespace ts {
                     // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case.
                     if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl))) {
                         const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
-                        return (overallAnnotation && getTypeFromTypeNode(overallAnnotation)) ||
+                        return (overallAnnotation && instantiateType(getTypeFromTypeNode(overallAnnotation), getSymbolLinks(lhsSymbol).mapper)) ||
                             (decl.initializer && getTypeOfExpression(binaryExpression.left));
                     }
                     if (kind === AssignmentDeclarationKind.None) {
