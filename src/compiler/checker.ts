@@ -3543,7 +3543,6 @@ namespace ts {
                 const type = getTypeOfSymbol(exportEquals);
                 if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
                     getPropertiesOfType(type).forEach(symbol => {
-                        Debug.assert(getPropertyOfType(type, symbol.escapedName) === symbol);
                         cb(symbol, symbol.escapedName);
                     });
                 }
