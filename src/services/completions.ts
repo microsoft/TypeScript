@@ -6,36 +6,43 @@ namespace ts.Completions {
 
     export type Log = (message: string) => void;
 
+    // NOTE: Make sure that each entry has the exact same number of digits
+    //       since many implementations will sort by string contents,
+    //       where "10" is considered less than "2".
     export enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7",
-        DeprecatedLocalDeclarationPriority = "8",
-        DeprecatedLocationPriority = "9",
-        DeprecatedOptionalMember = "10",
-        DeprecatedMemberDeclaredBySpreadAssignment = "11",
-        DeprecatedSuggestedClassMembers = "12",
-        DeprecatedGlobalsOrKeywords = "13",
-        DeprecatedAutoImportSuggestions = "14"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
 
-    enum SortTextId {
-        LocalDeclarationPriority,
-        LocationPriority,
-        OptionalMember,
-        MemberDeclaredBySpreadAssignment,
-        SuggestedClassMembers,
-        GlobalsOrKeywords,
-        AutoImportSuggestions
-    }
+    const enum SortTextId {
+        LocalDeclarationPriority = 10,
+        LocationPriority = 11,
+        OptionalMember = 12,
+        MemberDeclaredBySpreadAssignment = 13,
+        SuggestedClassMembers = 14,
+        GlobalsOrKeywords = 15,
+        AutoImportSuggestions = 16,
 
-    // for JavaScript identifiers since they are preferred over deprecated symbols
-    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2;
+        // Don't use these directly.
+        _JavaScriptIdentifiers = 17,
+        _DeprecatedStart = 18,
+        _First = LocalDeclarationPriority,
+
+        DeprecatedOffset = _DeprecatedStart - _First,
+    }
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
@@ -787,7 +794,7 @@ namespace ts.Completions {
 
             const { name, needsConvertPropertyAccess } = info;
             const sortTextId = symbolToSortTextIdMap?.[getSymbolId(symbol)] ?? SortTextId.LocationPriority;
-            const sortText = (isDeprecated(symbol, typeChecker) ? DeprecatedSortTextStart + sortTextId : sortTextId).toString() as SortText;
+            const sortText = (isDeprecated(symbol, typeChecker) ? SortTextId.DeprecatedOffset + sortTextId : sortTextId).toString() as SortText;
             const entry = createCompletionEntry(
                 symbol,
                 sortText,
