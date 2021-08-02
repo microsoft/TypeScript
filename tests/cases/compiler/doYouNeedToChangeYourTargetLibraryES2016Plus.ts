@@ -40,7 +40,9 @@ const testStringMatchAll = "".matchAll();
 const testRegExpMatchAll = /matchAll/g[Symbol.matchAll]("matchAll");
 const testBigInt = BigInt(123);
 
-// esnext
+// es2021
 const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
+
+// esnext
 const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();

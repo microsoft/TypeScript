@@ -17,11 +17,11 @@ namespace ts.projectSystem {
                 const service = createProjectService(host);
                 service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
                 const upperCaseConfigFilePath = combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path));
-                service.openExternalProject(<protocol.ExternalProject>{
+                service.openExternalProject({
                     projectFileName: "/a/b/project.csproj",
                     rootFiles: toExternalFiles([f1.path, upperCaseConfigFilePath]),
                     options: {}
-                });
+                } as protocol.ExternalProject);
                 service.checkNumberOfProjects({ configuredProjects: 1 });
                 const project = service.configuredProjects.get(config.path)!;
                 if (lazyConfiguredProjectsFromExternalProject) {
@@ -85,18 +85,18 @@ namespace ts.projectSystem {
             };
             const session = createSession(host, { globalPlugins: ["myplugin"] });
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand({
                 seq: 1,
                 type: "request",
                 command: "openExternalProjects",
                 arguments: { projects: [p1] }
-            });
+            } as protocol.OpenExternalProjectsRequest);
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { externalProjects: 1 });
             assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
 
-            const handlerResponse = session.executeCommand(<protocol.SemanticDiagnosticsSyncRequest>{
+            const handlerResponse = session.executeCommand({
                 seq: 2,
                 type: "request",
                 command: "semanticDiagnosticsSync",
@@ -104,7 +104,7 @@ namespace ts.projectSystem {
                     file: f1.path,
                     projectFileName: p1.projectFileName
                 }
-            });
+            } as protocol.SemanticDiagnosticsSyncRequest);
 
             assert.isDefined(handlerResponse.response);
             const response = handlerResponse.response as protocol.Diagnostic[];
@@ -133,42 +133,42 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, f2, f3]);
             const session = createSession(host);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand({
                 seq: 1,
                 type: "request",
                 command: "openExternalProjects",
                 arguments: { projects: [p1, p2] }
-            });
+            } as protocol.OpenExternalProjectsRequest);
 
             const projectService = session.getProjectService();
             checkNumberOfProjects(projectService, { externalProjects: 2 });
             assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
             assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand({
                 seq: 2,
                 type: "request",
                 command: "openExternalProjects",
                 arguments: { projects: [p1, p3] }
-            });
+            } as protocol.OpenExternalProjectsRequest);
             checkNumberOfProjects(projectService, { externalProjects: 2 });
             assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
             assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand({
                 seq: 3,
                 type: "request",
                 command: "openExternalProjects",
                 arguments: { projects: [] }
-            });
+            } as protocol.OpenExternalProjectsRequest);
             checkNumberOfProjects(projectService, { externalProjects: 0 });
 
-            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+            session.executeCommand({
                 seq: 3,
                 type: "request",
                 command: "openExternalProjects",
                 arguments: { projects: [p2] }
-            });
+            } as protocol.OpenExternalProjectsRequest);
             assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
         });
 
@@ -816,11 +816,11 @@ namespace ts.projectSystem {
             const host = createServerHost([f1, config]);
             const service = createProjectService(host);
             service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: true } });
-            service.openExternalProject(<protocol.ExternalProject>{
+            service.openExternalProject({
                 projectFileName,
                 rootFiles: toExternalFiles([f1.path, config.path]),
                 options: {}
-            });
+            } as protocol.ExternalProject);
             service.checkNumberOfProjects({ configuredProjects: 1 });
             const project = service.configuredProjects.get(config.path)!;
             assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
@@ -833,11 +833,11 @@ namespace ts.projectSystem {
             service.closeExternalProject(projectFileName);
             service.checkNumberOfProjects({});
 
-            service.openExternalProject(<protocol.ExternalProject>{
+            service.openExternalProject({
                 projectFileName,
                 rootFiles: toExternalFiles([f1.path, config.path]),
                 options: {}
-            });
+            } as protocol.ExternalProject);
             service.checkNumberOfProjects({ configuredProjects: 1 });
             const project2 = service.configuredProjects.get(config.path)!;
             assert.equal(project2.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded

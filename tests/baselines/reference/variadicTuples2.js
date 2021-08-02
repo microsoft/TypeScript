@@ -134,10 +134,14 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 //// [variadicTuples2.js]
 "use strict";
 // Declarations
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || from);
 };
 tt1 = [5];
 tt1 = ['abc', 5];
@@ -191,14 +195,14 @@ pipe("foo", 123, true, function () {
     }
     x; // [string, number, boolean]
 });
-pipe.apply(void 0, __spreadArray(__spreadArray([], sa), [function () {
+pipe.apply(void 0, __spreadArray(__spreadArray([], sa, false), [function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
         }
         x; // string[]
-    }]));
-pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {
+    }], false));
+pipe.apply(void 0, __spreadArray(__spreadArray([1], sa, false), [2, function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
@@ -206,7 +210,7 @@ pipe.apply(void 0, __spreadArray(__spreadArray([1], sa), [2, function () {
         x; // [number, ...string[], number]
         var qq = x[x.length - 1];
         var ww = x[0];
-    }]));
+    }], false));
 pipe(1, 2, 3, 4); // Error
 pipe.apply(void 0, sa); // Error
 fn1([]); // Error

@@ -1,0 +1,41 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock4.ts ===
+class C {
+>C : C
+
+    static s1 = 1;
+>s1 : number
+>1 : 1
+
+    static {
+        this.s1;
+>this.s1 : number
+>this : typeof C
+>s1 : number
+
+        C.s1;
+>C.s1 : number
+>C : typeof C
+>s1 : number
+
+        this.s2;
+>this.s2 : number
+>this : typeof C
+>s2 : number
+
+        C.s2;
+>C.s2 : number
+>C : typeof C
+>s2 : number
+    }
+
+    static s2 = 2;
+>s2 : number
+>2 : 2
+
+    static ss2 = this.s1;
+>ss2 : number
+>this.s1 : number
+>this : typeof C
+>s1 : number
+}
+

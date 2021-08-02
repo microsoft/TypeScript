@@ -129,7 +129,7 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >f.apply : (this: Function, thisArg: any, argArray?: any) => any
 >f : () => void
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->parent : Window
+>parent : Window | null
 >[] : never[]
 
     // error
@@ -193,7 +193,7 @@ function checksConsole() {
 
     // error
     typeof window !== 'undefined' && window.console &&
->typeof window !== 'undefined' && window.console &&        ((window.console as any).firebug || (window.console.exception && window.console.table)) : any
+>typeof window !== 'undefined' && window.console &&        ((window.console as any).firebug || (window.console.error && window.console.table)) : any
 >typeof window !== 'undefined' && window.console : false | Console
 >typeof window !== 'undefined' : boolean
 >typeof window : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -203,9 +203,9 @@ function checksConsole() {
 >window : Window & typeof globalThis
 >console : Console
 
-        ((window.console as any).firebug || (window.console.exception && window.console.table));
->((window.console as any).firebug || (window.console.exception && window.console.table)) : any
->(window.console as any).firebug || (window.console.exception && window.console.table) : any
+        ((window.console as any).firebug || (window.console.error && window.console.table));
+>((window.console as any).firebug || (window.console.error && window.console.table)) : any
+>(window.console as any).firebug || (window.console.error && window.console.table) : any
 >(window.console as any).firebug : any
 >(window.console as any) : any
 >window.console as any : any
@@ -213,13 +213,13 @@ function checksConsole() {
 >window : Window & typeof globalThis
 >console : Console
 >firebug : any
->(window.console.exception && window.console.table) : (tabularData?: any, properties?: string[] | undefined) => void
->window.console.exception && window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
->window.console.exception : (message?: string | undefined, ...optionalParams: any[]) => void
+>(window.console.error && window.console.table) : (tabularData?: any, properties?: string[] | undefined) => void
+>window.console.error && window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
+>window.console.error : (...data: any[]) => void
 >window.console : Console
 >window : Window & typeof globalThis
 >console : Console
->exception : (message?: string | undefined, ...optionalParams: any[]) => void
+>error : (...data: any[]) => void
 >window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
 >window.console : Console
 >window : Window & typeof globalThis

@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -96,6 +102,13 @@ declare module ts {
     interface LineAndCharacter {
         line: number;
         character: number;
+    }
+
+    interface CompletionEntryData {
+        fileName?: string;
+        ambientModuleName?: string;
+        isPackageJsonImport?: true;
+        exportName: string;
     }
 
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
@@ -180,6 +193,7 @@ declare namespace FourSlashInterface {
         markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesInFile(fileName?: string): Range[];
         spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
@@ -253,6 +267,7 @@ declare namespace FourSlashInterface {
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
+            data?: ts.CompletionEntryData,
             description: string,
             newFileContent?: string,
             newRangeContent?: string,
@@ -278,7 +293,8 @@ declare namespace FourSlashInterface {
          * `verify.goToDefinition(["a", "aa"], "b");` verifies that markers "a" and "aa" have the same definition "b".
          * `verify.goToDefinition("a", ["b", "bb"]);` verifies that "a" has multiple definitions available.
          */
-        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, fileResult: { file: string, unverified?: boolean }): void;
+        goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string | { marker: string, unverified?: boolean }>): void;
         goToDefinition(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, range: Range): void;
         /** Performs `goToDefinition` for each pair. */
         goToDefinition(startsAndEnds: [ArrayOrSingle<string>, ArrayOrSingle<string>][]): void;
@@ -320,8 +336,10 @@ declare namespace FourSlashInterface {
         baselineSyntacticDiagnostics(): void;
         baselineSyntacticAndSemanticDiagnostics(): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
+        baselineCompletions(): void;
         baselineQuickInfo(): void;
         baselineSmartSelection(): void;
+        baselineSignatureHelp(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[], kind?: "comment" | "region" | "code" | "imports"): void;
         outliningHintSpansInCurrentFile(spans: Range[]): void;
@@ -347,6 +365,8 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
+        /** Prefer semanticClassificationsAre for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -382,6 +402,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
+            start: number;
+            length: number;
+        }, preference?: InlayHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -610,10 +634,24 @@ declare namespace FourSlashInterface {
     interface UserPreferences {
         readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsForImportStatements?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
+        /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -639,6 +677,7 @@ declare namespace FourSlashInterface {
         readonly kindModifiers?: string;
         readonly sortText?: completion.SortText;
         readonly isPackageJsonImport?: boolean;
+        readonly isSnippet?: boolean;
 
         // details
         readonly text?: string;
@@ -716,6 +755,14 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: VerifyInlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
     interface VerifyNavigateToOptions {
         readonly pattern: string;
         readonly fileName?: string;
@@ -734,7 +781,7 @@ declare namespace FourSlashInterface {
 
     interface JSDocTagInfo {
         readonly name: string;
-        readonly text: string | undefined;
+        readonly text: string | ts.SymbolDisplayPart[] | undefined;
     }
 
     interface GenerateTypesOptions {
@@ -775,14 +822,21 @@ declare function classification(format: "2020"): FourSlashInterface.ModernClassi
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

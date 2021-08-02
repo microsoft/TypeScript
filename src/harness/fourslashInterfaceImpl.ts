@@ -23,6 +23,10 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
+        public rangesInFile(fileName?: string): FourSlash.Range[] {
+            return this.state.getRangesInFile(fileName);
+        }
+
         public spans(): ts.TextSpan[] {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
@@ -247,6 +251,10 @@ namespace FourSlashInterface {
             }
         }
 
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+            this.state.verifyInlayHints(expected, span, preference);
+        }
+
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
@@ -396,6 +404,14 @@ namespace FourSlashInterface {
             this.state.baselineQuickInfo();
         }
 
+        public baselineSignatureHelp() {
+            this.state.baselineSignatureHelp();
+        }
+
+        public baselineCompletions() {
+            this.state.baselineCompletions();
+        }
+
         public baselineSmartSelection() {
             this.state.baselineSmartSelection();
         }
@@ -527,6 +543,10 @@ namespace FourSlashInterface {
          */
         public syntacticClassificationsAre(...classifications: { classificationType: string; text: string }[]) {
             this.state.verifySyntacticClassifications(classifications);
+        }
+
+        public encodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, length: number) {
+            this.state.verifyEncodedSemanticClassificationsLength(format, length);
         }
 
         /**
@@ -1150,6 +1170,7 @@ namespace FourSlashInterface {
                     case "symbol":
                     case "type":
                     case "unique":
+                    case "override":
                     case "unknown":
                     case "global":
                     case "bigint":
@@ -1161,12 +1182,12 @@ namespace FourSlashInterface {
         }
 
         export const classElementKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set"].map(keywordEntry);
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "declare", "get", "readonly", "set", "override"].map(keywordEntry);
 
         export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: readonly ExpectedCompletionEntryObject[] =
-            ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({
+            ["private", "protected", "public", "readonly", "override"].map((name): ExpectedCompletionEntryObject => ({
                 name,
                 kind: "keyword",
                 sortText: SortText.GlobalsOrKeywords
@@ -1388,7 +1409,7 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
-        export const undefinedVarEntry: ExpectedCompletionEntry = {
+        export const undefinedVarEntry: ExpectedCompletionEntryObject = {
             name: "undefined",
             kind: "var",
             sortText: SortText.GlobalsOrKeywords
@@ -1547,11 +1568,14 @@ namespace FourSlashInterface {
         ];
 
         export function globalsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
+            const firstEntry = plus[0];
+            const afterUndefined = typeof firstEntry !== "string" && firstEntry.sortText! > undefinedVarEntry.sortText!;
             return [
                 globalThisEntry,
                 ...globalsVars,
-                ...plus,
+                ...afterUndefined ? ts.emptyArray : plus,
                 undefinedVarEntry,
+                ...afterUndefined ? plus : ts.emptyArray,
                 ...globalKeywords];
         }
 
@@ -1591,6 +1615,7 @@ namespace FourSlashInterface {
         readonly isFromUncheckedFile?: boolean; // If not specified, won't assert about this
         readonly kind?: string; // If not specified, won't assert about this
         readonly isPackageJsonImport?: boolean; // If not specified, won't assert about this
+        readonly isSnippet?: boolean;
         readonly kindModifiers?: string; // Must be paired with 'kind'
         readonly text?: string;
         readonly documentation?: string;
@@ -1649,6 +1674,14 @@ namespace FourSlashInterface {
         readonly containerKind?: ts.ScriptElementKind;
     }
 
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: ts.InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
     export type ArrayOrSingle<T> = T | readonly T[];
 
     export interface VerifyCompletionListContainsOptions extends ts.UserPreferences {
@@ -1701,6 +1734,7 @@ namespace FourSlashInterface {
     export interface VerifyCompletionActionOptions extends NewContentOptions {
         name: string;
         source?: string;
+        data?: ts.CompletionEntryData;
         description: string;
         preferences?: ts.UserPreferences;
     }

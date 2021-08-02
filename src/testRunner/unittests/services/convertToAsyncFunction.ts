@@ -1682,5 +1682,41 @@ function [#|f|]() {
 }
 `);
 
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements1", `
+function f(x: number): Promise<void>;
+function f(): void;
+function [#|f|](x?: number): Promise<void> | void {
+    if (!x) return;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInFunctionsWithNonFixableReturnStatements2", `
+function f(x: number): Promise<void>;
+function f(): number;
+function [#|f|](x?: number): Promise<void> | number {
+    if (x) return x;
+    return fetch('').then(() => {});
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionInGetters", `
+class Foo {
+    get [#|m|](): Promise<number> {
+        return Promise.resolve(1).then(n => n);
+    }
+}
+`);
+
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction__NoSuggestionForGeneratorCallbacks", `
+function [#|foo|](p: Promise<string[]>) {
+    return p.then(function* (strings) {
+        for (const s of strings) {
+            yield s.toUpperCase();
+        }
+    });
+}
+`);
+
     });
 }

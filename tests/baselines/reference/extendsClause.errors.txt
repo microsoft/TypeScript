@@ -26,5 +26,5 @@ tests/cases/conformance/externalModules/typeOnly/index.ts(10,17): error TS1361: 
     class V extends types.C {} // Error
                     ~~~~~
 !!! error TS1361: 'types' cannot be used as a value because it was imported using 'import type'.
-!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/ns.ts:1:13: 'types' was imported here.
+!!! related TS1376 tests/cases/conformance/externalModules/typeOnly/ns.ts:1:18: 'types' was imported here.
     

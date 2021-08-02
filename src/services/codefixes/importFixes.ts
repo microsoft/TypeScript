@@ -10,6 +10,7 @@ namespace ts.codefix {
         Diagnostics.Cannot_find_namespace_0.code,
         Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code,
         Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here.code,
+        Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code
     ];
 
     registerCodeFix({
@@ -62,11 +63,13 @@ namespace ts.codefix {
             const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
             const checker = program.getTypeChecker();
             const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
-            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, host, program, useAutoImportProvider);
+            const exportInfos = getAllReExportingModules(sourceFile, symbol, moduleSymbol, symbolName, host, program, preferences, useAutoImportProvider);
             const preferTypeOnlyImport = !!usageIsTypeOnly && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error;
             const useRequire = shouldUseRequire(sourceFile, program);
             const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, /*position*/ undefined, preferTypeOnlyImport, useRequire, host, preferences);
-            addImport({ fixes: [fix], symbolName });
+            if (fix) {
+                addImport({ fixes: [fix], symbolName });
+            }
         }
 
         function addImport(info: FixesInfo) {
@@ -156,11 +159,13 @@ namespace ts.codefix {
         readonly kind: ImportFixKind.UseNamespace;
         readonly namespacePrefix: string;
         readonly position: number;
+        readonly moduleSpecifier: string;
     }
     interface FixUseImportType {
         readonly kind: ImportFixKind.ImportType;
         readonly moduleSpecifier: string;
         readonly position: number;
+        readonly exportInfo: SymbolExportInfo;
     }
     interface FixAddToExistingImport {
         readonly kind: ImportFixKind.AddToExisting;
@@ -175,21 +180,7 @@ namespace ts.codefix {
         readonly importKind: ImportKind;
         readonly typeOnly: boolean;
         readonly useRequire: boolean;
-    }
-
-    const enum ImportKind {
-        Named,
-        Default,
-        Namespace,
-        CommonJS,
-    }
-
-    /** Information about how a symbol is exported from a module. (We don't need to store the exported symbol, just its module.) */
-    interface SymbolExportInfo {
-        readonly moduleSymbol: Symbol;
-        readonly importKind: ImportKind;
-        /** If true, can't use an es6 import from a js file. */
-        readonly exportedSymbolIsTypeOnly: boolean;
+        readonly exportInfo?: SymbolExportInfo;
     }
 
     /** Information needed to augment an existing import declaration. */
@@ -211,79 +202,103 @@ namespace ts.codefix {
     ): { readonly moduleSpecifier: string, readonly codeAction: CodeAction } {
         const compilerOptions = program.getCompilerOptions();
         const exportInfos = pathIsBareSpecifier(stripQuotes(moduleSymbol.name))
-            ? [getSymbolExportInfoForSymbol(exportedSymbol, moduleSymbol, sourceFile, program, host)]
-            : getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, /*useAutoImportProvider*/ true);
+            ? [getSymbolExportInfoForSymbol(exportedSymbol, moduleSymbol, program, host)]
+            : getAllReExportingModules(sourceFile, exportedSymbol, moduleSymbol, symbolName, host, program, preferences, /*useAutoImportProvider*/ true);
         const useRequire = shouldUseRequire(sourceFile, program);
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && !isSourceFileJS(sourceFile) && isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
-        const moduleSpecifier = getBestFix(getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences), sourceFile, program, host).moduleSpecifier;
-        const fix = getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, position, preferTypeOnlyImport, useRequire, host, preferences);
-        return { moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
+        const fix = Debug.checkDefined(getImportFixForSymbol(sourceFile, exportInfos, moduleSymbol, symbolName, program, position, preferTypeOnlyImport, useRequire, host, preferences));
+        return { moduleSpecifier: fix.moduleSpecifier, codeAction: codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, getQuotePreference(sourceFile, preferences))) };
     }
 
     function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, symbolName: string, program: Program, position: number | undefined, preferTypeOnlyImport: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
-        Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
-        // We sort the best codefixes first, so taking `first` is best.
-        return getBestFix(getFixForImport(exportInfos, symbolName, position, preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences), sourceFile, program, host);
+        Debug.assert(exportInfos.some(info => info.moduleSymbol === moduleSymbol || info.symbol.parent === moduleSymbol), "Some exportInfo should match the specified moduleSymbol");
+        return getBestFix(getImportFixes(exportInfos, symbolName, position, preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences), sourceFile, program, host, preferences);
     }
 
     function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
         return { description, changes, commands };
     }
 
-    function getSymbolExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, importingFile: SourceFile, program: Program, host: LanguageServiceHost): SymbolExportInfo {
+    function getSymbolExportInfoForSymbol(symbol: Symbol, moduleSymbol: Symbol, program: Program, host: LanguageServiceHost): SymbolExportInfo {
         const compilerOptions = program.getCompilerOptions();
-        const mainProgramInfo = getInfoWithChecker(program.getTypeChecker());
+        const mainProgramInfo = getInfoWithChecker(program.getTypeChecker(), /*isFromPackageJson*/ false);
         if (mainProgramInfo) {
             return mainProgramInfo;
         }
         const autoImportProvider = host.getPackageJsonAutoImportProvider?.()?.getTypeChecker();
-        return Debug.checkDefined(autoImportProvider && getInfoWithChecker(autoImportProvider), `Could not find symbol in specified module for code actions`);
+        return Debug.checkDefined(autoImportProvider && getInfoWithChecker(autoImportProvider, /*isFromPackageJson*/ true), `Could not find symbol in specified module for code actions`);
 
-        function getInfoWithChecker(checker: TypeChecker): SymbolExportInfo | undefined {
-            const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
+        function getInfoWithChecker(checker: TypeChecker, isFromPackageJson: boolean): SymbolExportInfo | undefined {
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
-                return { moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(symbol, checker) };
+                return { symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
             }
             const named = checker.tryGetMemberInModuleExportsAndProperties(symbol.name, moduleSymbol);
             if (named && skipAlias(named, checker) === symbol) {
-                return { moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(symbol, checker) };
+                return { symbol: named, moduleSymbol, moduleFileName: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
             }
         }
     }
 
-    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, host: LanguageServiceHost, program: Program, useAutoImportProvider: boolean): readonly SymbolExportInfo[] {
+    function getAllReExportingModules(importingFile: SourceFile, exportedSymbol: Symbol, exportingModuleSymbol: Symbol, symbolName: string, host: LanguageServiceHost, program: Program, preferences: UserPreferences, useAutoImportProvider: boolean): readonly SymbolExportInfo[] {
         const result: SymbolExportInfo[] = [];
         const compilerOptions = program.getCompilerOptions();
-        forEachExternalModuleToImportFrom(program, host, importingFile, /*filterByPackageJson*/ false, useAutoImportProvider, (moduleSymbol, moduleFile, program) => {
+        const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
+            return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
+        });
+
+        forEachExternalModuleToImportFrom(program, host, useAutoImportProvider, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             const checker = program.getTypeChecker();
             // Don't import from a re-export when looking "up" like to `./index` or `../index`.
             if (moduleFile && moduleSymbol !== exportingModuleSymbol && startsWith(importingFile.fileName, getDirectoryPath(moduleFile.fileName))) {
                 return;
             }
 
-            const defaultInfo = getDefaultLikeExportInfo(importingFile, moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
-                result.push({ moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol, checker) });
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol && isImportable(program, moduleFile, isFromPackageJson)) {
+                result.push({ symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: moduleFile?.fileName, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(defaultInfo.symbol, checker).flags, isFromPackageJson });
             }
 
             for (const exported of checker.getExportsAndPropertiesOfModule(moduleSymbol)) {
-                if (exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
-                    result.push({ moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported, checker) });
+                if (exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol && isImportable(program, moduleFile, isFromPackageJson)) {
+                    result.push({ symbol: exported, moduleSymbol, moduleFileName: moduleFile?.fileName, exportKind: ExportKind.Named, targetFlags: skipAlias(exported, checker).flags, isFromPackageJson });
                 }
             }
         });
         return result;
+
+        function isImportable(program: Program, moduleFile: SourceFile | undefined, isFromPackageJson: boolean) {
+            return !moduleFile || isImportableFile(program, importingFile, moduleFile, preferences, /*packageJsonFilter*/ undefined, getModuleSpecifierResolutionHost(isFromPackageJson), host.getModuleSpecifierCache?.());
+        }
     }
 
-    function isTypeOnlySymbol(s: Symbol, checker: TypeChecker): boolean {
-        return !(skipAlias(s, checker).flags & SymbolFlags.Value);
+    export function getModuleSpecifierForBestExportInfo(
+        exportInfo: readonly SymbolExportInfo[],
+        importingFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
+        fromCacheOnly?: boolean,
+    ): { exportInfo?: SymbolExportInfo, moduleSpecifier: string, computedWithoutCacheCount: number } | undefined {
+        const { fixes, computedWithoutCacheCount } = getNewImportFixes(
+            program,
+            importingFile,
+            /*position*/ undefined,
+            /*preferTypeOnlyImport*/ false,
+            /*useRequire*/ false,
+            exportInfo,
+            host,
+            preferences,
+            fromCacheOnly);
+        const result = getBestFix(fixes, importingFile, program, host, preferences);
+        return result && { ...result, computedWithoutCacheCount };
     }
 
     function isTypeOnlyPosition(sourceFile: SourceFile, position: number) {
         return isValidTypeOnlyAliasUseSite(getTokenAtPosition(sourceFile, position));
     }
 
-    function getFixForImport(
+    function getImportFixes(
         exportInfos: readonly SymbolExportInfo[],
         symbolName: string,
         /** undefined only for missing JSX namespace */
@@ -296,7 +311,7 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): readonly ImportFix[] {
         const checker = program.getTypeChecker();
-        const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile));
+        const existingImports = flatMap(exportInfos, info => getExistingImportDeclarations(info, checker, sourceFile, program.getCompilerOptions()));
         const useNamespace = position === undefined ? undefined : tryUseExistingNamespaceImport(existingImports, symbolName, position, checker);
         const addToExisting = tryAddToExistingImport(existingImports, position !== undefined && isTypeOnlyPosition(sourceFile, position));
         // Don't bother providing an action to add a new import if we can add to an existing one.
@@ -319,10 +334,11 @@ namespace ts.codefix {
         // and it is up to the user to decide which one fits best.
         return firstDefined(existingImports, ({ declaration }): FixUseNamespaceImport | undefined => {
             const namespacePrefix = getNamespaceLikeImportText(declaration);
-            if (namespacePrefix) {
+            const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+            if (namespacePrefix && moduleSpecifier) {
                 const moduleSymbol = getTargetModuleFromNamespaceLikeImport(declaration, checker);
                 if (moduleSymbol && moduleSymbol.exports!.has(escapeLeadingUnderscores(symbolName))) {
-                    return { kind: ImportFixKind.UseNamespace, namespacePrefix, position };
+                    return { kind: ImportFixKind.UseNamespace, namespacePrefix, position, moduleSpecifier };
                 }
             }
         });
@@ -364,17 +380,22 @@ namespace ts.codefix {
                     : undefined;
             }
             const { importClause } = declaration;
-            if (!importClause) return undefined;
+            if (!importClause || !isStringLiteralLike(declaration.moduleSpecifier)) return undefined;
             const { name, namedBindings } = importClause;
+            // A type-only import may not have both a default and named imports, so the only way a name can
+            // be added to an existing type-only import is adding a named import to existing named bindings.
+            if (importClause.isTypeOnly && !(importKind === ImportKind.Named && namedBindings)) return undefined;
             return importKind === ImportKind.Default && !name || importKind === ImportKind.Named && (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports)
-                ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: importClause, importKind, moduleSpecifier: declaration.moduleSpecifier.getText(), canUseTypeOnlyImport }
+                ? { kind: ImportFixKind.AddToExisting, importClauseOrBindingPattern: importClause, importKind, moduleSpecifier: declaration.moduleSpecifier.text, canUseTypeOnlyImport }
                 : undefined;
         });
     }
 
-    function getExistingImportDeclarations({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }: SymbolExportInfo, checker: TypeChecker, sourceFile: SourceFile): readonly FixAddToExistingImportInfo[] {
+    function getExistingImportDeclarations({ moduleSymbol, exportKind, targetFlags }: SymbolExportInfo, checker: TypeChecker, importingFile: SourceFile, compilerOptions: CompilerOptions): readonly FixAddToExistingImportInfo[] {
         // Can't use an es6 import for a type in JS.
-        return exportedSymbolIsTypeOnly && isSourceFileJS(sourceFile) ? emptyArray : mapDefined(sourceFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
+        if (!(targetFlags & SymbolFlags.Value) && isSourceFileJS(importingFile)) return emptyArray;
+        const importKind = getImportKind(importingFile, exportKind, compilerOptions);
+        return mapDefined(importingFile.imports, (moduleSpecifier): FixAddToExistingImportInfo | undefined => {
             const i = importFromModuleSpecifier(moduleSpecifier);
             if (isRequireVariableDeclaration(i.parent)) {
                 return checker.resolveExternalModuleName(moduleSpecifier) === moduleSymbol ? { declaration: i.parent, importKind } : undefined;
@@ -412,7 +433,7 @@ namespace ts.codefix {
         return true;
     }
 
-    function getNewImportInfos(
+    function getNewImportFixes(
         program: Program,
         sourceFile: SourceFile,
         position: number | undefined,
@@ -421,16 +442,36 @@ namespace ts.codefix {
         moduleSymbols: readonly SymbolExportInfo[],
         host: LanguageServiceHost,
         preferences: UserPreferences,
-    ): readonly (FixAddNewImport | FixUseImportType)[] {
+        fromCacheOnly?: boolean,
+    ): { computedWithoutCacheCount: number, fixes: readonly (FixAddNewImport | FixUseImportType)[] } {
         const isJs = isSourceFileJS(sourceFile);
         const compilerOptions = program.getCompilerOptions();
-        return flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
-            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getTypeChecker(), compilerOptions, sourceFile, createModuleSpecifierResolutionHost(program, host), preferences)
-                .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
-                    // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
-                    exportedSymbolIsTypeOnly && isJs
-                        ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.checkDefined(position, "position should be defined") }
-                        : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind, useRequire, typeOnly: preferTypeOnlyImport }));
+        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
+        const checker = program.getTypeChecker();
+        const getModuleSpecifiers = fromCacheOnly
+            ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
+            : (moduleSymbol: Symbol) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
+
+        let computedWithoutCacheCount = 0;
+        const fixes = flatMap(moduleSymbols, exportInfo => {
+            const { computedWithoutCache, moduleSpecifiers } = getModuleSpecifiers(exportInfo.moduleSymbol);
+            computedWithoutCacheCount += computedWithoutCache ? 1 : 0;
+            return moduleSpecifiers?.map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
+                // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
+                !(exportInfo.targetFlags & SymbolFlags.Value) && isJs && position !== undefined
+                    ? { kind: ImportFixKind.ImportType, moduleSpecifier, position, exportInfo }
+                    : {
+                        kind: ImportFixKind.AddNew,
+                        moduleSpecifier,
+                        importKind: getImportKind(sourceFile, exportInfo.exportKind, compilerOptions),
+                        useRequire,
+                        typeOnly: preferTypeOnlyImport,
+                        exportInfo,
+                    }
+            );
+        });
+
+        return { computedWithoutCacheCount, fixes };
     }
 
     function getFixesForAddImport(
@@ -445,16 +486,13 @@ namespace ts.codefix {
         preferences: UserPreferences,
     ): readonly (FixAddNewImport | FixUseImportType)[] {
         const existingDeclaration = firstDefined(existingImports, info => newImportInfoFromExistingSpecifier(info, preferTypeOnlyImport, useRequire));
-        return existingDeclaration ? [existingDeclaration] : getNewImportInfos(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences);
+        return existingDeclaration ? [existingDeclaration] : getNewImportFixes(program, sourceFile, position, preferTypeOnlyImport, useRequire, exportInfos, host, preferences).fixes;
     }
 
     function newImportInfoFromExistingSpecifier({ declaration, importKind }: FixAddToExistingImportInfo, preferTypeOnlyImport: boolean, useRequire: boolean): FixAddNewImport | undefined {
-        const moduleSpecifier = declaration.kind === SyntaxKind.ImportDeclaration ? declaration.moduleSpecifier :
-            declaration.kind === SyntaxKind.VariableDeclaration ? declaration.initializer.arguments[0] :
-            declaration.moduleReference.kind === SyntaxKind.ExternalModuleReference ? declaration.moduleReference.expression :
-            undefined;
-        return moduleSpecifier && isStringLiteral(moduleSpecifier)
-            ? { kind: ImportFixKind.AddNew, moduleSpecifier: moduleSpecifier.text, importKind, typeOnly: preferTypeOnlyImport, useRequire }
+        const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(declaration);
+        return moduleSpecifier
+            ? { kind: ImportFixKind.AddNew, moduleSpecifier, importKind, typeOnly: preferTypeOnlyImport, useRequire }
             : undefined;
     }
 
@@ -464,30 +502,38 @@ namespace ts.codefix {
         const info = errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
             ? getFixesInfoForUMDImport(context, symbolToken)
             : isIdentifier(symbolToken) ? getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider) : undefined;
-        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, context.host) };
+        return info && { ...info, fixes: sortFixes(info.fixes, context.sourceFile, context.program, context.host, context.preferences) };
     }
 
-    function sortFixes(fixes: readonly ImportFix[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost): readonly ImportFix[] {
-        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
-        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, allowsImportingSpecifier));
+    function sortFixes(fixes: readonly ImportFix[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): readonly ImportFix[] {
+        const { allowsImportingSpecifier } = createPackageJsonImportFilter(sourceFile, preferences, host);
+        return sort(fixes, (a, b) => compareValues(a.kind, b.kind) || compareModuleSpecifiers(a, b, sourceFile, program, allowsImportingSpecifier));
     }
 
-    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost): T {
+    function getBestFix<T extends ImportFix>(fixes: readonly T[], sourceFile: SourceFile, program: Program, host: LanguageServiceHost, preferences: UserPreferences): T | undefined {
+        if (!some(fixes)) return;
         // These will always be placed first if available, and are better than other kinds
         if (fixes[0].kind === ImportFixKind.UseNamespace || fixes[0].kind === ImportFixKind.AddToExisting) {
             return fixes[0];
         }
-        const { allowsImportingSpecifier } = createAutoImportFilter(sourceFile, program, host);
+        const { allowsImportingSpecifier } = createPackageJsonImportFilter(sourceFile, preferences, host);
         return fixes.reduce((best, fix) =>
-            compareModuleSpecifiers(fix, best, allowsImportingSpecifier) === Comparison.LessThan ? fix : best
+            compareModuleSpecifiers(fix, best, sourceFile, program, allowsImportingSpecifier) === Comparison.LessThan ? fix : best
         );
     }
 
-    function compareModuleSpecifiers(a: ImportFix, b: ImportFix, allowsImportingSpecifier: (specifier: string) => boolean): Comparison {
+    function compareModuleSpecifiers(a: ImportFix, b: ImportFix, importingFile: SourceFile, program: Program, allowsImportingSpecifier: (specifier: string) => boolean): Comparison {
         if (a.kind !== ImportFixKind.UseNamespace && b.kind !== ImportFixKind.UseNamespace) {
             return compareBooleans(allowsImportingSpecifier(a.moduleSpecifier), allowsImportingSpecifier(b.moduleSpecifier))
+                || compareNodeCoreModuleSpecifiers(a.moduleSpecifier, b.moduleSpecifier, importingFile, program)
                 || compareNumberOfDirectorySeparators(a.moduleSpecifier, b.moduleSpecifier);
         }
+        return Comparison.EqualTo;
+    }
+
+    function compareNodeCoreModuleSpecifiers(a: string, b: string, importingFile: SourceFile, program: Program): Comparison {
+        if (startsWith(a, "node:") && !startsWith(b, "node:")) return shouldUseUriStyleNodeCoreModules(importingFile, program) ? Comparison.LessThan : Comparison.GreaterThan;
+        if (startsWith(b, "node:") && !startsWith(a, "node:")) return shouldUseUriStyleNodeCoreModules(importingFile, program) ? Comparison.GreaterThan : Comparison.LessThan;
         return Comparison.EqualTo;
     }
 
@@ -497,9 +543,9 @@ namespace ts.codefix {
         if (!umdSymbol) return undefined;
         const symbol = checker.getAliasedSymbol(umdSymbol);
         const symbolName = umdSymbol.name;
-        const exportInfos: readonly SymbolExportInfo[] = [{ moduleSymbol: symbol, importKind: getUmdImportKind(sourceFile, program.getCompilerOptions()), exportedSymbolIsTypeOnly: false }];
+        const exportInfos: readonly SymbolExportInfo[] = [{ symbol: umdSymbol, moduleSymbol: symbol, moduleFileName: undefined, exportKind: ExportKind.UMD, targetFlags: symbol.flags, isFromPackageJson: false }];
         const useRequire = shouldUseRequire(sourceFile, program);
-        const fixes = getFixForImport(exportInfos, symbolName, isIdentifier(token) ? token.getStart(sourceFile) : undefined, /*preferTypeOnlyImport*/ false, useRequire, program, sourceFile, host, preferences);
+        const fixes = getImportFixes(exportInfos, symbolName, isIdentifier(token) ? token.getStart(sourceFile) : undefined, /*preferTypeOnlyImport*/ false, useRequire, program, sourceFile, host, preferences);
         return { fixes, symbolName };
     }
     function getUmdSymbol(token: Node, checker: TypeChecker): Symbol | undefined {
@@ -514,7 +560,21 @@ namespace ts.codefix {
             : undefined;
     }
 
-    function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
+    /**
+     * @param forceImportKeyword Indicates that the user has already typed `import`, so the result must start with `import`.
+     * (In other words, do not allow `const x = require("...")` for JS files.)
+     */
+    export function getImportKind(importingFile: SourceFile, exportKind: ExportKind, compilerOptions: CompilerOptions, forceImportKeyword?: boolean): ImportKind {
+        switch (exportKind) {
+            case ExportKind.Named: return ImportKind.Named;
+            case ExportKind.Default: return ImportKind.Default;
+            case ExportKind.ExportEquals: return getExportEqualsImportKind(importingFile, compilerOptions, !!forceImportKeyword);
+            case ExportKind.UMD: return getUmdImportKind(importingFile, compilerOptions, !!forceImportKeyword);
+            default: return Debug.assertNever(exportKind);
+        }
+    }
+
+    function getUmdImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
         // Import a synthetic `default` if enabled.
         if (getAllowSyntheticDefaultImports(compilerOptions)) {
             return ImportKind.Default;
@@ -527,7 +587,7 @@ namespace ts.codefix {
             case ModuleKind.CommonJS:
             case ModuleKind.UMD:
                 if (isInJSFile(importingFile)) {
-                    return isExternalModule(importingFile) ? ImportKind.Namespace : ImportKind.CommonJS;
+                    return isExternalModule(importingFile) || forceImportKeyword ? ImportKind.Namespace : ImportKind.CommonJS;
                 }
                 return ImportKind.CommonJS;
             case ModuleKind.System:
@@ -551,9 +611,9 @@ namespace ts.codefix {
 
         const preferTypeOnlyImport = compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error && isValidTypeOnlyAliasUseSite(symbolToken);
         const useRequire = shouldUseRequire(sourceFile, program);
-        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host);
+        const exportInfos = getExportInfos(symbolName, getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
         const fixes = arrayFrom(flatMapIterator(exportInfos.entries(), ([_, exportInfos]) =>
-            getFixForImport(exportInfos, symbolName, symbolToken.getStart(sourceFile), preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences)));
+            getImportFixes(exportInfos, symbolName, symbolToken.getStart(sourceFile), preferTypeOnlyImport, useRequire, program, sourceFile, host, preferences)));
         return { fixes, symbolName };
     }
 
@@ -573,113 +633,75 @@ namespace ts.codefix {
         symbolName: string,
         currentTokenMeaning: SemanticMeaning,
         cancellationToken: CancellationToken,
-        sourceFile: SourceFile,
+        fromFile: SourceFile,
         program: Program,
         useAutoImportProvider: boolean,
-        host: LanguageServiceHost
+        host: LanguageServiceHost,
+        preferences: UserPreferences,
     ): ReadonlyESMap<string, readonly SymbolExportInfo[]> {
         // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
-        function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind, checker: TypeChecker): void {
-            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
+        const packageJsonFilter = createPackageJsonImportFilter(fromFile, preferences, host);
+        const moduleSpecifierCache = host.getModuleSpecifierCache?.();
+        const getModuleSpecifierResolutionHost = memoizeOne((isFromPackageJson: boolean) => {
+            return createModuleSpecifierResolutionHost(isFromPackageJson ? host.getPackageJsonAutoImportProvider!()! : program, host);
+        });
+        function addSymbol(moduleSymbol: Symbol, toFile: SourceFile | undefined, exportedSymbol: Symbol, exportKind: ExportKind, program: Program, isFromPackageJson: boolean): void {
+            const moduleSpecifierResolutionHost = getModuleSpecifierResolutionHost(isFromPackageJson);
+            if (toFile && isImportableFile(program, fromFile, toFile, preferences, packageJsonFilter, moduleSpecifierResolutionHost, moduleSpecifierCache) ||
+                !toFile && packageJsonFilter.allowsImportingAmbientModule(moduleSymbol, moduleSpecifierResolutionHost)
+            ) {
+                const checker = program.getTypeChecker();
+                originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { symbol: exportedSymbol, moduleSymbol, moduleFileName: toFile?.fileName, exportKind, targetFlags: skipAlias(exportedSymbol, checker).flags, isFromPackageJson });
+            }
         }
-        forEachExternalModuleToImportFrom(program, host, sourceFile, /*filterByPackageJson*/ true, useAutoImportProvider, (moduleSymbol, _, program) => {
+        forEachExternalModuleToImportFrom(program, host, useAutoImportProvider, (moduleSymbol, sourceFile, program, isFromPackageJson) => {
             const checker = program.getTypeChecker();
             cancellationToken.throwIfCancellationRequested();
 
             const compilerOptions = program.getCompilerOptions();
-            const defaultInfo = getDefaultLikeExportInfo(sourceFile, moduleSymbol, checker, compilerOptions);
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
-                addSymbol(moduleSymbol, defaultInfo.symbol, defaultInfo.kind, checker);
+                addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
             }
 
             // check exports with the same name
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
             if (exportSymbolWithIdenticalName && symbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
-                addSymbol(moduleSymbol, exportSymbolWithIdenticalName, ImportKind.Named, checker);
+                addSymbol(moduleSymbol, sourceFile, exportSymbolWithIdenticalName, ExportKind.Named, program, isFromPackageJson);
             }
         });
         return originalSymbolToExportInfos;
     }
 
-    function getDefaultLikeExportInfo(
-        importingFile: SourceFile, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions,
-    ): { readonly symbol: Symbol, readonly symbolForMeaning: Symbol, readonly name: string, readonly kind: ImportKind } | undefined {
-        const exported = getDefaultLikeExportWorker(importingFile, moduleSymbol, checker, compilerOptions);
-        if (!exported) return undefined;
-        const { symbol, kind } = exported;
-        const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
-        return info && { symbol, kind, ...info };
-    }
-
-    function getDefaultLikeExportWorker(importingFile: SourceFile, moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbol: Symbol, readonly kind: ImportKind } | undefined {
-        const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
-        if (defaultExport) return { symbol: defaultExport, kind: ImportKind.Default };
-        const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
-        return exportEquals === moduleSymbol ? undefined : { symbol: exportEquals, kind: getExportEqualsImportKind(importingFile, compilerOptions) };
-    }
-
-    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions): ImportKind {
+    function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: CompilerOptions, forceImportKeyword: boolean): ImportKind {
         const allowSyntheticDefaults = getAllowSyntheticDefaultImports(compilerOptions);
-        // 1. 'import =' will not work in es2015+, so the decision is between a default
+        const isJS = isInJSFile(importingFile);
+        // 1. 'import =' will not work in es2015+ TS files, so the decision is between a default
         //    and a namespace import, based on allowSyntheticDefaultImports/esModuleInterop.
-        if (getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
+        if (!isJS && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015) {
             return allowSyntheticDefaults ? ImportKind.Default : ImportKind.Namespace;
         }
-        // 2. 'import =' will not work in JavaScript, so the decision is between a default
-        //    and const/require.
-        if (isInJSFile(importingFile)) {
-            return isExternalModule(importingFile) ? ImportKind.Default : ImportKind.CommonJS;
+        // 2. 'import =' will not work in JavaScript, so the decision is between a default import,
+        //    a namespace import, and const/require.
+        if (isJS) {
+            return isExternalModule(importingFile) || forceImportKeyword
+                ? allowSyntheticDefaults ? ImportKind.Default : ImportKind.Namespace
+                : ImportKind.CommonJS;
         }
         // 3. At this point the most correct choice is probably 'import =', but people
         //    really hate that, so look to see if the importing file has any precedent
         //    on how to handle it.
         for (const statement of importingFile.statements) {
-            if (isImportEqualsDeclaration(statement)) {
+            // `import foo` parses as an ImportEqualsDeclaration even though it could be an ImportDeclaration
+            if (isImportEqualsDeclaration(statement) && !nodeIsMissing(statement.moduleReference)) {
                 return ImportKind.CommonJS;
             }
         }
         // 4. We have no precedent to go on, so just use a default import if
         //    allowSyntheticDefaultImports/esModuleInterop is enabled.
         return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
-    }
-
-    function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly symbolForMeaning: Symbol, readonly name: string } | undefined {
-        const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-        if (localSymbol) return { symbolForMeaning: localSymbol, name: localSymbol.name };
-
-        const name = getNameForExportDefault(defaultExport);
-        if (name !== undefined) return { symbolForMeaning: defaultExport, name };
-
-        if (defaultExport.flags & SymbolFlags.Alias) {
-            const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-            if (aliased && aliased.parent) {
-                // - `aliased` will be undefined if the module is exporting an unresolvable name,
-                //    but we can still offer completions for it.
-                // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
-                //    or another expression that resolves to a global.
-                return getDefaultExportInfoWorker(aliased, checker, compilerOptions);
-            }
-        }
-
-        if (defaultExport.escapedName !== InternalSymbolName.Default &&
-            defaultExport.escapedName !== InternalSymbolName.ExportEquals) {
-            return { symbolForMeaning: defaultExport, name: defaultExport.getName() };
-        }
-        return { symbolForMeaning: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
-    }
-
-    function getNameForExportDefault(symbol: Symbol): string | undefined {
-        return symbol.declarations && firstDefined(symbol.declarations, declaration => {
-            if (isExportAssignment(declaration)) {
-                return tryCast(skipOuterExpressions(declaration.expression), isIdentifier)?.text;
-            }
-            else if (isExportSpecifier(declaration)) {
-                Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");
-                return declaration.propertyName && declaration.propertyName.text;
-            }
-        });
     }
 
     function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, quotePreference: QuotePreference): CodeFixAction {
@@ -877,104 +899,6 @@ namespace ts.codefix {
         return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
     }
 
-    export function forEachExternalModuleToImportFrom(
-        program: Program,
-        host: LanguageServiceHost,
-        from: SourceFile,
-        filterByPackageJson: boolean,
-        useAutoImportProvider: boolean,
-        cb: (module: Symbol, moduleFile: SourceFile | undefined, program: Program, isFromPackageJson: boolean) => void,
-    ) {
-        forEachExternalModuleToImportFromInProgram(program, host, from, filterByPackageJson, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
-        const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
-        if (autoImportProvider) {
-            const start = timestamp();
-            forEachExternalModuleToImportFromInProgram(autoImportProvider, host, from, filterByPackageJson, (module, file) => cb(module, file, autoImportProvider, /*isFromPackageJson*/ true));
-            host.log?.(`forEachExternalModuleToImportFrom autoImportProvider: ${timestamp() - start}`);
-        }
-    }
-
-    function forEachExternalModuleToImportFromInProgram(
-        program: Program,
-        host: LanguageServiceHost,
-        from: SourceFile,
-        filterByPackageJson: boolean,
-        cb: (module: Symbol, moduleFile: SourceFile | undefined) => void,
-    ) {
-        let filteredCount = 0;
-        const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
-        const packageJson = filterByPackageJson && createAutoImportFilter(from, program, host, moduleSpecifierResolutionHost);
-        forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), (module, sourceFile) => {
-            if (sourceFile === undefined) {
-                if (!packageJson || packageJson.allowsImportingAmbientModule(module)) {
-                    cb(module, sourceFile);
-                }
-                else if (packageJson) {
-                    filteredCount++;
-                }
-            }
-            else if (sourceFile &&
-                sourceFile !== from &&
-                isImportableFile(program, from, sourceFile, moduleSpecifierResolutionHost)
-            ) {
-                if (!packageJson || packageJson.allowsImportingSourceFile(sourceFile)) {
-                    cb(module, sourceFile);
-                }
-                else if (packageJson) {
-                    filteredCount++;
-                }
-            }
-        });
-        host.log?.(`forEachExternalModuleToImportFrom: filtered out ${filteredCount} modules by package.json contents`);
-    }
-
-    function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
-        for (const ambient of checker.getAmbientModules()) {
-            cb(ambient, /*sourceFile*/ undefined);
-        }
-        for (const sourceFile of allSourceFiles) {
-            if (isExternalOrCommonJsModule(sourceFile)) {
-                cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
-            }
-        }
-    }
-
-    function isImportableFile(
-        program: Program,
-        from: SourceFile,
-        to: SourceFile,
-        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost
-    ) {
-        const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
-        const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
-        return !!moduleSpecifiers.forEachFileNameOfModule(
-            from.fileName,
-            to.fileName,
-            moduleSpecifierResolutionHost,
-            /*preferSymlinks*/ false,
-            toPath => {
-                const toFile = program.getSourceFile(toPath);
-                // Determine to import using toPath only if toPath is what we were looking at
-                // or there doesnt exist the file in the program by the symlink
-                return (toFile === to || !toFile) &&
-                    isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
-            }
-        );
-    }
-
-    /**
-     * Don't include something from a `node_modules` that isn't actually reachable by a global import.
-     * A relative import to node_modules is usually a bad idea.
-     */
-    function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
-        // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-        const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
-        const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
-        return toNodeModulesParent === undefined
-            || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
-            || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
-    }
-
     export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined): string {
         return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target);
     }
@@ -1004,118 +928,5 @@ namespace ts.codefix {
         }
         // Need `|| "_"` to ensure result isn't empty.
         return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
-    }
-
-    function createAutoImportFilter(fromFile: SourceFile, program: Program, host: LanguageServiceHost, moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host)) {
-        const packageJsons = (
-            (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
-          ).filter(p => p.parseable);
-
-        let usesNodeCoreModules: boolean | undefined;
-        return { allowsImportingAmbientModule, allowsImportingSourceFile, allowsImportingSpecifier, moduleSpecifierResolutionHost };
-
-        function moduleSpecifierIsCoveredByPackageJson(specifier: string) {
-            const packageName = getNodeModuleRootSpecifier(specifier);
-            for (const packageJson of packageJsons) {
-                if (packageJson.has(packageName) || packageJson.has(getTypesPackageName(packageName))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function allowsImportingAmbientModule(moduleSymbol: Symbol): boolean {
-            if (!packageJsons.length) {
-                return true;
-            }
-
-            const declaringSourceFile = moduleSymbol.valueDeclaration.getSourceFile();
-            const declaringNodeModuleName = getNodeModulesPackageNameFromFileName(declaringSourceFile.fileName);
-            if (typeof declaringNodeModuleName === "undefined") {
-                return true;
-            }
-
-            const declaredModuleSpecifier = stripQuotes(moduleSymbol.getName());
-            if (isAllowedCoreNodeModulesImport(declaredModuleSpecifier)) {
-                return true;
-            }
-
-            return moduleSpecifierIsCoveredByPackageJson(declaringNodeModuleName)
-                || moduleSpecifierIsCoveredByPackageJson(declaredModuleSpecifier);
-        }
-
-        function allowsImportingSourceFile(sourceFile: SourceFile): boolean {
-            if (!packageJsons.length) {
-                return true;
-            }
-
-            const moduleSpecifier = getNodeModulesPackageNameFromFileName(sourceFile.fileName);
-            if (!moduleSpecifier) {
-                return true;
-            }
-
-            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
-        }
-
-        /**
-         * Use for a specific module specifier that has already been resolved.
-         * Use `allowsImportingAmbientModule` or `allowsImportingSourceFile` to resolve
-         * the best module specifier for a given module _and_ determine if it’s importable.
-         */
-        function allowsImportingSpecifier(moduleSpecifier: string) {
-            if (!packageJsons.length || isAllowedCoreNodeModulesImport(moduleSpecifier)) {
-                return true;
-            }
-            if (pathIsRelative(moduleSpecifier) || isRootedDiskPath(moduleSpecifier)) {
-                return true;
-            }
-            return moduleSpecifierIsCoveredByPackageJson(moduleSpecifier);
-        }
-
-        function isAllowedCoreNodeModulesImport(moduleSpecifier: string) {
-            // If we’re in JavaScript, it can be difficult to tell whether the user wants to import
-            // from Node core modules or not. We can start by seeing if the user is actually using
-            // any node core modules, as opposed to simply having @types/node accidentally as a
-            // dependency of a dependency.
-            if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
-                if (usesNodeCoreModules === undefined) {
-                    usesNodeCoreModules = consumesNodeCoreModules(fromFile);
-                }
-                if (usesNodeCoreModules) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        function getNodeModulesPackageNameFromFileName(importedFileName: string): string | undefined {
-            if (!stringContains(importedFileName, "node_modules")) {
-                return undefined;
-            }
-            const specifier = moduleSpecifiers.getNodeModulesPackageName(
-                host.getCompilationSettings(),
-                fromFile.path,
-                importedFileName,
-                moduleSpecifierResolutionHost,
-            );
-
-            if (!specifier) {
-                return undefined;
-            }
-            // Paths here are not node_modules, so we don’t care about them;
-            // returning anything will trigger a lookup in package.json.
-            if (!pathIsRelative(specifier) && !isRootedDiskPath(specifier)) {
-                return getNodeModuleRootSpecifier(specifier);
-            }
-        }
-
-        function getNodeModuleRootSpecifier(fullSpecifier: string): string {
-            const components = getPathComponents(getPackageNameFromTypesPackageName(fullSpecifier)).slice(1);
-            // Scoped packages
-            if (startsWith(components[0], "@")) {
-                return `${components[0]}/${components[1]}`;
-            }
-            return components[0];
-        }
     }
 }

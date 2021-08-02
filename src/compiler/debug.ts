@@ -112,8 +112,8 @@ namespace ts {
         export function fail(message?: string, stackCrawlMark?: AnyFunction): never {
             debugger;
             const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
-            if ((<any>Error).captureStackTrace) {
-                (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
+            if ((Error as any).captureStackTrace) {
+                (Error as any).captureStackTrace(e, stackCrawlMark || fail);
             }
             throw e;
         }
@@ -221,7 +221,7 @@ namespace ts {
                 assert(
                     node !== undefined && (test === undefined || test(node)),
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
                     stackCrawlMark || assertNode);
             }
         }
@@ -246,7 +246,7 @@ namespace ts {
                 assert(
                     test === undefined || node === undefined || test(node),
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
                     stackCrawlMark || assertOptionalNode);
             }
         }
@@ -259,7 +259,7 @@ namespace ts {
                 assert(
                     kind === undefined || node === undefined || node.kind === kind,
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
                     stackCrawlMark || assertOptionalToken);
             }
         }
@@ -275,12 +275,20 @@ namespace ts {
             }
         }
 
+        /**
+         * Asserts a value has the specified type in typespace only (does not perform a runtime assertion).
+         * This is useful in cases where we switch on `node.kind` and can be reasonably sure the type is accurate, and
+         * as a result can reduce the number of unnecessary casts.
+         */
+        export function type<T>(value: unknown): asserts value is T;
+        export function type(_value: unknown) { }
+
         export function getFunctionName(func: AnyFunction) {
             if (typeof func !== "function") {
                 return "";
             }
             else if (func.hasOwnProperty("name")) {
-                return (<any>func).name;
+                return (func as any).name;
             }
             else {
                 const text = Function.prototype.toString.call(func);
@@ -340,43 +348,43 @@ namespace ts {
         }
 
         export function formatSyntaxKind(kind: SyntaxKind | undefined): string {
-            return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
+            return formatEnum(kind, (ts as any).SyntaxKind, /*isFlags*/ false);
         }
 
         export function formatNodeFlags(flags: NodeFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).NodeFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
         }
 
         export function formatModifierFlags(flags: ModifierFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).ModifierFlags, /*isFlags*/ true);
         }
 
         export function formatTransformFlags(flags: TransformFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).TransformFlags, /*isFlags*/ true);
         }
 
         export function formatEmitFlags(flags: EmitFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).EmitFlags, /*isFlags*/ true);
         }
 
         export function formatSymbolFlags(flags: SymbolFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).SymbolFlags, /*isFlags*/ true);
         }
 
         export function formatTypeFlags(flags: TypeFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).TypeFlags, /*isFlags*/ true);
         }
 
         export function formatSignatureFlags(flags: SignatureFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).SignatureFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).SignatureFlags, /*isFlags*/ true);
         }
 
         export function formatObjectFlags(flags: ObjectFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).ObjectFlags, /*isFlags*/ true);
         }
 
         export function formatFlowFlags(flags: FlowFlags | undefined): string {
-            return formatEnum(flags, (<any>ts).FlowFlags, /*isFlags*/ true);
+            return formatEnum(flags, (ts as any).FlowFlags, /*isFlags*/ true);
         }
 
         let isDebugInfoEnabled = false;
@@ -463,6 +471,9 @@ namespace ts {
                             // An `Array` with extra properties is rendered as `[A, B, prop1: 1, prop2: 2]`. Most of
                             // these aren't immediately useful so we trim off the `prop1: ..., prop2: ...` part from the
                             // formatted string.
+                            // This regex can trigger slow backtracking because of overlapping potential captures.
+                            // We don't care, this is debug code that's only enabled with a debugger attached -
+                            // we're just taking note of it for anyone checking regex performance in the future.
                             defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
                             return `NodeArray ${defaultValue}`;
                         }
@@ -562,7 +573,7 @@ namespace ts {
                     }
                 },
                 __debugFlags: { get(this: Type) { return formatTypeFlags(this.flags); } },
-                __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                __debugObjectFlags: { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((this as ObjectType).objectFlags) : ""; } },
                 __debugTypeToString: {
                     value(this: Type) {
                         // avoid recomputing

@@ -11,6 +11,7 @@
     "files": [
         "types.ts",
         "utilities.ts",
+        "exportInfoMap.ts",
         "classifier.ts",
         "classifier2020.ts",
         "stringCompletions.ts",
@@ -33,6 +34,7 @@
         "rename.ts",
         "smartSelection.ts",
         "signatureHelp.ts",
+        "inlayHints.ts",
         "sourcemaps.ts",
         "suggestionDiagnostics.ts",
         "symbolDisplay.ts",
@@ -65,6 +67,7 @@
         "codefixes/convertLiteralTypeToMappedType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
+        "codefixes/fixOverrideModifier.ts",
         "codefixes/fixNoPropertyAccessFromIndexSignature.ts",
         "codefixes/fixImplicitThis.ts",
         "codefixes/fixIncorrectNamedTupleSyntax.ts",

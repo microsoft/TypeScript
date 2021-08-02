@@ -60,6 +60,11 @@ c:/a/lib/lib.d.ts
 c:/project/a.ts
 c:/project/b.ts
 
+Shape signatures in builder refreshed for::
+c:/a/lib/lib.d.ts (used version)
+c:/project/a.ts (used version)
+c:/project/b.ts (used version)
+
 WatchedFiles::
 c:/project/tsconfig.json:
   {"fileName":"c:/project/tsconfig.json","pollingInterval":250}
@@ -121,7 +126,7 @@ project/a.ts
   Imported via "c://project/a" from file 'project/b.ts'
 project/b.ts
   Matched by include pattern '**/*' in 'project/tsconfig.json'
-[[90m12:00:29 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -135,6 +140,11 @@ c:/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
 c:/project/a.ts
+c:/project/b.ts
+
+Shape signatures in builder refreshed for::
+c:/project/a.ts (computed .d.ts)
+c:/project/b.ts (computed .d.ts)
 
 WatchedFiles::
 c:/project/tsconfig.json:
@@ -165,3 +175,4 @@ exports.a = 1;
 exports.b = 2;
 
 
+//// [c:/project/b.js] file written with same contents

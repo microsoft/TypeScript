@@ -116,3 +116,39 @@ type Schema = {
 type Res1 = GetKey<Schema, Schema['root']['task']>;  // "Task"
 type Res2 = GetKeyWithIf<Schema, Schema['root']['task']>;  // "Task"
 type Res3 = keyof GetObjWithIf<Schema, Schema['root']['task']>;  // "Task"
+
+// Repro from #44019
+
+type KeysExtendedBy<T, U> = keyof { [K in keyof T as U extends T[K] ? K : never] : T[K] };
+
+interface M {
+    a: boolean;
+    b: number;
+}
+
+function f(x: KeysExtendedBy<M, number>) {
+    return x;
+}
+
+f("a");  // Error, should allow only "b"
+
+type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
+
+// Distributive, will be simplified
+
+type TS0<T> = keyof { [P in keyof T as keyof Record<P, number>]: string };
+type TS1<T> = keyof { [P in keyof T as Extract<P, 'a' | 'b' | 'c'>]: string };
+type TS2<T> = keyof { [P in keyof T as P & ('a' | 'b' | 'c')]: string };
+type TS3<T> = keyof { [P in keyof T as Exclude<P, 'a' | 'b' | 'c'>]: string };
+type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
+type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
+type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
+
+// Non-distributive, won't be simplified
+
+type TN0<T> = keyof { [P in keyof T as T[P] extends number ? P : never]: string };
+type TN1<T> = keyof { [P in keyof T as number extends T[P] ? P : never]: string };
+type TN2<T> = keyof { [P in keyof T as 'a' extends P ? 'x' : 'y']: string };
+type TN3<T> = keyof { [P in keyof T as Exclude<Exclude<Exclude<P, 'c'>, 'b'>, 'a'>]: string };
+type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
+type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };

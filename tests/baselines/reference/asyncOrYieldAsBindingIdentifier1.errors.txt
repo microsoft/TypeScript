@@ -1,0 +1,68 @@
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(14,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(18,9): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(22,11): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(38,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(42,9): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts(46,11): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+
+
+==== tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts (6 errors) ====
+    function f_let () {
+        let await = 1
+    }
+    
+    function f1_var () {
+        var await = 1
+    }
+    
+    function f1_const () {
+        const await = 1
+    }
+    
+    async function f2_let () {
+        let await = 1
+            ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+    }
+    
+    async function f2_var () {
+        var await = 1
+            ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+    }
+    
+    async function f2_const () {
+        const await = 1
+              ~~~~~
+!!! error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+    }
+    
+    function f3_let () {
+        let yield = 2
+    }
+    
+    function f3_var () {
+        var yield = 2
+    }
+    
+    function f3_const () {
+        const yield = 2
+    }
+    
+    function * f4_let () {
+        let yield = 2;
+            ~~~~~
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+    }
+    
+    function * f4_var () {
+        var yield = 2;
+            ~~~~~
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+    }
+    
+    function * f4_const () {
+        const yield = 2;
+              ~~~~~
+!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
+    }

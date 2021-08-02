@@ -2,8 +2,8 @@ tests/cases/compiler/parseErrorIncorrectReturnToken.ts(2,17): error TS1005: ':' 
 tests/cases/compiler/parseErrorIncorrectReturnToken.ts(4,22): error TS1005: '=>' expected.
 tests/cases/compiler/parseErrorIncorrectReturnToken.ts(4,24): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,18): error TS1005: '{' expected.
+tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,21): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,21): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/parseErrorIncorrectReturnToken.ts(9,28): error TS1005: ';' expected.
 tests/cases/compiler/parseErrorIncorrectReturnToken.ts(12,1): error TS1128: Declaration or statement expected.
 
 
@@ -27,9 +27,9 @@ tests/cases/compiler/parseErrorIncorrectReturnToken.ts(12,1): error TS1128: Decl
 !!! error TS1005: '{' expected.
 !!! related TS1007 tests/cases/compiler/parseErrorIncorrectReturnToken.ts:8:9: The parser expected to find a '}' to match the '{' token here.
                         ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                        ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
-                               ~
-!!! error TS1005: ';' expected.
             return n.toString();
         }
     };
