@@ -683,3 +683,41 @@ declare function bb(input: number): void;
 >bb : (input: number) => void
 >input : number
 
+interface U1 {
+    name: string
+>name : string
+
+    email?: string | number | undefined
+>email : string | number | undefined
+}
+interface U2 {
+    name: string
+>name : string
+
+    email?: string | number
+>email : string | number | undefined
+}
+declare const e: string | boolean | undefined
+>e : string | boolean | undefined
+
+declare const u1: U1
+>u1 : U1
+
+declare const u2: U2
+>u2 : U2
+
+u1.email = e // error, but only because boolean isn't in email's type
+>u1.email = e : string | boolean | undefined
+>u1.email : string | number | undefined
+>u1 : U1
+>email : string | number | undefined
+>e : string | boolean | undefined
+
+u2.email = e // error, and suggest adding undefined
+>u2.email = e : string | boolean | undefined
+>u2.email : string | number
+>u2 : U2
+>email : string | number
+>e : string | boolean | undefined
+
+

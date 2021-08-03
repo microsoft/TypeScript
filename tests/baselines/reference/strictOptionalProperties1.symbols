@@ -571,3 +571,45 @@ declare function bb(input: number): void;
 >bb : Symbol(bb, Decl(strictOptionalProperties1.ts, 177, 1))
 >input : Symbol(input, Decl(strictOptionalProperties1.ts, 179, 20))
 
+interface U1 {
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+    name: string
+>name : Symbol(U1.name, Decl(strictOptionalProperties1.ts, 181, 14))
+
+    email?: string | number | undefined
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+}
+interface U2 {
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+    name: string
+>name : Symbol(U2.name, Decl(strictOptionalProperties1.ts, 185, 14))
+
+    email?: string | number
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+}
+declare const e: string | boolean | undefined
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+declare const u1: U1
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+declare const u2: U2
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 13))
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+u1.email = e // error, but only because boolean isn't in email's type
+>u1.email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2.email = e // error, and suggest adding undefined
+>u2.email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 13))
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+

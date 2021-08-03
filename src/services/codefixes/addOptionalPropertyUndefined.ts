@@ -23,7 +23,7 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const { program } = context;
             const checker = program.getTypeChecker();
-            const seen = new Map<string, true>();
+            const seen = new Map<number, true>();
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
                     const toAdd = getPropertiesToAdd(diag.file, diag.start, checker);
@@ -32,7 +32,7 @@ namespace ts.codefix {
                     }
                     let untouched = true;
                     for (const add of toAdd) {
-                        if (!addToSeen(seen, getSymbolId(add) + "")) {
+                        if (!addToSeen(seen, getSymbolId(add))) {
                             untouched = false;
                         }
                     }
