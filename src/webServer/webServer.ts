@@ -130,10 +130,10 @@ namespace ts.server {
             getCurrentDirectory: returnEmptyString, // For inferred project root if projectRoot path is not set, normalizing the paths
 
             /* eslint-disable no-restricted-globals */
-            setTimeout,
-            clearTimeout,
+            setTimeout: (cb, ms, ...args) => setTimeout(cb, ms, ...args),
+            clearTimeout: handle => clearTimeout(handle),
             setImmediate: x => setTimeout(x, 0),
-            clearImmediate: clearTimeout,
+            clearImmediate: handle => clearTimeout(handle),
             /* eslint-enable no-restricted-globals */
 
             require: () => ({ module: undefined, error: new Error("Not implemented") }),
