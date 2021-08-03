@@ -411,8 +411,8 @@ function someGenerics10<T extends readonly string[], U extends readonly unknown[
 >null : null
 }
 var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
->a10a : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
->someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }` : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+>a10a : { parts: ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+>someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }` : { parts: ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
 >someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => { parts: T; args: U; }
 >`part1${ '' }part2${ 0 }part3${ [] }` : string
 >'' : ""
@@ -420,15 +420,15 @@ var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
 >[] : undefined[]
 
 var a10a: {};
->a10a : { parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
+>a10a : { parts: ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }
 
 var a10b = someGenerics10 `no substitution`;
->a10b : { parts: readonly ["no substitution"]; args: []; }
->someGenerics10 `no substitution` : { parts: readonly ["no substitution"]; args: []; }
+>a10b : { parts: ["no substitution"]; args: []; }
+>someGenerics10 `no substitution` : { parts: ["no substitution"]; args: []; }
 >someGenerics10 : <T extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<T>, ...args: U) => { parts: T; args: U; }
 >`no substitution` : "no substitution"
 
 var a10b: {};
->a10b : { parts: readonly ["no substitution"]; args: []; }
+>a10b : { parts: ["no substitution"]; args: []; }
 
 

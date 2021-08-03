@@ -28818,11 +28818,11 @@ namespace ts {
                         flags.push(ElementFlags.Required);
                     });
                     templateStringsArrayTypeParameter = createTupleType(
-                        templateStringParts, flags, /* readonly */ true);
+                        templateStringParts, flags);
                 }
                 else /* if (template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) */ {
                     templateStringsArrayTypeParameter = createTupleType(
-                        [getStringLiteralType(template.text)], [ElementFlags.Required], /* readonly */ true);
+                        [getStringLiteralType(template.text)], [ElementFlags.Required]);
                 }
 
                 const templateStringsArray = getGlobalTemplateStringsArraySymbol();

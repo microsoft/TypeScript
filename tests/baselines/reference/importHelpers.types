@@ -69,8 +69,8 @@ function id<T>(x: T) {
 }
 
 const result = id`hello world`;
->result : TemplateStringsArray<readonly ["hello world"]>
->id`hello world` : TemplateStringsArray<readonly ["hello world"]>
+>result : TemplateStringsArray<["hello world"]>
+>id`hello world` : TemplateStringsArray<["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 

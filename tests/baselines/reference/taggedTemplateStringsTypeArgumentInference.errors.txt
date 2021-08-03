@@ -1,8 +1,8 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(63,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9a' must be of type 'string', but here has type '{}'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(96,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '{ parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }', but here has type '{}'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(99,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10b' must be of type '{ parts: readonly ["no substitution"]; args: []; }', but here has type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(96,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '{ parts: ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }', but here has type '{}'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(99,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10b' must be of type '{ parts: ["no substitution"]; args: []; }', but here has type '{}'.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts (5 errors) ====
@@ -111,13 +111,13 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     var a10a = someGenerics10 `part1${ '' }part2${ 0 }part3${ [] }`;
     var a10a: {};
         ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '{ parts: readonly ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10a' must be of type '{ parts: ["part1", "part2", "part3", ""]; args: [string, number, any[]]; }', but here has type '{}'.
 !!! related TS6203 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts:95:5: 'a10a' was also declared here.
     
     var a10b = someGenerics10 `no substitution`;
     var a10b: {};
         ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10b' must be of type '{ parts: readonly ["no substitution"]; args: []; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a10b' must be of type '{ parts: ["no substitution"]; args: []; }', but here has type '{}'.
 !!! related TS6203 tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts:98:5: 'a10b' was also declared here.
     
     
