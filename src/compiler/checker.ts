@@ -16442,25 +16442,6 @@ namespace ts {
                 (hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node));
         }
 
-        function hasContextSensitiveParameters(node: FunctionLikeDeclaration) {
-            // Functions with type parameters are not context sensitive.
-            if (!node.typeParameters) {
-                // Functions with any parameters that lack type annotations are context sensitive.
-                if (some(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
-                    return true;
-                }
-                if (node.kind !== SyntaxKind.ArrowFunction) {
-                    // If the first parameter is not an explicit 'this' parameter, then the function has
-                    // an implicit 'this' parameter which is subject to contextual typing.
-                    const parameter = firstOrUndefined(node.parameters);
-                    if (!(parameter && parameterIsThisKeyword(parameter))) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
             // TODO(anhans): A block should be context-sensitive if it has a context-sensitive return value.
             return !node.typeParameters && !getEffectiveReturnTypeNode(node) && !!node.body && node.body.kind !== SyntaxKind.Block && isContextSensitive(node.body);
