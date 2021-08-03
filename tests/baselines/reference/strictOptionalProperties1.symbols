@@ -596,8 +596,8 @@ declare const u1: U1
 >u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
 >U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
 
-declare const u2: U2
->u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 13))
+declare let u2: U2
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
 >U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
 
 u1.email = e // error, but only because boolean isn't in email's type
@@ -608,8 +608,19 @@ u1.email = e // error, but only because boolean isn't in email's type
 
 u2.email = e // error, and suggest adding undefined
 >u2.email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
->u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 13))
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
 >email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
 >e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2 = {
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+
+    name: 'hi',
+>name : Symbol(name, Decl(strictOptionalProperties1.ts, 194, 6))
+
+    email: undefined
+>email : Symbol(email, Decl(strictOptionalProperties1.ts, 195, 15))
+>undefined : Symbol(undefined)
+}
 
 

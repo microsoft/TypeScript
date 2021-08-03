@@ -36,7 +36,9 @@ namespace ts.codefix {
                             untouched = false;
                         }
                     }
-                    if (untouched) {addUndefinedToOptionalProperty(changes, toAdd);}
+                    if (untouched) {
+                        addUndefinedToOptionalProperty(changes, toAdd);
+                    }
                 });
             }));
         },
@@ -45,18 +47,18 @@ namespace ts.codefix {
     function getPropertiesToAdd(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
         const sourceTarget = getSourceTarget(getErrorNode(file, pos), checker);
         if (!sourceTarget) {
-            return [];
+            return emptyArray;
         }
         const { source: sourceNode, target: targetNode } = sourceTarget;
         const target = checker.getTypeAtLocation(targetNode);
         const source = checker.getTypeAtLocation(sourceNode);
         if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/\.d\.ts$/))) {
-            return [];
+            return emptyArray;
         }
         const targetPropertyType = getTargetPropertyType(checker, targetNode);
         if (targetPropertyType && checker.isExactOptionalPropertyMismatch(source, targetPropertyType)) {
             const s = checker.getSymbolAtLocation((targetNode as PropertyAccessExpression).name);
-            return s ? [s] : [];
+            return s ? [s] : emptyArray;
         }
         return checker.getExactOptionalUnassignableProperties(source, target);
     }

@@ -193,7 +193,11 @@ interface U2 {
 }
 declare const e: string | boolean | undefined
 declare const u1: U1
-declare const u2: U2
+declare let u2: U2
 u1.email = e // error, but only because boolean isn't in email's type
 u2.email = e // error, and suggest adding undefined
+u2 = {
+    name: 'hi',
+    email: undefined
+}
 
