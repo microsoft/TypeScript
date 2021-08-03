@@ -14,6 +14,9 @@ export class C3 {}
 import { T1 } from "./type1";
 >T1 : any
 
+import * as t1 from "./type1";
+>t1 : typeof t1
+
 import type { T2 } from "./type2";
 >T2 : T2
 
@@ -51,6 +54,15 @@ class HelloWorld {
 
   p1!: T1; // Error
 >p1 : T1
+
+  @EventListener('1')
+>EventListener('1') : any
+>EventListener : any
+>'1' : "1"
+
+  p1_ns!: t1.T1; // Ok
+>p1_ns : T1
+>t1 : any
 
   @EventListener('2')
 >EventListener('2') : any

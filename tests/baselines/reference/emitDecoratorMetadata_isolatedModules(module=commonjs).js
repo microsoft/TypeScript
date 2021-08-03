@@ -12,6 +12,7 @@ export class C3 {}
 
 //// [index.ts]
 import { T1 } from "./type1";
+import * as t1 from "./type1";
 import type { T2 } from "./type2";
 import { C3 } from "./class3";
 declare var EventListener: any;
@@ -25,6 +26,9 @@ class HelloWorld {
 
   @EventListener('1')
   p1!: T1; // Error
+
+  @EventListener('1')
+  p1_ns!: t1.T1; // Ok
 
   @EventListener('2')
   p2!: T2; // Ok
@@ -62,6 +66,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 exports.__esModule = true;
+var t1 = require("./type1");
 var class3_1 = require("./class3");
 var HelloWorld = /** @class */ (function () {
     function HelloWorld() {
@@ -85,6 +90,10 @@ var HelloWorld = /** @class */ (function () {
         EventListener('1'),
         __metadata("design:type", Object)
     ], HelloWorld.prototype, "p1");
+    __decorate([
+        EventListener('1'),
+        __metadata("design:type", Object)
+    ], HelloWorld.prototype, "p1_ns");
     __decorate([
         EventListener('2'),
         __metadata("design:type", Object)
