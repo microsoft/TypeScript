@@ -86,6 +86,7 @@
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixInvalidJsxCharacters.ts",
+        "codefixes/fixUnreferenceableDecoratorMetadata.ts",
         "codefixes/fixUnusedIdentifier.ts",
         "codefixes/fixUnreachableCode.ts",
         "codefixes/fixUnusedLabel.ts",
