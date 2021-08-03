@@ -19603,9 +19603,7 @@ namespace ts {
         }
 
         function isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined) {
-            return !!source && !!target
-                && !(getObjectFlags(source) & ObjectFlags.Tuple) && !(getObjectFlags(target) & ObjectFlags.Tuple)
-                && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
+            return !!source && !!target && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
