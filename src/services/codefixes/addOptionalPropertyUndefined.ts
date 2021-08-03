@@ -3,8 +3,9 @@ namespace ts.codefix {
     const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
     const errorCodes = [
+        Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target.code,
         Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
-        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code
+        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties.code,
     ];
 
     registerCodeFix({
@@ -48,12 +49,27 @@ namespace ts.codefix {
         }
         const { source: sourceNode, target: targetNode } = sourceTarget;
         const target = checker.getTypeAtLocation(targetNode);
+        const source = checker.getTypeAtLocation(sourceNode);
         if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/\.d\.ts$/))) {
             return [];
         }
-        return checker.getExactOptionalUnassignableProperties(checker.getTypeAtLocation(sourceNode), target);
+        const targetPropertyType = getTargetPropertyType(checker, targetNode);
+        if (targetPropertyType && checker.isExactOptionalPropertyMismatch(source, targetPropertyType)) {
+            const s = checker.getSymbolAtLocation((targetNode as PropertyAccessExpression).name);
+            return s ? [s] : [];
+        }
+        return checker.getExactOptionalUnassignableProperties(source, target);
     }
 
+    function getTargetPropertyType(checker: TypeChecker, targetNode: Node) {
+        if (isPropertySignature(targetNode)) {
+            return checker.getTypeAtLocation(targetNode.name);
+        }
+        else if (isPropertyAccessExpression(targetNode)) {
+            return checker.getTypeOfPropertyOfType(checker.getTypeAtLocation(targetNode.expression), targetNode.name.text);
+        }
+        return undefined;
+    }
     /**
      * Get the part of the incorrect assignment that is useful for type-checking
      * eg

@@ -634,6 +634,7 @@ namespace ts {
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
             getExactOptionalUnassignableProperties,
+            isExactOptionalPropertyMismatch,
             getAllPossiblePropertiesOfTypes,
             getSuggestedSymbolForNonexistentProperty,
             getSuggestionForNonexistentProperty,
@@ -16754,24 +16755,29 @@ namespace ts {
                 let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (!sourcePropType) continue;
                 const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
-                const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                targetPropType = removeMissingType(targetPropType, targetIsOptional);
-                sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
                 if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
-                    if (elaborated) {
-                        reportedError = true;
-                    }
-                    else {
+                    reportedError = true;
+                    if (!elaborated) {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
-                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
-                        if (result && specificSource !== sourcePropType) {
-                            // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                        if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
+                            const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
+                            diagnostics.add(diag);
+                            resultObj.errors = [diag];
+                        }
+                        else {
+                            const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                            sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
+                            const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            if (result && specificSource !== sourcePropType) {
+                                // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+                                checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            }
                         }
                         if (resultObj.errors) {
                             const reportedDiag = resultObj.errors[resultObj.errors.length - 1];
@@ -16799,7 +16805,6 @@ namespace ts {
                                 }
                             }
                         }
-                        reportedError = true;
                     }
                 }
             }
@@ -19593,13 +19598,14 @@ namespace ts {
         }
 
         function getExactOptionalUnassignableProperties(source: Type, target: Type) {
-            return checker.getPropertiesOfType(target).filter(targetProp => {
-                const sourceProp = getPropertyOfType(source, targetProp.escapedName);
-                return sourceProp && targetProp.valueDeclaration
-                    && maybeTypeOfKind(getTypeOfSymbol(sourceProp), TypeFlags.Undefined)
-                    && hasQuestionToken(targetProp.valueDeclaration)
-                    && containsMissingType(getTypeOfSymbol(targetProp));
-});
+            return getPropertiesOfType(target)
+                .filter(targetProp => isExactOptionalPropertyMismatch(getTypeOfPropertyOfType(source, targetProp.escapedName), getTypeOfSymbol(targetProp)));
+        }
+
+        function isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined) {
+            return !!source && !!target
+                && !(getObjectFlags(source) & ObjectFlags.Tuple) && !(getObjectFlags(target) & ObjectFlags.Tuple)
+                && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
@@ -32463,8 +32469,16 @@ namespace ts {
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
                         && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+
+                        let headMessage: DiagnosticMessage | undefined;
+                        if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
+                            const target = getTypeOfPropertyOfType(getTypeOfExpression(left.expression), left.name.escapedText);
+                            if (isExactOptionalPropertyMismatch(valueType, target)) {
+                                headMessage = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target;
+                            }
+                        }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right);
+                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right, headMessage);
                     }
                 }
             }

@@ -1882,6 +1882,10 @@
         "category": "Error",
         "code": 2410
     },
+    "Type '{0}' is not assignable to type '{1}' with exactOptionalPropertyTypes: true. Consider adding 'undefined' to the type of the target.": {
+        "category": "Error",
+        "code": 2412
+    },
     "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
         "code": 2411

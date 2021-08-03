@@ -4306,6 +4306,7 @@ namespace ts {
          */
         /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
         /* @internal */ getExactOptionalUnassignableProperties(source: Type, target: Type): Symbol[];
+        /* @internal */ isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
