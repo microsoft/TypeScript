@@ -1666,13 +1666,13 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
-            setParent(node.tagName, node);
+            bind(node.tagName);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
                 setParent(node.fullName, node);
                 setParentRecursive(node.fullName, /*incremental*/ false);
             }
             if (typeof node.comment !== "string") {
-                setEachParent(node.comment, node);
+                bindEach(node.comment);
             }
         }
 
