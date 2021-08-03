@@ -1,22 +1,15 @@
 /// <reference path="fourslash.ts" />
 
 ////class Foo {
-////    get foo()/*a*/ { return 1; }
-////    set foo(value: number)/*b*/ {}
+////    get foo()/**/ { return 1; }
 ////}
 
-const [a, b] = test.markers();
+const [marker] = test.markers();
 
 verify.getInlayHints([
     {
         text: ': number',
-        position: a.position,
-        kind: ts.InlayHintKind.Type,
-        whitespaceBefore: true
-    },
-    {
-        text: ': void',
-        position: b.position,
+        position: marker.position,
         kind: ts.InlayHintKind.Type,
         whitespaceBefore: true
     },

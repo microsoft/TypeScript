@@ -67,11 +67,15 @@ namespace ts.InlayHints {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionExpressionLike(node)) {
                     visitFunctionExpressionLikeForParameterType(node);
                 }
-                if (preferences.includeInlayFunctionLikeReturnTypeHints && isFunctionLikeDeclaration(node)) {
+                if (preferences.includeInlayFunctionLikeReturnTypeHints && isSignatureSupportingReturnAnnotation(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
                 }
             }
             return forEachChild(node, visitor);
+        }
+
+        function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
+            return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
         }
 
         function isFunctionExpressionLike(node: Node): node is ArrowFunction | FunctionExpression {
@@ -206,7 +210,7 @@ namespace ts.InlayHints {
             return isLiteralExpression(node) || isBooleanLiteral(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
         }
 
-        function visitFunctionDeclarationLikeForReturnType(decl: FunctionLikeDeclaration) {
+        function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
             if (isArrowFunction(decl)) {
                 if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
                     return;
@@ -236,7 +240,7 @@ namespace ts.InlayHints {
             addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
         }
 
-        function getTypeAnnotationPosition(decl: FunctionLikeDeclaration) {
+        function getTypeAnnotationPosition(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
             const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
             if (closeParenToken) {
                 return closeParenToken.end;
