@@ -39827,11 +39827,14 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
-                else if (parent.kind === SyntaxKind.MetaProperty) {
+                else if (isMetaProperty(parent)) {
                     const parentType = getTypeOfNode(parent);
                     const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
                     if (propertyDeclaration) {
                         return propertyDeclaration;
+                    }
+                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                        return checkNewTargetMetaProperty(parent).symbol;
                     }
                 }
             }
@@ -39910,7 +39913,7 @@ namespace ts {
 
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.NewKeyword:
-                    return isImportMeta(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
+                    return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
                 case SyntaxKind.MetaProperty:
                     return checkExpression(node as Expression).symbol;
 
