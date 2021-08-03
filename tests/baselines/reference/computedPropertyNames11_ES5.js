@@ -72,7 +72,7 @@ var v = (_a = {},
         enumerable: false,
         configurable: true
     }),
-    Object.defineProperty(_a, "hello " + a + " bye", {
+    Object.defineProperty(_a, "hello ".concat(a, " bye"), {
         get: function () { return 0; },
         enumerable: false,
         configurable: true
