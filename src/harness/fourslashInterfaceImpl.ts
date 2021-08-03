@@ -1409,7 +1409,7 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
-        export const undefinedVarEntry: ExpectedCompletionEntry = {
+        export const undefinedVarEntry: ExpectedCompletionEntryObject = {
             name: "undefined",
             kind: "var",
             sortText: SortText.GlobalsOrKeywords
@@ -1568,11 +1568,14 @@ namespace FourSlashInterface {
         ];
 
         export function globalsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
+            const firstEntry = plus[0];
+            const afterUndefined = typeof firstEntry !== "string" && firstEntry.sortText! > undefinedVarEntry.sortText!;
             return [
                 globalThisEntry,
                 ...globalsVars,
-                ...plus,
+                ...afterUndefined ? ts.emptyArray : plus,
                 undefinedVarEntry,
+                ...afterUndefined ? plus : ts.emptyArray,
                 ...globalKeywords];
         }
 
