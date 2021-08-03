@@ -32,7 +32,7 @@ namespace ts.codefix {
                     }
                     let untouched = true;
                     for (const add of toAdd) {
-                        if (!addToSeen(seen, add.id + "")) {
+                        if (!addToSeen(seen, getSymbolId(add) + "")) {
                             untouched = false;
                         }
                     }
