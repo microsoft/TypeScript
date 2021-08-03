@@ -657,7 +657,7 @@ namespace ts {
                 const saveExceptionTarget = currentExceptionTarget;
                 const saveActiveLabelList = activeLabelList;
                 const saveHasExplicitReturn = hasExplicitReturn;
-                const isIIFELike =
+                const isImmediatelyInvoked =
                     (containerFlags & ContainerFlags.IsFunctionExpression &&
                         !hasSyntacticModifier(node, ModifierFlags.Async) &&
                         !(node as FunctionLikeDeclaration).asteriskToken &&
@@ -665,7 +665,7 @@ namespace ts {
                     node.kind === SyntaxKind.ClassStaticBlockDeclaration;
                 // A non-async, non-generator IIFE is considered part of the containing control flow. Return statements behave
                 // similarly to break statements that exit to a label just past the statement body.
-                if (!isIIFELike) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
                     if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
                         currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration;
@@ -673,7 +673,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFELike || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isImmediatelyInvoked || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -699,7 +699,7 @@ namespace ts {
                         (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                     }
                 }
-                if (!isIIFELike) {
+                if (!isImmediatelyInvoked) {
                     currentFlow = saveCurrentFlow;
                 }
                 currentBreakTarget = saveBreakTarget;
