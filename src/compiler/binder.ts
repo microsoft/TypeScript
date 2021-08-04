@@ -1666,10 +1666,14 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
-            setParent(node.tagName, node);
+            bind(node.tagName);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
+                // don't bind the type name yet; that's delayed until delayedBindJSDocTypedefTag
                 setParent(node.fullName, node);
                 setParentRecursive(node.fullName, /*incremental*/ false);
+            }
+            if (typeof node.comment !== "string") {
+                bindEach(node.comment);
             }
         }
 
