@@ -1668,6 +1668,7 @@ namespace ts {
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
             bind(node.tagName);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
+                // don't bind the type name yet; that's delayed until delayedBindJSDocTypedefTag
                 setParent(node.fullName, node);
                 setParentRecursive(node.fullName, /*incremental*/ false);
             }
