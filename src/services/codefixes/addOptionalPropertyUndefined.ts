@@ -12,7 +12,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const typeChecker = context.program.getTypeChecker();
-            const toAdd = getPropertiesToAdd(context.sourceFile, context.span.start, typeChecker);
+            const toAdd = getPropertiesToAdd(context.sourceFile, context.span, typeChecker);
             if (!toAdd.length) {
                 return undefined;
             }
@@ -26,7 +26,7 @@ namespace ts.codefix {
             const seen = new Map<number, true>();
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const toAdd = getPropertiesToAdd(diag.file, diag.start, checker);
+                    const toAdd = getPropertiesToAdd(diag.file, diag, checker);
                     if (!toAdd.length) {
                         return;
                     }
@@ -44,8 +44,8 @@ namespace ts.codefix {
         },
     });
 
-    function getPropertiesToAdd(file: SourceFile, pos: number, checker: TypeChecker): Symbol[] {
-        const sourceTarget = getSourceTarget(getErrorNode(file, pos), checker);
+    function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeChecker): Symbol[] {
+        const sourceTarget = getSourceTarget(getFixableErrorSpanExpression(file, span), checker);
         if (!sourceTarget) {
             return emptyArray;
         }
@@ -72,20 +72,6 @@ namespace ts.codefix {
         }
         return undefined;
     }
-    /**
-     * Get the part of the incorrect assignment that is useful for type-checking
-     * eg
-     * this.definite = 1; ---> `this.definite`
-     * ^^^^
-     * definite = source  ----> `definite`
-     * ^^^^^^^^
-     */
-    function getErrorNode(file: SourceFile, pos: number): MemberName | PropertyAccessExpression | undefined {
-        const start = getTokenAtPosition(file, pos);
-        return isPropertyAccessExpression(start.parent) && start.parent.expression === start ? start.parent
-            : isIdentifier(start) || isPrivateIdentifier(start) ? start
-            : undefined;
-    }
 
     /**
      * Find the source and target of the incorrect assignment.
@@ -101,7 +87,7 @@ namespace ts.codefix {
         else if (isVariableDeclaration(errorNode.parent) && errorNode.parent.initializer) {
             return { source: errorNode.parent.initializer, target: errorNode.parent.name };
         }
-        else if (isCallExpression(errorNode.parent)) {
+        else if (isCallExpression(errorNode.parent) && errorNode.parent.arguments.indexOf(errorNode as Expression) > -1) {
             const n = checker.getSymbolAtLocation(errorNode.parent.expression);
             if (!n?.valueDeclaration) return undefined;
             if (!isExpression(errorNode)) return undefined;
