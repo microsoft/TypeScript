@@ -3289,6 +3289,10 @@ namespace ts {
         return startsWith(symbol.escapedName as string, "__@");
     }
 
+    export function isPrivateIdentifierSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__#");
+    }
+
     /**
      * Includes the word "Symbol" with unicode escapes
      */

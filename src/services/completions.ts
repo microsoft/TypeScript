@@ -1934,6 +1934,7 @@ namespace ts.Completions {
                 !!importCompletionNode,
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
+                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
                         if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
