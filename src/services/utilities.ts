@@ -3098,7 +3098,7 @@ namespace ts {
             return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
         }) as Expression | undefined;
 
-        return expression
+        return expression;
     }
 
     /**

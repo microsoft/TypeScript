@@ -60,7 +60,7 @@ namespace ts.codefix {
     });
 
     function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
-        const expression = getFixableErrorSpanExpression(sourceFile, span)
+        const expression = getFixableErrorSpanExpression(sourceFile, span);
         return expression
             && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
             && isInsideAwaitableBody(expression) ? expression : undefined;
