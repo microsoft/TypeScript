@@ -3309,10 +3309,9 @@ namespace ts.Completions {
     /** True if symbol is a type or a module containing at least one type. */
     function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {
         const sym = skipAlias(symbol.exportSymbol || symbol, checker);
-        return !!(sym.flags & SymbolFlags.Type) ||
-            !!(sym.flags & SymbolFlags.Module) &&
-            addToSeen(seenModules, getSymbolId(sym)) &&
-            checker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
+        return !!(sym.flags & SymbolFlags.Type) || checker.isUnknownSymbol(sym) ||
+            !!(sym.flags & SymbolFlags.Module) && addToSeen(seenModules, getSymbolId(sym)) &&
+                checker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
     }
 
     function isDeprecated(symbol: Symbol, checker: TypeChecker) {
