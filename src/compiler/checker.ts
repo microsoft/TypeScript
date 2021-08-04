@@ -921,6 +921,7 @@ namespace ts {
         let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
+        let deferredGlobalImportMetaExpressionType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
@@ -13322,6 +13323,24 @@ namespace ts {
 
         function getGlobalImportMetaType() {
             return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+        }
+
+        function getGlobalImportMetaExpressionType() {
+            if (!deferredGlobalImportMetaExpressionType) {
+                // Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
+                const symbol = createSymbol(SymbolFlags.None, "ImportMetaExpression" as __String);
+                const importMetaType = getGlobalImportMetaType();
+
+                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String, CheckFlags.Readonly);
+                metaPropertySymbol.parent = symbol;
+                metaPropertySymbol.type = importMetaType;
+
+                const members = createSymbolTable([metaPropertySymbol]);
+                symbol.members = members;
+
+                deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+            }
+            return deferredGlobalImportMetaExpressionType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
@@ -30465,6 +30484,18 @@ namespace ts {
             return Debug.assertNever(node.keywordToken);
         }
 
+        function checkMetaPropertyKeyword(node: MetaProperty): Type {
+            switch (node.keywordToken) {
+                case SyntaxKind.ImportKeyword:
+                    return getGlobalImportMetaExpressionType();
+                case SyntaxKind.NewKeyword:
+                    const type = checkNewTargetMetaProperty(node);
+                    return type === errorType ? errorType : createNewTargetExpressionType(type);
+                default:
+                    Debug.assertNever(node.keywordToken);
+            }
+        }
+
         function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
@@ -30487,7 +30518,6 @@ namespace ts {
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
         }
 
@@ -30847,6 +30877,19 @@ namespace ts {
             }
 
             return promiseType;
+        }
+
+        function createNewTargetExpressionType(targetType: Type): Type {
+            // Create a synthetic type `NewTargetExpression { target: TargetType; }`
+            const symbol = createSymbol(SymbolFlags.None, "NewTargetExpression" as __String);
+
+            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String, CheckFlags.Readonly);
+            targetPropertySymbol.parent = symbol;
+            targetPropertySymbol.type = targetType;
+
+            const members = createSymbolTable([targetPropertySymbol]);
+            symbol.members = members;
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
@@ -39784,6 +39827,16 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
+                else if (isMetaProperty(parent)) {
+                    const parentType = getTypeOfNode(parent);
+                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                        return checkNewTargetMetaProperty(parent).symbol;
+                    }
+                }
             }
 
             switch (node.kind) {
@@ -39857,6 +39910,12 @@ namespace ts {
 
                 case SyntaxKind.ExportKeyword:
                     return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
+
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.NewKeyword:
+                    return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
+                case SyntaxKind.MetaProperty:
+                    return checkExpression(node as Expression).symbol;
 
                 default:
                     return undefined;
@@ -39955,6 +40014,10 @@ namespace ts {
                     const declaredType = getDeclaredTypeOfSymbol(symbol);
                     return declaredType !== errorType ? declaredType : getTypeOfSymbol(symbol);
                 }
+            }
+
+            if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
+                return checkMetaPropertyKeyword(node.parent);
             }
 
             return errorType;

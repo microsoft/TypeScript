@@ -1355,8 +1355,11 @@ namespace ts.Completions {
                         node = (parent as ModuleDeclaration).name;
                         break;
                     case SyntaxKind.ImportType:
-                    case SyntaxKind.MetaProperty:
                         node = parent;
+                        break;
+                    case SyntaxKind.MetaProperty:
+                        node = parent.getFirstToken(sourceFile)!;
+                        Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword);
                         break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
@@ -1596,12 +1599,6 @@ namespace ts.Completions {
                         return;
                     }
                 }
-            }
-
-            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword) && contextToken === node.getChildAt(1)) {
-                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
-                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
-                return;
             }
 
             if (!isTypeLocation) {
