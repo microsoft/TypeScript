@@ -2917,8 +2917,7 @@ namespace ts {
             }
         }
 
-        // eslint-disable-next-line no-in-operator
-        if (rootCompilerOptions && json && !("compilerOptions" in json)) {
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
             errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
