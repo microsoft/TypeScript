@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithTypedTags.ts ===
 interface I {
     (stringParts: TemplateStringsArray, ...rest: number[]): I;
->stringParts : TemplateStringsArray<readonly string[]>
+>stringParts : TemplateStringsArray<readonly string[], readonly string[]>
 >rest : number[]
 
     g: I;

@@ -11,20 +11,20 @@ namespace n {
     }
 
     function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
 
         return id`hello world`;
->id`hello world` : TemplateStringsArray<["hello world"]>
+>id`hello world` : TemplateStringsArray<["hello world"], ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
     }
     let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray<["hello world"]>
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
->templateObjectFactory() : TemplateStringsArray<["hello world"]>
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
 }
 === tests/cases/compiler/module.ts ===
 export { }
@@ -37,18 +37,18 @@ function id<T>(x: T): T {
 }
 
 function templateObjectFactory() {
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
 
     return id`hello world`;
->id`hello world` : TemplateStringsArray<["hello world"]>
+>id`hello world` : TemplateStringsArray<["hello world"], ["hello world"]>
 >id : <T>(x: T) => T
 >`hello world` : "hello world"
 }
 let result = templateObjectFactory() === templateObjectFactory();
 >result : boolean
 >templateObjectFactory() === templateObjectFactory() : boolean
->templateObjectFactory() : TemplateStringsArray<["hello world"]>
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
->templateObjectFactory() : TemplateStringsArray<["hello world"]>
->templateObjectFactory : () => TemplateStringsArray<["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory() : TemplateStringsArray<["hello world"], ["hello world"]>
+>templateObjectFactory : () => TemplateStringsArray<["hello world"], ["hello world"]>
 

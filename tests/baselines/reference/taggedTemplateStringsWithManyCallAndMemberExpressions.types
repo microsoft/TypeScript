@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts ===
 interface I {
     (strs: TemplateStringsArray, ...subs: number[]): I;
->strs : TemplateStringsArray<readonly string[]>
+>strs : TemplateStringsArray<readonly string[], readonly string[]>
 >subs : number[]
 
     member: {

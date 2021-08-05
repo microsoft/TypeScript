@@ -28816,26 +28816,33 @@ namespace ts {
                 const args: Expression[] = [];
 
                 let templateStringsArrayTypeParameter: Type;
+                let templateStringsArrayRawTypeParameter: Type;
 
                 if (template.kind === SyntaxKind.TemplateExpression) {
                     const templateStringParts: Type[] = [getStringLiteralType(template.head.text)];
+                    const templateStringPartsRaw: Type[] = [getStringLiteralType(template.head.rawText ?? template.head.text)];
                     const flags: ElementFlags[] = [ElementFlags.Required];
                     forEach(template.templateSpans, span => {
                         args.push(span.expression);
                         templateStringParts.push(getStringLiteralType(span.literal.text));
+                        templateStringPartsRaw.push(getStringLiteralType(span.literal.rawText ?? span.literal.text));
                         flags.push(ElementFlags.Required);
                     });
                     templateStringsArrayTypeParameter = createTupleType(
                         templateStringParts, flags);
+                    templateStringsArrayRawTypeParameter = createTupleType(
+                        templateStringPartsRaw, flags);
                 }
                 else /* if (template.kind === SyntaxKind.NoSubstitutionTemplateLiteral) */ {
                     templateStringsArrayTypeParameter = createTupleType(
                         [getStringLiteralType(template.text)], [ElementFlags.Required]);
+                    templateStringsArrayRawTypeParameter = createTupleType(
+                        [getStringLiteralType(template.rawText ?? template.text)], [ElementFlags.Required]);
                 }
 
                 const templateStringsArray = getGlobalTemplateStringsArraySymbol();
                 const expr = createSyntheticExpression(template,
-                    getTypeAliasInstantiation(templateStringsArray, [templateStringsArrayTypeParameter]));
+                    getTypeAliasInstantiation(templateStringsArray, [templateStringsArrayTypeParameter, templateStringsArrayRawTypeParameter]));
                 args.unshift(expr);
 
                 return args;

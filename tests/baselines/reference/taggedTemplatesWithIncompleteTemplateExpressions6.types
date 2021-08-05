@@ -1,7 +1,7 @@
 === tests/cases/compiler/taggedTemplatesWithIncompleteTemplateExpressions6.ts ===
 function f(x: TemplateStringsArray, y: string, z: string) {
 >f : (x: TemplateStringsArray, y: string, z: string) => void
->x : TemplateStringsArray<readonly string[]>
+>x : TemplateStringsArray<readonly string[], readonly string[]>
 >y : string
 >z : string
 }
@@ -9,7 +9,7 @@ function f(x: TemplateStringsArray, y: string, z: string) {
 // Incomplete call, not enough parameters, at EOF.
 f `123qdawdrqw${ 1 }${
 >f `123qdawdrqw${ 1 }${ : void
->f : (x: TemplateStringsArray<readonly string[]>, y: string, z: string) => void
+>f : (x: TemplateStringsArray<readonly string[], readonly string[]>, y: string, z: string) => void
 >`123qdawdrqw${ 1 }${ : string
 >1 : 1
 > : any

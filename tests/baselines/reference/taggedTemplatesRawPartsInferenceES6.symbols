@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/templates/taggedTemplatesRawPartsInferenceES6.ts ===
+function tag<TParts extends readonly string[], TRaw extends readonly string[], U extends readonly unknown[]>(strs: TemplateStringsArray<TParts, TRaw>, ...args: U): {parts: TParts; raw: TRaw; args: U} {
+>tag : Symbol(tag, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 0))
+>TParts : Symbol(TParts, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 13))
+>TRaw : Symbol(TRaw, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 46))
+>U : Symbol(U, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 78))
+>strs : Symbol(strs, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 109))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>TParts : Symbol(TParts, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 13))
+>TRaw : Symbol(TRaw, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 46))
+>args : Symbol(args, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 150))
+>U : Symbol(U, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 78))
+>parts : Symbol(parts, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 165))
+>TParts : Symbol(TParts, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 13))
+>raw : Symbol(raw, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 179))
+>TRaw : Symbol(TRaw, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 46))
+>args : Symbol(args, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 190))
+>U : Symbol(U, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 78))
+
+    return null;
+}
+
+var a = tag `part\1${''}part\2`;
+>a : Symbol(a, Decl(taggedTemplatesRawPartsInferenceES6.ts, 4, 3), Decl(taggedTemplatesRawPartsInferenceES6.ts, 5, 3))
+>tag : Symbol(tag, Decl(taggedTemplatesRawPartsInferenceES6.ts, 0, 0))
+
+var a: {};
+>a : Symbol(a, Decl(taggedTemplatesRawPartsInferenceES6.ts, 4, 3), Decl(taggedTemplatesRawPartsInferenceES6.ts, 5, 3))
+
