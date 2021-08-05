@@ -223,7 +223,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Output_Formatting,
-            description: Diagnostics.Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read,
+            description: Diagnostics.Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read,
             defaultValueDescription: "true"
         },
         {
@@ -553,7 +553,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Disable_emitting_file_from_a_compilation,
+            description: Diagnostics.Disable_emitting_files_from_a_compilation,
             transpileOptionValue: undefined,
             defaultValueDescription: "false"
         },

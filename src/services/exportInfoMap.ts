@@ -29,6 +29,7 @@ namespace ts {
         // Used to rehydrate `symbol` and `moduleSymbol` when transient
         id: number;
         symbolName: string;
+        symbolTableKey: __String;
         moduleName: string;
         moduleFile: SourceFile | undefined;
 
@@ -44,7 +45,7 @@ namespace ts {
     export interface ExportInfoMap {
         isUsableByFile(importingFile: Path): boolean;
         clear(): void;
-        add(importingFile: Path, symbol: Symbol, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, scriptTarget: ScriptTarget, checker: TypeChecker): void;
+        add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, scriptTarget: ScriptTarget, checker: TypeChecker): void;
         get(importingFile: Path, importedName: string, symbol: Symbol, moduleName: string, checker: TypeChecker): readonly SymbolExportInfo[] | undefined;
         forEach(importingFile: Path, action: (info: readonly SymbolExportInfo[], name: string, isFromAmbientModule: boolean) => void): void;
         releaseSymbols(): void;
@@ -71,13 +72,19 @@ namespace ts {
                 symbols.clear();
                 usableByFileName = undefined;
             },
-            add: (importingFile, symbol, moduleSymbol, moduleFile, exportKind, isFromPackageJson, scriptTarget, checker) => {
+            add: (importingFile, symbol, symbolTableKey, moduleSymbol, moduleFile, exportKind, isFromPackageJson, scriptTarget, checker) => {
                 if (importingFile !== usableByFileName) {
                     cache.clear();
                     usableByFileName = importingFile;
                 }
                 const isDefault = exportKind === ExportKind.Default;
-                const importedName = getNameForExportedSymbol(isDefault && getLocalSymbolForExportDefault(symbol) || symbol, scriptTarget);
+                const namedSymbol = isDefault && getLocalSymbolForExportDefault(symbol) || symbol;
+                // A re-export merged with an export from a module augmentation can result in `symbol`
+                // being an external module symbol; the name it is re-exported by will be `symbolTableKey`
+                // (which comes from the keys of `moduleSymbol.exports`.)
+                const importedName = isExternalModuleSymbol(namedSymbol)
+                    ? unescapeLeadingUnderscores(symbolTableKey)
+                    : getNameForExportedSymbol(namedSymbol, scriptTarget);
                 const moduleName = stripQuotes(moduleSymbol.name);
                 const id = exportInfoId++;
                 const storedSymbol = symbol.flags & SymbolFlags.Transient ? undefined : symbol;
@@ -86,6 +93,7 @@ namespace ts {
 
                 exportInfo.add(key(importedName, symbol, moduleName, checker), {
                     id,
+                    symbolTableKey,
                     symbolName: importedName,
                     moduleName,
                     moduleFile,
@@ -160,12 +168,10 @@ namespace ts {
             const moduleSymbol = info.moduleSymbol || cachedModuleSymbol || Debug.checkDefined(info.moduleFile
                 ? checker.getMergedSymbol(info.moduleFile.symbol)
                 : checker.tryFindAmbientModule(info.moduleName));
-            const symbolName = exportKind === ExportKind.Default
-                ? InternalSymbolName.Default
-                : info.symbolName;
             const symbol = info.symbol || cachedSymbol || Debug.checkDefined(exportKind === ExportKind.ExportEquals
                 ? checker.resolveExternalModuleSymbol(moduleSymbol)
-                : checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol));
+                : checker.tryGetMemberInModuleExportsAndProperties(unescapeLeadingUnderscores(info.symbolTableKey), moduleSymbol),
+                `Could not find symbol '${info.symbolName}' by key '${info.symbolTableKey}' in module ${moduleSymbol.name}`);
             symbols.set(id, [symbol, moduleSymbol]);
             return {
                 symbol,
@@ -330,10 +336,11 @@ namespace ts {
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'
-            if (defaultInfo && !checker.isUndefinedSymbol(defaultInfo.symbol) && !isExternalModuleSymbol(defaultInfo.symbol)) {
+            if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
                 cache.add(
                     importingFile.path,
                     defaultInfo.symbol,
+                    defaultInfo.exportKind === ExportKind.Default ? InternalSymbolName.Default : InternalSymbolName.ExportEquals,
                     moduleSymbol,
                     moduleFile,
                     defaultInfo.exportKind,
@@ -341,11 +348,12 @@ namespace ts {
                     scriptTarget,
                     checker);
             }
-            for (const exported of checker.getExportsAndPropertiesOfModule(moduleSymbol)) {
-                if (exported !== defaultInfo?.symbol && !isKnownSymbol(exported) && !isExternalModuleSymbol(exported) && addToSeen(seenExports, exported)) {
+            checker.forEachExportAndPropertyOfModule(moduleSymbol, (exported, key) => {
+                if (exported !== defaultInfo?.symbol && isImportableSymbol(exported, checker) && addToSeen(seenExports, exported)) {
                     cache.add(
                         importingFile.path,
                         exported,
+                        key,
                         moduleSymbol,
                         moduleFile,
                         ExportKind.Named,
@@ -353,7 +361,7 @@ namespace ts {
                         scriptTarget,
                         checker);
                 }
-            }
+            });
         });
 
         host.log?.(`getExportInfoMap: done in ${timestamp() - start} ms`);
@@ -366,6 +374,10 @@ namespace ts {
         const { symbol, exportKind } = exported;
         const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
         return info && { symbol, exportKind, ...info };
+    }
+
+    function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
+        return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
     }
 
     function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly exportKind: ExportKind } | undefined {
