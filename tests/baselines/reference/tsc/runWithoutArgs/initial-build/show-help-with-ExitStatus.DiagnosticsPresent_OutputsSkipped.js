@@ -62,7 +62,7 @@ Print the final configuration instead of building.
 [1mCOMMON COMPILER OPTIONS[22m
 
 [94m--pretty[39m
-Enable color and formatting in the output to make compiler errors easier to read
+Enable color and formatting in TypeScript's output to make compiler errors easier to read
 type: boolean
 default: true
 
