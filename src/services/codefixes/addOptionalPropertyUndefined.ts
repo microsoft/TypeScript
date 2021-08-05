@@ -87,11 +87,12 @@ namespace ts.codefix {
         else if (isVariableDeclaration(errorNode.parent) && errorNode.parent.initializer) {
             return { source: errorNode.parent.initializer, target: errorNode.parent.name };
         }
-        else if (isCallExpression(errorNode.parent) && errorNode.parent.arguments.indexOf(errorNode as Expression) > -1) {
+        else if (isCallExpression(errorNode.parent)) {
             const n = checker.getSymbolAtLocation(errorNode.parent.expression);
-            if (!n?.valueDeclaration) return undefined;
+            if (!n?.valueDeclaration || !isFunctionLikeKind(n.valueDeclaration.kind)) return undefined;
             if (!isExpression(errorNode)) return undefined;
             const i = errorNode.parent.arguments.indexOf(errorNode);
+            if (i === -1) return undefined;
             const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
             if (isIdentifier(name)) return { source: errorNode, target: name };
         }

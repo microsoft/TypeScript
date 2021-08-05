@@ -5,7 +5,7 @@
 // @Filename: fixExactOptionalUnassignableProperties6.ts
 // based on snapshotterInjected.ts in microsoft/playwright
 //// type Data = {
-////     p?: boolean,
+////     p?: (x: number) => void,
 //// };
 //// declare function e(o: any): Data;
 //// e(101).p = undefined
@@ -18,7 +18,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `type Data = {
-    p?: boolean | undefined,
+    p?: ((x: number) => void) | undefined,
 };
 declare function e(o: any): Data;
 e(101).p = undefined`,
