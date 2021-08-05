@@ -7122,13 +7122,9 @@
         "category": "Message",
         "code": 95166
     },
-    "Add 'undefined' to all optional properties": {
-        "category": "Message",
-        "code": 95167
-    },
     "Add 'undefined' to optional property type": {
         "category": "Message",
-        "code": 95168
+        "code": 95167
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

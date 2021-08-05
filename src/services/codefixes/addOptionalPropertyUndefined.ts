@@ -17,31 +17,9 @@ namespace ts.codefix {
                 return undefined;
             }
             const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
-            return [createCodeFixAction(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type, addOptionalPropertyUndefined, Diagnostics.Add_undefined_to_all_optional_properties)];
+            return [createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type)];
         },
         fixIds: [addOptionalPropertyUndefined],
-        getAllCodeActions: context => {
-            const { program } = context;
-            const checker = program.getTypeChecker();
-            const seen = new Map<number, true>();
-            return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
-                eachDiagnostic(context, errorCodes, diag => {
-                    const toAdd = getPropertiesToAdd(diag.file, diag, checker);
-                    if (!toAdd.length) {
-                        return;
-                    }
-                    let untouched = true;
-                    for (const add of toAdd) {
-                        if (!addToSeen(seen, getSymbolId(add))) {
-                            untouched = false;
-                        }
-                    }
-                    if (untouched) {
-                        addUndefinedToOptionalProperty(changes, toAdd);
-                    }
-                });
-            }));
-        },
     });
 
     function getPropertiesToAdd(file: SourceFile, span: TextSpan, checker: TypeChecker): Symbol[] {
