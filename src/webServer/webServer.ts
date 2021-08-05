@@ -187,7 +187,7 @@ namespace ts.server {
                 byteLength: notImplemented, // Formats the message text in send of Session which is overriden in this class so not needed
                 hrtime,
                 logger,
-                canUseEvents: false,
+                canUseEvents: true,
             });
         }
 
