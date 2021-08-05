@@ -5507,7 +5507,7 @@
         "category": "Message",
         "code": 6684
     },
-    "Enable color and formatting in the output to make compiler errors easier to read": {
+    "Enable color and formatting in TypeScript's output to make compiler errors easier to read": {
         "category": "Message",
         "code": 6685
     },
