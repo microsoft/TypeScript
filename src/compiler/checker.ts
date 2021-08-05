@@ -634,8 +634,7 @@ namespace ts {
             isTupleType,
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
-            getExactOptionalUnassignableProperties,
-            isExactOptionalPropertyMismatch,
+            getExactOptionalProperties,
             getAllPossiblePropertiesOfTypes,
             getSuggestedSymbolForNonexistentProperty,
             getSuggestionForNonexistentProperty,
@@ -19587,6 +19586,10 @@ namespace ts {
 
         function isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined) {
             return !!source && !!target && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
+        }
+
+        function getExactOptionalProperties(type: Type) {
+            return getPropertiesOfType(type).filter(targetProp => containsMissingType(getTypeOfSymbol(targetProp)));
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {

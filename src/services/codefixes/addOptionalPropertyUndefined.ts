@@ -50,27 +50,19 @@ namespace ts.codefix {
             return emptyArray;
         }
         const { source: sourceNode, target: targetNode } = sourceTarget;
-        const target = checker.getTypeAtLocation(targetNode);
-        const source = checker.getTypeAtLocation(sourceNode);
+        const target = shouldUseParentTypeOfProperty(sourceNode, targetNode, checker)
+            ? checker.getTypeAtLocation(targetNode.expression)
+            : checker.getTypeAtLocation(targetNode);
         if (target.symbol?.declarations?.some(d => getSourceFileOfNode(d).fileName.match(/\.d\.ts$/))) {
             return emptyArray;
         }
-        const targetPropertyType = getTargetPropertyType(checker, targetNode);
-        if (targetPropertyType && checker.isExactOptionalPropertyMismatch(source, targetPropertyType)) {
-            const s = checker.getSymbolAtLocation((targetNode as PropertyAccessExpression).name);
-            return s ? [s] : emptyArray;
-        }
-        return checker.getExactOptionalUnassignableProperties(source, target);
+        return checker.getExactOptionalProperties(target);
     }
 
-    function getTargetPropertyType(checker: TypeChecker, targetNode: Node) {
-        if (isPropertySignature(targetNode)) {
-            return checker.getTypeAtLocation(targetNode.name);
-        }
-        else if (isPropertyAccessExpression(targetNode)) {
-            return checker.getTypeOfPropertyOfType(checker.getTypeAtLocation(targetNode.expression), targetNode.name.text);
-        }
-        return undefined;
+    function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, checker: TypeChecker): targetNode is PropertyAccessExpression {
+        return isPropertyAccessExpression(targetNode)
+            && !!checker.getExactOptionalProperties(checker.getTypeAtLocation(targetNode.expression)).length
+            && checker.getTypeAtLocation(sourceNode) === checker.getUndefinedType();
     }
 
     /**

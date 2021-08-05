@@ -105,7 +105,7 @@ interface ID {
 }
 interface More {
     a?: number | undefined
-    b?: number
+    b?: number | undefined
 }
 interface Assignment {
     a?: number | undefined
