@@ -205,3 +205,19 @@ tests/cases/conformance/controlFlow/controlFlowGenericTypes.ts(168,9): error TS2
         }
     }
     
+    // Repros from #45145
+    
+    function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
+        y = x;
+    }
+    
+    type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
+    
+    class SqlTable<T> {
+        protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
+        }
+        public insertRow(row: SqlInsertSet<T>) {
+            this.validateRow(row);
+        }
+    }
+    

@@ -1602,6 +1602,12 @@ namespace ts.Completions {
             }
 
             if (!isTypeLocation) {
+                // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
+                // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
+                // we will check (and cache) the type of `this` *before* checking the type of the node.
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+                if (!isSourceFile(container) && container.parent) typeChecker.getTypeAtLocation(container);
+
                 let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 let insertQuestionDot = false;
                 if (type.isNullableType()) {
@@ -1934,6 +1940,7 @@ namespace ts.Completions {
                 !!importCompletionNode,
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
+                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
                         if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
