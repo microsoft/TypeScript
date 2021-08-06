@@ -7110,6 +7110,14 @@
         "category": "Message",
         "code": 95166
     },
+    "Add missing attributes": {
+        "category": "Message",
+        "code": 95167
+    },
+    "Add all missing attributes": {
+        "category": "Message",
+        "code": 95168
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
