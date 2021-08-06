@@ -3665,10 +3665,13 @@
       </Item>
       <Item ItemId=";Compiles_the_TypeScript_project_located_at_the_specified_path_6927" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          <Val><![CDATA[Compiles the TypeScript project located at the specified path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[지정된 경로에 있는 TypeScript 프로젝트를 컴파일합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3683,10 +3686,13 @@
       </Item>
       <Item ItemId=";Compiles_the_current_project_with_additional_settings_6929" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          <Val><![CDATA[Compiles the current project, with additional settings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[추가 설정을 사용하여 현재 프로젝트를 컴파일합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4815,12 +4821,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Disable_emitting_file_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Disable_emitting_files_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting file from a compilation.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[컴파일에서 파일을 내보내지 않도록 설정합니다.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Disable emitting files from a compilation.]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5451,12 +5454,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in output to make compiler errors easier to read]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[컴파일러 오류를 더 쉽게 읽을 수 있도록 출력에서 색상 및 서식을 사용합니다.]]></Val>
-          </Tgt>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7061,10 +7061,13 @@
       </Item>
       <Item ItemId=";Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options_6924" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[tsconfig.json을 무시하고 기본 컴파일러 옵션을 사용하여 지정된 파일을 컴파일합니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
