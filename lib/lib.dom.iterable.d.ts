@@ -109,7 +109,7 @@ interface HTMLFormElement {
 }
 
 interface HTMLSelectElement {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): IterableIterator<HTMLOptionElement>;
 }
 
 interface Headers {
@@ -161,7 +161,7 @@ interface MessageEvent<T = any> {
 }
 
 interface MimeTypeArray {
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<MimeType>;
 }
 
 interface NamedNodeMap {
@@ -206,11 +206,11 @@ interface NodeListOf<TNode extends Node> {
 }
 
 interface Plugin {
-    [Symbol.iterator](): IterableIterator<undefined>;
+    [Symbol.iterator](): IterableIterator<MimeType>;
 }
 
 interface PluginArray {
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<Plugin>;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {

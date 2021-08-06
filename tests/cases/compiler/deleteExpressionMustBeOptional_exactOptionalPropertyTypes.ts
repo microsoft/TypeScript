@@ -22,6 +22,7 @@ type BB = {
 }
 
 declare const f: Foo
+declare const g: Partial<Foo>
 declare const a: AA
 declare const b: BB
 
@@ -35,6 +36,17 @@ delete f.g
 delete f.h
 delete f.i
 delete f.j
+
+delete g.a
+delete g.b
+delete g.c
+delete g.d
+delete g.e
+delete g.f
+delete g.g
+delete g.h
+delete g.i
+delete g.j
 
 delete a.a
 delete a.b

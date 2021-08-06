@@ -1604,7 +1604,7 @@ namespace ts.refactor.extractSymbol {
         const expression = !isReadonlyArray(targetRange.range)
             ? targetRange.range
             : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
-                ? (targetRange.range[0] as ExpressionStatement).expression
+                ? targetRange.range[0].expression
                 : undefined;
 
         let expressionDiagnostic: Diagnostic | undefined;

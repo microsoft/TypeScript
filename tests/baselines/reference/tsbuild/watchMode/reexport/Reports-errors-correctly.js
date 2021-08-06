@@ -136,6 +136,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -329,6 +331,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 
@@ -484,6 +488,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/reexport/src/main/tsconfig.json","pollingInterval":250}
 /user/username/projects/reexport/src/main/index.ts:
   {"fileName":"/user/username/projects/reexport/src/main/index.ts","pollingInterval":250}
+/user/username/projects/reexport/src/pure/package.json:
+  {"fileName":"/user/username/projects/reexport/src/pure/package.json","pollingInterval":250}
 /user/username/projects/reexport/src/tsconfig.json:
   {"fileName":"/user/username/projects/reexport/src/tsconfig.json","pollingInterval":250}
 

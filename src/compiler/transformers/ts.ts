@@ -567,35 +567,12 @@ namespace ts {
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
-        /**
-         * Tests whether we should emit a __decorate call for a class declaration.
-         */
-        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
-            if (node.decorators && node.decorators.length > 0) {
-                return true;
-            }
-
-            const constructor = getFirstConstructorWithBody(node);
-            if (constructor) {
-                return forEach(constructor.parameters, shouldEmitDecorateCallForParameter);
-            }
-
-            return false;
-        }
-
-        /**
-         * Tests whether we should emit a __decorate call for a parameter declaration.
-         */
-        function shouldEmitDecorateCallForParameter(parameter: ParameterDeclaration) {
-            return parameter.decorators !== undefined && parameter.decorators.length > 0;
-        }
-
         function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-            if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (classOrConstructorParameterIsDecorated(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
@@ -846,7 +823,12 @@ namespace ts {
 
             const location = moveRangePastDecorators(node);
             const classAlias = getClassAliasIfNeeded(node);
-            const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const declName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
@@ -1256,7 +1238,12 @@ namespace ts {
             }
 
             const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const localName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
             const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
             setEmitFlags(expression, EmitFlags.NoComments);

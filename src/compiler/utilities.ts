@@ -285,7 +285,6 @@ namespace ts {
             case SyntaxKind.ForStatement:
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-            case SyntaxKind.ClassStaticBlockDeclaration:
                 return true;
         }
         return false;
@@ -671,7 +670,7 @@ namespace ts {
                 const escapeText = flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                     escapeNonAsciiString;
 
-                const rawText = (node as TemplateLiteralLikeNode).rawText || escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
+                const rawText = (node as TemplateLiteralLikeNode).rawText ?? escapeTemplateSubstitution(escapeText(node.text, CharacterCodes.backtick));
                 switch (node.kind) {
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
                         return "`" + rawText + "`";
@@ -833,7 +832,7 @@ namespace ts {
         return false;
     }
 
-    export function isBlockScope(node: Node, parentNode: Node): boolean {
+    export function isBlockScope(node: Node, parentNode: Node | undefined): boolean {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
             case SyntaxKind.CaseBlock:
@@ -849,6 +848,8 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.PropertyDeclaration:
+            case SyntaxKind.ClassStaticBlockDeclaration:
                 return true;
 
             case SyntaxKind.Block:
@@ -941,6 +942,14 @@ namespace ts {
     // as a descendant, that is not the provided node.
     export function getEnclosingBlockScopeContainer(node: Node): Node {
         return findAncestor(node.parent, current => isBlockScope(current, current.parent))!;
+    }
+
+    export function forEachEnclosingBlockScopeContainer(node: Node, cb: (container: Node) => void): void {
+        let container = getEnclosingBlockScopeContainer(node);
+        while (container) {
+            cb(container);
+            container = getEnclosingBlockScopeContainer(container);
+        }
     }
 
     // Return display name of an identifier
@@ -1114,6 +1123,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+            case SyntaxKind.NamespaceImport:
                 errorNode = (node as NamedDeclaration).name;
                 break;
             case SyntaxKind.ArrowFunction:
@@ -1868,10 +1878,17 @@ namespace ts {
                 return some((node as ClassDeclaration).members, m => nodeOrChildIsDecorated(m, node, parent!)); // TODO: GH#18217
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
                 return some((node as FunctionLikeDeclaration).parameters, p => nodeIsDecorated(p, node, parent!)); // TODO: GH#18217
             default:
                 return false;
         }
+    }
+
+    export function classOrConstructorParameterIsDecorated(node: ClassDeclaration): boolean {
+        if (nodeIsDecorated(node)) return true;
+        const constructor = getFirstConstructorWithBody(node);
+        return !!constructor && childIsDecorated(constructor, node);
     }
 
     export function isJSXTagName(node: Node) {
@@ -3272,6 +3289,10 @@ namespace ts {
         return startsWith(symbol.escapedName as string, "__@");
     }
 
+    export function isPrivateIdentifierSymbol(symbol: Symbol): boolean {
+        return startsWith(symbol.escapedName as string, "__#");
+    }
+
     /**
      * Includes the word "Symbol" with unicode escapes
      */
@@ -3830,8 +3851,8 @@ namespace ts {
     // There is no reason for this other than that JSON.stringify does not handle it either.
     const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
     const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
-    // Template strings should be preserved as much as possible
-    const backtickQuoteEscapedCharsRegExp = /[\\`]/g;
+    // Template strings preserve simple LF newlines, still encode CRLF (or CR)
+    const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
     const escapedCharsMap = new Map(getEntries({
         "\t": "\\t",
         "\v": "\\v",
@@ -3845,7 +3866,8 @@ namespace ts {
         "\`": "\\\`",
         "\u2028": "\\u2028", // lineSeparator
         "\u2029": "\\u2029", // paragraphSeparator
-        "\u0085": "\\u0085"  // nextLine
+        "\u0085": "\\u0085", // nextLine
+        "\r\n": "\\r\\n", // special case for CRLFs in backticks
     }));
 
     function encodeUtf16EscapeSequence(charCode: number): string {
@@ -7036,11 +7058,15 @@ namespace ts {
             || isPartOfTypeQuery(useSite)
             || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
-            || !isExpressionNode(useSite);
+            || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
     }
 
     export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
         return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
+    }
+
+    function isShorthandPropertyNameUseSite(useSite: Node) {
+        return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
     }
 
     function isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(node: Node) {
@@ -7321,5 +7347,24 @@ namespace ts {
             case SyntaxKind.SourceFile:
                 return (parent as SourceFile).statements;
         }
+    }
+
+    export function hasContextSensitiveParameters(node: FunctionLikeDeclaration) {
+        // Functions with type parameters are not context sensitive.
+        if (!node.typeParameters) {
+            // Functions with any parameters that lack type annotations are context sensitive.
+            if (some(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
+                return true;
+            }
+            if (node.kind !== SyntaxKind.ArrowFunction) {
+                // If the first parameter is not an explicit 'this' parameter, then the function has
+                // an implicit 'this' parameter which is subject to contextual typing.
+                const parameter = firstOrUndefined(node.parameters);
+                if (!(parameter && parameterIsThisKeyword(parameter))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
