@@ -79,7 +79,7 @@ namespace ts.classifier.v2020 {
                 inJSXElement = false;
             }
 
-            if (isIdentifier(node) && !inJSXElement && !inImportClause(node)) {
+            if (isIdentifier(node) && !inJSXElement && !inImportClause(node) && !isInfinityOrNaNString(node.escapedText)) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.Alias) {
@@ -223,6 +223,10 @@ namespace ts.classifier.v2020 {
 
     function isRightSideOfQualifiedNameOrPropertyAccess(node: Node): boolean {
         return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
+    }
+
+    function isInfinityOrNaNString(name: __String): boolean {
+        return name === "Infinity" || name === "NaN";
     }
 
     const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([

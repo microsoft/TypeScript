@@ -916,10 +916,6 @@ namespace ts {
             return isTypeOfExpression(expr1) && isNarrowableOperand(expr1.expression) && isStringLiteralLike(expr2);
         }
 
-        function isNarrowableInOperands(left: Expression, right: Expression) {
-            return isStringLiteralLike(left) && isNarrowingExpression(right);
-        }
-
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
@@ -936,7 +932,7 @@ namespace ts {
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
                 case SyntaxKind.InKeyword:
-                    return isNarrowableInOperands(expr.left, expr.right);
+                    return isNarrowingExpression(expr.right);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
@@ -1670,10 +1666,14 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
-            setParent(node.tagName, node);
+            bind(node.tagName);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
+                // don't bind the type name yet; that's delayed until delayedBindJSDocTypedefTag
                 setParent(node.fullName, node);
                 setParentRecursive(node.fullName, /*incremental*/ false);
+            }
+            if (typeof node.comment !== "string") {
+                bindEach(node.comment);
             }
         }
 

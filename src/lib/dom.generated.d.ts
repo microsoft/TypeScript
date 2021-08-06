@@ -152,6 +152,12 @@ interface BlobPropertyBag {
     type?: string;
 }
 
+interface CSSStyleSheetInit {
+    baseURL?: string;
+    disabled?: boolean;
+    media?: MediaList | string;
+}
+
 interface CacheQueryOptions {
     ignoreMethod?: boolean;
     ignoreSearch?: boolean;
@@ -162,6 +168,7 @@ interface CanvasRenderingContext2DSettings {
     alpha?: boolean;
     colorSpace?: PredefinedColorSpace;
     desynchronized?: boolean;
+    willReadFrequently?: boolean;
 }
 
 interface ChannelMergerOptions extends AudioNodeOptions {
@@ -196,12 +203,12 @@ interface CompositionEventInit extends UIEventInit {
 }
 
 interface ComputedEffectTiming extends EffectTiming {
-    activeDuration?: number;
+    activeDuration?: CSSNumberish;
     currentIteration?: number | null;
-    endTime?: number;
-    localTime?: number | null;
-    progress?: number | null;
-    startTime?: number;
+    endTime?: CSSNumberish;
+    localTime?: CSSNumberish | null;
+    progress?: CSSNumberish | null;
+    startTime?: CSSNumberish;
 }
 
 interface ComputedKeyframe {
@@ -1571,20 +1578,17 @@ interface ScrollToOptions extends ScrollOptions {
 
 interface SecurityPolicyViolationEventInit extends EventInit {
     blockedURI?: string;
-    blockedURL?: string;
-    colno?: number;
     columnNumber?: number;
     disposition: SecurityPolicyViolationEventDisposition;
-    documentURI?: string;
-    documentURL: string;
+    documentURI: string;
     effectiveDirective: string;
     lineNumber?: number;
-    lineno?: number;
     originalPolicy: string;
     referrer?: string;
     sample?: string;
     sourceFile?: string;
     statusCode: number;
+    violatedDirective: string;
 }
 
 interface ShadowRootInit {
@@ -1598,11 +1602,6 @@ interface ShareData {
     text?: string;
     title?: string;
     url?: string;
-}
-
-interface SpeechRecognitionErrorEventInit extends EventInit {
-    error: SpeechRecognitionErrorCode;
-    message?: string;
 }
 
 interface SpeechSynthesisErrorEventInit extends SpeechSynthesisEventInit {
@@ -2225,8 +2224,10 @@ declare var AudioParamMap: {
     new(): AudioParamMap;
 };
 
-/** The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed.
- * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet. */
+/**
+ * The Web Audio API events that occur when a ScriptProcessorNode input buffer is ready to be processed.
+ * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and is soon to be replaced by AudioWorklet.
+ */
 interface AudioProcessingEvent extends Event {
     /** @deprecated */
     readonly inputBuffer: AudioBuffer;
@@ -2760,6 +2761,7 @@ interface CSSStyleDeclaration {
     captionSide: string;
     caretColor: string;
     clear: string;
+    /** @deprecated */
     clip: string;
     clipPath: string;
     clipRule: string;
@@ -2814,6 +2816,7 @@ interface CSSStyleDeclaration {
     fontStyle: string;
     fontSynthesis: string;
     fontVariant: string;
+    /** @deprecated */
     fontVariantAlternates: string;
     fontVariantCaps: string;
     fontVariantEastAsian: string;
@@ -2973,6 +2976,7 @@ interface CSSStyleDeclaration {
     scrollPaddingRight: string;
     scrollPaddingTop: string;
     scrollSnapAlign: string;
+    scrollSnapStop: string;
     scrollSnapType: string;
     shapeImageThreshold: string;
     shapeMargin: string;
@@ -3028,49 +3032,49 @@ interface CSSStyleDeclaration {
     userSelect: string;
     verticalAlign: string;
     visibility: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignContent`. */
     webkitAlignContent: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignItems`. */
     webkitAlignItems: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `alignSelf`. */
     webkitAlignSelf: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animation`. */
     webkitAnimation: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDelay`. */
     webkitAnimationDelay: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDirection`. */
     webkitAnimationDirection: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationDuration`. */
     webkitAnimationDuration: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationFillMode`. */
     webkitAnimationFillMode: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationIterationCount`. */
     webkitAnimationIterationCount: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationName`. */
     webkitAnimationName: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationPlayState`. */
     webkitAnimationPlayState: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `animationTimingFunction`. */
     webkitAnimationTimingFunction: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `appearance`. */
     webkitAppearance: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backfaceVisibility`. */
     webkitBackfaceVisibility: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundClip`. */
     webkitBackgroundClip: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundOrigin`. */
     webkitBackgroundOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `backgroundSize`. */
     webkitBackgroundSize: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderBottomLeftRadius`. */
     webkitBorderBottomLeftRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderBottomRightRadius`. */
     webkitBorderBottomRightRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderRadius`. */
     webkitBorderRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderTopLeftRadius`. */
     webkitBorderTopLeftRadius: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `borderTopRightRadius`. */
     webkitBorderTopRightRadius: string;
     /** @deprecated */
     webkitBoxAlign: string;
@@ -3082,90 +3086,83 @@ interface CSSStyleDeclaration {
     webkitBoxOrient: string;
     /** @deprecated */
     webkitBoxPack: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxShadow`. */
     webkitBoxShadow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `boxSizing`. */
     webkitBoxSizing: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `filter`. */
     webkitFilter: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flex`. */
     webkitFlex: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexBasis`. */
     webkitFlexBasis: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexDirection`. */
     webkitFlexDirection: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexFlow`. */
     webkitFlexFlow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexGrow`. */
     webkitFlexGrow: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexShrink`. */
     webkitFlexShrink: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `flexWrap`. */
     webkitFlexWrap: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `justifyContent`. */
     webkitJustifyContent: string;
     webkitLineClamp: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `mask`. */
     webkitMask: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorder`. */
     webkitMaskBoxImage: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderOutset`. */
     webkitMaskBoxImageOutset: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderRepeat`. */
     webkitMaskBoxImageRepeat: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderSlice`. */
     webkitMaskBoxImageSlice: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderSource`. */
     webkitMaskBoxImageSource: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskBorderWidth`. */
     webkitMaskBoxImageWidth: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskClip`. */
     webkitMaskClip: string;
-    /** @deprecated */
     webkitMaskComposite: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskImage`. */
     webkitMaskImage: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskOrigin`. */
     webkitMaskOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskPosition`. */
     webkitMaskPosition: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskRepeat`. */
     webkitMaskRepeat: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `maskSize`. */
     webkitMaskSize: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `order`. */
     webkitOrder: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `perspective`. */
     webkitPerspective: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `perspectiveOrigin`. */
     webkitPerspectiveOrigin: string;
-    /** @deprecated */
     webkitTextFillColor: string;
-    /** @deprecated */
-    webkitTextSizeAdjust: string;
-    /** @deprecated */
     webkitTextStroke: string;
-    /** @deprecated */
     webkitTextStrokeColor: string;
-    /** @deprecated */
     webkitTextStrokeWidth: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transform`. */
     webkitTransform: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transformOrigin`. */
     webkitTransformOrigin: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transformStyle`. */
     webkitTransformStyle: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transition`. */
     webkitTransition: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionDelay`. */
     webkitTransitionDelay: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionDuration`. */
     webkitTransitionDuration: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionProperty`. */
     webkitTransitionProperty: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `transitionTimingFunction`. */
     webkitTransitionTimingFunction: string;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `userSelect`. */
     webkitUserSelect: string;
     whiteSpace: string;
     widows: string;
@@ -3217,7 +3214,7 @@ interface CSSStyleSheet extends StyleSheet {
 
 declare var CSSStyleSheet: {
     prototype: CSSStyleSheet;
-    new(): CSSStyleSheet;
+    new(options?: CSSStyleSheetInit): CSSStyleSheet;
 };
 
 /** An object representing a single CSS @supports at-rule. It implements the CSSConditionRule interface, and therefore the CSSRule and CSSGroupingRule interfaces with a type value of 12 (CSSRule.SUPPORTS_RULE). */
@@ -3381,6 +3378,7 @@ interface CanvasRect {
 /** The CanvasRenderingContext2D interface, part of the Canvas API, provides the 2D rendering context for the drawing surface of a <canvas> element. It is used for drawing shapes, text, images, and other objects. */
 interface CanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform, CanvasUserInterface {
     readonly canvas: HTMLCanvasElement;
+    getContextAttributes(): CanvasRenderingContext2DSettings;
 }
 
 declare var CanvasRenderingContext2D: {
@@ -3464,7 +3462,7 @@ declare var CharacterData: {
     new(): CharacterData;
 };
 
-interface ChildNode {
+interface ChildNode extends Node {
     /**
      * Inserts nodes just after node, while replacing strings in nodes with equivalent Text nodes.
      *
@@ -3489,19 +3487,9 @@ interface ChildNode {
     replaceWith(...nodes: (Node | string)[]): void;
 }
 
-interface ClientRect {
-    bottom: number;
-    readonly height: number;
-    left: number;
-    right: number;
-    top: number;
-    readonly width: number;
+/** @deprecated */
+interface ClientRect extends DOMRect {
 }
-
-declare var ClientRect: {
-    prototype: ClientRect;
-    new(): ClientRect;
-};
 
 interface Clipboard extends EventTarget {
     read(): Promise<ClipboardItems>;
@@ -3761,6 +3749,28 @@ declare var DOMImplementation: {
 };
 
 interface DOMMatrix extends DOMMatrixReadOnly {
+    a: number;
+    b: number;
+    c: number;
+    d: number;
+    e: number;
+    f: number;
+    m11: number;
+    m12: number;
+    m13: number;
+    m14: number;
+    m21: number;
+    m22: number;
+    m23: number;
+    m24: number;
+    m31: number;
+    m32: number;
+    m33: number;
+    m34: number;
+    m41: number;
+    m42: number;
+    m43: number;
+    m44: number;
     invertSelf(): DOMMatrix;
     multiplySelf(other?: DOMMatrixInit): DOMMatrix;
     preMultiplySelf(other?: DOMMatrixInit): DOMMatrix;
@@ -3864,6 +3874,10 @@ declare var DOMParser: {
 };
 
 interface DOMPoint extends DOMPointReadOnly {
+    w: number;
+    x: number;
+    y: number;
+    z: number;
 }
 
 declare var DOMPoint: {
@@ -3907,6 +3921,10 @@ declare var DOMQuad: {
 };
 
 interface DOMRect extends DOMRectReadOnly {
+    height: number;
+    width: number;
+    x: number;
+    y: number;
 }
 
 declare var DOMRect: {
@@ -4222,28 +4240,28 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly URL: string;
     /**
      * Sets or gets the color of all active links in the document.
+     * @deprecated
      */
-    /** @deprecated */
     alinkColor: string;
     /**
      * Returns a reference to the collection of elements contained by the object.
+     * @deprecated
      */
-    /** @deprecated */
     readonly all: HTMLAllCollection;
     /**
      * Retrieves a collection of all a objects that have a name and/or id property. Objects in this collection are in HTML source order.
+     * @deprecated
      */
-    /** @deprecated */
     readonly anchors: HTMLCollectionOf<HTMLAnchorElement>;
     /**
      * Retrieves a collection of all applet objects in the document.
+     * @deprecated
      */
-    /** @deprecated */
     readonly applets: HTMLCollection;
     /**
      * Deprecated. Sets or retrieves a value that indicates the background color behind the object.
+     * @deprecated
      */
-    /** @deprecated */
     bgColor: string;
     /**
      * Specifies the beginning and end of the document body.
@@ -4255,6 +4273,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly characterSet: string;
     /**
      * Gets or sets the character set used to encode the object.
+     * @deprecated This is a legacy alias of `characterSet`.
      */
     readonly charset: string;
     /**
@@ -4313,8 +4332,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly embeds: HTMLCollectionOf<HTMLEmbedElement>;
     /**
      * Sets or gets the foreground (text) color of the document.
+     * @deprecated
      */
-    /** @deprecated */
     fgColor: string;
     /**
      * Retrieves a collection, in source order, of all form objects in the document.
@@ -4341,6 +4360,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly implementation: DOMImplementation;
     /**
      * Returns the character encoding used to create the webpage that is loaded into the document object.
+     * @deprecated This is a legacy alias of `characterSet`.
      */
     readonly inputEncoding: string;
     /**
@@ -4349,8 +4369,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly lastModified: string;
     /**
      * Sets or gets the color of the document links.
+     * @deprecated
      */
-    /** @deprecated */
     linkColor: string;
     /**
      * Retrieves a collection of all a objects that specify the href property and all area objects in the document.
@@ -4385,6 +4405,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      * Gets the URL of the location that referred the user to the current page.
      */
     readonly referrer: string;
+    /** @deprecated */
+    readonly rootElement: SVGSVGElement | null;
     /**
      * Retrieves a collection of all script objects in the document.
      */
@@ -4398,8 +4420,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly visibilityState: VisibilityState;
     /**
      * Sets or gets the color of the links that the user has visited.
+     * @deprecated
      */
-    /** @deprecated */
     vlinkColor: string;
     /**
      * Moves node from another document and returns it.
@@ -4409,6 +4431,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     adoptNode<T extends Node>(node: T): T;
     /** @deprecated */
     captureEvents(): void;
+    /** @deprecated */
+    caretRangeFromPoint(x: number, y: number): Range | null;
     /** @deprecated */
     clear(): void;
     /**
@@ -4507,7 +4531,6 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "RTCPeerConnectionIceEvent"): RTCPeerConnectionIceEvent;
     createEvent(eventInterface: "RTCTrackEvent"): RTCTrackEvent;
     createEvent(eventInterface: "SecurityPolicyViolationEvent"): SecurityPolicyViolationEvent;
-    createEvent(eventInterface: "SpeechRecognitionErrorEvent"): SpeechRecognitionErrorEvent;
     createEvent(eventInterface: "SpeechSynthesisErrorEvent"): SpeechSynthesisErrorEvent;
     createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
     createEvent(eventInterface: "StorageEvent"): StorageEvent;
@@ -4559,8 +4582,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
      * @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
      * @param showUI Display the user interface, defaults to false.
      * @param value Value to assign.
+     * @deprecated
      */
-    /** @deprecated */
     execCommand(commandId: string, showUI?: boolean, value?: string): boolean;
     /**
      * Stops document's fullscreen element from being displayed fullscreen and resolves promise when done.
@@ -4628,8 +4651,8 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     /**
      * Returns a Boolean value that indicates whether a specified command can be successfully executed using execCommand, given the current state of the document.
      * @param commandId Specifies a command identifier.
+     * @deprecated
      */
-    /** @deprecated */
     queryCommandEnabled(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
@@ -4639,14 +4662,14 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     /**
      * Returns a Boolean value that indicates the current state of the command.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
-    /** @deprecated */
     queryCommandState(commandId: string): boolean;
     /**
      * Returns a Boolean value that indicates whether the current command is supported on the current range.
      * @param commandId Specifies a command identifier.
+     * @deprecated
      */
-    /** @deprecated */
     queryCommandSupported(commandId: string): boolean;
     /**
      * Returns the current value of the document, range, or current selection for the given command.
@@ -4695,6 +4718,8 @@ interface DocumentAndElementEventHandlers {
 
 /** A minimal document object that has no parent. It is used as a lightweight version of Document that stores a segment of a document structure comprised of nodes just like a standard document. The key difference is that because the document fragment isn't part of the active document tree structure, changes made to the fragment don't affect the document, cause reflow, or incur any performance impact that can occur when changes are made. */
 interface DocumentFragment extends Node, NonElementParentNode, ParentNode {
+    readonly ownerDocument: Document;
+    getElementById(elementId: string): HTMLElement | null;
 }
 
 declare var DocumentFragment: {
@@ -4972,7 +4997,7 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, InnerHTML, Non
      * Returns true if qualifiedName is now present, and false otherwise.
      */
     toggleAttribute(qualifiedName: string, force?: boolean): boolean;
-    /** @deprecated */
+    /** @deprecated This is a legacy alias of `matches`. */
     webkitMatchesSelector(selectors: string): boolean;
     addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Element, ev: ElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -5736,8 +5761,8 @@ interface GlobalEventHandlers {
     /**
      * Fires when the user presses an alphanumeric key.
      * @param ev The event.
+     * @deprecated
      */
-    /** @deprecated */
     onkeypress: ((this: GlobalEventHandlers, ev: KeyboardEvent) => any) | null;
     /**
      * Fires when the user releases a key.
@@ -5870,10 +5895,10 @@ interface GlobalEventHandlers {
      */
     ontimeupdate: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     ontoggle: ((this: GlobalEventHandlers, ev: Event) => any) | null;
-    ontouchcancel?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchend?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchmove?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
-    ontouchstart?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null;
+    ontouchcancel?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchend?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchmove?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
+    ontouchstart?: ((this: GlobalEventHandlers, ev: TouchEvent) => any) | null | undefined;
     ontransitioncancel: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
     ontransitionend: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
     ontransitionrun: ((this: GlobalEventHandlers, ev: TransitionEvent) => any) | null;
@@ -5928,13 +5953,13 @@ declare var HTMLAllCollection: {
 interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     /**
      * Sets or retrieves the coordinates of the object.
+     * @deprecated
      */
-    /** @deprecated */
     coords: string;
     download: string;
     /**
@@ -5943,8 +5968,8 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     hreflang: string;
     /**
      * Sets or retrieves the shape of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     ping: string;
     referrerPolicy: string;
@@ -5955,13 +5980,13 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
     readonly relList: DOMTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
+     * @deprecated
      */
-    /** @deprecated */
     rev: string;
     /**
      * Sets or retrieves the shape of the object.
+     * @deprecated
      */
-    /** @deprecated */
     shape: string;
     /**
      * Sets or retrieves the window or frame at which to target content.
@@ -5996,8 +6021,8 @@ interface HTMLAreaElement extends HTMLElement, HTMLHyperlinkElementUtils {
     download: string;
     /**
      * Sets or gets whether clicks in this region cause action.
+     * @deprecated
      */
-    /** @deprecated */
     noHref: boolean;
     ping: string;
     referrerPolicy: string;
@@ -6039,8 +6064,8 @@ declare var HTMLAudioElement: {
 interface HTMLBRElement extends HTMLElement {
     /**
      * Sets or retrieves the side on which floating objects are not to be positioned when any IHTMLBlockElement is inserted into the document.
+     * @deprecated
      */
-    /** @deprecated */
     clear: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBRElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6305,7 +6330,7 @@ declare var HTMLDetailsElement: {
     new(): HTMLDetailsElement;
 };
 
-/** @deprecated - this is not available in most browsers */
+/** @deprecated this is not available in most browsers */
 interface HTMLDialogElement extends HTMLElement {
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDialogElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6333,8 +6358,8 @@ declare var HTMLDirectoryElement: {
 interface HTMLDivElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDivElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6347,7 +6372,7 @@ declare var HTMLDivElement: {
     new(): HTMLDivElement;
 };
 
-/** @deprecated - use Document */
+/** @deprecated use Document */
 interface HTMLDocument extends Document {
     addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: HTMLDocument, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6399,8 +6424,8 @@ interface HTMLEmbedElement extends HTMLElement {
     height: string;
     /**
      * Sets or retrieves the name of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     /**
      * Sets or retrieves a URL to be loaded by the object.
@@ -6472,15 +6497,17 @@ declare var HTMLFieldSetElement: {
     new(): HTMLFieldSetElement;
 };
 
-/** Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text. */
-/** @deprecated */
+/**
+ * Implements the document object model (DOM) representation of the font element. The HTML Font Element <font> defines the font size, font face and color of text.
+ * @deprecated
+ */
 interface HTMLFontElement extends HTMLElement {
     /** @deprecated */
     color: string;
     /**
      * Sets or retrieves the current typeface family.
+     * @deprecated
      */
-    /** @deprecated */
     face: string;
     /** @deprecated */
     size: string;
@@ -6588,53 +6615,53 @@ declare var HTMLFormElement: {
 interface HTMLFrameElement extends HTMLElement {
     /**
      * Retrieves the document object of the page or frame.
+     * @deprecated
      */
-    /** @deprecated */
     readonly contentDocument: Document | null;
     /**
      * Retrieves the object of the specified.
+     * @deprecated
      */
-    /** @deprecated */
     readonly contentWindow: WindowProxy | null;
     /**
      * Sets or retrieves whether to display a border for the frame.
+     * @deprecated
      */
-    /** @deprecated */
     frameBorder: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginWidth: string;
     /**
      * Sets or retrieves the frame name.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     /**
      * Sets or retrieves whether the user can resize the frame.
+     * @deprecated
      */
-    /** @deprecated */
     noResize: boolean;
     /**
      * Sets or retrieves whether the frame can be scrolled.
+     * @deprecated
      */
-    /** @deprecated */
     scrolling: string;
     /**
      * Sets or retrieves a URL to be loaded by the object.
+     * @deprecated
      */
-    /** @deprecated */
     src: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFrameElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6651,18 +6678,20 @@ declare var HTMLFrameElement: {
 interface HTMLFrameSetElementEventMap extends HTMLElementEventMap, WindowEventHandlersEventMap {
 }
 
-/** Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements. */
-/** @deprecated */
+/**
+ * Provides special properties (beyond those of the regular HTMLElement interface they also inherit) for manipulating <frameset> elements.
+ * @deprecated
+ */
 interface HTMLFrameSetElement extends HTMLElement, WindowEventHandlers {
     /**
      * Sets or retrieves the frame widths of the object.
+     * @deprecated
      */
-    /** @deprecated */
     cols: string;
     /**
      * Sets or retrieves the frame heights of the object.
+     * @deprecated
      */
-    /** @deprecated */
     rows: string;
     addEventListener<K extends keyof HTMLFrameSetElementEventMap>(type: K, listener: (this: HTMLFrameSetElement, ev: HTMLFrameSetElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6680,22 +6709,22 @@ declare var HTMLFrameSetElement: {
 interface HTMLHRElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     color: string;
     /**
      * Sets or retrieves whether the horizontal rule is drawn with 3-D shading.
+     * @deprecated
      */
-    /** @deprecated */
     noShade: boolean;
     /** @deprecated */
     size: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHRElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6725,8 +6754,8 @@ declare var HTMLHeadElement: {
 interface HTMLHeadingElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHeadingElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6743,8 +6772,8 @@ declare var HTMLHeadingElement: {
 interface HTMLHtmlElement extends HTMLElement {
     /**
      * Sets or retrieves the DTD version that governs the current document.
+     * @deprecated
      */
-    /** @deprecated */
     version: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHtmlElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -6829,8 +6858,8 @@ interface HTMLHyperlinkElementUtils {
 interface HTMLIFrameElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     allow: string;
     allowFullscreen: boolean;
@@ -6844,8 +6873,8 @@ interface HTMLIFrameElement extends HTMLElement {
     readonly contentWindow: WindowProxy | null;
     /**
      * Sets or retrieves whether to display a border for the frame.
+     * @deprecated
      */
-    /** @deprecated */
     frameBorder: string;
     /**
      * Sets or retrieves the height of the object.
@@ -6853,18 +6882,18 @@ interface HTMLIFrameElement extends HTMLElement {
     height: string;
     /**
      * Sets or retrieves a URI to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /**
      * Sets or retrieves the top and bottom margin heights before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginHeight: string;
     /**
      * Sets or retrieves the left and right margin widths before displaying the text in a frame.
+     * @deprecated
      */
-    /** @deprecated */
     marginWidth: string;
     /**
      * Sets or retrieves the frame name.
@@ -6874,8 +6903,8 @@ interface HTMLIFrameElement extends HTMLElement {
     readonly sandbox: DOMTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
+     * @deprecated
      */
-    /** @deprecated */
     scrolling: string;
     /**
      * Sets or retrieves a URL to be loaded by the object.
@@ -6905,8 +6934,8 @@ declare var HTMLIFrameElement: {
 interface HTMLImageElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /**
      * Sets or retrieves a text alternative to the graphic.
@@ -6914,8 +6943,8 @@ interface HTMLImageElement extends HTMLElement {
     alt: string;
     /**
      * Specifies the properties of a border drawn around an object.
+     * @deprecated
      */
-    /** @deprecated */
     border: string;
     /**
      * Retrieves whether the object is fully loaded.
@@ -6930,8 +6959,8 @@ interface HTMLImageElement extends HTMLElement {
     height: number;
     /**
      * Sets or retrieves the width of the border to draw around the object.
+     * @deprecated
      */
-    /** @deprecated */
     hspace: number;
     /**
      * Sets or retrieves whether the image is a server-side image map.
@@ -6940,15 +6969,15 @@ interface HTMLImageElement extends HTMLElement {
     loading: string;
     /**
      * Sets or retrieves a Uniform Resource Identifier (URI) to a long description of the object.
+     * @deprecated
      */
-    /** @deprecated */
     longDesc: string;
     /** @deprecated */
     lowsrc: string;
     /**
      * Sets or retrieves the name of the object.
+     * @deprecated
      */
-    /** @deprecated */
     name: string;
     /**
      * The original height of the image resource before sizing.
@@ -6971,8 +7000,8 @@ interface HTMLImageElement extends HTMLElement {
     useMap: string;
     /**
      * Sets or retrieves the vertical margin for the object.
+     * @deprecated
      */
-    /** @deprecated */
     vspace: number;
     /**
      * Sets or retrieves the width of the object.
@@ -7000,8 +7029,8 @@ interface HTMLInputElement extends HTMLElement {
     accept: string;
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /**
      * Sets or retrieves a text alternative to the graphic.
@@ -7125,8 +7154,8 @@ interface HTMLInputElement extends HTMLElement {
     type: string;
     /**
      * Sets or retrieves the URL, often with a bookmark extension (#name), to use as a client-side image map.
+     * @deprecated
      */
-    /** @deprecated */
     useMap: string;
     /**
      * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
@@ -7270,8 +7299,8 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     as: string;
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     crossOrigin: string | null;
     disabled: boolean;
@@ -7298,14 +7327,14 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
     readonly relList: DOMTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
+     * @deprecated
      */
-    /** @deprecated */
     rev: string;
     readonly sizes: DOMTokenList;
     /**
      * Sets or retrieves the window or frame at which to target content.
+     * @deprecated
      */
-    /** @deprecated */
     target: string;
     /**
      * Sets or retrieves the MIME type of the object.
@@ -7343,8 +7372,10 @@ declare var HTMLMapElement: {
     new(): HTMLMapElement;
 };
 
-/** Provides methods to manipulate <marquee> elements. */
-/** @deprecated */
+/**
+ * Provides methods to manipulate <marquee> elements.
+ * @deprecated
+ */
 interface HTMLMarqueeElement extends HTMLElement {
     /** @deprecated */
     behavior: string;
@@ -7559,8 +7590,8 @@ interface HTMLMetaElement extends HTMLElement {
     name: string;
     /**
      * Sets or retrieves a scheme to be used in interpreting the value of a property specified for the object.
+     * @deprecated
      */
-    /** @deprecated */
     scheme: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMetaElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7641,25 +7672,25 @@ interface HTMLObjectElement extends HTMLElement {
     align: string;
     /**
      * Sets or retrieves a character string that can be used to implement your own archive functionality for the object.
+     * @deprecated
      */
-    /** @deprecated */
     archive: string;
     /** @deprecated */
     border: string;
     /**
      * Sets or retrieves the URL of the file containing the compiled Java class.
+     * @deprecated
      */
-    /** @deprecated */
     code: string;
     /**
      * Sets or retrieves the URL of the component.
+     * @deprecated
      */
-    /** @deprecated */
     codeBase: string;
     /**
      * Sets or retrieves the Internet media type for the code associated with the object.
+     * @deprecated
      */
-    /** @deprecated */
     codeType: string;
     /**
      * Retrieves the document object of the page or frame.
@@ -7688,8 +7719,8 @@ interface HTMLObjectElement extends HTMLElement {
     name: string;
     /**
      * Sets or retrieves a message to be displayed while an object is loading.
+     * @deprecated
      */
-    /** @deprecated */
     standby: string;
     /**
      * Sets or retrieves the MIME type of the object.
@@ -7882,8 +7913,8 @@ declare var HTMLOutputElement: {
 interface HTMLParagraphElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParagraphElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7904,8 +7935,8 @@ interface HTMLParamElement extends HTMLElement {
     name: string;
     /**
      * Sets or retrieves the content type of the resource designated by the value attribute.
+     * @deprecated
      */
-    /** @deprecated */
     type: string;
     /**
      * Sets or retrieves the value of an input parameter for an element.
@@ -7913,8 +7944,8 @@ interface HTMLParamElement extends HTMLElement {
     value: string;
     /**
      * Sets or retrieves the data type of the value attribute.
+     * @deprecated
      */
-    /** @deprecated */
     valueType: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParamElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -7944,8 +7975,8 @@ declare var HTMLPictureElement: {
 interface HTMLPreElement extends HTMLElement {
     /**
      * Sets or gets a value that you can use to implement your own width functionality for the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: number;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLPreElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8006,8 +8037,8 @@ interface HTMLScriptElement extends HTMLElement {
     async: boolean;
     /**
      * Sets or retrieves the character set used to encode the object.
+     * @deprecated
      */
-    /** @deprecated */
     charset: string;
     crossOrigin: string | null;
     /**
@@ -8016,13 +8047,13 @@ interface HTMLScriptElement extends HTMLElement {
     defer: boolean;
     /**
      * Sets or retrieves the event for which the script is written.
+     * @deprecated
      */
-    /** @deprecated */
     event: string;
     /**
      * Sets or retrieves the object that is bound to the event script.
+     * @deprecated
      */
-    /** @deprecated */
     htmlFor: string;
     integrity: string;
     noModule: boolean;
@@ -8123,7 +8154,7 @@ interface HTMLSelectElement extends HTMLElement {
      * @param name Variant of type Number or String that specifies the object or collection to retrieve. If this parameter is an integer, it is the zero-based index of the object. If this parameter is a string, all objects with matching name or id properties are retrieved, and a collection is returned if more than one match is made.
      * @param index Variant of type Number that specifies the zero-based index of the object to retrieve when a collection is returned.
      */
-    item(index: number): Element | null;
+    item(index: number): HTMLOptionElement | null;
     /**
      * Retrieves a select object or an object from an options collection.
      * @param namedItem A String that specifies the name or id property of the object to retrieve. A collection is returned if more than one match is made.
@@ -8216,8 +8247,8 @@ interface HTMLStyleElement extends HTMLElement, LinkStyle {
     media: string;
     /**
      * Retrieves the CSS language in which the style sheet is written.
+     * @deprecated
      */
-    /** @deprecated */
     type: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLStyleElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8234,8 +8265,8 @@ declare var HTMLStyleElement: {
 interface HTMLTableCaptionElement extends HTMLElement {
     /**
      * Sets or retrieves the alignment of the caption or legend.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCaptionElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8256,13 +8287,13 @@ interface HTMLTableCellElement extends HTMLElement {
     abbr: string;
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /**
      * Sets or retrieves a comma-delimited list of conceptual categories associated with the object.
+     * @deprecated
      */
-    /** @deprecated */
     axis: string;
     /** @deprecated */
     bgColor: string;
@@ -8284,13 +8315,13 @@ interface HTMLTableCellElement extends HTMLElement {
     headers: string;
     /**
      * Sets or retrieves the height of the object.
+     * @deprecated
      */
-    /** @deprecated */
     height: string;
     /**
      * Sets or retrieves whether the browser automatically performs wordwrap.
+     * @deprecated
      */
-    /** @deprecated */
     noWrap: boolean;
     /**
      * Sets or retrieves how many rows in a table the cell should span.
@@ -8304,8 +8335,8 @@ interface HTMLTableCellElement extends HTMLElement {
     vAlign: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8322,8 +8353,8 @@ declare var HTMLTableCellElement: {
 interface HTMLTableColElement extends HTMLElement {
     /**
      * Sets or retrieves the alignment of the object relative to the display or table.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     ch: string;
@@ -8337,8 +8368,8 @@ interface HTMLTableColElement extends HTMLElement {
     vAlign: string;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableColElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8351,7 +8382,7 @@ declare var HTMLTableColElement: {
     new(): HTMLTableColElement;
 };
 
-/** @deprecated - prefer HTMLTableCellElement */
+/** @deprecated prefer HTMLTableCellElement */
 interface HTMLTableDataCellElement extends HTMLTableCellElement {
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableDataCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8363,15 +8394,15 @@ interface HTMLTableDataCellElement extends HTMLTableCellElement {
 interface HTMLTableElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     bgColor: string;
     /**
      * Sets or retrieves the width of the border to draw around the object.
+     * @deprecated
      */
-    /** @deprecated */
     border: string;
     /**
      * Retrieves the caption object of a table.
@@ -8379,18 +8410,18 @@ interface HTMLTableElement extends HTMLElement {
     caption: HTMLTableCaptionElement | null;
     /**
      * Sets or retrieves the amount of space between the border of the cell and the content of the cell.
+     * @deprecated
      */
-    /** @deprecated */
     cellPadding: string;
     /**
      * Sets or retrieves the amount of space between cells in a table.
+     * @deprecated
      */
-    /** @deprecated */
     cellSpacing: string;
     /**
      * Sets or retrieves the way the border frame around the table is displayed.
+     * @deprecated
      */
-    /** @deprecated */
     frame: string;
     /**
      * Sets or retrieves the number of horizontal rows contained in the object.
@@ -8398,13 +8429,13 @@ interface HTMLTableElement extends HTMLElement {
     readonly rows: HTMLCollectionOf<HTMLTableRowElement>;
     /**
      * Sets or retrieves which dividing lines (inner borders) are displayed.
+     * @deprecated
      */
-    /** @deprecated */
     rules: string;
     /**
      * Sets or retrieves a description and/or structure of the object.
+     * @deprecated
      */
-    /** @deprecated */
     summary: string;
     /**
      * Retrieves a collection of all tBody objects in the table. Objects in this collection are in source order.
@@ -8420,8 +8451,8 @@ interface HTMLTableElement extends HTMLElement {
     tHead: HTMLTableSectionElement | null;
     /**
      * Sets or retrieves the width of the object.
+     * @deprecated
      */
-    /** @deprecated */
     width: string;
     /**
      * Creates an empty caption element in the table.
@@ -8472,7 +8503,7 @@ declare var HTMLTableElement: {
     new(): HTMLTableElement;
 };
 
-/** @deprecated - prefer HTMLTableCellElement */
+/** @deprecated prefer HTMLTableCellElement */
 interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableHeaderCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8484,8 +8515,8 @@ interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
 interface HTMLTableRowElement extends HTMLElement {
     /**
      * Sets or retrieves how the object is aligned with adjacent text.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     bgColor: string;
@@ -8532,8 +8563,8 @@ declare var HTMLTableRowElement: {
 interface HTMLTableSectionElement extends HTMLElement {
     /**
      * Sets or retrieves a value that indicates the table alignment.
+     * @deprecated
      */
-    /** @deprecated */
     align: string;
     /** @deprecated */
     ch: string;
@@ -9411,7 +9442,7 @@ interface ImageBitmapRenderingContext {
     /**
      * Returns the canvas element that the context is bound to.
      */
-    readonly canvas: HTMLCanvasElement | OffscreenCanvas;
+    readonly canvas: HTMLCanvasElement;
     /**
      * Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound.
      */
@@ -9514,6 +9545,8 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     getModifierState(keyArg: string): boolean;
+    /** @deprecated */
+    initKeyboardEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, viewArg?: Window | null, keyArg?: string, locationArg?: number, ctrlKey?: boolean, altKey?: boolean, shiftKey?: boolean, metaKey?: boolean): void;
     readonly DOM_KEY_LOCATION_LEFT: number;
     readonly DOM_KEY_LOCATION_NUMPAD: number;
     readonly DOM_KEY_LOCATION_RIGHT: number;
@@ -9744,7 +9777,7 @@ interface MediaKeySessionEventMap {
 
 /** This EncryptedMediaExtensions API interface represents a context for message exchange with a content decryption module (CDM). */
 interface MediaKeySession extends EventTarget {
-    readonly closed: Promise<undefined>;
+    readonly closed: Promise<MediaKeySessionClosedReason>;
     readonly expiration: number;
     readonly keyStatuses: MediaKeyStatusMap;
     onkeystatuseschange: ((this: MediaKeySession, ev: Event) => any) | null;
@@ -10132,29 +10165,31 @@ declare var MessagePort: {
     new(): MessagePort;
 };
 
-/** Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object. */
-/** @deprecated */
+/**
+ * Provides contains information about a MIME type associated with a particular plugin. NavigatorPlugins.mimeTypes returns an array of this object.
+ * @deprecated
+ */
 interface MimeType {
     /**
      * Returns the MIME type's description.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly description: undefined;
+    readonly description: string;
     /**
      * Returns the Plugin object that implements this MIME type.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly enabledPlugin: undefined;
+    readonly enabledPlugin: Plugin;
     /**
      * Returns the MIME type's typical file extensions, in a comma-separated list.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly suffixes: undefined;
+    readonly suffixes: string;
     /**
      * Returns the MIME type.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly type: undefined;
+    readonly type: string;
 }
 
 /** @deprecated */
@@ -10163,16 +10198,18 @@ declare var MimeType: {
     new(): MimeType;
 };
 
-/** Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes. */
-/** @deprecated */
+/**
+ * Returns an array of MimeType instances, each of which contains information about a supported browser plugins. This object is returned by NavigatorPlugins.mimeTypes.
+ * @deprecated
+ */
 interface MimeTypeArray {
     /** @deprecated */
     readonly length: number;
     /** @deprecated */
-    item(index: number): any;
+    item(index: number): MimeType | null;
     /** @deprecated */
-    namedItem(name: string): any;
-    [index: number]: any;
+    namedItem(name: string): MimeType | null;
+    [index: number]: MimeType;
 }
 
 /** @deprecated */
@@ -10212,20 +10249,29 @@ declare var MouseEvent: {
     new(type: string, eventInitDict?: MouseEventInit): MouseEvent;
 };
 
-/** Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
- * @deprecated DOM4 [DOM] provides a new mechanism using a MutationObserver interface which addresses the use cases that mutation events solve, but in a more performant manner. Thus, this specification describes mutation events for reference and completeness of legacy behavior, but deprecates the use of the MutationEvent interface. */
+/**
+ * Provides event properties that are specific to modifications to the Document Object Model (DOM) hierarchy and nodes.
+ * @deprecated DOM4 [DOM] provides a new mechanism using a MutationObserver interface which addresses the use cases that mutation events solve, but in a more performant manner. Thus, this specification describes mutation events for reference and completeness of legacy behavior, but deprecates the use of the MutationEvent interface.
+ */
 interface MutationEvent extends Event {
+    /** @deprecated */
     readonly attrChange: number;
+    /** @deprecated */
     readonly attrName: string;
+    /** @deprecated */
     readonly newValue: string;
+    /** @deprecated */
     readonly prevValue: string;
+    /** @deprecated */
     readonly relatedNode: Node | null;
+    /** @deprecated */
     initMutationEvent(typeArg: string, bubblesArg?: boolean, cancelableArg?: boolean, relatedNodeArg?: Node | null, prevValueArg?: string, newValueArg?: string, attrNameArg?: string, attrChangeArg?: number): void;
     readonly ADDITION: number;
     readonly MODIFICATION: number;
     readonly REMOVAL: number;
 }
 
+/** @deprecated */
 declare var MutationEvent: {
     prototype: MutationEvent;
     new(): MutationEvent;
@@ -10393,7 +10439,6 @@ interface NavigatorOnLine {
     readonly onLine: boolean;
 }
 
-/** @deprecated */
 interface NavigatorPlugins {
     /** @deprecated */
     readonly mimeTypes: MimeTypeArray;
@@ -10425,11 +10470,11 @@ interface Node extends EventTarget {
     /**
      * Returns the children.
      */
-    readonly childNodes: NodeListOf<ChildNode & Node>;
+    readonly childNodes: NodeListOf<ChildNode>;
     /**
      * Returns the first child.
      */
-    readonly firstChild: (ChildNode & Node) | null;
+    readonly firstChild: ChildNode | null;
     /**
      * Returns true if node is connected and false otherwise.
      */
@@ -10437,11 +10482,11 @@ interface Node extends EventTarget {
     /**
      * Returns the last child.
      */
-    readonly lastChild: (ChildNode & Node) | null;
+    readonly lastChild: ChildNode | null;
     /**
      * Returns the next sibling.
      */
-    readonly nextSibling: (ChildNode & Node) | null;
+    readonly nextSibling: ChildNode | null;
     /**
      * Returns a string appropriate for the type of node.
      */
@@ -10462,11 +10507,11 @@ interface Node extends EventTarget {
     /**
      * Returns the parent.
      */
-    readonly parentNode: (Node & ParentNode) | null;
+    readonly parentNode: ParentNode | null;
     /**
      * Returns the previous sibling.
      */
-    readonly previousSibling: (ChildNode & Node) | null;
+    readonly previousSibling: ChildNode | null;
     textContent: string | null;
     appendChild<T extends Node>(node: T): T;
     /**
@@ -10808,10 +10853,6 @@ declare var OfflineAudioContext: {
     new(numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
 };
 
-/** @deprecated - this is not available in most browsers */
-interface OffscreenCanvas extends EventTarget {
-}
-
 /** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. */
 interface OscillatorNode extends AudioScheduledSourceNode {
     readonly detune: AudioParam;
@@ -10887,7 +10928,7 @@ declare var PannerNode: {
     new(context: BaseAudioContext, options?: PannerOptions): PannerNode;
 };
 
-interface ParentNode {
+interface ParentNode extends Node {
     readonly childElementCount: number;
     /**
      * Returns the child elements.
@@ -10946,8 +10987,10 @@ declare var Path2D: {
     new(path?: Path2D | string): Path2D;
 };
 
-/** This Payment Request API interface is used to store shipping or payment address information. */
-/** @deprecated */
+/**
+ * This Payment Request API interface is used to store shipping or payment address information.
+ * @deprecated
+ */
 interface PaymentAddress {
     /** @deprecated */
     readonly addressLine: ReadonlyArray<string>;
@@ -11116,8 +11159,10 @@ declare var PerformanceMeasure: {
     new(): PerformanceMeasure;
 };
 
-/** The legacy PerformanceNavigation interface represents information about how the navigation to the current document was done.
- * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead. */
+/**
+ * The legacy PerformanceNavigation interface represents information about how the navigation to the current document was done.
+ * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
+ */
 interface PerformanceNavigation {
     /** @deprecated */
     readonly redirectCount: number;
@@ -11232,8 +11277,10 @@ declare var PerformanceServerTiming: {
     new(): PerformanceServerTiming;
 };
 
-/** A legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
- * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead. */
+/**
+ * A legacy interface kept for backwards compatibility and contains properties that offer performance timing information for various events which occur during the loading and use of the current page. You get a PerformanceTiming object describing your page using the window.performance.timing property.
+ * @deprecated This interface is deprecated in the Navigation Timing Level 2 specification. Please use the PerformanceNavigationTiming interface instead.
+ */
 interface PerformanceTiming {
     /** @deprecated */
     readonly connectEnd: number;
@@ -11342,37 +11389,39 @@ declare var PictureInPictureWindow: {
     new(): PictureInPictureWindow;
 };
 
-/** Provides information about a browser plugin. */
-/** @deprecated */
+/**
+ * Provides information about a browser plugin.
+ * @deprecated
+ */
 interface Plugin {
     /**
      * Returns the plugin's description.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly description: undefined;
+    readonly description: string;
     /**
      * Returns the plugin library's filename, if applicable on the current platform.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly filename: undefined;
+    readonly filename: string;
     /**
      * Returns the number of MIME types, represented by MimeType objects, supported by the plugin.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly length: undefined;
+    readonly length: number;
     /**
      * Returns the plugin's name.
+     * @deprecated
      */
-    /** @deprecated */
-    readonly name: undefined;
+    readonly name: string;
     /**
      * Returns the specified MimeType object.
+     * @deprecated
      */
+    item(index: number): MimeType | null;
     /** @deprecated */
-    item(index: number): void;
-    /** @deprecated */
-    namedItem(name: string): void;
-    [index: number]: undefined;
+    namedItem(name: string): MimeType | null;
+    [index: number]: MimeType;
 }
 
 /** @deprecated */
@@ -11381,18 +11430,20 @@ declare var Plugin: {
     new(): Plugin;
 };
 
-/** Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods. */
-/** @deprecated */
+/**
+ * Used to store a list of Plugin objects describing the available plugins; it's returned by the window.navigator.plugins property. The PluginArray is not a JavaScript array, but has the length property and supports accessing individual items using bracket notation (plugins[2]), as well as via item(index) and namedItem("name") methods.
+ * @deprecated
+ */
 interface PluginArray {
     /** @deprecated */
     readonly length: number;
     /** @deprecated */
-    item(index: number): any;
+    item(index: number): Plugin | null;
     /** @deprecated */
-    namedItem(name: string): any;
+    namedItem(name: string): Plugin | null;
     /** @deprecated */
     refresh(): void;
-    [index: number]: any;
+    [index: number]: Plugin;
 }
 
 /** @deprecated */
@@ -11414,6 +11465,7 @@ interface PointerEvent extends MouseEvent {
     readonly twist: number;
     readonly width: number;
     getCoalescedEvents(): PointerEvent[];
+    getPredictedEvents(): PointerEvent[];
 }
 
 declare var PointerEvent: {
@@ -11663,6 +11715,7 @@ interface RTCPeerConnectionEventMap {
     "connectionstatechange": Event;
     "datachannel": RTCDataChannelEvent;
     "icecandidate": RTCPeerConnectionIceEvent;
+    "icecandidateerror": Event;
     "iceconnectionstatechange": Event;
     "icegatheringstatechange": Event;
     "negotiationneeded": Event;
@@ -11682,6 +11735,7 @@ interface RTCPeerConnection extends EventTarget {
     onconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     ondatachannel: ((this: RTCPeerConnection, ev: RTCDataChannelEvent) => any) | null;
     onicecandidate: ((this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any) | null;
+    onicecandidateerror: ((this: RTCPeerConnection, ev: Event) => any) | null;
     oniceconnectionstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     onicegatheringstatechange: ((this: RTCPeerConnection, ev: Event) => any) | null;
     onnegotiationneeded: ((this: RTCPeerConnection, ev: Event) => any) | null;
@@ -11731,8 +11785,10 @@ declare var RTCPeerConnection: {
 };
 
 interface RTCPeerConnectionIceErrorEvent extends Event {
+    readonly address: string | null;
     readonly errorCode: number;
     readonly errorText: string;
+    readonly port: number | null;
     readonly url: string;
 }
 
@@ -12370,20 +12426,6 @@ declare var SVGComponentTransferFunctionElement: {
     readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
     readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
     readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
-};
-
-interface SVGCursorElement extends SVGElement {
-    readonly x: SVGAnimatedLength;
-    readonly y: SVGAnimatedLength;
-    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGCursorElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-    removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGCursorElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-}
-
-declare var SVGCursorElement: {
-    prototype: SVGCursorElement;
-    new(): SVGCursorElement;
 };
 
 /** Corresponds to the <defs> element. */
@@ -13851,8 +13893,10 @@ interface ScriptProcessorNodeEventMap {
     "audioprocess": AudioProcessingEvent;
 }
 
-/** Allows the generation, processing, or analyzing of audio using JavaScript.
- * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode). */
+/**
+ * Allows the generation, processing, or analyzing of audio using JavaScript.
+ * @deprecated As of the August 29 2014 Web Audio API spec publication, this feature has been marked as deprecated, and was replaced by AudioWorklet (see AudioWorkletNode).
+ */
 interface ScriptProcessorNode extends AudioNode {
     /** @deprecated */
     readonly bufferSize: number;
@@ -14002,6 +14046,7 @@ declare var ServiceWorkerRegistration: {
 };
 
 interface ShadowRoot extends DocumentFragment, DocumentOrShadowRoot, InnerHTML {
+    readonly delegatesFocus: boolean;
     readonly host: Element;
     readonly mode: ShadowRootMode;
     /**
@@ -14100,16 +14145,6 @@ interface SpeechRecognitionAlternative {
 declare var SpeechRecognitionAlternative: {
     prototype: SpeechRecognitionAlternative;
     new(): SpeechRecognitionAlternative;
-};
-
-interface SpeechRecognitionErrorEvent extends Event {
-    readonly error: SpeechRecognitionErrorCode;
-    readonly message: string;
-}
-
-declare var SpeechRecognitionErrorEvent: {
-    prototype: SpeechRecognitionErrorEvent;
-    new(type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent;
 };
 
 interface SpeechRecognitionResult {
@@ -14335,15 +14370,11 @@ declare var StorageManager: {
     new(): StorageManager;
 };
 
+/** @deprecated */
 interface StyleMedia {
     type: string;
     matchMedium(mediaquery: string): boolean;
 }
-
-declare var StyleMedia: {
-    prototype: StyleMedia;
-    new(): StyleMedia;
-};
 
 /** A single style sheet. CSS style sheets will further implement the more specialized CSSStyleSheet interface. */
 interface StyleSheet {
@@ -16506,6 +16537,7 @@ declare var WebGLRenderingContext: {
 };
 
 interface WebGLRenderingContextBase {
+    readonly canvas: HTMLCanvasElement;
     readonly drawingBufferHeight: GLsizei;
     readonly drawingBufferWidth: GLsizei;
     activeTexture(texture: GLenum): void;
@@ -17150,6 +17182,8 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
 interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage {
     HTMLDocument: Document;
+    /** @deprecated This is a legacy alias of `navigator`. */
+    readonly clientInformation: Navigator;
     /**
      * Returns true if the window has been closed, false otherwise.
      */
@@ -17191,9 +17225,12 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandler
     readonly orientation: number;
     readonly outerHeight: number;
     readonly outerWidth: number;
+    /** @deprecated This is a legacy alias of `scrollX`. */
     readonly pageXOffset: number;
+    /** @deprecated This is a legacy alias of `scrollY`. */
     readonly pageYOffset: number;
-    readonly parent: WindowProxy | null;
+    /** Refers to either the parent WindowProxy, or itself. It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent. */
+    readonly parent: WindowProxy;
     /**
      * Returns true if the personal bar is visible; otherwise, returns false.
      */
@@ -18210,6 +18247,8 @@ declare var Option: {
     new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement;
 };
 declare var HTMLDocument: Document;
+/** @deprecated This is a legacy alias of `navigator`. */
+declare var clientInformation: Navigator;
 /**
  * Returns true if the window has been closed, false otherwise.
  */
@@ -18251,9 +18290,12 @@ declare var opener: any;
 declare var orientation: number;
 declare var outerHeight: number;
 declare var outerWidth: number;
+/** @deprecated This is a legacy alias of `scrollX`. */
 declare var pageXOffset: number;
+/** @deprecated This is a legacy alias of `scrollY`. */
 declare var pageYOffset: number;
-declare var parent: WindowProxy | null;
+/** Refers to either the parent WindowProxy, or itself. It can rarely be null e.g. for contentWindow of an iframe that is already removed from the parent. */
+declare var parent: WindowProxy;
 /**
  * Returns true if the personal bar is visible; otherwise, returns false.
  */
@@ -18452,8 +18494,8 @@ declare var onkeydown: ((this: Window, ev: KeyboardEvent) => any) | null;
 /**
  * Fires when the user presses an alphanumeric key.
  * @param ev The event.
+ * @deprecated
  */
-/** @deprecated */
 declare var onkeypress: ((this: Window, ev: KeyboardEvent) => any) | null;
 /**
  * Fires when the user releases a key.
@@ -18657,7 +18699,8 @@ type BlobPart = BufferSource | Blob | string;
 type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
 type BufferSource = ArrayBufferView | ArrayBuffer;
 type COSEAlgorithmIdentifier = number;
-type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
+type CSSNumberish = number;
+type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap;
 type ClipboardItemData = Promise<ClipboardItemDataType>;
 type ClipboardItemDataType = string | Blob;
 type ClipboardItems = ClipboardItem[];
@@ -18703,7 +18746,7 @@ type ReadableStreamDefaultReadResult<T> = ReadableStreamDefaultReadValueResult<T
 type ReadableStreamReader<T> = ReadableStreamDefaultReader<T>;
 type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type RequestInfo = Request | string;
-type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas;
+type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
 type TimerHandler = string | Function;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type Uint32List = Uint32Array | GLuint[];
@@ -18773,6 +18816,7 @@ type MediaDecodingType = "file" | "media-source" | "webrtc";
 type MediaDeviceKind = "audioinput" | "audiooutput" | "videoinput";
 type MediaEncodingType = "record" | "webrtc";
 type MediaKeyMessageType = "individualization-request" | "license-release" | "license-renewal" | "license-request";
+type MediaKeySessionClosedReason = "closed-by-application" | "hardware-context-reset" | "internal-error" | "release-acknowledged" | "resource-evicted";
 type MediaKeySessionType = "persistent-license" | "temporary";
 type MediaKeyStatus = "expired" | "internal-error" | "output-downscaled" | "output-restricted" | "released" | "status-pending" | "usable" | "usable-in-future";
 type MediaKeysRequirement = "not-allowed" | "optional" | "required";
@@ -18788,7 +18832,7 @@ type OscillatorType = "custom" | "sawtooth" | "sine" | "square" | "triangle";
 type OverSampleType = "2x" | "4x" | "none";
 type PanningModelType = "HRTF" | "equalpower";
 type PaymentComplete = "fail" | "success" | "unknown";
-type PermissionName = "geolocation" | "notifications" | "persistent-storage" | "push";
+type PermissionName = "gamepad" | "geolocation" | "notifications" | "persistent-storage" | "push" | "screen-wake-lock";
 type PermissionState = "denied" | "granted" | "prompt";
 type PlaybackDirection = "alternate" | "alternate-reverse" | "normal" | "reverse";
 type PositionAlignSetting = "auto" | "center" | "line-left" | "line-right";
@@ -18843,7 +18887,6 @@ type ServiceWorkerState = "activated" | "activating" | "installed" | "installing
 type ServiceWorkerUpdateViaCache = "all" | "imports" | "none";
 type ShadowRootMode = "closed" | "open";
 type SlotAssignmentMode = "manual" | "named";
-type SpeechRecognitionErrorCode = "aborted" | "audio-capture" | "bad-grammar" | "language-not-supported" | "network" | "no-speech" | "not-allowed" | "service-not-allowed";
 type SpeechSynthesisErrorCode = "audio-busy" | "audio-hardware" | "canceled" | "interrupted" | "invalid-argument" | "language-unavailable" | "network" | "not-allowed" | "synthesis-failed" | "synthesis-unavailable" | "text-too-long" | "voice-unavailable";
 type TextTrackKind = "captions" | "chapters" | "descriptions" | "metadata" | "subtitles";
 type TextTrackMode = "disabled" | "hidden" | "showing";

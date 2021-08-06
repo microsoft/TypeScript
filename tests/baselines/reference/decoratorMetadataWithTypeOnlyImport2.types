@@ -1,0 +1,27 @@
+=== tests/cases/conformance/decorators/services.ts ===
+export namespace Services {
+>Services : typeof Services
+
+  export class Service {}
+>Service : Service
+}
+
+=== tests/cases/conformance/decorators/index.ts ===
+import type { Services } from './services';
+>Services : any
+
+declare const decorator: any;
+>decorator : any
+
+export class Main {
+>Main : Main
+
+  @decorator()
+>decorator() : any
+>decorator : any
+
+  field: Services.Service;
+>field : Services.Service
+>Services : any
+}
+

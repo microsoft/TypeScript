@@ -5925,6 +5925,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Expected_for_property_initializer_1442" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected '=' for property initializer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[« = » attendu pour l’initialiseur de propriété.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Expected_type_of_0_field_in_package_json_to_be_1_got_2_6105" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.]]></Val>
@@ -8297,15 +8306,6 @@
           <Val><![CDATA[Method not implemented.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Méthode non implémentée.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Missing_before_default_property_value_1442" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Missing '=' before default property value.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[«=» Manquant avant la valeur de la propriété par défaut.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13259,6 +13259,15 @@
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Le type d'une déclaration de fonction doit correspondre à la signature de la fonction.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this node cannot be serialized because its property '{0}' cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Impossible de sérialiser le type de ce nœud, car sa propriété «{0}» ne peut pas être sérialisée.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
