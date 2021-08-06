@@ -683,3 +683,49 @@ declare function bb(input: number): void;
 >bb : (input: number) => void
 >input : number
 
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+>a : { [x: string]: string | number; }
+>x : string
+
+declare var b: {a: number, b: string}
+>b : { a: number; b: string; }
+>a : number
+>b : string
+
+declare var c: {a: number, b?: string}
+>c : { a: number; b?: string; }
+>a : number
+>b : string | undefined
+
+declare var d: {a: number, b: string | undefined }
+>d : { a: number; b: string | undefined; }
+>a : number
+>b : string | undefined
+
+declare var e: {a: number, b?: string | undefined }
+>e : { a: number; b?: string | undefined; }
+>a : number
+>b : string | undefined
+
+a = b;
+>a = b : { a: number; b: string; }
+>a : { [x: string]: string | number; }
+>b : { a: number; b: string; }
+
+a = c;
+>a = c : { a: number; b?: string; }
+>a : { [x: string]: string | number; }
+>c : { a: number; b?: string; }
+
+a = d;  // Error
+>a = d : { a: number; b: string | undefined; }
+>a : { [x: string]: string | number; }
+>d : { a: number; b: string | undefined; }
+
+a = e;  // Error
+>a = e : { a: number; b?: string | undefined; }
+>a : { [x: string]: string | number; }
+>e : { a: number; b?: string | undefined; }
+
