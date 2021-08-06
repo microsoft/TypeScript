@@ -525,3 +525,52 @@ class TableBaseEnum<
     }
 }
 
+// Repros from #45145
+
+function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
+>f10 : Symbol(f10, Decl(controlFlowGenericTypes.ts, 174, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
+>a : Symbol(a, Decl(controlFlowGenericTypes.ts, 178, 24))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 178, 50))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 178, 55))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 178, 13))
+
+    y = x;
+>y : Symbol(y, Decl(controlFlowGenericTypes.ts, 178, 55))
+>x : Symbol(x, Decl(controlFlowGenericTypes.ts, 178, 50))
+}
+
+type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
+>P : Symbol(P, Decl(controlFlowGenericTypes.ts, 182, 57))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 182, 18))
+
+class SqlTable<T> {
+>SqlTable : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 182, 82))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+
+    protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
+>validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
+>_row : Symbol(_row, Decl(controlFlowGenericTypes.ts, 185, 26))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+    }
+    public insertRow(row: SqlInsertSet<T>) {
+>insertRow : Symbol(SqlTable.insertRow, Decl(controlFlowGenericTypes.ts, 186, 5))
+>row : Symbol(row, Decl(controlFlowGenericTypes.ts, 187, 21))
+>SqlInsertSet : Symbol(SqlInsertSet, Decl(controlFlowGenericTypes.ts, 180, 1))
+>T : Symbol(T, Decl(controlFlowGenericTypes.ts, 184, 15))
+
+        this.validateRow(row);
+>this.validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
+>this : Symbol(SqlTable, Decl(controlFlowGenericTypes.ts, 182, 82))
+>validateRow : Symbol(SqlTable.validateRow, Decl(controlFlowGenericTypes.ts, 184, 19))
+>row : Symbol(row, Decl(controlFlowGenericTypes.ts, 187, 21))
+    }
+}
+
