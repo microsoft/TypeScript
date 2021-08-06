@@ -623,4 +623,45 @@ u2 = {
 >undefined : Symbol(undefined)
 }
 
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 201, 17))
+
+declare var b: {a: number, b: string}
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 202, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 26))
+
+declare var c: {a: number, b?: string}
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 203, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 203, 26))
+
+declare var d: {a: number, b: string | undefined }
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 204, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 204, 26))
+
+declare var e: {a: number, b?: string | undefined }
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 205, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 205, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 205, 26))
+
+a = b;
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
+
+a = c;
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
+
+a = d;  // Error
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
+
+a = e;  // Error
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
 

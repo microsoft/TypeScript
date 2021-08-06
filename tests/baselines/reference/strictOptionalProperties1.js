@@ -198,6 +198,18 @@ u2 = {
     email: undefined
 }
 
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+declare var b: {a: number, b: string}
+declare var c: {a: number, b?: string}
+declare var d: {a: number, b: string | undefined }
+declare var e: {a: number, b?: string | undefined }
+
+a = b;
+a = c;
+a = d;  // Error
+a = e;  // Error
 
 
 //// [strictOptionalProperties1.js]
@@ -334,6 +346,10 @@ u2 = {
     name: 'hi',
     email: undefined
 };
+a = b;
+a = c;
+a = d; // Error
+a = e; // Error
 
 
 //// [strictOptionalProperties1.d.ts]
@@ -418,3 +434,22 @@ interface U2 {
 declare const e: string | boolean | undefined;
 declare const u1: U1;
 declare let u2: U2;
+declare var a: {
+    [x: string]: number | string;
+};
+declare var b: {
+    a: number;
+    b: string;
+};
+declare var c: {
+    a: number;
+    b?: string;
+};
+declare var d: {
+    a: number;
+    b: string | undefined;
+};
+declare var e: {
+    a: number;
+    b?: string | undefined;
+};

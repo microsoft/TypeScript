@@ -581,6 +581,7 @@ namespace ts {
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
+            forEachExportAndPropertyOfModule,
             getSymbolWalker: createGetSymbolWalker(
                 getRestTypeOfSignature,
                 getTypePredicateOfSignature,
@@ -922,6 +923,7 @@ namespace ts {
         let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
+        let deferredGlobalImportMetaExpressionType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
@@ -3530,6 +3532,24 @@ namespace ts {
                 }
             }
             return exports;
+        }
+
+        function forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void {
+            const exports = getExportsOfModule(moduleSymbol);
+            exports.forEach((symbol, key) => {
+                if (!isReservedMemberName(key)) {
+                    cb(symbol, key);
+                }
+            });
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals !== moduleSymbol) {
+                const type = getTypeOfSymbol(exportEquals);
+                if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
+                    getPropertiesOfType(type).forEach(symbol => {
+                        cb(symbol, symbol.escapedName);
+                    });
+                }
+            }
         }
 
         function tryGetMemberInModuleExports(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
@@ -13325,6 +13345,24 @@ namespace ts {
             return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
+        function getGlobalImportMetaExpressionType() {
+            if (!deferredGlobalImportMetaExpressionType) {
+                // Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
+                const symbol = createSymbol(SymbolFlags.None, "ImportMetaExpression" as __String);
+                const importMetaType = getGlobalImportMetaType();
+
+                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String, CheckFlags.Readonly);
+                metaPropertySymbol.parent = symbol;
+                metaPropertySymbol.type = importMetaType;
+
+                const members = createSymbolTable([metaPropertySymbol]);
+                symbol.members = members;
+
+                deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+            }
+            return deferredGlobalImportMetaExpressionType;
+        }
+
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
             return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
         }
@@ -14865,40 +14903,35 @@ namespace ts {
             return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
         }
 
+        function isGenericType(type: Type): boolean {
+            return !!getGenericObjectFlags(type);
+        }
+
         function isGenericObjectType(type: Type): boolean {
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericObjectType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (isGenericObjectType((type as SubstitutionType).substitute) || isGenericObjectType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type) || isGenericTupleType(type);
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericObjectType);
         }
 
         function isGenericIndexType(type: Type): boolean {
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericIndexType);
+        }
+
+        function getGenericObjectFlags(type: Type): ObjectFlags {
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericIndexType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
                 }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
             }
             if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (isGenericIndexType((type as SubstitutionType).substitute) || isGenericIndexType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        getGenericObjectFlags((type as SubstitutionType).substitute) | getGenericObjectFlags((type as SubstitutionType).baseType);
                 }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
             }
-            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
+            return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
+                (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -15175,7 +15208,7 @@ namespace ts {
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
-                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const checkTypeInstantiable = isGenericType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
@@ -15197,7 +15230,7 @@ namespace ts {
                 // Instantiate the extends type including inferences for 'infer T' type parameters
                 const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
-                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
+                if (!checkTypeInstantiable && !isGenericType(inferredExtendsType)) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -19437,8 +19470,8 @@ namespace ts {
                         continue;
                     }
                     if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
-                        const propType = getTypeOfSymbol(prop);
-                        const type = propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
+                        const propType = getNonMissingTypeOfSymbol(prop);
+                        const type = exactOptionalPropertyTypes || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                             ? propType
                             : getTypeWithFacts(propType, TypeFacts.NEUndefined);
                         const related = isRelatedTo(type, targetInfo.type, reportErrors);
@@ -24258,17 +24291,13 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        function containsGenericType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, containsGenericType));
-        }
-
         function hasNonBindingPatternContextualTypeWithNoGenericTypes(node: Node) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 getContextualType(node, ContextFlags.SkipBindingPatterns);
-            return contextualType && !someType(contextualType, containsGenericType);
+            return contextualType && !isGenericType(contextualType);
         }
 
         function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
@@ -30492,6 +30521,18 @@ namespace ts {
             return Debug.assertNever(node.keywordToken);
         }
 
+        function checkMetaPropertyKeyword(node: MetaProperty): Type {
+            switch (node.keywordToken) {
+                case SyntaxKind.ImportKeyword:
+                    return getGlobalImportMetaExpressionType();
+                case SyntaxKind.NewKeyword:
+                    const type = checkNewTargetMetaProperty(node);
+                    return type === errorType ? errorType : createNewTargetExpressionType(type);
+                default:
+                    Debug.assertNever(node.keywordToken);
+            }
+        }
+
         function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
@@ -30514,7 +30555,6 @@ namespace ts {
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
         }
 
@@ -30874,6 +30914,19 @@ namespace ts {
             }
 
             return promiseType;
+        }
+
+        function createNewTargetExpressionType(targetType: Type): Type {
+            // Create a synthetic type `NewTargetExpression { target: TargetType; }`
+            const symbol = createSymbol(SymbolFlags.None, "NewTargetExpression" as __String);
+
+            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String, CheckFlags.Readonly);
+            targetPropertySymbol.parent = symbol;
+            targetPropertySymbol.type = targetType;
+
+            const members = createSymbolTable([targetPropertySymbol]);
+            symbol.members = members;
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
@@ -39819,6 +39872,16 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
+                else if (isMetaProperty(parent)) {
+                    const parentType = getTypeOfNode(parent);
+                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                        return checkNewTargetMetaProperty(parent).symbol;
+                    }
+                }
             }
 
             switch (node.kind) {
@@ -39892,6 +39955,12 @@ namespace ts {
 
                 case SyntaxKind.ExportKeyword:
                     return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
+
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.NewKeyword:
+                    return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
+                case SyntaxKind.MetaProperty:
+                    return checkExpression(node as Expression).symbol;
 
                 default:
                     return undefined;
@@ -39990,6 +40059,10 @@ namespace ts {
                     const declaredType = getDeclaredTypeOfSymbol(symbol);
                     return declaredType !== errorType ? declaredType : getTypeOfSymbol(symbol);
                 }
+            }
+
+            if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
+                return checkMetaPropertyKeyword(node.parent);
             }
 
             return errorType;
@@ -41612,7 +41685,7 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericIndexType(type) || isGenericObjectType(type)) {
+            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericType(type)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
             if (!everyType(type, isValidIndexKeyType)) {

@@ -30,6 +30,7 @@ tests/cases/compiler/strictOptionalProperties1.ts(111,7): error TS2375: Type '{ 
   Types of property 'foo' are incompatible.
     Type 'undefined' is not assignable to type 'number'.
 tests/cases/compiler/strictOptionalProperties1.ts(119,5): error TS2411: Property 'bar' of type 'string | undefined' is not assignable to 'string' index type 'string'.
+tests/cases/compiler/strictOptionalProperties1.ts(190,15): error TS2451: Cannot redeclare block-scoped variable 'e'.
 tests/cases/compiler/strictOptionalProperties1.ts(193,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type 'string | number | undefined'.
   Type 'false' is not assignable to type 'string | number | undefined'.
 tests/cases/compiler/strictOptionalProperties1.ts(194,1): error TS2412: Type 'string | boolean | undefined' is not assignable to type 'string | number' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
@@ -37,9 +38,16 @@ tests/cases/compiler/strictOptionalProperties1.ts(194,1): error TS2412: Type 'st
 tests/cases/compiler/strictOptionalProperties1.ts(195,1): error TS2375: Type '{ name: string; email: undefined; }' is not assignable to type 'U2' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
   Types of property 'email' are incompatible.
     Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/compiler/strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
+tests/cases/compiler/strictOptionalProperties1.ts(210,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+  Property 'b' is incompatible with index signature.
+    Type 'string | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
+  Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
 
 
-==== tests/cases/compiler/strictOptionalProperties1.ts (19 errors) ====
+==== tests/cases/compiler/strictOptionalProperties1.ts (23 errors) ====
     function f1(obj: { a?: string, b?: string | undefined }) {
         let a = obj.a;  // string | undefined
         let b = obj.b;  // string | undefined
@@ -278,6 +286,8 @@ tests/cases/compiler/strictOptionalProperties1.ts(195,1): error TS2375: Type '{ 
         email?: string | number
     }
     declare const e: string | boolean | undefined
+                  ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
     declare const u1: U1
     declare let u2: U2
     u1.email = e // error, but only because boolean isn't in email's type
@@ -297,4 +307,26 @@ tests/cases/compiler/strictOptionalProperties1.ts(195,1): error TS2375: Type '{ 
         email: undefined
     }
     
+    // Repro from #44437
+    
+    declare var a: {[x: string]: number | string }
+    declare var b: {a: number, b: string}
+    declare var c: {a: number, b?: string}
+    declare var d: {a: number, b: string | undefined }
+    declare var e: {a: number, b?: string | undefined }
+                ~
+!!! error TS2451: Cannot redeclare block-scoped variable 'e'.
+    
+    a = b;
+    a = c;
+    a = d;  // Error
+    ~
+!!! error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322:   Property 'b' is incompatible with index signature.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+    a = e;  // Error
+    ~
+!!! error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322:   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
     
