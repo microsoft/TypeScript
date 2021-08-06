@@ -1,0 +1,23 @@
+tests/cases/compiler/b.js(2,18): error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'.
+  Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+
+
+==== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment2.js (0 errors) ====
+    
+==== tests/cases/compiler/a.ts (0 errors) ====
+    export interface Foo {
+        a: number;
+        b: number;
+    }
+    
+==== tests/cases/compiler/b.js (1 errors) ====
+    /** @type {import("./a").Foo} */
+    export default { c: false };
+                     ~~~~~~~~
+!!! error TS2322: Type '{ c: boolean; }' is not assignable to type 'Foo'.
+!!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
+    
+==== tests/cases/compiler/c.js (0 errors) ====
+    import b from "./b";
+    b;
+    
