@@ -758,7 +758,7 @@ namespace ts {
         if (isClassDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = node.modifiers && find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isClassExpression(node)) {

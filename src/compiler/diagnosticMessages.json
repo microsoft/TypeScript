@@ -663,7 +663,7 @@
         "category": "Error",
         "code": 1208
     },
-    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+    "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
         "code": 1210
     },
@@ -7109,6 +7109,14 @@
     "Add all missing properties": {
         "category": "Message",
         "code": 95166
+    },
+    "Add missing attributes": {
+        "category": "Message",
+        "code": 95167
+    },
+    "Add all missing attributes": {
+        "category": "Message",
+        "code": 95168
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
