@@ -1079,6 +1079,7 @@ namespace FourSlashInterface {
             typeEntry("PromiseConstructorLike"),
             interfaceEntry("PromiseLike"),
             interfaceEntry("Promise"),
+            typeEntry("Awaited"),
             interfaceEntry("ArrayLike"),
             typeEntry("Partial"),
             typeEntry("Required"),

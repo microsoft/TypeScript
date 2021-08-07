@@ -1440,6 +1440,17 @@ interface Promise<T> {
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
+/**
+ * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ */
+type Awaited<T> =
+    T extends null | undefined ? T : // special case for `null | undefined` when not in `--noImplicitAny` mode
+    T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
+        F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
+            Awaited<V> : // recursively unwrap the value
+            never : // the argument to `then` was not callable.
+    T; // non-thenable
+
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
