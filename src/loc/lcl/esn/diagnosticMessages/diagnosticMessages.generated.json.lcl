@@ -3705,7 +3705,7 @@
       <Item ItemId=";Compiles_the_TypeScript_project_located_at_the_specified_path_6927" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compiles the TypeScript project located at the specified path.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Compila el proyecto TypeScript ubicado en la ruta de acceso especificada.]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -3726,7 +3726,7 @@
       <Item ItemId=";Compiles_the_current_project_with_additional_settings_6929" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Compiles the current project, with additional settings.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Compila el proyecto actual con opciones de configuración adicionales]]></Val>
           </Tgt>
           <Prev Cat="Text">
@@ -4863,6 +4863,9 @@
       <Item ItemId=";Disable_emitting_files_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable emitting files from a compilation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Deshabilita la emisión de archivos de una compilación.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5496,6 +5499,9 @@
       <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Habilita el color y el formato en la salida de TypeScript para que los errores del compilador sean más fáciles de leer]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7101,8 +7107,8 @@
       <Item ItemId=";Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options_6924" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options.]]></Val>
-          <Tgt Cat="Text" Stat="Update" Orig="New">
-            <Val><![CDATA[Si se ignora tsconfig.json, se compilan los archivos especificados con las opciones predeterminadas del compilador.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ignora tsconfig.json y se compilan los archivos especificados con las opciones predeterminadas del compilador.]]></Val>
           </Tgt>
           <Prev Cat="Text">
             <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
