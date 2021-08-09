@@ -182,3 +182,16 @@ function aa(input: Bar): void {
 }
 
 declare function bb(input: number): void;
+
+// Repro from #44437
+
+declare var a: {[x: string]: number | string }
+declare var b: {a: number, b: string}
+declare var c: {a: number, b?: string}
+declare var d: {a: number, b: string | undefined }
+declare var e: {a: number, b?: string | undefined }
+
+a = b;
+a = c;
+a = d;  // Error
+a = e;  // Error

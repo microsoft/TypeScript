@@ -14929,40 +14929,35 @@ namespace ts {
             return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
         }
 
+        function isGenericType(type: Type): boolean {
+            return !!getGenericObjectFlags(type);
+        }
+
         function isGenericObjectType(type: Type): boolean {
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericObjectType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (isGenericObjectType((type as SubstitutionType).substitute) || isGenericObjectType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type) || isGenericTupleType(type);
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericObjectType);
         }
 
         function isGenericIndexType(type: Type): boolean {
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericIndexType);
+        }
+
+        function getGenericObjectFlags(type: Type): ObjectFlags {
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericIndexType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
                 }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
             }
             if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (isGenericIndexType((type as SubstitutionType).substitute) || isGenericIndexType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        getGenericObjectFlags((type as SubstitutionType).substitute) | getGenericObjectFlags((type as SubstitutionType).baseType);
                 }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
             }
-            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
+            return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
+                (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -15239,7 +15234,7 @@ namespace ts {
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
-                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const checkTypeInstantiable = isGenericType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
@@ -15261,7 +15256,7 @@ namespace ts {
                 // Instantiate the extends type including inferences for 'infer T' type parameters
                 const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
-                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
+                if (!checkTypeInstantiable && !isGenericType(inferredExtendsType)) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -19489,8 +19484,8 @@ namespace ts {
                         continue;
                     }
                     if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
-                        const propType = getTypeOfSymbol(prop);
-                        const type = propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
+                        const propType = getNonMissingTypeOfSymbol(prop);
+                        const type = exactOptionalPropertyTypes || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                             ? propType
                             : getTypeWithFacts(propType, TypeFacts.NEUndefined);
                         const related = isRelatedTo(type, targetInfo.type, reportErrors);
@@ -24296,17 +24291,13 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        function containsGenericType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, containsGenericType));
-        }
-
         function hasNonBindingPatternContextualTypeWithNoGenericTypes(node: Node) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 getContextualType(node, ContextFlags.SkipBindingPatterns);
-            return contextualType && !someType(contextualType, containsGenericType);
+            return contextualType && !isGenericType(contextualType);
         }
 
         function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
@@ -41717,7 +41708,7 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericIndexType(type) || isGenericObjectType(type)) {
+            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericType(type)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
             if (!everyType(type, isValidIndexKeyType)) {

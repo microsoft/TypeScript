@@ -2,6 +2,7 @@
 namespace ts.codefix {
     const fixMissingMember = "fixMissingMember";
     const fixMissingProperties = "fixMissingProperties";
+    const fixMissingAttributes = "fixMissingAttributes";
     const fixMissingFunctionDeclaration = "fixMissingFunctionDeclaration";
 
     const errorCodes = [
@@ -25,6 +26,10 @@ namespace ts.codefix {
                 const changes = textChanges.ChangeTracker.with(context, t => addObjectLiteralProperties(t, context, info));
                 return [createCodeFixAction(fixMissingProperties, changes, Diagnostics.Add_missing_properties, fixMissingProperties, Diagnostics.Add_all_missing_properties)];
             }
+            if (info.kind === InfoKind.JsxAttributes) {
+                const changes = textChanges.ChangeTracker.with(context, t => addJsxAttributes(t, context, info));
+                return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
+            }
             if (info.kind === InfoKind.Function) {
                 const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
                 return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
@@ -35,7 +40,7 @@ namespace ts.codefix {
             }
             return concatenate(getActionsForMissingMethodDeclaration(context, info), getActionsForMissingMemberDeclaration(context, info));
         },
-        fixIds: [fixMissingMember, fixMissingFunctionDeclaration, fixMissingProperties],
+        fixIds: [fixMissingMember, fixMissingFunctionDeclaration, fixMissingProperties, fixMissingAttributes],
         getAllCodeActions: context => {
             const { program, fixId } = context;
             const checker = program.getTypeChecker();
@@ -49,15 +54,14 @@ namespace ts.codefix {
                         return;
                     }
 
-                    if (fixId === fixMissingFunctionDeclaration) {
-                        if (info.kind === InfoKind.Function) {
-                            addFunctionDeclaration(changes, context, info);
-                        }
+                    if (fixId === fixMissingFunctionDeclaration && info.kind === InfoKind.Function) {
+                        addFunctionDeclaration(changes, context, info);
                     }
-                    else if (fixId === fixMissingProperties) {
-                        if (info.kind === InfoKind.ObjectLiteral) {
-                            addObjectLiteralProperties(changes, context, info);
-                        }
+                    else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
+                        addObjectLiteralProperties(changes, context, info);
+                    }
+                    else if (fixId === fixMissingAttributes && info.kind === InfoKind.JsxAttributes) {
+                        addJsxAttributes(changes, context, info);
                     }
                     else {
                         if (info.kind === InfoKind.Enum) {
@@ -102,8 +106,8 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral }
-    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectLiteralInfo;
+    const enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral, JsxAttributes }
+    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
 
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
@@ -137,6 +141,13 @@ namespace ts.codefix {
         readonly parentDeclaration: ObjectLiteralExpression;
     }
 
+    interface JsxAttributesInfo {
+        readonly kind: InfoKind.JsxAttributes;
+        readonly token: Identifier;
+        readonly attributes: Symbol[];
+        readonly parentDeclaration: JsxOpeningLikeElement;
+    }
+
     function getInfo(sourceFile: SourceFile, tokenPos: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
@@ -151,6 +162,13 @@ namespace ts.codefix {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (length(properties)) {
                 return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
+            }
+        }
+
+        if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
+            const attributes = getUnmatchedAttributes(checker, token.parent);
+            if (length(attributes)) {
+                return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
             }
         }
 
@@ -434,18 +452,33 @@ namespace ts.codefix {
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
     }
 
+    function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: JsxAttributesInfo) {
+        const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
+        const checker = context.program.getTypeChecker();
+        const jsxAttributesNode = info.parentDeclaration.attributes;
+        const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
+        const attrs = map(info.attributes, attr => {
+            const value = attr.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(attr.valueDeclaration)) : createUndefined();
+            return factory.createJsxAttribute(factory.createIdentifier(attr.name), factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
+        });
+        const jsxAttributes = factory.createJsxAttributes(hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs]);
+        const options = { prefix: jsxAttributesNode.pos === jsxAttributesNode.end ? " " : undefined };
+        changes.replaceNode(context.sourceFile, jsxAttributesNode, jsxAttributes, options);
+    }
+
     function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const checker = context.program.getTypeChecker();
         const props = map(info.properties, prop => {
-            const initializer = prop.valueDeclaration ? tryGetInitializerValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
+            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
             return factory.createPropertyAssignment(prop.name, initializer);
         });
         changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true));
     }
 
-    function tryGetInitializerValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {
+    function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {
         if (type.flags & TypeFlags.AnyOrUnknown) {
             return createUndefined();
         }
@@ -482,7 +515,7 @@ namespace ts.codefix {
             return factory.createNull();
         }
         if (type.flags & TypeFlags.Union) {
-            const expression = firstDefined((type as UnionType).types, t => tryGetInitializerValueFromType(context, checker, importAdder, quotePreference, t));
+            const expression = firstDefined((type as UnionType).types, t => tryGetValueFromType(context, checker, importAdder, quotePreference, t));
             return expression ?? createUndefined();
         }
         if (checker.isArrayLikeType(type)) {
@@ -490,7 +523,7 @@ namespace ts.codefix {
         }
         if (isObjectLiteralType(type)) {
             const props = map(checker.getPropertiesOfType(type), prop => {
-                const initializer = prop.valueDeclaration ? tryGetInitializerValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
+                const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
                 return factory.createPropertyAssignment(prop.name, initializer);
             });
             return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
@@ -525,5 +558,28 @@ namespace ts.codefix {
     function isObjectLiteralType(type: Type) {
         return (type.flags & TypeFlags.Object) &&
             ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
+    }
+
+    function getUnmatchedAttributes(checker: TypeChecker, source: JsxOpeningLikeElement) {
+        const attrsType = checker.getContextualType(source.attributes);
+        if (attrsType === undefined) return emptyArray;
+
+        const targetProps = attrsType.getProperties();
+        if (!length(targetProps)) return emptyArray;
+
+        const seenNames = new Set<__String>();
+        for (const sourceProp of source.attributes.properties) {
+            if (isJsxAttribute(sourceProp)) {
+                seenNames.add(sourceProp.name.escapedText);
+            }
+            if (isJsxSpreadAttribute(sourceProp)) {
+                const type = checker.getTypeAtLocation(sourceProp.expression);
+                for (const prop of type.getProperties()) {
+                    seenNames.add(prop.escapedName);
+                }
+            }
+        }
+        return filter(targetProps, targetProp =>
+            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
     }
 }

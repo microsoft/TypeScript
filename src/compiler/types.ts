@@ -5267,23 +5267,23 @@ namespace ts {
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
         /* @internal */
         IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
+        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
         /* @internal */
-        IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
+        IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 26, // Union contains intersections
+        ContainsIntersections = 1 << 25, // Union contains intersections
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 27, // Intersection reduces to never
+        IsNeverIntersection = 1 << 26, // Intersection reduces to never
     }
 
     /* @internal */
