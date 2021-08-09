@@ -23,7 +23,8 @@
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
-        { "path": "../harness", "prepend": true }
+        { "path": "../harness", "prepend": true },
+        { "path": "../loggedIO", "prepend": true }
     ],
 
     "files": [
