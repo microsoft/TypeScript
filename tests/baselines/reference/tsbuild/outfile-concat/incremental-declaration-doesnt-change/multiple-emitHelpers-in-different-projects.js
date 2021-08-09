@@ -479,7 +479,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var s = "Hello, world";
 console.log(s);
@@ -569,7 +569,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var s = "Hello, world";
 1 >
@@ -1350,7 +1350,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1368,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1370,"end":1614,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1370,"end":1614,"kind":"text"}]},{"pos":1614,"end":2189,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1614,"end":2189,"kind":"text"}]},{"pos":2189,"end":2342,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1642,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1642,"kind":"text"}]},{"pos":1642,"end":2217,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1642,"end":2217,"kind":"text"}]},{"pos":2217,"end":2370,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1387,7 +1387,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1368):: typescript:spreadArray
+emitHelpers: (1008-1396):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1395,12 +1395,12 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-prepend: (1370-1614):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1398-1642):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1370-1614)
+text: (1398-1642)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -1413,9 +1413,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1614-2189):: ../../../2/second-output.js texts:: 1
+prepend: (1642-2217):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1614-2189)
+text: (1642-2217)
 var N;
 (function (N) {
     function f() {
@@ -1441,7 +1441,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (2189-2342)
+text: (2217-2370)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -1509,39 +1509,39 @@ declare function forthirdthird_part1Rest(): void;
         },
         {
           "pos": 1008,
-          "end": 1368,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1370,
-          "end": 1614,
+          "pos": 1398,
+          "end": 1642,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1370,
-              "end": 1614,
+              "pos": 1398,
+              "end": 1642,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1614,
-          "end": 2189,
+          "pos": 1642,
+          "end": 2217,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1614,
-              "end": 2189,
+              "pos": 1642,
+              "end": 2217,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2189,
-          "end": 2342,
+          "pos": 2217,
+          "end": 2370,
           "kind": "text"
         }
       ],

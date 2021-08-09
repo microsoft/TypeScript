@@ -139,7 +139,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var a0 = 1;
 var a1 = [1, [2, 3], [4, [5, [6, 7]]]];
