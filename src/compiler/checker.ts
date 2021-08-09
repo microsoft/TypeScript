@@ -37687,8 +37687,8 @@ namespace ts {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1, baseClassName, symbolToString(suggestion)) :
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                     }
-                    else if (prop && baseProp?.valueDeclaration && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                        const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
+                    else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                        const baseHasAbstract = some(baseProp.declarations, d => hasAbstractModifier(d));
                         if (hasOverride) {
                             return;
                         }
