@@ -6902,7 +6902,7 @@ interface HTMLIFrameElement extends HTMLElement {
      */
     src: string;
     /**
-     * Sets or retrives the content of the page that is to contain.
+     * Sets or retrieves the content of the page that is to contain.
      */
     srcdoc: string;
     /**

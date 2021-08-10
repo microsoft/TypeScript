@@ -31430,7 +31430,7 @@ namespace ts {
 
         function isAssignmentToReadonlyEntity(expr: Expression, symbol: Symbol, assignmentKind: AssignmentKind) {
             if (assignmentKind === AssignmentKind.None) {
-                // no assigment means it doesn't matter whether the entity is readonly
+                // no assignment means it doesn't matter whether the entity is readonly
                 return false;
             }
             if (isReadonlySymbol(symbol)) {
@@ -34510,7 +34510,7 @@ namespace ts {
                     // SyntaxKind.ElementAccessExpression - `thing["aField"] = 42;` or `thing["aField"];` (with a doc comment on it)
                     // or SyntaxKind.PropertyAccessExpression - `thing.aField = 42;`
                     // all of which are pretty much always values, or at least imply a value meaning.
-                    // It may be apprpriate to treat these as aliases in the future.
+                    // It may be appropriate to treat these as aliases in the future.
                         return DeclarationSpaces.ExportValue;
                     default:
                         return Debug.failBadSyntaxKind(d);

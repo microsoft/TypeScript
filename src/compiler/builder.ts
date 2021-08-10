@@ -1099,7 +1099,7 @@ namespace ts {
             let savedAffectedFilesPendingEmitIndex;
             // Backup and restore affected pendings emit state for non emit Builder if noEmitOnError is enabled and emitBuildInfo could be written in case there are errors
             // This ensures pending files to emit is updated in tsbuildinfo
-            // Note that when there are no errors, emit proceeds as if everything is emitted as it is callers reponsibility to write the files to disk if at all (because its builder that doesnt track files to emit)
+            // Note that when there are no errors, emit proceeds as if everything is emitted as it is callers responsibility to write the files to disk if at all (because its builder that doesnt track files to emit)
             if (kind !== BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram &&
                 !targetSourceFile &&
                 !outFile(state.compilerOptions) &&

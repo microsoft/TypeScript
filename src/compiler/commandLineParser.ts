@@ -934,7 +934,7 @@ namespace ts {
             name: "out",
             type: "string",
             affectsEmit: true,
-            isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
+            isFilePath: false, // This is intentionally broken to support compatibility with existing tsconfig files
             // for correct behaviour, please use outFile
             category: Diagnostics.Backwards_Compatibility,
             paramType: Diagnostics.FILE,
@@ -3166,7 +3166,7 @@ namespace ts {
      * @param basePath The base path for any relative file specifications.
      * @param options Compiler options.
      * @param host The host used to resolve files and directories.
-     * @param extraFileExtensions optionaly file extra file extension information from host
+     * @param extraFileExtensions optionally file extra file extension information from host
      */
     /* @internal */
     export function getFileNamesFromConfigSpecs(

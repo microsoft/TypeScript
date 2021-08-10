@@ -7,7 +7,7 @@ namespace ts {
     } : undefined;
 
     /**
-     * Create a function that reports error by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
         const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
@@ -64,7 +64,7 @@ namespace ts {
     }
 
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     export function createWatchStatusReporter(system: System, pretty?: boolean): WatchStatusReporter {
         return pretty ?

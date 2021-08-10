@@ -121,7 +121,7 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         function getNewParametersForCombinedSignature(signatureDeclarations: (MethodSignature | MethodDeclaration | CallSignatureDeclaration | ConstructorDeclaration | ConstructSignatureDeclaration | FunctionDeclaration)[]): NodeArray<ParameterDeclaration> {
             const lastSig = signatureDeclarations[signatureDeclarations.length - 1];
             if (isFunctionLikeDeclaration(lastSig) && lastSig.body) {
-                // Trim away implementation signature arguments (they should already be compatible with overloads, but are likely less precise to guarantee compatability with the overloads)
+                // Trim away implementation signature arguments (they should already be compatible with overloads, but are likely less precise to guarantee compatibility with the overloads)
                 signatureDeclarations = signatureDeclarations.slice(0, signatureDeclarations.length - 1);
             }
             return factory.createNodeArray([

@@ -2167,7 +2167,7 @@ declare namespace ts.server.protocol {
     }
     interface ConfigFileDiagnosticEventBody {
         /**
-         * The file which trigged the searching and error-checking of the config file
+         * The file which triggered the searching and error-checking of the config file
          */
         triggerFile: string;
         /**

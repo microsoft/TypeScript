@@ -1473,7 +1473,7 @@ namespace ts.server.protocol {
     /* @internal */
     export interface ProjectFiles {
         /**
-         * Information about project verison
+         * Information about project version
          */
         info?: ProjectVersionInfo;
         /**
@@ -2278,7 +2278,7 @@ namespace ts.server.protocol {
          */
         replacementSpan?: TextSpan;
         /**
-         * Indicates whether commiting this completion entry will require additional code actions to be
+         * Indicates whether committing this completion entry will require additional code actions to be
          * made to avoid errors. The CompletionEntryDetails will have these actions.
          */
         hasAction?: true;
@@ -2812,7 +2812,7 @@ namespace ts.server.protocol {
 
     export interface ConfigFileDiagnosticEventBody {
         /**
-         * The file which trigged the searching and error-checking of the config file
+         * The file which triggered the searching and error-checking of the config file
          */
         triggerFile: string;
 

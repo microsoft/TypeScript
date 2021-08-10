@@ -698,7 +698,7 @@ export function someFn() { }`),
                     timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout // Build project2
                 },
                 {
-                    caption: "update aplha config",
+                    caption: "update alpha config",
                     change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", "{}"),
                     timeouts: checkSingleTimeoutQueueLengthAndRun, // build project1
                 },

@@ -93,7 +93,7 @@ namespace ts {
             });
         });
 
-        describe("No duplicate ref directives when emiting .d.ts->.d.ts", () => {
+        describe("No duplicate ref directives when emitting .d.ts->.d.ts", () => {
             it("without statements", () => {
                 const host = new fakes.CompilerHost(new vfs.FileSystem(true, {
                     files: {

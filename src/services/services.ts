@@ -1501,7 +1501,7 @@ namespace ts {
                             return documentRegistry.updateDocumentWithKey(fileName, path, newSettings, documentRegistryBucketKey, hostFileInformation.scriptSnapshot, hostFileInformation.version, hostFileInformation.scriptKind);
                         }
                         else {
-                            // Release old source file and fall through to aquire new file with new script kind
+                            // Release old source file and fall through to acquire new file with new script kind
                             documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, documentRegistry.getKeyForCompilationSettings(program.getCompilerOptions()), oldSourceFile.scriptKind);
                         }
                     }

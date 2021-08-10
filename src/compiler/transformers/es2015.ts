@@ -114,7 +114,7 @@ namespace ts {
         thisName?: Identifier;
 
         /*
-         * set to true if node contains lexical 'this' so we can mark function that wraps convered loop body as 'CapturedThis' for subsequent substitution.
+         * set to true if node contains lexical 'this' so we can mark function that wraps covered loop body as 'CapturedThis' for subsequent substitution.
          */
         containsLexicalThis?: boolean;
 

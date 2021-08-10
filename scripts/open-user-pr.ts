@@ -38,7 +38,7 @@ gh.pulls.create({
     head: `${userName}:${branchName}`,
     base: branchName === masterBranchname ? "main" : masterBranchname,
     body:
-`${process.env.SOURCE_ISSUE ? `This test run was triggerd by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
+`${process.env.SOURCE_ISSUE ? `This test run was triggered by a request on https://github.com/Microsoft/TypeScript/pull/${process.env.SOURCE_ISSUE} `+"\n" : ""}Please review the diff and merge if no changes are unexpected.
 You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
 
 cc ${reviewers.map(r => "@" + r).join(" ")}`,
