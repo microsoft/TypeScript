@@ -736,8 +736,10 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
-            isPropertyAccessible: (node, isSuper, writing, type, prop) => {
-                return checkPropertyAccessibilityAtNode(node, isSuper, writing, type, prop).result === TypeChecks.Ok;
+            isPropertyAccessible: (nodeIn, isSuper, writing, type, prop) => {
+                const node = getParseTreeNode(nodeIn);
+                return node ?
+                    checkPropertyAccessibilityAtNode(node, isSuper, writing, type, prop).result === TypeChecks.Ok : false;
             }
         };
 
