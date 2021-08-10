@@ -784,7 +784,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -871,7 +871,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -1553,7 +1553,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":1520,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1370,"end":1520,"kind":"text"}]},{"pos":1520,"end":2095,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1520,"end":2095,"kind":"text"}]},{"pos":2095,"end":2248,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":1548,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1548,"kind":"text"}]},{"pos":1548,"end":2123,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1548,"end":2123,"kind":"text"}]},{"pos":2123,"end":2276,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1577,7 +1577,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1585,10 +1585,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (868-1368):: typescript:rest
+emitHelpers: (896-1396):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1601,9 +1601,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1370-1520):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1398-1548):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1370-1520)
+text: (1398-1548)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -1613,9 +1613,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1520-2095):: ../../../2/second-output.js texts:: 1
+prepend: (1548-2123):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1520-2095)
+text: (1548-2123)
 var N;
 (function (N) {
     function f() {
@@ -1641,7 +1641,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (2095-2248)
+text: (2123-2276)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -1703,45 +1703,45 @@ declare function forthirdthird_part1Rest(): void;
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1368,
+          "pos": 896,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1370,
-          "end": 1520,
+          "pos": 1398,
+          "end": 1548,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1370,
-              "end": 1520,
+              "pos": 1398,
+              "end": 1548,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1520,
-          "end": 2095,
+          "pos": 1548,
+          "end": 2123,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1520,
-              "end": 2095,
+              "pos": 1548,
+              "end": 2123,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2095,
-          "end": 2248,
+          "pos": 2123,
+          "end": 2276,
           "kind": "text"
         }
       ],

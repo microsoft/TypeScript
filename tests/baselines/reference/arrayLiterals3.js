@@ -47,7 +47,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 // The resulting type an array literal expression is determined as follows:
 //     - If the array literal contains no spread elements and is contextually typed by a tuple-like type,
