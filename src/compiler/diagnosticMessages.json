@@ -1738,6 +1738,10 @@
         "category": "Error",
         "code": 2374
     },
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2375
+    },
     "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
@@ -1749,6 +1753,10 @@
     "A 'get' accessor must return a value.": {
         "category": "Error",
         "code": 2378
+    },
+    "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2379
     },
     "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
@@ -1873,6 +1881,10 @@
     "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
+    },
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.": {
+        "category": "Error",
+        "code": 2412
     },
     "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
@@ -7117,6 +7129,10 @@
     "Add all missing attributes": {
         "category": "Message",
         "code": 95168
+    },
+    "Add 'undefined' to optional property type": {
+        "category": "Message",
+        "code": 95169
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
