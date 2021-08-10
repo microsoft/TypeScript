@@ -18,7 +18,7 @@ function instrument(tscPath: string, prepareCode: string, cleanupCode = "") {
     const filename = fs.existsSync(bak) ? bak : tscPath;
     const tscContent = fs.readFileSync(filename, "utf-8");
     fs.writeFileSync(bak, tscContent);
-    const loggerContent = fs.readFileSync(path.resolve(path.dirname(tscPath) + "/loggedIO.js"), "utf-8")
+    const loggerContent = fs.readFileSync(path.resolve(path.dirname(tscPath) + "/loggedIO.js"), "utf-8");
     const invocationLine = "ts.executeCommandLine(ts.sys, ts.noop, ts.sys.args);";
     const index1 = tscContent.indexOf(invocationLine);
     if (index1 < 0) {
@@ -26,7 +26,7 @@ function instrument(tscPath: string, prepareCode: string, cleanupCode = "") {
     }
     const index2 = index1 + invocationLine.length;
     const newContent = tscContent.substr(0, index1) + loggerContent + prepareCode + invocationLine + cleanupCode + tscContent.substr(index2) + "\r\n";
-    fs.writeFileSync(tscPath, newContent)
+    fs.writeFileSync(tscPath, newContent);
 }
 
 const isJson = (arg: string) => arg.indexOf(".json") > 0;
