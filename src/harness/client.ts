@@ -653,7 +653,7 @@ namespace ts.server {
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 ...item,
-                kind: item.kind as InlayHintKind | undefined,
+                kind: item.kind as InlayHintKind,
                 position: this.lineOffsetToPosition(file, item.position),
             }));
         }
