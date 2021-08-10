@@ -191,6 +191,7 @@
         "unittests/tsserver/getExportReferences.ts",
         "unittests/tsserver/getFileReferences.ts",
         "unittests/tsserver/importHelpers.ts",
+        "unittests/tsserver/inlayHints.ts",
         "unittests/tsserver/inferredProjects.ts",
         "unittests/tsserver/jsdocTag.ts",
         "unittests/tsserver/languageService.ts",
