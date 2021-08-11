@@ -4205,6 +4205,8 @@ namespace ts {
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
+        /* @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
+
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -4219,10 +4221,11 @@ namespace ts {
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
-        /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
+        getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
+        /* @internal */ forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -4305,6 +4308,7 @@ namespace ts {
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
         /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
+        /* @internal */ getExactOptionalProperties(type: Type): Symbol[];
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -5263,23 +5267,23 @@ namespace ts {
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
         /* @internal */
         IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
+        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
         /* @internal */
-        IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
+        IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 26, // Union contains intersections
+        ContainsIntersections = 1 << 25, // Union contains intersections
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 27, // Intersection reduces to never
+        IsNeverIntersection = 1 << 26, // Intersection reduces to never
     }
 
     /* @internal */

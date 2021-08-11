@@ -34,12 +34,20 @@ namespace ts.OutliningElementsCollector {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
-            if (isDeclaration(n) || isVariableStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
+            if (isDeclaration(n) || isVariableStatement(n) || isReturnStatement(n) || n.kind === SyntaxKind.EndOfFileToken) {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
             if (isFunctionLike(n) && isBinaryExpression(n.parent) && isPropertyAccessExpression(n.parent.left)) {
                 addOutliningForLeadingCommentsForNode(n.parent.left, sourceFile, cancellationToken, out);
+            }
+
+            if (isBlock(n) || isModuleBlock(n)) {
+                addOutliningForLeadingCommentsForPos(n.statements.end, sourceFile, cancellationToken, out);
+            }
+
+            if (isClassLike(n) || isInterfaceDeclaration(n)) {
+                addOutliningForLeadingCommentsForPos(n.members.end, sourceFile, cancellationToken, out);
             }
 
             const span = getOutliningSpanForNode(n, sourceFile);
@@ -106,9 +114,10 @@ namespace ts.OutliningElementsCollector {
         return regionDelimiterRegExp.exec(lineText);
     }
 
-    function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
-        const comments = getLeadingCommentRangesOfNode(n, sourceFile);
+    function addOutliningForLeadingCommentsForPos(pos: number, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+        const comments = getLeadingCommentRanges(sourceFile.text, pos);
         if (!comments) return;
+
         let firstSingleLineCommentStart = -1;
         let lastSingleLineCommentEnd = -1;
         let singleLineCommentCount = 0;
@@ -150,6 +159,11 @@ namespace ts.OutliningElementsCollector {
                 out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment));
             }
         }
+    }
+
+    function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
+        if (isJsxText(n)) return;
+        addOutliningForLeadingCommentsForPos(n.pos, sourceFile, cancellationToken, out);
     }
 
     function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind): OutliningSpan {

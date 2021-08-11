@@ -505,3 +505,40 @@ class TableBaseEnum<
     }
 }
 
+// Repros from #45145
+
+function f10<T extends { a: string } | undefined>(x: T, y: Partial<T>) {
+>f10 : <T extends { a: string; } | undefined>(x: T, y: Partial<T>) => void
+>a : string
+>x : T
+>y : Partial<T>
+
+    y = x;
+>y = x : T
+>y : Partial<T>
+>x : T
+}
+
+type SqlInsertSet<T> = T extends undefined ? object : { [P in keyof T]: unknown };
+>SqlInsertSet : SqlInsertSet<T>
+
+class SqlTable<T> {
+>SqlTable : SqlTable<T>
+
+    protected validateRow(_row: Partial<SqlInsertSet<T>>): void {
+>validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>_row : Partial<SqlInsertSet<T>>
+    }
+    public insertRow(row: SqlInsertSet<T>) {
+>insertRow : (row: SqlInsertSet<T>) => void
+>row : SqlInsertSet<T>
+
+        this.validateRow(row);
+>this.validateRow(row) : void
+>this.validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>this : this
+>validateRow : (_row: Partial<SqlInsertSet<T>>) => void
+>row : SqlInsertSet<T>
+    }
+}
+

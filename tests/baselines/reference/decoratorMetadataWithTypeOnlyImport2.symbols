@@ -1,0 +1,27 @@
+=== tests/cases/conformance/decorators/services.ts ===
+export namespace Services {
+>Services : Symbol(Services, Decl(services.ts, 0, 0))
+
+  export class Service {}
+>Service : Symbol(Service, Decl(services.ts, 0, 27))
+}
+
+=== tests/cases/conformance/decorators/index.ts ===
+import type { Services } from './services';
+>Services : Symbol(Services, Decl(index.ts, 0, 13))
+
+declare const decorator: any;
+>decorator : Symbol(decorator, Decl(index.ts, 2, 13))
+
+export class Main {
+>Main : Symbol(Main, Decl(index.ts, 2, 29))
+
+  @decorator()
+>decorator : Symbol(decorator, Decl(index.ts, 2, 13))
+
+  field: Services.Service;
+>field : Symbol(Main.field, Decl(index.ts, 3, 19))
+>Services : Symbol(Services, Decl(index.ts, 0, 13))
+>Service : Symbol(Services.Service, Decl(services.ts, 0, 27))
+}
+

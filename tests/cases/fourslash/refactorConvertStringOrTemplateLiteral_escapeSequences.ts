@@ -94,3 +94,15 @@ edit.applyRefactor({
     // newContent is: let s = `\u0041\u0061${text}\0\u0000`;
     newContent: 'let s = `\\u0041\\u0061${text}\\0\\u0000`;'
 });
+
+// @Filename: /i.ts
+////let s = /*i1*/'$`' + text + "`\\"/*i2*/;
+
+goTo.select("i1", "i2");
+edit.applyRefactor({
+    refactorName: "Convert to template string",
+    actionName: "Convert to template string",
+    actionDescription: ts.Diagnostics.Convert_to_template_string.message,
+    // newContent is: let s = `\$\`${text}\`\\`;
+    newContent: 'let s = `\\$\\`${text}\\`\\\\`;'
+});

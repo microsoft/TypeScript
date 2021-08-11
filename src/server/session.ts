@@ -1453,9 +1453,9 @@ namespace ts.server {
         }
 
         private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
-            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+            const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
-            const hints = languageService.provideInlayHints(file, args, this.getPreferences(file));
+            const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));
 
             return hints.map(hint => ({
                 ...hint,

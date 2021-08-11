@@ -23,7 +23,8 @@
         { "path": "../server", "prepend": true },
         { "path": "../webServer", "prepend": true },
         { "path": "../typingsInstallerCore", "prepend": true },
-        { "path": "../harness", "prepend": true }
+        { "path": "../harness", "prepend": true },
+        { "path": "../loggedIO", "prepend": true }
     ],
 
     "files": [
@@ -191,6 +192,7 @@
         "unittests/tsserver/getExportReferences.ts",
         "unittests/tsserver/getFileReferences.ts",
         "unittests/tsserver/importHelpers.ts",
+        "unittests/tsserver/inlayHints.ts",
         "unittests/tsserver/inferredProjects.ts",
         "unittests/tsserver/jsdocTag.ts",
         "unittests/tsserver/languageService.ts",

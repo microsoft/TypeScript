@@ -6,36 +6,43 @@ namespace ts.Completions {
 
     export type Log = (message: string) => void;
 
+    // NOTE: Make sure that each entry has the exact same number of digits
+    //       since many implementations will sort by string contents,
+    //       where "10" is considered less than "2".
     export enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7",
-        DeprecatedLocalDeclarationPriority = "8",
-        DeprecatedLocationPriority = "9",
-        DeprecatedOptionalMember = "10",
-        DeprecatedMemberDeclaredBySpreadAssignment = "11",
-        DeprecatedSuggestedClassMembers = "12",
-        DeprecatedGlobalsOrKeywords = "13",
-        DeprecatedAutoImportSuggestions = "14"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
 
-    enum SortTextId {
-        LocalDeclarationPriority,
-        LocationPriority,
-        OptionalMember,
-        MemberDeclaredBySpreadAssignment,
-        SuggestedClassMembers,
-        GlobalsOrKeywords,
-        AutoImportSuggestions
-    }
+    const enum SortTextId {
+        LocalDeclarationPriority = 10,
+        LocationPriority = 11,
+        OptionalMember = 12,
+        MemberDeclaredBySpreadAssignment = 13,
+        SuggestedClassMembers = 14,
+        GlobalsOrKeywords = 15,
+        AutoImportSuggestions = 16,
 
-    // for JavaScript identifiers since they are preferred over deprecated symbols
-    const DeprecatedSortTextStart = SortTextId.AutoImportSuggestions + 2;
+        // Don't use these directly.
+        _JavaScriptIdentifiers = 17,
+        _DeprecatedStart = 18,
+        _First = LocalDeclarationPriority,
+
+        DeprecatedOffset = _DeprecatedStart - _First,
+    }
 
     /**
      * Special values for `CompletionInfo['source']` used to disambiguate
@@ -787,7 +794,7 @@ namespace ts.Completions {
 
             const { name, needsConvertPropertyAccess } = info;
             const sortTextId = symbolToSortTextIdMap?.[getSymbolId(symbol)] ?? SortTextId.LocationPriority;
-            const sortText = (isDeprecated(symbol, typeChecker) ? DeprecatedSortTextStart + sortTextId : sortTextId).toString() as SortText;
+            const sortText = (isDeprecated(symbol, typeChecker) ? SortTextId.DeprecatedOffset + sortTextId : sortTextId).toString() as SortText;
             const entry = createCompletionEntry(
                 symbol,
                 sortText,
@@ -1348,8 +1355,11 @@ namespace ts.Completions {
                         node = (parent as ModuleDeclaration).name;
                         break;
                     case SyntaxKind.ImportType:
-                    case SyntaxKind.MetaProperty:
                         node = parent;
+                        break;
+                    case SyntaxKind.MetaProperty:
+                        node = parent.getFirstToken(sourceFile)!;
+                        Debug.assert(node.kind === SyntaxKind.ImportKeyword || node.kind === SyntaxKind.NewKeyword);
                         break;
                     default:
                         // There is nothing that precedes the dot, so this likely just a stray character
@@ -1591,13 +1601,13 @@ namespace ts.Completions {
                 }
             }
 
-            if (isMetaProperty(node) && (node.keywordToken === SyntaxKind.NewKeyword || node.keywordToken === SyntaxKind.ImportKeyword) && contextToken === node.getChildAt(1)) {
-                const completion = (node.keywordToken === SyntaxKind.NewKeyword) ? "target" : "meta";
-                symbols.push(typeChecker.createSymbol(SymbolFlags.Property, escapeLeadingUnderscores(completion)));
-                return;
-            }
-
             if (!isTypeLocation) {
+                // GH#39946. Pulling on the type of a node inside of a function with a contextual `this` parameter can result in a circularity
+                // if the `node` is part of the exprssion of a `yield` or `return`. This circularity doesn't exist at compile time because
+                // we will check (and cache) the type of `this` *before* checking the type of the node.
+                const container = getThisContainer(node, /*includeArrowFunctions*/ false);
+                if (!isSourceFile(container) && container.parent) typeChecker.getTypeAtLocation(container);
+
                 let type = typeChecker.getTypeAtLocation(node).getNonOptionalType();
                 let insertQuestionDot = false;
                 if (type.isNullableType()) {
@@ -1930,6 +1940,7 @@ namespace ts.Completions {
                 !!importCompletionNode,
                 context => {
                     exportInfo.forEach(sourceFile.path, (info, symbolName, isFromAmbientModule) => {
+                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return;
                         // `targetFlags` should be the same for each `info`
                         if (!isTypeOnlyLocation && !importCompletionNode && !(info[0].targetFlags & SymbolFlags.Value)) return;
@@ -2013,7 +2024,8 @@ namespace ts.Completions {
             const result = isInStringOrRegularExpressionOrTemplateLiteral(contextToken) ||
                 isSolelyIdentifierDefinitionLocation(contextToken) ||
                 isDotOfNumericLiteral(contextToken) ||
-                isInJsxText(contextToken);
+                isInJsxText(contextToken) ||
+                isBigIntLiteral(contextToken);
             log("getCompletionsAtPosition: isCompletionListBlocker: " + (timestamp() - start));
             return result;
         }
@@ -3301,10 +3313,9 @@ namespace ts.Completions {
     /** True if symbol is a type or a module containing at least one type. */
     function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecker, seenModules = new Map<SymbolId, true>()): boolean {
         const sym = skipAlias(symbol.exportSymbol || symbol, checker);
-        return !!(sym.flags & SymbolFlags.Type) ||
-            !!(sym.flags & SymbolFlags.Module) &&
-            addToSeen(seenModules, getSymbolId(sym)) &&
-            checker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
+        return !!(sym.flags & SymbolFlags.Type) || checker.isUnknownSymbol(sym) ||
+            !!(sym.flags & SymbolFlags.Module) && addToSeen(seenModules, getSymbolId(sym)) &&
+                checker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, checker, seenModules));
     }
 
     function isDeprecated(symbol: Symbol, checker: TypeChecker) {

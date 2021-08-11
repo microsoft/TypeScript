@@ -263,7 +263,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var s = "Hello, world";
 console.log(s);
@@ -319,7 +319,7 @@ sourceFile:../first_PART1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var s = "Hello, world";
 1 >
@@ -590,7 +590,7 @@ sourceFile:../first_part3.ts
 >>>//# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1300,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"..","sourceFiles":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1328,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -614,7 +614,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -622,10 +622,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (868-1300)
+text: (896-1328)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -680,13 +680,13 @@ declare const firstfirst_part3_ar: number[];
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1300,
+          "pos": 896,
+          "end": 1328,
           "kind": "text"
         }
       ],
@@ -1188,7 +1188,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -1294,7 +1294,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -2311,7 +2311,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":1802,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1370,"end":1802,"kind":"text"}]},{"pos":1802,"end":2496,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1802,"end":2496,"kind":"text"}]},{"pos":2496,"end":2931,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":1830,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1830,"kind":"text"}]},{"pos":1830,"end":2524,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1830,"end":2524,"kind":"text"}]},{"pos":2524,"end":2959,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":318,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":318,"kind":"text"}]},{"pos":318,"end":585,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":318,"end":585,"kind":"text"}]},{"pos":585,"end":765,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2335,7 +2335,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -2343,10 +2343,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (868-1368):: typescript:rest
+emitHelpers: (896-1396):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -2359,9 +2359,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1370-1802):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1398-1830):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1370-1802)
+text: (1398-1830)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -2379,9 +2379,9 @@ var firstfirst_part3_ar = [20, 30];
 firstfirst_part3Spread.apply(void 0, __spreadArray([10], __read(firstfirst_part3_ar), false));
 
 ----------------------------------------------------------------------
-prepend: (1802-2496):: ../../../2/second-output.js texts:: 1
+prepend: (1830-2524):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1802-2496)
+text: (1830-2524)
 var N;
 (function (N) {
     function f() {
@@ -2410,7 +2410,7 @@ var secondsecond_part2_ar = [20, 30];
 secondsecond_part2Spread.apply(void 0, __spreadArray([10], __read(secondsecond_part2_ar), false));
 
 ----------------------------------------------------------------------
-text: (2496-2931)
+text: (2524-2959)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -2485,45 +2485,45 @@ declare const thirdthird_part1_ar: number[];
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1368,
+          "pos": 896,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1370,
-          "end": 1802,
+          "pos": 1398,
+          "end": 1830,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1370,
-              "end": 1802,
+              "pos": 1398,
+              "end": 1830,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1802,
-          "end": 2496,
+          "pos": 1830,
+          "end": 2524,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1802,
-              "end": 2496,
+              "pos": 1830,
+              "end": 2524,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2496,
-          "end": 2931,
+          "pos": 2524,
+          "end": 2959,
           "kind": "text"
         }
       ],

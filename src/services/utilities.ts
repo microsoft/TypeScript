@@ -758,7 +758,7 @@ namespace ts {
         if (isClassDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = node.modifiers && find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isClassExpression(node)) {
@@ -3083,6 +3083,22 @@ namespace ts {
     /* @internal */
     export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
         return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
+    }
+
+    /* @internal */
+    export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
+        const token = getTokenAtPosition(sourceFile, span.start);
+        // Checker has already done work to determine that await might be possible, and has attached
+        // related info to the node, so start by finding the expression that exactly matches up
+        // with the diagnostic range.
+        const expression = findAncestor(token, node => {
+            if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
+                return "quit";
+            }
+            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        }) as Expression | undefined;
+
+        return expression;
     }
 
     /**
