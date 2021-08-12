@@ -641,7 +641,8 @@ namespace FourSlash {
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
-                    this.raiseError(`Found an error: ${this.formatPosition(error.file!, error.start!)}: ${error.messageText}`);
+                    const message = typeof error.messageText === "string" ? error.messageText : error.messageText.messageText;
+                    this.raiseError(`Found an error: ${this.formatPosition(error.file!, error.start!)}: ${message}`);
                 }
             });
         }

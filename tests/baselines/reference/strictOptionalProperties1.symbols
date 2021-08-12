@@ -571,45 +571,97 @@ declare function bb(input: number): void;
 >bb : Symbol(bb, Decl(strictOptionalProperties1.ts, 177, 1))
 >input : Symbol(input, Decl(strictOptionalProperties1.ts, 179, 20))
 
+interface U1 {
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+    name: string
+>name : Symbol(U1.name, Decl(strictOptionalProperties1.ts, 181, 14))
+
+    email?: string | number | undefined
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+}
+interface U2 {
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+    name: string
+>name : Symbol(U2.name, Decl(strictOptionalProperties1.ts, 185, 14))
+
+    email?: string | number
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+}
+declare const e: string | boolean | undefined
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+declare const u1: U1
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>U1 : Symbol(U1, Decl(strictOptionalProperties1.ts, 179, 41))
+
+declare let u2: U2
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+>U2 : Symbol(U2, Decl(strictOptionalProperties1.ts, 184, 1))
+
+u1.email = e // error, but only because boolean isn't in email's type
+>u1.email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>u1 : Symbol(u1, Decl(strictOptionalProperties1.ts, 190, 13))
+>email : Symbol(U1.email, Decl(strictOptionalProperties1.ts, 182, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2.email = e // error, and suggest adding undefined
+>u2.email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+>email : Symbol(U2.email, Decl(strictOptionalProperties1.ts, 186, 16))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
+
+u2 = {
+>u2 : Symbol(u2, Decl(strictOptionalProperties1.ts, 191, 11))
+
+    name: 'hi',
+>name : Symbol(name, Decl(strictOptionalProperties1.ts, 194, 6))
+
+    email: undefined
+>email : Symbol(email, Decl(strictOptionalProperties1.ts, 195, 15))
+>undefined : Symbol(undefined)
+}
+
 // Repro from #44437
 
 declare var a: {[x: string]: number | string }
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 183, 11))
->x : Symbol(x, Decl(strictOptionalProperties1.ts, 183, 17))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 201, 17))
 
 declare var b: {a: number, b: string}
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 184, 11))
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 184, 16))
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 184, 26))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 202, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 26))
 
 declare var c: {a: number, b?: string}
->c : Symbol(c, Decl(strictOptionalProperties1.ts, 185, 11))
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 185, 16))
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 185, 26))
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 203, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 203, 26))
 
 declare var d: {a: number, b: string | undefined }
->d : Symbol(d, Decl(strictOptionalProperties1.ts, 186, 11))
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 186, 16))
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 186, 26))
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 204, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 204, 26))
 
 declare var e: {a: number, b?: string | undefined }
->e : Symbol(e, Decl(strictOptionalProperties1.ts, 187, 11))
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 187, 16))
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 187, 26))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 205, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 205, 16))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 205, 26))
 
 a = b;
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 183, 11))
->b : Symbol(b, Decl(strictOptionalProperties1.ts, 184, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>b : Symbol(b, Decl(strictOptionalProperties1.ts, 202, 11))
 
 a = c;
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 183, 11))
->c : Symbol(c, Decl(strictOptionalProperties1.ts, 185, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>c : Symbol(c, Decl(strictOptionalProperties1.ts, 203, 11))
 
 a = d;  // Error
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 183, 11))
->d : Symbol(d, Decl(strictOptionalProperties1.ts, 186, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>d : Symbol(d, Decl(strictOptionalProperties1.ts, 204, 11))
 
 a = e;  // Error
->a : Symbol(a, Decl(strictOptionalProperties1.ts, 183, 11))
->e : Symbol(e, Decl(strictOptionalProperties1.ts, 187, 11))
+>a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
+>e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
 

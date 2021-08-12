@@ -3085,6 +3085,22 @@ namespace ts {
         return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 
+    /* @internal */
+    export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
+        const token = getTokenAtPosition(sourceFile, span.start);
+        // Checker has already done work to determine that await might be possible, and has attached
+        // related info to the node, so start by finding the expression that exactly matches up
+        // with the diagnostic range.
+        const expression = findAncestor(token, node => {
+            if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
+                return "quit";
+            }
+            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        }) as Expression | undefined;
+
+        return expression;
+    }
+
     /**
      * If the provided value is an array, the mapping function is applied to each element; otherwise, the mapping function is applied
      * to the provided value itself.

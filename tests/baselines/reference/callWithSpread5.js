@@ -16,7 +16,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 fn.apply(void 0, __spreadArray(__spreadArray([], nnnu, false), [x], false));
 fn.apply(void 0, __spreadArray(__spreadArray([], nntnnnt, false), [x], false));

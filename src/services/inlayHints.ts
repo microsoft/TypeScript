@@ -203,7 +203,18 @@ namespace ts.InlayHints {
         }
 
         function isHintableExpression(node: Node) {
-            return isLiteralExpression(node) || isBooleanLiteral(node) || isArrowFunction(node) || isFunctionExpression(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
+            switch (node.kind) {
+                case SyntaxKind.PrefixUnaryExpression:
+                    return isLiteralExpression((node as PrefixUnaryExpression).operand);
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                    return true;
+            }
+            return isLiteralExpression(node);
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
