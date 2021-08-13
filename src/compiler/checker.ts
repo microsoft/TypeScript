@@ -42792,6 +42792,7 @@ namespace ts {
 
         function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
             if (moduleKind !== ModuleKind.ESNext) {
+                // We are allowed trailing comma after proposal-import-assertions.
                 checkGrammarForDisallowedTrailingComma(nodeArguments);
 
                 if (nodeArguments.length > 1) {
