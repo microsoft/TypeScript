@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract3.js ===
+class Foo {
+>Foo : Foo
+
+    /** @abstract */
+    m1() {}
+>m1 : () => void
+
+    /** @abstract */
+    static m2() {}
+>m2 : () => void
+
+    /** @abstract */
+    p1;
+>p1 : any
+
+    /** @abstract */
+    get p2() {}
+>p2 : void
+
+    /** @abstract */
+    set p2(value) {}
+>p2 : void
+>value : void
+}
+

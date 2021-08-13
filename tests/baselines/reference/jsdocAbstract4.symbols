@@ -1,0 +1,172 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract4.js ===
+/** @abstract */
+class C1 {
+>C1 : Symbol(C1, Decl(jsdocAbstract4.js, 0, 0))
+
+    /** @abstract */
+    m() {}
+>m : Symbol(C1.m, Decl(jsdocAbstract4.js, 1, 10))
+
+    /** @abstract */
+    set p1(value) {}
+>p1 : Symbol(C1.p1, Decl(jsdocAbstract4.js, 3, 10), Decl(jsdocAbstract4.js, 6, 20))
+>value : Symbol(value, Decl(jsdocAbstract4.js, 6, 11))
+
+    /** @abstract */
+    get p1() {}
+>p1 : Symbol(C1.p1, Decl(jsdocAbstract4.js, 3, 10), Decl(jsdocAbstract4.js, 6, 20))
+}
+
+/** @abstract */
+class C2 {
+>C2 : Symbol(C2, Decl(jsdocAbstract4.js, 10, 1))
+
+    /** @abstract */
+    m() {
+>m : Symbol(C2.m, Decl(jsdocAbstract4.js, 13, 10))
+
+        throw new Error("Method not implemented.")
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+
+    /** @abstract */
+    set p1(value) {
+>p1 : Symbol(C2.p1, Decl(jsdocAbstract4.js, 17, 5), Decl(jsdocAbstract4.js, 22, 5))
+>value : Symbol(value, Decl(jsdocAbstract4.js, 20, 11))
+
+        throw new Error("Method not implemented.")
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : Symbol(C2.p1, Decl(jsdocAbstract4.js, 17, 5), Decl(jsdocAbstract4.js, 22, 5))
+
+        throw new Error("Method not implemented.")
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+/** @abstract */
+class C3 {
+>C3 : Symbol(C3, Decl(jsdocAbstract4.js, 28, 1))
+
+    /** @abstract */
+    m() {
+>m : Symbol(C3.m, Decl(jsdocAbstract4.js, 31, 10))
+
+        /** @type {never} */
+        let x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 35, 11))
+
+        return x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 35, 11))
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : Symbol(C3.p1, Decl(jsdocAbstract4.js, 37, 5))
+
+        /** @type {never} */
+        let x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 42, 11))
+
+        return x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 42, 11))
+    }
+}
+
+/** @abstract */
+class C4 {
+>C4 : Symbol(C4, Decl(jsdocAbstract4.js, 45, 1))
+
+    /** @abstract */
+    m() {
+>m : Symbol(C4.m, Decl(jsdocAbstract4.js, 48, 10))
+
+        const x = 1;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 51, 13))
+
+        const y = 1;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 52, 13))
+
+        return x + y;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 51, 13))
+>y : Symbol(y, Decl(jsdocAbstract4.js, 52, 13))
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : Symbol(C4.p1, Decl(jsdocAbstract4.js, 54, 5), Decl(jsdocAbstract4.js, 61, 5))
+
+        const x = 1;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 58, 13))
+
+        const y = 1;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 59, 13))
+
+        return x + y;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 58, 13))
+>y : Symbol(y, Decl(jsdocAbstract4.js, 59, 13))
+    }
+
+    /** @abstract */
+    set p1(value) {
+>p1 : Symbol(C4.p1, Decl(jsdocAbstract4.js, 54, 5), Decl(jsdocAbstract4.js, 61, 5))
+>value : Symbol(value, Decl(jsdocAbstract4.js, 64, 11))
+
+        this.p1 = value;
+>this.p1 : Symbol(C4.p1, Decl(jsdocAbstract4.js, 54, 5), Decl(jsdocAbstract4.js, 61, 5))
+>this : Symbol(C4, Decl(jsdocAbstract4.js, 45, 1))
+>p1 : Symbol(C4.p1, Decl(jsdocAbstract4.js, 54, 5), Decl(jsdocAbstract4.js, 61, 5))
+>value : Symbol(value, Decl(jsdocAbstract4.js, 64, 11))
+    }
+}
+
+/** @abstract */
+class C5 {
+>C5 : Symbol(C5, Decl(jsdocAbstract4.js, 67, 1))
+
+    /** @abstract */
+    m() {
+>m : Symbol(C5.m, Decl(jsdocAbstract4.js, 70, 10))
+
+        const x = 1;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 73, 13))
+
+        /** @type {never} */
+        let y;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 75, 11))
+
+        if (x) {
+>x : Symbol(x, Decl(jsdocAbstract4.js, 73, 13))
+
+            return x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 73, 13))
+        }
+        return y;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 75, 11))
+    }
+
+    /** @abstract */
+    get p1() {
+>p1 : Symbol(C5.p1, Decl(jsdocAbstract4.js, 80, 5))
+
+        const x = 1;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 84, 13))
+
+        /** @type {never} */
+        let y;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 86, 11))
+
+        if (x) {
+>x : Symbol(x, Decl(jsdocAbstract4.js, 84, 13))
+
+            return x;
+>x : Symbol(x, Decl(jsdocAbstract4.js, 84, 13))
+        }
+        return y;
+>y : Symbol(y, Decl(jsdocAbstract4.js, 86, 11))
+    }
+}
+

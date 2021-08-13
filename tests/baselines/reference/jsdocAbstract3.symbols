@@ -1,0 +1,26 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract3.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(jsdocAbstract3.js, 0, 0))
+
+    /** @abstract */
+    m1() {}
+>m1 : Symbol(Foo.m1, Decl(jsdocAbstract3.js, 0, 11))
+
+    /** @abstract */
+    static m2() {}
+>m2 : Symbol(Foo.m2, Decl(jsdocAbstract3.js, 2, 11))
+
+    /** @abstract */
+    p1;
+>p1 : Symbol(Foo.p1, Decl(jsdocAbstract3.js, 5, 18))
+
+    /** @abstract */
+    get p2() {}
+>p2 : Symbol(Foo.p2, Decl(jsdocAbstract3.js, 8, 7), Decl(jsdocAbstract3.js, 11, 15))
+
+    /** @abstract */
+    set p2(value) {}
+>p2 : Symbol(Foo.p2, Decl(jsdocAbstract3.js, 8, 7), Decl(jsdocAbstract3.js, 11, 15))
+>value : Symbol(value, Decl(jsdocAbstract3.js, 14, 11))
+}
+

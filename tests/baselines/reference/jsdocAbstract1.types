@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract1.js ===
+/** @abstract */
+class A {
+>A : A
+}
+new A()
+>new A() : any
+>A : typeof A
+

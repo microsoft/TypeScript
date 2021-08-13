@@ -1,0 +1,29 @@
+tests/cases/conformance/jsdoc/jsdocAbstract2.js(18,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'foo' from class 'A'.
+
+
+==== tests/cases/conformance/jsdoc/jsdocAbstract2.js (1 errors) ====
+    /** @abstract */
+    class A {
+        /**
+         * @abstract
+         * @returns {number}
+         */
+        foo() {}
+    }
+    
+    // ok
+    class B extends A {
+        foo() {
+            return 1;
+        }
+    }
+    
+    // error
+    class C extends A {}
+          ~
+!!! error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'foo' from class 'A'.
+    
+    // ok
+    /** @abstract */
+    class D extends A {}
+    

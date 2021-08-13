@@ -1,0 +1,36 @@
+=== tests/cases/conformance/jsdoc/jsdocAbstract2.js ===
+/** @abstract */
+class A {
+>A : Symbol(A, Decl(jsdocAbstract2.js, 0, 0))
+
+    /**
+     * @abstract
+     * @returns {number}
+     */
+    foo() {}
+>foo : Symbol(A.foo, Decl(jsdocAbstract2.js, 1, 9))
+}
+
+// ok
+class B extends A {
+>B : Symbol(B, Decl(jsdocAbstract2.js, 7, 1))
+>A : Symbol(A, Decl(jsdocAbstract2.js, 0, 0))
+
+    foo() {
+>foo : Symbol(B.foo, Decl(jsdocAbstract2.js, 10, 19))
+
+        return 1;
+    }
+}
+
+// error
+class C extends A {}
+>C : Symbol(C, Decl(jsdocAbstract2.js, 14, 1))
+>A : Symbol(A, Decl(jsdocAbstract2.js, 0, 0))
+
+// ok
+/** @abstract */
+class D extends A {}
+>D : Symbol(D, Decl(jsdocAbstract2.js, 17, 20))
+>A : Symbol(A, Decl(jsdocAbstract2.js, 0, 0))
+

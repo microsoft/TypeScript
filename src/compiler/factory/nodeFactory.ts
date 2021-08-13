@@ -364,6 +364,8 @@ namespace ts {
             get updateJSDocThisTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocThisTag>(SyntaxKind.JSDocThisTag); },
             get createJSDocEnumTag() { return getJSDocTypeLikeTagCreateFunction<JSDocEnumTag>(SyntaxKind.JSDocEnumTag); },
             get updateJSDocEnumTag() { return getJSDocTypeLikeTagUpdateFunction<JSDocEnumTag>(SyntaxKind.JSDocEnumTag); },
+            get createJSDocAbstractTag() { return getJSDocSimpleTagCreateFunction<JSDocAbstractTag>(SyntaxKind.JSDocAbstractTag); },
+            get updateJSDocAbstractTag() { return getJSDocSimpleTagUpdateFunction<JSDocAbstractTag>(SyntaxKind.JSDocAbstractTag); },
             get createJSDocAuthorTag() { return getJSDocSimpleTagCreateFunction<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag); },
             get updateJSDocAuthorTag() { return getJSDocSimpleTagUpdateFunction<JSDocAuthorTag>(SyntaxKind.JSDocAuthorTag); },
             get createJSDocClassTag() { return getJSDocSimpleTagCreateFunction<JSDocClassTag>(SyntaxKind.JSDocClassTag); },
@@ -6104,6 +6106,7 @@ namespace ts {
             case SyntaxKind.JSDocReturnTag: return "returns";
             case SyntaxKind.JSDocThisTag: return "this";
             case SyntaxKind.JSDocEnumTag: return "enum";
+            case SyntaxKind.JSDocAbstractTag: return "abstract";
             case SyntaxKind.JSDocAuthorTag: return "author";
             case SyntaxKind.JSDocClassTag: return "class";
             case SyntaxKind.JSDocPublicTag: return "public";
