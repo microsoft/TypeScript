@@ -3918,6 +3918,8 @@ namespace ts {
         /* @internal */
         getMissingFilePaths(): readonly Path[];
         /* @internal */
+        getModuleResolutionCache(): ModuleResolutionCache | undefined;
+        /* @internal */
         getFilesByNameMap(): ESMap<string, SourceFile | false | undefined>;
 
         /**
@@ -3985,6 +3987,8 @@ namespace ts {
         /* @internal */ sourceFileToPackageName: ESMap<Path, string>;
         /** Set of all source files that some other source file redirects to. */
         /* @internal */ redirectTargetsMap: MultiMap<Path, string>;
+        /** Whether any (non-external, non-declaration) source files use `node:`-prefixed module specifiers. */
+        /* @internal */ readonly usesUriStyleNodeCoreModules: boolean;
         /** Is the file emitted file */
         /* @internal */ isEmittedFile(file: string): boolean;
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
@@ -4224,6 +4228,8 @@ namespace ts {
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): readonly (readonly Symbol[])[];
         /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
+        /* @internal */ containsArgumentsReference(declaration: SignatureDeclaration): boolean;
+
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -4238,10 +4244,11 @@ namespace ts {
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
-        /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
+        getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
+        /* @internal */ forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -4324,6 +4331,7 @@ namespace ts {
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
         /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
+        /* @internal */ getExactOptionalProperties(type: Type): Symbol[];
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -5006,29 +5014,30 @@ namespace ts {
 
     /* @internal */
     export const enum NodeCheckFlags {
-        TypeChecked                         = 0x00000001,  // Node has been type checked
-        LexicalThis                         = 0x00000002,  // Lexical 'this' reference
-        CaptureThis                         = 0x00000004,  // Lexical 'this' used in body
-        CaptureNewTarget                    = 0x00000008,  // Lexical 'new.target' used in body
-        SuperInstance                       = 0x00000100,  // Instance 'super' reference
-        SuperStatic                         = 0x00000200,  // Static 'super' reference
-        ContextChecked                      = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
-        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body
-        EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
-        LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
-        LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
-        ContainsCapturedBlockScopeBinding   = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00040000,  // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithBodyScopedClassBinding     = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00200000,  // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-        AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
-        ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
-        ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
-        ContainsClassWithPrivateIdentifiers = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
+        TypeChecked                              = 0x00000001,  // Node has been type checked
+        LexicalThis                              = 0x00000002,  // Lexical 'this' reference
+        CaptureThis                              = 0x00000004,  // Lexical 'this' used in body
+        CaptureNewTarget                         = 0x00000008,  // Lexical 'new.target' used in body
+        SuperInstance                            = 0x00000100,  // Instance 'super' reference
+        SuperStatic                              = 0x00000200,  // Static 'super' reference
+        ContextChecked                           = 0x00000400,  // Contextual types have been assigned
+        AsyncMethodWithSuper                     = 0x00000800,  // An async method that reads a value from a member of 'super'.
+        AsyncMethodWithSuperBinding              = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        CaptureArguments                         = 0x00002000,  // Lexical 'arguments' used in body
+        EnumValuesComputed                       = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
+        LexicalModuleMergesWithClass             = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
+        LoopWithCapturedBlockScopedBinding       = 0x00010000,  // Loop that contains block scoped variable captured in closure
+        ContainsCapturedBlockScopeBinding        = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding               = 0x00040000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop                 = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding          = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding                   = 0x00200000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter                    = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                        = 0x00800000,  // Parameter assignments have been marked
+        ClassWithConstructorReference            = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass              = 0x02000000,  // Binding to a class constructor inside of the class's body.
+        ContainsClassWithPrivateIdentifiers      = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
+        ContainsSuperPropertyInStaticInitializer = 0x08000000,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
     }
 
     /* @internal */
@@ -5281,23 +5290,23 @@ namespace ts {
 
         // Flags that require TypeFlags.UnionOrIntersection or TypeFlags.Substitution
         /* @internal */
-        IsGenericObjectTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
+        IsGenericTypeComputed = 1 << 22, // IsGenericObjectType flag has been computed
         /* @internal */
         IsGenericObjectType = 1 << 23, // Union or intersection contains generic object type
         /* @internal */
-        IsGenericIndexTypeComputed = 1 << 24, // IsGenericIndexType flag has been computed
+        IsGenericIndexType = 1 << 24, // Union or intersection contains generic index type
         /* @internal */
-        IsGenericIndexType = 1 << 25, // Union or intersection contains generic index type
+        IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
         // Flags that require TypeFlags.Union
         /* @internal */
-        ContainsIntersections = 1 << 26, // Union contains intersections
+        ContainsIntersections = 1 << 25, // Union contains intersections
 
         // Flags that require TypeFlags.Intersection
         /* @internal */
-        IsNeverIntersectionComputed = 1 << 26, // IsNeverLike flag has been computed
+        IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
         /* @internal */
-        IsNeverIntersection = 1 << 27, // Intersection reduces to never
+        IsNeverIntersection = 1 << 26, // Intersection reduces to never
     }
 
     /* @internal */
@@ -6658,6 +6667,7 @@ namespace ts {
         ContainsClassFields = 1 << 23,
         ContainsPossibleTopLevelAwait = 1 << 24,
         ContainsLexicalSuper = 1 << 25,
+        ContainsUpdateExpressionForIdentifier = 1 << 26,
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
         // It is a good reminder of how much room we have left
@@ -8259,6 +8269,7 @@ namespace ts {
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
         reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
+        reportNonSerializableProperty?(propertyName: string): void;
     }
 
     export interface TextSpan {

@@ -120,6 +120,8 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
   {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -148,6 +150,8 @@ WatchedFiles::
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts:
   {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts","pollingInterval":250}
+/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json:
+  {"fileName":"/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json","pollingInterval":250}
 
 FsWatches::
 

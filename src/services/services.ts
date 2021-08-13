@@ -259,11 +259,11 @@ namespace ts {
         }
 
         public getChildCount(): number {
-            return 0;
+            return this.getChildren().length;
         }
 
-        public getChildAt(): Node {
-            return undefined!;  // TODO: GH#18217
+        public getChildAt(index: number): Node {
+            return this.getChildren()[index];
         }
 
         public getChildren(): Node[] {
@@ -1171,7 +1171,6 @@ namespace ts {
     }
 
     const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[] = [
-        "getSyntacticDiagnostics",
         "getSemanticDiagnostics",
         "getSuggestionDiagnostics",
         "getCompilerOptionsDiagnostics",
@@ -1601,7 +1600,8 @@ namespace ts {
                 position,
                 fullPreferences,
                 options.triggerCharacter,
-                options.triggerKind);
+                options.triggerKind,
+                cancellationToken);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {

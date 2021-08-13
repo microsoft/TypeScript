@@ -40,7 +40,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var float32Array = new Float32Array(1);
 __spreadArray([], float32Array, true);

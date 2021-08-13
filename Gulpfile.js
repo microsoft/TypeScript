@@ -510,21 +510,15 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
 
-const buildLoggedIO = async () => {
-    mkdirp.sync("built/local/temp");
-    await exec(process.execPath, ["lib/tsc", "--types", "--target", "es5", "--lib", "es5", "--outdir", "built/local/temp", "src/harness/loggedIO.ts"]);
-    fs.renameSync("built/local/temp/harness/loggedIO.js", "built/local/loggedIO.js");
-    await del("built/local/temp");
-};
-
-const cleanLoggedIO = () => del("built/local/temp/loggedIO.js");
+const buildLoggedIO = () => buildProject("src/loggedIO/tsconfig-tsc-instrumented.json");
+const cleanLoggedIO = () => del("built/local/loggedIO.js");
 cleanTasks.push(cleanLoggedIO);
 
 const buildInstrumenter = () => buildProject("src/instrumenter");
 const cleanInstrumenter = () => cleanProject("src/instrumenter");
 cleanTasks.push(cleanInstrumenter);
 
-const tscInstrumented = () => exec(process.execPath, ["built/local/instrumenter.js", "record", cmdLineOptions.tests || "iocapture", "built/local"]);
+const tscInstrumented = () => exec(process.execPath, ["built/local/instrumenter.js", "record", cmdLineOptions.tests || "iocapture", "built/local/tsc.js"]);
 task("tsc-instrumented", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildLoggedIO, buildInstrumenter), tscInstrumented));
 task("tsc-instrumented").description = "Builds an instrumented tsc.js";
 task("tsc-instrumented").flags = {

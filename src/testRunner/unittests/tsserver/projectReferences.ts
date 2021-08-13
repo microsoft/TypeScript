@@ -1354,7 +1354,7 @@ bar;`
             baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
         });
 
-        describe("find refs to symbol from other project", () => {
+        describe("find refs to decl in other proj", () => {
             const indexA: File = {
                 path: `${tscWatch.projectRoot}/a/index.ts`,
                 content: `import { B } from "../b/lib";
@@ -1408,7 +1408,7 @@ const b: B = new B();`
 
                 // Mangled to stay under windows path length limit
                 const subScenario =
-                    `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded ` +
+                    `when proj ${projectAlreadyLoaded ? "is" : "is not"} loaded` +
                     ` and refd proj loading is ${disableReferencedProjectLoad ? "disabled" : "enabled"}` +
                     ` and proj ref redirects are ${disableSourceOfProjectReferenceRedirect ? "disabled" : "enabled"}` +
                     ` and a decl map is ${dtsMapPresent ? "present" : "missing"}`;
@@ -1435,7 +1435,7 @@ const b: B = new B();`
                         command: protocol.CommandTypes.References,
                         arguments: protocolFileLocationFromSubstring(indexA, `B`, { index: 1 })
                     });
-                    baselineTsserverLogs("projectReferences", `find all references to a symbol declared in another project ${subScenario}`, session);
+                    baselineTsserverLogs("projectReferences", `find refs to decl in other proj ${subScenario}`, session);
                 });
             }
 

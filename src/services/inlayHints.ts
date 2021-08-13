@@ -64,22 +64,18 @@ namespace ts.InlayHints {
                 visitCallOrNewExpression(node);
             }
             else {
-                if (preferences.includeInlayFunctionParameterTypeHints && isFunctionExpressionLike(node)) {
-                    visitFunctionExpressionLikeForParameterType(node);
+                if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
+                    visitFunctionLikeForParameterType(node);
                 }
-                if (preferences.includeInlayFunctionLikeReturnTypeHints && isFunctionDeclarationLike(node)) {
+                if (preferences.includeInlayFunctionLikeReturnTypeHints && isSignatureSupportingReturnAnnotation(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
                 }
             }
             return forEachChild(node, visitor);
         }
 
-        function isFunctionExpressionLike(node: Node): node is ArrowFunction | FunctionExpression {
-            return isArrowFunction(node) || isFunctionExpression(node);
-        }
-
-        function isFunctionDeclarationLike(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration {
-            return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node);
+        function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
+            return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
         }
 
         function addParameterHints(text: string, position: number, isFirstVariadicArgument: boolean) {
@@ -125,8 +121,12 @@ namespace ts.InlayHints {
         }
 
         function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
+            if (!decl.initializer || isBindingPattern(decl.name)) {
+                return;
+            }
+
             const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(decl);
-            if (effectiveTypeAnnotation || !decl.initializer) {
+            if (effectiveTypeAnnotation) {
                 return;
             }
 
@@ -163,7 +163,7 @@ namespace ts.InlayHints {
                 const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (identifierNameInfo) {
                     const [parameterName, isFirstVariadicArgument] = identifierNameInfo;
-                    const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !isIdentifier(arg) || arg.text !== parameterName;
+                    const isParameterNameNotSameAsArgument = preferences.includeInlayParameterNameHintsWhenArgumentMatchesName || !identifierOrAccessExpressionPostfixMatchesParameterName(arg, parameterName);
                     if (!isParameterNameNotSameAsArgument && !isFirstVariadicArgument) {
                         continue;
                     }
@@ -176,6 +176,16 @@ namespace ts.InlayHints {
                     addParameterHints(name, originalArg.getStart(), isFirstVariadicArgument);
                 }
             }
+        }
+
+        function identifierOrAccessExpressionPostfixMatchesParameterName(expr: Expression, parameterName: __String) {
+            if (isIdentifier(expr)) {
+                return expr.text === parameterName;
+            }
+            if (isPropertyAccessExpression(expr)) {
+                return expr.name.text === parameterName;
+            }
+            return false;
         }
 
         function leadingCommentsContainsParameterName(node: Node, name: string) {
@@ -193,10 +203,21 @@ namespace ts.InlayHints {
         }
 
         function isHintableExpression(node: Node) {
-            return isLiteralExpression(node) || isBooleanLiteral(node) || isFunctionExpressionLike(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
+            switch (node.kind) {
+                case SyntaxKind.PrefixUnaryExpression:
+                    return isLiteralExpression((node as PrefixUnaryExpression).operand);
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                    return true;
+            }
+            return isLiteralExpression(node);
         }
 
-        function visitFunctionDeclarationLikeForReturnType(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+        function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
             if (isArrowFunction(decl)) {
                 if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
                     return;
@@ -208,9 +229,7 @@ namespace ts.InlayHints {
                 return;
             }
 
-            const type = checker.getTypeAtLocation(decl);
-            const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-            const signature = firstOrUndefined(signatures);
+            const signature = checker.getSignatureFromDeclaration(decl);
             if (!signature) {
                 return;
             }
@@ -228,7 +247,7 @@ namespace ts.InlayHints {
             addTypeHints(typeDisplayString, getTypeAnnotationPosition(decl));
         }
 
-        function getTypeAnnotationPosition(decl: ArrowFunction | FunctionExpression | MethodDeclaration | FunctionDeclaration) {
+        function getTypeAnnotationPosition(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
             const closeParenToken = findChildOfKind(decl, SyntaxKind.CloseParenToken, file);
             if (closeParenToken) {
                 return closeParenToken.end;
@@ -236,24 +255,14 @@ namespace ts.InlayHints {
             return decl.parameters.end;
         }
 
-        function visitFunctionExpressionLikeForParameterType(expr: ArrowFunction | FunctionExpression) {
-            if (!expr.parameters.length || expr.parameters.every(param => !!getEffectiveTypeAnnotationNode(param))) {
-                return;
-            }
-
-            const contextualType = checker.getContextualType(expr);
-            if (!contextualType) {
-                return;
-            }
-
-            const signatures = checker.getSignaturesOfType(contextualType, SignatureKind.Call);
-            const signature = firstOrUndefined(signatures);
+        function visitFunctionLikeForParameterType(node: FunctionLikeDeclaration) {
+            const signature = checker.getSignatureFromDeclaration(node);
             if (!signature) {
                 return;
             }
 
-            for (let i = 0; i < expr.parameters.length && i < signature.parameters.length; ++i) {
-                const param = expr.parameters[i];
+            for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
+                const param = node.parameters[i];
                 const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
 
                 if (effectiveTypeAnnotation) {

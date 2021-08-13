@@ -1122,6 +1122,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Add_all_missing_attributes_95168" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add all missing attributes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter tous les attributs manquants]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Add_all_missing_call_parentheses_95068" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add all missing call parentheses]]></Val>
@@ -1328,6 +1337,15 @@
           <Val><![CDATA[Add initializers to all uninitialized properties]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ajouter des initialiseurs à toutes les propriétés non initialisées]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Add_missing_attributes_95167" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Add missing attributes]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ajouter les attributs manquants]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3228,6 +3246,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Cannot_start_a_function_call_in_a_type_annotation_1441" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Cannot start a function call in a type annotation.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Impossible de démarrer un appel de fonction dans une annotation de type.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Cannot_update_output_of_project_0_because_there_was_error_reading_file_1_6376" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Cannot update output of project '{0}' because there was error reading file '{1}']]></Val>
@@ -3594,6 +3621,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of__1210" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le code contenu dans une classe est évalué en mode strict JavaScript qui n’autorise pas l’utilisation de « {0} ». Pour plus d’informations, consultez https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Command_line_Options_6171" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Command-line Options]]></Val>
@@ -3668,10 +3704,13 @@
       </Item>
       <Item ItemId=";Compiles_the_TypeScript_project_located_at_the_specified_path_6927" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          <Val><![CDATA[Compiles the TypeScript project located at the specified path.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Compile le projet TypeScript situé au chemin d’accès spécifié]]></Val>
+            <Val><![CDATA[Compile le projet TypeScript situé au chemin d’accès spécifié.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the TypeScript project located at the specified path]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -3686,10 +3725,13 @@
       </Item>
       <Item ItemId=";Compiles_the_current_project_with_additional_settings_6929" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          <Val><![CDATA[Compiles the current project, with additional settings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Compile le projet actif, avec des paramètres supplémentaires]]></Val>
+            <Val><![CDATA[Compile le projet actif, avec des paramètres supplémentaires.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Compiles the current project, with additional settings]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -4581,6 +4623,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Decorators_must_precede_the_name_and_all_keywords_of_property_declarations_1436" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Decorators must precede the name and all keywords of property declarations.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les éléments décoratifs doivent précéder le nom et tous les mots clés des déclarations de propriété.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Default_export_of_the_module_has_or_is_using_private_name_0_4082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default export of the module has or is using private name '{0}'.]]></Val>
@@ -4809,11 +4860,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Disable_emitting_file_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Disable_emitting_files_from_a_compilation_6660" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Disable emitting file from a compilation.]]></Val>
+          <Val><![CDATA[Disable emitting files from a compilation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Désactivez l’émission d’un fichier à partir d’une compilation.]]></Val>
+            <Val><![CDATA[Désactivez l’émission des fichiers à partir d’une compilation.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5151,6 +5202,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Duplicate_identifier_0_Compiler_reserves_name_1_when_emitting_super_references_in_static_initializer_2818" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Duplicate identifier '{0}'. Compiler reserves name '{1}' when emitting 'super' references in static initializers.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Identificateur en double «{0}». Le compilateur réserve le nom «{1}» lors de l’émission de références « super » dans les initialiseurs statiques.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions_2520" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.]]></Val>
@@ -5436,11 +5496,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read_6685" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Enable color and formatting in output to make compiler errors easier to read]]></Val>
+          <Val><![CDATA[Enable color and formatting in TypeScript's output to make compiler errors easier to read]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Activer la couleur et la mise en forme dans la sortie pour faciliter la lecture des erreurs du compilateur]]></Val>
+            <Val><![CDATA[Activer la couleur et la mise en forme dans la sortie de TypeScript pour faciliter la lecture des erreurs du compilateur]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5894,6 +5954,15 @@
           <Val><![CDATA[Expected corresponding closing tag for JSX fragment.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Balise de fermeture correspondante attendue pour le fragment JSX.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Expected_for_property_initializer_1442" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Expected '=' for property initializer.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[« = » attendu pour l’initialiseur de propriété.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7037,10 +7106,13 @@
       </Item>
       <Item ItemId=";Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options_6924" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ignore tsconfig.json, compile les fichiers spécifiés avec les options du compilateur par défaut]]></Val>
+            <Val><![CDATA[Ignore tsconfig.json, compile les fichiers spécifiés avec les options du compilateur par défaut.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Ignoring tsconfig.json, compiles the specified files with default compiler options]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7539,6 +7611,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Interface_must_be_given_a_name_1438" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Interface must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un nom doit être attribué à l’interface.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Interface_name_cannot_be_0_2427" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Interface name cannot be '{0}'.]]></Val>
@@ -7601,15 +7682,6 @@
           <Val><![CDATA[Invalid 'reference' directive syntax.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Syntaxe de directive 'reference' non valide.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode_1210" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Invalid use of '{0}'. Class definitions are automatically in strict mode.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Utilisation non valide de '{0}'. Les définitions de classe sont automatiquement en mode strict.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8421,6 +8493,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Module_declaration_names_may_only_use_or_quoted_strings_1443" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module declaration names may only use ' or " quoted strings.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les noms de déclaration de module ne peuvent utiliser que des chaînes entre guillemets.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Module_name_0_matched_pattern_1_6092" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Module name '{0}', matched pattern '{1}'.]]></Val>
@@ -8555,6 +8636,24 @@
           <Val><![CDATA[Namespace '{0}' has no exported member '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[L'espace de noms '{0}' n'a aucun membre exporté '{1}'.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_must_be_given_a_name_1437" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un nom doit être attribué à l’espace de noms.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Namespace_name_cannot_be_0_2819" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Namespace name cannot be '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[L’espace de noms ne peut pas être «{0}».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13191,6 +13290,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The type of this node cannot be serialized because its property '{0}' cannot be serialized.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Impossible de sérialiser le type de ce nœud, car sa propriété «{0}» ne peut pas être sérialisée.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The type returned by the '{0}()' method of an async iterator must be a promise for a type with a 'value' property.]]></Val>
@@ -13845,6 +13953,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Type_alias_must_be_given_a_name_1439" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Type alias must be given a name.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Un nom doit être attribué à l’alias de type.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Type_alias_name_cannot_be_0_2457" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type alias name cannot be '{0}'.]]></Val>
@@ -14382,6 +14499,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Unexpected_keyword_or_identifier_1434" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unexpected keyword or identifier.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mot clé ou identificateur inattendu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Unexpected_token_1012" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Unexpected token.]]></Val>
@@ -14468,6 +14594,15 @@
           <Val><![CDATA[Unknown compiler option '{0}'. Did you mean '{1}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Option de compilateur inconnue : '{0}'. Est-ce que vous avez voulu utiliser '{1}' ?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Unknown_keyword_or_identifier_Did_you_mean_0_1435" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Unknown keyword or identifier. Did you mean '{0}'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Mot clé ou identificateur inconnu. Souhaitiez-vous utiliser «{0}» ?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14774,6 +14909,15 @@
           <Val><![CDATA[Variable declaration list cannot be empty.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[La liste des déclarations de variable ne peut pas être vide.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Variable_declaration_not_allowed_at_this_location_1440" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Variable declaration not allowed at this location.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Déclaration de variable non autorisée à cet emplacement.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

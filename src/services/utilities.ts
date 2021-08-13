@@ -758,7 +758,7 @@ namespace ts {
         if (isClassDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = node.modifiers && find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isClassExpression(node)) {
@@ -800,6 +800,11 @@ namespace ts {
         const contextualType = checker.getContextualType(node);
         if (contextualType) {
             return contextualType;
+        }
+
+        const parent = node.parent;
+        if (parent && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind)) {
+            return checker.getTypeAtLocation(node === parent.left ? parent.right : parent.left);
         }
 
         const ancestorTypeNode = getAncestorTypeNode(node);
@@ -3081,6 +3086,22 @@ namespace ts {
         return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 
+    /* @internal */
+    export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
+        const token = getTokenAtPosition(sourceFile, span.start);
+        // Checker has already done work to determine that await might be possible, and has attached
+        // related info to the node, so start by finding the expression that exactly matches up
+        // with the diagnostic range.
+        const expression = findAncestor(token, node => {
+            if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
+                return "quit";
+            }
+            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        }) as Expression | undefined;
+
+        return expression;
+    }
+
     /**
      * If the provided value is an array, the mapping function is applied to each element; otherwise, the mapping function is applied
      * to the provided value itself.
@@ -3170,6 +3191,15 @@ namespace ts {
 
     export function isDeprecatedDeclaration(decl: Declaration) {
         return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
+
+    export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+        const decisionFromFile = firstDefined(file.imports, node => {
+            if (JsTyping.nodeCoreModules.has(node.text)) {
+                return startsWith(node.text, "node:");
+            }
+        });
+        return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
     }
 
     // #endregion
