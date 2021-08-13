@@ -225,10 +225,6 @@ namespace ts.classifier.v2020 {
         return (isQualifiedName(node.parent) && node.parent.right === node) || (isPropertyAccessExpression(node.parent) && node.parent.name === node);
     }
 
-    function isInfinityOrNaNString(name: __String): boolean {
-        return name === "Infinity" || name === "NaN";
-    }
-
     const tokenFromDeclarationMapping = new Map<SyntaxKind, TokenType>([
         [SyntaxKind.VariableDeclaration, TokenType.variable],
         [SyntaxKind.Parameter, TokenType.parameter],
