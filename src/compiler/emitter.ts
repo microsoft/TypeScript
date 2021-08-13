@@ -1,6 +1,11 @@
 namespace ts {
     const brackets = createBracketsMap();
-
+    let horrible: Map<string> = new Map()
+    /** This is DEFINITELY only used in tests */
+    export function resetHorrible() {
+        horrible = new Map()
+        // Definitely.
+    }
     /*@internal*/
     export function isBuildInfoFile(file: string) {
         return fileExtensionIs(file, Extension.TsBuildInfo);
@@ -309,6 +314,7 @@ namespace ts {
         let emitSkipped = false;
         let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
+
         // Emit each output file
         enter();
         forEachEmittedFile(
@@ -320,7 +326,6 @@ namespace ts {
             !targetSourceFile
         );
         exit();
-
 
         return {
             emitSkipped,
@@ -438,8 +443,6 @@ namespace ts {
             if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
         }
 
-        const horrible: Record<string, readonly SourceFile[]> = {}
-
         function emitDeclarationFileOrBundle(
             sourceFileOrBundle: SourceFile | Bundle | undefined,
             declarationFilePath: string | undefined,
@@ -451,13 +454,6 @@ namespace ts {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
-            const key = sourceFiles.map(f => f.fileName).join("|")
-            console.log(key)
-            horrible[key] = sourceFiles
-            // Let's do this WRONG
-            // 1. cache with key=filesForEmit, value=[emit, diagnostics]
-            // 2. include custom transformers in the key, plus "other api things" (??)
-            // Afterward, need to measure performance to see which projects this helps/how much. Ask Andrew about this.
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
             const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
@@ -541,6 +537,17 @@ namespace ts {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
+            const key = `${compilerOptions.target};${jsFilePath};${sourceFiles.map(f => f.fileName).join("|")}`
+            const cached = horrible.get(key)
+            if (cached) {
+                // console.log(`Retrieving ${key} from cache: ${cached.slice(0,20)}`)
+                writeFile(host, emitterDiagnostics, jsFilePath, cached, !!compilerOptions.emitBOM, sourceFiles);
+                return;
+            }
+            // Let's do this WRONG
+            // 1. cache with key=filesForEmit, value=[emit, diagnostics]
+            // 2. include custom transformers in the key, plus "other api things" (??)
+            // Afterward, need to measure performance to see which projects this helps/how much. Ask Andrew about this.
 
             let sourceMapGenerator: SourceMapGenerator | undefined;
             if (shouldEmitSourceMaps(mapOptions, sourceFileOrBundle)) {
@@ -591,6 +598,9 @@ namespace ts {
 
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
+            // CaChE sTAte
+            // console.log(`Caching ${key}: ${writer.getText().slice(0,20)}`)
+            horrible.set(key, writer.getText())
 
             // Reset state
             writer.clear();

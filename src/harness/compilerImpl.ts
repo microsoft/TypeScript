@@ -248,6 +248,7 @@ namespace compiler {
             delete compilerOptions.project;
         }
 
+        ts.resetHorrible()
         // establish defaults (aligns with old harness)
         if (compilerOptions.target === undefined) compilerOptions.target = ts.ScriptTarget.ES3;
         if (compilerOptions.newLine === undefined) compilerOptions.newLine = ts.NewLineKind.CarriageReturnLineFeed;
