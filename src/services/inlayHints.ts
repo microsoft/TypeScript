@@ -210,11 +210,13 @@ namespace ts.InlayHints {
                 }
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.NullKeyword:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
                     return true;
                 case SyntaxKind.Identifier: {
                     const name = (node as Identifier).escapedText;
