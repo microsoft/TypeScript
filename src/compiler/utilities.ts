@@ -7367,4 +7367,9 @@ namespace ts {
         }
         return false;
     }
+
+    /* @internal */
+    export function isInfinityOrNaNString(name: string | __String): boolean {
+        return name === "Infinity" || name === "-Infinity" || name === "NaN";
+    }
 }

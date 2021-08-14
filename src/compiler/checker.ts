@@ -9094,7 +9094,7 @@ namespace ts {
             }
             let type: Type;
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                type = widenTypeForVariableLikeDeclaration(checkExpressionCached((declaration as ExportAssignment).expression), declaration);
+                type = widenTypeForVariableLikeDeclaration(tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionCached((declaration as ExportAssignment).expression), declaration);
             }
             else if (
                 isBinaryExpression(declaration) ||
@@ -9350,6 +9350,7 @@ namespace ts {
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
                 const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
+                const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
@@ -9357,6 +9358,7 @@ namespace ts {
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : declaredType ? declaredType
                     : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
@@ -26311,10 +26313,6 @@ namespace ts {
             return isTypeAssignableToKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
         }
 
-        function isInfinityOrNaNString(name: string | __String): boolean {
-            return name === "Infinity" || name === "-Infinity" || name === "NaN";
-        }
-
         function isNumericLiteralName(name: string | __String) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -38867,11 +38865,16 @@ namespace ts {
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
+
+            const typeAnnotationNode = getEffectiveTypeAnnotationNode(node);
+            if (typeAnnotationNode) {
+                checkTypeAssignableTo(checkExpressionCached(node.expression), getTypeFromTypeNode(typeAnnotationNode), node.expression);
+            }
+
             if (node.expression.kind === SyntaxKind.Identifier) {
                 const id = node.expression as Identifier;
                 const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
                 if (sym) {
-
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
