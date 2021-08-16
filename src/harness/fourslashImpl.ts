@@ -2100,7 +2100,7 @@ namespace FourSlash {
         }
 
         private printMembersOrCompletions(info: ts.CompletionInfo | undefined) {
-            if (info === undefined) { return "No completion info."; }
+            if (info === undefined) return "No completion info.";
             const { entries } = info;
 
             function pad(s: string, length: number) {
@@ -2836,7 +2836,7 @@ namespace FourSlash {
 
         public verifyTodoComments(descriptors: string[], spans: Range[]) {
             const actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => { return { text: d, priority: 0 }; }));
+                descriptors.map(d => ({ text: d, priority: 0 })));
 
             if (actual.length !== spans.length) {
                 this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
@@ -4498,7 +4498,7 @@ namespace FourSlash {
 
         // put ranges in the correct order
         localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
-        localRanges.forEach((r) => { ranges.push(r); });
+        localRanges.forEach(r => ranges.push(r));
 
         return {
             content: output,

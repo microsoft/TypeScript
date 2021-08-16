@@ -1581,7 +1581,9 @@ namespace ts.server {
 
             const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;
-            const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
+            const logError = (message: string) => {
+                (errorLogs || (errorLogs = [])).push(message);
+            };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
                 Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {

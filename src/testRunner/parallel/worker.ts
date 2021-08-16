@@ -98,10 +98,10 @@ namespace Harness.Parallel.Worker {
          */
         function shimTestInterface(rootSuite: Mocha.Suite, context: Mocha.MochaGlobals) {
             const suites = [rootSuite];
-            context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeAll(title as string, fn); };
-            context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterAll(title as string, fn); };
-            context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].beforeEach(title as string, fn); };
-            context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => { suites[0].afterEach(title as string, fn); };
+            context.before = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeAll(title as string, fn);
+            context.after = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterAll(title as string, fn);
+            context.beforeEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].beforeEach(title as string, fn);
+            context.afterEach = (title: string | Mocha.Func | Mocha.AsyncFunc, fn?: Mocha.Func | Mocha.AsyncFunc) => suites[0].afterEach(title as string, fn);
             context.describe = context.context = ((title: string, fn: (this: Mocha.Suite) => void) => addSuite(title, fn)) as Mocha.SuiteFunction;
             context.describe.skip = context.xdescribe = context.xcontext = (title: string) => addSuite(title, /*fn*/ undefined);
             context.describe.only = (title: string, fn?: (this: Mocha.Suite) => void) => addSuite(title, fn);

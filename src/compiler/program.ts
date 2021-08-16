@@ -556,7 +556,7 @@ namespace ts {
             // Visit project references first
             if (cbRef) {
                 const result = cbRef(projectReferences, parent);
-                if (result) { return result; }
+                if (result) return result;
             }
 
             return forEach(resolvedProjectReferences, (resolvedRef, index) => {
@@ -2238,7 +2238,7 @@ namespace ts {
         }
 
         function getOptionsDiagnosticsOfConfigFile() {
-            if (!options.configFile) { return emptyArray; }
+            if (!options.configFile) return emptyArray;
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
                 diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
