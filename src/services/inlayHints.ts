@@ -268,10 +268,18 @@ namespace ts.InlayHints {
                 return;
             }
 
-            const wrap = isArrowFunction(node) && node.parameters.length === 1;
-
-            if (wrap) {
-                addTypeHints("(", node.parameters[0].getStart());
+            if (isArrowFunction(node) && node.parameters.length === 1) {
+                result.push({
+                    text: "(",
+                    position: node.parameters[0].getStart(),
+                    kind: InlayHintKind.Type,
+                    whitespaceBefore: true,
+                }, {
+                    text: ")",
+                    position: node.parameters[0].end,
+                    kind: InlayHintKind.Type,
+                    whitespaceAfter: true,
+                });
             }
 
             for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
@@ -288,10 +296,6 @@ namespace ts.InlayHints {
                 }
 
                 addTypeHints(typeDisplayString, param.end);
-            }
-
-            if (wrap) {
-                addTypeHints(")", node.parameters[0].end);
             }
         }
 
