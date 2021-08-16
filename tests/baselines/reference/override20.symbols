@@ -1,0 +1,67 @@
+=== tests/cases/conformance/override/override20.ts ===
+const Foo: C1 & C2 =
+>Foo : Symbol(Foo, Decl(override20.ts, 0, 5))
+>C1 : Symbol(C1, Decl(override20.ts, 13, 1))
+>C2 : Symbol(C2, Decl(override20.ts, 17, 1))
+
+    class {
+        m1() { }
+>m1 : Symbol(Foo.m1, Decl(override20.ts, 1, 11))
+
+        m2() { }
+>m2 : Symbol(Foo.m2, Decl(override20.ts, 2, 16))
+    }
+
+interface I1 {
+>I1 : Symbol(I1, Decl(override20.ts, 4, 5))
+
+    m1(): void;
+>m1 : Symbol(I1.m1, Decl(override20.ts, 6, 14))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(override20.ts, 8, 1))
+
+    m1(): void;
+>m1 : Symbol(I2.m1, Decl(override20.ts, 10, 14))
+
+    m2(): void;
+>m2 : Symbol(I2.m2, Decl(override20.ts, 11, 15))
+}
+
+interface C1 {
+>C1 : Symbol(C1, Decl(override20.ts, 13, 1))
+
+    new(...args: any[]): I1;
+>args : Symbol(args, Decl(override20.ts, 16, 8))
+>I1 : Symbol(I1, Decl(override20.ts, 4, 5))
+}
+
+interface C2 {
+>C2 : Symbol(C2, Decl(override20.ts, 17, 1))
+
+    new(...args: any[]): I2;
+>args : Symbol(args, Decl(override20.ts, 20, 8))
+>I2 : Symbol(I2, Decl(override20.ts, 8, 1))
+}
+
+export class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(override20.ts, 21, 1))
+>Foo : Symbol(Foo, Decl(override20.ts, 0, 5))
+
+    m1() {
+>m1 : Symbol(Bar.m1, Decl(override20.ts, 23, 30))
+
+        super.m1();
+>super.m1 : Symbol(m1, Decl(override20.ts, 6, 14), Decl(override20.ts, 10, 14))
+>m1 : Symbol(m1, Decl(override20.ts, 6, 14), Decl(override20.ts, 10, 14))
+    }
+    m2() {
+>m2 : Symbol(Bar.m2, Decl(override20.ts, 26, 5))
+
+        super.m2();
+>super.m2 : Symbol(I2.m2, Decl(override20.ts, 11, 15))
+>m2 : Symbol(I2.m2, Decl(override20.ts, 11, 15))
+    }
+}
+

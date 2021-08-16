@@ -203,7 +203,27 @@ namespace ts.InlayHints {
         }
 
         function isHintableExpression(node: Node) {
-            return isLiteralExpression(node) || isBooleanLiteral(node) || isArrowFunction(node) || isFunctionExpression(node) || isObjectLiteralExpression(node) || isArrayLiteralExpression(node);
+            switch (node.kind) {
+                case SyntaxKind.PrefixUnaryExpression: {
+                    const operand = (node as PrefixUnaryExpression).operand;
+                    return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
+                }
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
+                    return true;
+                case SyntaxKind.Identifier: {
+                    const name = (node as Identifier).escapedText;
+                    return isUndefined(name) || isInfinityOrNaNString(name);
+                }
+            }
+            return isLiteralExpression(node);
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
@@ -298,6 +318,10 @@ namespace ts.InlayHints {
                 Debug.assertIsDefined(typeNode, "should always get typenode");
                 printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
             });
+        }
+
+        function isUndefined(name: __String) {
+            return name === "undefined";
         }
     }
 }

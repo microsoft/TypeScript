@@ -2197,7 +2197,7 @@ namespace ts.FindAllReferences {
         }
 
         function isStaticSymbol(symbol: Symbol): boolean {
-            if (!symbol.valueDeclaration) { return false; }
+            if (!symbol.valueDeclaration) return false;
             const modifierFlags = getEffectiveModifierFlags(symbol.valueDeclaration);
             return !!(modifierFlags & ModifierFlags.Static);
         }

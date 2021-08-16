@@ -635,6 +635,7 @@ namespace ts {
             isTupleType,
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
+            getExactOptionalProperties,
             getAllPossiblePropertiesOfTypes,
             getSuggestedSymbolForNonexistentProperty,
             getSuggestionForNonexistentProperty,
@@ -9094,7 +9095,7 @@ namespace ts {
             }
             let type: Type;
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                type = widenTypeForVariableLikeDeclaration(checkExpressionCached((declaration as ExportAssignment).expression), declaration);
+                type = widenTypeForVariableLikeDeclaration(tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionCached((declaration as ExportAssignment).expression), declaration);
             }
             else if (
                 isBinaryExpression(declaration) ||
@@ -9350,6 +9351,7 @@ namespace ts {
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
                 const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
+                const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
@@ -9357,6 +9359,7 @@ namespace ts {
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : declaredType ? declaredType
                     : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
@@ -16769,24 +16772,29 @@ namespace ts {
                 let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (!sourcePropType) continue;
                 const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
-                const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                targetPropType = removeMissingType(targetPropType, targetIsOptional);
-                sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
                 if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
-                    if (elaborated) {
-                        reportedError = true;
-                    }
-                    else {
+                    reportedError = true;
+                    if (!elaborated) {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
-                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
-                        if (result && specificSource !== sourcePropType) {
-                            // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                        if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
+                            const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
+                            diagnostics.add(diag);
+                            resultObj.errors = [diag];
+                        }
+                        else {
+                            const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                            sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
+                            const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            if (result && specificSource !== sourcePropType) {
+                                // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+                                checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            }
                         }
                         if (resultObj.errors) {
                             const reportedDiag = resultObj.errors[resultObj.errors.length - 1];
@@ -16814,7 +16822,6 @@ namespace ts {
                                 }
                             }
                         }
-                        reportedError = true;
                     }
                 }
             }
@@ -17680,9 +17687,17 @@ namespace ts {
                     else if (sourceType === targetType) {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
                     }
+                    else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                    }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
+                }
+                else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
+                    && exactOptionalPropertyTypes
+                    && getExactOptionalUnassignableProperties(source, target).length) {
+                    message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
                 }
 
                 reportError(message, generalizedSourceType, targetType);
@@ -19597,6 +19612,20 @@ namespace ts {
             }
 
             return isUnitType(type) || !!(type.flags & TypeFlags.TemplateLiteral);
+        }
+
+        function getExactOptionalUnassignableProperties(source: Type, target: Type) {
+            if (isTupleType(source) && isTupleType(target)) return emptyArray;
+            return getPropertiesOfType(target)
+                .filter(targetProp => isExactOptionalPropertyMismatch(getTypeOfPropertyOfType(source, targetProp.escapedName), getTypeOfSymbol(targetProp)));
+        }
+
+        function isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined) {
+            return !!source && !!target && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
+        }
+
+        function getExactOptionalProperties(type: Type) {
+            return getPropertiesOfType(type).filter(targetProp => containsMissingType(getTypeOfSymbol(targetProp)));
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
@@ -26285,10 +26314,6 @@ namespace ts {
             return isTypeAssignableToKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
         }
 
-        function isInfinityOrNaNString(name: string | __String): boolean {
-            return name === "Infinity" || name === "-Infinity" || name === "NaN";
-        }
-
         function isNumericLiteralName(name: string | __String) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
@@ -32552,8 +32577,16 @@ namespace ts {
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
                         && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+
+                        let headMessage: DiagnosticMessage | undefined;
+                        if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
+                            const target = getTypeOfPropertyOfType(getTypeOfExpression(left.expression), left.name.escapedText);
+                            if (isExactOptionalPropertyMismatch(valueType, target)) {
+                                headMessage = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target;
+                            }
+                        }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right);
+                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right, headMessage);
                     }
                 }
             }
@@ -34571,7 +34604,9 @@ namespace ts {
                     case SyntaxKind.ImportClause:
                         let result = DeclarationSpaces.None;
                         const target = resolveAlias(getSymbolOfNode(d)!);
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                        forEach(target.declarations, d => {
+                            result |= getDeclarationSpaces(d);
+                        });
                         return result;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
@@ -37760,8 +37795,8 @@ namespace ts {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1, baseClassName, symbolToString(suggestion)) :
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                     }
-                    else if (prop && baseProp?.valueDeclaration && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                        const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
+                    else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                        const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
                         if (hasOverride) {
                             return;
                         }
@@ -37983,7 +38018,9 @@ namespace ts {
                 return properties;
             }
             const seen = new Map<__String, Symbol>();
-            forEach(properties, p => { seen.set(p.escapedName, p); });
+            forEach(properties, p => {
+                seen.set(p.escapedName, p);
+            });
 
             for (const base of baseTypes) {
                 const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
@@ -38006,7 +38043,9 @@ namespace ts {
 
             interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = new Map<__String, InheritanceInfoMap>();
-            forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
+            forEach(resolveDeclaredMembers(type).declaredProperties, p => {
+                seen.set(p.escapedName, { prop: p, containingType: type });
+            });
             let ok = true;
 
             for (const base of baseTypes) {
@@ -38905,11 +38944,16 @@ namespace ts {
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
+
+            const typeAnnotationNode = getEffectiveTypeAnnotationNode(node);
+            if (typeAnnotationNode) {
+                checkTypeAssignableTo(checkExpressionCached(node.expression), getTypeFromTypeNode(typeAnnotationNode), node.expression);
+            }
+
             if (node.expression.kind === SyntaxKind.Identifier) {
                 const id = node.expression as Identifier;
                 const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
                 if (sym) {
-
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
