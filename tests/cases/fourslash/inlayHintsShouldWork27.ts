@@ -10,7 +10,7 @@ verify.getInlayHints([
     {
         text: '(',
         position: markers[0].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     },
     {
         text: ': (c: (d: 2 | 3) => void) => ...',
@@ -21,12 +21,12 @@ verify.getInlayHints([
     {
         text: ')',
         position: markers[2].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     },
     {
         text: '(',
         position: markers[3].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     },
     {
         text: ': 2 | 3',
@@ -37,7 +37,7 @@ verify.getInlayHints([
     {
         text: ')',
         position: markers[5].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     }
 ], undefined, {
     includeInlayFunctionParameterTypeHints: true

@@ -8,7 +8,7 @@ verify.getInlayHints([
     {
         text: '(',
         position: markers[0].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     },
     {
         text: ': number',
@@ -19,7 +19,7 @@ verify.getInlayHints([
     {
         text: ')',
         position: markers[2].position,
-        kind: ts.InlayHintKind.Parenthesis
+        kind: ts.InlayHintKind.Other
     }
 ], undefined, {
     includeInlayFunctionParameterTypeHints: true

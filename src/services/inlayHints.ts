@@ -74,6 +74,10 @@ namespace ts.InlayHints {
             return forEachChild(node, visitor);
         }
 
+        function shouldWrapParameterList(node: Node): boolean {
+            return isArrowFunction(node) && node.parameters.length === 1 && !findChildOfKind(node, SyntaxKind.OpenParenToken, file);
+        }
+
         function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
             return isArrowFunction(node) || isFunctionExpression(node) || isFunctionDeclaration(node) || isMethodDeclaration(node) || isGetAccessorDeclaration(node);
         }
@@ -267,12 +271,12 @@ namespace ts.InlayHints {
             if (!signature) {
                 return;
             }
-            const wrapParen = isArrowFunction(node) && !findChildOfKind(node, SyntaxKind.OpenParenToken, file);
-            if (wrapParen) {
+            const shouldWrap = shouldWrapParameterList(node);
+            if (shouldWrap) {
                 result.push({
                     text: "(",
                     position: node.parameters[0].getStart(),
-                    kind: InlayHintKind.Parenthesis,
+                    kind: InlayHintKind.Other,
                 });
             }
 
@@ -292,12 +296,12 @@ namespace ts.InlayHints {
                 addTypeHints(typeDisplayString, param.end);
             }
 
-            if (wrapParen) {
+            if (shouldWrap) {
                 // ensure ")" is added after paremeter hints.
                 result.push({
                     text: ")",
                     position: node.parameters[node.parameters.length - 1].end,
-                    kind: InlayHintKind.Parenthesis,
+                    kind: InlayHintKind.Other,
                 });
             }
         }

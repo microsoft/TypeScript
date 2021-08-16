@@ -715,7 +715,7 @@ namespace ts {
         Type = "Type",
         Parameter = "Parameter",
         Enum = "Enum",
-        Parenthesis = "Parenthesis"
+        Other = "Other"
     }
 
     export interface InlayHint {
