@@ -268,6 +268,12 @@ namespace ts.InlayHints {
                 return;
             }
 
+            const wrap = isArrowFunction(node) && node.parameters.length === 1;
+
+            if (wrap) {
+                addTypeHints("(", node.parameters[0].getStart());
+            }
+
             for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
                 const param = node.parameters[i];
                 const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
@@ -282,6 +288,10 @@ namespace ts.InlayHints {
                 }
 
                 addTypeHints(typeDisplayString, param.end);
+            }
+
+            if (wrap) {
+                addTypeHints(")", node.parameters[0].end);
             }
         }
 
