@@ -267,8 +267,8 @@ namespace ts.InlayHints {
             if (!signature) {
                 return;
             }
-            const wrap = isArrowFunction(node) && node.parameters.length === 1;
-            if (wrap) {
+            const wrapParen = isArrowFunction(node) && !findChildOfKind(node, SyntaxKind.OpenParenToken, file);
+            if (wrapParen) {
                 result.push({
                     text: "(",
                     position: node.parameters[0].getStart(),
@@ -285,16 +285,12 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                let typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
+                const typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
                 if (!typeDisplayString) {
                     continue;
                 }
 
-                if (wrap) {
-                    typeDisplayString += ")";
-                }
-
-                addTypeHints(typeDisplayString, param.end);
+                addTypeHints(typeDisplayString + (wrapParen ? ")" : ""), param.end);
             }
         }
 
