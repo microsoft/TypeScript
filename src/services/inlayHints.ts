@@ -87,9 +87,9 @@ namespace ts.InlayHints {
             });
         }
 
-        function addTypeHints(text: string, position: number, fixedSuffix = "") {
+        function addTypeHints(text: string, position: number){
             result.push({
-                text: `: ${truncation(text, maxHintsLength)}` + fixedSuffix,
+                text: `: ${truncation(text, maxHintsLength)}`,
                 position,
                 kind: InlayHintKind.Type,
                 whitespaceBefore: true,
@@ -272,8 +272,7 @@ namespace ts.InlayHints {
                 result.push({
                     text: "(",
                     position: node.parameters[0].getStart(),
-                    kind: InlayHintKind.Type,
-                    whitespaceBefore: true,
+                    kind: InlayHintKind.Parenthesis,
                 });
             }
 
@@ -290,7 +289,16 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString, param.end, wrapParen ? ")" : "");
+                addTypeHints(typeDisplayString, param.end);
+            }
+
+            if (wrapParen) {
+                // ensure ")" is added after paremeter hints.
+                result.push({
+                    text: ")",
+                    position: node.parameters[node.parameters.length - 1].end,
+                    kind: InlayHintKind.Parenthesis,
+                });
             }
         }
 

@@ -70,6 +70,7 @@ declare module ts {
         Type = "Type",
         Parameter = "Parameter",
         Enum = "Enum",
+        Parenthesis = "Parenthesis"
     }
 
     enum SemicolonPreference {
