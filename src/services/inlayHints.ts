@@ -87,7 +87,7 @@ namespace ts.InlayHints {
             });
         }
 
-        function addTypeHints(text: string, position: number){
+        function addTypeHints(text: string, position: number) {
             result.push({
                 text: `: ${truncation(text, maxHintsLength)}`,
                 position,
