@@ -34531,7 +34531,9 @@ namespace ts {
                     case SyntaxKind.ImportClause:
                         let result = DeclarationSpaces.None;
                         const target = resolveAlias(getSymbolOfNode(d)!);
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                        forEach(target.declarations, d => {
+                            result |= getDeclarationSpaces(d);
+                        });
                         return result;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
@@ -37943,7 +37945,9 @@ namespace ts {
                 return properties;
             }
             const seen = new Map<__String, Symbol>();
-            forEach(properties, p => { seen.set(p.escapedName, p); });
+            forEach(properties, p => {
+                seen.set(p.escapedName, p);
+            });
 
             for (const base of baseTypes) {
                 const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
@@ -37966,7 +37970,9 @@ namespace ts {
 
             interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = new Map<__String, InheritanceInfoMap>();
-            forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
+            forEach(resolveDeclaredMembers(type).declaredProperties, p => {
+                seen.set(p.escapedName, { prop: p, containingType: type });
+            });
             let ok = true;
 
             for (const base of baseTypes) {

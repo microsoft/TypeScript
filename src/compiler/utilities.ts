@@ -6702,9 +6702,9 @@ namespace ts {
     }
 
     export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[]): readonly string[] {
-        if (!options || !options.resolveJsonModule) { return supportedExtensions; }
-        if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
-        if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
+        if (!options || !options.resolveJsonModule) return supportedExtensions;
+        if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
+        if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
         return [...supportedExtensions, Extension.Json];
     }
 
@@ -6721,7 +6721,7 @@ namespace ts {
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]) {
-        if (!fileName) { return false; }
+        if (!fileName) return false;
 
         const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
         for (const extension of getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)) {
