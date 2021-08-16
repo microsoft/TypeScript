@@ -267,18 +267,13 @@ namespace ts.InlayHints {
             if (!signature) {
                 return;
             }
-
-            if (isArrowFunction(node) && node.parameters.length === 1) {
+            const wrap = isArrowFunction(node) && node.parameters.length === 1;
+            if (wrap) {
                 result.push({
                     text: "(",
                     position: node.parameters[0].getStart(),
                     kind: InlayHintKind.Type,
                     whitespaceBefore: true,
-                }, {
-                    text: ")",
-                    position: node.parameters[0].end,
-                    kind: InlayHintKind.Type,
-                    whitespaceAfter: true,
                 });
             }
 
@@ -290,9 +285,13 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                const typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
+                let typeDisplayString = getParameterDeclarationTypeDisplayString(signature.parameters[i]);
                 if (!typeDisplayString) {
                     continue;
+                }
+
+                if (wrap) {
+                    typeDisplayString += ")";
                 }
 
                 addTypeHints(typeDisplayString, param.end);
