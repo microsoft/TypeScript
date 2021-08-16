@@ -1,6 +1,11 @@
 namespace ts {
     const brackets = createBracketsMap();
-    let horrible: Map<string> = new Map()
+    let horrible: Map<{
+        text: string,
+        versions: string[],
+        sourceMap?: string,
+        sourceMapFilePath?: string,
+    }> = new Map()
     /** This is DEFINITELY only used in tests */
     export function resetHorrible() {
         horrible = new Map()
@@ -537,11 +542,14 @@ namespace ts {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
-            const key = `${compilerOptions.target};${jsFilePath};${sourceFiles.map(f => f.fileName).join("|")}`
+            const key = `${compilerOptions.module};${compilerOptions.target};${jsFilePath};${sourceFiles.map(f => f.fileName).join("|")}`
             const cached = horrible.get(key)
-            if (cached) {
+            if (cached && zipWith(sourceFiles.map(f => f.version), cached.versions, (v1, v2) => v1 === v2).every(eq => !!eq)) {
                 // console.log(`Retrieving ${key} from cache: ${cached.slice(0,20)}`)
-                writeFile(host, emitterDiagnostics, jsFilePath, cached, !!compilerOptions.emitBOM, sourceFiles);
+                writeFile(host, emitterDiagnostics, jsFilePath, cached.text, !!compilerOptions.emitBOM, sourceFiles);
+                if (cached.sourceMap !== undefined && cached.sourceMapFilePath !== undefined) {
+                    writeFile(host, emitterDiagnostics, cached.sourceMapFilePath, cached.sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
+                }
                 return;
             }
             // Let's do this WRONG
@@ -566,6 +574,7 @@ namespace ts {
                 printer.writeFile(sourceFile!, writer, sourceMapGenerator);
             }
 
+            let sourceMap: string | undefined;
             if (sourceMapGenerator) {
                 if (sourceMapDataList) {
                     sourceMapDataList.push({
@@ -588,7 +597,7 @@ namespace ts {
 
                 // Write the source map
                 if (sourceMapFilePath) {
-                    const sourceMap = sourceMapGenerator.toString();
+                    sourceMap = sourceMapGenerator.toString();
                     writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
                 }
             }
@@ -600,7 +609,12 @@ namespace ts {
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
             // CaChE sTAte
             // console.log(`Caching ${key}: ${writer.getText().slice(0,20)}`)
-            horrible.set(key, writer.getText())
+            horrible.set(key, {
+                text: writer.getText(),
+                versions: sourceFiles.map(f => f.version),
+                sourceMapFilePath,
+                sourceMap,
+            })
 
             // Reset state
             writer.clear();
