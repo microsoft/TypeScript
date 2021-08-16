@@ -2634,13 +2634,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
+            result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = append(result, last(node.jsDoc!));
+                result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2654,6 +2654,26 @@ namespace ts {
             node = getNextJSDocCommentLocation(node);
         }
         return result || emptyArray;
+    }
+
+    function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
+        if (isJSDoc(jsDoc)) {
+            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+            return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
+        }
+        return ownsJSDocTag(hostNode, jsDoc) ? [jsDoc] : undefined;
+    }
+
+    /**
+     * Determines whether a host node owns a jsDoc tag. A `@type` tag attached to a
+     * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
+     */
+    function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
+        return !isJSDocTypeTag(tag)
+            || !tag.parent
+            || !isJSDoc(tag.parent)
+            || !isParenthesizedExpression(tag.parent.parent)
+            || tag.parent.parent === hostNode;
     }
 
     export function getNextJSDocCommentLocation(node: Node) {
@@ -2899,10 +2919,13 @@ namespace ts {
         return [child, node];
     }
 
-    export function skipParentheses(node: Expression): Expression;
-    export function skipParentheses(node: Node): Node;
-    export function skipParentheses(node: Node): Node {
-        return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
+    export function skipParentheses(node: Expression, excludeJSDocTypeAssertions?: boolean): Expression;
+    export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node;
+    export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node {
+        const flags = excludeJSDocTypeAssertions ?
+            OuterExpressionKinds.Parentheses | OuterExpressionKinds.ExcludeJSDocTypeAssertion :
+            OuterExpressionKinds.Parentheses;
+        return skipOuterExpressions(node, flags);
     }
 
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
