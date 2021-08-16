@@ -4355,7 +4355,7 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
-        /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, writing: boolean, type: Type, prop: Symbol): boolean;
+        /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, type: Type, property: Symbol): boolean;
     }
 
     /* @internal */

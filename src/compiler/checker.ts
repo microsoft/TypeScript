@@ -28157,8 +28157,8 @@ namespace ts {
          * e.g. in completions, this node will often be an incomplete property access node, as in `foo.`.
          * Besides providing a location (i.e. scope) used to check property accessibility, we use this node for
          * computing whether this is a `super` property access.
-         * @param type the type whose property we are checking
-         * @param property the accessed property's symbol
+         * @param type the type whose property we are checking.
+         * @param property the accessed property's symbol.
          */
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
             return isPropertyAccessible(node,
