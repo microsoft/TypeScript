@@ -87,9 +87,9 @@ namespace ts.InlayHints {
             });
         }
 
-        function addTypeHints(text: string, position: number) {
+        function addTypeHints(text: string, position: number, fixedSuffix = "") {
             result.push({
-                text: `: ${truncation(text, maxHintsLength)}`,
+                text: `: ${truncation(text, maxHintsLength)}` + fixedSuffix,
                 position,
                 kind: InlayHintKind.Type,
                 whitespaceBefore: true,
@@ -290,7 +290,7 @@ namespace ts.InlayHints {
                     continue;
                 }
 
-                addTypeHints(typeDisplayString + (wrapParen ? ")" : ""), param.end);
+                addTypeHints(typeDisplayString, param.end, wrapParen ? ")" : "");
             }
         }
 
