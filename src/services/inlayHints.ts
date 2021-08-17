@@ -8,11 +8,7 @@ namespace ts.InlayHints {
     };
 
     function shouldShowParameterNameHints(preferences: InlayHintsOptions) {
-        return preferences.includeInlayParameterNameHints === "literals" || preferences.includeInlayParameterNameHints === "all";
-    }
-
-    function shouldShowLiteralParameterNameHintsOnly(preferences: InlayHintsOptions) {
-        return preferences.includeInlayParameterNameHints === "literals";
+        return !!preferences.includeInlayParameterNameHints && preferences.includeInlayParameterNameHints !== "none";
     }
 
     export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
@@ -156,9 +152,9 @@ namespace ts.InlayHints {
             for (let i = 0; i < args.length; ++i) {
                 const originalArg = args[i];
                 const arg = skipParentheses(originalArg);
-                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableExpression(arg)) {
-                    continue;
-                }
+
+                if ((preferences.includeInlayParameterNameHints === "literals" && !isLiteralLike(arg)) ||
+                    (preferences.includeInlayParameterNameHints === "primitiveLiterals" && !isPrimitiveLiteral(arg))) continue;
 
                 const identifierNameInfo = checker.getParameterIdentifierNameAtPosition(signature, i);
                 if (identifierNameInfo) {
@@ -202,28 +198,40 @@ namespace ts.InlayHints {
             return some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
         }
 
-        function isHintableExpression(node: Node) {
+        function isLiteralLike(node: Node): boolean {
             switch (node.kind) {
-                case SyntaxKind.PrefixUnaryExpression: {
-                    const operand = (node as PrefixUnaryExpression).operand;
-                    return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
-                }
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ArrayLiteralExpression:
-                case SyntaxKind.NullKeyword:
+                case SyntaxKind.RegularExpressionLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateExpression:
                     return true;
-                case SyntaxKind.Identifier: {
-                    const name = (node as Identifier).escapedText;
-                    return isUndefined(name) || isInfinityOrNaNString(name);
-                }
+                case SyntaxKind.PrefixUnaryExpression:
+                    return isLiteralLike(skipParentheses((node as PrefixUnaryExpression).operand));
+                default:
+                    return isPrimitiveLiteral(node);
             }
-            return isLiteralExpression(node);
+        }
+
+        function isPrimitiveLiteral(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.BigIntLiteral:
+                    return true;
+                case SyntaxKind.Identifier:
+                    return isUndefined(node) || isInfinityOrNaNString((node as Identifier).escapedText);
+                case SyntaxKind.PrefixUnaryExpression:
+                    const operand = skipParentheses((node as PrefixUnaryExpression).operand);
+                    return !(operand.kind === SyntaxKind.NullKeyword || operand.kind === SyntaxKind.BigIntLiteral || isUndefined(operand)) && isPrimitiveLiteral(operand);
+                default:
+                    return false;
+            }
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
@@ -320,8 +328,8 @@ namespace ts.InlayHints {
             });
         }
 
-        function isUndefined(name: __String) {
-            return name === "undefined";
+        function isUndefined(node: Node) {
+            return isIdentifier(node) && node.escapedText === "undefined";
         }
     }
 }

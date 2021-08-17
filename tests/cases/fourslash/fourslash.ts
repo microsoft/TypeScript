@@ -645,7 +645,7 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "primitiveLiterals" | "all";
         readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
         readonly includeInlayFunctionParameterTypeHints?: boolean;
         readonly includeInlayVariableTypeHints?: boolean;
