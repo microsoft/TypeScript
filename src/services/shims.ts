@@ -14,7 +14,9 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+    return this;
+})();
 
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable no-in-operator */

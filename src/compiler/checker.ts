@@ -16272,26 +16272,19 @@ namespace ts {
                 let result = root.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-                    result = instantiateConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
+                    const checkType = root.checkType;
+                    const distributionType = root.isDistributive ? getMappedType(checkType, newMapper) : undefined;
+                    // Distributive conditional types are distributed over union types. For example, when the
+                    // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
+                    // result is (A extends U ? X : Y) | (B extends U ? X : Y).
+                    result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
+                        mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
+                        getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                     root.instantiations!.set(id, result);
                 }
                 return result;
             }
             return type;
-        }
-
-        function instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
-            // Check if we have a conditional type where the check type is a naked type parameter. If so,
-            // the conditional type is distributive over union types and when T is instantiated to a union
-            // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
-            if (root.isDistributive) {
-                const checkType = root.checkType as TypeParameter;
-                const instantiatedType = getMappedType(checkType, mapper);
-                if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    return mapTypeWithAlias(instantiatedType, t => getConditionalType(root, prependTypeMapping(checkType, t, mapper)), aliasSymbol, aliasTypeArguments);
-                }
-            }
-            return getConditionalType(root, mapper, aliasSymbol, aliasTypeArguments);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
@@ -16304,10 +16297,10 @@ namespace ts {
             if (!couldContainTypeVariables(type)) {
                 return type;
             }
-            if (instantiationDepth === 50 || instantiationCount >= 5000000) {
-                // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
-                // with a combination of infinite generic types that perpetually generate new type identities. We stop
-                // the recursion here by yielding the error type.
+            if (instantiationDepth === 500 || instantiationCount >= 5000000) {
+                // We have reached 500 recursive type instantiations, or 5M type instantiations caused by the same statement
+                // or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
+                // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
                 tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
@@ -34531,7 +34524,9 @@ namespace ts {
                     case SyntaxKind.ImportClause:
                         let result = DeclarationSpaces.None;
                         const target = resolveAlias(getSymbolOfNode(d)!);
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                        forEach(target.declarations, d => {
+                            result |= getDeclarationSpaces(d);
+                        });
                         return result;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
@@ -37943,7 +37938,9 @@ namespace ts {
                 return properties;
             }
             const seen = new Map<__String, Symbol>();
-            forEach(properties, p => { seen.set(p.escapedName, p); });
+            forEach(properties, p => {
+                seen.set(p.escapedName, p);
+            });
 
             for (const base of baseTypes) {
                 const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
@@ -37966,7 +37963,9 @@ namespace ts {
 
             interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = new Map<__String, InheritanceInfoMap>();
-            forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
+            forEach(resolveDeclaredMembers(type).declaredProperties, p => {
+                seen.set(p.escapedName, { prop: p, containingType: type });
+            });
             let ok = true;
 
             for (const base of baseTypes) {
