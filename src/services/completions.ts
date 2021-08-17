@@ -416,6 +416,10 @@ namespace ts.Completions {
             }
         }
 
+        if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
+            return undefined;
+        }
+
         const entries: CompletionEntry[] = [];
 
         if (isUncheckedFile(sourceFile, compilerOptions)) {
@@ -443,10 +447,6 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
         else {
-            if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
-                return undefined;
-            }
-
             getCompletionEntriesFromSymbols(
                 symbols,
                 entries,

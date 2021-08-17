@@ -13,16 +13,5 @@
 
 verify.completions({
     marker: "0",
-    includes: [
-        {
-            name: "hello",
-            sortText: completion.SortText.JavascriptIdentifiers,
-            isFromUncheckedFile: true
-        },
-        {
-            name: "goodbye",
-            sortText: completion.SortText.JavascriptIdentifiers,
-            isFromUncheckedFile: true
-        }
-    ]
+    exact: undefined
 });
