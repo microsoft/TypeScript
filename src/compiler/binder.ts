@@ -3388,7 +3388,7 @@ namespace ts {
 
         function bindTypeParameter(node: TypeParameterDeclaration) {
             if (isJSDocTemplateTag(node.parent)) {
-                const container = find((node.parent.parent as JSDoc).tags!, isJSDocTypeAlias) || getHostSignatureFromJSDoc(node.parent); // TODO: GH#18217
+                const container = getEffectiveContainerForJSDocTemplateTag(node.parent);
                 if (container) {
                     if (!container.locals) {
                         container.locals = createSymbolTable();
