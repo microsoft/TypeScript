@@ -65,7 +65,7 @@ namespace ts.InlayHints {
             }
             else {
                 if (preferences.includeInlayFunctionParameterTypeHints && isFunctionLikeDeclaration(node) && hasContextSensitiveParameters(node)) {
-                    visitFunctionLikeForParameterType(node);
+                    visitFunctionLikeForParameterType(node, preferences.includeInlayFunctionLikeReturnTypeHints);
                 }
                 if (preferences.includeInlayFunctionLikeReturnTypeHints && isSignatureSupportingReturnAnnotation(node)) {
                     visitFunctionDeclarationLikeForReturnType(node);
@@ -75,7 +75,7 @@ namespace ts.InlayHints {
         }
 
         function shouldWrapParameterList(node: Node): boolean {
-            return isArrowFunction(node) && node.parameters.length === 1 && !findChildOfKind(node, SyntaxKind.OpenParenToken, file);
+            return isArrowFunction(node) && node.parameters.length === 1 && node.getFirstToken(file)?.kind !== SyntaxKind.OpenParenToken;
         }
 
         function isSignatureSupportingReturnAnnotation(node: Node): node is FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration {
@@ -229,12 +229,6 @@ namespace ts.InlayHints {
         }
 
         function visitFunctionDeclarationLikeForReturnType(decl: FunctionDeclaration | ArrowFunction | FunctionExpression | MethodDeclaration | GetAccessorDeclaration) {
-            if (isArrowFunction(decl)) {
-                if (!findChildOfKind(decl, SyntaxKind.OpenParenToken, file)) {
-                    return;
-                }
-            }
-
             const effectiveTypeAnnotation = getEffectiveReturnTypeNode(decl);
             if (effectiveTypeAnnotation || !decl.body) {
                 return;
@@ -266,16 +260,18 @@ namespace ts.InlayHints {
             return decl.parameters.end;
         }
 
-        function visitFunctionLikeForParameterType(node: FunctionLikeDeclaration) {
+        function visitFunctionLikeForParameterType(node: FunctionLikeDeclaration, autoWrapParen = false) {
             const signature = checker.getSignatureFromDeclaration(node);
             if (!signature) {
                 return;
             }
-            const shouldWrap = shouldWrapParameterList(node);
-            if (shouldWrap) {
+
+            const parameterNeedsParens = autoWrapParen && shouldWrapParameterList(node);
+
+            if (parameterNeedsParens) {
                 result.push({
                     text: "(",
-                    position: node.parameters[0].getStart(),
+                    position: node.parameters[0].getStart(file),
                     kind: InlayHintKind.Other,
                 });
             }
@@ -296,7 +292,7 @@ namespace ts.InlayHints {
                 addTypeHints(typeDisplayString, param.end);
             }
 
-            if (shouldWrap) {
+            if (parameterNeedsParens) {
                 // ensure ")" is added after paremeter hints.
                 result.push({
                     text: ")",
