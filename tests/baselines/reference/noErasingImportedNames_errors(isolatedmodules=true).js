@@ -60,8 +60,7 @@ export {};
 //// [c.fixed.js]
 export {};
 //// [d.js]
-export { A as AA } from "./a";
-export { B as BB } from "./b";
+export {};
 //// [d.fixed.js]
 export {};
 //// [e.js]
@@ -69,6 +68,6 @@ export {};
 //// [e.fixed.js]
 export {};
 //// [f.js]
-export { A, B as BB };
+export {};
 //// [f.fixed.js]
 export {};

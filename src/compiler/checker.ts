@@ -38607,7 +38607,10 @@ namespace ts {
                     error(node, message, symbolToString(symbol));
                 }
 
-                const isDeclaredTypeOnly = isTypeOnlyImportOrExportDeclaration(node);
+                // Type assertion to defeat the type predicate aliasing of `node` here because
+                // `isTypeOnlyImportOrExportDeclaration` is a one-sided type guard so `!isDeclaredTypeOnly`
+                // does not actually imply any narrowing effect on `node`.
+                const isDeclaredTypeOnly = isTypeOnlyImportOrExportDeclaration(node as never);
                 if (compilerOptions.isolatedModules
                     && !isDeclaredTypeOnly
                     && !(node.flags & NodeFlags.Ambient)
