@@ -40069,6 +40069,9 @@ namespace ts {
         }
 
         function isAliasResolvedToValue(symbol: Symbol): boolean {
+            if (symbol === unknownSymbol) {
+                return false;
+            }
             const target = resolveAlias(symbol);
             if (target === unknownSymbol) {
                 return true;

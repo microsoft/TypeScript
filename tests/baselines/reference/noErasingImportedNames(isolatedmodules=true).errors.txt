@@ -1,3 +1,4 @@
+tests/cases/conformance/externalModules/typeOnly/b.ts(1,19): error TS1434: 'D' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
 tests/cases/conformance/externalModules/typeOnly/d.ts(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 tests/cases/conformance/externalModules/typeOnly/e.ts(1,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
 tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
@@ -7,9 +8,12 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1202: Import
     export default {};
     export const b = 0;
     export const c = 1;
+    export interface D {}
     
-==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
-    import a, { b, c } from "./a";
+==== tests/cases/conformance/externalModules/typeOnly/b.ts (1 errors) ====
+    import a, { b, c, D } from "./a";
+                      ~
+!!! error TS1434: 'D' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
     
 ==== tests/cases/conformance/externalModules/typeOnly/c.ts (0 errors) ====
     import * as a from "./a";

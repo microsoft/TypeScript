@@ -7,9 +7,10 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(2,1): error TS1202: Import
     export default {};
     export const b = 0;
     export const c = 1;
+    export interface D {}
     
 ==== tests/cases/conformance/externalModules/typeOnly/b.ts (0 errors) ====
-    import a, { b, c } from "./a";
+    import a, { b, c, D } from "./a";
     
 ==== tests/cases/conformance/externalModules/typeOnly/c.ts (0 errors) ====
     import * as a from "./a";

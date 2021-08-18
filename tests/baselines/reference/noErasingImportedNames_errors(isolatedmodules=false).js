@@ -56,10 +56,7 @@ var B = /** @class */ (function () {
 ;
 export {};
 //// [c.js]
-import DefaultA from "./a";
-import { A } from "./a";
-import DefaultB from "./b";
-import { B } from "./b";
+export {};
 //// [c.fixed.js]
 export {};
 //// [d.js]
@@ -68,7 +65,7 @@ export { B as BB } from "./b";
 //// [d.fixed.js]
 export {};
 //// [e.js]
-import { AA, BB } from "./d";
+export {};
 //// [e.fixed.js]
 export {};
 //// [f.js]

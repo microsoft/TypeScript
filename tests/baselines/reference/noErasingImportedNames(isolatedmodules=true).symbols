@@ -6,11 +6,15 @@ export const b = 0;
 export const c = 1;
 >c : Symbol(c, Decl(a.ts, 2, 12))
 
+export interface D {}
+>D : Symbol(D, Decl(a.ts, 2, 19))
+
 === tests/cases/conformance/externalModules/typeOnly/b.ts ===
-import a, { b, c } from "./a";
+import a, { b, c, D } from "./a";
 >a : Symbol(a, Decl(b.ts, 0, 6))
 >b : Symbol(b, Decl(b.ts, 0, 11))
 >c : Symbol(c, Decl(b.ts, 0, 14))
+>D : Symbol(D, Decl(b.ts, 0, 17))
 
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
 import * as a from "./a";

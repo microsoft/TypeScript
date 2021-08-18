@@ -4,9 +4,10 @@
 export default {};
 export const b = 0;
 export const c = 1;
+export interface D {}
 
 //// [b.ts]
-import a, { b, c } from "./a";
+import a, { b, c, D } from "./a";
 
 //// [c.ts]
 import * as a from "./a";

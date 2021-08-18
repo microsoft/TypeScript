@@ -2804,7 +2804,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve' and `noErasingImportedNames` is not set.
+         * Visits an import declaration, eliding it if it is type-only or if it has an import clause that may be elided.
          *
          * @param node The import declaration node.
          */
@@ -2822,7 +2822,6 @@ namespace ts {
             // Elide the declaration if the import clause was elided.
             const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
             return importClause ||
-                compilerOptions.noErasingImportedNames ||
                 importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
                 importsNotUsedAsValues === ImportsNotUsedAsValues.Error
                 ? factory.updateImportDeclaration(
@@ -2835,30 +2834,27 @@ namespace ts {
         }
 
         /**
-         * Visits an import clause, eliding it if it is not referenced and `noErasingImportedNames` is not set.
+         * Visits an import clause, eliding it if its `name` and `namedBindings` may both be elided.
          *
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
             Debug.assert(!node.isTypeOnly);
-            if (compilerOptions.noErasingImportedNames) {
-                return node;
-            }
             // Elide the import clause if we elide both its name and its named bindings.
-            const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
+            const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
             const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
             return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
         }
 
         /**
-         * Visits named import bindings, eliding it if it is not referenced.
+         * Visits named import bindings, eliding them if their targets, their references, and the compilation settings allow.
          *
          * @param node The named import bindings node.
          */
         function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
             if (node.kind === SyntaxKind.NamespaceImport) {
                 // Elide a namespace import if it is not referenced.
-                return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+                return shouldEmitAliasDeclaration(node) ? node : undefined;
             }
             else {
                 // Elide named imports if all of its import specifiers are elided.
@@ -2868,13 +2864,12 @@ namespace ts {
         }
 
         /**
-         * Visits an import specifier, eliding it if it is not referenced.
+         * Visits an import specifier, eliding it if its target, its references, and the compilation settings allow.
          *
          * @param node The import specifier node.
          */
         function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
-            // Elide an import specifier if it is not referenced.
-            return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+            return shouldEmitAliasDeclaration(node) ? node : undefined;
         }
 
         /**
@@ -2891,8 +2886,7 @@ namespace ts {
         }
 
         /**
-         * Visits an export declaration, eliding it if it does not contain a clause that resolves
-         * to a value and if `noErasingImportedNames` is not set.
+         * Visits an export declaration, eliding it if it does not contain a clause that resolves to a value.
          *
          * @param node The export declaration node.
          */
@@ -2901,7 +2895,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (!node.exportClause || isNamespaceExport(node.exportClause) || compilerOptions.noErasingImportedNames) {
+            if (!node.exportClause || isNamespaceExport(node.exportClause)) {
                 // never elide `export <whatever> from <whereever>` declarations -
                 // they should be kept for sideffects/untyped exports, even when the
                 // type checker doesn't know about any exports
@@ -2965,7 +2959,7 @@ namespace ts {
             // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
             // - current file is not external module
             // - import declaration is top level and target is value imported by entity name
-            return resolver.isReferencedAliasDeclaration(node)
+            return shouldEmitAliasDeclaration(node)
                 || (!isExternalModule(currentSourceFile)
                     && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
@@ -2982,7 +2976,7 @@ namespace ts {
             }
 
             if (isExternalModuleImportEqualsDeclaration(node)) {
-                const isReferenced = resolver.isReferencedAliasDeclaration(node);
+                const isReferenced = shouldEmitAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
                 if (!isReferenced && importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
                     return setOriginalNode(
@@ -3372,6 +3366,12 @@ namespace ts {
             }
 
             return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
+        }
+
+        function shouldEmitAliasDeclaration(node: Node): boolean {
+            return compilerOptions.noErasingImportedNames
+                ? resolver.isValueAliasDeclaration(node)
+                : resolver.isReferencedAliasDeclaration(node);
         }
     }
 }
