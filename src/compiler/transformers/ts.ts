@@ -325,6 +325,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     // Fallback to the default visit behavior.
                     return visitorWorker(node);
 
@@ -412,11 +413,11 @@ namespace ts {
 
                 case SyntaxKind.Decorator:
                     // TypeScript decorators are elided. They will be emitted as part of visitClassDeclaration.
-                    // falls through
+                    return undefined;
 
                 case SyntaxKind.TypeAliasDeclaration:
                     // TypeScript type-only declarations are elided.
-                    return undefined;
+                    return factory.createNotEmittedStatement(node);
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided. However their names are still visited, and can potentially be retained if they could have sideeffects
@@ -567,35 +568,12 @@ namespace ts {
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
-        /**
-         * Tests whether we should emit a __decorate call for a class declaration.
-         */
-        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
-            if (node.decorators && node.decorators.length > 0) {
-                return true;
-            }
-
-            const constructor = getFirstConstructorWithBody(node);
-            if (constructor) {
-                return forEach(constructor.parameters, shouldEmitDecorateCallForParameter);
-            }
-
-            return false;
-        }
-
-        /**
-         * Tests whether we should emit a __decorate call for a parameter declaration.
-         */
-        function shouldEmitDecorateCallForParameter(parameter: ParameterDeclaration) {
-            return parameter.decorators !== undefined && parameter.decorators.length > 0;
-        }
-
         function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-            if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (classOrConstructorParameterIsDecorated(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
@@ -846,7 +824,12 @@ namespace ts {
 
             const location = moveRangePastDecorators(node);
             const classAlias = getClassAliasIfNeeded(node);
-            const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const declName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
@@ -945,7 +928,7 @@ namespace ts {
          * @param member The class member.
          */
         function isStaticDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStatic*/ true, parent);
+            return isDecoratedClassElement(member, /*isStaticElement*/ true, parent);
         }
 
         /**
@@ -955,7 +938,7 @@ namespace ts {
          * @param member The class member.
          */
         function isInstanceDecoratedClassElement(member: ClassElement, parent: ClassLikeDeclaration) {
-            return isDecoratedClassElement(member, /*isStatic*/ false, parent);
+            return isDecoratedClassElement(member, /*isStaticElement*/ false, parent);
         }
 
         /**
@@ -964,9 +947,9 @@ namespace ts {
          *
          * @param member The class member.
          */
-        function isDecoratedClassElement(member: ClassElement, isStatic: boolean, parent: ClassLikeDeclaration) {
+        function isDecoratedClassElement(member: ClassElement, isStaticElement: boolean, parent: ClassLikeDeclaration) {
             return nodeOrChildIsDecorated(member, parent)
-                && isStatic === hasSyntacticModifier(member, ModifierFlags.Static);
+                && isStaticElement === isStatic(member);
         }
 
         /**
@@ -1256,7 +1239,12 @@ namespace ts {
             }
 
             const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const localName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
             const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
             setEmitFlags(expression, EmitFlags.NoComments);
@@ -3154,7 +3142,7 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            return hasSyntacticModifier(member, ModifierFlags.Static)
+            return isStatic(member)
                 ? factory.getDeclarationName(node)
                 : getClassPrototype(node);
         }

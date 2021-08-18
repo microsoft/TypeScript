@@ -52,6 +52,11 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/solution/app/fileWithError.ts
 /user/username/projects/solution/app/fileWithoutError.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/solution/app/filewitherror.ts (used version)
+/user/username/projects/solution/app/filewithouterror.ts (used version)
+
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:
   {"fileName":"/user/username/projects/solution/app/tsconfig.json","pollingInterval":250}
@@ -97,6 +102,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/solution/app/fileWithError.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/solution/app/filewitherror.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/solution/app/tsconfig.json:

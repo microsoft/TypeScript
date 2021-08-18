@@ -66,6 +66,12 @@ declare module ts {
         Smart = 2,
     }
 
+    const enum InlayHintKind {
+        Type = "Type",
+        Parameter = "Parameter",
+        Enum = "Enum",
+    }
+
     enum SemicolonPreference {
         Ignore = "ignore",
         Insert = "insert",
@@ -187,6 +193,7 @@ declare namespace FourSlashInterface {
         markerName(m: Marker): string;
         marker(name?: string): Marker;
         ranges(): Range[];
+        rangesInFile(fileName?: string): Range[];
         spans(): Array<{ start: number, length: number }>;
         rangesByText(): ts.Map<Range[]>;
         markerByName(s: string): Marker;
@@ -395,6 +402,10 @@ declare namespace FourSlashInterface {
             start: number;
             length: number;
         }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: { name: string, text?: string }[] | undefined): void;
+        getInlayHints(expected: readonly VerifyInlayHintsOptions[], textSpan?: {
+            start: number;
+            length: number;
+        }, preference?: InlayHintsOptions);
         getSyntacticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSemanticDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
         getSuggestionDiagnostics(expected: ReadonlyArray<Diagnostic>): void;
@@ -626,11 +637,21 @@ declare namespace FourSlashInterface {
         readonly includeCompletionsForImportStatements?: boolean;
         readonly includeCompletionsWithSnippetText?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
+        readonly allowIncompleteCompletions?: boolean;
         /** @deprecated use `includeCompletionsWithInsertText` */
         readonly includeInsertTextCompletions?: boolean;
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+    }
+    interface InlayHintsOptions extends UserPreferences {
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean;
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
     }
     interface CompletionsOptions {
         readonly marker?: ArrayOrSingle<string | Marker>;
@@ -734,6 +755,14 @@ declare namespace FourSlashInterface {
         readonly commands?: ReadonlyArray<{}>;
     }
 
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: VerifyInlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
+    }
+
     interface VerifyNavigateToOptions {
         readonly pattern: string;
         readonly fileName?: string;
@@ -793,21 +822,21 @@ declare function classification(format: "2020"): FourSlashInterface.ModernClassi
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7",
-        DeprecatedLocalDeclarationPriority = "8",
-        DeprecatedLocationPriority = "9",
-        DeprecatedOptionalMember = "10",
-        DeprecatedMemberDeclaredBySpreadAssignment = "11",
-        DeprecatedSuggestedClassMembers = "12",
-        DeprecatedGlobalsOrKeywords = "13",
-        DeprecatedAutoImportSuggestions = "14"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

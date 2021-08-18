@@ -1,0 +1,121 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock8.ts ===
+function foo (v: number) {
+>foo : (v: number) => void
+>v : number
+
+    label: while (v) {
+>label : any
+>v : number
+
+        class C {
+>C : C
+
+            static {
+                if (v === 1) {
+>v === 1 : boolean
+>v : number
+>1 : 1
+
+                    break label;
+>label : any
+                }
+                if (v === 2) {
+>v === 2 : boolean
+>v : number
+>2 : 2
+
+                    continue label;
+>label : any
+                }
+                if (v === 3) {
+>v === 3 : boolean
+>v : number
+>3 : 3
+
+                    break
+                }
+                if (v === 4) {
+>v === 4 : boolean
+>v : number
+>4 : 4
+
+                    continue
+                }
+            }
+        }
+
+        if (v === 5) {
+>v === 5 : boolean
+>v : number
+>5 : 5
+
+            break label;
+>label : any
+        }
+        if (v === 6) {
+>v === 6 : boolean
+>v : number
+>6 : 6
+
+            continue label;
+>label : any
+        }
+        if (v === 7) {
+>v === 7 : boolean
+>v : number
+>7 : 7
+
+            break;
+        }
+        if (v === 8) {
+>v === 8 : boolean
+>v : number
+>8 : 8
+
+            continue;
+        }
+    }
+
+    class C {
+>C : C
+
+        static {
+            outer: break outer; // valid
+>outer : any
+>outer : any
+
+            loop: while (v) {
+>loop : any
+>v : number
+
+                if (v === 1) break loop; // valid
+>v === 1 : boolean
+>v : number
+>1 : 1
+>loop : any
+
+                if (v === 2) continue loop; // valid
+>v === 2 : boolean
+>v : number
+>2 : 2
+>loop : any
+
+                if (v === 3) break; // valid
+>v === 3 : boolean
+>v : number
+>3 : 3
+
+                if (v === 4) continue; // valid
+>v === 4 : boolean
+>v : number
+>4 : 4
+            }
+            switch (v) {
+>v : number
+
+                default: break; // valid
+            }
+        }
+    }
+}
+

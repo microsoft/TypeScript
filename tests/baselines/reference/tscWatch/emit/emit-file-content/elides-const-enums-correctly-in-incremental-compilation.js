@@ -46,6 +46,12 @@ Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/someone/projects/myproject/file1.ts (used version)
+/user/someone/projects/myproject/file2.ts (used version)
+/user/someone/projects/myproject/file3.ts (used version)
+
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:
   {"fileName":"/user/someone/projects/myproject/file3.ts","pollingInterval":250}
@@ -105,6 +111,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/someone/projects/myproject/file3.ts
+
+Shape signatures in builder refreshed for::
+/user/someone/projects/myproject/file3.ts (computed .d.ts)
 
 WatchedFiles::
 /user/someone/projects/myproject/file3.ts:

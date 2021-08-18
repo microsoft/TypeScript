@@ -55,6 +55,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
 
 FsWatches::
@@ -68,7 +73,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return jsx_runtime_1.jsx("div", { propA: true }, void 0); };
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }, void 0); };
 exports.App = App;
 
 
@@ -155,6 +160,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.tsx (computed .d.ts)
 
 WatchedFiles::
 

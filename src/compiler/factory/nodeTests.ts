@@ -129,6 +129,11 @@ namespace ts {
         return node.kind === SyntaxKind.StaticKeyword;
     }
 
+    /* @internal */
+    export function isAbstractModifier(node: Node): node is AbstractKeyword {
+        return node.kind === SyntaxKind.AbstractKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;
@@ -180,6 +185,10 @@ namespace ts {
 
     export function isMethodDeclaration(node: Node): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration;
+    }
+
+    export function isClassStaticBlockDeclaration(node: Node): node is ClassStaticBlockDeclaration {
+        return node.kind === SyntaxKind.ClassStaticBlockDeclaration;
     }
 
     export function isConstructorDeclaration(node: Node): node is ConstructorDeclaration {

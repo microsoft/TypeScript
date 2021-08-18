@@ -1,3 +1,4 @@
+
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -640,7 +641,8 @@ namespace FourSlash {
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
                     const error = errors[0];
-                    this.raiseError(`Found an error: ${this.formatPosition(error.file!, error.start!)}: ${error.messageText}`);
+                    const message = typeof error.messageText === "string" ? error.messageText : error.messageText.messageText;
+                    this.raiseError(`Found an error: ${this.formatPosition(error.file!, error.start!)}: ${message}`);
                 }
             });
         }
@@ -833,6 +835,22 @@ namespace FourSlash {
             ts.zipWith(emit.outputFiles, expected, (outputFile, expected) => {
                 assert.equal(outputFile.name, expected.name, "FileName");
                 assert.equal(outputFile.text, expected.text, "Content");
+            });
+        }
+
+        public verifyInlayHints(expected: readonly FourSlashInterface.VerifyInlayHintsOptions[], span: ts.TextSpan = { start: 0, length: this.activeFile.content.length }, preference?: ts.InlayHintsOptions) {
+            const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
+            assert.equal(hints.length, expected.length, "Number of hints");
+
+            const sortHints = (a: ts.InlayHint, b: ts.InlayHint) => {
+                return a.position - b.position;
+            };
+            ts.zipWith(hints.sort(sortHints), [...expected].sort(sortHints), (actual, expected) => {
+                assert.equal(actual.text, expected.text, "Text");
+                assert.equal(actual.position, expected.position, "Position");
+                assert.equal(actual.kind, expected.kind, "Kind");
+                assert.equal(actual.whitespaceBefore, expected.whitespaceBefore, "whitespaceBefore");
+                assert.equal(actual.whitespaceAfter, expected.whitespaceAfter, "whitespaceAfter");
             });
         }
 
@@ -2082,7 +2100,7 @@ namespace FourSlash {
         }
 
         private printMembersOrCompletions(info: ts.CompletionInfo | undefined) {
-            if (info === undefined) { return "No completion info."; }
+            if (info === undefined) return "No completion info.";
             const { entries } = info;
 
             function pad(s: string, length: number) {
@@ -2818,7 +2836,7 @@ namespace FourSlash {
 
         public verifyTodoComments(descriptors: string[], spans: Range[]) {
             const actual = this.languageService.getTodoComments(this.activeFile.fileName,
-                descriptors.map(d => { return { text: d, priority: 0 }; }));
+                descriptors.map(d => ({ text: d, priority: 0 })));
 
             if (actual.length !== spans.length) {
                 this.raiseError(`verifyTodoComments failed - expected total spans to be ${spans.length}, but was ${actual.length}`);
@@ -4480,7 +4498,7 @@ namespace FourSlash {
 
         // put ranges in the correct order
         localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
-        localRanges.forEach((r) => { ranges.push(r); });
+        localRanges.forEach(r => ranges.push(r));
 
         return {
             content: output,

@@ -884,6 +884,10 @@ namespace ts.FindAllReferences {
                     node.kind === SyntaxKind.ReadonlyKeyword ? isReadonlyTypeOperator : undefined);
             }
 
+            if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
+                return [{ definition: { type: DefinitionKind.Keyword, node }, references: [nodeEntry(node)] }];
+            }
+
             // Labels
             if (isJumpStatementTarget(node)) {
                 const labelDefinition = getTargetLabel(node.parent, node.text);
@@ -1519,9 +1523,14 @@ namespace ts.FindAllReferences {
             }
 
             // Use the parent symbol if the location is commonjs require syntax on javascript files only.
-            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
-                ? referenceLocation.parent.symbol
-                : referenceSymbol;
+            if (isInJSFile(referenceLocation)
+                && referenceLocation.parent.kind === SyntaxKind.BindingElement
+                && isRequireVariableDeclaration(referenceLocation.parent)) {
+                referenceSymbol = referenceLocation.parent.symbol;
+                // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
+                // this case, just skip it, since the bound identifiers are not an alias of the import.
+                if (!referenceSymbol) return;
+            }
 
             getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
         }
@@ -1680,7 +1689,7 @@ namespace ts.FindAllReferences {
             Debug.assert(classLike.name === referenceLocation);
             const addRef = state.referenceAdder(search.symbol);
             for (const member of classLike.members) {
-                if (!(isMethodOrAccessor(member) && hasSyntacticModifier(member, ModifierFlags.Static))) {
+                if (!(isMethodOrAccessor(member) && isStatic(member))) {
                     continue;
                 }
                 if (member.body) {
@@ -1913,7 +1922,7 @@ namespace ts.FindAllReferences {
                 // If we have a 'super' container, we must have an enclosing class.
                 // Now make sure the owning class is the same as the search-space
                 // and has the same static qualifier as the original 'super's owner.
-                return container && (ModifierFlags.Static & getSyntacticModifierFlags(container)) === staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
+                return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
             });
 
             return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
@@ -1979,7 +1988,7 @@ namespace ts.FindAllReferences {
                         case SyntaxKind.ObjectLiteralExpression:
                             // Make sure the container belongs to the same class/object literals
                             // and has the appropriate static modifier from the original container.
-                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getSyntacticModifierFlags(container) & ModifierFlags.Static) === staticFlag;
+                            return container.parent && searchSpaceNode.symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
                         case SyntaxKind.SourceFile:
                             return container.kind === SyntaxKind.SourceFile && !isExternalModule(container as SourceFile) && !isParameterName(node);
                     }
@@ -2026,7 +2035,7 @@ namespace ts.FindAllReferences {
                 (sym, root, base) => {
                     // static method/property and instance method/property might have the same name. Only include static or only include instance.
                     if (base) {
-                        if (isStatic(symbol) !== isStatic(base)) {
+                        if (isStaticSymbol(symbol) !== isStaticSymbol(base)) {
                             base = undefined;
                         }
                     }
@@ -2192,8 +2201,8 @@ namespace ts.FindAllReferences {
             readonly kind: NodeEntryKind | undefined;
         }
 
-        function isStatic(symbol: Symbol): boolean {
-            if (!symbol.valueDeclaration) { return false; }
+        function isStaticSymbol(symbol: Symbol): boolean {
+            if (!symbol.valueDeclaration) return false;
             const modifierFlags = getEffectiveModifierFlags(symbol.valueDeclaration);
             return !!(modifierFlags & ModifierFlags.Static);
         }
@@ -2206,7 +2215,7 @@ namespace ts.FindAllReferences {
                     // check whether the symbol used to search itself is just the searched one.
                     if (baseSymbol) {
                         // static method/property and instance method/property might have the same name. Only check static or only check instance.
-                        if (isStatic(referenceSymbol) !== isStatic(baseSymbol)) {
+                        if (isStaticSymbol(referenceSymbol) !== isStaticSymbol(baseSymbol)) {
                             baseSymbol = undefined;
                         }
                     }

@@ -556,7 +556,7 @@ namespace ts {
             // Visit project references first
             if (cbRef) {
                 const result = cbRef(projectReferences, parent);
-                if (result) { return result; }
+                if (result) return result;
             }
 
             return forEach(resolvedProjectReferences, (resolvedRef, index) => {
@@ -886,6 +886,7 @@ namespace ts {
         let sourceFileToPackageName = new Map<Path, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
+        let usesUriStyleNodeCoreModules = false;
 
         /**
          * map with
@@ -1054,6 +1055,7 @@ namespace ts {
             getSourceFileByPath,
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
+            getModuleResolutionCache: () => moduleResolutionCache,
             getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1086,6 +1088,7 @@ namespace ts {
             getLibFileFromReference,
             sourceFileToPackageName,
             redirectTargetsMap,
+            usesUriStyleNodeCoreModules,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1634,6 +1637,7 @@ namespace ts {
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
+            usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
 
             return StructureIsReused.Completely;
         }
@@ -2234,7 +2238,7 @@ namespace ts {
         }
 
         function getOptionsDiagnosticsOfConfigFile() {
-            if (!options.configFile) { return emptyArray; }
+            if (!options.configFile) return emptyArray;
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
                 diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
@@ -2326,6 +2330,9 @@ namespace ts {
                     // only through top - level external module names. Relative external module names are not permitted.
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
                         imports = append(imports, moduleNameExpr);
+                        if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
+                            usesUriStyleNodeCoreModules = startsWith(moduleNameExpr.text, "node:");
+                        }
                     }
                 }
                 else if (isModuleDeclaration(node)) {
@@ -2370,7 +2377,7 @@ namespace ts {
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                     else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                        imports = append(imports, node.arguments[0] as StringLiteralLike);
+                        imports = append(imports, node.arguments[0]);
                     }
                     else if (isLiteralImportTypeNode(node)) {
                         imports = append(imports, node.argument.literal);
@@ -3043,8 +3050,8 @@ namespace ts {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
             }
-            if (options.strictOptionalProperties && !getStrictOptionValue(options, "strictNullChecks")) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictOptionalProperties", "strictNullChecks");
+            if (options.exactOptionalPropertyTypes && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
             }
 
             if (options.isolatedModules) {

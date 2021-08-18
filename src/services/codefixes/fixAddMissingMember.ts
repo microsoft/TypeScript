@@ -1,7 +1,10 @@
 /* @internal */
 namespace ts.codefix {
     const fixMissingMember = "fixMissingMember";
+    const fixMissingProperties = "fixMissingProperties";
+    const fixMissingAttributes = "fixMissingAttributes";
     const fixMissingFunctionDeclaration = "fixMissingFunctionDeclaration";
+
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
@@ -19,6 +22,14 @@ namespace ts.codefix {
             if (!info) {
                 return undefined;
             }
+            if (info.kind === InfoKind.ObjectLiteral) {
+                const changes = textChanges.ChangeTracker.with(context, t => addObjectLiteralProperties(t, context, info));
+                return [createCodeFixAction(fixMissingProperties, changes, Diagnostics.Add_missing_properties, fixMissingProperties, Diagnostics.Add_all_missing_properties)];
+            }
+            if (info.kind === InfoKind.JsxAttributes) {
+                const changes = textChanges.ChangeTracker.with(context, t => addJsxAttributes(t, context, info));
+                return [createCodeFixAction(fixMissingAttributes, changes, Diagnostics.Add_missing_attributes, fixMissingAttributes, Diagnostics.Add_all_missing_attributes)];
+            }
             if (info.kind === InfoKind.Function) {
                 const changes = textChanges.ChangeTracker.with(context, t => addFunctionDeclaration(t, context, info));
                 return [createCodeFixAction(fixMissingFunctionDeclaration, changes, [Diagnostics.Add_missing_function_declaration_0, info.token.text], fixMissingFunctionDeclaration, Diagnostics.Add_all_missing_function_declarations)];
@@ -29,7 +40,7 @@ namespace ts.codefix {
             }
             return concatenate(getActionsForMissingMethodDeclaration(context, info), getActionsForMissingMemberDeclaration(context, info));
         },
-        fixIds: [fixMissingMember, fixMissingFunctionDeclaration],
+        fixIds: [fixMissingMember, fixMissingFunctionDeclaration, fixMissingProperties, fixMissingAttributes],
         getAllCodeActions: context => {
             const { program, fixId } = context;
             const checker = program.getTypeChecker();
@@ -43,16 +54,19 @@ namespace ts.codefix {
                         return;
                     }
 
-                    if (fixId === fixMissingFunctionDeclaration) {
-                        if (info.kind === InfoKind.Function) {
-                            addFunctionDeclaration(changes, context, info);
-                        }
+                    if (fixId === fixMissingFunctionDeclaration && info.kind === InfoKind.Function) {
+                        addFunctionDeclaration(changes, context, info);
+                    }
+                    else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
+                        addObjectLiteralProperties(changes, context, info);
+                    }
+                    else if (fixId === fixMissingAttributes && info.kind === InfoKind.JsxAttributes) {
+                        addJsxAttributes(changes, context, info);
                     }
                     else {
                         if (info.kind === InfoKind.Enum) {
                             addEnumMemberDeclaration(changes, checker, info);
                         }
-
                         if (info.kind === InfoKind.ClassOrInterface) {
                             const { parentDeclaration, token } = info;
                             const infos = getOrUpdate(typeDeclToMembers, parentDeclaration, () => []);
@@ -92,8 +106,8 @@ namespace ts.codefix {
         },
     });
 
-    const enum InfoKind { Enum, ClassOrInterface, Function }
-    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo;
+    const enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral, JsxAttributes }
+    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
 
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
@@ -120,6 +134,20 @@ namespace ts.codefix {
         readonly parentDeclaration: SourceFile | ModuleDeclaration;
     }
 
+    interface ObjectLiteralInfo {
+        readonly kind: InfoKind.ObjectLiteral;
+        readonly token: Identifier;
+        readonly properties: Symbol[];
+        readonly parentDeclaration: ObjectLiteralExpression;
+    }
+
+    interface JsxAttributesInfo {
+        readonly kind: InfoKind.JsxAttributes;
+        readonly token: Identifier;
+        readonly attributes: Symbol[];
+        readonly parentDeclaration: JsxOpeningLikeElement;
+    }
+
     function getInfo(sourceFile: SourceFile, tokenPos: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
@@ -130,6 +158,20 @@ namespace ts.codefix {
         }
 
         const { parent } = token;
+        if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
+            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+            if (length(properties)) {
+                return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
+            }
+        }
+
+        if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
+            const attributes = getUnmatchedAttributes(checker, token.parent);
+            if (length(attributes)) {
+                return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
+            }
+        }
+
         if (isIdentifier(token) && isCallExpression(parent)) {
             return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
         }
@@ -147,7 +189,7 @@ namespace ts.codefix {
         if (isIdentifier(token) && isCallExpression(parent.parent)) {
             const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
             const moduleDeclarationSourceFile = moduleDeclaration?.getSourceFile();
-            if (moduleDeclaration && moduleDeclarationSourceFile && !program.isSourceFileFromExternalLibrary(moduleDeclarationSourceFile)) {
+            if (moduleDeclaration && moduleDeclarationSourceFile && !isSourceFileFromLibrary(program, moduleDeclarationSourceFile)) {
                 return { kind: InfoKind.Function, token, call: parent.parent, sourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleDeclaration };
             }
 
@@ -156,7 +198,7 @@ namespace ts.codefix {
                 return;
             }
 
-            if (moduleSourceFile && !program.isSourceFileFromExternalLibrary(moduleSourceFile)) {
+            if (moduleSourceFile && !isSourceFileFromLibrary(program, moduleSourceFile)) {
                 return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleSourceFile };
             }
         }
@@ -169,7 +211,7 @@ namespace ts.codefix {
 
         // Prefer to change the class instead of the interface if they are merged
         const classOrInterface = classDeclaration || find(symbol.declarations, isInterfaceDeclaration);
-        if (classOrInterface && !program.isSourceFileFromExternalLibrary(classOrInterface.getSourceFile())) {
+        if (classOrInterface && !isSourceFileFromLibrary(program, classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) {
                 return undefined;
@@ -183,10 +225,14 @@ namespace ts.codefix {
         }
 
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration && !isPrivateIdentifier(token) && !program.isSourceFileFromExternalLibrary(enumDeclaration.getSourceFile())) {
+        if (enumDeclaration && !isPrivateIdentifier(token) && !isSourceFileFromLibrary(program, enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;
+    }
+
+    function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
     }
 
     function getActionsForMissingMemberDeclaration(context: CodeFixContext, info: ClassOrInterfaceInfo): CodeFixAction[] | undefined {
@@ -248,7 +294,7 @@ namespace ts.codefix {
     }
 
     function initializePropertyToUndefined(obj: Expression, propertyName: string) {
-        return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), factory.createIdentifier("undefined")));
+        return factory.createExpressionStatement(factory.createAssignment(factory.createPropertyAccessExpression(obj, propertyName), createUndefined()));
     }
 
     function createActionsForAddMissingMemberInTypeScriptFile(context: CodeFixContext, { parentDeclaration, declSourceFile, modifierFlags, token }: ClassOrInterfaceInfo): CodeFixAction[] | undefined {
@@ -404,5 +450,136 @@ namespace ts.codefix {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const functionDeclaration = createSignatureDeclarationFromCallExpression(SyntaxKind.FunctionDeclaration, context, importAdder, info.call, idText(info.token), info.modifierFlags, info.parentDeclaration) as FunctionDeclaration;
         changes.insertNodeAtEndOfScope(info.sourceFile, info.parentDeclaration, functionDeclaration);
+    }
+
+    function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: JsxAttributesInfo) {
+        const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
+        const checker = context.program.getTypeChecker();
+        const jsxAttributesNode = info.parentDeclaration.attributes;
+        const hasSpreadAttribute = some(jsxAttributesNode.properties, isJsxSpreadAttribute);
+        const attrs = map(info.attributes, attr => {
+            const value = attr.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(attr.valueDeclaration)) : createUndefined();
+            return factory.createJsxAttribute(factory.createIdentifier(attr.name), factory.createJsxExpression(/*dotDotDotToken*/ undefined, value));
+        });
+        const jsxAttributes = factory.createJsxAttributes(hasSpreadAttribute ? [...attrs, ...jsxAttributesNode.properties] : [...jsxAttributesNode.properties, ...attrs]);
+        const options = { prefix: jsxAttributesNode.pos === jsxAttributesNode.end ? " " : undefined };
+        changes.replaceNode(context.sourceFile, jsxAttributesNode, jsxAttributes, options);
+    }
+
+    function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
+        const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
+        const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
+        const checker = context.program.getTypeChecker();
+        const props = map(info.properties, prop => {
+            const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
+            return factory.createPropertyAssignment(prop.name, initializer);
+        });
+        changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true));
+    }
+
+    function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {
+        if (type.flags & TypeFlags.AnyOrUnknown) {
+            return createUndefined();
+        }
+        if (type.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
+            return factory.createStringLiteral("", /* isSingleQuote */ quotePreference === QuotePreference.Single);
+        }
+        if (type.flags & TypeFlags.Number) {
+            return factory.createNumericLiteral(0);
+        }
+        if (type.flags & TypeFlags.BigInt) {
+            return factory.createBigIntLiteral("0n");
+        }
+        if (type.flags & TypeFlags.Boolean) {
+            return factory.createFalse();
+        }
+        if (type.flags & TypeFlags.EnumLike) {
+            const enumMember = type.symbol.exports ? firstOrUndefined(arrayFrom(type.symbol.exports.values())) : type.symbol;
+            const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
+            return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
+        }
+        if (type.flags & TypeFlags.NumberLiteral) {
+            return factory.createNumericLiteral((type as NumberLiteralType).value);
+        }
+        if (type.flags & TypeFlags.BigIntLiteral) {
+            return factory.createBigIntLiteral((type as BigIntLiteralType).value);
+        }
+        if (type.flags & TypeFlags.StringLiteral) {
+            return factory.createStringLiteral((type as StringLiteralType).value, /* isSingleQuote */ quotePreference === QuotePreference.Single);
+        }
+        if (type.flags & TypeFlags.BooleanLiteral) {
+            return (type === checker.getFalseType() || type === checker.getFalseType(/*fresh*/ true)) ? factory.createFalse() : factory.createTrue();
+        }
+        if (type.flags & TypeFlags.Null) {
+            return factory.createNull();
+        }
+        if (type.flags & TypeFlags.Union) {
+            const expression = firstDefined((type as UnionType).types, t => tryGetValueFromType(context, checker, importAdder, quotePreference, t));
+            return expression ?? createUndefined();
+        }
+        if (checker.isArrayLikeType(type)) {
+            return factory.createArrayLiteralExpression();
+        }
+        if (isObjectLiteralType(type)) {
+            const props = map(checker.getPropertiesOfType(type), prop => {
+                const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
+                return factory.createPropertyAssignment(prop.name, initializer);
+            });
+            return factory.createObjectLiteralExpression(props, /*multiLine*/ true);
+        }
+        if (getObjectFlags(type) & ObjectFlags.Anonymous) {
+            const decl = find(type.symbol.declarations || emptyArray, or(isFunctionTypeNode, isMethodSignature, isMethodDeclaration));
+            if (decl === undefined) return createUndefined();
+
+            const signature = checker.getSignaturesOfType(type, SignatureKind.Call);
+            if (signature === undefined) return createUndefined();
+
+            const func = createSignatureDeclarationFromSignature(SyntaxKind.FunctionExpression, context, quotePreference, signature[0],
+                createStubbedBody(Diagnostics.Function_not_implemented.message, quotePreference), /*name*/ undefined, /*modifiers*/ undefined, /*optional*/ undefined, /*enclosingDeclaration*/ undefined, importAdder) as FunctionExpression | undefined;
+            return func ?? createUndefined();
+        }
+        if (getObjectFlags(type) & ObjectFlags.Class) {
+            const classDeclaration = getClassLikeDeclarationOfSymbol(type.symbol);
+            if (classDeclaration === undefined || hasAbstractModifier(classDeclaration)) return createUndefined();
+
+            const constructorDeclaration = getFirstConstructorWithBody(classDeclaration);
+            if (constructorDeclaration && length(constructorDeclaration.parameters)) return createUndefined();
+
+            return factory.createNewExpression(factory.createIdentifier(type.symbol.name), /*typeArguments*/ undefined, /*argumentsArray*/ undefined);
+        }
+        return createUndefined();
+    }
+
+    function createUndefined() {
+        return factory.createIdentifier("undefined");
+    }
+
+    function isObjectLiteralType(type: Type) {
+        return (type.flags & TypeFlags.Object) &&
+            ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
+    }
+
+    function getUnmatchedAttributes(checker: TypeChecker, source: JsxOpeningLikeElement) {
+        const attrsType = checker.getContextualType(source.attributes);
+        if (attrsType === undefined) return emptyArray;
+
+        const targetProps = attrsType.getProperties();
+        if (!length(targetProps)) return emptyArray;
+
+        const seenNames = new Set<__String>();
+        for (const sourceProp of source.attributes.properties) {
+            if (isJsxAttribute(sourceProp)) {
+                seenNames.add(sourceProp.name.escapedText);
+            }
+            if (isJsxSpreadAttribute(sourceProp)) {
+                const type = checker.getTypeAtLocation(sourceProp.expression);
+                for (const prop of type.getProperties()) {
+                    seenNames.add(prop.escapedName);
+                }
+            }
+        }
+        return filter(targetProps, targetProp =>
+            !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
     }
 }

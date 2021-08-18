@@ -223,7 +223,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Output_Formatting,
-            description: Diagnostics.Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read,
+            description: Diagnostics.Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read,
             defaultValueDescription: "true"
         },
         {
@@ -553,7 +553,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Disable_emitting_file_from_a_compilation,
+            description: Diagnostics.Disable_emitting_files_from_a_compilation,
             transpileOptionValue: undefined,
             defaultValueDescription: "false"
         },
@@ -649,14 +649,6 @@ namespace ts {
             defaultValueDescription: Diagnostics.false_unless_strict_is_set
         },
         {
-            name: "strictOptionalProperties",
-            type: "boolean",
-            affectsSemanticDiagnostics: true,
-            strictFlag: true,
-            category: Diagnostics.Type_Checking,
-            description: Diagnostics.Enable_strict_checking_of_optional_properties
-        },
-        {
             name: "noImplicitThis",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -701,6 +693,13 @@ namespace ts {
             defaultValueDescription: "false"
         },
         {
+            name: "exactOptionalPropertyTypes",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Type_Checking,
+            description: Diagnostics.Interpret_optional_property_types_as_written_rather_than_adding_undefined
+        },
+        {
             name: "noImplicitReturns",
             type: "boolean",
             affectsSemanticDiagnostics: true,
@@ -728,7 +727,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",

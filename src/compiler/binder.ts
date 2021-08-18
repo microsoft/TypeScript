@@ -669,7 +669,7 @@ namespace ts {
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
                 // we use the return control flow graph in strict property initialization checks.
-                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
+                currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression)) ? createBranchLabel() : undefined;
                 currentExceptionTarget = undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -678,10 +678,10 @@ namespace ts {
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
-                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration).body)) {
+                if (!(currentFlow.flags & FlowFlags.Unreachable) && containerFlags & ContainerFlags.IsFunctionLike && nodeIsPresent((node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).body)) {
                     node.flags |= NodeFlags.HasImplicitReturn;
                     if (hasExplicitReturn) node.flags |= NodeFlags.HasExplicitReturn;
-                    (node as FunctionLikeDeclaration).endFlowNode = currentFlow;
+                    (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).endFlowNode = currentFlow;
                 }
                 if (node.kind === SyntaxKind.SourceFile) {
                     node.flags |= emitFlags;
@@ -691,8 +691,8 @@ namespace ts {
                 if (currentReturnTarget) {
                     addAntecedent(currentReturnTarget, currentFlow);
                     currentFlow = finishFlowLabel(currentReturnTarget);
-                    if (node.kind === SyntaxKind.Constructor || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
-                        (node as FunctionLikeDeclaration).returnFlowNode = currentFlow;
+                    if (node.kind === SyntaxKind.Constructor || node.kind === SyntaxKind.ClassStaticBlockDeclaration || (isInJSFile(node) && (node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.FunctionExpression))) {
+                        (node as FunctionLikeDeclaration | ClassStaticBlockDeclaration).returnFlowNode = currentFlow;
                     }
                 }
                 if (!isIIFE) {
@@ -916,10 +916,6 @@ namespace ts {
             return isTypeOfExpression(expr1) && isNarrowableOperand(expr1.expression) && isStringLiteralLike(expr2);
         }
 
-        function isNarrowableInOperands(left: Expression, right: Expression) {
-            return isStringLiteralLike(left) && isNarrowingExpression(right);
-        }
-
         function isNarrowingBinaryExpression(expr: BinaryExpression) {
             switch (expr.operatorToken.kind) {
                 case SyntaxKind.EqualsToken:
@@ -936,7 +932,7 @@ namespace ts {
                 case SyntaxKind.InstanceOfKeyword:
                     return isNarrowableOperand(expr.left);
                 case SyntaxKind.InKeyword:
-                    return isNarrowableInOperands(expr.left, expr.right);
+                    return isNarrowingExpression(expr.right);
                 case SyntaxKind.CommaToken:
                     return isNarrowingExpression(expr.right);
             }
@@ -1670,10 +1666,14 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
-            setParent(node.tagName, node);
+            bind(node.tagName);
             if (node.kind !== SyntaxKind.JSDocEnumTag && node.fullName) {
+                // don't bind the type name yet; that's delayed until delayedBindJSDocTypedefTag
                 setParent(node.fullName, node);
                 setParentRecursive(node.fullName, /*incremental*/ false);
+            }
+            if (typeof node.comment !== "string") {
+                bindEach(node.comment);
             }
         }
 
@@ -1832,6 +1832,7 @@ namespace ts {
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
                 case SyntaxKind.ConstructorType:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
 
                 case SyntaxKind.FunctionExpression:
@@ -1867,7 +1868,7 @@ namespace ts {
                     // By not creating a new block-scoped-container here, we ensure that both 'var x'
                     // and 'let x' go into the Function-container's locals, and we do get a collision
                     // conflict.
-                    return isFunctionLike(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+                    return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
             }
 
             return ContainerFlags.None;
@@ -1929,6 +1930,7 @@ namespace ts {
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
+                case SyntaxKind.ClassStaticBlockDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
@@ -1942,7 +1944,7 @@ namespace ts {
         }
 
         function declareClassMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            return hasSyntacticModifier(node, ModifierFlags.Static)
+            return isStatic(node)
                 ? declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes)
                 : declareSymbol(container.symbol.members!, container.symbol, node, symbolFlags, symbolExcludes);
         }
@@ -2292,7 +2294,7 @@ namespace ts {
             // Provide specialized messages to help the user understand why we think they're in
             // strict mode.
             if (getContainingClass(node)) {
-                return Diagnostics.Invalid_use_of_0_Class_definitions_are_automatically_in_strict_mode;
+                return Diagnostics.Code_contained_in_a_class_is_evaluated_in_JavaScript_s_strict_mode_which_does_not_allow_this_use_of_0_For_more_information_see_https_Colon_Slash_Slashdeveloper_mozilla_org_Slashen_US_Slashdocs_SlashWeb_SlashJavaScript_SlashReference_SlashStrict_mode;
             }
 
             if (file.externalModuleIndicator) {
@@ -2328,7 +2330,7 @@ namespace ts {
                 // Report error if function is not top level function declaration
                 if (blockScopeContainer.kind !== SyntaxKind.SourceFile &&
                     blockScopeContainer.kind !== SyntaxKind.ModuleDeclaration &&
-                    !isFunctionLike(blockScopeContainer)) {
+                    !isFunctionLikeOrClassStaticBlockDeclaration(blockScopeContainer)) {
                     // We check first if the name is inside class declaration or class expression; if so give explicit message
                     // otherwise report generic error message.
                     const errorSpan = getErrorSpanForNode(file, node);
@@ -2712,7 +2714,7 @@ namespace ts {
                     updateStrictModeStatementList((node as SourceFile).statements);
                     return bindSourceFileIfExternalModule();
                 case SyntaxKind.Block:
-                    if (!isFunctionLike(node.parent)) {
+                    if (!isFunctionLikeOrClassStaticBlockDeclaration(node.parent)) {
                         return;
                     }
                     // falls through
@@ -2948,7 +2950,7 @@ namespace ts {
                     // this.foo assignment in a JavaScript class
                     // Bind this property to the containing class
                     const containingClass = thisContainer.parent;
-                    const symbolTable = hasSyntacticModifier(thisContainer, ModifierFlags.Static) ? containingClass.symbol.exports! : containingClass.symbol.members!;
+                    const symbolTable = isStatic(thisContainer) ? containingClass.symbol.exports! : containingClass.symbol.members!;
                     if (hasDynamicName(node)) {
                         bindDynamicallyNamedThisPropertyAssignment(node, containingClass.symbol, symbolTable);
                     }

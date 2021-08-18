@@ -2,6 +2,7 @@
 
 // @Filename: /mod.ts
 //// export const foo = 0;
+//// export type Foo = number;
 
 // @Filename: /index0.ts
 //// [|import f/*0*/|]
@@ -29,6 +30,13 @@
       name: "foo",
       source: "./mod",
       insertText: `import { foo$1 } from "./mod";`,
+      isSnippet: true,
+      replacementSpan: test.ranges()[marker],
+      sourceDisplay: "./mod",
+    }, {
+      name: "Foo",
+      source: "./mod",
+      insertText: `import { Foo$1 } from "./mod";`,
       isSnippet: true,
       replacementSpan: test.ranges()[marker],
       sourceDisplay: "./mod",
