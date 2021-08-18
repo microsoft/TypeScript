@@ -568,9 +568,9 @@ namespace ts {
         {
             name: "importsNotUsedAsValues",
             type: new Map(getEntries({
-                "remove": ImportsNotUsedAsValues.Remove,
-                "preserve": ImportsNotUsedAsValues.Preserve,
-                "error": ImportsNotUsedAsValues.Error,
+                remove: ImportsNotUsedAsValues.Remove,
+                preserve: ImportsNotUsedAsValues.Preserve,
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
