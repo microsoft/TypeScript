@@ -18,8 +18,7 @@ namespace ts {
                 packageId = {
                     name: packageJsonContent.name,
                     subModuleName: r.path.slice(packageInfo.packageDirectory.length + directorySeparator.length),
-                    version: packageJsonContent.version,
-                    bundlesTypes: typeof packageJsonContent.types === "string" || typeof packageJsonContent.typings === "string"
+                    version: packageJsonContent.version
                 };
             }
         }

@@ -3,8 +3,7 @@
 //// [package.json]
 {   
     "name": "foo",
-    "version": "1.0.0",
-    "types": "index.d.ts"
+    "version": "1.0.0"
 }
 
 //// [index.js]
@@ -19,6 +18,7 @@ export = foo;
 module.exports = {};
 
 //// [index.ts]
+import * as Foo from "foo";
 import * as Other from "foo/other"/*1*/;
 
 //// [index.js]

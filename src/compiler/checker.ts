@@ -294,16 +294,20 @@ namespace ts {
     }
 
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
-        const getPackagesSet = memoize(() => {
-            const set = new Set<string>();
+        const getPackagesMap = memoize(() => {
+            // A package name maps to true when we detect it has .d.ts files.
+            // This is useful as an approximation of whether a package bundles its own types.
+            // Note: we only look at files already found by module resolution,
+            // so there may be files we did not consider.
+            const map = new Map<string, boolean>();
             host.getSourceFiles().forEach(sf => {
                 if (!sf.resolvedModules) return;
 
                 forEachEntry(sf.resolvedModules, r => {
-                    if (r && r.packageId) set.add(r.packageId.name);
+                    if (r && r.packageId) map.set(r.packageId.name, r.extension === Extension.Dts || !!map.get(r.packageId.name));
                 });
             });
-            return set;
+            return map;
         });
 
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
@@ -3416,7 +3420,7 @@ namespace ts {
                         /*details*/ undefined,
                         Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
                         packageId.name, mangleScopedPackageName(packageId.name))
-                    : packageId.bundlesTypes
+                    : packageBundlesTypes(packageId.name)
                         ? chainDiagnosticMessages(
                             /*details*/ undefined,
                             Diagnostics.Try_adding_a_new_declaration_d_ts_file_containing_declare_module_0,
@@ -3434,7 +3438,10 @@ namespace ts {
                 resolvedFileName));
         }
         function typesPackageExists(packageName: string): boolean {
-            return getPackagesSet().has(getTypesPackageName(packageName));
+            return getPackagesMap().has(getTypesPackageName(packageName));
+        }
+        function packageBundlesTypes(packageName: string): boolean {
+            return !!getPackagesMap().get(packageName);
         }
 
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;

@@ -4,8 +4,7 @@
 // @filename: node_modules/foo/package.json
 {   
     "name": "foo",
-    "version": "1.0.0",
-    "types": "index.d.ts"
+    "version": "1.0.0"
 }
 
 // @filename: node_modules/foo/index.js
@@ -20,4 +19,5 @@ export = foo;
 module.exports = {};
 
 // @filename: index.ts
+import * as Foo from "foo";
 import * as Other from "foo/other"/*1*/;
