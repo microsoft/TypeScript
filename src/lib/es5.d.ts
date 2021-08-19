@@ -860,28 +860,52 @@ interface Date {
 }
 
 interface DateConstructor {
-    new(): Date;
-    new(value: number | string): Date;
-    new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
-    (): string;
-    readonly prototype: Date;
-    /**
-     * Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
-     * @param s A date string
+    /** 
+     * When called as a constructor, returns a new Date object.
      */
-    parse(s: string): number;
-    /**
-     * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
-     * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
-     * @param month The month as a number between 0 and 11 (January to December).
-     * @param date The date as a number between 1 and 31.
-     * @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
-     * @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
-     * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
-     * @param ms A number from 0 to 999 that specifies the milliseconds.
-     */
-    UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
-    now(): number;
+     new(): Date;
+     /**
+      * When called as a constructor, returns a new Date object.
+      * @param value Either an integer value representing the number of milliseconds since January 1, 1970, 00:00:00 UTC (the ECMAScript epoch, equivalent to the UNIX epoch), with leap seconds ignored, or a string value representing a date, specified in a format recognized by the Date.parse() method.
+      */
+     new(value: number | string): Date;
+     /**
+      * When called as a constructor, returns a new Date object.
+      * @param year Integer value representing the year.
+      * @param month Integer value representing the month, beginning with 0 for January to 11 for December. If a value greater than 11 is passed in, then those months will be added to the date; for example, new Date(1990, 12, 1) will return January 1st, 1991
+      * @param day Integer value representing the day of the month. The default is 1.
+      * @param hours Integer value between 0 and 23 representing the hour of the day. Defaults to 0.
+      * @param minutes Integer value representing the minute segment of a time. The default is 0 minutes past the hour.
+      * @param seconds Integer value representing the seconds segment of a time. The default is 0 seconds past the minute.
+      * @param milliseconds Integer value representing the milliseconds segment of a time. The default is 0 milliseconds past the second.
+      */ 
+     new(year: number, month: number, day?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+     /**
+      * When called as a function, returns a string representation of the current date and time, exactly as new Date().toString() does.
+      */
+     (): string;
+     readonly prototype: Date;
+     /**
+      * Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
+      * @param s A date string
+      */
+     parse(s: string): number;
+     /**
+      * Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
+      * @param year The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+      * @param month The month as a number between 0 and 11 (January to December).
+      * @param date The date as a number between 1 and 31.
+      * @param hours Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+      * @param minutes Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+      * @param seconds Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+      * @param ms A number from 0 to 999 that specifies the milliseconds.
+      */
+     UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+     /** 
+      * Returns the numeric value corresponding to the current time—the number of milliseconds elapsed since January 1, 
+      * 1970 00:00:00 UTC, with leap seconds ignored.
+      */
+     now(): number;     
 }
 
 declare var Date: DateConstructor;
