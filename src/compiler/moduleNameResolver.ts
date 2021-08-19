@@ -1079,8 +1079,7 @@ namespace ts {
 
     /* @internal */
     export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost) {
-        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
-        return resolvedModule;
+        return tryResolveJSModuleWorker(moduleName, initialDir, host).resolvedModule;
     }
 
     const jsOnlyExtensions = [Extensions.JavaScript];
