@@ -5929,6 +5929,11 @@ namespace ts {
         name: string;
     }
 
+    export interface LibReplaceReference {
+        replace: string;
+        with: string;
+    }
+
     export interface ProjectReference {
         /** A normalized path on disk */
         path: string;
@@ -5963,7 +5968,8 @@ namespace ts {
         FixedChunkSize,
     }
 
-    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    type LibType = (string | LibReplaceReference)[]
+    export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | LibType | null | undefined;
 
     export interface CompilerOptions {
         /*@internal*/ all?: boolean;
@@ -6010,7 +6016,7 @@ namespace ts {
         isolatedModules?: boolean;
         jsx?: JsxEmit;
         keyofStringsOnly?: boolean;
-        lib?: string[];
+        lib?: (string | LibReplaceReference)[];
         /*@internal*/listEmittedFiles?: boolean;
         /*@internal*/listFiles?: boolean;
         /*@internal*/explainFiles?: boolean;
@@ -6246,7 +6252,7 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionBase {
         name: string;
-        type: "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>;    // a value of a primitive type, or an object literal mapping named values to actual values
+        type: "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string | { replace: string, with: string } >;    // a value of a primitive type, or an object literal mapping named values to actual values
         isFilePath?: boolean;                                   // True if option value is a path or fileName
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -6278,6 +6284,11 @@ namespace ts {
     }
 
     /* @internal */
+    export interface CommandLineOptionLibType extends CommandLineOptionBase {
+        type: ESMap<string, number | string | { replace: string, with: string } >;  // an object showing what to replace
+    }
+
+    /* @internal */
     export interface AlternateModeDiagnostics {
         diagnostic: DiagnosticMessage;
         getOptionsNameMap: () => OptionsNameMap;
@@ -6301,11 +6312,11 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfListType extends CommandLineOptionBase {
         type: "list";
-        element: CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
+        element: CommandLineOptionLibType | CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption;
     }
 
     /* @internal */
-    export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
+    export type CommandLineOption = CommandLineOptionLibType | CommandLineOptionOfCustomType | CommandLineOptionOfPrimitiveType | TsConfigOnlyOption | CommandLineOptionOfListType;
 
     /* @internal */
     export const enum CharacterCodes {

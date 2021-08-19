@@ -1379,7 +1379,32 @@ namespace ts {
             case "string":
                 return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
             default:
-                return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
+                if (opt.element.type !== libMap) {
+                    return  mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
+                }
+                // Extact out potential 
+                const result: string[] = [];
+                let jsonStart = "";
+                let jsonParsing = false;
+                for (const v of values) {
+                    const s = v.trim();
+                    if (s.startsWith("{")) {
+                        Debug.assert(!jsonStart);
+                        jsonParsing = true;
+                        jsonStart += s + ", ";
+                    }
+                     else if (s.endsWith("}")) {
+                        Debug.assert(jsonParsing, "Unexpected }");
+                        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        append(result, JSON.parse(jsonStart + s) as unknown as string);
+                        jsonParsing = false;
+                        jsonStart = "";
+                    }
+                    else if (!jsonParsing) {
+                       append(result, parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
+                    }
+                }
+                return result;
         }
     }
 
@@ -3093,6 +3118,8 @@ namespace ts {
             return value;
         }
         else if (!isString(option.type)) {
+            // option
+            // @ts-ignore !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! do not ship
             return option.type.get(isString(value) ? value.toLowerCase() : value);
         }
         return normalizeNonListOptionValue(option, basePath, value);
@@ -3504,6 +3531,7 @@ namespace ts {
                 const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
+                // @ts-ignore !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! dont ship this
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
                         return optionStringValue;

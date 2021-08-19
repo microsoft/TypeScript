@@ -278,7 +278,7 @@ namespace ts {
                     reason.packageId && packageIdToString(reason.packageId),
                 );
             case FileIncludeKind.LibFile:
-                if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
+                if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index] as string);
                 const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === options.target ? key : undefined);
                 return chainDiagnosticMessages(
                     /*details*/ undefined,

@@ -327,6 +327,7 @@ namespace FourSlash {
                         Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
 
                     compilationOptions.lib?.forEach(fileName => {
+                        if (!ts.isString(fileName)) return;
                         const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                         ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
                         if (libFile) {

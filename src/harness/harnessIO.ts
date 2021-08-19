@@ -1079,7 +1079,13 @@ namespace Harness {
         const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
         if (option) {
             if (typeof option.type === "object") {
-                return option.type;
+                // Array.from(option.type.values()).every(v => typeof v === "string" || typeof v === "number")
+                if(varyBy === "lib") {
+
+                    ts.Debug.assert("Can't vary a test which uses lib, because it can contain objects" + JSON.stringify(option));
+                }
+                return option.type as ts.ReadonlyESMap<string, string | number>;
+
             }
             if (option.type === "boolean") {
                 return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new ts.Map(ts.getEntries({

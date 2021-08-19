@@ -1,0 +1,14 @@
+/index.ts(5,1): error TS2304: Cannot find name 'window'.
+
+
+==== /fake-dom.d.ts (0 errors) ====
+    interface ABC {}
+    
+==== /index.ts (1 errors) ====
+    /// <reference lib="dom" />
+    const a: ABC = {}
+    
+    // This should raise ebcause 'window' is not set in the replacement for DOM
+    window
+    ~~~~~~
+!!! error TS2304: Cannot find name 'window'.

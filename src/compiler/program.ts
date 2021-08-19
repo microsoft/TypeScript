@@ -994,7 +994,8 @@ namespace ts {
                     processRootFile(defaultLibraryFileName, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile });
                 }
                 else {
-                    forEach(options.lib, (libFileName, index) => {
+                    const stringReferences = filter((options.lib || []), isString);
+                    forEach(stringReferences, (libFileName, index) => {
                         processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
                     });
                 }
@@ -1738,7 +1739,12 @@ namespace ts {
                 return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return some(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                // Handle strings in lib first as these are most
+                const libFiles = map(filter(options.lib, isString), (libFileName) => combinePaths(defaultLibraryPath, libFileName));
+                if (some(libFiles, libFileName => equalityComparer(file.fileName, libFileName))) return true;
+
+                // TODO: Check if this file is referenced via the types
+                return false;
             }
         }
 
@@ -2403,11 +2409,31 @@ namespace ts {
             }
         }
 
-        function getLibFileFromReference(ref: FileReference) {
-            const libName = toFileNameLowerCase(ref.fileName);
+        /** Handles swapping the lib file referenes based on the users's 'lib' settings */
+        function getLibFilePath(fileName: string, fromSourceFile?: SourceFile) {
+            const libName = toFileNameLowerCase(fileName);
             const libFileName = libMap.get(libName);
+            const swaps = filter(options.lib || [], (f) => !isString(f)) as LibReplaceReference[];
+            const toSwap = find(swaps, (s) => s.replace === libName);
+            if (toSwap) {
+                const resolved = resolveModuleName(toSwap.with, fromSourceFile?.fileName ?? host.getCurrentDirectory(), { moduleResolution: ModuleResolutionKind.NodeJs }, host, /*cache*/ undefined, /*redirectedReference*/ undefined,);
+
+                // const newPath = actualResolveModuleNamesWorker([toSwap.with], fromSourceFile?.fileName ?? host.getCurrentDirectory())[0];
+                if (resolved.resolvedModule) return resolved.resolvedModule.resolvedFileName;
+                else {
+                    Debug.assert("could not resolve lib replace reference");
+                }
+            }
+
             if (libFileName) {
-                return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
+                return combinePaths(defaultLibraryPath, libFileName);
+            }
+        }
+
+        function getLibFileFromReference(ref: FileReference) {
+            const path = getLibFilePath(ref.fileName);
+            if (path) {
+                return getSourceFile(path);
             }
         }
 
@@ -2885,11 +2911,11 @@ namespace ts {
 
         function processLibReferenceDirectives(file: SourceFile) {
             forEach(file.libReferenceDirectives, (libReference, index) => {
-                const libName = toFileNameLowerCase(libReference.fileName);
-                const libFileName = libMap.get(libName);
+                const libName = libReference.fileName;
+                const libFileName = getLibFilePath(libReference.fileName, file);
                 if (libFileName) {
                     // we ignore any 'no-default-lib' reference set on this file.
-                    processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
+                    processRootFile(libFileName, /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
                 }
                 else {
                     const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
@@ -3464,7 +3490,7 @@ namespace ts {
                     break;
                 case FileIncludeKind.LibFile:
                     if (reason.index !== undefined) {
-                        configFileNode = getOptionsSyntaxByArrayElementValue("lib", options.lib![reason.index]);
+                        configFileNode = getOptionsSyntaxByArrayElementValue("lib", options.lib![reason.index] as string);
                         message = Diagnostics.File_is_library_specified_here;
                         break;
                     }

@@ -1,0 +1,13 @@
+=== /fake-dom.d.ts ===
+interface ABC {}
+No type information for this code.
+No type information for this code.=== /index.ts ===
+/// <reference lib="dom" />
+const a: ABC = {}
+>a : ABC
+>{} : {}
+
+// This should raise ebcause 'window' is not set in the replacement for DOM
+window
+>window : any
+
