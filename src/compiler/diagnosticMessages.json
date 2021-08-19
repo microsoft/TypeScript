@@ -6027,6 +6027,11 @@
         "category": "Error",
         "code": 7057
     },
+    "Try adding a new declaration (.d.ts) file containing `declare module '{0}';`": {
+        "category": "Error",
+        "code": 7058
+    },
+
 
     "You cannot rename this element.": {
         "category": "Error",

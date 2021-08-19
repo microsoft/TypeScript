@@ -1,0 +1,4 @@
+=== tests/cases/conformance/moduleResolution/index.ts ===
+import * as Other from "foo/other"/*1*/;
+>Other : any
+

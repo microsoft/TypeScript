@@ -6513,6 +6513,8 @@ namespace ts {
         subModuleName: string;
         /** Version of the package, e.g. "1.2.3" */
         version: string;
+        /** Whether the package bundles its own type declarations. */
+        bundlesTypes?: boolean;
     }
 
     export const enum Extension {
