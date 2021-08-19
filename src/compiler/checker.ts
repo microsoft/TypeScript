@@ -27306,13 +27306,13 @@ namespace ts {
          * @param location The location node where we want to check if the property is accessible.
          * @param isSuper True if the access is from `super.`.
          * @param writing True if this is a write property access, false if it is a read property access.
-         * @param type The type of the object whose property is being accessed. (Not the type of the property.)
+         * @param containingType The type of the object whose property is being accessed. (Not the type of the property.)
          * @param prop The symbol for the property being accessed.
          * @param errorNode The node where we should report an invalid property access error, or undefined if we should not report errors.
          */
         function checkPropertyAccessibilityAtLocation(location: Node,
             isSuper: boolean, writing: boolean,
-            type: Type, prop: Symbol, errorNode?: Node): boolean {
+            containingType: Type, prop: Symbol, errorNode?: Node): boolean {
 
             const flags = getDeclarationModifierFlagsFromSymbol(prop, writing);
 
@@ -27407,7 +27407,7 @@ namespace ts {
                         error(errorNode,
                             Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses,
                             symbolToString(prop),
-                            typeToString(getDeclaringClass(prop) || type));
+                            typeToString(getDeclaringClass(prop) || containingType));
                     }
                     return false;
                 }
@@ -27419,15 +27419,15 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-            if (type.flags & TypeFlags.TypeParameter) {
+            if (containingType.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
-                type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(type as TypeParameter)! : getBaseConstraintOfType(type as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
+                containingType = (containingType as TypeParameter).isThisType ? getConstraintOfTypeParameter(containingType as TypeParameter)! : getBaseConstraintOfType(containingType as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
-            if (!type || !hasBaseType(type, enclosingClass)) {
+            if (!containingType || !hasBaseType(containingType, enclosingClass)) {
                 if (errorNode) {
                     error(errorNode,
                         Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2,
-                        symbolToString(prop), typeToString(enclosingClass), typeToString(type));
+                        symbolToString(prop), typeToString(enclosingClass), typeToString(containingType));
                 }
                 return false;
             }
@@ -28192,18 +28192,18 @@ namespace ts {
          * @param node location where to check property accessibility
          * @param isSuper whether to consider this a `super` property access, e.g. `super.foo`.
          * @param isWrite whether this is a write access, e.g. `++foo.x`.
-         * @param type type where the property comes from.
+         * @param containingType type where the property comes from.
          * @param property property symbol.
          */
         function isPropertyAccessible(
             node: Node,
             isSuper: boolean,
             isWrite: boolean,
-            type: Type,
+            containingType: Type,
             property: Symbol): boolean {
 
             // Short-circuiting for improved performance.
-            if (type === errorType || isTypeAny(type)) {
+            if (containingType === errorType || isTypeAny(containingType)) {
                 return true;
             }
 
@@ -28214,7 +28214,7 @@ namespace ts {
                 return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
             }
 
-            return checkPropertyAccessibilityAtLocation(node, isSuper, isWrite, type, property);
+            return checkPropertyAccessibilityAtLocation(node, isSuper, isWrite, containingType, property);
         }
 
         /**
