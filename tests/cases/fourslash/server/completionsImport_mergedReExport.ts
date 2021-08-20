@@ -30,6 +30,12 @@
 
 verify.completions({
   marker: "",
+  includes: [{
+    name: "Config",
+    source: "/node_modules/@jest/types/index",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions,
+  }],
   preferences: {
     includeCompletionsForModuleExports: true,
   },
@@ -37,19 +43,16 @@ verify.completions({
 
 edit.insert("o");
 
-// Should not crash
 verify.completions({
   marker: "",
+  includes: [{
+    name: "Config",
+    source: "@jest/types",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions,
+  }],
   preferences: {
     includeCompletionsForModuleExports: true,
+    allowIncompleteCompletions: true,
   },
 });
-
-// Because of the way `Config` is merged, we are actually not including it
-// in completions here, though it would be better if we could. The `exports`
-// of "@jest/types/index" would contain an alias symbol named `Config` without
-// the merge from ts-jest, but with the merge, the `exports` contains the merge
-// of `namespace Config` and the "@jest/types/Config" module symbol. This is
-// unexpected (to me) and difficult to work with, and might be wrong? My
-// expectation would have been to preserve the export alias symbol, but let it
-// *resolve* to the merge of the SourceFile and the namespace declaration.

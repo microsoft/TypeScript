@@ -77,7 +77,8 @@ namespace ts {
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode,
-            reportNonlocalAugmentation
+            reportNonlocalAugmentation,
+            reportNonSerializableProperty
         };
         let errorNameNode: DeclarationName | undefined;
         let errorFallbackNode: Declaration | undefined;
@@ -225,6 +226,12 @@ namespace ts {
                         createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
                     ));
                 }
+            }
+        }
+
+        function reportNonSerializableProperty(propertyName: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
         }
 

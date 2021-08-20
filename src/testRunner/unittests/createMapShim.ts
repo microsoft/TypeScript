@@ -319,7 +319,7 @@ namespace ts {
             map.set("c", "d");
             map.set("a", "b");
             const actual: [string, string][] = [];
-            map.forEach((value, key) => { actual.push([key, value]); });
+            map.forEach((value, key) => actual.push([key, value]));
             assert.deepEqual(actual, [["c", "d"], ["a", "b"]]);
         });
     });
