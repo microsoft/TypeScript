@@ -1527,11 +1527,9 @@ namespace ts {
     }
 
     export function isObjectLiteralOrClassExpressionMethodOrAccessor(node: Node): node is MethodDeclaration {
-        return (node.kind === SyntaxKind.MethodDeclaration &&
+        return (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
-                node.parent.kind === SyntaxKind.ClassExpression)) ||
-            node.kind === SyntaxKind.GetAccessor ||
-            node.kind === SyntaxKind.SetAccessor;
+                node.parent.kind === SyntaxKind.ClassExpression);
     }
 
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {
