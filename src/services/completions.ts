@@ -3050,16 +3050,9 @@ namespace ts.Completions {
             ? checker.getUnionType([contextualType, completionsType!])
             : contextualType;
 
-        const properties = type.isUnion()
-            ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
-                // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
-                !(memberType.flags & TypeFlags.Primitive ||
-                    checker.isArrayLikeType(memberType) ||
-                    typeHasCallOrConstructSignatures(memberType, checker) ||
-                    checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
-            : type.getApparentProperties();
-
-        return hasCompletionsType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
+        const properties = getApparentProperties(type, obj, checker);
+        return type.isClass() && containsNonPublicProperties(properties) ? [] :
+            hasCompletionsType ? filter(properties, hasDeclarationOtherThanSelf) : properties;
 
         // Filter out members whose only declaration is the object literal itself to avoid
         // self-fulfilling completions like:
@@ -3069,6 +3062,20 @@ namespace ts.Completions {
         function hasDeclarationOtherThanSelf(member: Symbol) {
             return some(member.declarations, decl => decl.parent !== obj);
         }
+    }
+
+    function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker) {
+        if (!type.isUnion()) return type.getApparentProperties();
+        return checker.getAllPossiblePropertiesOfTypes(filter(type.types, memberType =>
+            !(memberType.flags & TypeFlags.Primitive
+                || checker.isArrayLikeType(memberType)
+                || checker.isTypeInvalidDueToUnionDiscriminant(memberType, node)
+                || typeHasCallOrConstructSignatures(memberType, checker)
+                || memberType.isClass() && containsNonPublicProperties(memberType.getApparentProperties()))));
+    }
+
+    function containsNonPublicProperties(props: Symbol[]) {
+        return some(props, p => !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier));
     }
 
     /**
