@@ -2003,13 +2003,13 @@ namespace ts.FindAllReferences {
         }
 
         function getReferencesForStringLiteral(node: StringLiteralLike, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
-            const type = getContextualTypeOrAncestorTypeNodeType(node, checker);
+            const type = getContextualTypeFromParentOrAncestorTypeNode(node, checker);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
                     if (isStringLiteralLike(ref) && ref.text === node.text) {
                         if (type) {
-                            const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
+                            const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
                             if (type !== checker.getStringType() && type === refType) {
                                 return nodeEntry(ref, EntryKind.StringLiteral);
                             }
