@@ -1526,10 +1526,12 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
-    export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
-        return node.kind === SyntaxKind.MethodDeclaration &&
+    export function isObjectLiteralOrClassExpressionMethodOrAccessor(node: Node): node is MethodDeclaration {
+        return (node.kind === SyntaxKind.MethodDeclaration &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
-                node.parent.kind === SyntaxKind.ClassExpression);
+                node.parent.kind === SyntaxKind.ClassExpression)) ||
+            node.kind === SyntaxKind.GetAccessor ||
+            node.kind === SyntaxKind.SetAccessor;
     }
 
     export function isIdentifierTypePredicate(predicate: TypePredicate): predicate is IdentifierTypePredicate {

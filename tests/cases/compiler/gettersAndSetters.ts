@@ -1,3 +1,4 @@
+// @target: es2020
 // classes
 class C {
     public fooBack = "";

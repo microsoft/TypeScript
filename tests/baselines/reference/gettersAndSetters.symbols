@@ -118,7 +118,7 @@ var i:I1 = function (n) {return n;}
 const x: string | number = Math.random() < 0.5 ? "str" : 123;
 >x : Symbol(x, Decl(gettersAndSetters.ts, 41, 5))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 if (typeof x === "string") {

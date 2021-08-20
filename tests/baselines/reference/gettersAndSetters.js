@@ -52,32 +52,19 @@ if (typeof x === "string") {
 
 //// [gettersAndSetters.js]
 // classes
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.fooBack = "";
         this.bazBack = "";
         this.get = function () { }; // ok
         this.set = function () { }; // ok
     }
-    Object.defineProperty(C.prototype, "Foo", {
-        get: function () { return this.fooBack; } // ok
-        ,
-        set: function (foo) { this.fooBack = foo; } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "Bar", {
-        get: function () { return C.barBack; } // ok
-        ,
-        set: function (bar) { C.barBack = bar; } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    C.barBack = "";
-    return C;
-}());
+    get Foo() { return this.fooBack; } // ok
+    set Foo(foo) { this.fooBack = foo; } // ok
+    static get Bar() { return C.barBack; } // ok
+    static set Bar(bar) { C.barBack = bar; } // ok
+}
+C.barBack = "";
 var c = new C();
 var foo = c.Foo;
 c.Foo = "foov";
@@ -91,11 +78,11 @@ var ofg = o.Foo;
 o.Foo = 0;
 var i = function (n) { return n; };
 // Repro from #45006
-var x = Math.random() < 0.5 ? "str" : 123;
+const x = Math.random() < 0.5 ? "str" : 123;
 if (typeof x === "string") {
-    var obj = {
+    let obj = {
         set prop(_) { x.toUpperCase(); },
         get prop() { return x.toUpperCase(); },
-        method: function () { return x.toUpperCase(); }
+        method() { return x.toUpperCase(); }
     };
 }
