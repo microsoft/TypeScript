@@ -105,9 +105,9 @@ function createKey(name: string, code: number): string {
 
 function convertPropertyName(origName: string): string {
     let result = origName.split("").map(char => {
-        if (char === "*") { return "_Asterisk"; }
-        if (char === "/") { return "_Slash"; }
-        if (char === ":") { return "_Colon"; }
+        if (char === "*") return "_Asterisk";
+        if (char === "/") return "_Slash";
+        if (char === ":") return "_Colon";
         return /\w/.test(char) ? char : "_";
     }).join("");
 

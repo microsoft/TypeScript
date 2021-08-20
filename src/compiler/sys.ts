@@ -366,7 +366,7 @@ namespace ts {
                 FileSystemEntryKind.Directory,
                 (_eventName: string, relativeFileName) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    if (!isString(relativeFileName)) { return; }
+                    if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                     // Some applications save a working file via rename operations
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));

@@ -1,0 +1,24 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment3.js ===
+
+No type information for this code.=== tests/cases/compiler/a.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {boolean} a
+ * @property {boolean} b
+ */
+
+const bar = { c: 1 };
+>bar : Symbol(bar, Decl(a.js, 6, 5))
+>c : Symbol(c, Decl(a.js, 6, 13))
+
+/** @type {Foo} */
+export default bar;
+>bar : Symbol(bar, Decl(a.js, 6, 5))
+
+=== tests/cases/compiler/b.js ===
+import a from "./a";
+>a : Symbol(a, Decl(b.js, 0, 6))
+
+a;
+>a : Symbol(a, Decl(b.js, 0, 6))
+

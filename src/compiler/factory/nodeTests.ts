@@ -129,6 +129,11 @@ namespace ts {
         return node.kind === SyntaxKind.StaticKeyword;
     }
 
+    /* @internal */
+    export function isAbstractModifier(node: Node): node is AbstractKeyword {
+        return node.kind === SyntaxKind.AbstractKeyword;
+    }
+
     /*@internal*/
     export function isSuperKeyword(node: Node): node is SuperExpression {
         return node.kind === SyntaxKind.SuperKeyword;

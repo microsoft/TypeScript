@@ -171,3 +171,14 @@ var x
     });
     assert.equal(5, kids.length);
 });
+
+describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSDoc", () => {
+    const content = `
+/** jsdoc comment attached to EndOfFileToken */
+`;
+    const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+    const endOfFileToken = sourceFile.getChildren()[1];
+    assert.equal(endOfFileToken.getChildren().length, 1);
+    assert.equal(endOfFileToken.getChildCount(), 1);
+    assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
+});

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameHashCharName.ts ===
+#
+
+class C {
+>C : Symbol(C, Decl(privateNameHashCharName.ts, 0, 1))
+
+    #
+># : Symbol(C[#], Decl(privateNameHashCharName.ts, 2, 9))
+
+    m() {
+>m : Symbol(C.m, Decl(privateNameHashCharName.ts, 3, 5))
+
+        this.#
+>this.# : Symbol(C[#], Decl(privateNameHashCharName.ts, 2, 9))
+>this : Symbol(C, Decl(privateNameHashCharName.ts, 0, 1))
+    }
+}
+

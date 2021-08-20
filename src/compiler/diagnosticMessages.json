@@ -663,7 +663,7 @@
         "category": "Error",
         "code": 1208
     },
-    "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
+    "Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of '{0}'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.": {
         "category": "Error",
         "code": 1210
     },
@@ -1400,7 +1400,7 @@
         "category": "Error",
         "code": 1441
     },
-    "Missing '=' before default property value.": {
+    "Expected '=' for property initializer.": {
         "category": "Error",
         "code": 1442
     },
@@ -1738,6 +1738,10 @@
         "category": "Error",
         "code": 2374
     },
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2375
+    },
     "A 'super' call must be the first statement in the constructor when a class contains initialized properties, parameter properties, or private identifiers.": {
         "category": "Error",
         "code": 2376
@@ -1749,6 +1753,10 @@
     "A 'get' accessor must return a value.": {
         "category": "Error",
         "code": 2378
+    },
+    "Argument of type '{0}' is not assignable to parameter of type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.": {
+        "category": "Error",
+        "code": 2379
     },
     "The return type of a 'get' accessor must be assignable to its 'set' accessor type": {
         "category": "Error",
@@ -1873,6 +1881,10 @@
     "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.": {
         "category": "Error",
         "code": 2410
+    },
+    "Type '{0}' is not assignable to type '{1}' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.": {
+        "category": "Error",
+        "code": 2412
     },
     "Property '{0}' of type '{1}' is not assignable to '{2}' index type '{3}'.": {
         "category": "Error",
@@ -3801,6 +3813,10 @@
         "category": "Error",
         "code": 4117
     },
+    "The type of this node cannot be serialized because its property '{0}' cannot be serialized.": {
+        "category": "Error",
+        "code": 4118
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -5455,7 +5471,7 @@
         "category": "Message",
         "code": 6659
     },
-    "Disable emitting file from a compilation.": {
+    "Disable emitting files from a compilation.": {
         "category": "Message",
         "code": 6660
     },
@@ -5555,7 +5571,7 @@
         "category": "Message",
         "code": 6684
     },
-    "Enable color and formatting in output to make compiler errors easier to read": {
+    "Enable color and formatting in TypeScript's output to make compiler errors easier to read": {
         "category": "Message",
         "code": 6685
     },
@@ -5784,7 +5800,7 @@
         "category": "Message",
         "code": 6923
     },
-    "Ignoring tsconfig.json, compiles the specified files with default compiler options": {
+    "Ignoring tsconfig.json, compiles the specified files with default compiler options.": {
         "category": "Message",
         "code": 6924
     },
@@ -5796,7 +5812,7 @@
         "category": "Message",
         "code": 6926
     },
-    "Compiles the TypeScript project located at the specified path": {
+    "Compiles the TypeScript project located at the specified path.": {
         "category": "Message",
         "code": 6927
     },
@@ -5804,7 +5820,7 @@
         "category": "Message",
         "code": 6928
     },
-    "Compiles the current project, with additional settings": {
+    "Compiles the current project, with additional settings.": {
         "category": "Message",
         "code": 6929
     },
@@ -7105,6 +7121,18 @@
     "Add all missing properties": {
         "category": "Message",
         "code": 95166
+    },
+    "Add missing attributes": {
+        "category": "Message",
+        "code": 95167
+    },
+    "Add all missing attributes": {
+        "category": "Message",
+        "code": 95168
+    },
+    "Add 'undefined' to optional property type": {
+        "category": "Message",
+        "code": 95169
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

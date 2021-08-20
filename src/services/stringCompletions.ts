@@ -184,14 +184,14 @@ namespace ts.Completions.StringCompletions {
 
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ false) && !isImportCall(parent)) {
+                if (!isRequireCallArgument(node) && !isImportCall(parent)) {
                     const argumentInfo = SignatureHelp.getArgumentInfoForCompletions(node, position, sourceFile);
                     // Get string literal completions from specialized signatures of the target
                     // i.e. declare function f(a: 'A');
                     // f("/*completion position*/")
                     return argumentInfo ? getStringLiteralCompletionsFromSignature(argumentInfo, typeChecker) : fromContextualType();
                 }
-                // falls through (is `require("")` or `import("")`)
+                // falls through (is `require("")` or `require(""` or `import("")`)
 
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportDeclaration:
@@ -758,5 +758,15 @@ namespace ts.Completions.StringCompletions {
 
     function containsSlash(fragment: string) {
         return stringContains(fragment, directorySeparator);
+    }
+
+    /**
+     * Matches
+     *   require(""
+     *   require("")
+     */
+    function isRequireCallArgument(node: Node) {
+        return isCallExpression(node.parent) && firstOrUndefined(node.parent.arguments) === node
+            && isIdentifier(node.parent.expression) && node.parent.expression.escapedText === "require";
     }
 }

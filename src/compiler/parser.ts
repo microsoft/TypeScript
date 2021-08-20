@@ -530,8 +530,8 @@ namespace ts {
                             visitNode(cbNode, (node as JSDocTypedefTag).fullName) ||
                             (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined))
                         : visitNode(cbNode, (node as JSDocTypedefTag).fullName) ||
-                            visitNode(cbNode, (node as JSDocTypedefTag).typeExpression)) ||
-                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined));
+                            visitNode(cbNode, (node as JSDocTypedefTag).typeExpression) ||
+                            (typeof (node as JSDoc).comment === "string" ? undefined : visitNodes(cbNode, cbNodes, (node as JSDoc).comment as NodeArray<JSDocComment> | undefined)));
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
@@ -1648,15 +1648,15 @@ namespace ts {
         }
 
         function parseSemicolonAfterPropertyName(name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
-            switch (token()) {
-                case SyntaxKind.AtToken:
-                    parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_the_name_and_all_keywords_of_property_declarations);
-                    return;
+            if (token() === SyntaxKind.AtToken && !scanner.hasPrecedingLineBreak()) {
+                parseErrorAtCurrentToken(Diagnostics.Decorators_must_precede_the_name_and_all_keywords_of_property_declarations);
+                return;
+            }
 
-                case SyntaxKind.OpenParenToken:
-                    parseErrorAtCurrentToken(Diagnostics.Cannot_start_a_function_call_in_a_type_annotation);
-                    nextToken();
-                    return;
+            if (token() === SyntaxKind.OpenParenToken) {
+                parseErrorAtCurrentToken(Diagnostics.Cannot_start_a_function_call_in_a_type_annotation);
+                nextToken();
+                return;
             }
 
             if (type && !canParseSemicolon()) {
@@ -1664,7 +1664,7 @@ namespace ts {
                     parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
                 }
                 else {
-                    parseErrorAtCurrentToken(Diagnostics.Missing_before_default_property_value);
+                    parseErrorAtCurrentToken(Diagnostics.Expected_for_property_initializer);
                 }
                 return;
             }

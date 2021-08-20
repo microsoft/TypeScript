@@ -1070,7 +1070,7 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
-            const isFirstLoad = this.projectProgramVersion === 0;
+            const isFirstProgramLoad = this.projectProgramVersion === 0 && hasNewProgram;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
@@ -1078,7 +1078,7 @@ namespace ts.server {
                 if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
                 this.autoImportProviderHost?.markAsDirty();
             }
-            if (isFirstLoad) {
+            if (isFirstProgramLoad) {
                 // Preload auto import provider so it's not created during completions request
                 this.getPackageJsonAutoImportProvider();
             }
@@ -1581,7 +1581,9 @@ namespace ts.server {
 
             const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;
-            const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
+            const logError = (message: string) => {
+                (errorLogs || (errorLogs = [])).push(message);
+            };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
                 Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
@@ -1902,6 +1904,11 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
+            const program = hostProject.getCurrentProgram();
+            if (!program) {
+                return ts.emptyArray;
+            }
+
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1918,7 +1925,6 @@ namespace ts.server {
                     compilerOptions,
                     moduleResolutionHost));
 
-                const program = hostProject.getCurrentProgram()!;
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
                     if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;

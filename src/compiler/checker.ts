@@ -555,6 +555,7 @@ namespace ts {
                 getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp),
             getExpandedParameters,
             hasEffectiveRestParameter,
+            containsArgumentsReference,
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
@@ -580,6 +581,7 @@ namespace ts {
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
             getExportsAndPropertiesOfModule,
+            forEachExportAndPropertyOfModule,
             getSymbolWalker: createGetSymbolWalker(
                 getRestTypeOfSignature,
                 getTypePredicateOfSignature,
@@ -633,6 +635,7 @@ namespace ts {
             isTupleType,
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
+            getExactOptionalProperties,
             getAllPossiblePropertiesOfTypes,
             getSuggestedSymbolForNonexistentProperty,
             getSuggestionForNonexistentProperty,
@@ -710,6 +713,7 @@ namespace ts {
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
+            isPropertyAccessible,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
@@ -920,6 +924,7 @@ namespace ts {
         let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
+        let deferredGlobalImportMetaExpressionType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
@@ -3530,6 +3535,24 @@ namespace ts {
             return exports;
         }
 
+        function forEachExportAndPropertyOfModule(moduleSymbol: Symbol, cb: (symbol: Symbol, key: __String) => void): void {
+            const exports = getExportsOfModule(moduleSymbol);
+            exports.forEach((symbol, key) => {
+                if (!isReservedMemberName(key)) {
+                    cb(symbol, key);
+                }
+            });
+            const exportEquals = resolveExternalModuleSymbol(moduleSymbol);
+            if (exportEquals !== moduleSymbol) {
+                const type = getTypeOfSymbol(exportEquals);
+                if (shouldTreatPropertiesOfExternalModuleAsExports(type)) {
+                    getPropertiesOfType(type).forEach(symbol => {
+                        cb(symbol, symbol.escapedName);
+                    });
+                }
+            }
+        }
+
         function tryGetMemberInModuleExports(memberName: __String, moduleSymbol: Symbol): Symbol | undefined {
             const symbolTable = getExportsOfModule(moduleSymbol);
             if (symbolTable) {
@@ -4536,6 +4559,7 @@ namespace ts {
                     reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
                     reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
                     reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
+                    reportNonSerializableProperty: wrapReportedDiagnostic(tracker.reportNonSerializableProperty),
                     trackSymbol: oldTrackSymbol && ((...args) => {
                         const result = oldTrackSymbol(...args);
                         if (result) {
@@ -5243,17 +5267,22 @@ namespace ts {
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
                 if (context.tracker.trackSymbol && getCheckFlags(propertySymbol) & CheckFlags.Late && isLateBoundName(propertySymbol.escapedName)) {
-                    const decl = first(propertySymbol.declarations!);
-                    if (propertySymbol.declarations && hasLateBindableName(decl)) {
-                        if (isBinaryExpression(decl)) {
-                            const name = getNameOfDeclaration(decl);
-                            if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
-                                trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                    if (propertySymbol.declarations) {
+                        const decl = first(propertySymbol.declarations);
+                        if (hasLateBindableName(decl)) {
+                            if (isBinaryExpression(decl)) {
+                                const name = getNameOfDeclaration(decl);
+                                if (name && isElementAccessExpression(name) && isPropertyAccessEntityNameExpression(name.argumentExpression)) {
+                                    trackComputedName(name.argumentExpression, saveEnclosingDeclaration, context);
+                                }
+                            }
+                            else {
+                                trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
                             }
                         }
-                        else {
-                            trackComputedName(decl.name.expression, saveEnclosingDeclaration, context);
-                        }
+                    }
+                    else if (context.tracker?.reportNonSerializableProperty) {
+                        context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                     }
                 }
                 context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
@@ -9066,7 +9095,7 @@ namespace ts {
             }
             let type: Type;
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                type = widenTypeForVariableLikeDeclaration(checkExpressionCached((declaration as ExportAssignment).expression), declaration);
+                type = widenTypeForVariableLikeDeclaration(tryGetTypeFromEffectiveTypeNode(declaration) || checkExpressionCached((declaration as ExportAssignment).expression), declaration);
             }
             else if (
                 isBinaryExpression(declaration) ||
@@ -9322,6 +9351,7 @@ namespace ts {
             if (!links.type) {
                 const targetSymbol = resolveAlias(symbol);
                 const exportSymbol = symbol.declarations && getTargetOfAliasDeclaration(getDeclarationOfAliasSymbol(symbol)!, /*dontResolveAlias*/ true);
+                const declaredType = firstDefined(exportSymbol?.declarations, d => isExportAssignment(d) ? tryGetTypeFromEffectiveTypeNode(d) : undefined);
                 // It only makes sense to get the type of a value symbol. If the result of resolving
                 // the alias is not a value, then it has no type. To get the type associated with a
                 // type symbol, call getDeclaredTypeOfSymbol.
@@ -9329,6 +9359,7 @@ namespace ts {
                 // up recursively calling getTypeOfAlias, causing a stack overflow.
                 links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                     : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
+                    : declaredType ? declaredType
                     : targetSymbol.flags & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
                     : errorType;
             }
@@ -13317,6 +13348,24 @@ namespace ts {
             return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
+        function getGlobalImportMetaExpressionType() {
+            if (!deferredGlobalImportMetaExpressionType) {
+                // Create a synthetic type `ImportMetaExpression { meta: MetaProperty }`
+                const symbol = createSymbol(SymbolFlags.None, "ImportMetaExpression" as __String);
+                const importMetaType = getGlobalImportMetaType();
+
+                const metaPropertySymbol = createSymbol(SymbolFlags.Property, "meta" as __String, CheckFlags.Readonly);
+                metaPropertySymbol.parent = symbol;
+                metaPropertySymbol.type = importMetaType;
+
+                const members = createSymbolTable([metaPropertySymbol]);
+                symbol.members = members;
+
+                deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
+            }
+            return deferredGlobalImportMetaExpressionType;
+        }
+
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
             return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
         }
@@ -14246,8 +14295,10 @@ namespace ts {
             // a symbol-like type and a type known to be non-symbol-like, or
             // a void-like type and a type known to be non-void-like, or
             // a non-primitive type and a type known to be primitive.
-            if (includes & TypeFlags.Never ||
-                strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
+            if (includes & TypeFlags.Never) {
+                return contains(typeSet, silentNeverType) ? silentNeverType : neverType;
+            }
+            if (strictNullChecks && includes & TypeFlags.Nullable && includes & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.IncludesEmptyObject) ||
                 includes & TypeFlags.NonPrimitive && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NonPrimitive) ||
                 includes & TypeFlags.StringLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.StringLike) ||
                 includes & TypeFlags.NumberLike && includes & (TypeFlags.DisjointDomains & ~TypeFlags.NumberLike) ||
@@ -14855,40 +14906,35 @@ namespace ts {
             return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType);
         }
 
+        function isGenericType(type: Type): boolean {
+            return !!getGenericObjectFlags(type);
+        }
+
         function isGenericObjectType(type: Type): boolean {
-            if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericObjectType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericObjectTypeComputed |
-                        (isGenericObjectType((type as SubstitutionType).substitute) || isGenericObjectType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericObjectType : 0);
-                }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericObjectType);
-            }
-            return !!(type.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type) || isGenericTupleType(type);
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericObjectType);
         }
 
         function isGenericIndexType(type: Type): boolean {
+            return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericIndexType);
+        }
+
+        function getGenericObjectFlags(type: Type): ObjectFlags {
             if (type.flags & TypeFlags.UnionOrIntersection) {
-                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (some((type as UnionOrIntersectionType).types, isGenericIndexType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as UnionOrIntersectionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        reduceLeft((type as UnionOrIntersectionType).types, (flags, t) => flags | getGenericObjectFlags(t), 0);
                 }
-                return !!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericType;
             }
             if (type.flags & TypeFlags.Substitution) {
-                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexTypeComputed)) {
-                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericIndexTypeComputed |
-                        (isGenericIndexType((type as SubstitutionType).substitute) || isGenericIndexType((type as SubstitutionType).baseType) ? ObjectFlags.IsGenericIndexType : 0);
+                if (!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
+                    (type as SubstitutionType).objectFlags |= ObjectFlags.IsGenericTypeComputed |
+                        getGenericObjectFlags((type as SubstitutionType).substitute) | getGenericObjectFlags((type as SubstitutionType).baseType);
                 }
-                return !!((type as SubstitutionType).objectFlags & ObjectFlags.IsGenericIndexType);
+                return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
             }
-            return !!(type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) && !isPatternLiteralType(type);
+            return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
+                (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
         }
 
         function isThisTypeParameter(type: Type): boolean {
@@ -15165,7 +15211,7 @@ namespace ts {
             while (true) {
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
-                const checkTypeInstantiable = isGenericObjectType(checkType) || isGenericIndexType(checkType);
+                const checkTypeInstantiable = isGenericType(checkType);
                 const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
                 if (checkType === wildcardType || extendsType === wildcardType) {
                     return wildcardType;
@@ -15187,7 +15233,7 @@ namespace ts {
                 // Instantiate the extends type including inferences for 'infer T' type parameters
                 const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
                 // We attempt to resolve the conditional type only when the check and extends types are non-generic
-                if (!checkTypeInstantiable && !isGenericObjectType(inferredExtendsType) && !isGenericIndexType(inferredExtendsType)) {
+                if (!checkTypeInstantiable && !isGenericType(inferredExtendsType)) {
                     // Return falseType for a definitely false extends check. We check an instantiations of the two
                     // types with type parameters mapped to the wildcard type, the most permissive instantiations
                     // possible (the wildcard type is assignable to and from all types). If those are not related,
@@ -16227,26 +16273,19 @@ namespace ts {
                 let result = root.instantiations!.get(id);
                 if (!result) {
                     const newMapper = createTypeMapper(root.outerTypeParameters, typeArguments);
-                    result = instantiateConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
+                    const checkType = root.checkType;
+                    const distributionType = root.isDistributive ? getMappedType(checkType, newMapper) : undefined;
+                    // Distributive conditional types are distributed over union types. For example, when the
+                    // distributive conditional type T extends U ? X : Y is instantiated with A | B for T, the
+                    // result is (A extends U ? X : Y) | (B extends U ? X : Y).
+                    result = distributionType && checkType !== distributionType && distributionType.flags & (TypeFlags.Union | TypeFlags.Never) ?
+                        mapTypeWithAlias(distributionType, t => getConditionalType(root, prependTypeMapping(checkType, t, newMapper)), aliasSymbol, aliasTypeArguments) :
+                        getConditionalType(root, newMapper, aliasSymbol, aliasTypeArguments);
                     root.instantiations!.set(id, result);
                 }
                 return result;
             }
             return type;
-        }
-
-        function instantiateConditionalType(root: ConditionalRoot, mapper: TypeMapper, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
-            // Check if we have a conditional type where the check type is a naked type parameter. If so,
-            // the conditional type is distributive over union types and when T is instantiated to a union
-            // type A | B, we produce (A extends U ? X : Y) | (B extends U ? X : Y).
-            if (root.isDistributive) {
-                const checkType = root.checkType as TypeParameter;
-                const instantiatedType = getMappedType(checkType, mapper);
-                if (checkType !== instantiatedType && instantiatedType.flags & (TypeFlags.Union | TypeFlags.Never)) {
-                    return mapTypeWithAlias(instantiatedType, t => getConditionalType(root, prependTypeMapping(checkType, t, mapper)), aliasSymbol, aliasTypeArguments);
-                }
-            }
-            return getConditionalType(root, mapper, aliasSymbol, aliasTypeArguments);
         }
 
         function instantiateType(type: Type, mapper: TypeMapper | undefined): Type;
@@ -16259,10 +16298,10 @@ namespace ts {
             if (!couldContainTypeVariables(type)) {
                 return type;
             }
-            if (instantiationDepth === 50 || instantiationCount >= 5000000) {
-                // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
-                // with a combination of infinite generic types that perpetually generate new type identities. We stop
-                // the recursion here by yielding the error type.
+            if (instantiationDepth === 500 || instantiationCount >= 5000000) {
+                // We have reached 500 recursive type instantiations, or 5M type instantiations caused by the same statement
+                // or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
+                // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
                 tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
                 error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
@@ -16431,25 +16470,6 @@ namespace ts {
         function isContextSensitiveFunctionLikeDeclaration(node: FunctionLikeDeclaration): boolean {
             return (!isFunctionDeclaration(node) || isInJSFile(node) && !!getTypeForDeclarationFromJSDocComment(node)) &&
                 (hasContextSensitiveParameters(node) || hasContextSensitiveReturnExpression(node));
-        }
-
-        function hasContextSensitiveParameters(node: FunctionLikeDeclaration) {
-            // Functions with type parameters are not context sensitive.
-            if (!node.typeParameters) {
-                // Functions with any parameters that lack type annotations are context sensitive.
-                if (some(node.parameters, p => !getEffectiveTypeAnnotationNode(p))) {
-                    return true;
-                }
-                if (node.kind !== SyntaxKind.ArrowFunction) {
-                    // If the first parameter is not an explicit 'this' parameter, then the function has
-                    // an implicit 'this' parameter which is subject to contextual typing.
-                    const parameter = firstOrUndefined(node.parameters);
-                    if (!(parameter && parameterIsThisKeyword(parameter))) {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
@@ -16745,24 +16765,29 @@ namespace ts {
                 let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
                 if (!sourcePropType) continue;
                 const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
-                const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
-                targetPropType = removeMissingType(targetPropType, targetIsOptional);
-                sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
                 if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
-                    if (elaborated) {
-                        reportedError = true;
-                    }
-                    else {
+                    reportedError = true;
+                    if (!elaborated) {
                         // Issue error on the prop itself, since the prop couldn't elaborate the error
                         const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
                         // Use the expression type, if available
                         const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
-                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
-                        if (result && specificSource !== sourcePropType) {
-                            // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
-                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                        if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
+                            const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
+                            diagnostics.add(diag);
+                            resultObj.errors = [diag];
+                        }
+                        else {
+                            const targetIsOptional = !!(propName && (getPropertyOfType(target, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                            targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                            sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
+                            const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            if (result && specificSource !== sourcePropType) {
+                                // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+                                checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                            }
                         }
                         if (resultObj.errors) {
                             const reportedDiag = resultObj.errors[resultObj.errors.length - 1];
@@ -16790,7 +16815,6 @@ namespace ts {
                                 }
                             }
                         }
-                        reportedError = true;
                     }
                 }
             }
@@ -17656,9 +17680,17 @@ namespace ts {
                     else if (sourceType === targetType) {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
                     }
+                    else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                    }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
+                }
+                else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
+                    && exactOptionalPropertyTypes
+                    && getExactOptionalUnassignableProperties(source, target).length) {
+                    message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
                 }
 
                 reportError(message, generalizedSourceType, targetType);
@@ -19434,8 +19466,8 @@ namespace ts {
                         continue;
                     }
                     if (isApplicableIndexType(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), keyType)) {
-                        const propType = getTypeOfSymbol(prop);
-                        const type = propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
+                        const propType = getNonMissingTypeOfSymbol(prop);
+                        const type = exactOptionalPropertyTypes || propType.flags & TypeFlags.Undefined || keyType === numberType || !(prop.flags & SymbolFlags.Optional)
                             ? propType
                             : getTypeWithFacts(propType, TypeFacts.NEUndefined);
                         const related = isRelatedTo(type, targetInfo.type, reportErrors);
@@ -19573,6 +19605,20 @@ namespace ts {
             }
 
             return isUnitType(type) || !!(type.flags & TypeFlags.TemplateLiteral);
+        }
+
+        function getExactOptionalUnassignableProperties(source: Type, target: Type) {
+            if (isTupleType(source) && isTupleType(target)) return emptyArray;
+            return getPropertiesOfType(target)
+                .filter(targetProp => isExactOptionalPropertyMismatch(getTypeOfPropertyOfType(source, targetProp.escapedName), getTypeOfSymbol(targetProp)));
+        }
+
+        function isExactOptionalPropertyMismatch(source: Type | undefined, target: Type | undefined) {
+            return !!source && !!target && maybeTypeOfKind(source, TypeFlags.Undefined) && !!containsMissingType(target);
+        }
+
+        function getExactOptionalProperties(type: Type) {
+            return getPropertiesOfType(type).filter(targetProp => containsMissingType(getTypeOfSymbol(targetProp)));
         }
 
         function getBestMatchingType(source: Type, target: UnionOrIntersectionType, isRelatedTo = compareTypesAssignable) {
@@ -23568,13 +23614,12 @@ namespace ts {
                 return getApplicableIndexInfoForName(type, propName) ? true : !assumeTrue;
             }
 
-            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+            function narrowByInKeyword(type: Type, name: __String, assumeTrue: boolean) {
                 if (type.flags & TypeFlags.Union
                     || type.flags & TypeFlags.Object && declaredType !== type
                     || isThisTypeParameter(type)
                     || type.flags & TypeFlags.Intersection && every((type as IntersectionType).types, t => t.symbol !== globalThisSymbol)) {
-                    const propName = escapeLeadingUnderscores(literal.text);
-                    return filterType(type, t => isTypePresencePossible(t, propName, assumeTrue));
+                    return filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 }
                 return type;
             }
@@ -23632,13 +23677,15 @@ namespace ts {
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
                         const target = getReferenceCandidate(expr.right);
-                        if (isStringLiteralLike(expr.left)) {
+                        const leftType = getTypeOfNode(expr.left);
+                        if (leftType.flags & TypeFlags.StringLiteral) {
+                            const name = escapeLeadingUnderscores((leftType as StringLiteralType).value);
                             if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target) &&
-                                getAccessedPropertyName(reference) === escapeLeadingUnderscores(expr.left.text)) {
+                                getAccessedPropertyName(reference) === name) {
                                 return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                             }
                             if (isMatchingReference(reference, target)) {
-                                return narrowByInKeyword(type, expr.left, assumeTrue);
+                                return narrowByInKeyword(type, name, assumeTrue);
                             }
                         }
                         break;
@@ -24240,17 +24287,13 @@ namespace ts {
             return !!(type.flags & TypeFlags.Instantiable && !maybeTypeOfKind(getBaseConstraintOrType(type), TypeFlags.Nullable));
         }
 
-        function containsGenericType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Instantiable || type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, containsGenericType));
-        }
-
         function hasNonBindingPatternContextualTypeWithNoGenericTypes(node: Node) {
             // Computing the contextual type for a child of a JSX element involves resolving the type of the
             // element's tag name, so we exclude that here to avoid circularities.
             const contextualType = (isIdentifier(node) || isPropertyAccessExpression(node) || isElementAccessExpression(node)) &&
                 !((isJsxOpeningElement(node.parent) || isJsxSelfClosingElement(node.parent)) && node.parent.tagName === node) &&
                 getContextualType(node, ContextFlags.SkipBindingPatterns);
-            return contextualType && !someType(contextualType, containsGenericType);
+            return contextualType && !isGenericType(contextualType);
         }
 
         function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
@@ -25309,6 +25352,10 @@ namespace ts {
             if (signature && !isResolvingReturnTypeOfSignature(signature)) {
                 return getReturnTypeOfSignature(signature);
             }
+            const iife = getImmediatelyInvokedFunctionExpression(functionDecl);
+            if (iife) {
+                return getContextualType(iife);
+            }
             return undefined;
         }
 
@@ -25368,14 +25415,48 @@ namespace ts {
             }
         }
 
+        /**
+         * Try to find a resolved symbol for an expression without also resolving its type, as
+         * getSymbolAtLocation would (as that could be reentrant into contextual typing)
+         */
+         function getSymbolForExpression(e: Expression) {
+            if (e.symbol) {
+                return e.symbol;
+            }
+            if (isIdentifier(e)) {
+                return getResolvedSymbol(e);
+            }
+            if (isPropertyAccessExpression(e)) {
+                const lhsType = getTypeOfExpression(e.expression);
+                return isPrivateIdentifier(e.name) ? tryGetPrivateIdentifierPropertyOfType(lhsType, e.name) : getPropertyOfType(lhsType, e.name.escapedText);
+            }
+            return undefined;
+
+            function tryGetPrivateIdentifierPropertyOfType(type: Type, id: PrivateIdentifier) {
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(id.escapedText, id);
+                return lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(type, lexicallyScopedSymbol);
+            }
+        }
+
         // In an assignment expression, the right operand is contextually typed by the type of the left operand.
         // Don't do this for assignment declarations unless there is a type tag on the assignment, to avoid circularity from checking the right operand.
         function getContextualTypeForAssignmentDeclaration(binaryExpression: BinaryExpression): Type | undefined {
             const kind = getAssignmentDeclarationKind(binaryExpression);
             switch (kind) {
                 case AssignmentDeclarationKind.None:
-                    return getTypeOfExpression(binaryExpression.left);
                 case AssignmentDeclarationKind.ThisProperty:
+                    const lhsSymbol = getSymbolForExpression(binaryExpression.left);
+                    const decl = lhsSymbol && lhsSymbol.valueDeclaration;
+                    // Unannotated, uninitialized property declarations have a type implied by their usage in the constructor.
+                    // We avoid calling back into `getTypeOfExpression` and reentering contextual typing to avoid a bogus circularity error in that case.
+                    if (decl && (isPropertyDeclaration(decl) || isPropertySignature(decl))) {
+                        const overallAnnotation = getEffectiveTypeAnnotationNode(decl);
+                        return (overallAnnotation && instantiateType(getTypeFromTypeNode(overallAnnotation), getSymbolLinks(lhsSymbol).mapper)) ||
+                            (decl.initializer && getTypeOfExpression(binaryExpression.left));
+                    }
+                    if (kind === AssignmentDeclarationKind.None) {
+                        return getTypeOfExpression(binaryExpression.left);
+                    }
                     return getContextualTypeForThisPropertyAssignment(binaryExpression);
                 case AssignmentDeclarationKind.Property:
                     if (isPossiblyAliasedThisProperty(binaryExpression, kind)) {
@@ -26228,10 +26309,6 @@ namespace ts {
             // It seems odd to consider an expression of type Any to result in a numeric name,
             // but this behavior is consistent with checkIndexedAccess
             return isTypeAssignableToKind(checkComputedPropertyName(name), TypeFlags.NumberLike);
-        }
-
-        function isInfinityOrNaNString(name: string | __String): boolean {
-            return name === "Infinity" || name === "-Infinity" || name === "NaN";
         }
 
         function isNumericLiteralName(name: string | __String) {
@@ -27212,10 +27289,29 @@ namespace ts {
             node: PropertyAccessExpression | QualifiedName | PropertyAccessExpression | VariableDeclaration | ParameterDeclaration | ImportTypeNode | PropertyAssignment | ShorthandPropertyAssignment | BindingElement,
             isSuper: boolean, writing: boolean, type: Type, prop: Symbol, reportError = true): boolean {
 
-            const flags = getDeclarationModifierFlagsFromSymbol(prop, writing);
-            const errorNode = node.kind === SyntaxKind.QualifiedName ? node.right :
+            const errorNode = !reportError ? undefined :
+                node.kind === SyntaxKind.QualifiedName ? node.right :
                 node.kind === SyntaxKind.ImportType ? node :
                 node.kind === SyntaxKind.BindingElement && node.propertyName ? node.propertyName : node.name;
+
+            return checkPropertyAccessibilityAtLocation(node, isSuper, writing, type, prop, errorNode);
+        }
+
+        /**
+         * Check whether the requested property can be accessed at the requested location.
+         * Returns true if node is a valid property access, and false otherwise.
+         * @param location The location node where we want to check if the property is accessible.
+         * @param isSuper True if the access is from `super.`.
+         * @param writing True if this is a write property access, false if it is a read property access.
+         * @param containingType The type of the object whose property is being accessed. (Not the type of the property.)
+         * @param prop The symbol for the property being accessed.
+         * @param errorNode The node where we should report an invalid property access error, or undefined if we should not report errors.
+         */
+        function checkPropertyAccessibilityAtLocation(location: Node,
+            isSuper: boolean, writing: boolean,
+            containingType: Type, prop: Symbol, errorNode?: Node): boolean {
+
+            const flags = getDeclarationModifierFlagsFromSymbol(prop, writing);
 
             if (isSuper) {
                 // TS 1.0 spec (April 2014): 4.8.2
@@ -27227,7 +27323,7 @@ namespace ts {
                 //   a super property access is permitted and must specify a public static member function of the base class.
                 if (languageVersion < ScriptTarget.ES2015) {
                     if (symbolHasNonMethodDeclaration(prop)) {
-                        if (reportError) {
+                        if (errorNode) {
                             error(errorNode, Diagnostics.Only_public_and_protected_methods_of_the_base_class_are_accessible_via_the_super_keyword);
                         }
                         return false;
@@ -27238,8 +27334,11 @@ namespace ts {
                     // This error could mask a private property access error. But, a member
                     // cannot simultaneously be private and abstract, so this will trigger an
                     // additional error elsewhere.
-                    if (reportError) {
-                        error(errorNode, Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
+                    if (errorNode) {
+                        error(errorNode,
+                            Diagnostics.Abstract_method_0_in_class_1_cannot_be_accessed_via_super_expression,
+                            symbolToString(prop),
+                            typeToString(getDeclaringClass(prop)!));
                     }
                     return false;
                 }
@@ -27247,11 +27346,14 @@ namespace ts {
 
             // Referencing abstract properties within their own constructors is not allowed
             if ((flags & ModifierFlags.Abstract) && symbolHasNonMethodDeclaration(prop) &&
-                (isThisProperty(node) || isThisInitializedObjectBindingExpression(node) || isObjectBindingPattern(node.parent) && isThisInitializedDeclaration(node.parent.parent))) {
+                (isThisProperty(location) || isThisInitializedObjectBindingExpression(location) || isObjectBindingPattern(location.parent) && isThisInitializedDeclaration(location.parent.parent))) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!);
-                if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(node)) {
-                    if (reportError) {
-                        error(errorNode, Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor, symbolToString(prop), getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!)); // TODO: GH#18217
+                if (declaringClassDeclaration && isNodeUsedDuringClassInitialization(location)) {
+                    if (errorNode) {
+                        error(errorNode,
+                            Diagnostics.Abstract_property_0_in_class_1_cannot_be_accessed_in_the_constructor,
+                            symbolToString(prop),
+                            getTextOfIdentifierOrLiteral(declaringClassDeclaration.name!));
                     }
                     return false;
                 }
@@ -27267,9 +27369,12 @@ namespace ts {
             // Private property is accessible if the property is within the declaring class
             if (flags & ModifierFlags.Private) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!)!;
-                if (!isNodeWithinClass(node, declaringClassDeclaration)) {
-                    if (reportError) {
-                        error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
+                if (!isNodeWithinClass(location, declaringClassDeclaration)) {
+                    if (errorNode) {
+                        error(errorNode,
+                            Diagnostics.Property_0_is_private_and_only_accessible_within_class_1,
+                            symbolToString(prop),
+                            typeToString(getDeclaringClass(prop)!));
                     }
                     return false;
                 }
@@ -27285,7 +27390,7 @@ namespace ts {
 
             // Find the first enclosing class that has the declaring classes of the protected constituents
             // of the property as base classes
-            let enclosingClass = forEachEnclosingClass(node, enclosingDeclaration => {
+            let enclosingClass = forEachEnclosingClass(location, enclosingDeclaration => {
                 const enclosingClass = getDeclaredTypeOfSymbol(getSymbolOfNode(enclosingDeclaration)!) as InterfaceType;
                 return isClassDerivedFromDeclaringClasses(enclosingClass, prop, writing) ? enclosingClass : undefined;
             });
@@ -27294,9 +27399,12 @@ namespace ts {
                 // allow PropertyAccessibility if context is in function with this parameter
                 // static member access is disallow
                 let thisParameter: ParameterDeclaration | undefined;
-                if (flags & ModifierFlags.Static || !(thisParameter = getThisParameterFromNodeContext(node)) || !thisParameter.type) {
-                    if (reportError) {
-                        error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses, symbolToString(prop), typeToString(getDeclaringClass(prop) || type));
+                if (flags & ModifierFlags.Static || !(thisParameter = getThisParameterFromNodeContext(location)) || !thisParameter.type) {
+                    if (errorNode) {
+                        error(errorNode,
+                            Diagnostics.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses,
+                            symbolToString(prop),
+                            typeToString(getDeclaringClass(prop) || containingType));
                     }
                     return false;
                 }
@@ -27308,13 +27416,15 @@ namespace ts {
             if (flags & ModifierFlags.Static) {
                 return true;
             }
-            if (type.flags & TypeFlags.TypeParameter) {
+            if (containingType.flags & TypeFlags.TypeParameter) {
                 // get the original type -- represented as the type constraint of the 'this' type
-                type = (type as TypeParameter).isThisType ? getConstraintOfTypeParameter(type as TypeParameter)! : getBaseConstraintOfType(type as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
+                containingType = (containingType as TypeParameter).isThisType ? getConstraintOfTypeParameter(containingType as TypeParameter)! : getBaseConstraintOfType(containingType as TypeParameter)!; // TODO: GH#18217 Use a different variable that's allowed to be undefined
             }
-            if (!type || !hasBaseType(type, enclosingClass)) {
-                if (reportError) {
-                    error(errorNode, Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2, symbolToString(prop), typeToString(enclosingClass), typeToString(type));
+            if (!containingType || !hasBaseType(containingType, enclosingClass)) {
+                if (errorNode) {
+                    error(errorNode,
+                        Diagnostics.Property_0_is_protected_and_only_accessible_through_an_instance_of_class_1_This_is_an_instance_of_class_2,
+                        symbolToString(prop), typeToString(enclosingClass), typeToString(containingType));
                 }
                 return false;
             }
@@ -27745,6 +27855,7 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
+                    case SyntaxKind.ArrowFunction:
                     case SyntaxKind.ExpressionStatement:
                         return isBlock(node.parent) && isClassStaticBlockDeclaration(node.parent.parent) ? true : "quit";
                     default:
@@ -27875,7 +27986,7 @@ namespace ts {
         }
 
         function getSuggestedSymbolForNonexistentClassMember(name: string, baseType: Type): Symbol | undefined {
-            return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
+            return getSpellingSuggestionForName(name, getPropertiesOfType(baseType), SymbolFlags.ClassMember);
         }
 
         function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
@@ -28037,8 +28148,22 @@ namespace ts {
             }
         }
 
+        /**
+         * Checks if an existing property access is valid for completions purposes.
+         * @param node a property access-like node where we want to check if we can access a property.
+         * This node does not need to be an access of the property we are checking.
+         * e.g. in completions, this node will often be an incomplete property access node, as in `foo.`.
+         * Besides providing a location (i.e. scope) used to check property accessibility, we use this node for
+         * computing whether this is a `super` property access.
+         * @param type the type whose property we are checking.
+         * @param property the accessed property's symbol.
+         */
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
-            return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, property.escapedName, type);
+            return isPropertyAccessible(node,
+                node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword,
+                /* isWrite */ false,
+                type,
+                property);
             // Previously we validated the 'this' type of methods but this adversely affected performance. See #31377 for more context.
         }
 
@@ -28048,19 +28173,45 @@ namespace ts {
             propertyName: __String,
             type: Type): boolean {
 
+            // Short-circuiting for improved performance.
             if (type === errorType || isTypeAny(type)) {
                 return true;
             }
+
             const prop = getPropertyOfType(type, propertyName);
-            if (prop) {
-                if (prop.valueDeclaration && isPrivateIdentifierClassElementDeclaration(prop.valueDeclaration)) {
-                    const declClass = getContainingClass(prop.valueDeclaration);
-                    return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
-                }
-                return checkPropertyAccessibility(node, isSuper, /*writing*/ false, type, prop, /* reportError */ false);
+            return !!prop && isPropertyAccessible(node, isSuper, /* isWrite */ false, type, prop);
+        }
+
+        /**
+         * Checks if a property can be accessed in a location.
+         * The location is given by the `node` parameter.
+         * The node does not need to be a property access.
+         * @param node location where to check property accessibility
+         * @param isSuper whether to consider this a `super` property access, e.g. `super.foo`.
+         * @param isWrite whether this is a write access, e.g. `++foo.x`.
+         * @param containingType type where the property comes from.
+         * @param property property symbol.
+         */
+        function isPropertyAccessible(
+            node: Node,
+            isSuper: boolean,
+            isWrite: boolean,
+            containingType: Type,
+            property: Symbol): boolean {
+
+            // Short-circuiting for improved performance.
+            if (containingType === errorType || isTypeAny(containingType)) {
+                return true;
             }
-            // In js files properties of unions are allowed in completion
-            return isInJSFile(node) && (type.flags & TypeFlags.Union) !== 0 && (type as UnionType).types.some(elementType => isValidPropertyAccessWithType(node, isSuper, propertyName, elementType));
+
+            // A #private property access in an optional chain is an error dealt with by the parser.
+             // The checker does not check for it, so we need to do our own check here.
+             if (property.valueDeclaration && isPrivateIdentifierClassElementDeclaration(property.valueDeclaration)) {
+                const declClass = getContainingClass(property.valueDeclaration);
+                return !isOptionalChain(node) && !!findAncestor(node, parent => parent === declClass);
+            }
+
+            return checkPropertyAccessibilityAtLocation(node, isSuper, isWrite, containingType, property);
         }
 
         /**
@@ -30439,6 +30590,18 @@ namespace ts {
             return Debug.assertNever(node.keywordToken);
         }
 
+        function checkMetaPropertyKeyword(node: MetaProperty): Type {
+            switch (node.keywordToken) {
+                case SyntaxKind.ImportKeyword:
+                    return getGlobalImportMetaExpressionType();
+                case SyntaxKind.NewKeyword:
+                    const type = checkNewTargetMetaProperty(node);
+                    return type === errorType ? errorType : createNewTargetExpressionType(type);
+                default:
+                    Debug.assertNever(node.keywordToken);
+            }
+        }
+
         function checkNewTargetMetaProperty(node: MetaProperty) {
             const container = getNewTargetContainer(node);
             if (!container) {
@@ -30461,7 +30624,6 @@ namespace ts {
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
-            Debug.assert(!!file.externalModuleIndicator, "Containing file should be a module.");
             return node.name.escapedText === "meta" ? getGlobalImportMetaType() : errorType;
         }
 
@@ -30821,6 +30983,19 @@ namespace ts {
             }
 
             return promiseType;
+        }
+
+        function createNewTargetExpressionType(targetType: Type): Type {
+            // Create a synthetic type `NewTargetExpression { target: TargetType; }`
+            const symbol = createSymbol(SymbolFlags.None, "NewTargetExpression" as __String);
+
+            const targetPropertySymbol = createSymbol(SymbolFlags.Property, "target" as __String, CheckFlags.Readonly);
+            targetPropertySymbol.parent = symbol;
+            targetPropertySymbol.type = targetType;
+
+            const members = createSymbolTable([targetPropertySymbol]);
+            symbol.members = members;
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
         }
 
         function getReturnTypeFromBody(func: FunctionLikeDeclaration, checkMode?: CheckMode): Type {
@@ -32400,8 +32575,16 @@ namespace ts {
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access,
                         Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)
                         && (!isIdentifier(left) || unescapeLeadingUnderscores(left.escapedText) !== "exports")) {
+
+                        let headMessage: DiagnosticMessage | undefined;
+                        if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
+                            const target = getTypeOfPropertyOfType(getTypeOfExpression(left.expression), left.name.escapedText);
+                            if (isExactOptionalPropertyMismatch(valueType, target)) {
+                                headMessage = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target;
+                            }
+                        }
                         // to avoid cascading errors check assignability only if 'isReference' check succeeded and no errors were reported
-                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right);
+                        checkTypeAssignableToAndOptionallyElaborate(valueType, leftType, left, right, headMessage);
                     }
                 }
             }
@@ -34419,7 +34602,9 @@ namespace ts {
                     case SyntaxKind.ImportClause:
                         let result = DeclarationSpaces.None;
                         const target = resolveAlias(getSymbolOfNode(d)!);
-                        forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
+                        forEach(target.declarations, d => {
+                            result |= getDeclarationSpaces(d);
+                        });
                         return result;
                     case SyntaxKind.VariableDeclaration:
                     case SyntaxKind.BindingElement:
@@ -37608,8 +37793,8 @@ namespace ts {
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1, baseClassName, symbolToString(suggestion)) :
                             error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
                     }
-                    else if (prop && baseProp?.valueDeclaration && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
-                        const baseHasAbstract = hasAbstractModifier(baseProp.valueDeclaration);
+                    else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
+                        const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
                         if (hasOverride) {
                             return;
                         }
@@ -37831,7 +38016,9 @@ namespace ts {
                 return properties;
             }
             const seen = new Map<__String, Symbol>();
-            forEach(properties, p => { seen.set(p.escapedName, p); });
+            forEach(properties, p => {
+                seen.set(p.escapedName, p);
+            });
 
             for (const base of baseTypes) {
                 const properties = getPropertiesOfType(getTypeWithThisArgument(base, type.thisType));
@@ -37854,7 +38041,9 @@ namespace ts {
 
             interface InheritanceInfoMap { prop: Symbol; containingType: Type; }
             const seen = new Map<__String, InheritanceInfoMap>();
-            forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.escapedName, { prop: p, containingType: type }); });
+            forEach(resolveDeclaredMembers(type).declaredProperties, p => {
+                seen.set(p.escapedName, { prop: p, containingType: type });
+            });
             let ok = true;
 
             for (const base of baseTypes) {
@@ -38753,11 +38942,16 @@ namespace ts {
             if (!checkGrammarDecoratorsAndModifiers(node) && hasEffectiveModifiers(node)) {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
+
+            const typeAnnotationNode = getEffectiveTypeAnnotationNode(node);
+            if (typeAnnotationNode) {
+                checkTypeAssignableTo(checkExpressionCached(node.expression), getTypeFromTypeNode(typeAnnotationNode), node.expression);
+            }
+
             if (node.expression.kind === SyntaxKind.Identifier) {
                 const id = node.expression as Identifier;
                 const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
                 if (sym) {
-
                     markAliasReferenced(sym, id);
                     // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                     const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
@@ -39758,6 +39952,16 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
+                else if (isMetaProperty(parent)) {
+                    const parentType = getTypeOfNode(parent);
+                    const propertyDeclaration = getPropertyOfType(parentType, (node as Identifier).escapedText);
+                    if (propertyDeclaration) {
+                        return propertyDeclaration;
+                    }
+                    if (parent.keywordToken === SyntaxKind.NewKeyword) {
+                        return checkNewTargetMetaProperty(parent).symbol;
+                    }
+                }
             }
 
             switch (node.kind) {
@@ -39831,6 +40035,12 @@ namespace ts {
 
                 case SyntaxKind.ExportKeyword:
                     return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
+
+                case SyntaxKind.ImportKeyword:
+                case SyntaxKind.NewKeyword:
+                    return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
+                case SyntaxKind.MetaProperty:
+                    return checkExpression(node as Expression).symbol;
 
                 default:
                     return undefined;
@@ -39929,6 +40139,10 @@ namespace ts {
                     const declaredType = getDeclaredTypeOfSymbol(symbol);
                     return declaredType !== errorType ? declaredType : getTypeOfSymbol(symbol);
                 }
+            }
+
+            if (isMetaProperty(node.parent) && node.parent.keywordToken === node.kind) {
+                return checkMetaPropertyKeyword(node.parent);
             }
 
             return errorType;
@@ -40436,9 +40650,14 @@ namespace ts {
             }
 
             // Resolve the symbol as a value to ensure the type can be reached at runtime during emit.
+            let isTypeOnly = false;
+            if (isQualifiedName(typeName)) {
+                const rootValueSymbol = resolveEntityName(getFirstIdentifier(typeName), SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
+                isTypeOnly = !!rootValueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration);
+            }
             const valueSymbol = resolveEntityName(typeName, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location);
-            const isTypeOnly = valueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration) || false;
             const resolvedSymbol = valueSymbol && valueSymbol.flags & SymbolFlags.Alias ? resolveAlias(valueSymbol) : valueSymbol;
+            isTypeOnly ||= !!valueSymbol?.declarations?.every(isTypeOnlyImportOrExportDeclaration);
 
             // Resolve the symbol as a type so that we can provide a more useful hint for the type serializer.
             const typeSymbol = resolveEntityName(typeName, SymbolFlags.Type, /*ignoreErrors*/ true, /*dontResolveAlias*/ false, location);
@@ -41546,7 +41765,7 @@ namespace ts {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_must_have_a_type_annotation);
             }
             const type = getTypeFromTypeNode(parameter.type);
-            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericIndexType(type) || isGenericObjectType(type)) {
+            if (someType(type, t => !!(t.flags & TypeFlags.StringOrNumberLiteralOrUnique)) || isGenericType(type)) {
                 return grammarErrorOnNode(parameter.name, Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead);
             }
             if (!everyType(type, isValidIndexKeyType)) {

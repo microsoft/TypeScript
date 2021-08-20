@@ -601,7 +601,7 @@ namespace ts {
         // Set initial build if not already built
         if (!state.allProjectBuildPending) return;
         state.allProjectBuildPending = false;
-        if (state.options.watch) { reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode); }
+        if (state.options.watch) reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode);
         enableCache(state);
         const buildOrder = getBuildOrderFromAnyBuildOrder(getBuildOrder(state));
         buildOrder.forEach(configFileName =>
@@ -1358,7 +1358,7 @@ namespace ts {
             }
 
             if (!force) {
-                const inputTime = getModifiedTime(host, inputFile); host.getModifiedTime(inputFile);
+                const inputTime = getModifiedTime(host, inputFile);
                 if (inputTime > newestInputFileTime) {
                     newestInputFileName = inputFile;
                     newestInputFileTime = inputTime;

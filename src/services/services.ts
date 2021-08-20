@@ -139,7 +139,9 @@ namespace ts {
 
         if (isJSDocCommentContainingNode(node)) {
             /** Don't add trivia for "tokens" since this is in a comment. */
-            node.forEachChild(child => { children.push(child); });
+            node.forEachChild(child => {
+                children.push(child);
+            });
             return children;
         }
 
@@ -259,11 +261,11 @@ namespace ts {
         }
 
         public getChildCount(): number {
-            return 0;
+            return this.getChildren().length;
         }
 
-        public getChildAt(): Node {
-            return undefined!;  // TODO: GH#18217
+        public getChildAt(index: number): Node {
+            return this.getChildren()[index];
         }
 
         public getChildren(): Node[] {
@@ -1600,7 +1602,8 @@ namespace ts {
                 position,
                 fullPreferences,
                 options.triggerCharacter,
-                options.triggerKind);
+                options.triggerKind,
+                cancellationToken);
         }
 
         function getCompletionEntryDetails(fileName: string, position: number, name: string, formattingOptions: FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences = emptyOptions, data?: CompletionEntryData): CompletionEntryDetails | undefined {
