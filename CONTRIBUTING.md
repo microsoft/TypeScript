@@ -83,7 +83,7 @@ The TypeScript repository is relatively large. To save some time, you might want
 
 ### Filename too long on Windows
 
-You might need to run `git config --system core.longpaths true` before cloning Typescript on Windows.
+You might need to run `git config --global core.longpaths true` before cloning TypeScript on Windows.
 
 ### Using local builds
 
