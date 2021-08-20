@@ -3423,7 +3423,8 @@ namespace ts {
                     : packageBundlesTypes(packageId.name)
                         ? chainDiagnosticMessages(
                             /*details*/ undefined,
-                            Diagnostics.Try_adding_a_new_declaration_d_ts_file_containing_declare_module_0,
+                            Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                            packageId.name,
                             moduleReference)
                         : chainDiagnosticMessages(
                             /*details*/ undefined,

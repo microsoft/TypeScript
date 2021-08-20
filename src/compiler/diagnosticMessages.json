@@ -6027,7 +6027,7 @@
         "category": "Error",
         "code": 7057
     },
-    "Try adding a new declaration (.d.ts) file containing `declare module '{0}';`": {
+    "If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`": {
         "category": "Error",
         "code": 7058
     },
