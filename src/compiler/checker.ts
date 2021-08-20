@@ -199,9 +199,9 @@ namespace ts {
 
     const enum RecursionFlags {
         None = 0,
-        Left = 1 << 0,
-        Right = 1 << 1,
-        Both = Left | Right,
+        Source = 1 << 0,
+        Target = 1 << 1,
+        Both = Source | Target,
     }
 
     const enum MappedTypeModifiers {
@@ -17836,8 +17836,8 @@ namespace ts {
                         const targetString = typeToString(originalTarget.aliasSymbol ? originalTarget : target);
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
                         const constructs = getSignaturesOfType(source, SignatureKind.Construct);
-                        if (calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, RecursionFlags.Left, /*reportErrors*/ false) ||
-                            constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, RecursionFlags.Left, /*reportErrors*/ false)) {
+                        if (calls.length > 0 && isRelatedTo(getReturnTypeOfSignature(calls[0]), target, RecursionFlags.Source, /*reportErrors*/ false) ||
+                            constructs.length > 0 && isRelatedTo(getReturnTypeOfSignature(constructs[0]), target, RecursionFlags.Source, /*reportErrors*/ false)) {
                             reportError(Diagnostics.Value_of_type_0_has_no_properties_in_common_with_type_1_Did_you_mean_to_call_it, sourceString, targetString);
                         }
                         else {
@@ -17883,7 +17883,7 @@ namespace ts {
                     if (constraint && (source.flags & TypeFlags.Intersection || target.flags & TypeFlags.Union)) {
                         if (everyType(constraint, c => c !== source)) { // Skip comparison if expansion contains the source itself
                             // TODO: Stack errors so we get a pyramid for the "normal" comparison above, _and_ a second for this
-                            if (result = isRelatedTo(constraint, target, RecursionFlags.Left, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                            if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                                 resetErrorInfo(saveErrorInfo);
                             }
                         }
@@ -18122,21 +18122,21 @@ namespace ts {
                     }
                     const match = getMatchingUnionConstituentForType(target as UnionType, source);
                     if (match) {
-                        const related = isRelatedTo(source, match, RecursionFlags.Right, /*reportErrors*/ false);
+                        const related = isRelatedTo(source, match, RecursionFlags.Target, /*reportErrors*/ false);
                         if (related) {
                             return related;
                         }
                     }
                 }
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, RecursionFlags.Right, /*reportErrors*/ false);
+                    const related = isRelatedTo(source, type, RecursionFlags.Target, /*reportErrors*/ false);
                     if (related) {
                         return related;
                     }
                 }
                 if (reportErrors) {
                     const bestMatchingType = getBestMatchingType(source, target, isRelatedTo);
-                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], RecursionFlags.Right, /*reportErrors*/ true);
+                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], RecursionFlags.Target, /*reportErrors*/ true);
                 }
                 return Ternary.False;
             }
@@ -18145,7 +18145,7 @@ namespace ts {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
-                    const related = isRelatedTo(source, targetType, RecursionFlags.Right, reportErrors, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(source, targetType, RecursionFlags.Target, reportErrors, /*headMessage*/ undefined, intersectionState);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -18161,7 +18161,7 @@ namespace ts {
                 }
                 const len = sourceTypes.length;
                 for (let i = 0; i < len; i++) {
-                    const related = isRelatedTo(sourceTypes[i], target, RecursionFlags.Left, reportErrors && i === len - 1, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(sourceTypes[i], target, RecursionFlags.Source, reportErrors && i === len - 1, /*headMessage*/ undefined, intersectionState);
                     if (related) {
                         return related;
                     }
@@ -18199,7 +18199,7 @@ namespace ts {
                             continue;
                         }
                     }
-                    const related = isRelatedTo(sourceType, target, RecursionFlags.Left, reportErrors, /*headMessage*/ undefined, intersectionState);
+                    const related = isRelatedTo(sourceType, target, RecursionFlags.Source, reportErrors, /*headMessage*/ undefined, intersectionState);
                     if (!related) {
                         return Ternary.False;
                     }
@@ -18322,11 +18322,11 @@ namespace ts {
                 const maybeStart = maybeCount;
                 maybeKeys[maybeCount] = id;
                 maybeCount++;
-                if (recursionFlags & RecursionFlags.Left) {
+                if (recursionFlags & RecursionFlags.Source) {
                     sourceStack[sourceDepth] = source;
                     sourceDepth++;
                 }
-                if (recursionFlags & RecursionFlags.Right) {
+                if (recursionFlags & RecursionFlags.Target) {
                     targetStack[targetDepth] = target;
                     targetDepth++;
                 }
@@ -18359,10 +18359,10 @@ namespace ts {
                     outofbandVarianceMarkerHandler = originalHandler;
                 }
                 expandingFlags = saveExpandingFlags;
-                if (recursionFlags & RecursionFlags.Left) {
+                if (recursionFlags & RecursionFlags.Source) {
                     sourceDepth--;
                 }
-                if (recursionFlags & RecursionFlags.Right) {
+                if (recursionFlags & RecursionFlags.Target) {
                     targetDepth--;
                 }
                 if (result) {
@@ -18422,7 +18422,7 @@ namespace ts {
                         if (constraints !== (source as IntersectionType).types) {
                             source = getIntersectionType(constraints);
                             if (!(source.flags & TypeFlags.Intersection)) {
-                                return isRelatedTo(source, target, RecursionFlags.Left, /*reportErrors*/ false);
+                                return isRelatedTo(source, target, RecursionFlags.Source, /*reportErrors*/ false);
                             }
                         }
                     }
@@ -18496,8 +18496,8 @@ namespace ts {
 
                 // For a generic type T and a type U that is assignable to T, [...U] is assignable to T, U is assignable to readonly [...T],
                 // and U is assignable to [...T] when U is constrained to a mutable array or tuple type.
-                if (isSingleElementGenericTupleType(source) && !source.target.readonly && (result = isRelatedTo(getTypeArguments(source)[0], target, RecursionFlags.Left)) ||
-                    isSingleElementGenericTupleType(target) && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source)) && (result = isRelatedTo(source, getTypeArguments(target)[0], RecursionFlags.Right))) {
+                if (isSingleElementGenericTupleType(source) && !source.target.readonly && (result = isRelatedTo(getTypeArguments(source)[0], target, RecursionFlags.Source)) ||
+                    isSingleElementGenericTupleType(target) && (target.target.readonly || isMutableArrayOrTuple(getBaseConstraintOfType(source) || source)) && (result = isRelatedTo(source, getTypeArguments(target)[0], RecursionFlags.Target))) {
                     return result;
                 }
 
@@ -18525,7 +18525,7 @@ namespace ts {
                     if (isTupleType(targetType)) {
                         // An index type can have a tuple type target when the tuple type contains variadic elements.
                         // Check if the source is related to the known keys of the tuple type.
-                        if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), RecursionFlags.Right, reportErrors)) {
+                        if (result = isRelatedTo(source, getKnownKeysOfTupleType(targetType), RecursionFlags.Target, reportErrors)) {
                             return result;
                         }
                     }
@@ -18538,7 +18538,7 @@ namespace ts {
                             // false positives. For example, given 'T extends { [K in keyof T]: string }',
                             // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
                             // related to other types.
-                            if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), RecursionFlags.Right, reportErrors) === Ternary.True) {
+                            if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), RecursionFlags.Target, reportErrors) === Ternary.True) {
                                 return Ternary.True;
                             }
                         }
@@ -18574,7 +18574,7 @@ namespace ts {
                                     // create a new chain for the constraint error
                                     resetErrorInfo(saveErrorInfo);
                                 }
-                                if (result = isRelatedTo(source, constraint, RecursionFlags.Right, reportErrors)) {
+                                if (result = isRelatedTo(source, constraint, RecursionFlags.Target, reportErrors)) {
                                     return result;
                                 }
                                 // prefer the shorter chain of the constraint comparison chain, and the direct comparison chain
@@ -18614,7 +18614,7 @@ namespace ts {
                                 // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `source[P]`
                                 const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
                                 if (nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
-                                    if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, RecursionFlags.Right, reportErrors)) {
+                                    if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, RecursionFlags.Target, reportErrors)) {
                                         return result;
                                     }
                                 }
@@ -18652,9 +18652,9 @@ namespace ts {
                     // TODO: Find a nice way to include potential conditional type breakdowns in error output, if they seem good (they usually don't)
                     const expanding = isDeeplyNestedType(target, targetStack, targetDepth);
                     let localResult: Ternary | undefined = expanding ? Ternary.Maybe : undefined;
-                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), RecursionFlags.Right, /*reportErrors*/ false))) {
+                    if (skipTrue || expanding || (localResult = isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.trueType), distributionMapper) : getTrueTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false))) {
                         if (!skipFalse && !expanding) {
-                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), RecursionFlags.Right, /*reportErrors*/ false);
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, distributionMapper ? instantiateType(getTypeFromTypeNode(c.root.node.falseType), distributionMapper) : getFalseTypeFromConditionalType(c), RecursionFlags.Target, /*reportErrors*/ false);
                         }
                     }
                     if (localResult) {
@@ -18686,19 +18686,19 @@ namespace ts {
                             }
                         }
                         // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                        else if (result = isRelatedTo(constraint, target, RecursionFlags.Left, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(constraint, target, RecursionFlags.Source, /*reportErrors*/ false, /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                         // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Left, reportErrors && !(target.flags & source.flags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, RecursionFlags.Source, reportErrors && !(target.flags & source.flags & TypeFlags.TypeParameter), /*headMessage*/ undefined, intersectionState)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
-                    if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Left, reportErrors)) {
+                    if (result = isRelatedTo(keyofConstraintType, target, RecursionFlags.Source, reportErrors)) {
                         resetErrorInfo(saveErrorInfo);
                         return result;
                     }
@@ -18707,7 +18707,7 @@ namespace ts {
                     if (!(target.flags & TypeFlags.TemplateLiteral)) {
                         const baseConstraint = getBaseConstraintOfType(source);
                         const constraint = baseConstraint && baseConstraint !== source ? baseConstraint : stringType;
-                        if (result = isRelatedTo(constraint, target, RecursionFlags.Left, reportErrors)) {
+                        if (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors)) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -18722,7 +18722,7 @@ namespace ts {
                     }
                     else {
                         const constraint = getBaseConstraintOfType(source);
-                        if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Left, reportErrors))) {
+                        if (constraint && (result = isRelatedTo(constraint, target, RecursionFlags.Source, reportErrors))) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -18764,7 +18764,7 @@ namespace ts {
                         // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
                         const distributiveConstraint = getConstraintOfDistributiveConditionalType(source as ConditionalType);
                         if (distributiveConstraint) {
-                            if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Left, reportErrors)) {
+                            if (result = isRelatedTo(distributiveConstraint, target, RecursionFlags.Source, reportErrors)) {
                                 resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
@@ -18779,7 +18779,7 @@ namespace ts {
                         // when `O` is a conditional (`never` is trivially assignable to `O`, as is `O`!).
                         const defaultConstraint = getDefaultConstraintOfConditionalType(source as ConditionalType);
                         if (defaultConstraint) {
-                            if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Left, reportErrors)) {
+                            if (result = isRelatedTo(defaultConstraint, target, RecursionFlags.Source, reportErrors)) {
                                 resetErrorInfo(saveErrorInfo);
                                 return result;
                             }
