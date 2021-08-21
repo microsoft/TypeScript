@@ -87,7 +87,7 @@ namespace ts {
         function visitor(node: Node): VisitResult<Node>;
         function visitor(node: Node): VisitResult<Node> {
             if (isFunctionLikeDeclaration(node)) return visitFunctionLikeDeclaration(node);
-            if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return visitIterationStatement(node);
+            if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return visitIterationStatement(node, /** label */ undefined);
             if (isClassLike(node)) return visitClassLike(node);
 
             if (isSuperProperty(node)) return visitSuperPropertyExpression(node);
@@ -149,8 +149,7 @@ namespace ts {
                 return nextBody;
             }
         }
-        function visitIterationStatement<T extends IterationStatement>(node: T): Node {
-            const label = node.parent && isLabeledStatement(node.parent) ? node.parent.label : undefined;
+        function visitIterationStatement<T extends IterationStatement>(node: T, label: Identifier | undefined): Statement {
             return startIterationContext(label, () => {
                 return visitEachChild(node, child => {
                     if (child === node.statement) return visitStatement(node.statement);
@@ -189,7 +188,9 @@ namespace ts {
         function visitLabelledStatement(node: LabeledStatement): Node {
             // why it will be undefined?
             if (!node.statement) return visitEachChild(node, visitor, context);
-            if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) return visitEachChild(node, visitor, context);
+            if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) {
+                return factory.updateLabeledStatement(node, visitor(node.label) as Identifier, visitIterationStatement(node.statement, node.label));
+            }
             return startBreakContext(node.label, /** allowAmbientBreak */ false, () => visitEachChild(node, child => {
                 if (child === node.statement) {
                     let nextChild = visitor(node.statement);
