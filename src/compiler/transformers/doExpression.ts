@@ -71,9 +71,9 @@ namespace ts {
             return signals;
         }
         //#endregion
-        return transformSourceFile(node);
+        return visitSourceFile(node);
 
-        function transformSourceFile(node: SourceFile) {
+        function visitSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) return node;
             if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
                 return node;
@@ -86,11 +86,11 @@ namespace ts {
         function visitor(node: ConciseBody): ConciseBody;
         function visitor(node: Node): VisitResult<Node>;
         function visitor(node: Node): VisitResult<Node> {
-            if (isFunctionLikeDeclaration(node)) return transformFunctionLikeDeclaration(node);
-            if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return transformIterationStatement(node);
-            if (isClassLike(node)) return transformClassLike(node);
+            if (isFunctionLikeDeclaration(node)) return visitFunctionLikeDeclaration(node);
+            if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return visitIterationStatement(node);
+            if (isClassLike(node)) return visitClassLike(node);
 
-            if (isSuperProperty(node)) return transformSuperPropertyExpression(node);
+            if (isSuperProperty(node)) return visitSuperPropertyExpression(node);
 
             switch (node.kind) {
                 // No need to handle new.target.
@@ -99,32 +99,32 @@ namespace ts {
 
                 // Same for super() call.
                 case SyntaxKind.CallExpression:
-                    return transformCallExpression(node as CallExpression);
+                    return visitCallExpression(node as CallExpression);
                 case SyntaxKind.DoExpression:
-                    return transformDoExpression(node as DoExpression);
+                    return visitDoExpression(node as DoExpression);
                 case SyntaxKind.LabeledStatement:
-                    return transformLabelledStatement(node as LabeledStatement);
+                    return visitLabelledStatement(node as LabeledStatement);
                 case SyntaxKind.TryStatement:
-                    return transformTryStatement(node as TryStatement);
+                    return visitTryStatement(node as TryStatement);
                 case SyntaxKind.CatchClause:
-                    return transfromCatchClause(node as CatchClause);
+                    return visitCatchClause(node as CatchClause);
                 case SyntaxKind.ExpressionStatement:
-                    return transformExpressionStatement(node as ExpressionStatement);
+                    return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.Block:
-                    return transformBlock(node as Block, /** directChildOfDoExpr */ false);
+                    return visitBlock(node as Block, /** directChildOfDoExpr */ false);
                 case SyntaxKind.SwitchStatement:
-                    return transformSwitch(node as SwitchStatement);
+                    return visitSwitch(node as SwitchStatement);
                 case SyntaxKind.Identifier:
-                    return transformIdentifier(node as Identifier);
+                    return visitIdentifier(node as Identifier);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
-                    return transformControlFlow(node as ReturnStatement | BreakStatement | ContinueStatement);
+                    return visitControlFlow(node as ReturnStatement | BreakStatement | ContinueStatement);
                 default:
                     return visitEachChild(node, visitor, context);
             }
         }
-        function transformFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): Node {
+        function visitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): Node {
             return startControlFlowContext(() => {
                 currentReturnContext = { type: ControlFlow.Return, signal: undefined };
                 return visitEachChild(node, child => {
@@ -149,7 +149,7 @@ namespace ts {
                 return nextBody;
             }
         }
-        function transformIterationStatement<T extends IterationStatement>(node: T): Node {
+        function visitIterationStatement<T extends IterationStatement>(node: T): Node {
             const label = node.parent && isLabeledStatement(node.parent) ? node.parent.label : undefined;
             return startIterationContext(label, () => {
                 return visitEachChild(node, child => {
@@ -183,10 +183,10 @@ namespace ts {
                 return result;
             }
         }
-        function transformClassLike<T extends ClassExpression | ClassDeclaration>(node: T): T {
+        function visitClassLike<T extends ClassExpression | ClassDeclaration>(node: T): T {
             return startControlFlowContext(() => visitEachChild(node, visitor, context));
         }
-        function transformLabelledStatement(node: LabeledStatement): Node {
+        function visitLabelledStatement(node: LabeledStatement): Node {
             // why it will be undefined?
             if (!node.statement) return visitEachChild(node, visitor, context);
             if (isIterationStatement(node.statement, /** lookInLabeledStatements */ false)) return visitEachChild(node, visitor, context);
@@ -225,7 +225,7 @@ namespace ts {
          * }
          * ```
          */
-        function transfromCatchClause(node: CatchClause): CatchClause {
+        function visitCatchClause(node: CatchClause): CatchClause {
             if (!currentReturnContext?.signal && !hasSignal(currentBreakContext) && !hasSignal(currentContinueContext)) return visitEachChild(node, visitor, context);
             node = visitEachChild(node, visitor, context);
 
@@ -248,7 +248,7 @@ namespace ts {
             });
             return factory.updateCatchClause(node, factory.createVariableDeclaration(catch_e), factory.updateBlock(node.block, newStatements));
         }
-        function transformTryStatement(node: TryStatement): TryStatement {
+        function visitTryStatement(node: TryStatement): TryStatement {
             if (!currentDoContext) return visitEachChild(node, visitor, context);
             return visitEachChild(node, child => {
                 if (child === node.finallyBlock) {
@@ -261,7 +261,7 @@ namespace ts {
                 return visitor(child);
             }, context);
         }
-        function transformSwitch(node: SwitchStatement): SwitchStatement {
+        function visitSwitch(node: SwitchStatement): SwitchStatement {
             // TODO:
             return visitEachChild(node, visitor, context);
         }
@@ -269,7 +269,7 @@ namespace ts {
         /**
          * Turn "return val" into "throw ((operand = val), signal)"
          */
-        function transformControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
+        function visitControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
             if (!currentDoContext || currentDoContext.isAsync) return visitEachChild(node, visitor, context);
             if (isReturnStatement(node)) {
                 if (!currentReturnContext) return visitEachChild(node, visitor, context);
@@ -296,7 +296,7 @@ namespace ts {
             }
         }
 
-        function transformDoExpression(node: DoExpression) {
+        function visitDoExpression(node: DoExpression) {
             const hasAwait = Boolean(node.transformFlags & TransformFlags.ContainsAwait);
             const hasYield = Boolean(node.transformFlags & TransformFlags.ContainsYield);
             const oldContext = currentDoContext;
@@ -308,7 +308,7 @@ namespace ts {
                 shouldTrack: false,
                 remapExpression: new Map(),
             };
-            const nextBlock = transformBlock(node.block, /** directChildOfDoExpr */ true);
+            const nextBlock = visitBlock(node.block, /** directChildOfDoExpr */ true);
             localContext.remapExpression.forEach(([temp, init]) => {
                 context.hoistVariableDeclaration(temp);
                 context.addInitializationStatement(factory.createExpressionStatement(factory.createAssignment(temp, init)));
@@ -318,12 +318,12 @@ namespace ts {
             return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAwait, hasYield);
         }
 
-        function transformExpressionStatement(node: ExpressionStatement) {
+        function visitExpressionStatement(node: ExpressionStatement) {
             const result = visitEachChild(node, visitor, context);
             if (!currentDoContext?.shouldTrack) return result;
             return factory.updateExpressionStatement(result, factory.createAssignment(currentDoContext.completionValue, result.expression));
         }
-        function transformBlock(node: Block, directChildOfDoExpr: boolean) {
+        function visitBlock(node: Block, directChildOfDoExpr: boolean) {
             if (!currentDoContext) return visitEachChild(node, visitor, context);
             const lastMeaningfulNode = findLast(node.statements, (node) =>
                 node.kind === SyntaxKind.ExpressionStatement ||
@@ -347,7 +347,7 @@ namespace ts {
             }, context);
         }
 
-        function transformIdentifier(node: Identifier) {
+        function visitIdentifier(node: Identifier) {
             if (!currentDoContext?.hasYield) return node;
             if (context.getEmitResolver().isArgumentsLocalBinding(node)) {
                 const ARG = "arguments";
@@ -355,7 +355,7 @@ namespace ts {
             }
             return node;
         }
-        function transformSuperPropertyExpression(node: SuperProperty) {
+        function visitSuperPropertyExpression(node: SuperProperty) {
             if (!currentDoContext?.hasYield) return visitEachChild(node, visitor, context);
             if (isElementAccessExpression(node)) {
                 return remapExpression(currentDoContext.remapExpression, "super_dynamic", () => {
@@ -388,7 +388,7 @@ namespace ts {
 
             };
         }
-        function transformCallExpression(node: CallExpression) {
+        function visitCallExpression(node: CallExpression) {
             if (!currentDoContext?.hasYield) return visitEachChild(node, visitor, context);
             const inner = skipParentheses(node.expression);
             if (isSuperProperty(inner)) {
