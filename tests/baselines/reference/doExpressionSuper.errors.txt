@@ -1,0 +1,39 @@
+tests/cases/compiler/doExpressionSuper.ts(10,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionSuper.ts(11,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionSuper.ts(12,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionSuper.ts(13,13): error TS7030: Not all code paths return a value.
+
+
+==== tests/cases/compiler/doExpressionSuper.ts (4 errors) ====
+    class Parent {
+        concat(...args) {
+            console.log(this, ...args)
+        }
+    }
+    class Test extends Parent {
+        *b() {
+            const a = do {
+                yield;
+                console.log(super["concat"]);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                console.log(super.concat);
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                super.concat(1,2);
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                super["concat"](1,2);
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+                1;
+            }
+        }
+    }
+    [...new Test().b()]
+    // Correct result:
+    // [Function: concat]
+    // [Function: concat]
+    // Test {} 1 2
+    // Test {} 1 2
+    

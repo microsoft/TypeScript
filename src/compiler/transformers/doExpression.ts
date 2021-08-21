@@ -22,6 +22,8 @@ namespace ts {
         interface DoExpressionContext {
             completionValue: Identifier
             isAsync: boolean
+            hasAwait: boolean
+            hasYield: boolean
             shouldTrack: boolean
             remapExpression: ESMap<string, [Identifier, Expression]>
         }
@@ -88,7 +90,16 @@ namespace ts {
             if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return transformIterationStatement(node);
             if (isClassLike(node)) return transformClassLike(node);
 
+            if (isSuperProperty(node)) return transformSuperPropertyExpression(node);
+
             switch (node.kind) {
+                // No need to handle new.target.
+                // Because ~Yield DoExpression will be transformed into ArrowFunction which is transparent to the new.target.
+                // And +Yield DoExpression requires a Yield context, meanwhile generator function is invalid target of new.target.
+
+                // Same for super() call.
+                case SyntaxKind.CallExpression:
+                    return transformCallExpression(node as CallExpression);
                 case SyntaxKind.DoExpression:
                     return transformDoExpression(node as DoExpression);
                 case SyntaxKind.LabeledStatement:
@@ -286,12 +297,14 @@ namespace ts {
         }
 
         function transformDoExpression(node: DoExpression) {
-            const hasAsync = Boolean(node.transformFlags & TransformFlags.ContainsAwait);
+            const hasAwait = Boolean(node.transformFlags & TransformFlags.ContainsAwait);
             const hasYield = Boolean(node.transformFlags & TransformFlags.ContainsYield);
             const oldContext = currentDoContext;
             const localContext: DoExpressionContext = currentDoContext = {
                 completionValue: createReservedInNestedScopeTempVariable(context.hoistVariableDeclaration),
                 isAsync: node.async,
+                hasAwait,
+                hasYield,
                 shouldTrack: false,
                 remapExpression: new Map(),
             };
@@ -302,7 +315,7 @@ namespace ts {
             });
             currentDoContext = oldContext;
             if (node.async) return createAsyncDoExpressionExecutor(nextBlock, localContext.completionValue);
-            return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAsync, hasYield);
+            return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAwait, hasYield);
         }
 
         function transformExpressionStatement(node: ExpressionStatement) {
@@ -335,18 +348,114 @@ namespace ts {
         }
 
         function transformIdentifier(node: Identifier) {
-            if (!currentDoContext) return node;
-            if (node.escapedText === "arguments") {
-                if (currentDoContext.remapExpression.has("arguments")) {
-                    return currentDoContext.remapExpression.get("arguments")![0];
-                }
-                const temp = createReservedInNestedScopeTempVariable();
-                const init = node;
-                // _a = arguments
-                currentDoContext.remapExpression.set("arguments", [temp, init]);
-                return temp;
+            if (!currentDoContext?.hasYield) return node;
+            const ARG = "arguments";
+            if (node.escapedText === ARG) {
+                return remapExpression(currentDoContext.remapExpression, ARG, () => node, id => id);
             }
             return node;
+        }
+        function transformSuperPropertyExpression(node: SuperProperty) {
+            if (!currentDoContext?.hasYield) return visitEachChild(node, visitor, context);
+            if (isElementAccessExpression(node)) {
+                return remapExpression(currentDoContext.remapExpression, "super_dynamic", () => {
+                    const param0 = factory.createTempVariable(noop);
+                    // (_a) => super[_a]
+                    return factory.createArrowFunction(
+                        /** modifiers */ undefined,
+                        /** generics */ undefined,
+                        [
+                            factory.createParameterDeclaration(
+                                /** decorators */ undefined,
+                                /** modifiers */ undefined,
+                                /** ... */ undefined,
+                                param0
+                            )
+                        ],
+                        /** type */ undefined,
+                        factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                        factory.createElementAccessExpression(factory.createSuper(), param0)
+                    );
+                }, delegate => createCall(delegate, [visitEachChild(node.argumentExpression, visitor, context)]));
+            }
+            else {
+                return remapExpression(
+                    currentDoContext.remapExpression,
+                    "super." + node.name.escapedText,
+                    // () => super.prop
+                    () => createFunctionExpression(node, /** async */ false, /** yield */ false),
+                    prop => createCall(prop, []));
+
+            };
+        }
+        function transformCallExpression(node: CallExpression) {
+            if (!currentDoContext?.hasYield) return visitEachChild(node, visitor, context);
+            const inner = skipParentheses(node.expression);
+            if (isSuperProperty(inner)) {
+                const rest = factory.createTempVariable(noop);
+                if (isElementAccessExpression(inner)) {
+                    return remapExpression(currentDoContext.remapExpression, "super_dynamic_call", () => {
+                        const param0 = createReservedInNestedScopeTempVariable();
+                        // (_a) => (...arg) => super[_a](...args)
+                        return factory.createArrowFunction(
+                            /** modifiers */ undefined,
+                            /** generics */ undefined,
+                            [
+                                factory.createParameterDeclaration(
+                                    /** decorators */ undefined,
+                                    /** modifiers */ undefined,
+                                    /** ... */ undefined,
+                                    param0
+                                )
+                            ],
+                            /** type */ undefined,
+                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                            factory.createArrowFunction(
+                                /** modifiers */ undefined,
+                                /** generics */ undefined,
+                                [
+                                    factory.createParameterDeclaration(
+                                        /** decorators */ undefined,
+                                        /** modifiers */ undefined,
+                                        /** ... */ factory.createToken(SyntaxKind.DotDotDotToken),
+                                        rest
+                                    )
+                                ],
+                                /** type */ undefined,
+                                factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                                createCall(
+                                    factory.createElementAccessExpression(factory.createSuper(), param0),
+                                    [factory.createSpreadElement(rest)],
+                                )
+                            )
+                        );
+                        // _a(dynamicAccessExpr)(...call)
+                    }, delegate => createCall(createCall(delegate, [visitEachChild(inner.argumentExpression, visitor, context)]), node.arguments));
+                }
+                else {
+                    return remapExpression(
+                        currentDoContext.remapExpression,
+                        "super_call." + inner.name.escapedText,
+                        // (...args) => super.prop(...args)
+                        () => factory.createArrowFunction(
+                            /** modifiers */ undefined,
+                            /** generics */ undefined,
+                            [
+                                factory.createParameterDeclaration(
+                                    /** decorators */ undefined,
+                                    /** modifiers */ undefined,
+                                    /** ... */ factory.createToken(SyntaxKind.DotDotDotToken),
+                                    rest
+                                )
+                            ],
+                            /** type */ undefined,
+                            factory.createToken(SyntaxKind.EqualsGreaterThanToken),
+                            createCall(inner, [factory.createSpreadElement(rest)])
+                        ),
+                        prop => createCall(prop, node.arguments));
+                };
+            }
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -451,11 +560,18 @@ namespace ts {
             const thenBody = createFunctionExpression(completionValueContainer, /** await */ false, /** yield */ false);
             return createCall(then, [thenBody]);
         }
-        function createCall(expr: Expression, args: Expression[]) {
+        function createCall(expr: Expression, args: Expression[] | NodeArray<Expression>) {
             return factory.createCallExpression(expr, /** generics */ undefined, args);
         }
         function createReservedInNestedScopeTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined = noop) {
             return factory.createTempVariable(recordTempVariable, /** reservedInNestedScopes */ true);
+        }
+        function remapExpression<T>(map: DoExpressionContext["remapExpression"], key: string, init: (identifier: Identifier) => Expression, apply: (id: Identifier) => T) {
+            if (map.has(key)) return apply(map.get(key)![0]);
+            const temp = createReservedInNestedScopeTempVariable();
+            const initExpr = init(temp);
+            map.set(key, [temp, initExpr]);
+            return apply(temp);
         }
     }
 }

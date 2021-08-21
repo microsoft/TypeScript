@@ -1,0 +1,86 @@
+=== tests/cases/compiler/doExpressionSuper.ts ===
+class Parent {
+>Parent : Parent
+
+    concat(...args) {
+>concat : (...args: any[]) => void
+>args : any[]
+
+        console.log(this, ...args)
+>console.log(this, ...args) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>this : this
+>...args : any
+>args : any[]
+    }
+}
+class Test extends Parent {
+>Test : Test
+>Parent : Parent
+
+    *b() {
+>b : () => Generator<any, void, unknown>
+
+        const a = do {
+>a : 1
+>do {            yield;            console.log(super["concat"]);            console.log(super.concat);            super.concat(1,2);            super["concat"](1,2);            1;        } : 1
+
+            yield;
+>yield : any
+
+            console.log(super["concat"]);
+>console.log(super["concat"]) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>super["concat"] : (...args: any[]) => void
+>super : Parent
+>"concat" : "concat"
+
+            console.log(super.concat);
+>console.log(super.concat) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>super.concat : (...args: any[]) => void
+>super : Parent
+>concat : (...args: any[]) => void
+
+            super.concat(1,2);
+>super.concat(1,2) : void
+>super.concat : (...args: any[]) => void
+>super : Parent
+>concat : (...args: any[]) => void
+>1 : 1
+>2 : 2
+
+            super["concat"](1,2);
+>super["concat"](1,2) : void
+>super["concat"] : (...args: any[]) => void
+>super : Parent
+>"concat" : "concat"
+>1 : 1
+>2 : 2
+
+            1;
+>1 : 1
+        }
+    }
+}
+[...new Test().b()]
+>[...new Test().b()] : any[]
+>...new Test().b() : any
+>new Test().b() : Generator<any, void, unknown>
+>new Test().b : () => Generator<any, void, unknown>
+>new Test() : Test
+>Test : typeof Test
+>b : () => Generator<any, void, unknown>
+
+// Correct result:
+// [Function: concat]
+// [Function: concat]
+// Test {} 1 2
+// Test {} 1 2
+

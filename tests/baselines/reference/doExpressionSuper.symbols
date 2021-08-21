@@ -1,0 +1,66 @@
+=== tests/cases/compiler/doExpressionSuper.ts ===
+class Parent {
+>Parent : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+
+    concat(...args) {
+>concat : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+>args : Symbol(args, Decl(doExpressionSuper.ts, 1, 11))
+
+        console.log(this, ...args)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+>args : Symbol(args, Decl(doExpressionSuper.ts, 1, 11))
+    }
+}
+class Test extends Parent {
+>Test : Symbol(Test, Decl(doExpressionSuper.ts, 4, 1))
+>Parent : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+
+    *b() {
+>b : Symbol(Test.b, Decl(doExpressionSuper.ts, 5, 27))
+
+        const a = do {
+>a : Symbol(a, Decl(doExpressionSuper.ts, 7, 13))
+
+            yield;
+            console.log(super["concat"]);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+>"concat" : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+
+            console.log(super.concat);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>super.concat : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+>super : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+>concat : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+
+            super.concat(1,2);
+>super.concat : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+>super : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+>concat : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+
+            super["concat"](1,2);
+>super : Symbol(Parent, Decl(doExpressionSuper.ts, 0, 0))
+>"concat" : Symbol(Parent.concat, Decl(doExpressionSuper.ts, 0, 14))
+
+            1;
+        }
+    }
+}
+[...new Test().b()]
+>new Test().b : Symbol(Test.b, Decl(doExpressionSuper.ts, 5, 27))
+>Test : Symbol(Test, Decl(doExpressionSuper.ts, 4, 1))
+>b : Symbol(Test.b, Decl(doExpressionSuper.ts, 5, 27))
+
+// Correct result:
+// [Function: concat]
+// [Function: concat]
+// Test {} 1 2
+// Test {} 1 2
+
