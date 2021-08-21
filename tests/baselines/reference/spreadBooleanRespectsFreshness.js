@@ -15,6 +15,6 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 foo1 = __spreadArray([], Array.isArray(foo2) ? foo2 : [foo2], true);
