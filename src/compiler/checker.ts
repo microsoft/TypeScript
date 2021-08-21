@@ -32853,7 +32853,6 @@ namespace ts {
                     }
                     return checkEndsInIterationOrBareIfOrDeclaration(node.statement, labelSet, isLast);
                 }
-                // Not mentioned in the spec https://github.com/tc39/proposal-do-expressions/issues/68
                 else if (isBlock(node)) return checkEndsInIterationOrBareIfOrDeclaration(node.statements, labelSet, isLast);
                 else if (isIfStatement(node)) {
                     if (!node.elseStatement) {
@@ -35818,7 +35817,6 @@ namespace ts {
             if (node.kind === SyntaxKind.Block) {
                 checkGrammarStatementInAmbientContext(node);
             }
-            // eslint-disable-next-line no-undef-init
             let types: (Type | void)[] = [];
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
@@ -37393,6 +37391,7 @@ namespace ts {
             if (!checkGrammarStatementInAmbientContext(node)) checkGrammarBreakOrContinueStatement(node);
 
             // TODO: Check that target label is valid
+            // TODO: give grammar error when break/continue acrossing the async do expression boundary.
             // complete a CompletionRecord<"continue" | "break", T>
             // so it does not contribute to the analysis of CompletionRecord<"normal", T>
             return neverType;

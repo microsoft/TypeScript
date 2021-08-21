@@ -8,7 +8,11 @@ namespace ts {
                 return node;
             }
 
-            return visitEachChild(transformDoExpression(context, node), visitor, context);
+            return visitEachChild(
+                transformDoExpression(context, node),
+                visitor,
+                context
+            );
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -21,4 +25,4 @@ namespace ts {
             }
         }
     }
-  }
+}
