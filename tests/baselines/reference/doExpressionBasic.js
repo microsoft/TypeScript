@@ -69,13 +69,13 @@ const c2 = ((() => {
         else
             2;
         if (a2)
-            1;
+            _g = 1;
         else
-            2;
+            _g = 2;
     }
     catch (e) {
         {
-            e;
+            _g = e;
         }
     }
     finally { }

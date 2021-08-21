@@ -1,0 +1,88 @@
+=== tests/cases/compiler/doExpressionArguments.ts ===
+async function* a(b, c, d) {
+>a : (b: any, c: any, d: any) => AsyncGenerator<any, void, unknown>
+>b : any
+>c : any
+>d : any
+
+    console.log(arguments)
+>console.log(arguments) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>arguments : IArguments
+
+    arguments[1] = "before"
+>arguments[1] = "before" : "before"
+>arguments[1] : any
+>arguments : IArguments
+>1 : 1
+>"before" : "before"
+
+    console.log(b, c, d)
+>console.log(b, c, d) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>b : any
+>c : any
+>d : any
+
+    console.log(do {
+>console.log(do {        yield;        arguments[1] = "after";        arguments;    }) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>do {        yield;        arguments[1] = "after";        arguments;    } : IArguments
+
+        yield;
+>yield : any
+
+        arguments[1] = "after";
+>arguments[1] = "after" : "after"
+>arguments[1] : any
+>arguments : IArguments
+>1 : 1
+>"after" : "after"
+
+        arguments;
+>arguments : IArguments
+
+    })
+    console.log(b, c, d)
+>console.log(b, c, d) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>b : any
+>c : any
+>d : any
+}
+const gen = a(0, 1, 2)
+>gen : AsyncGenerator<any, void, unknown>
+>a(0, 1, 2) : AsyncGenerator<any, void, unknown>
+>a : (b: any, c: any, d: any) => AsyncGenerator<any, void, unknown>
+>0 : 0
+>1 : 1
+>2 : 2
+
+gen.next().then(() => gen.next())
+>gen.next().then(() => gen.next()) : Promise<IteratorResult<any, void>>
+>gen.next().then : <TResult1 = IteratorResult<any, void>, TResult2 = never>(onfulfilled?: (value: IteratorResult<any, void>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>gen.next() : Promise<IteratorResult<any, void>>
+>gen.next : (...args: [] | [unknown]) => Promise<IteratorResult<any, void>>
+>gen : AsyncGenerator<any, void, unknown>
+>next : (...args: [] | [unknown]) => Promise<IteratorResult<any, void>>
+>then : <TResult1 = IteratorResult<any, void>, TResult2 = never>(onfulfilled?: (value: IteratorResult<any, void>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>() => gen.next() : () => Promise<IteratorResult<any, void>>
+>gen.next() : Promise<IteratorResult<any, void>>
+>gen.next : (...args: [] | [unknown]) => Promise<IteratorResult<any, void>>
+>gen : AsyncGenerator<any, void, unknown>
+>next : (...args: [] | [unknown]) => Promise<IteratorResult<any, void>>
+
+// Correct result:
+// [Arguments] 0, 1, 2
+// 0, "before", 2
+// (inside do) [Arguments] 0, "after", 2
+// 0, "after", 2
+

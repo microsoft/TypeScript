@@ -23,6 +23,7 @@ namespace ts {
             completionValue: Identifier
             isAsync: boolean
             shouldTrack: boolean
+            remapExpression: ESMap<string, [Identifier, Expression]>
         }
         let currentReturnContext: ReturnContext | undefined;
         let currentBreakContext: BreakContinueContext | undefined;
@@ -99,7 +100,11 @@ namespace ts {
                 case SyntaxKind.ExpressionStatement:
                     return transformExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.Block:
-                    return transformBlock(node as Block);
+                    return transformBlock(node as Block, false);
+                case SyntaxKind.SwitchStatement:
+                    return transformSwitch(node as SwitchStatement);
+                case SyntaxKind.Identifier:
+                    return transformIdentifier(node as Identifier);
                 case SyntaxKind.ReturnStatement:
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
@@ -120,13 +125,13 @@ namespace ts {
             });
             function visitBody(child: ConciseBody): ConciseBody {
                 let nextBody = visitor(child);
-                const sig = currentReturnContext?.signal;
-                if (sig) {
+                if (currentReturnContext?.signal) {
+                    const { signal: [currentSignal, operand] } = currentReturnContext;
                     // to code: if (signal == currentReturnContext.signal) return operand
-                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext!], (signal) => [
+                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext], (possibleSignal) => [
                         factory.createIfStatement(
-                            factory.createEquality(signal, sig[0]),
-                            factory.createReturnStatement(sig[1]),
+                            factory.createEquality(possibleSignal, currentSignal),
+                            factory.createReturnStatement(operand),
                         )
                     ]);
                 }
@@ -215,8 +220,10 @@ namespace ts {
 
             const catch_e = factory.createTempVariable(noop);
             const newStatements = [...node.block.statements];
+
             const signals = getSignals(currentBreakContext).concat(getSignals(currentContinueContext));
             if (currentReturnContext?.signal) signals.push(currentReturnContext.signal[0]);
+
             const oldCatch_e = node.variableDeclaration;
             if (oldCatch_e) {
                 // catch(e = 1) is syntax error. no need to worry the original initializer
@@ -243,13 +250,19 @@ namespace ts {
                 return visitor(child);
             }, context);
         }
-        // function transformSwitch() {}
+        function transformSwitch(node: SwitchStatement): SwitchStatement {
+            // TODO:
+            return visitEachChild(node, visitor, context);
+        }
 
+        /**
+         * Turn "return val" into "throw ((operand = val), signal)"
+         */
         function transformControlFlow(node: ReturnStatement | ContinueStatement | BreakStatement) {
             if (!currentDoContext || currentDoContext.isAsync) return visitEachChild(node, visitor, context);
             if (isReturnStatement(node)) {
                 if (!currentReturnContext) return visitEachChild(node, visitor, context);
-                const [signal, returnValue] = currentReturnContext.signal ??= [factory.createTempVariable(noop, /** reservedInNestedScopes */ true), factory.createTempVariable(noop, /** reservedInNestedScopes */ true)];
+                const [signal, returnValue] = currentReturnContext.signal ??= [createReservedInNestedScopeTempVariable(), createReservedInNestedScopeTempVariable()];
                 const setReturnValue = node.expression && factory.createBinaryExpression(returnValue, factory.createToken(SyntaxKind.EqualsToken), visitor(node.expression));
                 return factory.createThrowStatement(setReturnValue ? factory.createCommaListExpression([setReturnValue, signal]) : signal);
             }
@@ -268,7 +281,7 @@ namespace ts {
                 };
                 const jump = findJumpContext(node.label, node.kind === SyntaxKind.BreakStatement ? currentBreakContext : currentContinueContext);
                 if (!jump) return visitEachChild(node, visitor, context);
-                return factory.createThrowStatement(jump.signal ??= factory.createTempVariable(noop, /** reservedInNestedScopes */ true));
+                return factory.createThrowStatement(jump.signal ??= createReservedInNestedScopeTempVariable());
             }
         }
 
@@ -276,12 +289,17 @@ namespace ts {
             const hasAsync = Boolean(node.transformFlags & TransformFlags.ContainsAwait);
             const hasYield = Boolean(node.transformFlags & TransformFlags.ContainsYield);
             const oldContext = currentDoContext;
-            const localContext = currentDoContext = {
-                completionValue: context.factory.createTempVariable(context.hoistVariableDeclaration, /** reservedInNestedScopes */ true),
+            const localContext: DoExpressionContext = currentDoContext = {
+                completionValue: createReservedInNestedScopeTempVariable(context.hoistVariableDeclaration),
                 isAsync: node.async,
                 shouldTrack: false,
+                remapExpression: new Map(),
             };
-            const nextBlock = transformBlock(node.block);
+            const nextBlock = transformBlock(node.block, true);
+            localContext.remapExpression.forEach(([temp, init]) => {
+                context.hoistVariableDeclaration(temp);
+                context.addInitializationStatement(factory.createExpressionStatement(factory.createAssignment(temp, init)));
+            });
             currentDoContext = oldContext;
             if (node.async) return createAsyncDoExpressionExecutor(nextBlock, localContext.completionValue);
             return createDoExpressionExecutor(nextBlock, localContext.completionValue, hasAsync, hasYield);
@@ -292,7 +310,7 @@ namespace ts {
             if (!currentDoContext?.shouldTrack) return result;
             return factory.updateExpressionStatement(result, factory.createAssignment(currentDoContext.completionValue, result.expression));
         }
-        function transformBlock(node: Block) {
+        function transformBlock(node: Block, directChildOfDoExpr: boolean) {
             if (!currentDoContext) return visitEachChild(node, visitor, context);
             const lastMeaningfulNode = findLast(node.statements, (node) =>
                 node.kind === SyntaxKind.ExpressionStatement ||
@@ -305,8 +323,7 @@ namespace ts {
                 node.kind === SyntaxKind.TryStatement
             );
             const shouldTrackOld = currentDoContext.shouldTrack;
-            const shouldTrack =
-                shouldTrackOld || node.parent?.kind === SyntaxKind.DoExpression;
+            const shouldTrack = shouldTrackOld || directChildOfDoExpr;
             return visitEachChild(node, child => {
                 const isDirectChild = node.statements.includes(child as Statement);
                 if (!shouldTrack || !isDirectChild) return visitor(child);
@@ -316,6 +333,22 @@ namespace ts {
                 return result;
             }, context);
         }
+
+        function transformIdentifier(node: Identifier) {
+            if (!currentDoContext) return node;
+            if (node.escapedText === "arguments") {
+                if (currentDoContext.remapExpression.has("arguments")) {
+                    return currentDoContext.remapExpression.get("arguments")![0];
+                }
+                const temp = createReservedInNestedScopeTempVariable();
+                const init = node;
+                // _a = arguments
+                currentDoContext.remapExpression.set("arguments", [temp, init]);
+                return temp;
+            }
+            return node;
+        }
+
         /**
          * ```js
          * { Block }
@@ -420,6 +453,9 @@ namespace ts {
         }
         function createCall(expr: Expression, args: Expression[]) {
             return factory.createCallExpression(expr, /** generics */ undefined, args);
+        }
+        function createReservedInNestedScopeTempVariable(recordTempVariable: ((node: Identifier) => void) | undefined = noop) {
+            return factory.createTempVariable(recordTempVariable, /** reservedInNestedScopes */ true);
         }
     }
 }

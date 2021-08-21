@@ -1,0 +1,65 @@
+=== tests/cases/compiler/doExpressionArguments.ts ===
+async function* a(b, c, d) {
+>a : Symbol(a, Decl(doExpressionArguments.ts, 0, 0))
+>b : Symbol(b, Decl(doExpressionArguments.ts, 0, 18))
+>c : Symbol(c, Decl(doExpressionArguments.ts, 0, 20))
+>d : Symbol(d, Decl(doExpressionArguments.ts, 0, 23))
+
+    console.log(arguments)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>arguments : Symbol(arguments)
+
+    arguments[1] = "before"
+>arguments : Symbol(arguments)
+
+    console.log(b, c, d)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(doExpressionArguments.ts, 0, 18))
+>c : Symbol(c, Decl(doExpressionArguments.ts, 0, 20))
+>d : Symbol(d, Decl(doExpressionArguments.ts, 0, 23))
+
+    console.log(do {
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+        yield;
+        arguments[1] = "after";
+>arguments : Symbol(arguments)
+
+        arguments;
+>arguments : Symbol(arguments)
+
+    })
+    console.log(b, c, d)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(doExpressionArguments.ts, 0, 18))
+>c : Symbol(c, Decl(doExpressionArguments.ts, 0, 20))
+>d : Symbol(d, Decl(doExpressionArguments.ts, 0, 23))
+}
+const gen = a(0, 1, 2)
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>a : Symbol(a, Decl(doExpressionArguments.ts, 0, 0))
+
+gen.next().then(() => gen.next())
+>gen.next().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>gen.next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>gen.next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+// Correct result:
+// [Arguments] 0, 1, 2
+// 0, "before", 2
+// (inside do) [Arguments] 0, "after", 2
+// 0, "after", 2
+
