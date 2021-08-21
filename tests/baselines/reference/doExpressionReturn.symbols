@@ -1,70 +1,95 @@
 === tests/cases/compiler/doExpressionReturn.ts ===
-function x() {
->x : Symbol(x, Decl(doExpressionReturn.ts, 0, 0))
+declare let v: boolean
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
 
-    const y = do { return }
->y : Symbol(y, Decl(doExpressionReturn.ts, 1, 9))
+function returnTypeInfer() {
+>returnTypeInfer : Symbol(returnTypeInfer, Decl(doExpressionReturn.ts, 0, 22))
+
+    const y = do { return 1 }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 3, 9))
 }
 
-function w() {
->w : Symbol(w, Decl(doExpressionReturn.ts, 2, 1))
+function returnTypeCheck(): string {
+>returnTypeCheck : Symbol(returnTypeCheck, Decl(doExpressionReturn.ts, 4, 1))
+
+    const y = do { return 1 }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 7, 9))
+}
+
+function avoidFalsePositive() {
+>avoidFalsePositive : Symbol(avoidFalsePositive, Decl(doExpressionReturn.ts, 8, 1))
 
     const y = do {
->y : Symbol(y, Decl(doExpressionReturn.ts, 5, 9))
+>y : Symbol(y, Decl(doExpressionReturn.ts, 11, 9))
 
         function z() {
->z : Symbol(z, Decl(doExpressionReturn.ts, 5, 18))
+>z : Symbol(z, Decl(doExpressionReturn.ts, 11, 18))
 
-            return
+            return 1
         }
         1
-     }
+    }
 }
 
-function z() {
->z : Symbol(z, Decl(doExpressionReturn.ts, 11, 1))
+function tryCatch() {
+>tryCatch : Symbol(tryCatch, Decl(doExpressionReturn.ts, 17, 1))
 
     try {
-        const y = do { return }
->y : Symbol(y, Decl(doExpressionReturn.ts, 15, 13))
-
-    } catch {}
-    try {
-        const y = do { return }
->y : Symbol(y, Decl(doExpressionReturn.ts, 18, 13))
-
-    } catch(e) {}
->e : Symbol(e, Decl(doExpressionReturn.ts, 19, 12))
-
-    try {
-        const y = do { return }
+        const y = do { if (v) return; 1; }
 >y : Symbol(y, Decl(doExpressionReturn.ts, 21, 13))
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
 
-    } catch ({ a = 1 }) {}
->a : Symbol(a, Decl(doExpressionReturn.ts, 22, 14))
+    } catch { 1 }
+    try {
+        const y = do { if (v) return; 1; }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 24, 13))
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
+
+    } catch (e) { 1 }
+>e : Symbol(e, Decl(doExpressionReturn.ts, 25, 13))
+
+    try {
+        const y = do { if (v) return; 1; }
+>y : Symbol(y, Decl(doExpressionReturn.ts, 27, 13))
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
+
+    } catch ({ a = 1 }) { 1 }
+>a : Symbol(a, Decl(doExpressionReturn.ts, 28, 14))
 }
 
-function q() {
->q : Symbol(q, Decl(doExpressionReturn.ts, 23, 1))
+function avoidSignatureToBeCaptured(): void {
+>avoidSignatureToBeCaptured : Symbol(avoidSignatureToBeCaptured, Decl(doExpressionReturn.ts, 29, 1))
 
-    (do {
-        try {
-            return
-        } catch {}
-    });
-    (do {
-        try {
-            return
-        } catch(d) {}
->d : Symbol(d, Decl(doExpressionReturn.ts, 34, 16))
+    const a = do {
+>a : Symbol(a, Decl(doExpressionReturn.ts, 32, 9))
 
-    });
-    (do {
         try {
-            return
-        } catch({a = 1}) {}
->a : Symbol(a, Decl(doExpressionReturn.ts, 39, 17))
+            if (v) return; 1;
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
 
-    });
+        } catch { 1 }
+    };
+    const b = do {
+>b : Symbol(b, Decl(doExpressionReturn.ts, 37, 9))
+
+        try {
+            if (v) return; 1;
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
+
+        } catch (d) { 1 }
+>d : Symbol(d, Decl(doExpressionReturn.ts, 40, 17))
+
+    };
+    const c = do {
+>c : Symbol(c, Decl(doExpressionReturn.ts, 42, 9))
+
+        try {
+            if (v) return; 1;
+>v : Symbol(v, Decl(doExpressionReturn.ts, 0, 11))
+
+        } catch ({ a = 1 }) { 1 }
+>a : Symbol(a, Decl(doExpressionReturn.ts, 45, 18))
+
+    };
 }
 

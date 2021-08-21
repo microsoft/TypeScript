@@ -1,89 +1,109 @@
 //// [doExpressionReturn.ts]
-function x() {
-    const y = do { return }
+declare let v: boolean
+
+function returnTypeInfer() {
+    const y = do { return 1 }
 }
 
-function w() {
+function returnTypeCheck(): string {
+    const y = do { return 1 }
+}
+
+function avoidFalsePositive() {
     const y = do {
         function z() {
-            return
+            return 1
         }
         1
-     }
+    }
 }
 
-function z() {
+function tryCatch() {
     try {
-        const y = do { return }
-    } catch {}
+        const y = do { if (v) return; 1; }
+    } catch { 1 }
     try {
-        const y = do { return }
-    } catch(e) {}
+        const y = do { if (v) return; 1; }
+    } catch (e) { 1 }
     try {
-        const y = do { return }
-    } catch ({ a = 1 }) {}
+        const y = do { if (v) return; 1; }
+    } catch ({ a = 1 }) { 1 }
 }
 
-function q() {
-    (do {
+function avoidSignatureToBeCaptured(): void {
+    const a = do {
         try {
-            return
-        } catch {}
-    });
-    (do {
+            if (v) return; 1;
+        } catch { 1 }
+    };
+    const b = do {
         try {
-            return
-        } catch(d) {}
-    });
-    (do {
+            if (v) return; 1;
+        } catch (d) { 1 }
+    };
+    const c = do {
         try {
-            return
-        } catch({a = 1}) {}
-    });
+            if (v) return; 1;
+        } catch ({ a = 1 }) { 1 }
+    };
 }
 
 
 //// [doExpressionReturn.js]
-function x() { var _a; var _b = {}, _c; try {
-    const y = ((() => { throw _b; })(), _a);
+function returnTypeInfer() { var _a; var _b = {}, _c; try {
+    const y = ((() => { throw _c = 1, _b; })(), _a);
 }
 catch (_d) {
     if (_d == _b)
         return _c;
     throw _d;
 } }
-function w() {
+function returnTypeCheck() { var _a; var _b = {}, _c; try {
+    const y = ((() => { throw _c = 1, _b; })(), _a);
+}
+catch (_d) {
+    if (_d == _b)
+        return _c;
+    throw _d;
+} }
+function avoidFalsePositive() {
     var _a;
     const y = ((() => {
         function z() {
-            return;
+            return 1;
         }
         _a = 1;
     })(), _a);
 }
-function z() { var _a, _b, _c; var _d = {}, _e; try {
+function tryCatch() { var _a, _b, _c; var _d = {}, _e; try {
     try {
-        const y = ((() => { throw _d; })(), _a);
+        const y = ((() => { if (v)
+            throw _d; _a = 1; })(), _a);
     }
     catch (_f) {
         if (_f == _d)
             throw _f;
+        1;
     }
     try {
-        const y = ((() => { throw _d; })(), _b);
+        const y = ((() => { if (v)
+            throw _d; _b = 1; })(), _b);
     }
     catch (_g) {
         if (_g == _d)
             throw _g;
         var e = _g;
+        1;
     }
     try {
-        const y = ((() => { throw _d; })(), _c);
+        const y = ((() => { if (v)
+            throw _d; _c = 1; })(), _c);
     }
     catch (_h) {
         if (_h == _d)
             throw _h;
         var { a = 1 } = _h;
+        1;
     }
 }
 catch (_j) {
@@ -91,34 +111,43 @@ catch (_j) {
         return _e;
     throw _j;
 } }
-function q() { var _a, _b, _c; var _d = {}, _e; try {
-    ((() => {
+function avoidSignatureToBeCaptured() { var _a, _b, _c; var _d = {}, _e; try {
+    const a = ((() => {
         try {
-            throw _d;
+            if (v)
+                throw _d;
+            _a = 1;
         }
         catch (_f) {
             if (_f == _d)
                 throw _f;
+            _a = 1;
         }
     })(), _a);
-    ((() => {
+    const b = ((() => {
         try {
-            throw _d;
+            if (v)
+                throw _d;
+            _b = 1;
         }
         catch (_f) {
             if (_f == _d)
                 throw _f;
             var d = _f;
+            _b = 1;
         }
     })(), _b);
-    ((() => {
+    const c = ((() => {
         try {
-            throw _d;
+            if (v)
+                throw _d;
+            _c = 1;
         }
         catch (_f) {
             if (_f == _d)
                 throw _f;
             var { a = 1 } = _f;
+            _c = 1;
         }
     })(), _c);
 }

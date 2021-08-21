@@ -1,100 +1,88 @@
-tests/cases/compiler/doExpressionReturn.ts(15,9): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(17,13): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(18,9): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(20,16): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(8,20): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/doExpressionReturn.ts(21,9): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(23,25): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(27,5): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(30,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(32,5): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(35,20): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(37,5): error TS7030: Not all code paths return a value.
-tests/cases/compiler/doExpressionReturn.ts(40,26): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(22,24): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(24,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(25,24): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(27,9): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(28,24): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(35,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(40,13): error TS7030: Not all code paths return a value.
+tests/cases/compiler/doExpressionReturn.ts(45,13): error TS7030: Not all code paths return a value.
 
 
-==== tests/cases/compiler/doExpressionReturn.ts (12 errors) ====
-    function x() {
-        const y = do { return }
+==== tests/cases/compiler/doExpressionReturn.ts (10 errors) ====
+    declare let v: boolean
+    
+    function returnTypeInfer() {
+        const y = do { return 1 }
     }
     
-    function w() {
+    function returnTypeCheck(): string {
+        const y = do { return 1 }
+                       ~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    }
+    
+    function avoidFalsePositive() {
         const y = do {
             function z() {
-                return
+                return 1
             }
             1
-         }
+        }
     }
     
-    function z() {
+    function tryCatch() {
         try {
             ~
-            const y = do { return }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        } catch {}
+            const y = do { if (v) return; 1; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        } catch { 1 }
     ~~~~~
-!!! error TS7030: Not all code paths return a value.
-                ~~
-!!! error TS7030: Not all code paths return a value.
-        try {
-            ~
-            const y = do { return }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        } catch(e) {}
-    ~~~~~
-!!! error TS7030: Not all code paths return a value.
-                   ~~
 !!! error TS7030: Not all code paths return a value.
         try {
             ~
-            const y = do { return }
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        } catch ({ a = 1 }) {}
+            const y = do { if (v) return; 1; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        } catch (e) { 1 }
     ~~~~~
 !!! error TS7030: Not all code paths return a value.
-                            ~~
+        try {
+            ~
+            const y = do { if (v) return; 1; }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~
+!!! error TS7030: Not all code paths return a value.
+        } catch ({ a = 1 }) { 1 }
+    ~~~~~
 !!! error TS7030: Not all code paths return a value.
     }
     
-    function q() {
-        (do {
-        ~~~~~
+    function avoidSignatureToBeCaptured(): void {
+        const a = do {
             try {
-    ~~~~~~~~~~~~~
-                return
-    ~~~~~~~~~~~~~~~~~~
-            } catch {}
-    ~~~~~~~~~~~~~~~~~~
-                    ~~
+                if (v) return; 1;
+                ~~~~~~~~~~~~~~
 !!! error TS7030: Not all code paths return a value.
-        });
-    ~~~~~~~
-!!! error TS7030: Not all code paths return a value.
-        (do {
-        ~~~~~
+            } catch { 1 }
+        };
+        const b = do {
             try {
-    ~~~~~~~~~~~~~
-                return
-    ~~~~~~~~~~~~~~~~~~
-            } catch(d) {}
-    ~~~~~~~~~~~~~~~~~~~~~
-                       ~~
+                if (v) return; 1;
+                ~~~~~~~~~~~~~~
 !!! error TS7030: Not all code paths return a value.
-        });
-    ~~~~~~~
-!!! error TS7030: Not all code paths return a value.
-        (do {
-        ~~~~~
+            } catch (d) { 1 }
+        };
+        const c = do {
             try {
-    ~~~~~~~~~~~~~
-                return
-    ~~~~~~~~~~~~~~~~~~
-            } catch({a = 1}) {}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                             ~~
+                if (v) return; 1;
+                ~~~~~~~~~~~~~~
 !!! error TS7030: Not all code paths return a value.
-        });
-    ~~~~~~~
-!!! error TS7030: Not all code paths return a value.
+            } catch ({ a = 1 }) { 1 }
+        };
     }
     

@@ -1,43 +1,49 @@
 //@target: ES2021
-function x() {
-    const y = do { return }
+declare let v: boolean
+
+function returnTypeInfer() {
+    const y = do { return 1 }
 }
 
-function w() {
+function returnTypeCheck(): string {
+    const y = do { return 1 }
+}
+
+function avoidFalsePositive() {
     const y = do {
         function z() {
-            return
+            return 1
         }
         1
-     }
+    }
 }
 
-function z() {
+function tryCatch() {
     try {
-        const y = do { return }
-    } catch {}
+        const y = do { if (v) return; 1; }
+    } catch { 1 }
     try {
-        const y = do { return }
-    } catch(e) {}
+        const y = do { if (v) return; 1; }
+    } catch (e) { 1 }
     try {
-        const y = do { return }
-    } catch ({ a = 1 }) {}
+        const y = do { if (v) return; 1; }
+    } catch ({ a = 1 }) { 1 }
 }
 
-function q() {
-    (do {
+function avoidSignatureToBeCaptured(): void {
+    const a = do {
         try {
-            return
-        } catch {}
-    });
-    (do {
+            if (v) return; 1;
+        } catch { 1 }
+    };
+    const b = do {
         try {
-            return
-        } catch(d) {}
-    });
-    (do {
+            if (v) return; 1;
+        } catch (d) { 1 }
+    };
+    const c = do {
         try {
-            return
-        } catch({a = 1}) {}
-    });
+            if (v) return; 1;
+        } catch ({ a = 1 }) { 1 }
+    };
 }

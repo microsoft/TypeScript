@@ -1369,26 +1369,11 @@ namespace ts {
         return traverse(body);
 
         function traverse(node: Node): T | undefined {
-            switch (node.kind) {
-                case SyntaxKind.ReturnStatement:
-                    return visitor(node as ReturnStatement);
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.Block:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.ForStatement:
-                case SyntaxKind.ForInStatement:
-                case SyntaxKind.ForOfStatement:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                case SyntaxKind.LabeledStatement:
-                case SyntaxKind.TryStatement:
-                case SyntaxKind.CatchClause:
-                    return forEachChild(node, traverse);
-            }
+            if (isReturnStatement(node)) return visitor(node);
+            if (isFunctionLike(node) || isModuleBlock(node) || isClassLike(node)) return;
+            if (isDoExpression(node) && node.async) return;
+            if (isTypeNode(node)) return;
+            return forEachChild(node, traverse);
         }
     }
 
