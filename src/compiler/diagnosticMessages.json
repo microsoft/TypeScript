@@ -6027,6 +6027,11 @@
         "category": "Error",
         "code": 7057
     },
+    "If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`": {
+        "category": "Error",
+        "code": 7058
+    },
+
 
     "You cannot rename this element.": {
         "category": "Error",

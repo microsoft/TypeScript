@@ -134,3 +134,50 @@ var i:I1 = function (n) {return n;}
 >n : number
 >n : number
 
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+>x : string | number
+>Math.random() < 0.5 ? "str" : 123 : "str" | 123
+>Math.random() < 0.5 : boolean
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>0.5 : 0.5
+>"str" : "str"
+>123 : 123
+
+if (typeof x === "string") {
+>typeof x === "string" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>"string" : "string"
+
+  let obj = {
+>obj : { prop: any; method(): string; }
+>{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method(): string; }
+
+    set prop(_: any) { x.toUpperCase(); },
+>prop : any
+>_ : any
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+
+    get prop() { return x.toUpperCase() },
+>prop : any
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+
+    method() { return x.toUpperCase() }
+>method : () => string
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+  }
+}
+

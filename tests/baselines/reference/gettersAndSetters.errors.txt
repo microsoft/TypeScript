@@ -1,14 +1,8 @@
-tests/cases/compiler/gettersAndSetters.ts(7,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSetters.ts(8,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSetters.ts(10,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSetters.ts(11,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/gettersAndSetters.ts(25,13): error TS2339: Property 'Baz' does not exist on type 'C'.
 tests/cases/compiler/gettersAndSetters.ts(26,3): error TS2339: Property 'Baz' does not exist on type 'C'.
-tests/cases/compiler/gettersAndSetters.ts(29,30): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/gettersAndSetters.ts(29,53): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/compiler/gettersAndSetters.ts (8 errors) ====
+==== tests/cases/compiler/gettersAndSetters.ts (2 errors) ====
     // classes
     class C {
         public fooBack = "";
@@ -16,18 +10,10 @@ tests/cases/compiler/gettersAndSetters.ts(29,53): error TS1056: Accessors are on
         public bazBack = "";
         
         public get Foo() { return this.fooBack;} // ok
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         public set Foo(foo:string) {this.fooBack = foo;} // ok
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         static get Bar() {return C.barBack;} // ok
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
         static set Bar(bar:string) {C.barBack = bar;} // ok
-                   ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
         public get = function() {} // ok
         public set = function() {} // ok
@@ -50,10 +36,6 @@ tests/cases/compiler/gettersAndSetters.ts(29,53): error TS1056: Accessors are on
     
     // The Foo accessors' return and param types should be contextually typed to the Foo field
     var o : {Foo:number;} = {get Foo() {return 0;}, set Foo(val:number){val}}; // o
-                                 ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-                                                        ~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
     
     var ofg = o.Foo;
     o.Foo = 0;
@@ -64,4 +46,14 @@ tests/cases/compiler/gettersAndSetters.ts(29,53): error TS1056: Accessors are on
     }
     
     var i:I1 = function (n) {return n;}
+    
+    // Repro from #45006
+    const x: string | number = Math.random() < 0.5 ? "str" : 123;
+    if (typeof x === "string") {
+      let obj = {
+        set prop(_: any) { x.toUpperCase(); },
+        get prop() { return x.toUpperCase() },
+        method() { return x.toUpperCase() }
+      }
+    }
     
