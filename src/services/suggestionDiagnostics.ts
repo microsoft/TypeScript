@@ -157,7 +157,8 @@ namespace ts {
     function isPromiseHandler(node: Node): node is CallExpression {
         return isCallExpression(node) && (
             hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
-            hasPropertyAccessExpressionWithName(node, "catch"));
+            hasPropertyAccessExpressionWithName(node, "catch") ||
+            hasPropertyAccessExpressionWithName(node, "finally"));
     }
 
     function hasSupportedNumberOfArguments(node: CallExpression) {

@@ -53,6 +53,13 @@ interface Promise<T> {
      * @returns A Promise for the completion of the callback.
      */
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): Promise<T>
 }
 interface PromiseConstructor {
     /**
@@ -1717,6 +1724,52 @@ function [#|foo|](p: Promise<string[]>) {
     });
 }
 `);
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_catchNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().catch();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_chainedThenCatchThen", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => Promise.resolve(x + 1)).catch(() => 1).then(y => y + 2);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finally", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(() => console.log("done"));
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyNoArguments", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally();
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyNull", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(null);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_finallyUndefined", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().finally(undefined);
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenFinally", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => x + 1).finally(() => console.log("done"));
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_thenFinallyThen", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(x => Promise.resolve(x + 1)).finally(() => console.log("done")).then(y => y + 2);
+}`);
 
     });
 }

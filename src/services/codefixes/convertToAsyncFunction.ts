@@ -43,6 +43,12 @@ namespace ts.codefix {
         readonly isInJSFile: boolean;
     }
 
+    interface PromiseReturningCallExpression<Name extends string> extends CallExpression {
+        readonly expression: PropertyAccessExpression & {
+            readonly escapedText: Name;
+        };
+    }
+
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
         // get the function declaration - returns a promise
         const tokenAtPosition = getTokenAtPosition(sourceFile, position);
@@ -84,7 +90,7 @@ namespace ts.codefix {
         for (const returnStatement of returnStatements) {
             forEachChild(returnStatement, function visit(node) {
                 if (isCallExpression(node)) {
-                    const newNodes = transformExpression(node, transformer);
+                    const newNodes = transformExpression(node, node, transformer);
                     changes.replaceNodeWithNodes(sourceFile, returnStatement, newNodes);
                 }
                 else if (!isFunctionLike(node)) {
@@ -121,7 +127,13 @@ namespace ts.codefix {
                 // if .catch() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
                 forEachChild(node, visit);
             }
+            else if (isPromiseReturningCallExpression(node, checker, "finally")) {
+                setOfExpressionsToReturn.add(getNodeId(node));
+                // if .finally() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
+                forEachChild(node, visit);
+            }
             else if (isPromiseTypedExpression(node, checker)) {
+                // TODO(rbuckton): Do we need this if we have `returnContextNode`?
                 setOfExpressionsToReturn.add(getNodeId(node));
                 // don't recurse here, since we won't refactor any children or arguments of the expression
             }
@@ -133,7 +145,7 @@ namespace ts.codefix {
         return setOfExpressionsToReturn;
     }
 
-    function isPromiseReturningCallExpression(node: Node, checker: TypeChecker, name: string): node is CallExpression {
+    function isPromiseReturningCallExpression<Name extends string>(node: Node, checker: TypeChecker, name: Name): node is PromiseReturningCallExpression<Name> {
         if (!isCallExpression(node)) return false;
         const isExpressionOfName = hasPropertyAccessExpressionWithName(node, name);
         const nodeType = isExpressionOfName && checker.getTypeAtLocation(node);
@@ -236,30 +248,50 @@ namespace ts.codefix {
 
     // dispatch function to recursively build the refactoring
     // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
-    function transformExpression(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+    function transformExpression(returnContextNode: Expression, node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
         if (isPromiseReturningCallExpression(node, transformer.checker, "then")) {
-            if (node.arguments.length === 0) return silentFail();
             return transformThen(node, transformer, prevArgName);
         }
         if (isPromiseReturningCallExpression(node, transformer.checker, "catch")) {
             return transformCatch(node, transformer, prevArgName);
         }
+        if (isPromiseReturningCallExpression(node, transformer.checker, "finally")) {
+            return transformFinally(node, transformer, prevArgName);
+        }
+        // TODO(rbuckton): Do we need this if we have `returnContextNode`?
         if (isPropertyAccessExpression(node)) {
-            return transformExpression(node.expression, transformer, prevArgName);
+            return transformExpression(returnContextNode, node.expression, transformer, prevArgName);
         }
 
         const nodeType = transformer.checker.getTypeAtLocation(node);
         if (nodeType && transformer.checker.getPromisedTypeOfPromise(nodeType)) {
-            Debug.assertNode(node.original!.parent, isPropertyAccessExpression);
-            return transformPromiseExpressionOfPropertyAccess(node, transformer, prevArgName);
+            Debug.assertNode(getOriginalNode(node).parent, isPropertyAccessExpression);
+            return transformPromiseExpressionOfPropertyAccess(returnContextNode, node, transformer, prevArgName);
         }
 
         return silentFail();
     }
 
-    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
-        const func = singleOrUndefined(node.arguments);
-        const argName = func ? getArgBindingName(func, transformer) : undefined;
+    function isNullOrUndefinedOrMissing({ checker }: Transformer, node: Expression) {
+        if (node.kind === SyntaxKind.NullKeyword) return true;
+        if (isIdentifier(node) && !isGeneratedIdentifier(node) && idText(node) === "undefined") {
+            const symbol = checker.getSymbolAtLocation(node);
+            return !symbol || checker.isUndefinedSymbol(symbol);
+        }
+        return false;
+    }
+
+    function createUniqueSynthName(prevArgName: SynthIdentifier): SynthIdentifier {
+        const renamedPrevArg = factory.createUniqueName(prevArgName.identifier.text, GeneratedIdentifierFlags.Optimistic);
+        return createSynthIdentifier(renamedPrevArg);
+    }
+
+    function transformFinally(node: PromiseReturningCallExpression<"finally">, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+        const callback = node.arguments.length > 0 ? node.arguments[0] : undefined;
+        if (!callback || isNullOrUndefinedOrMissing(transformer, callback)) {
+            return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, prevArgName);
+        }
+
         let possibleNameForVarDecl: SynthIdentifier | undefined;
 
         // If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
@@ -285,10 +317,63 @@ namespace ts.codefix {
             possibleNameForVarDecl.hasBeenDeclared = true;
         }
 
-        const tryBlock = factory.createBlock(transformExpression(node.expression, transformer, possibleNameForVarDecl));
-        const transformationBody = func ? getTransformationBody(func, possibleNameForVarDecl, argName, node, transformer) : emptyArray;
-        const catchArg = argName ? isSynthIdentifier(argName) ? argName.identifier.text : argName.bindingPattern : "e";
-        const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
+        const tryBlock = factory.createBlock(transformExpression(/*returnContextNode*/ node, node.expression.expression, transformer, possibleNameForVarDecl));
+        const transformationBody = callback ? getTransformationBody(callback, /*prevArgName*/ undefined, /*argName*/ undefined, node, transformer) : emptyArray;
+        const finallyBlock = factory.createBlock(transformationBody);
+        const tryStatement = factory.createTryStatement(tryBlock, /*catchClause*/ undefined, finallyBlock);
+
+        // In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
+        let varDeclList: VariableStatement | undefined;
+        let varDeclIdentifier: Identifier | undefined;
+        if (possibleNameForVarDecl && !shouldReturn(node, transformer)) {
+            varDeclIdentifier = getSynthesizedDeepClone(possibleNameForVarDecl.identifier);
+            const typeArray: Type[] = possibleNameForVarDecl.types;
+            const unionType = transformer.checker.getUnionType(typeArray, UnionReduction.Subtype);
+            const unionTypeNode = transformer.isInJSFile ? undefined : transformer.checker.typeToTypeNode(unionType, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
+            const varDecl = [factory.createVariableDeclaration(varDeclIdentifier, /*exclamationToken*/ undefined, unionTypeNode)];
+            varDeclList = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList(varDecl, NodeFlags.Let));
+        }
+
+        const destructuredResult = prevArgName && varDeclIdentifier && isSynthBindingPattern(prevArgName)
+            && factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([factory.createVariableDeclaration(getSynthesizedDeepClone(prevArgName.bindingPattern), /*exclamationToken*/ undefined, /*type*/ undefined, varDeclIdentifier)], NodeFlags.Const));
+        return compact([varDeclList, tryStatement, destructuredResult]);
+    }
+
+    function transformCatchWorker(node: PromiseReturningCallExpression<"catch" | "then">, callback: Expression | undefined, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+        if (!callback || isNullOrUndefinedOrMissing(transformer, callback)) {
+            return transformExpression(/* returnContextNode */ node, node.expression.expression, transformer, prevArgName);
+        }
+
+        const argName = callback ? getArgBindingName(callback, transformer) : undefined;
+        let possibleNameForVarDecl: SynthIdentifier | undefined;
+
+        // If there is another call in the chain after the .catch() we are transforming, we will need to save the result of both paths (try block and catch block)
+        // To do this, we will need to synthesize a variable that we were not aware of while we were adding identifiers to the synthNamesMap
+        // We will use the prevArgName and then update the synthNamesMap with a new variable name for the next transformation step
+        if (prevArgName && !shouldReturn(node, transformer)) {
+            if (isSynthIdentifier(prevArgName)) {
+                possibleNameForVarDecl = prevArgName;
+                transformer.synthNamesMap.forEach((val, key) => {
+                    if (val.identifier.text === prevArgName.identifier.text) {
+                        const newSynthName = createUniqueSynthName(prevArgName);
+                        transformer.synthNamesMap.set(key, newSynthName);
+                    }
+                });
+            }
+            else {
+                possibleNameForVarDecl = createSynthIdentifier(factory.createUniqueName("result", GeneratedIdentifierFlags.Optimistic), prevArgName.types);
+            }
+
+            // We are about to write a 'let' variable declaration, but `transformExpression` for both
+            // the try block and catch block will assign to this name. Setting this flag indicates
+            // that future assignments should be written as `name = value` instead of `const name = value`.
+            possibleNameForVarDecl.hasBeenDeclared = true;
+        }
+
+        const tryBlock = factory.createBlock(transformExpression(/*returnContextNode*/ node, node.expression.expression, transformer, possibleNameForVarDecl));
+        const transformationBody = callback ? getTransformationBody(callback, possibleNameForVarDecl, argName, node, transformer) : emptyArray;
+        const catchArg = argName ? isSynthIdentifier(argName) ? argName.identifier.text : argName.bindingPattern : undefined;
+        const catchVariableDeclaration = catchArg !== undefined ? factory.createVariableDeclaration(catchArg) : undefined;
         const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody));
 
         // In order to avoid an implicit any, we will synthesize a type for the declaration using the unions of the types of both paths (try block and catch block)
@@ -309,33 +394,39 @@ namespace ts.codefix {
         return compact([varDeclList, tryStatement, destructuredResult]);
     }
 
-    function createUniqueSynthName(prevArgName: SynthIdentifier): SynthIdentifier {
-        const renamedPrevArg = factory.createUniqueName(prevArgName.identifier.text, GeneratedIdentifierFlags.Optimistic);
-        return createSynthIdentifier(renamedPrevArg);
+    function transformCatch(node: PromiseReturningCallExpression<"catch">, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+        const func = singleOrUndefined(node.arguments);
+        return transformCatchWorker(node, func, transformer, prevArgName);
     }
 
-    function transformThen(node: CallExpression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
-        const [onFulfilled, onRejected] = node.arguments;
+    function transformThen(node: PromiseReturningCallExpression<"then">, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+        const onFulfilled = node.arguments.length > 0 ? node.arguments[0] : undefined;
+        const onRejected = node.arguments.length > 1 ? node.arguments[1] : undefined;
+        if (!onFulfilled || isNullOrUndefinedOrMissing(transformer, onFulfilled)) {
+            return transformCatchWorker(node, onRejected, transformer, prevArgName);
+        }
+
         const onFulfilledArgumentName = getArgBindingName(onFulfilled, transformer);
         const transformationBody = getTransformationBody(onFulfilled, prevArgName, onFulfilledArgumentName, node, transformer);
-        if (onRejected) {
+        if (onRejected && !isNullOrUndefinedOrMissing(transformer, onRejected)) {
             const onRejectedArgumentName = getArgBindingName(onRejected, transformer);
-            const tryBlock = factory.createBlock(transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody));
+            const tryBlock = factory.createBlock(transformExpression(node.expression, node.expression, transformer, onFulfilledArgumentName).concat(transformationBody));
             const transformationBody2 = getTransformationBody(onRejected, prevArgName, onRejectedArgumentName, node, transformer);
-            const catchArg = onRejectedArgumentName ? isSynthIdentifier(onRejectedArgumentName) ? onRejectedArgumentName.identifier.text : onRejectedArgumentName.bindingPattern : "e";
-            const catchVariableDeclaration = factory.createVariableDeclaration(catchArg);
+            const catchArg = onRejectedArgumentName ? isSynthIdentifier(onRejectedArgumentName) ? onRejectedArgumentName.identifier.text : onRejectedArgumentName.bindingPattern : undefined;
+            const catchVariableDeclaration = catchArg !== undefined ? factory.createVariableDeclaration(catchArg) : undefined;
             const catchClause = factory.createCatchClause(catchVariableDeclaration, factory.createBlock(transformationBody2));
             return [factory.createTryStatement(tryBlock, catchClause, /* finallyBlock */ undefined)];
         }
-        return transformExpression(node.expression, transformer, onFulfilledArgumentName).concat(transformationBody);
+
+        return transformExpression(node.expression.expression, node.expression.expression, transformer, onFulfilledArgumentName).concat(transformationBody);
     }
 
     /**
      * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y().catch(...)`, where 'x' and 'y()' are Promises.
      */
-    function transformPromiseExpressionOfPropertyAccess(node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
-        if (shouldReturn(node, transformer)) {
-            return [factory.createReturnStatement(getSynthesizedDeepClone(node))];
+    function transformPromiseExpressionOfPropertyAccess(returnContextNode: Expression, node: Expression, transformer: Transformer, prevArgName?: SynthBindingName): readonly Statement[] {
+        if (shouldReturn(returnContextNode, transformer)) {
+            return [factory.createReturnStatement(factory.createAwaitExpression(getSynthesizedDeepClone(node)))];
         }
 
         return createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
@@ -402,7 +493,7 @@ namespace ts.codefix {
                 const returnType = callSignatures[0].getReturnType();
                 const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(prevArgName, factory.createAwaitExpression(synthCall), parent.typeArguments?.[0]);
                 if (prevArgName) {
-                    prevArgName.types.push(returnType);
+                    prevArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
                 }
                 return varDeclOrAssignment;
 
@@ -452,7 +543,7 @@ namespace ts.codefix {
                         if (!shouldReturn(parent, transformer)) {
                             const transformedStatement = createVariableOrAssignmentOrExpressionStatement(prevArgName, possiblyAwaitedRightHandSide, /*typeAnnotation*/ undefined);
                             if (prevArgName) {
-                                prevArgName.types.push(returnType);
+                                prevArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
                             }
                             return transformedStatement;
                         }
@@ -517,7 +608,7 @@ namespace ts.codefix {
         for (const stmt of innerRetStmts) {
             forEachChild(stmt, function visit(node) {
                 if (isCallExpression(node)) {
-                    const temp = transformExpression(node, transformer, prevArgName);
+                    const temp = transformExpression(node, node, transformer, prevArgName);
                     innerCbBody = innerCbBody.concat(temp);
                     if (innerCbBody.length > 0) {
                         return;
