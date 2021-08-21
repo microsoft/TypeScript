@@ -29,14 +29,21 @@ async function* a(b, c, d) {
 >d : any
 
     console.log(do {
->console.log(do {        yield;        arguments[1] = "after";        arguments;    }) : void
+>console.log(do {        yield;        ({} as any).arguments;        arguments[1] = "after";        arguments;    }) : void
 >console.log : (...data: any[]) => void
 >console : Console
 >log : (...data: any[]) => void
->do {        yield;        arguments[1] = "after";        arguments;    } : IArguments
+>do {        yield;        ({} as any).arguments;        arguments[1] = "after";        arguments;    } : IArguments
 
         yield;
 >yield : any
+
+        ({} as any).arguments;
+>({} as any).arguments : any
+>({} as any) : any
+>{} as any : any
+>{} : {}
+>arguments : any
 
         arguments[1] = "after";
 >arguments[1] = "after" : "after"

@@ -28,6 +28,7 @@ async function* a(b, c, d) {
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 
         yield;
+        ({} as any).arguments;
         arguments[1] = "after";
 >arguments : Symbol(arguments)
 
@@ -44,17 +45,17 @@ async function* a(b, c, d) {
 >d : Symbol(d, Decl(doExpressionArguments.ts, 0, 23))
 }
 const gen = a(0, 1, 2)
->gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 12, 5))
 >a : Symbol(a, Decl(doExpressionArguments.ts, 0, 0))
 
 gen.next().then(() => gen.next())
 >gen.next().then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >gen.next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
->gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 12, 5))
 >next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 >gen.next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
->gen : Symbol(gen, Decl(doExpressionArguments.ts, 11, 5))
+>gen : Symbol(gen, Decl(doExpressionArguments.ts, 12, 5))
 >next : Symbol(AsyncGenerator.next, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 
 // Correct result:

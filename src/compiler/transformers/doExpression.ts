@@ -111,7 +111,7 @@ namespace ts {
                 case SyntaxKind.ExpressionStatement:
                     return transformExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.Block:
-                    return transformBlock(node as Block, false);
+                    return transformBlock(node as Block, /** directChildOfDoExpr */ false);
                 case SyntaxKind.SwitchStatement:
                     return transformSwitch(node as SwitchStatement);
                 case SyntaxKind.Identifier:
@@ -308,7 +308,7 @@ namespace ts {
                 shouldTrack: false,
                 remapExpression: new Map(),
             };
-            const nextBlock = transformBlock(node.block, true);
+            const nextBlock = transformBlock(node.block, /** directChildOfDoExpr */ true);
             localContext.remapExpression.forEach(([temp, init]) => {
                 context.hoistVariableDeclaration(temp);
                 context.addInitializationStatement(factory.createExpressionStatement(factory.createAssignment(temp, init)));
@@ -349,8 +349,8 @@ namespace ts {
 
         function transformIdentifier(node: Identifier) {
             if (!currentDoContext?.hasYield) return node;
-            const ARG = "arguments";
-            if (node.escapedText === ARG) {
+            if (context.getEmitResolver().isArgumentsLocalBinding(node)) {
+                const ARG = "arguments";
                 return remapExpression(currentDoContext.remapExpression, ARG, () => node, id => id);
             }
             return node;

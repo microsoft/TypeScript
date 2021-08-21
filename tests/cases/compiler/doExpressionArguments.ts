@@ -5,6 +5,7 @@ async function* a(b, c, d) {
     console.log(b, c, d)
     console.log(do {
         yield;
+        ({} as any).arguments;
         arguments[1] = "after";
         arguments;
     })
