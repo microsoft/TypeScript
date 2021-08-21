@@ -163,7 +163,7 @@ namespace ts {
         IsFunctionExpression = 1 << 4,
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
-        IsObjectLiteralOrClassExpressionMethod = 1 << 7,
+        IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
     }
 
     function initFlowNode<T extends FlowNode>(node: T) {
@@ -663,8 +663,8 @@ namespace ts {
                 // similarly to break statements that exit to a label just past the statement body.
                 if (!isIIFE) {
                     currentFlow = initFlowNode({ flags: FlowFlags.Start });
-                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethod)) {
-                        currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration;
+                    if (containerFlags & (ContainerFlags.IsFunctionExpression | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor)) {
+                        currentFlow.node = node as FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
@@ -1815,16 +1815,16 @@ namespace ts {
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
                 case SyntaxKind.MethodDeclaration:
-                    if (isObjectLiteralOrClassExpressionMethod(node)) {
-                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
+                    if (isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
+                        return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
                     }
                     // falls through
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.JSDocSignature:
                 case SyntaxKind.JSDocFunctionType:
@@ -3372,7 +3372,7 @@ namespace ts {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 
-            if (currentFlow && isObjectLiteralOrClassExpressionMethod(node)) {
+            if (currentFlow && isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
                 node.flowNode = currentFlow;
             }
 
