@@ -151,7 +151,7 @@ namespace ts.Completions.StringCompletions {
                 }
             }
             case SyntaxKind.PropertyAssignment:
-                if (isObjectLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
+                if (isObjectOrRecordLiteralExpression(parent.parent) && (parent as PropertyAssignment).name === node) {
                     // Get quoted name of properties of the object literal expression
                     // i.e. interface ConfigFiles {
                     //          'jspm:dev': string
@@ -164,7 +164,7 @@ namespace ts.Completions.StringCompletions {
                     //      foo({
                     //          '/*completion position*/'
                     //      });
-                    return stringLiteralCompletionsForObjectLiteral(typeChecker, parent.parent);
+                    return stringLiteralCompletionsForObjectOrRecordLiteral(typeChecker, parent.parent);
                 }
                 return fromContextualType();
 
@@ -255,15 +255,15 @@ namespace ts.Completions.StringCompletions {
         };
     }
 
-    function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): StringLiteralCompletionsFromProperties | undefined {
-        const contextualType = checker.getContextualType(objectLiteralExpression);
+    function stringLiteralCompletionsForObjectOrRecordLiteral(checker: TypeChecker, expression: ObjectLiteralExpression | RecordLiteralExpression): StringLiteralCompletionsFromProperties | undefined {
+        const contextualType = checker.getContextualType(expression);
         if (!contextualType) return undefined;
 
-        const completionsType = checker.getContextualType(objectLiteralExpression, ContextFlags.Completions);
+        const completionsType = checker.getContextualType(expression, ContextFlags.Completions);
         const symbols = getPropertiesForObjectExpression(
             contextualType,
             completionsType,
-            objectLiteralExpression,
+            expression,
             checker
         );
 

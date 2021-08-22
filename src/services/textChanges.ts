@@ -283,7 +283,7 @@ namespace ts.textChanges {
      * Checks if 'candidate' argument is a legal separator in the list that contains 'node' as an element
      */
     function isSeparator(node: Node, candidate: Node | undefined): candidate is Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken> {
-        return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && node.parent.kind === SyntaxKind.ObjectLiteralExpression));
+        return !!candidate && !!node.parent && (candidate.kind === SyntaxKind.CommaToken || (candidate.kind === SyntaxKind.SemicolonToken && isObjectOrRecordLiteralExpression(node.parent)));
     }
 
     export interface TextChangesContext {
@@ -303,7 +303,7 @@ namespace ts.textChanges {
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: readonly (Statement | SyntaxKind.NewLineTrivia)[] }[] = [];
-        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
+        private readonly classesWithNodesInsertedAtStart = new Map<number, { readonly node: ClassDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression, readonly sourceFile: SourceFile }>(); // Set<ClassDeclaration> implemented as Map<node id, ClassDeclaration>
         private readonly deletedNodes: { readonly sourceFile: SourceFile, readonly node: Node | NodeArray<TypeParameterDeclaration> }[] = [];
 
         public static fromContext(context: TextChangesContext): ChangeTracker {
@@ -599,11 +599,13 @@ namespace ts.textChanges {
             this.insertNodeAtStartWorker(sourceFile, cls, newElement);
         }
 
-        public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void {
+        public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression, newElement: ObjectLiteralElementLike): void
+        public insertNodeAtObjectStart(sourceFile: SourceFile, obj: RecordLiteralExpression, newElement: RecordLiteralElement): void
+        public insertNodeAtObjectStart(sourceFile: SourceFile, obj: ObjectLiteralExpression | RecordLiteralExpression, newElement: ObjectLiteralElementLike | RecordLiteralElement): void {
             this.insertNodeAtStartWorker(sourceFile, obj, newElement);
         }
 
-        private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike): void {
+        private insertNodeAtStartWorker(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression, newElement: ClassElement | ObjectLiteralElementLike | RecordLiteralElement): void {
             const indentation = this.guessIndentationFromExistingMembers(sourceFile, cls) ?? this.computeIndentationForNewMember(sourceFile, cls);
             this.insertNodeAt(sourceFile, getMembersOrProperties(cls).pos, newElement, this.getInsertNodeAtStartInsertOptions(sourceFile, cls, indentation));
         }
@@ -612,7 +614,7 @@ namespace ts.textChanges {
          * Tries to guess the indentation from the existing members of a class/interface/object. All members must be on
          * new lines and must share the same indentation.
          */
-        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+        private guessIndentationFromExistingMembers(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression) {
             let indentation: number | undefined;
             let lastRange: TextRange = cls;
             for (const member of getMembersOrProperties(cls)) {
@@ -634,13 +636,13 @@ namespace ts.textChanges {
             return indentation;
         }
 
-        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression) {
+        private computeIndentationForNewMember(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression) {
             const clsStart = cls.getStart(sourceFile);
             return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(clsStart, sourceFile), clsStart, sourceFile, this.formatContext.options)
                 + (this.formatContext.options.indentSize ?? 4);
         }
 
-        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, indentation: number): InsertNodeOptions {
+        private getInsertNodeAtStartInsertOptions(sourceFile: SourceFile, cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression, indentation: number): InsertNodeOptions {
             // Rules:
             // - Always insert leading newline.
             // - For object literals:
@@ -654,8 +656,8 @@ namespace ts.textChanges {
             const members = getMembersOrProperties(cls);
             const isEmpty = members.length === 0;
             const isFirstInsertion = addToSeen(this.classesWithNodesInsertedAtStart, getNodeId(cls), { node: cls, sourceFile });
-            const insertTrailingComma = isObjectLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
-            const insertLeadingComma = isObjectLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
+            const insertTrailingComma = isObjectOrRecordLiteralExpression(cls) && (!isJsonSourceFile(sourceFile) || !isEmpty);
+            const insertLeadingComma = isObjectOrRecordLiteralExpression(cls) && isJsonSourceFile(sourceFile) && isEmpty && !isFirstInsertion;
             return {
                 indentation,
                 prefix: (insertLeadingComma ? "," : "") + this.newLineCharacter,
@@ -925,13 +927,14 @@ namespace ts.textChanges {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
-    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
-        const open = findChildOfKind(cls, SyntaxKind.OpenBraceToken, sourceFile);
+    function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression, sourceFile: SourceFile): [number | undefined, number | undefined] {
+        const startToken = isRecordLiteralExpression(cls) ? SyntaxKind.HashOpenBraceToken : SyntaxKind.OpenBraceToken;
+        const open = findChildOfKind(cls, startToken, sourceFile);
         const close = findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile);
         return [open?.end, close?.end];
     }
-    function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression): NodeArray<Node> {
-        return isObjectLiteralExpression(cls) ? cls.properties : cls.members;
+    function getMembersOrProperties(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | RecordLiteralExpression): NodeArray<Node> {
+        return isObjectOrRecordLiteralExpression(cls) ? cls.properties : cls.members;
     }
 
     export type ValidateNonFormattedText = (node: Node, text: string) => void;

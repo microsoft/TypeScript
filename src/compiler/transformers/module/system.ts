@@ -1578,10 +1578,10 @@ namespace ts {
             else if (isSpreadElement(node)) {
                 return hasExportedReferenceInDestructuringTarget(node.expression);
             }
-            else if (isObjectLiteralExpression(node)) {
+            else if (isObjectOrRecordLiteralExpression(node)) {
                 return some(node.properties, hasExportedReferenceInDestructuringTarget);
             }
-            else if (isArrayLiteralExpression(node)) {
+            else if (isArrayOrTupleLiteralExpression(node)) {
                 return some(node.elements, hasExportedReferenceInDestructuringTarget);
             }
             else if (isShorthandPropertyAssignment(node)) {

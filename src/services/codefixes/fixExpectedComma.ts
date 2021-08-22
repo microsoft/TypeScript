@@ -35,8 +35,8 @@ namespace ts.codefix {
 
         return (node.kind === SyntaxKind.SemicolonToken &&
                 node.parent &&
-                (isObjectLiteralExpression(node.parent) ||
-                 isArrayLiteralExpression(node.parent))) ? { node } : undefined;
+                (isObjectOrRecordLiteralExpression(node.parent) ||
+                 isArrayOrTupleLiteralExpression(node.parent))) ? { node } : undefined;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {

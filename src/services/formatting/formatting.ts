@@ -109,7 +109,7 @@ namespace ts.formatting {
     }
 
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, formatContext: FormatContext): TextChange[] {
-        const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
+        const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile) || findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.HashOpenBraceToken, sourceFile);
         if (!openingCurly) {
             return [];
         }
@@ -754,7 +754,7 @@ namespace ts.formatting {
 
                 childContextNode = node;
 
-                if (isFirstListItem && parent.kind === SyntaxKind.ArrayLiteralExpression && inheritedIndentation === Constants.Unknown) {
+                if (isFirstListItem && isArrayOrTupleLiteralExpression(parent) && inheritedIndentation === Constants.Unknown) {
                     inheritedIndentation = childIndentation.indentation;
                 }
 
@@ -1312,6 +1312,7 @@ namespace ts.formatting {
             case SyntaxKind.LessThanToken:
                 return SyntaxKind.GreaterThanToken;
             case SyntaxKind.OpenBraceToken:
+            case SyntaxKind.HashOpenBraceToken:
                 return SyntaxKind.CloseBraceToken;
         }
 

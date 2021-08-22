@@ -847,7 +847,9 @@ namespace ts {
                     bindBindingElementFlow(node as BindingElement);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.SpreadElement:
                     // Carry over whether we are in an assignment pattern of Object and Array literals
@@ -1407,8 +1409,8 @@ namespace ts {
             if (isNarrowableReference(node)) {
                 currentFlow = createFlowMutation(FlowFlags.Assignment, currentFlow, node);
             }
-            else if (node.kind === SyntaxKind.ArrayLiteralExpression) {
-                for (const e of (node as ArrayLiteralExpression).elements) {
+            else if (isArrayOrTupleLiteralExpression(node)) {
+                for (const e of node.elements) {
                     if (e.kind === SyntaxKind.SpreadElement) {
                         bindAssignmentTargetFlow((e as SpreadElement).expression);
                     }
@@ -1417,8 +1419,8 @@ namespace ts {
                     }
                 }
             }
-            else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
-                for (const p of (node as ObjectLiteralExpression).properties) {
+            else if (isObjectOrRecordLiteralExpression(node)) {
+                for (const p of node.properties) {
                     if (p.kind === SyntaxKind.PropertyAssignment) {
                         bindDestructuringTargetFlow(p.initializer);
                     }
@@ -1799,6 +1801,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.JsxAttributes:
@@ -1904,6 +1907,7 @@ namespace ts {
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.JSDocTypeLiteral:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.JsxAttributes:
                     // Interface/Object-types always have their children added to the 'members' of
@@ -2033,7 +2037,7 @@ namespace ts {
             typeLiteralSymbol.members.set(symbol.escapedName, symbol);
         }
 
-        function bindObjectLiteralExpression(node: ObjectLiteralExpression) {
+        function bindObjectOrRecordLiteralExpression(node: ObjectLiteralExpression | RecordLiteralExpression) {
             const enum ElementKind {
                 Property = 1,
                 Accessor = 2
@@ -2652,7 +2656,8 @@ namespace ts {
                 case SyntaxKind.JSDocClassTag:
                     return bindJSDocClassTag(node as JSDocClassTag);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return bindObjectLiteralExpression(node as ObjectLiteralExpression);
+                case SyntaxKind.RecordLiteralExpression:
+                    return bindObjectOrRecordLiteralExpression(node as ObjectLiteralExpression | RecordLiteralExpression);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return bindFunctionExpression(node as FunctionExpression);
@@ -2886,11 +2891,11 @@ namespace ts {
                 return;
             }
             const assignedExpression = getRightMostAssignedExpression(node.right);
-            if (isEmptyObjectLiteral(assignedExpression) || container === file && isExportsOrModuleExportsOrAlias(file, assignedExpression)) {
+            if (isEmptyObjectOrRecordLiteral(assignedExpression) || container === file && isExportsOrModuleExportsOrAlias(file, assignedExpression)) {
                 return;
             }
 
-            if (isObjectLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)) {
+            if (isObjectOrRecordLiteralExpression(assignedExpression) && every(assignedExpression.properties, isShorthandPropertyAssignment)) {
                 forEach(assignedExpression.properties, bindExportAssignedObjectMemberAlias);
                 return;
             }

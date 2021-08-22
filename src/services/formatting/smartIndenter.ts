@@ -294,7 +294,7 @@ namespace ts.formatting {
                 return NextTokenKind.Unknown;
             }
 
-            if (nextToken.kind === SyntaxKind.OpenBraceToken) {
+            if (nextToken.kind === SyntaxKind.OpenBraceToken || nextToken.kind === SyntaxKind.HashOpenBraceToken) {
                 // open braces are always indented at the parent level
                 return NextTokenKind.OpenBrace;
             }
@@ -417,9 +417,11 @@ namespace ts.formatting {
                 case SyntaxKind.TypeReference:
                     return getList((node as TypeReferenceNode).typeArguments);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return getList((node as ObjectLiteralExpression).properties);
+                case SyntaxKind.RecordLiteralExpression:
+                    return getList((node as ObjectLiteralExpression | RecordLiteralExpression).properties);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getList((node as ArrayLiteralExpression).elements);
+                case SyntaxKind.TupleLiteralExpression:
+                    return getList((node as ArrayLiteralExpression | TupleLiteralExpression).elements);
                 case SyntaxKind.TypeLiteral:
                     return getList((node as TypeLiteralNode).members);
                 case SyntaxKind.FunctionDeclaration:
@@ -562,9 +564,11 @@ namespace ts.formatting {
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.Block:
                 case SyntaxKind.ModuleBlock:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.TypeLiteral:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TupleType:
@@ -603,7 +607,7 @@ namespace ts.formatting {
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.BinaryExpression:
-                    if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && childKind === SyntaxKind.ObjectLiteralExpression) { // TODO: GH#18217
+                    if (!settings.indentMultiLineObjectLiteralBeginningOnBlankLine && sourceFile && (childKind === SyntaxKind.ObjectLiteralExpression || childKind === SyntaxKind.RecordLiteralExpression)) { // TODO: GH#18217
                         return rangeIsOnOneLine(sourceFile, child!);
                     }
                     if (parent.kind === SyntaxKind.BinaryExpression && sourceFile && child && childKind === SyntaxKind.JsxElement) {

@@ -549,6 +549,7 @@ namespace ts.formatting {
             case SyntaxKind.Block:
             case SyntaxKind.CaseBlock:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.ModuleBlock:
                 return true;
         }
@@ -655,7 +656,7 @@ namespace ts.formatting {
     }
 
     function isObjectContext(context: FormattingContext): boolean {
-        return context.contextNode.kind === SyntaxKind.ObjectLiteralExpression;
+        return isObjectOrRecordLiteralExpression(context.contextNode);
     }
 
     function isFunctionCallContext(context: FormattingContext): boolean {

@@ -286,9 +286,14 @@ namespace ts {
         );
     }
 
-    export function createExpressionForObjectLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+    export function createExpressionForObjectOrRecordLiteralElementLike(factory: NodeFactory, node: ObjectLiteralExpression | RecordLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
         if (property.name && isPrivateIdentifier(property.name)) {
             Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+        }
+        if (node.kind === SyntaxKind.RecordLiteralExpression) {
+            if (property.kind === SyntaxKind.GetAccessor || property.kind === SyntaxKind.SetAccessor || property.kind === SyntaxKind.MethodDeclaration) {
+                Debug.failBadSyntaxKind(property, "Methods are not allowed in record literals.");
+            }
         }
         switch (property.kind) {
             case SyntaxKind.GetAccessor:

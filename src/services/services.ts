@@ -1936,6 +1936,9 @@ namespace ts {
             [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
             [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,
             [SyntaxKind.GreaterThanToken]: SyntaxKind.LessThanToken,
+            // TODO: it will fail 4 matching brace tests
+            // [SyntaxKind.HashOpenBraceToken]: SyntaxKind.CloseBraceToken,
+            // [SyntaxKind.HashOpenBracketToken]: SyntaxKind.CloseBracketToken,
         }));
         braceMatching.forEach((value, key) => braceMatching.set(value.toString(), Number(key) as SyntaxKind));
 
@@ -2720,7 +2723,7 @@ namespace ts {
     /* @internal */
     export function getContainingObjectLiteralElement(node: Node): ObjectLiteralElementWithName | undefined {
         const element = getContainingObjectLiteralElementWorker(node);
-        return element && (isObjectLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
+        return element && (isObjectOrRecordLiteralExpression(element.parent) || isJsxAttributes(element.parent)) ? element as ObjectLiteralElementWithName : undefined;
     }
     function getContainingObjectLiteralElementWorker(node: Node): ObjectLiteralElement | undefined {
         switch (node.kind) {
@@ -2734,14 +2737,14 @@ namespace ts {
 
             case SyntaxKind.Identifier:
                 return isObjectLiteralElement(node.parent) &&
-                    (node.parent.parent.kind === SyntaxKind.ObjectLiteralExpression || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
+                    (isObjectOrRecordLiteralExpression(node.parent.parent) || node.parent.parent.kind === SyntaxKind.JsxAttributes) &&
                     node.parent.name === node ? node.parent : undefined;
         }
         return undefined;
     }
 
     /* @internal */
-    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes };
+    export type ObjectLiteralElementWithName = ObjectLiteralElement & { name: PropertyName; parent: ObjectLiteralExpression | JsxAttributes | RecordLiteralExpression };
 
     function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symbol | undefined {
         const object = getContainingObjectLiteralElement(node);
@@ -2765,7 +2768,7 @@ namespace ts {
             return symbol ? [symbol] : emptyArray;
         }
 
-        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
+        const discriminatedPropertySymbols = mapDefined(contextualType.types, t => (isObjectOrRecordLiteralExpression(node.parent)|| isJsxAttributes(node.parent)) && checker.isTypeInvalidDueToUnionDiscriminant(t, node.parent) ? undefined : t.getProperty(name));
         if (unionSymbolOk && (discriminatedPropertySymbols.length === 0 || discriminatedPropertySymbols.length === contextualType.types.length)) {
             const symbol = contextualType.getProperty(name);
             if (symbol) return [symbol];

@@ -1408,6 +1408,10 @@
         "category": "Error",
         "code": 1443
     },
+    "Record literals cannot contain accessors or method definitions.": {
+        "category": "Error",
+        "code": 1444
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -7138,6 +7142,10 @@
     "Add 'undefined' to optional property type": {
         "category": "Message",
         "code": 95169
+    },
+    "Cannot add accessors inside a record literal": {
+        "category": "Error",
+        "code": 95170
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

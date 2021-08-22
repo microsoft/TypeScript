@@ -437,7 +437,7 @@ namespace ts.FindAllReferences {
                 // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
                 if (isShorthandAssignment) {
                     const grandParent = parent.parent;
-                    if (isObjectLiteralExpression(grandParent) &&
+                    if (isObjectOrRecordLiteralExpression(grandParent) &&
                         isBinaryExpression(grandParent.parent) &&
                         isModuleExportsAccessExpression(grandParent.parent.left)) {
                         return prefixColon;
@@ -483,7 +483,7 @@ namespace ts.FindAllReferences {
         if (symbol) {
             return getDefinitionKindAndDisplayParts(symbol, checker, node);
         }
-        else if (node.kind === SyntaxKind.ObjectLiteralExpression) {
+        else if (isObjectOrRecordLiteralExpression(node)) {
             return {
                 kind: ScriptElementKind.interfaceElement,
                 displayParts: [punctuationPart(SyntaxKind.OpenParenToken), textPart("object literal"), punctuationPart(SyntaxKind.CloseParenToken)]
@@ -1838,8 +1838,10 @@ namespace ts.FindAllReferences {
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                     return true;
                 default:
                     return false;
@@ -1986,6 +1988,7 @@ namespace ts.FindAllReferences {
                         case SyntaxKind.ClassExpression:
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.ObjectLiteralExpression:
+                        case SyntaxKind.RecordLiteralExpression:
                             // Make sure the container belongs to the same class/object literals
                             // and has the appropriate static modifier from the original container.
                             return container.parent && searchSpaceNode.symbol === container.parent.symbol && isStatic(container) === !!staticFlag;

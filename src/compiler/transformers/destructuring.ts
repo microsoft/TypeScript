@@ -41,7 +41,7 @@ namespace ts {
         let value: Expression | undefined;
         if (isDestructuringAssignment(node)) {
             value = node.right;
-            while (isEmptyArrayLiteral(node.left) || isEmptyObjectLiteral(node.left)) {
+            while (isEmptyArrayOrTupleLiteral(node.left) || isEmptyObjectOrRecordLiteral(node.left)) {
                 if (isDestructuringAssignment(value)) {
                     location = node = value;
                     value = node.right;

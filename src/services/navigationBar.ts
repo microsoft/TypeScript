@@ -334,7 +334,7 @@ namespace ts.NavigationBar {
 
             case SyntaxKind.ExportAssignment: {
                 const expression = (node as ExportAssignment).expression;
-                const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
+                const child = isObjectOrRecordLiteralExpression(expression) || isCallExpression(expression) ? expression :
                     isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
                 if (child) {
                     startNode(node);
@@ -384,7 +384,7 @@ namespace ts.NavigationBar {
                             [depth, className] = startNestedNodes(binaryExpression, prototypeAccess.expression as EntityNameExpression);
                         }
                         if (special === AssignmentDeclarationKind.Prototype) {
-                            if (isObjectLiteralExpression(binaryExpression.right)) {
+                            if (isObjectOrRecordLiteralExpression(binaryExpression.right)) {
                                 if (binaryExpression.right.properties.length > 0) {
                                     startNode(binaryExpression, className);
                                         forEachChild(binaryExpression.right, addChildrenRecursively);

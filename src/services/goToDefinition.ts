@@ -386,6 +386,7 @@ namespace ts.GoToDefinition {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:

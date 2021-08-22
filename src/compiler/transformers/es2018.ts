@@ -164,6 +164,8 @@ namespace ts {
                     return visitReturnStatement(node as ReturnStatement);
                 case SyntaxKind.LabeledStatement:
                     return visitLabeledStatement(node as LabeledStatement);
+                // skip record and tuple because when running the transformer for generators,
+                // there is ES2018 syntaxes only.
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
                 case SyntaxKind.BinaryExpression:
@@ -399,6 +401,8 @@ namespace ts {
                 // If we translate the above to `__assign({}, k, l)`, the `l` will evaluate before `k` is spread and we
                 // end up with `{ a: 1, b: 2, c: 3 }`
                 const objects = chunkObjectLiteralElements(node.properties);
+                // skip record and tuple because when running the transformer for generators,
+                // there is ES2018 syntaxes only.
                 if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
                     objects.unshift(factory.createObjectLiteralExpression());
                 }

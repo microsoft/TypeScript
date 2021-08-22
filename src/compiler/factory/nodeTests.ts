@@ -337,6 +337,14 @@ namespace ts {
         return node.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isRecordLiteralExpression(node: Node): node is RecordLiteralExpression {
+        return node.kind === SyntaxKind.RecordLiteralExpression;
+    }
+
+    export function isTupleLiteralExpression(node: Node): node is TupleLiteralExpression {
+        return node.kind === SyntaxKind.TupleLiteralExpression;
+    }
+
     export function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression;
     }

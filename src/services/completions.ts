@@ -2066,8 +2066,10 @@ namespace ts.Completions {
                             || containingNodeKind === SyntaxKind.Constructor                  // constructor( a, |   /* public, protected, private keywords are allowed here, so show completion */
                             || containingNodeKind === SyntaxKind.NewExpression                // new C(a, |
                             || containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [a, |
+                            || containingNodeKind === SyntaxKind.TupleLiteralExpression       // #[a, |
                             || containingNodeKind === SyntaxKind.BinaryExpression             // const x = (a, |
                             || containingNodeKind === SyntaxKind.FunctionType                 // var x: (s: string, list|
+                            || containingNodeKind === SyntaxKind.RecordLiteralExpression      // const obj = #{ x, |
                             || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { x, |
 
                     case SyntaxKind.OpenParenToken:
@@ -2082,6 +2084,9 @@ namespace ts.Completions {
                             || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
                             || containingNodeKind === SyntaxKind.ComputedPropertyName;         // [ |    /* this can become an index signature */
 
+                    case SyntaxKind.HashOpenBracketToken:
+                        return containingNodeKind === SyntaxKind.TupleLiteralExpression;        // #[ | ]
+
                     case SyntaxKind.ModuleKeyword:                                            // module |
                     case SyntaxKind.NamespaceKeyword:                                         // namespace |
                         return true;
@@ -2092,6 +2097,9 @@ namespace ts.Completions {
                     case SyntaxKind.OpenBraceToken:
                         return containingNodeKind === SyntaxKind.ClassDeclaration             // class A { |
                             || containingNodeKind === SyntaxKind.ObjectLiteralExpression;     // const obj = { |
+
+                    case SyntaxKind.HashOpenBraceToken:
+                        return containingNodeKind === SyntaxKind.RecordLiteralExpression;     // const obj = #{ |
 
                     case SyntaxKind.EqualsToken:
                         return containingNodeKind === SyntaxKind.VariableDeclaration          // const x = a|
@@ -2165,7 +2173,7 @@ namespace ts.Completions {
             let typeMembers: Symbol[] | undefined;
             let existingMembers: readonly Declaration[] | undefined;
 
-            if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
+            if (isObjectOrRecordLiteralExpression(objectLikeContainer)) {
                 const instantiatedType = tryGetObjectLiteralContextualType(objectLikeContainer, typeChecker);
 
                 // Check completions for Object property value shorthand
@@ -2353,13 +2361,14 @@ namespace ts.Completions {
          * Returns the immediate owning object literal or binding pattern of a context token,
          * on the condition that one exists and that the context implies completion should be given.
          */
-        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | ObjectBindingPattern | undefined {
+        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | RecordLiteralExpression | ObjectBindingPattern | undefined {
             if (contextToken) {
                 const { parent } = contextToken;
                 switch (contextToken.kind) {
+                    case SyntaxKind.HashOpenBraceToken:
                     case SyntaxKind.OpenBraceToken:  // const x = { |
                     case SyntaxKind.CommaToken:      // const x = { a: 0, |
-                        if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
+                        if (isObjectOrRecordLiteralExpression(parent) || isObjectBindingPattern(parent)) {
                             return parent;
                         }
                         break;
@@ -3044,7 +3053,7 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
+    export function getPropertiesForObjectExpression(contextualType: Type, completionsType: Type | undefined, obj: ObjectLiteralExpression | RecordLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         const hasCompletionsType = completionsType && completionsType !== contextualType;
         const type = hasCompletionsType && !(completionsType!.flags & TypeFlags.AnyOrUnknown)
             ? checker.getUnionType([contextualType, completionsType!])
@@ -3064,7 +3073,7 @@ namespace ts.Completions {
         }
     }
 
-    function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker) {
+    function getApparentProperties(type: Type, node: ObjectLiteralExpression | RecordLiteralExpression | JsxAttributes, checker: TypeChecker) {
         if (!type.isUnion()) return type.getApparentProperties();
         return checker.getAllPossiblePropertiesOfTypes(filter(type.types, memberType =>
             !(memberType.flags & TypeFlags.Primitive
@@ -3252,11 +3261,12 @@ namespace ts.Completions {
         return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
     }
 
-    function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {
+    function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression | RecordLiteralExpression, typeChecker: TypeChecker) {
         const type = typeChecker.getContextualType(node);
         if (type) {
             return type;
         }
+        if (node.kind === SyntaxKind.RecordLiteralExpression) return undefined;
         if (isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken && node === node.parent.left) {
             // Object literal is assignment pattern: ({ | } = x)
             return typeChecker.getTypeAtLocation(node.parent);

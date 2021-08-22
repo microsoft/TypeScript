@@ -673,10 +673,20 @@ namespace ts {
                 return factory.updateArrayLiteralExpression(node,
                     nodesVisitor(node.elements, visitor, isExpression));
 
+            case SyntaxKind.TupleLiteralExpression:
+                Debug.type<TupleLiteralExpression>(node);
+                return factory.updateTupleLiteralExpression(node,
+                    nodesVisitor(node.elements, visitor, isExpression));
+
             case SyntaxKind.ObjectLiteralExpression:
                 Debug.type<ObjectLiteralExpression>(node);
                 return factory.updateObjectLiteralExpression(node,
                     nodesVisitor(node.properties, visitor, isObjectLiteralElementLike));
+
+            case SyntaxKind.RecordLiteralExpression:
+                Debug.type<RecordLiteralExpression>(node);
+                return factory.updateRecordLiteralExpression(node,
+                    nodesVisitor(node.properties, visitor, isRecordLiteralElement));
 
             case SyntaxKind.PropertyAccessExpression:
                 if (node.flags & NodeFlags.OptionalChain) {

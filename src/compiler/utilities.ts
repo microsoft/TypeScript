@@ -1448,7 +1448,7 @@ namespace ts {
         }
     }
 
-    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement> | undefined {
+    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement | RecordLiteralElement> | undefined {
         switch (node.kind) {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.ClassDeclaration:
@@ -1456,7 +1456,8 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
                 return (node as ObjectTypeDeclaration).members;
             case SyntaxKind.ObjectLiteralExpression:
-                return (node as ObjectLiteralExpression).properties;
+            case SyntaxKind.RecordLiteralExpression:
+                return (node as ObjectLiteralExpression | RecordLiteralExpression).properties;
         }
     }
 
@@ -1522,6 +1523,14 @@ namespace ts {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
+    export function isObjectOrRecordLiteralExpression(node: Node): node is ObjectLiteralExpression | RecordLiteralExpression {
+        return node.kind === SyntaxKind.ObjectLiteralExpression || node.kind === SyntaxKind.RecordLiteralExpression;
+    }
+
+    export function isArrayOrTupleLiteralExpression(node: Node): node is ArrayLiteralExpression | TupleLiteralExpression {
+        return node.kind === SyntaxKind.ArrayLiteralExpression || node.kind === SyntaxKind.TupleLiteralExpression;
+    }
+
     export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
@@ -1540,8 +1549,9 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.This;
     }
 
-    export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
-        return objectLiteral.properties.filter((property): property is PropertyAssignment => {
+    export function getPropertyAssignment(expr: ObjectLiteralExpression | RecordLiteralExpression, key: string, key2?: string): readonly PropertyAssignment[] {
+        const items: NodeArray<ObjectLiteralElementLike | RecordLiteralElement> = expr.properties;
+        return items.filter((property): property is PropertyAssignment => {
             if (property.kind === SyntaxKind.PropertyAssignment) {
                 const propName = getTextOfPropertyName(property.name);
                 return key === propName || (!!key2 && key2 === propName);
@@ -1909,7 +1919,9 @@ namespace ts {
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.CallExpression:
@@ -2779,6 +2791,7 @@ namespace ts {
                     return (parent as ForInOrOfStatement).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.SpreadElement:
                 case SyntaxKind.NonNullExpression:
                     node = parent;
@@ -3678,7 +3691,9 @@ namespace ts {
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.ClassExpression:
@@ -5012,14 +5027,12 @@ namespace ts {
             || isJSDocMemberName(node.parent) && node.parent.right === node;
     }
 
-    export function isEmptyObjectLiteral(expression: Node): boolean {
-        return expression.kind === SyntaxKind.ObjectLiteralExpression &&
-            (expression as ObjectLiteralExpression).properties.length === 0;
+    export function isEmptyObjectOrRecordLiteral(expression: Node): boolean {
+        return isObjectOrRecordLiteralExpression(expression) && expression.properties.length === 0;
     }
 
-    export function isEmptyArrayLiteral(expression: Node): boolean {
-        return expression.kind === SyntaxKind.ArrayLiteralExpression &&
-            (expression as ArrayLiteralExpression).elements.length === 0;
+    export function isEmptyArrayOrTupleLiteral(expression: Node): boolean {
+        return isArrayOrTupleLiteralExpression(expression) && expression.elements.length === 0;
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
@@ -5463,6 +5476,7 @@ namespace ts {
                 // Assume it's the local variable being accessed, since we don't check public properties for --noUnusedLocals.
                 return node === (parent as ShorthandPropertyAssignment).objectAssignmentInitializer ? AccessKind.Read : accessKind(parent.parent);
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
                 return accessKind(parent);
             default:
                 return AccessKind.Read;
@@ -7314,13 +7328,15 @@ namespace ts {
                 return (parent as UnionOrIntersectionTypeNode).types;
             case SyntaxKind.TupleType:
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
             case SyntaxKind.CommaListExpression:
             case SyntaxKind.NamedImports:
             case SyntaxKind.NamedExports:
-                return (parent as TupleTypeNode | ArrayLiteralExpression | CommaListExpression | NamedImports | NamedExports).elements;
+                return (parent as TupleTypeNode | ArrayLiteralExpression | TupleLiteralExpression | CommaListExpression | NamedImports | NamedExports).elements;
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.JsxAttributes:
-                return (parent as ObjectLiteralExpressionBase<ObjectLiteralElement>).properties;
+                return (parent as ObjectLiteralExpressionBase<ObjectLiteralElement | RecordLiteralElement>).properties;
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
                 return isTypeNode(node) ? (parent as CallExpression | NewExpression).typeArguments :

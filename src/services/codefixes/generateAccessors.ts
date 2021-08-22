@@ -126,6 +126,12 @@ namespace ts.codefix {
             };
         }
 
+        const container = declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent;
+        if (isRecordLiteralExpression(container)) {
+            return {
+                error: getLocaleSpecificMessage(Diagnostics.Cannot_add_accessors_inside_a_record_literal)
+            };
+        }
         const name = declaration.name.text;
         const startWithUnderscore = startsWithUnderscore(name);
         const fieldName = createPropertyName(startWithUnderscore ? name : getUniqueName(`_${name}`, file), declaration.name);
@@ -134,7 +140,7 @@ namespace ts.codefix {
             isStatic: hasStaticModifier(declaration),
             isReadonly: hasEffectiveReadonlyModifier(declaration),
             type: getDeclarationType(declaration, program),
-            container: declaration.kind === SyntaxKind.Parameter ? declaration.parent.parent : declaration.parent,
+            container,
             originalName: (declaration.name as AcceptedNameType).text,
             declaration,
             fieldName,

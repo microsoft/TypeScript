@@ -163,10 +163,12 @@ namespace ts {
 
     const textToToken = new Map(getEntries({
         ...textToKeywordObj,
+        "#{": SyntaxKind.HashOpenBraceToken,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
         "(": SyntaxKind.OpenParenToken,
         ")": SyntaxKind.CloseParenToken,
+        "#[": SyntaxKind.HashOpenBracketToken,
         "[": SyntaxKind.OpenBracketToken,
         "]": SyntaxKind.CloseBracketToken,
         ".": SyntaxKind.DotToken,
@@ -2046,6 +2048,14 @@ namespace ts {
                             error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
                             pos++;
                             return token = SyntaxKind.Unknown;
+                        }
+                        if (text[pos + 1] === "{") {
+                            pos += 2;
+                            return token = SyntaxKind.HashOpenBraceToken;
+                        }
+                        if (text[pos + 1] === "[") {
+                            pos += 2;
+                            return token = SyntaxKind.HashOpenBracketToken;
                         }
 
                         if (isIdentifierStart(codePointAt(text, pos + 1), languageVersion)) {

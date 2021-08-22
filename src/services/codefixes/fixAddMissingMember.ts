@@ -24,7 +24,7 @@ namespace ts.codefix {
                 return undefined;
             }
             if (info.kind === InfoKind.ObjectLiteral) {
-                const changes = textChanges.ChangeTracker.with(context, t => addObjectLiteralProperties(t, context, info));
+                const changes = textChanges.ChangeTracker.with(context, t => addObjectOrRecordLiteralProperties(t, context, info));
                 return [createCodeFixAction(fixMissingProperties, changes, Diagnostics.Add_missing_properties, fixMissingProperties, Diagnostics.Add_all_missing_properties)];
             }
             if (info.kind === InfoKind.JsxAttributes) {
@@ -59,7 +59,7 @@ namespace ts.codefix {
                         addFunctionDeclaration(changes, context, info);
                     }
                     else if (fixId === fixMissingProperties && info.kind === InfoKind.ObjectLiteral) {
-                        addObjectLiteralProperties(changes, context, info);
+                        addObjectOrRecordLiteralProperties(changes, context, info);
                     }
                     else if (fixId === fixMissingAttributes && info.kind === InfoKind.JsxAttributes) {
                         addJsxAttributes(changes, context, info);
@@ -108,7 +108,7 @@ namespace ts.codefix {
     });
 
     const enum InfoKind { Enum, ClassOrInterface, Function, ObjectLiteral, JsxAttributes }
-    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectLiteralInfo | JsxAttributesInfo;
+    type Info = EnumInfo | ClassOrInterfaceInfo | FunctionInfo | ObjectOrRecordLiteralInfo | JsxAttributesInfo;
 
     interface EnumInfo {
         readonly kind: InfoKind.Enum;
@@ -135,11 +135,11 @@ namespace ts.codefix {
         readonly parentDeclaration: SourceFile | ModuleDeclaration;
     }
 
-    interface ObjectLiteralInfo {
+    interface ObjectOrRecordLiteralInfo {
         readonly kind: InfoKind.ObjectLiteral;
         readonly token: Identifier;
         readonly properties: Symbol[];
-        readonly parentDeclaration: ObjectLiteralExpression;
+        readonly parentDeclaration: ObjectLiteralExpression | RecordLiteralExpression;
         readonly indentation?: number;
     }
 
@@ -158,7 +158,7 @@ namespace ts.codefix {
         const parent = token.parent;
 
         if (errorCode === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code) {
-            if (!(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) && isCallExpression(parent.parent))) return undefined;
+            if (!((token.kind === SyntaxKind.OpenBraceToken || token.kind === SyntaxKind.HashOpenBraceToken) && isObjectOrRecordLiteralExpression(parent) && isCallExpression(parent.parent))) return undefined;
 
             const argIndex = findIndex(parent.parent.arguments, arg => arg === parent);
             if (argIndex < 0) return undefined;
@@ -176,7 +176,7 @@ namespace ts.codefix {
 
         if (!isMemberName(token)) return undefined;
 
-        if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
+        if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectOrRecordLiteralExpression(parent.initializer)) {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
             if (!length(properties)) return undefined;
             return { kind: InfoKind.ObjectLiteral, token, properties, indentation: undefined, parentDeclaration: parent.initializer };
@@ -473,7 +473,7 @@ namespace ts.codefix {
         changes.replaceNode(context.sourceFile, jsxAttributesNode, jsxAttributes, options);
     }
 
-    function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
+    function addObjectOrRecordLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectOrRecordLiteralInfo) {
         const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
         const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
         const checker = context.program.getTypeChecker();
@@ -486,7 +486,12 @@ namespace ts.codefix {
             trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
             indentation: info.indentation
         };
-        changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
+        if (info.parentDeclaration.kind === SyntaxKind.RecordLiteralExpression) {
+            changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createRecordLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
+        }
+        else {
+            changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
+        }
     }
 
     function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {

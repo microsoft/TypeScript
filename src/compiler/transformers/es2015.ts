@@ -470,6 +470,8 @@ namespace ts {
                 case SyntaxKind.ExpressionStatement:
                     return visitExpressionStatement(node as ExpressionStatement);
 
+                // skip record and tuple because when running the transformer for generators,
+                // there is ES6 syntaxes only.
                 case SyntaxKind.ObjectLiteralExpression:
                     return visitObjectLiteralExpression(node as ObjectLiteralExpression);
 

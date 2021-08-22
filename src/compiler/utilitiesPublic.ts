@@ -1337,6 +1337,13 @@ namespace ts {
             || kind === SyntaxKind.SetAccessor;
     }
 
+    export function isRecordLiteralElement(node: Node): node is RecordLiteralElement {
+        const kind = node.kind;
+        return kind === SyntaxKind.PropertyAssignment
+            || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.SpreadAssignment;
+    }
+
     // Type
 
     /**
@@ -1507,8 +1514,10 @@ namespace ts {
             case SyntaxKind.JsxFragment:
             case SyntaxKind.TaggedTemplateExpression:
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Identifier:

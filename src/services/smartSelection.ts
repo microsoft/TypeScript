@@ -274,6 +274,8 @@ namespace ts.SmartSelectionRange {
         const kind = token && token.kind;
         return kind === SyntaxKind.OpenBraceToken
             || kind === SyntaxKind.OpenBracketToken
+            || kind === SyntaxKind.HashOpenBraceToken
+            || kind === SyntaxKind.HashOpenBracketToken
             || kind === SyntaxKind.OpenParenToken
             || kind === SyntaxKind.JsxOpeningElement;
     }

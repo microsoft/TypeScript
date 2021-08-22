@@ -250,7 +250,7 @@ namespace ts {
     }
 
     function forEachProperty(objectLiteral: Expression, cb: (property: PropertyAssignment, propertyName: string) => void) {
-        if (!isObjectLiteralExpression(objectLiteral)) return;
+        if (!isObjectOrRecordLiteralExpression(objectLiteral)) return;
         for (const property of objectLiteral.properties) {
             if (isPropertyAssignment(property) && isStringLiteral(property.name)) {
                 cb(property, property.name.text);

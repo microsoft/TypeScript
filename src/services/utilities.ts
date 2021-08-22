@@ -557,6 +557,7 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.TypeLiteral:
             case SyntaxKind.Block:
@@ -618,6 +619,7 @@ namespace ts {
                     hasChildOfKind(n, SyntaxKind.SemicolonToken, sourceFile);
 
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
             case SyntaxKind.ArrayBindingPattern:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.ComputedPropertyName:
@@ -1414,7 +1416,7 @@ namespace ts {
         return isInsideJsxElementTraversal(getTokenAtPosition(sourceFile, position));
     }
 
-    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken, sourceFile: SourceFile) {
+    export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind.OpenBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.HashOpenBraceToken | SyntaxKind.HashOpenBracketToken, sourceFile: SourceFile) {
         const closeTokenText = tokenToString(token.kind)!;
         const matchingTokenText = tokenToString(matchingTokenKind)!;
         const tokenFullStart = token.getFullStart();

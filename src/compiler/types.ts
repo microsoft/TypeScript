@@ -90,6 +90,11 @@ namespace ts {
         BacktickToken,
         /** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
         HashToken,
+        // Record & Tuple
+        /** #{ */
+        HashOpenBraceToken,
+        /** #[ */
+        HashOpenBracketToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -245,6 +250,8 @@ namespace ts {
         // Expression
         ArrayLiteralExpression,
         ObjectLiteralExpression,
+        TupleLiteralExpression,
+        RecordLiteralExpression,
         PropertyAccessExpression,
         ElementAccessExpression,
         CallExpression,
@@ -479,6 +486,8 @@ namespace ts {
         ;
 
     export type PunctuationSyntaxKind =
+        | SyntaxKind.HashOpenBraceToken
+        | SyntaxKind.HashOpenBracketToken
         | SyntaxKind.OpenBraceToken
         | SyntaxKind.CloseBraceToken
         | SyntaxKind.OpenParenToken
@@ -1375,9 +1384,11 @@ namespace ts {
         | AccessorDeclaration
         ;
 
+    export type RecordLiteralElement = PropertyAssignment | ShorthandPropertyAssignment | SpreadAssignment;
+
     export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertyAssignment;
-        readonly parent: ObjectLiteralExpression;
+        readonly parent: ObjectLiteralExpression | RecordLiteralExpression;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken; // Present for use with reporting a grammar error
         readonly exclamationToken?: ExclamationToken; // Present for use with reporting a grammar error
@@ -1386,7 +1397,7 @@ namespace ts {
 
     export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.ShorthandPropertyAssignment;
-        readonly parent: ObjectLiteralExpression;
+        readonly parent: ObjectLiteralExpression | RecordLiteralExpression;
         readonly name: Identifier;
         readonly questionToken?: QuestionToken;
         readonly exclamationToken?: ExclamationToken;
@@ -1398,7 +1409,7 @@ namespace ts {
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
         readonly kind: SyntaxKind.SpreadAssignment;
-        readonly parent: ObjectLiteralExpression;
+        readonly parent: ObjectLiteralExpression | RecordLiteralExpression;
         readonly expression: Expression;
     }
 
@@ -2260,17 +2271,29 @@ namespace ts {
         multiLine?: boolean;
     }
 
+    export interface TupleLiteralExpression extends PrimaryExpression {
+        readonly kind: SyntaxKind.TupleLiteralExpression;
+        readonly elements: NodeArray<Expression>;
+        /* @internal */
+        multiLine?: boolean;
+    }
+
     export interface SpreadElement extends Expression {
         readonly kind: SyntaxKind.SpreadElement;
-        readonly parent: ArrayLiteralExpression | CallExpression | NewExpression;
+        readonly parent: ArrayLiteralExpression | TupleLiteralExpression | CallExpression | NewExpression;
         readonly expression: Expression;
     }
 
     /**
-     * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
-     * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
-     * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
-     * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     * This interface is a base interface for ObjectLiteralExpression, RecordLiteralExpression and JSXAttributes to extend from.
+     *
+     * JSXAttributes is similar to ObjectLiteralExpression in that it contains array of properties;
+     * however, JSXAttributes' properties can only be JSXAttribute or JSXSpreadAttribute.
+     *
+     * ObjectLiteralExpression, on the other hand, can only have properties of type ObjectLiteralElement
+     * (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     *
+     * RecordLiteral is similar to ObjectLiteral but cannot contain MethodDefinition and getter/setters.
      */
     export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<T>;
@@ -2280,6 +2303,12 @@ namespace ts {
     export interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
         readonly kind: SyntaxKind.ObjectLiteralExpression;
         /* @internal */
+        multiLine?: boolean;
+    }
+
+    export interface RecordLiteralExpression extends ObjectLiteralExpressionBase<RecordLiteralElement> {
+        readonly kind: SyntaxKind.RecordLiteralExpression;
+        /** @internal */
         multiLine?: boolean;
     }
 
@@ -4307,7 +4336,7 @@ namespace ts {
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
-        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | RecordLiteralExpression | JsxAttributes): boolean;
         /* @internal */ getExactOptionalProperties(type: Type): Symbol[];
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
@@ -7153,8 +7182,12 @@ namespace ts {
 
         createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean): ArrayLiteralExpression;
         updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
+        createTupleLiteralExpression(elements?: readonly Expression[], multiLine?: boolean): TupleLiteralExpression;
+        updateTupleLiteralExpression(node: TupleLiteralExpression, elements: readonly Expression[]): TupleLiteralExpression;
         createObjectLiteralExpression(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
         updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression;
+        createRecordLiteralExpression(properties?: readonly RecordLiteralElement[], multiLine?: boolean): RecordLiteralExpression;
+        updateRecordLiteralExpression(node: RecordLiteralExpression, properties: readonly RecordLiteralElement[]): RecordLiteralExpression;
         createPropertyAccessExpression(expression: Expression, name: string | MemberName): PropertyAccessExpression;
         updatePropertyAccessExpression(node: PropertyAccessExpression, expression: Expression, name: MemberName): PropertyAccessExpression;
         createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | MemberName): PropertyAccessChain;
@@ -8308,7 +8341,9 @@ namespace ts {
         Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
         AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
         SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
-        BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
+        HashBraces = 1 << 22,           // The list is surrounded by "#{" and "}".
+        HashSquareBrackets = 1 << 23,   // The list is surrounded by "#[" and "]".
+        BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets | HashBraces | HashSquareBrackets,
 
         OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
         OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
@@ -8336,7 +8371,9 @@ namespace ts {
         ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings | NoSpaceIfEmpty,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces | NoSpaceIfEmpty,
+        RecordLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | HashBraces | NoSpaceIfEmpty,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
+        TupleLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | HashSquareBrackets,
         CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,

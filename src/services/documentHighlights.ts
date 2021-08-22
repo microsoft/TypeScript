@@ -246,6 +246,7 @@ namespace ts {
 
                 // Syntactically invalid positions that the parser might produce anyway
                 case SyntaxKind.ObjectLiteralExpression:
+                // skip record. record cannot have modifiers.
                     return undefined;
 
                 default:

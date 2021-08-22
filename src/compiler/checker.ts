@@ -3815,7 +3815,7 @@ namespace ts {
             // we'd like to make that connection here - potentially causing us to paint the declaration's visibility, and therefore the literal.
             const firstDecl: Node | false = !!length(symbol.declarations) && first(symbol.declarations!);
             if (meaning & SymbolFlags.Value && firstDecl && firstDecl.parent && isVariableDeclaration(firstDecl.parent)) {
-                if (isObjectLiteralExpression(firstDecl) && firstDecl === firstDecl.parent.initializer || isTypeLiteralNode(firstDecl) && firstDecl === firstDecl.parent.type) {
+                if (isObjectOrRecordLiteralExpression(firstDecl) && firstDecl === firstDecl.parent.initializer || isTypeLiteralNode(firstDecl) && firstDecl === firstDecl.parent.type) {
                     return getSymbolOfNode(firstDecl.parent);
                 }
             }
@@ -8406,9 +8406,9 @@ namespace ts {
             return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(expr as Identifier) === undefinedSymbol;
         }
 
-        function isEmptyArrayLiteral(node: Expression) {
+        function isEmptyArrayOrTupleLiteral(node: Expression) {
             const expr = skipParentheses(node);
-            return expr.kind === SyntaxKind.ArrayLiteralExpression && (expr as ArrayLiteralExpression).elements.length === 0;
+            return isArrayOrTupleLiteralExpression(expr) && expr.elements.length === 0;
         }
 
         function addOptionality(type: Type, isProperty = false, isOptional = true): Type {
@@ -8460,7 +8460,7 @@ namespace ts {
                 }
                 // Use control flow tracked 'any[]' type for non-ambient, non-exported variables with an empty array
                 // literal initializer.
-                if (declaration.initializer && isEmptyArrayLiteral(declaration.initializer)) {
+                if (declaration.initializer && isEmptyArrayOrTupleLiteral(declaration.initializer)) {
                     return autoArrayType;
                 }
             }
@@ -8722,7 +8722,7 @@ namespace ts {
         }
 
         function getJSContainerObjectType(decl: Node, symbol: Symbol, init: Expression | undefined): Type | undefined {
-            if (!isInJSFile(decl) || !init || !isObjectLiteralExpression(init) || init.properties.length) {
+            if (!isInJSFile(decl) || !init || !isObjectOrRecordLiteralExpression(init) || init.properties.length) {
                 return undefined;
             }
             const exports = createSymbolTable();
@@ -11419,8 +11419,8 @@ namespace ts {
                 getPropertiesOfObjectType(type);
         }
 
-        function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
-            const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
+        function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | RecordLiteralExpression | JsxAttributes): boolean {
+            const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike | RecordLiteralElement>;
             return list.some(property => {
                 const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
                 const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
@@ -16450,9 +16450,11 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration: // Function declarations can have context when annotated with a jsdoc @type
                     return isContextSensitiveFunctionLikeDeclaration(node as FunctionExpression | ArrowFunction | MethodDeclaration);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return some((node as ObjectLiteralExpression).properties, isContextSensitive);
+                case SyntaxKind.RecordLiteralExpression:
+                    return some((node as ObjectLiteralExpression | RecordLiteralExpression).properties, isContextSensitive);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                case SyntaxKind.TupleLiteralExpression:
+                    return some((node as ArrayLiteralExpression | TupleLiteralExpression).elements, isContextSensitive);
                 case SyntaxKind.ConditionalExpression:
                     return isContextSensitive((node as ConditionalExpression).whenTrue) ||
                         isContextSensitive((node as ConditionalExpression).whenFalse);
@@ -16634,9 +16636,11 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return elaborateObjectLiteral(node as ObjectLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
+                case SyntaxKind.RecordLiteralExpression:
+                    return elaborateObjectLiteral(node as ObjectLiteralExpression | RecordLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
+                case SyntaxKind.TupleLiteralExpression:
+                    return elaborateArrayLiteral(node as ArrayLiteralExpression | TupleLiteralExpression, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.JsxAttributes:
                     return elaborateJsxComponents(node as JsxAttributes, source, target, relation, containingMessageChain, errorOutputContainer);
                 case SyntaxKind.ArrowFunction:
@@ -16967,7 +16971,7 @@ namespace ts {
             }
         }
 
-        function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
+        function *generateLimitedTupleElements(node: ArrayLiteralExpression | TupleLiteralExpression, target: Type): ElaborationIterator {
             const len = length(node.elements);
             if (!len) return;
             for (let i = 0; i < len; i++) {
@@ -16981,7 +16985,7 @@ namespace ts {
         }
 
         function elaborateArrayLiteral(
-            node: ArrayLiteralExpression,
+            node: ArrayLiteralExpression | TupleLiteralExpression,
             source: Type,
             target: Type,
             relation: ESMap<string, RelationComparisonResult>,
@@ -16997,7 +17001,7 @@ namespace ts {
             const oldContext = node.contextualType;
             node.contextualType = target;
             try {
-                const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
+                const tupleizedType = node.kind === SyntaxKind.ArrayLiteralExpression ? checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true) : checkTupleLiteral(node, CheckMode.Contextual, /** forceTuple */ true);
                 node.contextualType = oldContext;
                 if (isTupleLikeType(tupleizedType)) {
                     return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
@@ -17009,7 +17013,7 @@ namespace ts {
             }
         }
 
-        function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
+        function *generateObjectLiteralElements(node: ObjectLiteralExpression | RecordLiteralExpression): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
@@ -17034,7 +17038,7 @@ namespace ts {
         }
 
         function elaborateObjectLiteral(
-            node: ObjectLiteralExpression,
+            node: ObjectLiteralExpression | RecordLiteralExpression,
             source: Type,
             target: Type,
             relation: ESMap<string, RelationComparisonResult>,
@@ -22256,7 +22260,7 @@ namespace ts {
             return propType && getConstituentTypeForKeyType(unionType, propType);
         }
 
-        function getMatchingUnionConstituentForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression) {
+        function getMatchingUnionConstituentForObjectLiteral(unionType: UnionType, node: ObjectLiteralExpression | RecordLiteralExpression) {
             const keyPropertyName = getKeyPropertyName(unionType);
             const propNode = keyPropertyName && find(node.properties, p => p.symbol && p.kind === SyntaxKind.PropertyAssignment &&
                 p.symbol.escapedName === keyPropertyName && isPossiblyDiscriminantValue(p.initializer));
@@ -22457,7 +22461,7 @@ namespace ts {
                 parent.parent.kind === SyntaxKind.ForOfStatement && (parent.parent as ForOfStatement).initializer === parent;
         }
 
-        function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
+        function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression | TupleLiteralExpression, element: Expression): Type {
             return getTypeOfDestructuredArrayElement(getAssignedType(node), node.elements.indexOf(element));
         }
 
@@ -22485,7 +22489,8 @@ namespace ts {
                 case SyntaxKind.DeleteExpression:
                     return undefinedType;
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getAssignedTypeOfArrayLiteralElement(parent as ArrayLiteralExpression, node);
+                case SyntaxKind.TupleLiteralExpression:
+                    return getAssignedTypeOfArrayLiteralElement(parent as ArrayLiteralExpression | TupleLiteralExpression, node);
                 case SyntaxKind.SpreadElement:
                     return getAssignedTypeOfSpreadExpression(parent as SpreadElement);
                 case SyntaxKind.PropertyAssignment:
@@ -22536,9 +22541,9 @@ namespace ts {
 
         function isEmptyArrayAssignment(node: VariableDeclaration | BindingElement | Expression) {
             return node.kind === SyntaxKind.VariableDeclaration && (node as VariableDeclaration).initializer &&
-                isEmptyArrayLiteral((node as VariableDeclaration).initializer!) ||
+                isEmptyArrayOrTupleLiteral((node as VariableDeclaration).initializer!) ||
                 node.kind !== SyntaxKind.BindingElement && node.parent.kind === SyntaxKind.BinaryExpression &&
-                isEmptyArrayLiteral((node.parent as BinaryExpression).right);
+                isEmptyArrayOrTupleLiteral((node.parent as BinaryExpression).right);
         }
 
         function getReferenceCandidate(node: Expression): Expression {
@@ -25600,8 +25605,8 @@ namespace ts {
             return getContextualTypeForObjectLiteralElement(node, contextFlags);
         }
 
-        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike, contextFlags?: ContextFlags) {
-            const objectLiteral = element.parent as ObjectLiteralExpression;
+        function getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike | RecordLiteralElement, contextFlags?: ContextFlags) {
+            const objectLiteral = element.parent as ObjectLiteralExpression | RecordLiteralExpression;
             const propertyAssignmentType = isPropertyAssignment(element) && getContextualTypeForVariableLikeDeclaration(element);
             if (propertyAssignmentType) {
                 return propertyAssignmentType;
@@ -25711,7 +25716,7 @@ namespace ts {
             return false;
         }
 
-        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
+        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression | RecordLiteralExpression, contextualType: UnionType) {
             return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(contextualType,
                 concatenate(
                     map(
@@ -25754,7 +25759,7 @@ namespace ts {
             const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
             if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
                 const apparentType = mapType(instantiatedType, getApparentType, /*noReductions*/ true);
-                return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
+                return apparentType.flags & TypeFlags.Union && isObjectOrRecordLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
                     apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
                     apparentType;
             }
@@ -25855,9 +25860,9 @@ namespace ts {
                 case SyntaxKind.ShorthandPropertyAssignment:
                     return getContextualTypeForObjectLiteralElement(parent as PropertyAssignment | ShorthandPropertyAssignment, contextFlags);
                 case SyntaxKind.SpreadAssignment:
-                    return getContextualType(parent.parent as ObjectLiteralExpression, contextFlags);
+                    return getContextualType(parent.parent as ObjectLiteralExpression | RecordLiteralExpression, contextFlags);
                 case SyntaxKind.ArrayLiteralExpression: {
-                    const arrayLiteral = parent as ArrayLiteralExpression;
+                    const arrayLiteral = parent as ArrayLiteralExpression | TupleLiteralExpression;
                     const type = getApparentTypeOfContextualType(arrayLiteral, contextFlags);
                     return getContextualTypeForElementExpression(type, indexOfNode(arrayLiteral.elements, node));
                 }
@@ -26292,6 +26297,10 @@ namespace ts {
                 strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
         }
 
+        function checkTupleLiteral(_node: TupleLiteralExpression, _checkMode: CheckMode | undefined, _forceTuple: boolean | undefined): Type {
+            return anyReadonlyArrayType;
+        }
+
         function createArrayLiteralType(type: Type) {
             if (!(getObjectFlags(type) & ObjectFlags.Reference)) {
                 return type;
@@ -26390,7 +26399,7 @@ namespace ts {
                 isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
         }
 
-        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
+        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression | RecordLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
             const propTypes: Type[] = [];
             for (let i = offset; i < properties.length; i++) {
                 const prop = properties[i];
@@ -26419,7 +26428,7 @@ namespace ts {
         function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
-            checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
+            checkGrammarObjectOrRecordLiteralExpression(node, inDestructuringPattern);
 
             const allPropertiesTable = strictNullChecks ? createSymbolTable() : undefined;
             let propertiesTable = createSymbolTable();
@@ -26632,6 +26641,12 @@ namespace ts {
                 }
                 return result;
             }
+        }
+
+        function checkRecordLiteral(node: RecordLiteralExpression, _checkMode: CheckMode | undefined): Type {
+            // TODO:
+            checkGrammarObjectOrRecordLiteralExpression(node, /** destructing */ false);
+            return unknownType;
         }
 
         function isValidSpreadType(type: Type): boolean {
@@ -30533,7 +30548,9 @@ namespace ts {
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.TemplateExpression:
                     return true;
                 case SyntaxKind.ParenthesizedExpression:
@@ -32080,7 +32097,9 @@ namespace ts {
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.TypeOfExpression:
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.JsxSelfClosingElement:
@@ -32613,7 +32632,7 @@ namespace ts {
                     case AssignmentDeclarationKind.ThisProperty:
                         const symbol = getSymbolOfNode(left);
                         const init = getAssignedExpandoInitializer(right);
-                        return !!init && isObjectLiteralExpression(init) &&
+                        return !!init && isObjectOrRecordLiteralExpression(init) &&
                             !!symbol?.exports?.size;
                     default:
                         return false;
@@ -33277,8 +33296,12 @@ namespace ts {
                     return globalRegExpType;
                 case SyntaxKind.ArrayLiteralExpression:
                     return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
+                case SyntaxKind.TupleLiteralExpression:
+                    return checkTupleLiteral(node as TupleLiteralExpression, checkMode, forceTuple);
                 case SyntaxKind.ObjectLiteralExpression:
                     return checkObjectLiteral(node as ObjectLiteralExpression, checkMode);
+                case SyntaxKind.RecordLiteralExpression:
+                    return checkRecordLiteral(node as RecordLiteralExpression, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
                     return checkPropertyAccessExpression(node as PropertyAccessExpression, checkMode);
                 case SyntaxKind.QualifiedName:
@@ -36054,7 +36077,7 @@ namespace ts {
                 const initializer = getEffectiveInitializer(node);
                 if (initializer) {
                     const isJSObjectLiteralInitializer = isInJSFile(node) &&
-                        isObjectLiteralExpression(initializer) &&
+                        isObjectOrRecordLiteralExpression(initializer) &&
                         (initializer.properties.length === 0 || isPrototypeAccess(node.name)) &&
                         !!symbol.exports?.size;
                     if (!isJSObjectLiteralInitializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
@@ -41944,7 +41967,7 @@ namespace ts {
             return !!exclamationToken && grammarErrorOnNode(exclamationToken, message);
         }
 
-        function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
+        function checkGrammarObjectOrRecordLiteralExpression(node: ObjectLiteralExpression | RecordLiteralExpression, inDestructuring: boolean) {
             const seen = new Map<__String, DeclarationMeaning>();
 
             for (const prop of node.properties) {

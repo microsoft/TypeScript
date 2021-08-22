@@ -582,7 +582,7 @@ namespace ts {
         }
 
         function destructuringNeedsFlattening(node: Expression): boolean {
-            if (isObjectLiteralExpression(node)) {
+            if (isObjectOrRecordLiteralExpression(node)) {
                 for (const elem of node.properties) {
                     switch (elem.kind) {
                         case SyntaxKind.PropertyAssignment:

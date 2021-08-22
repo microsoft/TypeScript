@@ -1683,9 +1683,11 @@ namespace ts {
 
                     // Expressions
                     case SyntaxKind.ArrayLiteralExpression:
-                        return emitArrayLiteralExpression(node as ArrayLiteralExpression);
+                    case SyntaxKind.TupleLiteralExpression:
+                        return emitArrayOrTupleLiteralExpression(node as ArrayLiteralExpression | TupleLiteralExpression);
                     case SyntaxKind.ObjectLiteralExpression:
-                        return emitObjectLiteralExpression(node as ObjectLiteralExpression);
+                    case SyntaxKind.RecordLiteralExpression:
+                        return emitObjectOrRecordLiteralExpression(node as ObjectLiteralExpression | RecordLiteralExpression);
                     case SyntaxKind.PropertyAccessExpression:
                         return emitPropertyAccessExpression(node as PropertyAccessExpression);
                     case SyntaxKind.ElementAccessExpression:
@@ -2401,13 +2403,13 @@ namespace ts {
         // Expressions
         //
 
-        function emitArrayLiteralExpression(node: ArrayLiteralExpression) {
+        function emitArrayOrTupleLiteralExpression(node: ArrayLiteralExpression | TupleLiteralExpression) {
             const elements = node.elements;
             const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-            emitExpressionList(node, elements, ListFormat.ArrayLiteralExpressionElements | preferNewLine, parenthesizer.parenthesizeExpressionForDisallowedComma);
+            emitExpressionList(node, elements, (node.kind === SyntaxKind.ArrayLiteralExpression ? ListFormat.ArrayLiteralExpressionElements : ListFormat.TupleLiteralExpressionElements) | preferNewLine, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
-        function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
+        function emitObjectOrRecordLiteralExpression(node: ObjectLiteralExpression | RecordLiteralExpression) {
             forEach(node.properties, generateMemberNames);
 
             const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
@@ -2417,7 +2419,7 @@ namespace ts {
 
             const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
             const allowTrailingComma = currentSourceFile!.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile!) ? ListFormat.AllowTrailingComma : ListFormat.None;
-            emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
+            emitList(node, node.properties, (node.kind === SyntaxKind.ObjectLiteralExpression ? ListFormat.ObjectLiteralExpressionProperties : ListFormat.RecordLiteralExpressionProperties) | allowTrailingComma | preferNewLine);
 
             if (indentedFlag) {
                 decreaseIndent();
@@ -5735,9 +5737,11 @@ namespace ts {
     function createBracketsMap() {
         const brackets: string[][] = [];
         brackets[ListFormat.Braces] = ["{", "}"];
+        brackets[ListFormat.HashBraces] = ["#{", "}"];
         brackets[ListFormat.Parenthesis] = ["(", ")"];
         brackets[ListFormat.AngleBrackets] = ["<", ">"];
         brackets[ListFormat.SquareBrackets] = ["[", "]"];
+        brackets[ListFormat.HashSquareBrackets] = ["#[", "]"];
         return brackets;
     }
 

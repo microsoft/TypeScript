@@ -403,6 +403,8 @@ namespace ts {
                     return visitConditionalExpression(node as ConditionalExpression);
                 case SyntaxKind.YieldExpression:
                     return visitYieldExpression(node as YieldExpression);
+                // skip record and tuple because when running the transformer for generators,
+                // there is ES6 syntaxes only.
                 case SyntaxKind.ArrayLiteralExpression:
                     return visitArrayLiteralExpression(node as ArrayLiteralExpression);
                 case SyntaxKind.ObjectLiteralExpression:
@@ -1078,7 +1080,7 @@ namespace ts {
                     expressions = [];
                 }
 
-                const expression = createExpressionForObjectLiteralElementLike(factory, node, property, temp);
+                const expression = createExpressionForObjectOrRecordLiteralElementLike(factory, node, property, temp);
                 const visited = visitNode(expression, visitor, isExpression);
                 if (visited) {
                     if (multiLine) {

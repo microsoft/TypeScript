@@ -89,7 +89,7 @@ namespace ts.formatting {
         }
 
         private BlockIsOnOneLine(node: Node): boolean {
-            const openBrace = findChildOfKind(node, SyntaxKind.OpenBraceToken, this.sourceFile);
+            const openBrace = findChildOfKind(node, node.kind === SyntaxKind.RecordLiteralExpression ? SyntaxKind.HashOpenBraceToken : SyntaxKind.OpenBraceToken, this.sourceFile);
             const closeBrace = findChildOfKind(node, SyntaxKind.CloseBraceToken, this.sourceFile);
             if (openBrace && closeBrace) {
                 const startLine = this.sourceFile.getLineAndCharacterOfPosition(openBrace.getEnd()).line;

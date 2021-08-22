@@ -213,7 +213,9 @@ namespace ts.InlayHints {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                 case SyntaxKind.ObjectLiteralExpression:
+                case SyntaxKind.RecordLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.TupleLiteralExpression:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateExpression:

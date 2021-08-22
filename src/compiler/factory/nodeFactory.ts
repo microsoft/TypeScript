@@ -152,8 +152,12 @@ namespace ts {
             updateBindingElement,
             createArrayLiteralExpression,
             updateArrayLiteralExpression,
+            createTupleLiteralExpression,
+            updateTupleLiteralExpression,
             createObjectLiteralExpression,
             updateObjectLiteralExpression,
+            createRecordLiteralExpression,
+            updateRecordLiteralExpression,
             createPropertyAccessExpression: flags & NodeFactoryFlags.NoIndentationOnFreshPropertyAccess ?
                 (expression, name) => setEmitFlags(createPropertyAccessExpression(expression, name), EmitFlags.NoIndentation) :
                 createPropertyAccessExpression,
@@ -2233,9 +2237,11 @@ namespace ts {
             return node;
         }
 
-        // @api
-        function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
-            const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
+        /** @internal */
+        function createArrayLiteralOrTupleLiteral(kind: SyntaxKind.ArrayLiteralExpression, elements?: readonly Expression[], multiLine?: boolean): ArrayLiteralExpression;
+        function createArrayLiteralOrTupleLiteral(kind: SyntaxKind.TupleLiteralExpression, elements?: readonly Expression[], multiLine?: boolean): TupleLiteralExpression;
+        function createArrayLiteralOrTupleLiteral(kind: SyntaxKind.ArrayLiteralExpression | SyntaxKind.TupleLiteralExpression, elements?: readonly Expression[], multiLine?: boolean) {
+            const node = createBaseExpression<ArrayLiteralExpression | TupleLiteralExpression>(kind);
             // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
             // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
             // a trailing comma.
@@ -2243,14 +2249,32 @@ namespace ts {
             const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
             node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
             node.multiLine = multiLine;
+            if (kind === SyntaxKind.TupleLiteralExpression) node.transformFlags |= TransformFlags.ContainsESNext;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             return node;
+        }
+
+        // @api
+        function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
+            return createArrayLiteralOrTupleLiteral(SyntaxKind.ArrayLiteralExpression, elements, multiLine);
         }
 
         // @api
         function updateArrayLiteralExpression(node: ArrayLiteralExpression, elements: readonly Expression[]) {
             return node.elements !== elements
                 ? update(createArrayLiteralExpression(elements, node.multiLine), node)
+                : node;
+        }
+
+        // @api
+        function createTupleLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
+            return createArrayLiteralOrTupleLiteral(SyntaxKind.TupleLiteralExpression, elements, multiLine);
+        }
+
+        // @api
+        function updateTupleLiteralExpression(node: TupleLiteralExpression, elements: readonly Expression[]) {
+            return node.elements !== elements
+                ? update(createTupleLiteralExpression(elements, node.multiLine), node)
                 : node;
         }
 
@@ -2267,6 +2291,23 @@ namespace ts {
         function updateObjectLiteralExpression(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]) {
             return node.properties !== properties
                 ? update(createObjectLiteralExpression(properties, node.multiLine), node)
+                : node;
+        }
+
+        // @api
+        function createRecordLiteralExpression(properties?: readonly RecordLiteralElement[], multiLine?: boolean) {
+            const node = createBaseExpression<RecordLiteralExpression>(SyntaxKind.RecordLiteralExpression);
+            node.properties = createNodeArray(properties);
+            node.multiLine = multiLine;
+            node.transformFlags |= TransformFlags.ContainsESNext;
+            node.transformFlags |= propagateChildrenFlags(node.properties);
+            return node;
+        }
+
+        // @api
+        function updateRecordLiteralExpression(node: RecordLiteralExpression, properties: readonly RecordLiteralElement[]) {
+            return node.properties !== properties
+                ? update(createRecordLiteralExpression(properties, node.multiLine), node)
                 : node;
         }
 
@@ -5601,13 +5642,15 @@ namespace ts {
                 case SyntaxKind.StringLiteral:
                     return false;
                 case SyntaxKind.ArrayLiteralExpression:
-                    const elements = (target as ArrayLiteralExpression).elements;
+                case SyntaxKind.TupleLiteralExpression:
+                    const elements = (target as ArrayLiteralExpression | TupleLiteralExpression).elements;
                     if (elements.length === 0) {
                         return false;
                     }
                     return true;
                 case SyntaxKind.ObjectLiteralExpression:
-                    return (target as ObjectLiteralExpression).properties.length > 0;
+                case SyntaxKind.RecordLiteralExpression:
+                    return (target as ObjectLiteralExpression | RecordLiteralExpression).properties.length > 0;
                 default:
                     return true;
             }
@@ -6216,6 +6259,7 @@ namespace ts {
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
             case SyntaxKind.ArrayLiteralExpression:
+            case SyntaxKind.TupleLiteralExpression:
                 return TransformFlags.ArrayLiteralOrCallOrNewExcludes;
             case SyntaxKind.ModuleDeclaration:
                 return TransformFlags.ModuleExcludes;
@@ -6258,6 +6302,7 @@ namespace ts {
             case SyntaxKind.TypeAliasDeclaration:
                 return TransformFlags.TypeExcludes;
             case SyntaxKind.ObjectLiteralExpression:
+            case SyntaxKind.RecordLiteralExpression:
                 return TransformFlags.ObjectLiteralExcludes;
             case SyntaxKind.CatchClause:
                 return TransformFlags.CatchClauseExcludes;

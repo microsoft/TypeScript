@@ -225,8 +225,12 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (node as BindingPattern).elements);
             case SyntaxKind.ArrayLiteralExpression:
                 return visitNodes(cbNode, cbNodes, (node as ArrayLiteralExpression).elements);
+            case SyntaxKind.TupleLiteralExpression:
+                return visitNodes(cbNode, cbNodes, (node as TupleLiteralExpression).elements);
             case SyntaxKind.ObjectLiteralExpression:
                 return visitNodes(cbNode, cbNodes, (node as ObjectLiteralExpression).properties);
+            case SyntaxKind.RecordLiteralExpression:
+                return visitNodes(cbNode, cbNodes, (node as RecordLiteralExpression).properties);
             case SyntaxKind.PropertyAccessExpression:
                 return visitNode(cbNode, (node as PropertyAccessExpression).expression) ||
                     visitNode(cbNode, (node as PropertyAccessExpression).questionDotToken) ||
@@ -5576,8 +5580,12 @@ namespace ts {
                     return parseTokenNode<PrimaryExpression>();
                 case SyntaxKind.OpenParenToken:
                     return parseParenthesizedExpression();
+                case SyntaxKind.HashOpenBracketToken:
+                    return parseTupleLiteralExpression();
                 case SyntaxKind.OpenBracketToken:
                     return parseArrayLiteralExpression();
+                case SyntaxKind.HashOpenBraceToken:
+                    return parseRecordLiteralExpression()
                 case SyntaxKind.OpenBraceToken:
                     return parseObjectLiteralExpression();
                 case SyntaxKind.AsyncKeyword:
@@ -5630,6 +5638,10 @@ namespace ts {
                 parseAssignmentExpressionOrHigher();
         }
 
+        function parseTupleLiteralElement(): Expression {
+            return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() : parseAssignmentExpressionOrHigher();
+        }
+
         function parseArgumentExpression(): Expression {
             return doOutsideOfContext(disallowInAndDecoratorContext, parseArgumentOrArrayLiteralElement);
         }
@@ -5643,7 +5655,16 @@ namespace ts {
             return finishNode(factory.createArrayLiteralExpression(elements, multiLine), pos);
         }
 
-        function parseObjectLiteralElement(): ObjectLiteralElementLike {
+        function parseTupleLiteralExpression(): TupleLiteralExpression {
+            const pos = getNodePos();
+            parseExpected(SyntaxKind.HashOpenBracketToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            const elements = parseDelimitedList(ParsingContext.ArrayLiteralMembers, parseTupleLiteralElement);
+            parseExpected(SyntaxKind.CloseBracketToken);
+            return finishNode(factory.createTupleLiteralExpression(elements, multiLine), pos);
+        }
+
+        function parseObjectOrRecordLiteralElement(isRecord: boolean): ObjectLiteralElementLike | RecordLiteralElement {
             const pos = getNodePos();
             const hasJSDoc = hasPrecedingJSDocComment();
 
@@ -5656,10 +5677,10 @@ namespace ts {
             const modifiers = parseModifiers();
 
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor);
+                return withRecordLiteralCheck(parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.GetAccessor));
             }
             if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor);
+                return withRecordLiteralCheck(parseAccessorDeclaration(pos, hasJSDoc, decorators, modifiers, SyntaxKind.SetAccessor));
             }
 
             const asteriskToken = parseOptionalToken(SyntaxKind.AsteriskToken);
@@ -5671,7 +5692,7 @@ namespace ts {
             const exclamationToken = parseOptionalToken(SyntaxKind.ExclamationToken);
 
             if (asteriskToken || token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
-                return parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, exclamationToken);
+                return withRecordLiteralCheck(parseMethodDeclaration(pos, hasJSDoc, decorators, modifiers, asteriskToken, name, questionToken, exclamationToken));
             }
 
             // check if it is short-hand property assignment or normal property assignment
@@ -5700,7 +5721,18 @@ namespace ts {
             node.questionToken = questionToken;
             node.exclamationToken = exclamationToken;
             return withJSDoc(finishNode(node, pos), hasJSDoc);
+
+            function withRecordLiteralCheck(node: AccessorDeclaration | MethodDeclaration) {
+                if (!isRecord) return node;
+                const missingIdentifier = factory.createIdentifier("");
+                finishNode(missingIdentifier, node.pos, node.end);
+                const start = skipTrivia(sourceText, node.kind === SyntaxKind.MethodDeclaration ? node.name.pos : node.pos);
+                parseErrorAt(start, node.name.end, Diagnostics.Record_literals_cannot_contain_accessors_or_method_definitions);
+                return finishNode(factory.createShorthandPropertyAssignment(missingIdentifier), node.pos, node.end);
+            }
         }
+        const parseObjectLiteralElement: () => ObjectLiteralElementLike = parseObjectOrRecordLiteralElement.bind(null, /** isRecord */ false);
+        const parseRecordLiteralElement: () => RecordLiteralElement = parseObjectOrRecordLiteralElement.bind(null, /** isRecord */ true);
 
         function parseObjectLiteralExpression(): ObjectLiteralExpression {
             const pos = getNodePos();
@@ -5718,6 +5750,24 @@ namespace ts {
                 }
             }
             return finishNode(factory.createObjectLiteralExpression(properties, multiLine), pos);
+        }
+
+        function parseRecordLiteralExpression() {
+            const pos = getNodePos();
+            const openBracePosition = scanner.getTokenPos();
+            parseExpected(SyntaxKind.HashOpenBraceToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            const properties = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseRecordLiteralElement, /*considerSemicolonAsDelimiter*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
+            return finishNode(factory.createRecordLiteralExpression(properties, multiLine), pos);
         }
 
         function parseFunctionExpression(): FunctionExpression {
