@@ -35,7 +35,7 @@
 
 // @Filename: /8.tsx
 ////const x = <div>
-////    <div>/*8*/</div>
+////    <>/*8*/</>
 ////</div>;
 
 verify.jsxClosingTag({
