@@ -299,6 +299,9 @@ namespace ts {
         contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
         contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
 
+        contextualGetAccessorTags?: JSDocTagInfo[];
+        contextualSetAccessorTags?: JSDocTagInfo[];
+
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
             this.escapedName = name;
@@ -364,6 +367,25 @@ namespace ts {
             }
 
             return this.tags;
+        }
+
+        getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+            switch (context?.kind) {
+                case SyntaxKind.GetAccessor:
+                    if (!this.contextualGetAccessorTags) {
+                        this.contextualGetAccessorTags = emptyArray;
+                        this.contextualGetAccessorTags = getJsDocTags(filter(this.declarations, isGetAccessor), checker);
+                    }
+                    return this.contextualGetAccessorTags;
+                case SyntaxKind.SetAccessor:
+                    if (!this.contextualSetAccessorTags) {
+                        this.contextualSetAccessorTags = emptyArray;
+                        this.contextualSetAccessorTags = getJsDocTags(filter(this.declarations, isSetAccessor), checker);
+                    }
+                    return this.contextualSetAccessorTags;
+                default:
+                    return this.getJsDocTags(checker);
+            }
         }
     }
 
@@ -565,7 +587,7 @@ namespace ts {
 
         getJsDocTags(): JSDocTagInfo[] {
             if (this.jsDocTags === undefined) {
-                this.jsDocTags = this.declaration ? getJsDocTagsOfSignature(this.declaration, this.checker) : [];
+                this.jsDocTags = this.declaration ? getJsDocTagsOfDeclaration(this.declaration, this.checker) : [];
             }
             return this.jsDocTags;
         }
@@ -580,12 +602,27 @@ namespace ts {
         return getJSDocTags(node).some(tag => tag.tagName.text === "inheritDoc");
     }
 
-    function getJsDocTagsOfSignature(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
+    function getJsDocTagsOfDeclaration(declaration: Declaration, checker: TypeChecker): JSDocTagInfo[] {
         let tags = JsDoc.getJsDocTagsFromDeclarations([declaration], checker);
         if (tags.length === 0 || hasJSDocInheritDocTag(declaration)) {
             const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
             if (inheritedTags) {
                 tags = [...inheritedTags, ...tags];
+            }
+        }
+        return tags;
+    }
+
+    function getJsDocTags(declarations: Declaration[] | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        if (!declarations) return emptyArray;
+
+        let tags = JsDoc.getJsDocTagsFromDeclarations(declarations, checker);
+        if (checker && (tags.length === 0 || declarations.some(hasJSDocInheritDocTag))) {
+            for (const declaration of declarations) {
+                const inheritedTags = findBaseOfDeclaration(checker, declaration, symbol => symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined);
+                if (inheritedTags) {
+                    tags = [...inheritedTags, ...tags];
+                }
             }
         }
         return tags;

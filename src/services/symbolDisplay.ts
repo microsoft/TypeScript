@@ -58,6 +58,8 @@ namespace ts.SymbolDisplay {
             return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localVariableElement : ScriptElementKind.variableElement;
         }
         if (flags & SymbolFlags.Function) return isLocalVariableOrFunction(symbol) ? ScriptElementKind.localFunctionElement : ScriptElementKind.functionElement;
+        // FIXME: getter and setter use the same symbol. And it is rare to use only setter without getter, so in most cases the symbol always has getter flag.
+        // So, even when the location is just on the declaration of setter, this function returns getter.
         if (flags & SymbolFlags.GetAccessor) return ScriptElementKind.memberGetAccessorElement;
         if (flags & SymbolFlags.SetAccessor) return ScriptElementKind.memberSetAccessorElement;
         if (flags & SymbolFlags.Method) return ScriptElementKind.memberFunctionElement;
@@ -164,9 +166,24 @@ namespace ts.SymbolDisplay {
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
-            // If it is accessor they are allowed only if location is at name of the accessor
+            // If symbol is accessor, they are allowed only if location is at declaration identifier of the accessor
             if (symbolKind === ScriptElementKind.memberGetAccessorElement || symbolKind === ScriptElementKind.memberSetAccessorElement) {
-                symbolKind = ScriptElementKind.memberVariableElement;
+                const declaration = find(symbol.declarations as ((GetAccessorDeclaration | SetAccessorDeclaration)[]), declaration => declaration.name === location);
+                if (!!declaration) {
+                    switch(declaration.kind){
+                        case SyntaxKind.GetAccessor:
+                            symbolKind = ScriptElementKind.memberGetAccessorElement;
+                            break;
+                        case SyntaxKind.SetAccessor:
+                            symbolKind = ScriptElementKind.memberSetAccessorElement;
+                            break;
+                        default:
+                            Debug.assertNever(declaration);
+                        }
+                }
+                else {
+                    symbolKind = ScriptElementKind.memberVariableElement;
+                }
             }
 
             let signature: Signature | undefined;
