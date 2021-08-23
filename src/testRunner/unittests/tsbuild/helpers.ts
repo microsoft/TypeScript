@@ -423,7 +423,7 @@ interface Symbol {
 
             function verifyTextEqual(incrementalText: string | undefined, cleanText: string | undefined, descrepancyInClean: CleanBuildDescrepancy | undefined, message: string) {
                 if (descrepancyInClean === undefined) {
-                    assert.equal(incrementalText, cleanText, message);
+                    assert.equal(cleanText, incrementalText, message);
                     return;
                 }
                 switch (descrepancyInClean) {

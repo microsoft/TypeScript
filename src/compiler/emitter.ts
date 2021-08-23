@@ -542,9 +542,13 @@ namespace ts {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
-            const key = `${compilerOptions.module};${compilerOptions.target};${jsFilePath};${sourceFiles.map(f => f.fileName).join("|")}`
+            const key = `${compilerOptions.module};${compilerOptions.target};${jsFilePath};${sourceFiles.map(f => f.fileName).join("|")};${bundle?.prepends.map(p => (p as UnparsedSource).text)}`
             const cached = horrible.get(key)
-            if (cached && zipWith(sourceFiles.map(f => f.version), cached.versions, (v1, v2) => v1 === v2).every(eq => !!eq)) {
+            // If any sourceFile (or all?) has a version that's undefined, it blows the cache, AND all subsequent accesses get the cached version regardless of whether they have a version
+            // I just made up this rule, so it's probably wrong (but might be partly right)
+            // TODO: even safer would be to blow the cache and stop using the cache. But this might erase incremental efficiency gains.
+            // Ha Ha, no the filename doesn't have a leading / on the synthetic one. But it is Synthetic!
+            if (jsFilePath.endsWith('.d.ts') && cached && zipWith(sourceFiles.map(f => f.version), cached.versions, (v1, v2) => v1 == v2).every(eq => !!eq)) {
                 // console.log(`Retrieving ${key} from cache: ${cached.slice(0,20)}`)
                 writeFile(host, emitterDiagnostics, jsFilePath, cached.text, !!compilerOptions.emitBOM, sourceFiles);
                 if (cached.sourceMap !== undefined && cached.sourceMapFilePath !== undefined) {
@@ -553,7 +557,6 @@ namespace ts {
                 return;
             }
             // Let's do this WRONG
-            // 1. cache with key=filesForEmit, value=[emit, diagnostics]
             // 2. include custom transformers in the key, plus "other api things" (??)
             // Afterward, need to measure performance to see which projects this helps/how much. Ask Andrew about this.
 
@@ -609,12 +612,14 @@ namespace ts {
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
             // CaChE sTAte
             // console.log(`Caching ${key}: ${writer.getText().slice(0,20)}`)
-            horrible.set(key, {
-                text: writer.getText(),
-                versions: sourceFiles.map(f => f.version),
-                sourceMapFilePath,
-                sourceMap,
-            })
+            if (jsFilePath.endsWith('.d.ts') && (!cached || !cached.versions.some(v => v === undefined))) {
+                horrible.set(key, {
+                    text: writer.getText(),
+                    versions: sourceFiles.map(f => f.version),
+                    sourceMapFilePath,
+                    sourceMap,
+                })
+            }
 
             // Reset state
             writer.clear();
