@@ -16,6 +16,14 @@
 ////     my2.yes./*1*/
 //// }
 
+//// /**
+////  * @param {MyType} my2
+////  */
+//// function b(my2) {
+////     my2.yes./*2*/
+//// }
+
 verify.completions(
-    { marker: "1", includes: "charAt" }
+    { marker: "1", includes: "charAt" },
+    { marker: "2", excludes: "charAt" },
 );
