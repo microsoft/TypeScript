@@ -123,25 +123,13 @@
         "category": "Error",
         "code": 1040
     },
-    "'{0}' modifier cannot be used with a class declaration.": {
-        "category": "Error",
-        "code": 1041
-    },
     "'{0}' modifier cannot be used here.": {
         "category": "Error",
         "code": 1042
     },
-    "'{0}' modifier cannot appear on a data property.": {
-        "category": "Error",
-        "code": 1043
-    },
     "'{0}' modifier cannot appear on a module or namespace element.": {
         "category": "Error",
         "code": 1044
-    },
-    "A '{0}' modifier cannot be used with an interface declaration.": {
-        "category": "Error",
-        "code": 1045
     },
     "Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.": {
         "category": "Error",
@@ -182,10 +170,6 @@
     "Accessors are only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 1056
-    },
-    "An async function or method must have a valid awaitable return type.": {
-        "category": "Error",
-        "code": 1057
     },
     "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
@@ -699,10 +683,6 @@
         "category": "Error",
         "code": 1219
     },
-    "Generators are only available when targeting ECMAScript 2015 or higher.": {
-        "category": "Error",
-        "code": 1220
-    },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
         "code": 1221
@@ -830,10 +810,6 @@
     "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1252
-    },
-    "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
-        "category": "Error",
-        "code": 1253
     },
     "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
@@ -1084,10 +1060,6 @@
         "category": "Error",
         "code": 1359
     },
-    "Did you mean to parenthesize this function type?": {
-        "category": "Error",
-        "code": 1360
-    },
     "'{0}' cannot be used as a value because it was imported using 'import type'.": {
         "category": "Error",
         "code": 1361
@@ -1191,14 +1163,6 @@
     "'{0}' is not allowed as a variable declaration name.": {
         "category": "Error",
         "code": 1389
-    },
-    "Provides a root package name when using outFile with declarations.": {
-        "category": "Message",
-        "code": 1390
-    },
-    "The 'bundledPackageName' option must be provided when using outFile and node module resolution with declaration emit.": {
-        "category": "Error",
-        "code": 1391
     },
     "An import alias cannot use 'import type'": {
         "category": "Error",
@@ -1482,10 +1446,6 @@
         "category": "Error",
         "code": 2310
     },
-    "A class may only extend another class.": {
-        "category": "Error",
-        "code": 2311
-    },
     "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
@@ -1605,10 +1565,6 @@
     "Property '{0}' is private and only accessible within class '{1}'.": {
         "category": "Error",
         "code": 2341
-    },
-    "An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.": {
-        "category": "Error",
-        "code": 2342
     },
     "This syntax requires an imported helper named '{1}' which does not exist in '{0}'. Consider upgrading your version of '{0}'.": {
         "category": "Error",
@@ -1762,14 +1718,6 @@
         "category": "Error",
         "code": 2380
     },
-    "A signature with an implementation cannot use a string literal type.": {
-        "category": "Error",
-        "code": 2381
-    },
-    "Specialized overload signature is not assignable to any non-specialized signature.": {
-        "category": "Error",
-        "code": 2382
-    },
     "Overload signatures must all be exported or non-exported.": {
         "category": "Error",
         "code": 2383
@@ -1841,10 +1789,6 @@
     "Expression resolves to variable declaration '_this' that compiler uses to capture 'this' reference.": {
         "category": "Error",
         "code": 2400
-    },
-    "Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.": {
-        "category": "Error",
-        "code": 2401
     },
     "Expression resolves to '_super' that compiler uses to capture base class reference.": {
         "category": "Error",
@@ -2038,17 +1982,9 @@
         "category": "Error",
         "code": 2452
     },
-    "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": {
-        "category": "Error",
-        "code": 2453
-    },
     "Variable '{0}' is used before being assigned.": {
         "category": "Error",
         "code": 2454
-    },
-    "Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.": {
-        "category": "Error",
-        "code": 2455
     },
     "Type alias '{0}' circularly references itself.": {
         "category": "Error",
@@ -2106,14 +2042,6 @@
         "category": "Error",
         "code": 2469
     },
-    "'Symbol' reference does not refer to the global Symbol constructor object.": {
-        "category": "Error",
-        "code": 2470
-    },
-    "A computed property name of the form '{0}' must be of type 'symbol'.": {
-        "category": "Error",
-        "code": 2471
-    },
     "Spread operator in 'new' expressions is only available when targeting ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2472
@@ -2141,10 +2069,6 @@
     "'const' enum member initializer was evaluated to disallowed value 'NaN'.": {
         "category": "Error",
         "code": 2478
-    },
-    "Property '{0}' does not exist on 'const' enum '{1}'.": {
-        "category": "Error",
-        "code": 2479
     },
     "'let' is not allowed to be used as a name in 'let' or 'const' declarations.": {
         "category": "Error",
@@ -2270,10 +2194,6 @@
         "category": "Error",
         "code": 2513
     },
-    "Classes containing abstract methods must be marked abstract.": {
-        "category": "Error",
-        "code": 2514
-    },
     "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
         "category": "Error",
         "code": 2515
@@ -2297,10 +2217,6 @@
     "Duplicate identifier '{0}'. Compiler uses declaration '{1}' to support async functions.": {
         "category": "Error",
         "code": 2520
-    },
-    "Expression resolves to variable declaration '{0}' that compiler uses to support async functions.": {
-        "category": "Error",
-        "code": 2521
     },
     "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
         "category": "Error",
@@ -2377,10 +2293,6 @@
     "Cannot assign to '{0}' because it is a read-only property.": {
         "category": "Error",
         "code": 2540
-    },
-    "The target of an assignment must be a variable or a property access.": {
-        "category": "Error",
-        "code": 2541
     },
     "Index signature in type '{0}' only permits reading.": {
         "category": "Error",
@@ -2494,14 +2406,6 @@
         "category": "Error",
         "code": 2571
     },
-    "Rest signatures are incompatible.": {
-        "category": "Error",
-        "code": 2572
-    },
-    "Property '{0}' is incompatible with rest element type.": {
-        "category": "Error",
-        "code": 2573
-    },
     "A rest element type must be an array type.": {
         "category": "Error",
         "code": 2574
@@ -2545,14 +2449,6 @@
     "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.": {
         "category": "Error",
         "code": 2585
-    },
-    "Enum type '{0}' circularly references itself.": {
-        "category": "Error",
-        "code": 2586
-    },
-    "JSDoc type '{0}' circularly references itself.": {
-        "category": "Error",
-        "code": 2587
     },
     "Cannot assign to '{0}' because it is a constant.": {
         "category": "Error",
@@ -2598,14 +2494,6 @@
         "category": "Error",
         "code": 2598
     },
-    "JSX element attributes type '{0}' may not be a union type.": {
-        "category": "Error",
-        "code": 2600
-    },
-    "The return type of a JSX element constructor must return an object type.": {
-        "category": "Error",
-        "code": 2601
-    },
     "JSX element implicitly has type 'any' because the global type 'JSX.Element' does not exist.": {
         "category": "Error",
         "code": 2602
@@ -2617,10 +2505,6 @@
     "JSX element type '{0}' does not have any construct or call signatures.": {
         "category": "Error",
         "code": 2604
-    },
-    "JSX element type '{0}' is not a constructor function for JSX elements.": {
-        "category": "Error",
-        "code": 2605
     },
     "Property '{0}' of JSX spread attribute is not assignable to target property.": {
         "category": "Error",
@@ -2751,14 +2635,6 @@
         "category": "Error",
         "code": 2653
     },
-    "Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.": {
-        "category": "Error",
-        "code": 2654
-    },
-    "Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.": {
-        "category": "Error",
-        "code": 2656
-    },
     "JSX expressions must have one parent element.": {
         "category": "Error",
         "code": 2657
@@ -2858,10 +2734,6 @@
     "A constructor cannot have a 'this' parameter.": {
         "category": "Error",
         "code": 2681
-    },
-    "'get' and 'set' accessor must have the same 'this' type.": {
-        "category": "Error",
-        "code": 2682
     },
     "'this' implicitly has type 'any' because it does not have a type annotation.": {
         "category": "Error",
@@ -4203,10 +4075,6 @@
         "category": "Error",
         "code": 6048
     },
-    "Unsupported locale '{0}'.": {
-        "category": "Error",
-        "code": 6049
-    },
     "Unable to open file '{0}'.": {
         "category": "Error",
         "code": 6050
@@ -4262,10 +4130,6 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
-    },
-    "Enables experimental support for ES7 async functions.": {
-        "category": "Message",
-        "code": 6068
     },
     "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
         "category": "Message",
@@ -4403,10 +4267,6 @@
         "category": "Message",
         "code": 6102
     },
-    "Option '{0}' should have array of strings as a value.": {
-        "category": "Error",
-        "code": 6103
-    },
     "Checking if '{0}' is the longest matching prefix for '{1}' - '{2}'.": {
         "category": "Message",
         "code": 6104
@@ -4458,14 +4318,6 @@
     "======== Resolving type reference directive '{0}', containing file '{1}', root directory '{2}'. ========": {
         "category": "Message",
         "code": 6116
-    },
-    "Resolving using primary search paths...": {
-        "category": "Message",
-        "code": 6117
-    },
-    "Resolving from node_modules folder...": {
-        "category": "Message",
-        "code": 6118
     },
     "======== Type reference directive '{0}' was successfully resolved to '{1}', primary: {2}. ========": {
         "category": "Message",
@@ -4983,10 +4835,6 @@
         "code": 6257
     },
 
-    "Projects to reference": {
-        "category": "Message",
-        "code": 6300
-    },
     "Enable project compilation": {
         "category": "Message",
         "code": 6302
@@ -5058,10 +4906,6 @@
     "Updating output timestamps of project '{0}'...": {
         "category": "Message",
         "code": 6359
-    },
-    "delete this - Project '{0}' is up to date because it was previously built": {
-        "category": "Message",
-        "code": 6360
     },
     "Project '{0}' is up to date": {
         "category": "Message",
@@ -6161,18 +6005,6 @@
         "category": "Error",
         "code": 8034
     },
-    "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
-        "category": "Error",
-        "code": 9002
-    },
-    "'class' expressions are not currently supported.": {
-        "category": "Error",
-        "code": 9003
-    },
-    "Language service is disabled.": {
-        "category": "Error",
-        "code": 9004
-    },
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9005
@@ -6192,10 +6024,6 @@
     "Expected corresponding JSX closing tag for '{0}'.": {
         "category": "Error",
         "code": 17002
-    },
-    "JSX attribute expected.": {
-        "category": "Error",
-        "code": 17003
     },
     "Cannot use JSX unless the '--jsx' flag is provided.": {
         "category": "Error",
@@ -6260,10 +6088,6 @@
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
-    },
-    "A path in an 'extends' option must be relative or rooted, but '{0}' is not.": {
-        "category": "Error",
-        "code": 18001
     },
     "The 'files' list in config file '{0}' is empty.": {
         "category": "Error",
@@ -6471,10 +6295,6 @@
         "category": "Message",
         "code": 95001
     },
-    "Convert function '{0}' to class": {
-        "category": "Message",
-        "code": 95002
-    },
     "Convert '{0}' to '{1} in {0}'": {
         "category": "Message",
         "code": 95003
@@ -6502,10 +6322,6 @@
     "Annotate with type from JSDoc": {
         "category": "Message",
         "code": 95009
-    },
-    "Annotate with types from JSDoc": {
-        "category": "Message",
-        "code": 95010
     },
     "Infer type of '{0}' from usage": {
         "category": "Message",
@@ -6866,18 +6682,6 @@
     "Convert all invalid characters to HTML entity code": {
         "category": "Message",
         "code": 95101
-    },
-    "Add '@class' tag": {
-        "category": "Message",
-        "code": 95102
-    },
-    "Add '@this' tag": {
-        "category": "Message",
-        "code": 95103
-    },
-    "Add 'this' parameter.": {
-        "category": "Message",
-        "code": 95104
     },
     "Convert function expression '{0}' to arrow function": {
         "category": "Message",
