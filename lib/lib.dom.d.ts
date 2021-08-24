@@ -6400,6 +6400,12 @@ interface HTMLDocument extends Document {
     removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
+/** @deprecated */
+declare var HTMLDocument: {
+    prototype: HTMLDocument;
+    new(): HTMLDocument;
+};
+
 interface HTMLElementEventMap extends ElementEventMap, DocumentAndElementEventHandlersEventMap, GlobalEventHandlersEventMap {
 }
 
@@ -17201,7 +17207,6 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
 
 /** A window containing a DOM document; the document property points to the DOM document loaded in that window. */
 interface Window extends EventTarget, AnimationFrameProvider, GlobalEventHandlers, WindowEventHandlers, WindowLocalStorage, WindowOrWorkerGlobalScope, WindowSessionStorage {
-    HTMLDocument: Document;
     /** @deprecated This is a legacy alias of `navigator`. */
     readonly clientInformation: Navigator;
     /**
@@ -18266,7 +18271,6 @@ declare var Image: {
 declare var Option: {
     new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement;
 };
-declare var HTMLDocument: Document;
 /** @deprecated This is a legacy alias of `navigator`. */
 declare var clientInformation: Navigator;
 /**

@@ -1954,11 +1954,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    const enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum"
-    }
+    type InlayHintKind = "Type" | "Parameter" | "Enum";
     interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -1976,7 +1972,7 @@ declare namespace ts.server.protocol {
     interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
