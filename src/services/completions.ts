@@ -1338,8 +1338,8 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
-                        const leftMostAccessExpression = getLeftmostAccessExpression(parent as Expression);
-                        if (leftMostAccessExpression.pos === leftMostAccessExpression.end ||
+                        const leftmostAccessExpression = getLeftmostAccessExpression(propertyAccessToConvert);
+                        if (nodeIsMissing(leftmostAccessExpression) ||
                             ((isCallExpression(node) || isFunctionLike(node)) &&
                                 node.end === contextToken.pos &&
                                 node.getChildCount(sourceFile) &&
