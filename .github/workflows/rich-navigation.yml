@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - release-*
+      - dbaeumer/richNav
   pull_request:
     branches:
       - main
@@ -30,6 +31,6 @@ jobs:
         with:
           languages: typescript
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          typescriptVersion: 0.6.0-next.17
-          configFiles: .lsifrc.json
+          typescriptVersion: 0.6.0-next.18
+          configFiles: .github/workflow-resources/.lsifrc.json
         continue-on-error: true
