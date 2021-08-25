@@ -1,0 +1,55 @@
+=== tests/cases/compiler/checkOrderDependenceGenericAssignability.ts ===
+// #44572
+
+interface Parent<A> {
+  child: Child<A> | null;
+>child : Child<A, unknown>
+>null : null
+
+  parent: Parent<A> | null;
+>parent : Parent<A>
+>null : null
+}
+
+interface Child<A, B = unknown> extends Parent<A> {
+  readonly a: A;
+>a : A
+
+  // This field isn't necessary to the repro, but the
+  // type parameter is, so including it
+  readonly b: B;
+>b : B
+}
+
+function fn<A>(inp: Child<A>) {
+>fn : <A>(inp: Child<A>) => void
+>inp : Child<A, unknown>
+
+  // This assignability check defeats the later one
+  const a: Child<unknown> = inp;
+>a : Child<unknown, unknown>
+>inp : Child<A, unknown>
+}
+
+// Allowed initialization of pu
+const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+>pu : Parent<unknown>
+>{ child: { a: 0, b: 0, child: null, parent: null }, parent: null } : { child: { a: number; b: number; child: null; parent: null; }; parent: null; }
+>child : { a: number; b: number; child: null; parent: null; }
+>{ a: 0, b: 0, child: null, parent: null } : { a: number; b: number; child: null; parent: null; }
+>a : number
+>0 : 0
+>b : number
+>0 : 0
+>child : null
+>null : null
+>parent : null
+>null : null
+>parent : null
+>null : null
+
+// Should error
+const notString: Parent<string> = pu;
+>notString : Parent<string>
+>pu : Parent<unknown>
+

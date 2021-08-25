@@ -1,0 +1,67 @@
+=== tests/cases/compiler/checkOrderDependenceGenericAssignability.ts ===
+// #44572
+
+interface Parent<A> {
+>Parent : Symbol(Parent, Decl(checkOrderDependenceGenericAssignability.ts, 0, 0))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 2, 17))
+
+  child: Child<A> | null;
+>child : Symbol(Parent.child, Decl(checkOrderDependenceGenericAssignability.ts, 2, 21))
+>Child : Symbol(Child, Decl(checkOrderDependenceGenericAssignability.ts, 5, 1))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 2, 17))
+
+  parent: Parent<A> | null;
+>parent : Symbol(Parent.parent, Decl(checkOrderDependenceGenericAssignability.ts, 3, 25))
+>Parent : Symbol(Parent, Decl(checkOrderDependenceGenericAssignability.ts, 0, 0))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 2, 17))
+}
+
+interface Child<A, B = unknown> extends Parent<A> {
+>Child : Symbol(Child, Decl(checkOrderDependenceGenericAssignability.ts, 5, 1))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 7, 16))
+>B : Symbol(B, Decl(checkOrderDependenceGenericAssignability.ts, 7, 18))
+>Parent : Symbol(Parent, Decl(checkOrderDependenceGenericAssignability.ts, 0, 0))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 7, 16))
+
+  readonly a: A;
+>a : Symbol(Child.a, Decl(checkOrderDependenceGenericAssignability.ts, 7, 51))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 7, 16))
+
+  // This field isn't necessary to the repro, but the
+  // type parameter is, so including it
+  readonly b: B;
+>b : Symbol(Child.b, Decl(checkOrderDependenceGenericAssignability.ts, 8, 16))
+>B : Symbol(B, Decl(checkOrderDependenceGenericAssignability.ts, 7, 18))
+}
+
+function fn<A>(inp: Child<A>) {
+>fn : Symbol(fn, Decl(checkOrderDependenceGenericAssignability.ts, 12, 1))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 14, 12))
+>inp : Symbol(inp, Decl(checkOrderDependenceGenericAssignability.ts, 14, 15))
+>Child : Symbol(Child, Decl(checkOrderDependenceGenericAssignability.ts, 5, 1))
+>A : Symbol(A, Decl(checkOrderDependenceGenericAssignability.ts, 14, 12))
+
+  // This assignability check defeats the later one
+  const a: Child<unknown> = inp;
+>a : Symbol(a, Decl(checkOrderDependenceGenericAssignability.ts, 16, 7))
+>Child : Symbol(Child, Decl(checkOrderDependenceGenericAssignability.ts, 5, 1))
+>inp : Symbol(inp, Decl(checkOrderDependenceGenericAssignability.ts, 14, 15))
+}
+
+// Allowed initialization of pu
+const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+>pu : Symbol(pu, Decl(checkOrderDependenceGenericAssignability.ts, 20, 5))
+>Parent : Symbol(Parent, Decl(checkOrderDependenceGenericAssignability.ts, 0, 0))
+>child : Symbol(child, Decl(checkOrderDependenceGenericAssignability.ts, 20, 29))
+>a : Symbol(a, Decl(checkOrderDependenceGenericAssignability.ts, 20, 38))
+>b : Symbol(b, Decl(checkOrderDependenceGenericAssignability.ts, 20, 44))
+>child : Symbol(child, Decl(checkOrderDependenceGenericAssignability.ts, 20, 50))
+>parent : Symbol(parent, Decl(checkOrderDependenceGenericAssignability.ts, 20, 63))
+>parent : Symbol(parent, Decl(checkOrderDependenceGenericAssignability.ts, 20, 79))
+
+// Should error
+const notString: Parent<string> = pu;
+>notString : Symbol(notString, Decl(checkOrderDependenceGenericAssignability.ts, 23, 5))
+>Parent : Symbol(Parent, Decl(checkOrderDependenceGenericAssignability.ts, 0, 0))
+>pu : Symbol(pu, Decl(checkOrderDependenceGenericAssignability.ts, 20, 5))
+

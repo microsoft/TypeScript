@@ -1,3 +1,4 @@
+//// [checkOrderDependenceGenericAssignability.ts]
 // #44572
 
 interface Parent<A> {
@@ -22,3 +23,15 @@ const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, 
 
 // Should error
 const notString: Parent<string> = pu;
+
+
+//// [checkOrderDependenceGenericAssignability.js]
+// #44572
+function fn(inp) {
+    // This assignability check defeats the later one
+    var a = inp;
+}
+// Allowed initialization of pu
+var pu = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+// Should error
+var notString = pu;

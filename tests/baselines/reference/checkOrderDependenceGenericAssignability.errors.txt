@@ -1,0 +1,37 @@
+tests/cases/compiler/checkOrderDependenceGenericAssignability.ts(24,7): error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
+  Types of property 'child' are incompatible.
+    Type 'Child<unknown, unknown>' is not assignable to type 'Child<string, unknown>'.
+      Type 'unknown' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/checkOrderDependenceGenericAssignability.ts (1 errors) ====
+    // #44572
+    
+    interface Parent<A> {
+      child: Child<A> | null;
+      parent: Parent<A> | null;
+    }
+    
+    interface Child<A, B = unknown> extends Parent<A> {
+      readonly a: A;
+      // This field isn't necessary to the repro, but the
+      // type parameter is, so including it
+      readonly b: B;
+    }
+    
+    function fn<A>(inp: Child<A>) {
+      // This assignability check defeats the later one
+      const a: Child<unknown> = inp;
+    }
+    
+    // Allowed initialization of pu
+    const pu: Parent<unknown> = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+    
+    // Should error
+    const notString: Parent<string> = pu;
+          ~~~~~~~~~
+!!! error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
+!!! error TS2322:   Types of property 'child' are incompatible.
+!!! error TS2322:     Type 'Child<unknown, unknown>' is not assignable to type 'Child<string, unknown>'.
+!!! error TS2322:       Type 'unknown' is not assignable to type 'string'.
+    
