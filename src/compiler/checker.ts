@@ -11800,7 +11800,7 @@ namespace ts {
             // Flags we want to propagate to the result if they exist in all source symbols
             let optionalFlag = isUnion ? SymbolFlags.None : SymbolFlags.Optional;
             let syntheticFlag = CheckFlags.SyntheticMethod;
-            let checkFlags = 0;
+            let checkFlags = isUnion ? 0 : CheckFlags.Readonly;
             let mergedInstantiations = false;
             for (const current of containingType.types) {
                 const type = getApparentType(current);
@@ -11839,8 +11839,13 @@ namespace ts {
                                 }
                             }
                         }
-                        checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
-                            (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
+                        if (isUnion && isReadonlySymbol(prop)) {
+                            checkFlags |= CheckFlags.Readonly;
+                        }
+                        else if (!isUnion && !isReadonlySymbol(prop)) {
+                            checkFlags &= ~CheckFlags.Readonly;
+                        }
+                        checkFlags |= (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
                             (modifiers & ModifierFlags.Private ? CheckFlags.ContainsPrivate : 0) |
                             (modifiers & ModifierFlags.Static ? CheckFlags.ContainsStatic : 0);
