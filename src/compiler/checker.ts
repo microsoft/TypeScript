@@ -753,6 +753,7 @@ namespace ts {
         const nonInferrableAnyType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.ContainsWideningType);
         const intrinsicMarkerType = createIntrinsicType(TypeFlags.Any, "intrinsic");
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
+        const nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
         const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
@@ -13995,7 +13996,9 @@ namespace ts {
             const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
-                    return includes & TypeFlags.Any ? includes & TypeFlags.IncludesWildcard ? wildcardType : anyType : unknownType;
+                    return includes & TypeFlags.Any ?
+                        includes & TypeFlags.IncludesWildcard ? wildcardType : anyType :
+                        includes & TypeFlags.Null || containsType(typeSet, unknownType) ? unknownType : nonNullUnknownType;
                 }
                 if (exactOptionalPropertyTypes && includes & TypeFlags.Undefined) {
                     const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
@@ -22100,13 +22103,6 @@ namespace ts {
             return false;
         }
 
-        // Given a source x, check if target matches x or is an && operation with an operand that matches x.
-        function containsTruthyCheck(source: Node, target: Node): boolean {
-            return isMatchingReference(source, target) ||
-                (target.kind === SyntaxKind.BinaryExpression && (target as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken &&
-                (containsTruthyCheck(source, (target as BinaryExpression).left) || containsTruthyCheck(source, (target as BinaryExpression).right)));
-        }
-
         function getPropertyAccess(expr: Expression) {
             if (isAccessExpression(expr)) {
                 return expr;
@@ -23119,7 +23115,8 @@ namespace ts {
             if (resultType === unreachableNeverType || reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && !(resultType.flags & TypeFlags.Never) && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
-            return resultType;
+            // The non-null unknown type should never escape control flow analysis.
+            return resultType === nonNullUnknownType ? unknownType : resultType;
 
             function getOrSetCacheKey() {
                 if (isKeySet) {
@@ -23607,7 +23604,8 @@ namespace ts {
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
-                    return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
+                    return type.flags & TypeFlags.Unknown && assumeTrue ? nonNullUnknownType :
+                        getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
                 if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
                     type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
@@ -23765,7 +23763,7 @@ namespace ts {
                         valueType.flags & TypeFlags.Null ?
                             assumeTrue ? TypeFacts.EQNull : TypeFacts.NENull :
                             assumeTrue ? TypeFacts.EQUndefined : TypeFacts.NEUndefined;
-                    return getTypeWithFacts(type, facts);
+                    return type.flags & TypeFlags.Unknown && facts & (TypeFacts.NENull | TypeFacts.NEUndefinedOrNull) ? nonNullUnknownType : getTypeWithFacts(type, facts);
                 }
                 if (assumeTrue) {
                     const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
@@ -23795,15 +23793,10 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue && type.flags & TypeFlags.Unknown && literal.text === "object") {
-                    // The pattern x && typeof x === 'object', where x is of type unknown, narrows x to type object. We don't
-                    // need to check for the reverse typeof x === 'object' && x since that already narrows correctly.
-                    if (typeOfExpr.parent.parent.kind === SyntaxKind.BinaryExpression) {
-                        const expr = typeOfExpr.parent.parent as BinaryExpression;
-                        if (expr.operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && expr.right === typeOfExpr.parent && containsTruthyCheck(reference, expr.left)) {
-                            return nonPrimitiveType;
-                        }
-                    }
-                    return getUnionType([nonPrimitiveType, nullType]);
+                    // The non-null unknown type is used to track whether a previous narrowing operation has removed the null type
+                    // from the unknown type. For example, the expression `x && typeof x === 'object'` first narrows x to the non-null
+                    // unknown type, and then narrows that to the non-primitive type.
+                    return type === nonNullUnknownType ? nonPrimitiveType : getUnionType([nonPrimitiveType, nullType]);
                 }
                 const facts = assumeTrue ?
                     typeofEQFacts.get(literal.text) || TypeFacts.TypeofEQHostObject :
