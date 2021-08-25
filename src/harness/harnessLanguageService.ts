@@ -829,7 +829,7 @@ namespace Harness.LanguageService {
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
             // eslint-disable-next-line no-restricted-globals
-            return setTimeout(callback, ms, args);
+            return setTimeout(callback, ms, ...args);
         }
 
         clearTimeout(timeoutId: any): void {
