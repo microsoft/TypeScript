@@ -4,7 +4,9 @@ namespace ts {
         const enum Ext { js, jsmap, dts, dtsmap, buildinfo }
         const enum Project { first, second, third }
         type OutputFile = [string, string, string, string, string];
-        function relName(path: string) { return path.slice(1); }
+        function relName(path: string) {
+            return path.slice(1);
+        }
         const outputFiles: [OutputFile, OutputFile, OutputFile] = [
             [
                 "/src/first/bin/first-output.js",

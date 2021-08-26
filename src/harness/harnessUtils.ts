@@ -113,7 +113,11 @@ namespace Utils {
                     });
 
                 const childNodesAndArrays: any[] = [];
-                ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
+                ts.forEachChild(node, child => {
+                    childNodesAndArrays.push(child);
+                }, array => {
+                    childNodesAndArrays.push(array);
+                });
 
                 for (const childName in node) {
                     if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
@@ -198,7 +202,9 @@ namespace Utils {
             return result;
         }
 
-        function getNodeFlagName(f: number) { return getFlagName((ts as any).NodeFlags, f); }
+        function getNodeFlagName(f: number) {
+            return getFlagName((ts as any).NodeFlags, f);
+        }
 
         function serializeNode(n: ts.Node): any {
             const o: any = { kind: getKindName(n.kind) };

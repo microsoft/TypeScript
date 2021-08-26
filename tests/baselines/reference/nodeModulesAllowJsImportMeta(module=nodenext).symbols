@@ -3,6 +3,7 @@
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.js, 1, 5))
 >import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 
 export {x};
@@ -13,6 +14,7 @@ export {x};
 const x = import.meta.url;
 >x : Symbol(x, Decl(index.js, 1, 5))
 >import.meta.url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
+>import.meta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 >url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 
 export {x};

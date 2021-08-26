@@ -32,7 +32,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: context => {
             const { sourceFile, errorCode, span, cancellationToken, program } = context;
-            const expression = getFixableErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
+            const expression = getAwaitErrorSpanExpression(sourceFile, errorCode, span, cancellationToken, program);
             if (!expression) {
                 return;
             }
@@ -48,7 +48,7 @@ namespace ts.codefix {
             const checker = context.program.getTypeChecker();
             const fixedDeclarations = new Set<number>();
             return codeFixAll(context, errorCodes, (t, diagnostic) => {
-                const expression = getFixableErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
+                const expression = getAwaitErrorSpanExpression(sourceFile, diagnostic.code, diagnostic, cancellationToken, program);
                 if (!expression) {
                     return;
                 }
@@ -58,6 +58,13 @@ namespace ts.codefix {
             });
         },
     });
+
+    function getAwaitErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
+        const expression = getFixableErrorSpanExpression(sourceFile, span);
+        return expression
+            && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
+            && isInsideAwaitableBody(expression) ? expression : undefined;
+    }
 
     function getDeclarationSiteFix(context: CodeFixContext | CodeFixAllContext, expression: Expression, errorCode: number, checker: TypeChecker, trackChanges: ContextualTrackChangesFunction, fixedDeclarations?: Set<number>) {
         const { sourceFile, program, cancellationToken } = context;
@@ -93,23 +100,6 @@ namespace ts.codefix {
             code === errorCode &&
             !!relatedInformation &&
             some(relatedInformation, related => related.code === Diagnostics.Did_you_forget_to_use_await.code));
-    }
-
-    function getFixableErrorSpanExpression(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program): Expression | undefined {
-        const token = getTokenAtPosition(sourceFile, span.start);
-        // Checker has already done work to determine that await might be possible, and has attached
-        // related info to the node, so start by finding the expression that exactly matches up
-        // with the diagnostic range.
-        const expression = findAncestor(token, node => {
-            if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
-                return "quit";
-            }
-            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
-        }) as Expression | undefined;
-
-        return expression
-            && isMissingAwaitError(sourceFile, errorCode, span, cancellationToken, program)
-            && isInsideAwaitableBody(expression) ? expression : undefined;
     }
 
     interface AwaitableInitializer {

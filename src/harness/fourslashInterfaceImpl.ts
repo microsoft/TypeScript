@@ -48,12 +48,16 @@ namespace FourSlashInterface {
         }
     }
 
-    export class Plugins {
+    export class Config {
         constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
             this.state.configurePlugin(pluginName, configuration);
+        }
+
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions): void {
+            this.state.setCompilerOptionsForInferredProjects(options);
         }
     }
 
@@ -1409,7 +1413,7 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
-        export const undefinedVarEntry: ExpectedCompletionEntry = {
+        export const undefinedVarEntry: ExpectedCompletionEntryObject = {
             name: "undefined",
             kind: "var",
             sortText: SortText.GlobalsOrKeywords
@@ -1568,11 +1572,14 @@ namespace FourSlashInterface {
         ];
 
         export function globalsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
+            const firstEntry = plus[0];
+            const afterUndefined = typeof firstEntry !== "string" && firstEntry.sortText! > undefinedVarEntry.sortText!;
             return [
                 globalThisEntry,
                 ...globalsVars,
-                ...plus,
+                ...afterUndefined ? ts.emptyArray : plus,
                 undefinedVarEntry,
+                ...afterUndefined ? plus : ts.emptyArray,
                 ...globalKeywords];
         }
 

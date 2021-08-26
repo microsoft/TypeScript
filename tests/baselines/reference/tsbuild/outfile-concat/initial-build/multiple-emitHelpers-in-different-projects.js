@@ -347,7 +347,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var N;
 (function (N) {
@@ -411,7 +411,7 @@ sourceFile:../second/second_part1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var N;
 1 >
@@ -775,7 +775,7 @@ sourceFile:../second/second_part2.ts
 >>>//# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1443,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":214,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../second","sourceFiles":["../second/second_part1.ts","../second/second_part2.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1471,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":214,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -799,7 +799,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -807,10 +807,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-text: (868-1443)
+text: (896-1471)
 var N;
 (function (N) {
     function f() {
@@ -870,13 +870,13 @@ declare class C {
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1443,
+          "pos": 896,
+          "end": 1471,
           "kind": "text"
         }
       ],
@@ -1830,7 +1830,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var s = "Hello, world";
 console.log(s);
@@ -1919,7 +1919,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var s = "Hello, world";
 1 >
@@ -2673,7 +2673,7 @@ sourceFile:../../third_part1.ts
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1368,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1370,"end":1597,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1370,"end":1597,"kind":"text"}]},{"pos":1597,"end":2172,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1597,"end":2172,"kind":"text"}]},{"pos":2172,"end":2325,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"../..","sourceFiles":["../../third_part1.ts"],"js":{"sections":[{"pos":0,"end":500,"kind":"emitHelpers","data":"typescript:rest"},{"pos":502,"end":1006,"kind":"emitHelpers","data":"typescript:read"},{"pos":1008,"end":1396,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":1398,"end":1625,"kind":"prepend","data":"../../../first/bin/first-output.js","texts":[{"pos":1398,"end":1625,"kind":"text"}]},{"pos":1625,"end":2200,"kind":"prepend","data":"../../../2/second-output.js","texts":[{"pos":1625,"end":2200,"kind":"text"}]},{"pos":2200,"end":2353,"kind":"text"}],"sources":{"helpers":["typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":208,"kind":"prepend","data":"../../../first/bin/first-output.d.ts","texts":[{"pos":0,"end":208,"kind":"text"}]},{"pos":208,"end":422,"kind":"prepend","data":"../../../2/second-output.d.ts","texts":[{"pos":208,"end":422,"kind":"text"}]},{"pos":422,"end":492,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -2710,7 +2710,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1008-1368):: typescript:spreadArray
+emitHelpers: (1008-1396):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -2718,12 +2718,12 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-prepend: (1370-1597):: ../../../first/bin/first-output.js texts:: 1
+prepend: (1398-1625):: ../../../first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1370-1597)
+text: (1398-1625)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -2735,9 +2735,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1597-2172):: ../../../2/second-output.js texts:: 1
+prepend: (1625-2200):: ../../../2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1597-2172)
+text: (1625-2200)
 var N;
 (function (N) {
     function f() {
@@ -2763,7 +2763,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (2172-2325)
+text: (2200-2353)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
@@ -2831,39 +2831,39 @@ declare function forthirdthird_part1Rest(): void;
         },
         {
           "pos": 1008,
-          "end": 1368,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 1370,
-          "end": 1597,
+          "pos": 1398,
+          "end": 1625,
           "kind": "prepend",
           "data": "../../../first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1370,
-              "end": 1597,
+              "pos": 1398,
+              "end": 1625,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1597,
-          "end": 2172,
+          "pos": 1625,
+          "end": 2200,
           "kind": "prepend",
           "data": "../../../2/second-output.js",
           "texts": [
             {
-              "pos": 1597,
-              "end": 2172,
+              "pos": 1625,
+              "end": 2200,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2172,
-          "end": 2325,
+          "pos": 2200,
+          "end": 2353,
           "kind": "text"
         }
       ],
