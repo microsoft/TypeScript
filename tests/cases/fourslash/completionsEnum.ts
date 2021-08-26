@@ -4,7 +4,8 @@
 ////	v
 ////}
 ////const enum ES {
-////	v = "str"
+////	v = "str",
+////    x = "str2"
 ////}
 ////const e: E = /*a*/;
 ////const es: ES = /*b*/;
@@ -24,7 +25,7 @@ verify.completions({
 }, {
     marker: "b",
     isNewIdentifierLocation: true,
-    excludes: ["str"],
+    excludes: ["str", "str2"],
     includes: [
         {
             name: "ES",

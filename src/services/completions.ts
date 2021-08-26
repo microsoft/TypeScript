@@ -1503,7 +1503,7 @@ namespace ts.Completions {
 
         const literals = mapDefined(
             contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
-            t => t.isLiteral() && !(t.symbol?.flags & SymbolFlags.EnumMember) ? t.value : undefined);
+            t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
         const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
         return {
