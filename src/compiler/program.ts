@@ -903,6 +903,7 @@ namespace ts {
                 withExtension.extension = extensionFromPath(resolved.resolvedFileName);
                 return withExtension;
             });
+            moduleResolutionCache = host.getModuleResolutionCache?.();
         }
         else {
             moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);

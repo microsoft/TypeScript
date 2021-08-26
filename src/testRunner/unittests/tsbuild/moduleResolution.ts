@@ -148,8 +148,8 @@ namespace ts.tscWatch {
                 {
                     caption: "removes those errors when a package file is changed to cjs extensions",
                     change: sys => {
-                        replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `"main": "build/index.js"`, `"main": "build/index.cjs"`);
-                        sys.renameFile(`${projectRoot}/packages/pkg2/index.ts`, `${projectRoot}/packages/pkg2/index.cts`)
+                        replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
+                        sys.renameFile(`${projectRoot}/packages/pkg2/index.ts`, `${projectRoot}/packages/pkg2/index.cts`);
                     },
                     timeouts: runQueuedTimeoutCallbacks,
                 },

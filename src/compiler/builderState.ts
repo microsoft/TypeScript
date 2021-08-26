@@ -82,6 +82,7 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: boolean | undefined;
+            impliedFormat: number | undefined;
         }
 
         export interface ReadonlyManyToManyPathMap {
@@ -332,7 +333,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined, impliedFormat: sourceFile.impliedNodeFormat });
             }
 
             return {
