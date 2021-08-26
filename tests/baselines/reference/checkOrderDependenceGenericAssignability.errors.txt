@@ -1,7 +1,6 @@
 tests/cases/compiler/checkOrderDependenceGenericAssignability.ts(24,7): error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
-  Types of property 'child' are incompatible.
-    Type 'Child<unknown, unknown>' is not assignable to type 'Child<string, unknown>'.
-      Type 'unknown' is not assignable to type 'string'.
+  The types of 'child.a' are incompatible between these types.
+    Type 'unknown' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/checkOrderDependenceGenericAssignability.ts (1 errors) ====
@@ -31,7 +30,6 @@ tests/cases/compiler/checkOrderDependenceGenericAssignability.ts(24,7): error TS
     const notString: Parent<string> = pu;
           ~~~~~~~~~
 !!! error TS2322: Type 'Parent<unknown>' is not assignable to type 'Parent<string>'.
-!!! error TS2322:   Types of property 'child' are incompatible.
-!!! error TS2322:     Type 'Child<unknown, unknown>' is not assignable to type 'Child<string, unknown>'.
-!!! error TS2322:       Type 'unknown' is not assignable to type 'string'.
+!!! error TS2322:   The types of 'child.a' are incompatible between these types.
+!!! error TS2322:     Type 'unknown' is not assignable to type 'string'.
     

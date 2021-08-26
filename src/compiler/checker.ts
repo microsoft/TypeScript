@@ -18791,10 +18791,11 @@ namespace ts {
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((source as TypeReference).target);
-                        // We return Ternary.Maybe for a recursive invocation of getVariances (signalled by emptyArray). This
+                        // We return Ternary.Unknown for a recursive invocation of getVariances (signalled by emptyArray). This
                         // effectively means we measure variance only from type parameter occurrences that aren't nested in
                         // recursive instantiations of the generic type.
                         if (variances === emptyArray) {
+                            outofbandVarianceMarkerHandler!(/*onlyUnreliable*/ false);
                             return Ternary.Unknown;
                         }
                         const varianceResult = relateVariances(getTypeArguments(source as TypeReference), getTypeArguments(target as TypeReference), variances, intersectionState);
@@ -19756,7 +19757,7 @@ namespace ts {
                     outofbandVarianceMarkerHandler = oldHandler;
                     if (unmeasurable || unreliable) {
                         if (unmeasurable) {
-                            variance |= VarianceFlags.Unmeasurable;
+                            variance = VarianceFlags.Unmeasurable;
                         }
                         if (unreliable) {
                             variance |= VarianceFlags.Unreliable;
