@@ -495,6 +495,7 @@ namespace ts {
     export interface PackageJsonInfoCache {
         /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
         /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
+        /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
         clear(): void;
     }
 
@@ -560,7 +561,7 @@ namespace ts {
 
     function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
         let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
-        return { getPackageJsonInfo, setPackageJsonInfo, clear };
+        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries };
         function getPackageJsonInfo(packageJsonPath: string) {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
@@ -569,6 +570,10 @@ namespace ts {
         }
         function clear() {
             cache = undefined;
+        }
+        function entries() {
+            const iter = cache?.entries();
+            return iter ? arrayFrom(iter) : [];
         }
     }
 
@@ -1089,9 +1094,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string | undefined {
-        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
-        return resolvedModule && resolvedModule.resolvedFileName;
+    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost) {
+        return tryResolveJSModuleWorker(moduleName, initialDir, host).resolvedModule;
     }
 
     const jsOnlyExtensions = [Extensions.JavaScript];

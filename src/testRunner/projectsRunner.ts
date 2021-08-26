@@ -56,14 +56,18 @@ namespace project {
             for (const { name, payload } of ProjectTestCase.getConfigurations(testCaseFileName)) {
                 describe("Compiling project for " + payload.testCase.scenario + ": testcase " + testCaseFileName + (name ? ` (${name})` : ``), () => {
                     let projectTestCase: ProjectTestCase | undefined;
-                    before(() => { projectTestCase = new ProjectTestCase(testCaseFileName, payload); });
+                    before(() => {
+                        projectTestCase = new ProjectTestCase(testCaseFileName, payload);
+                    });
                     it(`Correct module resolution tracing for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyResolution());
                     it(`Correct errors for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDiagnostics());
                     it(`Correct JS output for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyJavaScriptOutput());
                     // NOTE: This check was commented out in previous code. Leaving this here to eventually be restored if needed.
                     // it(`Correct sourcemap content for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifySourceMapRecord());
                     it(`Correct declarations for ${testCaseFileName}`, () => projectTestCase && projectTestCase.verifyDeclarations());
-                    after(() => { projectTestCase = undefined; });
+                    after(() => {
+                        projectTestCase = undefined;
+                    });
                 });
             }
         }

@@ -44,7 +44,8 @@ type TT0 = TupleOf<string, 4>;
 type TT1 = TupleOf<number, 0 | 2 | 4>;
 type TT2 = TupleOf<number, number>;
 type TT3 = TupleOf<number, any>;
-type TT4 = TupleOf<number, 100>;  // Depth error
+type TT4 = TupleOf<number, 100>;
+type TT5 = TupleOf<number, 1000>;  // Depth error
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
     tn = tm;
@@ -194,6 +195,7 @@ declare type TT1 = TupleOf<number, 0 | 2 | 4>;
 declare type TT2 = TupleOf<number, number>;
 declare type TT3 = TupleOf<number, any>;
 declare type TT4 = TupleOf<number, 100>;
+declare type TT5 = TupleOf<number, 1000>;
 declare function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>): void;
 declare function f23<T>(t: TupleOf<T, 3>): T;
 interface Box<T> {

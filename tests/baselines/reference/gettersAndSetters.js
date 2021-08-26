@@ -39,35 +39,32 @@ interface I1 {
 
 var i:I1 = function (n) {return n;}
 
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+  let obj = {
+    set prop(_: any) { x.toUpperCase(); },
+    get prop() { return x.toUpperCase() },
+    method() { return x.toUpperCase() }
+  }
+}
+
 
 //// [gettersAndSetters.js]
 // classes
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.fooBack = "";
         this.bazBack = "";
         this.get = function () { }; // ok
         this.set = function () { }; // ok
     }
-    Object.defineProperty(C.prototype, "Foo", {
-        get: function () { return this.fooBack; } // ok
-        ,
-        set: function (foo) { this.fooBack = foo; } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "Bar", {
-        get: function () { return C.barBack; } // ok
-        ,
-        set: function (bar) { C.barBack = bar; } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    C.barBack = "";
-    return C;
-}());
+    get Foo() { return this.fooBack; } // ok
+    set Foo(foo) { this.fooBack = foo; } // ok
+    static get Bar() { return C.barBack; } // ok
+    static set Bar(bar) { C.barBack = bar; } // ok
+}
+C.barBack = "";
 var c = new C();
 var foo = c.Foo;
 c.Foo = "foov";
@@ -80,3 +77,12 @@ var o = { get Foo() { return 0; }, set Foo(val) { val; } }; // o
 var ofg = o.Foo;
 o.Foo = 0;
 var i = function (n) { return n; };
+// Repro from #45006
+const x = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+    let obj = {
+        set prop(_) { x.toUpperCase(); },
+        get prop() { return x.toUpperCase(); },
+        method() { return x.toUpperCase(); }
+    };
+}

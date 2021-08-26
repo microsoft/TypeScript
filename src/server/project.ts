@@ -1070,7 +1070,7 @@ namespace ts.server {
                 this.lastCachedUnresolvedImportsList = undefined;
             }
 
-            const isFirstLoad = this.projectProgramVersion === 0;
+            const isFirstProgramLoad = this.projectProgramVersion === 0 && hasNewProgram;
             if (hasNewProgram) {
                 this.projectProgramVersion++;
             }
@@ -1078,7 +1078,7 @@ namespace ts.server {
                 if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
                 this.autoImportProviderHost?.markAsDirty();
             }
-            if (isFirstLoad) {
+            if (isFirstProgramLoad) {
                 // Preload auto import provider so it's not created during completions request
                 this.getPackageJsonAutoImportProvider();
             }
@@ -1581,7 +1581,9 @@ namespace ts.server {
 
             const log = (message: string) => this.projectService.logger.info(message);
             let errorLogs: string[] | undefined;
-            const logError = (message: string) => { (errorLogs || (errorLogs = [])).push(message); };
+            const logError = (message: string) => {
+                (errorLogs || (errorLogs = [])).push(message);
+            };
             const resolvedModule = firstDefined(searchPaths, searchPath =>
                 Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log, logError) as PluginModuleFactory | undefined);
             if (resolvedModule) {
@@ -1902,6 +1904,11 @@ namespace ts.server {
                 return ts.emptyArray;
             }
 
+            const program = hostProject.getCurrentProgram();
+            if (!program) {
+                return ts.emptyArray;
+            }
+
             let dependencyNames: Set<string> | undefined;
             let rootNames: string[] | undefined;
             const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
@@ -1912,17 +1919,25 @@ namespace ts.server {
             }
 
             if (dependencyNames) {
-                const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(
-                    name,
-                    rootFileName,
-                    compilerOptions,
-                    moduleResolutionHost));
+                const resolutions = mapDefined(arrayFrom(dependencyNames.keys()), name => {
+                    const types = resolveTypeReferenceDirective(
+                        name,
+                        rootFileName,
+                        compilerOptions,
+                        moduleResolutionHost);
 
-                const program = hostProject.getCurrentProgram()!;
+                    if (types.resolvedTypeReferenceDirective) {
+                        return types.resolvedTypeReferenceDirective;
+                    }
+                    if (compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
+                        return tryResolveJSModule(name, hostProject.currentDirectory, moduleResolutionHost);
+                    }
+                });
+
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
-                    if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
-                    const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;
+                    if (!resolution.resolvedFileName) continue;
+                    const { resolvedFileName, originalPath } = resolution;
                     if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
                         rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity

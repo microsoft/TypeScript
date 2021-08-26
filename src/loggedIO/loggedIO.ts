@@ -205,9 +205,7 @@ namespace Playback {
         return log;
     }
 
-    function initWrapper(wrapper: PlaybackSystem, underlying: ts.System): void;
-    function initWrapper(wrapper: PlaybackIO, underlying: Harness.IO): void;
-    function initWrapper(wrapper: PlaybackSystem | PlaybackIO, underlying: ts.System | Harness.IO): void {
+    export function initWrapper(...[wrapper, underlying]: [PlaybackSystem, ts.System] | [PlaybackIO, Harness.IO]): void {
         ts.forEach(Object.keys(underlying), prop => {
             (wrapper as any)[prop] = (underlying as any)[prop];
         });

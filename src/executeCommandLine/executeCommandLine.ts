@@ -68,7 +68,7 @@ namespace ts {
     }
 
     function defaultIsPretty(sys: System) {
-        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
+        return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
     }
 
     function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
@@ -96,26 +96,47 @@ namespace ts {
                 bold: (str: string) => str,
                 blue: (str: string) => str,
                 blueBackground: (str: string) => str,
-                white: (str: string) => str
+                brightWhite: (str: string) => str
             };
         }
 
         function bold(str: string) {
             return `\x1b[1m${str}\x1b[22m`;
         }
+
+        const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+        const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
+        const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
+
         function blue(str: string) {
-            return `\x1b[34m${str}\x1b[39m`;
+            // Effectively Powershell and Command prompt users use cyan instead
+            // of blue because the default theme doesn't show blue with enough contrast.
+            if (isWindows && !isWindowsTerminal && !isVSCode) {
+                return brightWhite(str);
+            }
+
+            return `\x1b[94m${str}\x1b[39m`;
         }
+
+        // There are ~3 types of terminal color support: 16 colors, 256 and 16m colors
+        // If there is richer color support, e.g. 256+ we can use extended ANSI codes which are not just generic 'blue'
+        // but a 'lighter blue' which is closer to the blue in the TS logo.
+        const supportsRicherColors = sys.getEnvironmentVariable("COLORTERM") === "truecolor" || sys.getEnvironmentVariable("TERM") === "xterm-256color";
         function blueBackground(str: string) {
-            return `\x1b[44m${str}\x1b[49m`;
+            if (supportsRicherColors) {
+                return `\x1B[48;5;68m${str}\x1B[39;49m`;
+            }
+            else {
+                return `\x1b[44m${str}\x1B[39;49m`;
+            }
         }
-        function white(str: string) {
-            return `\x1b[37m${str}\x1b[39m`;
+        function brightWhite(str: string) {
+            return `\x1b[97m${str}\x1b[39m`;
         }
         return {
             bold,
             blue,
-            white,
+            brightWhite,
             blueBackground
         };
     }
@@ -143,7 +164,7 @@ namespace ts {
         const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
         // Note: child_process might return `terminalWidth` as undefined.
-        if (terminalWidth >= 60) {
+        if (terminalWidth >= 80) {
             let description = "";
             if (option.description) {
                 description = getDiagnosticText(option.description);
@@ -340,7 +361,7 @@ namespace ts {
         example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
         example("tsc -b", Diagnostics.Build_a_composite_project_in_the_working_directory);
         example("tsc --init", Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
-        example("tsc -p .path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
+        example("tsc -p ./path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
         example("tsc --help --all", Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
         example(["tsc --noEmit", "tsc --target esnext"], Diagnostics.Compiles_the_current_project_with_additional_settings);
 
@@ -392,7 +413,7 @@ namespace ts {
         const tsIconLength = 5;
 
         const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-        const tsIconSecondLine = colors.blueBackground(colors.white(padLeft("TS ", tsIconLength)));
+        const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
         // If we have enough space, print TS icon.
         if (terminalWidth >= tscExplanation.length + tsIconLength) {
             // right align of the icon is 120 at most.

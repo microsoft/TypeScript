@@ -56,6 +56,8 @@ class C2 extends Base {
 
         var t = new.target;
 >t : Symbol(t, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 29, 11))
+>new.target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
+>target : Symbol(C2, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 23, 1))
 
         var y = _newTarget;
 >y : Symbol(y, Decl(shadowedReservedCompilerDeclarationsWithNoEmit.ts, 30, 11))

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment1.js ===
+
+No type information for this code.=== tests/cases/compiler/a.js ===
+/**
+ * @typedef {Object} Foo
+ * @property {boolean} a
+ * @property {boolean} b
+ */
+
+/** @type {Foo} */
+export default { c: false };
+>{ c: false } : { c: boolean; }
+>c : boolean
+>false : false
+
+=== tests/cases/compiler/b.js ===
+import a from "./a";
+>a : import("tests/cases/compiler/a").Foo
+
+a;
+>a : import("tests/cases/compiler/a").Foo
+
