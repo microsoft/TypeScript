@@ -284,7 +284,30 @@ interface Array<T> {}`
         }
     }
 
-    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, includeLib?: boolean, includeModule?: boolean, expectFailure = false, onlyProvideAction = false) {
+    const enum ConvertToAsyncTestFlags {
+        None,
+        IncludeLib = 1 << 0,
+        IncludeModule = 1 << 1,
+        ExpectSuggestionDiagnostic = 1 << 2,
+        ExpectNoSuggestionDiagnostic = 1 << 3,
+        ExpectAction = 1 << 4,
+        ExpectNoAction = 1 << 5,
+
+        ExpectSuccess = ExpectSuggestionDiagnostic | ExpectAction,
+        ExpectFailed = ExpectNoSuggestionDiagnostic | ExpectNoAction,
+    }
+
+    function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: string, text: string, baselineFolder: string, flags: ConvertToAsyncTestFlags) {
+        const includeLib = !!(flags & ConvertToAsyncTestFlags.IncludeLib);
+        const includeModule = !!(flags & ConvertToAsyncTestFlags.IncludeModule);
+        const expectSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic);
+        const expectNoSuggestionDiagnostic = !!(flags & ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic);
+        const expectAction = !!(flags & ConvertToAsyncTestFlags.ExpectAction);
+        const expectNoAction = !!(flags & ConvertToAsyncTestFlags.ExpectNoAction);
+        const expectFailure = expectNoSuggestionDiagnostic || expectNoAction;
+        Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
+        Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
+
         const t = extractTest(text);
         const selectionRange = t.ranges.get("selection")!;
         if (!selectionRange) {
@@ -327,35 +350,47 @@ interface Array<T> {}`
             const diagnostics = languageService.getSuggestionDiagnostics(f.path);
             const diagnostic = find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
                 diagnostic.start === context.span.start && diagnostic.length === context.span.length);
-            if (expectFailure) {
-                assert.isUndefined(diagnostic);
-            }
-            else {
-                assert.exists(diagnostic);
-            }
-
             const actions = codefix.getFixes(context);
             const action = find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
-            if (expectFailure && !onlyProvideAction) {
-                assert.isNotTrue(action && action.changes.length > 0);
-                return;
+
+            let outputText: string | null;
+            if (action?.changes.length) {
+                const data: string[] = [];
+                data.push(`// ==ORIGINAL==`);
+                data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
+                const changes = action.changes;
+                assert.lengthOf(changes, 1);
+
+                data.push(`// ==ASYNC FUNCTION::${action.description}==`);
+                const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
+                data.push(newText);
+
+                const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
+                assert.isFalse(hasSyntacticDiagnostics(diagProgram));
+                outputText = data.join(newLineCharacter);
+            }
+            else {
+                // eslint-disable-next-line no-null/no-null
+                outputText = null;
             }
 
-            assert.isTrue(action && action.changes.length > 0);
+            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, outputText);
 
-            const data: string[] = [];
-            data.push(`// ==ORIGINAL==`);
-            data.push(text.replace("[#|", "/*[#|*/").replace("|]", "/*|]*/"));
-            const changes = action!.changes;
-            assert.lengthOf(changes, 1);
+            if (expectNoSuggestionDiagnostic) {
+                assert.isUndefined(diagnostic, "Expected code fix to not provide a suggestion diagnostic");
+            }
+            else if (expectSuggestionDiagnostic) {
+                assert.exists(diagnostic, "Expected code fix to provide a suggestion diagnostic");
+            }
 
-            data.push(`// ==ASYNC FUNCTION::${action!.description}==`);
-            const newText = textChanges.applyChanges(sourceFile.text, changes[0].textChanges);
-            data.push(newText);
-
-            const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
-            assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            Harness.Baseline.runBaseline(`${baselineFolder}/${caption}${extension}`, data.join(newLineCharacter));
+            if (expectNoAction) {
+                assert.isNotTrue(!!action?.changes.length, "Expected code fix to not provide an action");
+                assert.isNotTrue(typeof outputText === "string", "Expected code fix to not apply changes");
+            }
+            else if (expectAction) {
+                assert.isTrue(!!action?.changes.length, "Expected code fix to provide an action");
+                assert.isTrue(typeof outputText === "string", "Expected code fix to apply changes");
+            }
         }
 
         function makeLanguageService(file: TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
@@ -379,19 +414,23 @@ interface Array<T> {}`
     }
 
     const _testConvertToAsyncFunction = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuccess);
     });
 
     const _testConvertToAsyncFunctionFailed = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ false, /*expectFailure*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectFailed);
     });
 
     const _testConvertToAsyncFunctionFailedSuggestion = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ false, /*expectFailure*/ true, /*onlyProvideAction*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectNoSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectAction);
+    });
+
+    const _testConvertToAsyncFunctionFailedAction = createTestWrapper((it, caption: string, text: string) => {
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.ExpectSuggestionDiagnostic | ConvertToAsyncTestFlags.ExpectNoAction);
     });
 
     const _testConvertToAsyncFunctionWithModule = createTestWrapper((it, caption: string, text: string) => {
-        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", /*includeLib*/ true, /*includeModule*/ true);
+        testConvertToAsyncFunction(it, caption, text, "convertToAsyncFunction", ConvertToAsyncTestFlags.IncludeLib | ConvertToAsyncTestFlags.IncludeModule | ConvertToAsyncTestFlags.ExpectSuccess);
     });
 
     describe("unittests:: services:: convertToAsyncFunction", () => {
@@ -442,11 +481,11 @@ function [#|f|](): Promise<void>{
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }).catch(err => { console.log(err); });
 }`);
-        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRej", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchAndRej", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(result => { console.log(result); }, rejection => { console.log("rejected:", rejection); }).catch(err => { console.log(err) });
 }`);
-        _testConvertToAsyncFunction("convertToAsyncFunction_CatchAndRejRef", `
+        _testConvertToAsyncFunctionFailed("convertToAsyncFunction_CatchAndRejRef", `
 function [#|f|]():Promise<void> {
     return fetch('https://typescriptlang.org').then(res, rej).catch(catch_err)
 }
@@ -1770,6 +1809,31 @@ declare function foo(): Promise<number>;
 function [#|f|](): Promise<number> {
     return foo().then(x => Promise.resolve(x + 1)).finally(() => console.log("done")).then(y => y + 2);
 }`);
-
+        _testConvertToAsyncFunctionFailedAction("convertToAsyncFunction_returnInBranch", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(() => {
+        if (Math.random()) {
+            return 1;
+        }
+        return 2;
+    }).then(a => {
+        return a + 1;
+    });
+}
+`);
+        _testConvertToAsyncFunctionFailedAction("convertToAsyncFunction_partialReturnInBranch", `
+declare function foo(): Promise<number>;
+function [#|f|](): Promise<number> {
+    return foo().then(() => {
+        if (Math.random()) {
+            return 1;
+        }
+        console.log("foo");
+    }).then(a => {
+        return a + 1;
+    });
+}
+`);
     });
 }
