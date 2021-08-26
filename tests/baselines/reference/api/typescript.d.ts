@@ -2883,7 +2883,6 @@ declare namespace ts {
         noEmit?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
-        noErasingImportedNames?: boolean;
         noErrorTruncation?: boolean;
         noFallthroughCasesInSwitch?: boolean;
         noImplicitAny?: boolean;
@@ -2905,6 +2904,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;
         jsxFactory?: string;

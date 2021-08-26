@@ -1,4 +1,4 @@
-// @noErasingImportedNames: true
+// @preserveValueImports: true
 // @isolatedModules: true,false
 // @module: esnext
 

@@ -3357,7 +3357,7 @@ namespace ts {
         }
 
         function shouldEmitAliasDeclaration(node: Node): boolean {
-            return compilerOptions.noErasingImportedNames
+            return compilerOptions.preserveValueImports
                 ? resolver.isValueAliasDeclaration(node)
                 : resolver.isReferencedAliasDeclaration(node);
         }

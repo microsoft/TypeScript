@@ -1169,7 +1169,7 @@ namespace ts {
             defaultValueDescription: "false"
         },
         {
-            name: "noErasingImportedNames",
+            name: "preserveValueImports",
             type: "boolean",
             affectsEmit: true,
             category: Diagnostics.Emit,

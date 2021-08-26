@@ -1408,11 +1408,11 @@
         "category": "Error",
         "code": 1443
     },
-    "'{0}' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.": {
+    "'{0}' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1444
     },
-    "'{0}' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.": {
+    "'{0}' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1446
     },
@@ -4054,7 +4054,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'noErasingImportedNames' may be enabled only when 'module' is set to 'es2015' or later.": {
+    "Option 'preserveValueImports' may be enabled only when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },

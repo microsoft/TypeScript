@@ -1,11 +1,11 @@
-tests/cases/conformance/externalModules/typeOnly/c.ts(1,8): error TS1444: 'DefaultA' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
-tests/cases/conformance/externalModules/typeOnly/c.ts(2,10): error TS1444: 'A' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
-tests/cases/conformance/externalModules/typeOnly/c.ts(3,8): error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
-tests/cases/conformance/externalModules/typeOnly/c.ts(4,10): error TS1446: 'B' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(1,8): error TS1444: 'DefaultA' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(2,10): error TS1444: 'A' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(3,8): error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/c.ts(4,10): error TS1446: 'B' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 tests/cases/conformance/externalModules/typeOnly/d.ts(1,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
 tests/cases/conformance/externalModules/typeOnly/d.ts(2,10): error TS1448: 'B' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.
-tests/cases/conformance/externalModules/typeOnly/e.ts(1,10): error TS1444: 'AA' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
-tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,10): error TS1444: 'AA' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
+tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1446: 'BB' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 
 
 ==== tests/cases/conformance/externalModules/typeOnly/a.ts (0 errors) ====
@@ -19,17 +19,17 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1446: 'BB' 
 ==== tests/cases/conformance/externalModules/typeOnly/c.ts (4 errors) ====
     import DefaultA from "./a";
            ~~~~~~~~
-!!! error TS1444: 'DefaultA' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1444: 'DefaultA' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
     import { A } from "./a";
              ~
-!!! error TS1444: 'A' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1444: 'A' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
     import DefaultB from "./b";
            ~~~~~~~~
-!!! error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1446: 'DefaultB' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 !!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:18: 'DefaultB' was exported here.
     import { B } from "./b";
              ~
-!!! error TS1446: 'B' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1446: 'B' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 !!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'B' was exported here.
     
 ==== tests/cases/conformance/externalModules/typeOnly/c.fixed.ts (0 errors) ====
@@ -54,9 +54,9 @@ tests/cases/conformance/externalModules/typeOnly/e.ts(1,14): error TS1446: 'BB' 
 ==== tests/cases/conformance/externalModules/typeOnly/e.ts (2 errors) ====
     import { AA, BB } from "./d";
              ~~
-!!! error TS1444: 'AA' is a type and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1444: 'AA' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
                  ~~
-!!! error TS1446: 'BB' resolves to a type-only declaration and must be imported with a type-only import when 'noErasingImportedNames' and 'isolatedModules' are both enabled.
+!!! error TS1446: 'BB' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.
 !!! related TS1377 tests/cases/conformance/externalModules/typeOnly/b.ts:2:15: 'BB' was exported here.
     
 ==== tests/cases/conformance/externalModules/typeOnly/e.fixed.ts (0 errors) ====

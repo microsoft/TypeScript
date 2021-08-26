@@ -85,7 +85,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "noEmitOnError": true,                            /* Disable emitting files if any type checking errors are reported. */
     // "preserveConstEnums": true,                       /* Disable erasing `const enum` declarations in generated code. */
     "declarationDir": "decls",                           /* Specify the output directory for generated declaration files. */
-    // "noErasingImportedNames": true,                   /* Disable the removal of unused imported identifiers from the JavaScript output. */
+    // "preserveValueImports": true,                     /* Disable the removal of unused imported identifiers from the JavaScript output. */
 
     /* Interop Constraints */
     // "isolatedModules": true,                          /* Ensure that each file can be safely transpiled without relying on other imports. */
