@@ -25,7 +25,7 @@ verify.completions({
 }, {
     marker: "b",
     isNewIdentifierLocation: true,
-    excludes: ["str", "str2"],
+    excludes: [`"str"`, `"str2"`],
     includes: [
         {
             name: "ES",
