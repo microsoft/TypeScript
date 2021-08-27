@@ -8053,22 +8053,6 @@ namespace ts {
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
-                function parseBracketNameInTemplateTag(): { name: Identifier, defaultType?: TypeNode } {
-                    const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
-                    if (isBracketed) {
-                        skipWhitespace();
-                    }
-                    const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
-                    let defaultType: TypeNode | undefined;
-                    if (isBracketed) {
-                        skipWhitespace();
-                        parseExpected(SyntaxKind.EqualsToken);
-                        defaultType = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
-                        parseExpected(SyntaxKind.CloseBracketToken);
-                    }
-                    return { name, defaultType };
-                }
-
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
                     const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
@@ -8457,7 +8441,20 @@ namespace ts {
 
                 function parseTemplateTagTypeParameter() {
                     const typeParameterPos = getNodePos();
-                    const { name, defaultType } = parseBracketNameInTemplateTag();
+                    const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
+                    if (isBracketed) {
+                        skipWhitespace();
+                    }
+                    const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
+
+                    let defaultType: TypeNode | undefined;
+                    if (isBracketed) {
+                        skipWhitespace();
+                        parseExpected(SyntaxKind.EqualsToken);
+                        defaultType = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
+                        parseExpected(SyntaxKind.CloseBracketToken);
+                    }
+
                     if (nodeIsMissing(name)) {
                         return undefined;
                     }
