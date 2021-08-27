@@ -11,6 +11,7 @@ namespace ts.codefix {
         Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2.code,
         Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
         Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
+        Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
         Diagnostics.Cannot_find_name_0.code
     ];
 
@@ -18,7 +19,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const typeChecker = context.program.getTypeChecker();
-            const info = getInfo(context.sourceFile, context.span.start, typeChecker, context.program);
+            const info = getInfo(context.sourceFile, context.span.start, context.errorCode, typeChecker, context.program);
             if (!info) {
                 return undefined;
             }
@@ -49,7 +50,7 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, checker, context.program);
+                    const info = getInfo(diag.file, diag.start, diag.code, checker, context.program);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
@@ -139,6 +140,7 @@ namespace ts.codefix {
         readonly token: Identifier;
         readonly properties: Symbol[];
         readonly parentDeclaration: ObjectLiteralExpression;
+        readonly indentation?: number;
     }
 
     interface JsxAttributesInfo {
@@ -148,43 +150,53 @@ namespace ts.codefix {
         readonly parentDeclaration: JsxOpeningLikeElement;
     }
 
-    function getInfo(sourceFile: SourceFile, tokenPos: number, checker: TypeChecker, program: Program): Info | undefined {
+    function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
         const token = getTokenAtPosition(sourceFile, tokenPos);
-        if (!isIdentifier(token) && !isPrivateIdentifier(token)) {
-            return undefined;
+        const parent = token.parent;
+
+        if (errorCode === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code) {
+            if (!(token.kind === SyntaxKind.OpenBraceToken && isObjectLiteralExpression(parent) && isCallExpression(parent.parent))) return undefined;
+
+            const argIndex = findIndex(parent.parent.arguments, arg => arg === parent);
+            if (argIndex < 0) return undefined;
+
+            const signature = singleOrUndefined(checker.getSignaturesOfType(checker.getTypeAtLocation(parent.parent.expression), SignatureKind.Call));
+            if (!(signature && signature.declaration && signature.parameters[argIndex])) return undefined;
+
+            const param = signature.parameters[argIndex].valueDeclaration;
+            if (!(param && isParameter(param) && isIdentifier(param.name))) return undefined;
+
+            const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent), checker.getTypeAtLocation(param), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
+            if (!length(properties)) return undefined;
+            return { kind: InfoKind.ObjectLiteral, token: param.name, properties, indentation: 0, parentDeclaration: parent };
         }
 
-        const { parent } = token;
+        if (!isMemberName(token)) return undefined;
+
         if (isIdentifier(token) && hasInitializer(parent) && parent.initializer && isObjectLiteralExpression(parent.initializer)) {
             const properties = arrayFrom(checker.getUnmatchedProperties(checker.getTypeAtLocation(parent.initializer), checker.getTypeAtLocation(token), /* requireOptionalProperties */ false, /* matchDiscriminantProperties */ false));
-            if (length(properties)) {
-                return { kind: InfoKind.ObjectLiteral, token, properties, parentDeclaration: parent.initializer };
-            }
+            if (!length(properties)) return undefined;
+            return { kind: InfoKind.ObjectLiteral, token, properties, indentation: undefined, parentDeclaration: parent.initializer };
         }
 
         if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
             const attributes = getUnmatchedAttributes(checker, token.parent);
-            if (length(attributes)) {
-                return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
-            }
+            if (!length(attributes)) return undefined;
+            return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
         }
 
         if (isIdentifier(token) && isCallExpression(parent)) {
             return { kind: InfoKind.Function, token, call: parent, sourceFile, modifierFlags: ModifierFlags.None, parentDeclaration: sourceFile };
         }
 
-        if (!isPropertyAccessExpression(parent)) {
-            return undefined;
-        }
+        if (!isPropertyAccessExpression(parent)) return undefined;
 
         const leftExpressionType = skipConstraint(checker.getTypeAtLocation(parent.expression));
-        const { symbol } = leftExpressionType;
-        if (!symbol || !symbol.declarations) {
-            return undefined;
-        }
+        const symbol = leftExpressionType.symbol;
+        if (!symbol || !symbol.declarations) return undefined;
 
         if (isIdentifier(token) && isCallExpression(parent.parent)) {
             const moduleDeclaration = find(symbol.declarations, isModuleDeclaration);
@@ -194,9 +206,7 @@ namespace ts.codefix {
             }
 
             const moduleSourceFile = find(symbol.declarations, isSourceFile);
-            if (sourceFile.commonJsModuleIndicator) {
-                return;
-            }
+            if (sourceFile.commonJsModuleIndicator) return undefined;
 
             if (moduleSourceFile && !isSourceFileFromLibrary(program, moduleSourceFile)) {
                 return { kind: InfoKind.Function, token, call: parent.parent, sourceFile: moduleSourceFile, modifierFlags: ModifierFlags.Export, parentDeclaration: moduleSourceFile };
@@ -205,17 +215,13 @@ namespace ts.codefix {
 
         const classDeclaration = find(symbol.declarations, isClassLike);
         // Don't suggest adding private identifiers to anything other than a class.
-        if (!classDeclaration && isPrivateIdentifier(token)) {
-            return undefined;
-        }
+        if (!classDeclaration && isPrivateIdentifier(token)) return undefined;
 
         // Prefer to change the class instead of the interface if they are merged
         const classOrInterface = classDeclaration || find(symbol.declarations, isInterfaceDeclaration);
         if (classOrInterface && !isSourceFileFromLibrary(program, classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
-            if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) {
-                return undefined;
-            }
+            if (makeStatic && (isPrivateIdentifier(token) || isInterfaceDeclaration(classOrInterface))) return undefined;
 
             const declSourceFile = classOrInterface.getSourceFile();
             const modifierFlags = (makeStatic ? ModifierFlags.Static : 0) | (startsWithUnderscore(token.text) ? ModifierFlags.Private : 0);
@@ -475,7 +481,12 @@ namespace ts.codefix {
             const initializer = prop.valueDeclaration ? tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeAtLocation(prop.valueDeclaration)) : createUndefined();
             return factory.createPropertyAssignment(prop.name, initializer);
         });
-        changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true));
+        const options = {
+            leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
+            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
+            indentation: info.indentation
+        };
+        changes.replaceNode(context.sourceFile, info.parentDeclaration, factory.createObjectLiteralExpression([...info.parentDeclaration.properties, ...props], /*multiLine*/ true), options);
     }
 
     function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, importAdder: ImportAdder, quotePreference: QuotePreference, type: Type): Expression {

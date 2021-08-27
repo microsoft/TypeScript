@@ -3935,6 +3935,11 @@ namespace FourSlash {
             (this.languageService as ts.server.SessionClient).configurePlugin(pluginName, configuration);
         }
 
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions) {
+            ts.Debug.assert(this.testType === FourSlashTestType.Server);
+            (this.languageService as ts.server.SessionClient).setCompilerOptionsForInferredProjects(options);
+        }
+
         public toggleLineComment(newFileContent: string): void {
             const changes: ts.TextChange[] = [];
             for (const range of this.getRanges()) {
@@ -4077,7 +4082,7 @@ namespace FourSlash {
         try {
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
-            const plugins = new FourSlashInterface.Plugins(state);
+            const config = new FourSlashInterface.Config(state);
             const verify = new FourSlashInterface.Verify(state);
             const edit = new FourSlashInterface.Edit(state);
             const debug = new FourSlashInterface.Debug(state);
@@ -4085,7 +4090,7 @@ namespace FourSlash {
             const cancellation = new FourSlashInterface.Cancellation(state);
             // eslint-disable-next-line no-eval
             const f = eval(wrappedCode);
-            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
+            f(test, goTo, config, verify, edit, debug, format, cancellation, FourSlashInterface.classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
         catch (err) {
             // ensure 'source-map-support' is triggered while we still have the handler attached by accessing `error.stack`.

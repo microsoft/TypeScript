@@ -3410,7 +3410,7 @@ namespace ts {
     // function, the node property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -4216,7 +4216,7 @@ namespace ts {
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
-        /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
+        /** Exclude accesses to private properties. */
         /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
@@ -4355,6 +4355,7 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
+        /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
     }
 
     /* @internal */
@@ -6460,6 +6461,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
+        useCaseSensitiveFileNames?: boolean | (() => boolean);
     }
 
     /**

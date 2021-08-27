@@ -48,12 +48,16 @@ namespace FourSlashInterface {
         }
     }
 
-    export class Plugins {
+    export class Config {
         constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
             this.state.configurePlugin(pluginName, configuration);
+        }
+
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions): void {
+            this.state.setCompilerOptionsForInferredProjects(options);
         }
     }
 

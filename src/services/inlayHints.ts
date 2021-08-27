@@ -156,7 +156,7 @@ namespace ts.InlayHints {
             for (let i = 0; i < args.length; ++i) {
                 const originalArg = args[i];
                 const arg = skipParentheses(originalArg);
-                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableExpression(arg)) {
+                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                     continue;
                 }
 
@@ -202,7 +202,7 @@ namespace ts.InlayHints {
             return some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
         }
 
-        function isHintableExpression(node: Node) {
+        function isHintableLiteral(node: Node) {
             switch (node.kind) {
                 case SyntaxKind.PrefixUnaryExpression: {
                     const operand = (node as PrefixUnaryExpression).operand;
@@ -210,10 +210,6 @@ namespace ts.InlayHints {
                 }
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TemplateExpression:
