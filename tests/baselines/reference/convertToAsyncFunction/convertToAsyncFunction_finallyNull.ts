@@ -8,5 +8,5 @@ function /*[#|*/f/*|]*/(): Promise<number> {
 
 declare function foo(): Promise<number>;
 async function f(): Promise<number> {
-    return await foo();
+    return foo();
 }

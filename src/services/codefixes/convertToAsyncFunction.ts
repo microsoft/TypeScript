@@ -92,12 +92,21 @@ namespace ts.codefix {
             forEachChild(returnStatement, function visit(node) {
                 if (isCallExpression(node)) {
                     const newNodes = transformExpression(node, node, transformer, /*hasContinuation*/ false);
+                    if (hasFailed()) {
+                        return true; // return something truthy to shortcut out of more work
+                    }
                     changes.replaceNodeWithNodes(sourceFile, returnStatement, newNodes);
                 }
                 else if (!isFunctionLike(node)) {
                     forEachChild(node, visit);
+                    if (hasFailed()) {
+                        return true; // return something truthy to shortcut out of more work
+                    }
                 }
             });
+            if (hasFailed()) {
+                return; // shortcut out of more work
+            }
         }
     }
 
@@ -123,14 +132,10 @@ namespace ts.codefix {
                 setOfExpressionsToReturn.add(getNodeId(node));
                 forEach(node.arguments, visit);
             }
-            else if (isPromiseReturningCallExpression(node, checker, "catch")) {
+            else if (isPromiseReturningCallExpression(node, checker, "catch") ||
+                isPromiseReturningCallExpression(node, checker, "finally")) {
                 setOfExpressionsToReturn.add(getNodeId(node));
-                // if .catch() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
-                forEachChild(node, visit);
-            }
-            else if (isPromiseReturningCallExpression(node, checker, "finally")) {
-                setOfExpressionsToReturn.add(getNodeId(node));
-                // if .finally() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
+                // if .catch() or .finally() is the last call in the chain, move leftward in the chain until we hit something else that should be returned
                 forEachChild(node, visit);
             }
             else if (isPromiseTypedExpression(node, checker)) {
@@ -150,6 +155,41 @@ namespace ts.codefix {
         const isExpressionOfName = hasPropertyAccessExpressionWithName(node, name);
         const nodeType = isExpressionOfName && checker.getTypeAtLocation(node);
         return !!(nodeType && checker.getPromisedTypeOfPromise(nodeType));
+    }
+
+    // NOTE: this is a mostly copy of `isReferenceToType` from checker.ts. While this violates DRY, it keeps
+    // `isReferenceToType` in checker local to the checker to avoid the cost of a property lookup on `ts`.
+    function isReferenceToType(type: Type, target: Type) {
+        return (getObjectFlags(type) & ObjectFlags.Reference) !== 0
+            && (type as TypeReference).target === target;
+    }
+
+    function getExplicitPromisedTypeOfPromiseReturningCallExpression(node: PromiseReturningCallExpression<"then" | "catch" | "finally">, callback: Expression, checker: TypeChecker) {
+        if (node.expression.name.escapedText === "finally") {
+            // for a `finally`, there's no type argument
+            return undefined;
+        }
+
+        // If the call to `then` or `catch` comes from the global `Promise` or `PromiseLike` type, we can safely use the
+        // type argument supplied for the callback. For other promise types we would need a more complex heuristic to determine
+        // which type argument is safe to use as an annotation.
+        const promiseType = checker.getTypeAtLocation(node.expression.expression);
+        if (isReferenceToType(promiseType, checker.getPromiseType()) ||
+            isReferenceToType(promiseType, checker.getPromiseLikeType())) {
+            if (node.expression.name.escapedText === "then") {
+                if (callback === elementAt(node.arguments, 0)) {
+                    // for the `onfulfilled` callback, use the first type argument
+                    return elementAt(node.typeArguments, 0);
+                }
+                else if (callback === elementAt(node.arguments, 1)) {
+                    // for the `onrejected` callback, use the second type argument
+                    return elementAt(node.typeArguments, 1);
+                }
+            }
+            else {
+                return elementAt(node.typeArguments, 0);
+            }
+        }
     }
 
     function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Expression {
@@ -273,7 +313,7 @@ namespace ts.codefix {
         const nodeType = transformer.checker.getTypeAtLocation(node);
         if (nodeType && transformer.checker.getPromisedTypeOfPromise(nodeType)) {
             Debug.assertNode(getOriginalNode(node).parent, isPropertyAccessExpression);
-            return transformPromiseExpressionOfPropertyAccess(returnContextNode, node, transformer, continuationArgName);
+            return transformPromiseExpressionOfPropertyAccess(returnContextNode, node, transformer, hasContinuation, continuationArgName);
         }
 
         return silentFail();
@@ -423,7 +463,7 @@ namespace ts.codefix {
             return transformCatch(node, onRejected, transformer, hasContinuation, continuationArgName);
         }
 
-        // We don't currently support transforming a `.then` with both onfulfilled and onrejected handlers.
+        // We don't currently support transforming a `.then` with both onfulfilled and onrejected handlers, per GH#38152.
         if (onRejected && !isNullOrUndefined(transformer, onRejected)) {
             return silentFail();
         }
@@ -445,9 +485,13 @@ namespace ts.codefix {
     /**
      * Transforms the 'x' part of `x.then(...)`, or the 'y()' part of `y().catch(...)`, where 'x' and 'y()' are Promises.
      */
-    function transformPromiseExpressionOfPropertyAccess(returnContextNode: Expression, node: Expression, transformer: Transformer, continuationArgName?: SynthBindingName): readonly Statement[] {
+    function transformPromiseExpressionOfPropertyAccess(returnContextNode: Expression, node: Expression, transformer: Transformer, hasContinuation: boolean, continuationArgName?: SynthBindingName): readonly Statement[] {
         if (shouldReturn(returnContextNode, transformer)) {
-            return [factory.createReturnStatement(factory.createAwaitExpression(getSynthesizedDeepClone(node)))];
+            let returnValue = getSynthesizedDeepClone(node);
+            if (hasContinuation) {
+                returnValue = factory.createAwaitExpression(returnValue);
+            }
+            return [factory.createReturnStatement(returnValue)];
         }
 
         return createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
@@ -493,7 +537,7 @@ namespace ts.codefix {
      * @param continuationArgName The argument name for the continuation that follows this call.
      * @param inputArgName The argument name provided to this call
      */
-    function transformCallbackArgument(func: Expression, hasContinuation: boolean, continuationArgName: SynthBindingName | undefined, inputArgName: SynthBindingName | undefined, parent: CallExpression, transformer: Transformer): readonly Statement[] {
+    function transformCallbackArgument(func: Expression, hasContinuation: boolean, continuationArgName: SynthBindingName | undefined, inputArgName: SynthBindingName | undefined, parent: PromiseReturningCallExpression<"then" | "catch" | "finally">, transformer: Transformer): readonly Statement[] {
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
@@ -508,8 +552,7 @@ namespace ts.codefix {
                 const synthCall = factory.createCallExpression(getSynthesizedDeepClone(func as Identifier | PropertyAccessExpression), /*typeArguments*/ undefined, isSynthIdentifier(inputArgName) ? [referenceSynthIdentifier(inputArgName)] : []);
 
                 if (shouldReturn(parent, transformer)) {
-                    // TODO(rbuckton): `parent.typeArguments[0]` is wrong here if we support Promise-like types that might have different type argument lists than `Promise`.
-                    return maybeAnnotateAndReturn(synthCall, elementAt(parent.typeArguments, 0));
+                    return maybeAnnotateAndReturn(synthCall, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
                 }
 
                 const type = transformer.checker.getTypeAtLocation(func);
@@ -519,8 +562,7 @@ namespace ts.codefix {
                     return silentFail();
                 }
                 const returnType = callSignatures[0].getReturnType();
-                // TODO(rbuckton): `parent.typeArguments[0]` is wrong here if we support Promise-like types that might have different type argument lists than `Promise`.
-                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(synthCall), elementAt(parent.typeArguments, 0));
+                const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(synthCall), getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
                 if (continuationArgName) {
                     continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
                 }
@@ -543,8 +585,7 @@ namespace ts.codefix {
                             }
                             else {
                                 const possiblyAwaitedRightHandSide = returnType && statement.expression ? getPossiblyAwaitedRightHandSide(transformer.checker, returnType, statement.expression) : statement.expression;
-                                // TODO(rbuckton): `parent.typeArguments[0]` is wrong here if we support Promise-like types that might have different type argument lists than `Promise`.
-                                refactoredStmts.push(...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, elementAt(parent.typeArguments, 0)));
+                                refactoredStmts.push(...maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker)));
                             }
                         }
                         else if (hasContinuation && forEachReturnStatement(statement, returnTrue)) {
@@ -620,8 +661,7 @@ namespace ts.codefix {
                             return transformedStatement;
                         }
                         else {
-                        // TODO(rbuckton): `parent.typeArguments[0]` is wrong here if we support Promise-like types that might have different type argument lists than `Promise`.
-                        return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, elementAt(parent.typeArguments, 0));
+                            return maybeAnnotateAndReturn(possiblyAwaitedRightHandSide, getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
                         }
                     }
                     else {

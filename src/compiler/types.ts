@@ -4264,6 +4264,8 @@ namespace ts {
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
+        /* @internal */ getPromiseType(): Type;
+        /* @internal */ getPromiseLikeType(): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;

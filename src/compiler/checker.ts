@@ -634,6 +634,8 @@ namespace ts {
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
             getOptionalType: () => optionalType,
+            getPromiseType: () => getGlobalPromiseType(/*reportErrors*/ false),
+            getPromiseLikeType: () => getGlobalPromiseLikeType(/*reportErrors*/ false),
             isSymbolAccessible,
             isArrayType,
             isTupleType,
