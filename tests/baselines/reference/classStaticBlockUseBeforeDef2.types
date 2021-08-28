@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef2.ts ===
+class C {
+>C : C
+
+    static {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : number
+>this : typeof C
+>x : number
+>1 : 1
+    }
+    static x;
+>x : number
+}

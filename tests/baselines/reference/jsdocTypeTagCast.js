@@ -74,7 +74,10 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
-
+var asConst1 = /** @type {const} */(1);
+var asConst2 = /** @type {const} */({
+    x: 1
+});
 
 //// [a.js]
 var W;
@@ -154,3 +157,7 @@ var str;
 if ( /** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
     str = numOrStr; // Error, no narrowing occurred
 }
+var asConst1 = /** @type {const} */ (1);
+var asConst2 = /** @type {const} */ ({
+    x: 1
+});

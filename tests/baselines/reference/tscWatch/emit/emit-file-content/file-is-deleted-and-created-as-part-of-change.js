@@ -39,6 +39,10 @@ Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/home/username/project/app/file.ts (used version)
+
 WatchedFiles::
 /home/username/project/tsconfig.json:
   {"fileName":"/home/username/project/tsconfig.json","pollingInterval":250}
@@ -88,6 +92,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /home/username/project/app/file.ts
+
+Shape signatures in builder refreshed for::
+/home/username/project/app/file.ts (computed .d.ts)
 
 WatchedFiles::
 /home/username/project/tsconfig.json:

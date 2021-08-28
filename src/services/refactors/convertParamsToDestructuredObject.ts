@@ -220,7 +220,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | undefined {
         const element = getContainingObjectLiteralElement(node);
         if (element) {
-            const contextualType = checker.getContextualTypeForObjectLiteralElement(<ObjectLiteralElementLike>element);
+            const contextualType = checker.getContextualTypeForObjectLiteralElement(element as ObjectLiteralElementLike);
             const symbol = contextualType?.getSymbol();
             if (symbol && !(getCheckFlags(symbol) & CheckFlags.Synthetic)) {
                 return symbol;

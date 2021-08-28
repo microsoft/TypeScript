@@ -1,0 +1,42 @@
+=== tests/cases/conformance/types/union/discriminatedUnionTypes3.ts ===
+// Repro from #44435
+
+type Correct = {
+>Correct : Correct
+
+	code: string
+>code : string
+
+	property: true
+>property : true
+>true : true
+
+	err: undefined
+>err : undefined
+}
+type Err = {
+>Err : Err
+
+	err: `${string} is wrong!`
+>err : `${string} is wrong!`
+}
+type SomeReturnType = Correct | Err;
+>SomeReturnType : SomeReturnType
+
+const example: SomeReturnType = {} as SomeReturnType;
+>example : SomeReturnType
+>{} as SomeReturnType : SomeReturnType
+>{} : {}
+
+if (example.err === undefined) {
+>example.err === undefined : boolean
+>example.err : `${string} is wrong!` | undefined
+>example : SomeReturnType
+>err : `${string} is wrong!` | undefined
+>undefined : undefined
+
+	example.property;  // true
+>example.property : true
+>example : Correct
+>property : true
+}

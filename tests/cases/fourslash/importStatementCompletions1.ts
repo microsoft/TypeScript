@@ -2,6 +2,7 @@
 
 // @Filename: /mod.ts
 //// export const foo = 0;
+//// export type Foo = number;
 
 // @Filename: /index0.ts
 //// [|import f/*0*/|]
@@ -23,11 +24,19 @@
 
 [0, 1, 2, 3, 4, 5].forEach(marker => {
   verify.completions({
+    isNewIdentifierLocation: true,
     marker: "" + marker,
     exact: [{
       name: "foo",
       source: "./mod",
       insertText: `import { foo$1 } from "./mod";`,
+      isSnippet: true,
+      replacementSpan: test.ranges()[marker],
+      sourceDisplay: "./mod",
+    }, {
+      name: "Foo",
+      source: "./mod",
+      insertText: `import { Foo$1 } from "./mod";`,
       isSnippet: true,
       replacementSpan: test.ranges()[marker],
       sourceDisplay: "./mod",
@@ -65,8 +74,35 @@
 
 [6, 7, 8, 9, 10, 11, 12].forEach(marker => {
   verify.completions({
+    isNewIdentifierLocation: true,
     marker: "" + marker,
     exact: [],
+    preferences: {
+      includeCompletionsForImportStatements: true,
+      includeInsertTextCompletions: true,
+    }
+  });
+});
+
+// @Filename: /index13.ts
+//// import {} /*13*/
+
+// @Filename: /index14.ts
+//// import {} f/*14*/
+
+// @Filename: /index15.ts
+//// import * as foo /*15*/
+
+// @Filename: /index16.ts
+//// import * as foo f/*16*/
+
+[13, 14, 15, 16].forEach(marker => {
+  verify.completions({
+    marker: "" + marker,
+    exact: {
+      name: "from",
+      sortText: completion.SortText.GlobalsOrKeywords,
+    },
     preferences: {
       includeCompletionsForImportStatements: true,
       includeInsertTextCompletions: true,

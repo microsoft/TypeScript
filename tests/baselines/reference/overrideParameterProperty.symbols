@@ -1,0 +1,74 @@
+=== tests/cases/conformance/override/overrideParameterProperty.ts ===
+class Base {
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  p1!: string;
+>p1 : Symbol(Base.p1, Decl(overrideParameterProperty.ts, 0, 12))
+}
+
+class C1 extends Base {
+>C1 : Symbol(C1, Decl(overrideParameterProperty.ts, 2, 1))
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  constructor(public override p1: "hello") {
+>p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
+
+    super();
+>super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+    this.p1;
+>this.p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
+>this : Symbol(C1, Decl(overrideParameterProperty.ts, 2, 1))
+>p1 : Symbol(C1.p1, Decl(overrideParameterProperty.ts, 5, 14))
+  }
+}
+
+class C2 extends Base {
+>C2 : Symbol(C2, Decl(overrideParameterProperty.ts, 9, 1))
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  constructor(override p1: "hello") {
+>p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
+
+    super();
+>super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+    this.p1;
+>this.p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
+>this : Symbol(C2, Decl(overrideParameterProperty.ts, 9, 1))
+>p1 : Symbol(C2.p1, Decl(overrideParameterProperty.ts, 12, 14))
+  }
+}
+
+class C3 extends Base {
+>C3 : Symbol(C3, Decl(overrideParameterProperty.ts, 16, 1))
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  constructor(override public p1: "hello") {
+>p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
+
+    super();
+>super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+    this.p1;
+>this.p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
+>this : Symbol(C3, Decl(overrideParameterProperty.ts, 16, 1))
+>p1 : Symbol(C3.p1, Decl(overrideParameterProperty.ts, 19, 14))
+  }
+
+  m(override p1: "hello") {}
+>m : Symbol(C3.m, Decl(overrideParameterProperty.ts, 22, 3))
+>p1 : Symbol(p1, Decl(overrideParameterProperty.ts, 24, 4))
+}
+
+class C4 extends Base {
+>C4 : Symbol(C4, Decl(overrideParameterProperty.ts, 25, 1))
+>Base : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+
+  constructor(public override p2: string) {
+>p2 : Symbol(C4.p2, Decl(overrideParameterProperty.ts, 28, 14))
+
+    super();
+>super : Symbol(Base, Decl(overrideParameterProperty.ts, 0, 0))
+  }
+}

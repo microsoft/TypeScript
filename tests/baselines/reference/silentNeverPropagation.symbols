@@ -1,0 +1,84 @@
+=== tests/cases/compiler/silentNeverPropagation.ts ===
+// Repro from #45041
+
+type ModuleWithState<TState> = {
+>ModuleWithState : Symbol(ModuleWithState, Decl(silentNeverPropagation.ts, 0, 0))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 2, 21))
+
+    state: TState;
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 2, 21))
+
+};
+
+type State = {
+>State : Symbol(State, Decl(silentNeverPropagation.ts, 4, 2))
+
+    a: number;
+>a : Symbol(a, Decl(silentNeverPropagation.ts, 6, 14))
+
+};
+
+type MoreState = {
+>MoreState : Symbol(MoreState, Decl(silentNeverPropagation.ts, 8, 2))
+
+    z: string;
+>z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
+
+};
+
+declare function createModule<TState, TActions>(state: TState, actions: TActions): ModuleWithState<TState> & TActions;
+>createModule : Symbol(createModule, Decl(silentNeverPropagation.ts, 12, 2))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 14, 30))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 14, 37))
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 14, 48))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 14, 30))
+>actions : Symbol(actions, Decl(silentNeverPropagation.ts, 14, 62))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 14, 37))
+>ModuleWithState : Symbol(ModuleWithState, Decl(silentNeverPropagation.ts, 0, 0))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 14, 30))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 14, 37))
+
+declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions): ModuleWithState<TState & MoreState> & TActions;
+>convert : Symbol(convert, Decl(silentNeverPropagation.ts, 14, 118))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 16, 25))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 16, 32))
+>m : Symbol(m, Decl(silentNeverPropagation.ts, 16, 43))
+>ModuleWithState : Symbol(ModuleWithState, Decl(silentNeverPropagation.ts, 0, 0))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 16, 25))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 16, 32))
+>ModuleWithState : Symbol(ModuleWithState, Decl(silentNeverPropagation.ts, 0, 0))
+>TState : Symbol(TState, Decl(silentNeverPropagation.ts, 16, 25))
+>MoreState : Symbol(MoreState, Decl(silentNeverPropagation.ts, 8, 2))
+>TActions : Symbol(TActions, Decl(silentNeverPropagation.ts, 16, 32))
+
+const breaks = convert(
+>breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
+>convert : Symbol(convert, Decl(silentNeverPropagation.ts, 14, 118))
+
+    createModule({ a: 12 }, { foo() { return true } })
+>createModule : Symbol(createModule, Decl(silentNeverPropagation.ts, 12, 2))
+>a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
+>foo : Symbol(foo, Decl(silentNeverPropagation.ts, 19, 29))
+
+);
+
+breaks.state.a
+>breaks.state.a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
+>breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>a : Symbol(a, Decl(silentNeverPropagation.ts, 19, 18))
+
+breaks.state.z
+>breaks.state.z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
+>breaks.state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
+>state : Symbol(state, Decl(silentNeverPropagation.ts, 2, 32), Decl(silentNeverPropagation.ts, 2, 32))
+>z : Symbol(z, Decl(silentNeverPropagation.ts, 10, 18))
+
+breaks.foo()
+>breaks.foo : Symbol(foo, Decl(silentNeverPropagation.ts, 19, 29))
+>breaks : Symbol(breaks, Decl(silentNeverPropagation.ts, 18, 5))
+>foo : Symbol(foo, Decl(silentNeverPropagation.ts, 19, 29))
+
