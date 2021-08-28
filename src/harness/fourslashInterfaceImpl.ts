@@ -975,7 +975,7 @@ namespace FourSlashInterface {
             name,
             kind: "function",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.GlobalsOrKeywords
+            sortText: SortText.DeprecatedGlobalsOrKeywords
         });
         const varEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1004,7 +1004,7 @@ namespace FourSlashInterface {
             name,
             kind: "method",
             kindModifiers: "deprecated,declare",
-            sortText: SortText.LocationPriority
+            sortText: SortText.DeprecatedLocationPriority
         });
         const propertyEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
