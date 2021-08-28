@@ -7098,6 +7098,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_decl_7058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[If the '{0}' package actually exposes this module, try adding a new declaration (.d.ts) file containing `declare module '{1}';`]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Se il pacchetto ' {0}' espone effettivamente il modulo, provare ad aggiungere un nuovo file di dichiarazione (.d.ts) contenente ' Dichiara modulo' {1}';']]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ignore this error message]]></Val>

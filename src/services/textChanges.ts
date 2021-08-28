@@ -1024,7 +1024,12 @@ namespace ts.textChanges {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const file: SourceFileLike = {
+                text,
+                getLineAndCharacterOfPosition(pos) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                }
+            };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }

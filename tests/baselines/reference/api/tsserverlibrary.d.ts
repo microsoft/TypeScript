@@ -1925,7 +1925,7 @@ declare namespace ts {
         id?: number;
     }
     export interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
     }
     export interface FlowLabel extends FlowNodeBase {
         antecedents: FlowNode[] | undefined;
@@ -2282,6 +2282,7 @@ declare namespace ts {
         getApparentType(type: Type): Type;
         getBaseConstraintOfType(type: Type): Type | undefined;
         getDefaultFromTypeParameter(type: Type): Type | undefined;
+        getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /**
          * Depending on the operation performed, it may be appropriate to throw away the checker
          * if the cancellation token is triggered. Typically, if it is used for error checking
@@ -3058,6 +3059,7 @@ declare namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
+        useCaseSensitiveFileNames?: boolean | (() => boolean);
     }
     /**
      * Represents the result of module resolution.
@@ -5886,7 +5888,7 @@ declare namespace ts {
     interface InlayHint {
         text: string;
         position: number;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -8739,11 +8741,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum"
-    }
+    type InlayHintKind = "Type" | "Parameter" | "Enum";
     interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -8761,7 +8759,7 @@ declare namespace ts.server.protocol {
     interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

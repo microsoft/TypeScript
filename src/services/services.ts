@@ -139,7 +139,9 @@ namespace ts {
 
         if (isJSDocCommentContainingNode(node)) {
             /** Don't add trivia for "tokens" since this is in a comment. */
-            node.forEachChild(child => { children.push(child); });
+            node.forEachChild(child => {
+                children.push(child);
+            });
             return children;
         }
 

@@ -138,6 +138,13 @@ namespace ts.server {
             this.processResponse(request, /*expectEmptyBody*/ true);
         }
 
+        /*@internal*/
+        setCompilerOptionsForInferredProjects(options: protocol.CompilerOptions) {
+            const args: protocol.SetCompilerOptionsForInferredProjectsArgs = { options };
+            const request = this.processRequest(CommandNames.CompilerOptionsForInferredProjects, args);
+            this.processResponse(request, /*expectEmptyBody*/ false);
+        }
+
         openFile(file: string, fileContent?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
             const args: protocol.OpenRequestArgs = { file, fileContent, scriptKindName };
             this.processRequest(CommandNames.Open, args);
@@ -653,7 +660,7 @@ namespace ts.server {
 
             return response.body!.map(item => ({ // TODO: GH#18217
                 ...item,
-                kind: item.kind as InlayHintKind | undefined,
+                kind: item.kind as InlayHintKind,
                 position: this.lineOffsetToPosition(file, item.position),
             }));
         }

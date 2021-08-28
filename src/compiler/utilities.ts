@@ -1526,8 +1526,8 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
-    export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
-        return node.kind === SyntaxKind.MethodDeclaration &&
+    export function isObjectLiteralOrClassExpressionMethodOrAccessor(node: Node): node is MethodDeclaration {
+        return (node.kind === SyntaxKind.MethodDeclaration || node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor) &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
                 node.parent.kind === SyntaxKind.ClassExpression);
     }
@@ -6222,7 +6222,9 @@ namespace ts {
     }
 
     export interface SymlinkedDirectory {
+        /** Matches the casing returned by `realpath`.  Used to compute the `realpath` of children. */
         real: string;
+        /** toPath(real).  Stored to avoid repeated recomputation. */
         realPath: Path;
     }
 
@@ -6714,9 +6716,9 @@ namespace ts {
     }
 
     export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[]): readonly string[] {
-        if (!options || !options.resolveJsonModule) { return supportedExtensions; }
-        if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
-        if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
+        if (!options || !options.resolveJsonModule) return supportedExtensions;
+        if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
+        if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
         return [...supportedExtensions, Extension.Json];
     }
 
@@ -6733,7 +6735,7 @@ namespace ts {
     }
 
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: readonly FileExtensionInfo[]) {
-        if (!fileName) { return false; }
+        if (!fileName) return false;
 
         const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
         for (const extension of getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)) {
