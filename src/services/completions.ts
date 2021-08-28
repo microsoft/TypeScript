@@ -1324,6 +1324,7 @@ namespace ts.Completions {
             if (importCompletionCandidate && preferences.includeCompletionsForImportStatements && preferences.includeCompletionsWithInsertText) {
                 importCompletionNode = importCompletionCandidate;
             }
+
             // Bail out if this is a known invalid completion location
             if (!importCompletionNode && isCompletionListBlocker(contextToken)) {
                 log("Returning an empty list because completion was requested in an invalid position.");
@@ -3271,33 +3272,28 @@ namespace ts.Completions {
     }
 
     function getImportCompletionNode(contextToken: Node) {
-        const candidate = getCandidate();
-        return candidate === SyntaxKind.FromKeyword || candidate && rangeIsOnSingleLine(candidate, candidate.getSourceFile()) ? candidate : undefined;
-
-        function getCandidate() {
-            const parent = contextToken.parent;
-            if (isImportEqualsDeclaration(parent)) {
-                return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
-            }
-            if (isNamedImports(parent) || isNamespaceImport(parent)) {
-                if (isModuleSpecifierMissingOrEmpty(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2) && !parent.parent.name) {
-                    // At `import { ... } |` or `import * as Foo |`, the only possible completion is `from`
-                    return contextToken.kind === SyntaxKind.CloseBraceToken || contextToken.kind === SyntaxKind.Identifier
-                        ? SyntaxKind.FromKeyword
-                        : parent.parent.parent;
-                }
-                return undefined;
-            }
-            if (isImportKeyword(contextToken) && isSourceFile(parent)) {
-                // A lone import keyword with nothing following it does not parse as a statement at all
-                return contextToken as Token<SyntaxKind.ImportKeyword>;
-            }
-            if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
-                // `import s| from`
-                return isModuleSpecifierMissingOrEmpty(parent.moduleSpecifier) ? parent : undefined;
+        const parent = contextToken.parent;
+        if (isImportEqualsDeclaration(parent)) {
+            return isModuleSpecifierMissingOrEmpty(parent.moduleReference) ? parent : undefined;
+        }
+        if (isNamedImports(parent) || isNamespaceImport(parent)) {
+            if (isModuleSpecifierMissingOrEmpty(parent.parent.parent.moduleSpecifier) && (isNamespaceImport(parent) || parent.elements.length < 2) && !parent.parent.name) {
+                // At `import { ... } |` or `import * as Foo |`, the only possible completion is `from`
+                return contextToken.kind === SyntaxKind.CloseBraceToken || contextToken.kind === SyntaxKind.Identifier
+                    ? SyntaxKind.FromKeyword
+                    : parent.parent.parent;
             }
             return undefined;
         }
+        if (isImportKeyword(contextToken) && isSourceFile(parent)) {
+            // A lone import keyword with nothing following it does not parse as a statement at all
+            return contextToken as Token<SyntaxKind.ImportKeyword>;
+        }
+        if (isImportKeyword(contextToken) && isImportDeclaration(parent)) {
+            // `import s| from`
+            return isModuleSpecifierMissingOrEmpty(parent.moduleSpecifier) ? parent : undefined;
+        }
+        return undefined;
     }
 
     function isModuleSpecifierMissingOrEmpty(specifier: ModuleReference | Expression) {

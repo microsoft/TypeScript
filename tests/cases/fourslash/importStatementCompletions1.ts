@@ -22,7 +22,15 @@
 // @Filename: /index5.ts
 //// import f/*5*/ from "";
 
-[0, 1, 2, 3, 4, 5].forEach(marker => {
+// Note: /index12.ts moved to this section instead of being renamed after multi-line import statement
+// completion was added.
+
+// @Filename: /index12.ts
+//// import {
+////   /*12*/
+//// }
+
+[0, 1, 2, 3, 4, 5, 12].forEach(marker => {
   verify.completions({
     isNewIdentifierLocation: true,
     marker: "" + marker,
@@ -67,12 +75,7 @@
 // @Filename: /index11.ts
 //// import oo/*11*/
 
-// @Filename: /index12.ts
-//// import {
-////   /*12*/
-//// }
-
-[6, 7, 8, 9, 10, 11, 12].forEach(marker => {
+[6, 7, 8, 9, 10, 11].forEach(marker => {
   verify.completions({
     isNewIdentifierLocation: true,
     marker: "" + marker,
