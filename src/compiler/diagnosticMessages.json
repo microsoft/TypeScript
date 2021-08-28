@@ -7048,6 +7048,14 @@
         "category": "Error",
         "code": 18036
     },
+    "Export '{1}' from module '{0}'": {
+        "category": "Message",
+        "code": 90054
+    },
+    "Add all missing exports": {
+        "category": "Message",
+        "code": 90055
+    },
     "Await expression cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18037
