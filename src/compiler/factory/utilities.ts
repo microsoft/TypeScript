@@ -416,9 +416,24 @@ namespace ts {
             node.kind === SyntaxKind.CommaListExpression;
     }
 
+    export function isJSDocTypeAssertion(node: Node): node is JSDocTypeAssertion {
+        return isParenthesizedExpression(node)
+            && isInJSFile(node)
+            && !!getJSDocTypeTag(node);
+    }
+
+    export function getJSDocTypeAssertionType(node: JSDocTypeAssertion) {
+        const type = getJSDocType(node);
+        Debug.assertIsDefined(type);
+        return type;
+    }
+
     export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
+                if (kinds & OuterExpressionKinds.ExcludeJSDocTypeAssertion && isJSDocTypeAssertion(node)) {
+                    return false;
+                }
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:

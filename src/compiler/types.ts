@@ -2253,6 +2253,11 @@ namespace ts {
         readonly expression: Expression;
     }
 
+    /* @internal */
+    export interface JSDocTypeAssertion extends ParenthesizedExpression {
+        readonly _jsDocTypeAssertionBrand: never;
+    }
+
     export interface ArrayLiteralExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.ArrayLiteralExpression;
         readonly elements: NodeArray<Expression>;
@@ -6891,7 +6896,9 @@ namespace ts {
         PartiallyEmittedExpressions = 1 << 3,
 
         Assertions = TypeAssertions | NonNullAssertions,
-        All = Parentheses | Assertions | PartiallyEmittedExpressions
+        All = Parentheses | Assertions | PartiallyEmittedExpressions,
+
+        ExcludeJSDocTypeAssertion = 1 << 4,
     }
 
     /* @internal */

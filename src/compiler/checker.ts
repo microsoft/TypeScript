@@ -8402,12 +8402,12 @@ namespace ts {
         }
 
         function isNullOrUndefined(node: Expression) {
-            const expr = skipParentheses(node);
+            const expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
             return expr.kind === SyntaxKind.NullKeyword || expr.kind === SyntaxKind.Identifier && getResolvedSymbol(expr as Identifier) === undefinedSymbol;
         }
 
         function isEmptyArrayLiteral(node: Expression) {
-            const expr = skipParentheses(node);
+            const expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
             return expr.kind === SyntaxKind.ArrayLiteralExpression && (expr as ArrayLiteralExpression).elements.length === 0;
         }
 
@@ -22968,7 +22968,7 @@ namespace ts {
         }
 
         function isFalseExpression(expr: Expression): boolean {
-            const node = skipParentheses(expr);
+            const node = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
             return node.kind === SyntaxKind.FalseKeyword || node.kind === SyntaxKind.BinaryExpression && (
                 (node as BinaryExpression).operatorToken.kind === SyntaxKind.AmpersandAmpersandToken && (isFalseExpression((node as BinaryExpression).left) || isFalseExpression((node as BinaryExpression).right)) ||
                 (node as BinaryExpression).operatorToken.kind === SyntaxKind.BarBarToken && isFalseExpression((node as BinaryExpression).left) && isFalseExpression((node as BinaryExpression).right));
@@ -23290,7 +23290,7 @@ namespace ts {
             }
 
             function narrowTypeByAssertion(type: Type, expr: Expression): Type {
-                const node = skipParentheses(expr);
+                const node = skipParentheses(expr, /*excludeJSDocTypeAssertions*/ true);
                 if (node.kind === SyntaxKind.FalseKeyword) {
                     return unreachableNeverType;
                 }
@@ -25874,7 +25874,9 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression: {
                     // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                     const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
-                    return tag ? getTypeFromTypeNode(tag.typeExpression.type) : getContextualType(parent as ParenthesizedExpression, contextFlags);
+                    return !tag ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
+                        isJSDocTypeTag(tag) && isConstTypeReference(tag.typeExpression.type) ? tryFindWhenConstTypeReference(parent as ParenthesizedExpression) :
+                        getTypeFromTypeNode(tag.typeExpression.type);
                 }
                 case SyntaxKind.NonNullExpression:
                     return getContextualType(parent as NonNullExpression, contextFlags);
@@ -32857,8 +32859,10 @@ namespace ts {
         }
 
         function isTypeAssertion(node: Expression) {
-            node = skipParentheses(node);
-            return node.kind === SyntaxKind.TypeAssertionExpression || node.kind === SyntaxKind.AsExpression;
+            node = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
+            return node.kind === SyntaxKind.TypeAssertionExpression ||
+                node.kind === SyntaxKind.AsExpression ||
+                isJSDocTypeAssertion(node);
         }
 
         function checkDeclarationInitializer(declaration: HasExpressionInitializer, contextualType?: Type | undefined) {
@@ -32933,6 +32937,7 @@ namespace ts {
         function isConstContext(node: Expression): boolean {
             const parent = node.parent;
             return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
+                isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
                 (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
                 (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
         }
@@ -33145,7 +33150,14 @@ namespace ts {
         }
 
         function getQuickTypeOfExpression(node: Expression) {
-            const expr = skipParentheses(node);
+            let expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
+            if (isJSDocTypeAssertion(expr)) {
+                const type = getJSDocTypeAssertionType(expr);
+                if (!isConstTypeReference(type)) {
+                    return getTypeFromTypeNode(type);
+                }
+            }
+            expr = skipParentheses(node);
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
@@ -33232,9 +33244,9 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            const tag = isInJSFile(node) ? getJSDocTypeTag(node) : undefined;
-            if (tag) {
-                return checkAssertionWorker(tag.typeExpression.type, tag.typeExpression.type, node.expression, checkMode);
+            if (isJSDocTypeAssertion(node)) {
+                const type = getJSDocTypeAssertionType(node);
+                return checkAssertionWorker(type, type, node.expression, checkMode);
             }
             return checkExpression(node.expression, checkMode);
         }
@@ -36184,7 +36196,7 @@ namespace ts {
             if (getFalsyFlags(type)) return;
 
             const location = isBinaryExpression(condExpr) ? condExpr.right : condExpr;
-            if (isPropertyAccessExpression(location) && isAssertionExpression(skipParentheses(location.expression))) {
+            if (isPropertyAccessExpression(location) && isTypeAssertion(location.expression)) {
                 return;
             }
 
