@@ -325,7 +325,8 @@ namespace Harness.LanguageService {
                     readFile: fileName => {
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
-                    }
+                    },
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName)!;
@@ -829,7 +830,7 @@ namespace Harness.LanguageService {
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
             // eslint-disable-next-line no-restricted-globals
-            return setTimeout(callback, ms, args);
+            return setTimeout(callback, ms, ...args);
         }
 
         clearTimeout(timeoutId: any): void {
