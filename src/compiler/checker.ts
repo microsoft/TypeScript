@@ -12896,13 +12896,18 @@ namespace ts {
             return result & ObjectFlags.PropagatingFlags;
         }
 
+        function containsMarkerType(typeArguments: readonly Type[] | undefined) {
+            return some(typeArguments, t => t === markerSuperType || t === markerSubType || t === markerOtherType);
+        }
+
         function createTypeReference(target: GenericType, typeArguments: readonly Type[] | undefined): TypeReference {
             const id = getTypeListId(typeArguments);
             let type = target.instantiations.get(id);
             if (!type) {
                 type = createObjectType(ObjectFlags.Reference, target.symbol) as TypeReference;
                 target.instantiations.set(id, type);
-                type.objectFlags |= typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0;
+                type.objectFlags |= (typeArguments ? getPropagatingFlagsOfTypes(typeArguments, /*excludeKinds*/ 0) : 0) |
+                    (containsMarkerType(typeArguments) ? ObjectFlags.MarkerType : 0);
                 type.target = target;
                 type.resolvedTypeArguments = typeArguments;
             }
@@ -17385,7 +17390,9 @@ namespace ts {
                 if (source.flags !== target.flags) return false;
                 if (source.flags & TypeFlags.Singleton) return true;
             }
-            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+            // We skip the cache lookup shortcut when we're in a variance computation so the outofbandVarianceMarkerHandler
+            // will get called for cached results that are unreliable or unmeasurable.
+            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object && !outofbandVarianceMarkerHandler) {
                 const related = relation.get(getRelationKey(source, target, IntersectionState.None, relation));
                 if (related !== undefined) {
                     return !!(related & RelationComparisonResult.Succeeded);
@@ -18473,7 +18480,7 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
+                    !(containsMarkerType(source.aliasTypeArguments) || containsMarkerType(target.aliasTypeArguments))) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     if (variances === emptyArray) {
                         return Ternary.Unknown;
@@ -19708,18 +19715,14 @@ namespace ts {
         // Return a type reference where the source type parameter is replaced with the target marker
         // type, and flag the result as a marker type reference.
         function getMarkerTypeReference(type: GenericType, source: TypeParameter, target: Type) {
-            const result = createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
-            result.objectFlags |= ObjectFlags.MarkerType;
-            return result;
+            return createTypeReference(type, map(type.typeParameters, t => t === source ? target : t));
         }
 
         function getAliasVariances(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
-                const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
-                type.aliasTypeArgumentsContainsMarker = true;
-                return type;
-            });
+            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) =>
+                getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)))
+            );
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
