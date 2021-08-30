@@ -214,19 +214,15 @@ declare namespace Intl {
     }
 
     interface DateTimeFormatOptions {
-        dateStyle?: "full" | "long" | "medium" | "short";
-        timeStyle?: "full" | "long" | "medium" | "short";
         calendar?: string;
         dayPeriod?: "narrow" | "short" | "long";
         numberingSystem?: string;
         hourCycle?: "h11" | "h12" | "h23" | "h24";
-        fractionalSecondDigits?: 0 | 1 | 2 | 3;
     }
 
     interface DateTimeFormatOptions {
         dateStyle?: "full" | "long" | "medium" | "short";
         timeStyle?: "full" | "long" | "medium" | "short";
-        dayPeriod?: "narrow" | "short" | "long";
         hourCycle?: "h11" | "h12" | "h23" | "h24";
     }
 
