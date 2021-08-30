@@ -6,10 +6,106 @@
       "name": "2"
     },
     "completionList": {
-      "isGlobalCompletion": true,
+      "isGlobalCompletion": false,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 123,
+        "length": 1
+      },
       "entries": [
+        {
+          "name": "a",
+          "kind": "parameter",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "parameter",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "param a",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "b",
+          "kind": "parameter",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "parameter",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "param b",
+              "kind": "text"
+            }
+          ]
+        },
         {
           "name": "globalThis",
           "kind": "module",
@@ -3727,26 +3823,14 @@
       "name": "4"
     },
     "completionList": {
-      "isGlobalCompletion": false,
+      "isGlobalCompletion": true,
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
       "optionalReplacementSpan": {
-        "start": 123,
-        "length": 1
+        "start": 249,
+        "length": 9
       },
       "entries": [
-        {
-          "name": "a",
-          "kind": "parameter",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
-        {
-          "name": "b",
-          "kind": "parameter",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
         {
           "name": "globalThis",
           "kind": "module",
@@ -8435,10 +8519,149 @@
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
       "optionalReplacementSpan": {
-        "start": 249,
-        "length": 9
+        "start": 841,
+        "length": 1
       },
       "entries": [
+        {
+          "name": "s",
+          "kind": "parameter",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "parameter",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "s",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "On parameter",
+              "kind": "text"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "param on expression",
+              "kind": "text"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "the first parameter!",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "s",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "param on expression",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "s",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "the first parameter!",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "arguments",
+          "kind": "local var",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "local var",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "arguments",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "IArguments",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        },
         {
           "name": "globalThis",
           "kind": "module",
@@ -11907,30 +12130,6 @@
           ]
         },
         {
-          "name": "asserts",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "asserts",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "any",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
           "name": "async",
           "kind": "keyword",
           "kindModifiers": "",
@@ -11953,198 +12152,6 @@
               "kind": "keyword"
             }
           ]
-        },
-        {
-          "name": "boolean",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "boolean",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "declare",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "declare",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "infer",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "infer",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "keyof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "keyof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "module",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "module",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "namespace",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "never",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "never",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "readonly",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "readonly",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "number",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "object",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "object",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "string",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "string",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "symbol",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "symbol",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "type",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "type",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "unique",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unique",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "unknown",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "unknown",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "bigint",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "bigint",
-              "kind": "keyword"
-            }
-          ]
         }
       ]
     }
@@ -12160,22 +12167,10 @@
       "isMemberCompletion": false,
       "isNewIdentifierLocation": false,
       "optionalReplacementSpan": {
-        "start": 841,
-        "length": 1
+        "start": 853,
+        "length": 8
       },
       "entries": [
-        {
-          "name": "s",
-          "kind": "parameter",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
-        {
-          "name": "arguments",
-          "kind": "local var",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
         {
           "name": "globalThis",
           "kind": "module",
