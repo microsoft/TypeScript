@@ -15,8 +15,8 @@ class C {
     }
     static {
         ({ [await]: 1 }); // illegal
->({ [await]: 1 }) : { [x: number]: number; }
->{ [await]: 1 } : { [x: number]: number; }
+>({ [await]: 1 }) : { [x: string]: number; }
+>{ [await]: 1 } : { [x: string]: number; }
 >[await] : number
 >await : any
 > : any

@@ -508,3 +508,7 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
 !!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     
+    declare let anyVar: any;
+    const obj4 = { [anyVar]: "s" };
+    obj4["s"];
+    

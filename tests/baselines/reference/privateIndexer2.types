@@ -3,7 +3,7 @@
 
 var x = {
 >x : any
->{    private [x: string]: string;} : { [x: number]: any; string: any; }
+>{    private [x: string]: string;} : { [x: string]: any; string: any; }
 
     private [x: string]: string;
 >[x : any

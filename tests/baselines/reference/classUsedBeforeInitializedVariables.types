@@ -69,7 +69,7 @@ class Test {
 
     withinObjectLiteral: any = {
 >withinObjectLiteral : any
->{        [this.withinObjectLiteral]: true,    } : { [x: number]: boolean; }
+>{        [this.withinObjectLiteral]: true,    } : { [x: string]: boolean; }
 
         [this.withinObjectLiteral]: true,
 >[this.withinObjectLiteral] : boolean
@@ -82,7 +82,7 @@ class Test {
 
     withinObjectLiteralGetterName: any = {
 >withinObjectLiteralGetterName : any
->{        get [this.withinObjectLiteralGetterName]() {            return true;        }    } : { [x: number]: boolean; }
+>{        get [this.withinObjectLiteralGetterName]() {            return true;        }    } : { [x: string]: boolean; }
 
         get [this.withinObjectLiteralGetterName]() {
 >[this.withinObjectLiteralGetterName] : boolean
@@ -97,7 +97,7 @@ class Test {
 
     withinObjectLiteralSetterName: any = {
 >withinObjectLiteralSetterName : any
->{        set [this.withinObjectLiteralSetterName](_: any) {}    } : { [x: number]: any; }
+>{        set [this.withinObjectLiteralSetterName](_: any) {}    } : { [x: string]: any; }
 
         set [this.withinObjectLiteralSetterName](_: any) {}
 >[this.withinObjectLiteralSetterName] : any

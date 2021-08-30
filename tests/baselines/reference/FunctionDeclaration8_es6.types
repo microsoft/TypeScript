@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/functionDeclarations/FunctionDeclaration8_es6.ts ===
 var v = { [yield]: foo }
->v : { [x: number]: any; }
->{ [yield]: foo } : { [x: number]: any; }
+>v : { [x: string]: any; }
+>{ [yield]: foo } : { [x: string]: any; }
 >[yield] : any
 >yield : any
 >foo : any

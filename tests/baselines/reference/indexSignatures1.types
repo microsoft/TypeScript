@@ -1051,3 +1051,18 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >sym : unique symbol
 >'hello ' : "hello "
 
+declare let anyVar: any;
+>anyVar : any
+
+const obj4 = { [anyVar]: "s" };
+>obj4 : { [x: string]: string; }
+>{ [anyVar]: "s" } : { [x: string]: string; }
+>[anyVar] : string
+>anyVar : any
+>"s" : "s"
+
+obj4["s"];
+>obj4["s"] : string
+>obj4 : { [x: string]: string; }
+>"s" : "s"
+

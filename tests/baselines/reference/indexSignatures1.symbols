@@ -899,3 +899,14 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 311, 41))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
 
+declare let anyVar: any;
+>anyVar : Symbol(anyVar, Decl(indexSignatures1.ts, 313, 11))
+
+const obj4 = { [anyVar]: "s" };
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 314, 5))
+>[anyVar] : Symbol([anyVar], Decl(indexSignatures1.ts, 314, 14))
+>anyVar : Symbol(anyVar, Decl(indexSignatures1.ts, 313, 11))
+
+obj4["s"];
+>obj4 : Symbol(obj4, Decl(indexSignatures1.ts, 314, 5))
+

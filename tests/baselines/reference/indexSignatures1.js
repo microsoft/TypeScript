@@ -312,6 +312,10 @@ const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 
+declare let anyVar: any;
+const obj4 = { [anyVar]: "s" };
+obj4["s"];
+
 
 //// [indexSignatures1.js]
 "use strict";
@@ -475,6 +479,8 @@ const aa = { [sym]: '123' };
 const obj1 = { [sym]: 'hello ' };
 const obj2 = { [sym]: 'hello ' }; // Permitted for backwards compatibility
 const obj3 = { [sym]: 'hello ' }; // Error
+const obj4 = { [anyVar]: "s" };
+obj4["s"];
 
 
 //// [indexSignatures1.d.ts]
@@ -659,4 +665,8 @@ declare const obj2: {
 };
 declare const obj3: {
     [key: number]: string;
+};
+declare let anyVar: any;
+declare const obj4: {
+    [x: string]: string;
 };

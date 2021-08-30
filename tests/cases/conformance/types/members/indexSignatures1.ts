@@ -314,3 +314,7 @@ const aa: AA = { [sym]: '123' };
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+
+declare let anyVar: any;
+const obj4 = { [anyVar]: "s" };
+obj4["s"];

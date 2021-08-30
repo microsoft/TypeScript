@@ -3,8 +3,8 @@ function* g() {
 >g : () => Generator<number, void, unknown>
 
     let x = {
->x : { [x: number]: () => Generator<never, void, unknown>; }
->{        *[yield 0]() {        }    } : { [x: number]: () => Generator<never, void, unknown>; }
+>x : { [x: string]: () => Generator<never, void, unknown>; }
+>{        *[yield 0]() {        }    } : { [x: string]: () => Generator<never, void, unknown>; }
 
         *[yield 0]() {
 >[yield 0] : () => Generator<never, void, unknown>
