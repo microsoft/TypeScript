@@ -13,16 +13,22 @@ declare namespace Intl {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat/format#Parameters).
      */
     type RelativeTimeFormatUnit =
-        | "year" | "years"
-        | "quarter" | "quarters"
-        | "month" | "months"
-        | "week" | "weeks"
-        | "day" | "days"
-        | "hour" | "hours"
-        | "minute" | "minutes"
-        | "second" | "seconds"
-        ;
-
+        | "year"
+        | "years"
+        | "quarter"
+        | "quarters"
+        | "month"
+        | "months"
+        | "week"
+        | "weeks"
+        | "day"
+        | "days"
+        | "hour"
+        | "hours"
+        | "minute"
+        | "minutes"
+        | "second"
+        | "seconds";
     /**
      * The locale matching algorithm to use.
      *
