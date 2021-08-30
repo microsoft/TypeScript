@@ -38,4 +38,13 @@ declare namespace Intl {
             options?: PluralRulesOptions,
         ): string[];
     };
+
+    interface NumberFormatPart {
+        type: "compact" | "currency" | "decimal" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign" | "unit" | "unknown";
+        value: string;
+    }
+
+    interface NumberFormat {
+        formatToParts(number?: number | bigint): NumberFormatPart[];
+    }
 }
