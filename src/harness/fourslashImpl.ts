@@ -1976,8 +1976,8 @@ namespace FourSlash {
         public baselineCompletions(preferences?: ts.UserPreferences) {
             const baselineFile = this.getBaselineFileNameForContainingTestFile();
             const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
-                const completions = this.getCompletionListAtCaret(preferences);
                 this.goToMarker(marker);
+                const completions = this.getCompletionListAtCaret(preferences);
                 return {
                     marker: { ...marker, name },
                     completionList: {
