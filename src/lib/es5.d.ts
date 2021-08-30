@@ -939,16 +939,44 @@ interface RegExpConstructor {
     readonly prototype: RegExp;
 
     // Non-standard extensions
+    /** @deprecated A legacy feature for browser compatibility */
     $1: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $2: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $3: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $4: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $5: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $6: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $7: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $8: string;
+    /** @deprecated A legacy feature for browser compatibility */
     $9: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    input: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    $_: string;
+    /** @deprecated A legacy feature for browser compatibility */
     lastMatch: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$&": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    lastParen: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$+": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    leftContext: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$`": string;
+    /** @deprecated A legacy feature for browser compatibility */
+    rightContext: string;
+    /** @deprecated A legacy feature for browser compatibility */
+    "$'": string;
 }
 
 declare var RegExp: RegExpConstructor;
