@@ -1,0 +1,128 @@
+=== tests/cases/compiler/node_modules/styled-components/node_modules/hoist-non-react-statics/index.d.ts ===
+interface Statics {
+>Statics : Symbol(Statics, Decl(index.d.ts, 0, 0))
+
+    "$$whatever": string;
+>"$$whatever" : Symbol(Statics["$$whatever"], Decl(index.d.ts, 0, 19))
+}
+declare namespace hoistNonReactStatics {
+>hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 2, 1))
+
+    type NonReactStatics<T> = {[X in Exclude<keyof T, keyof Statics>]: T[X]}
+>NonReactStatics : Symbol(NonReactStatics, Decl(index.d.ts, 3, 40))
+>T : Symbol(T, Decl(index.d.ts, 4, 25))
+>X : Symbol(X, Decl(index.d.ts, 4, 32))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(index.d.ts, 4, 25))
+>Statics : Symbol(Statics, Decl(index.d.ts, 0, 0))
+>T : Symbol(T, Decl(index.d.ts, 4, 25))
+>X : Symbol(X, Decl(index.d.ts, 4, 32))
+}
+export = hoistNonReactStatics;
+>hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 2, 1))
+
+=== tests/cases/compiler/node_modules/styled-components/index.d.ts ===
+import * as hoistNonReactStatics from "hoist-non-react-statics";
+>hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 0, 6))
+
+export interface DefaultTheme {}
+>DefaultTheme : Symbol(DefaultTheme, Decl(index.d.ts, 0, 64))
+
+export type StyledComponent<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> =
+>StyledComponent : Symbol(StyledComponent, Decl(index.d.ts, 1, 32))
+>TTag : Symbol(TTag, Decl(index.d.ts, 2, 28))
+>TTheme : Symbol(TTheme, Decl(index.d.ts, 2, 48))
+>DefaultTheme : Symbol(DefaultTheme, Decl(index.d.ts, 0, 64))
+>TStyle : Symbol(TStyle, Decl(index.d.ts, 2, 71))
+>TWhatever : Symbol(TWhatever, Decl(index.d.ts, 2, 84))
+
+    string
+    & StyledComponentBase<TTag, TTheme, TStyle, TWhatever>
+>StyledComponentBase : Symbol(StyledComponentBase, Decl(index.d.ts, 5, 49))
+>TTag : Symbol(TTag, Decl(index.d.ts, 2, 28))
+>TTheme : Symbol(TTheme, Decl(index.d.ts, 2, 48))
+>TStyle : Symbol(TStyle, Decl(index.d.ts, 2, 71))
+>TWhatever : Symbol(TWhatever, Decl(index.d.ts, 2, 84))
+
+    & hoistNonReactStatics.NonReactStatics<TTag>;
+>hoistNonReactStatics : Symbol(hoistNonReactStatics, Decl(index.d.ts, 0, 6))
+>NonReactStatics : Symbol(hoistNonReactStatics.NonReactStatics, Decl(index.d.ts, 3, 40))
+>TTag : Symbol(TTag, Decl(index.d.ts, 2, 28))
+
+export interface StyledComponentBase<TTag extends string, TTheme = DefaultTheme, TStyle = {}, TWhatever = never> {
+>StyledComponentBase : Symbol(StyledComponentBase, Decl(index.d.ts, 5, 49))
+>TTag : Symbol(TTag, Decl(index.d.ts, 6, 37))
+>TTheme : Symbol(TTheme, Decl(index.d.ts, 6, 57))
+>DefaultTheme : Symbol(DefaultTheme, Decl(index.d.ts, 0, 64))
+>TStyle : Symbol(TStyle, Decl(index.d.ts, 6, 80))
+>TWhatever : Symbol(TWhatever, Decl(index.d.ts, 6, 93))
+
+    tag: TTag;
+>tag : Symbol(StyledComponentBase.tag, Decl(index.d.ts, 6, 114))
+>TTag : Symbol(TTag, Decl(index.d.ts, 6, 37))
+
+    theme: TTheme;
+>theme : Symbol(StyledComponentBase.theme, Decl(index.d.ts, 7, 14))
+>TTheme : Symbol(TTheme, Decl(index.d.ts, 6, 57))
+
+    style: TStyle;
+>style : Symbol(StyledComponentBase.style, Decl(index.d.ts, 8, 18))
+>TStyle : Symbol(TStyle, Decl(index.d.ts, 6, 80))
+
+    whatever: TWhatever;
+>whatever : Symbol(StyledComponentBase.whatever, Decl(index.d.ts, 9, 18))
+>TWhatever : Symbol(TWhatever, Decl(index.d.ts, 6, 93))
+}
+export interface StyledInterface {
+>StyledInterface : Symbol(StyledInterface, Decl(index.d.ts, 11, 1))
+
+    div: (a: TemplateStringsArray) => StyledComponent<"div">;
+>div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+>a : Symbol(a, Decl(index.d.ts, 13, 10))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>StyledComponent : Symbol(StyledComponent, Decl(index.d.ts, 1, 32))
+}
+
+declare const styled: StyledInterface;
+>styled : Symbol(styled, Decl(index.d.ts, 16, 13))
+>StyledInterface : Symbol(StyledInterface, Decl(index.d.ts, 11, 1))
+
+export default styled;
+>styled : Symbol(styled, Decl(index.d.ts, 16, 13))
+
+=== tests/cases/compiler/index.ts ===
+import styled from "styled-components";
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+
+const A = styled.div``;
+>A : Symbol(A, Decl(index.ts, 2, 5))
+>styled.div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+>div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+
+const B = styled.div``;
+>B : Symbol(B, Decl(index.ts, 3, 5))
+>styled.div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+>div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+
+export const C = styled.div``;
+>C : Symbol(C, Decl(index.ts, 4, 12))
+>styled.div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+>styled : Symbol(styled, Decl(index.ts, 0, 6))
+>div : Symbol(StyledInterface.div, Decl(index.d.ts, 12, 34))
+
+export default Object.assign(A, {
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>A : Symbol(A, Decl(index.ts, 2, 5))
+
+    B,
+>B : Symbol(B, Decl(index.ts, 6, 33))
+
+    C
+>C : Symbol(C, Decl(index.ts, 7, 6))
+
+});
+

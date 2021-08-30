@@ -1,5 +1,3 @@
 {
-    "compilerOptions": {
-        "locale": "someString"
-    }
+    "compilerOptions": {}
 }

@@ -1,5 +1,5 @@
 /////////////////////////////
-/// DOM Iterable APIs
+/// Window Iterable APIs
 /////////////////////////////
 
 interface AudioParam {
@@ -30,10 +30,6 @@ interface CanvasPathDrawingStyles {
     setLineDash(segments: Iterable<number>): void;
 }
 
-interface ClientRectList {
-    [Symbol.iterator](): IterableIterator<ClientRect>;
-}
-
 interface DOMRectList {
     [Symbol.iterator](): IterableIterator<DOMRect>;
 }
@@ -55,6 +51,9 @@ interface DataTransferItemList {
 
 interface FileList {
     [Symbol.iterator](): IterableIterator<File>;
+}
+
+interface FontFaceSet extends Set<FontFace> {
 }
 
 interface FormData {
@@ -90,7 +89,7 @@ interface HTMLFormElement {
 }
 
 interface HTMLSelectElement {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): IterableIterator<HTMLOptionElement>;
 }
 
 interface Headers {
@@ -136,6 +135,11 @@ interface MediaList {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
+interface MessageEvent<T = any> {
+    /** @deprecated */
+    initMessageEvent(type: string, bubbles?: boolean, cancelable?: boolean, data?: any, origin?: string, lastEventId?: string, source?: MessageEventSource | null, ports?: Iterable<MessagePort>): void;
+}
+
 interface MimeTypeArray {
     [Symbol.iterator](): IterableIterator<MimeType>;
 }
@@ -146,6 +150,7 @@ interface NamedNodeMap {
 
 interface Navigator {
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
+    vibrate(pattern: Iterable<number>): boolean;
 }
 
 interface NodeList {
@@ -188,11 +193,14 @@ interface PluginArray {
     [Symbol.iterator](): IterableIterator<Plugin>;
 }
 
-interface RTCRtpTransceiver {
-    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
+interface RTCStatsReport extends ReadonlyMap<string, any> {
 }
 
-interface RTCStatsReport extends ReadonlyMap<string, any> {
+interface ReadableStream<R = any> {
+    [Symbol.iterator](): IterableIterator<any>;
+    entries(): IterableIterator<[number, any]>;
+    keys(): IterableIterator<number>;
+    values(): IterableIterator<any>;
 }
 
 interface SVGLengthList {
@@ -211,12 +219,12 @@ interface SVGStringList {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
-interface SourceBufferList {
-    [Symbol.iterator](): IterableIterator<SourceBuffer>;
+interface SVGTransformList {
+    [Symbol.iterator](): IterableIterator<SVGTransform>;
 }
 
-interface SpeechGrammarList {
-    [Symbol.iterator](): IterableIterator<SpeechGrammar>;
+interface SourceBufferList {
+    [Symbol.iterator](): IterableIterator<SourceBuffer>;
 }
 
 interface SpeechRecognitionResult {
@@ -229,6 +237,16 @@ interface SpeechRecognitionResultList {
 
 interface StyleSheetList {
     [Symbol.iterator](): IterableIterator<CSSStyleSheet>;
+}
+
+interface SubtleCrypto {
+    deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKeyPair | CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
+    unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
 }
 
 interface TextTrackCueList {
@@ -257,10 +275,6 @@ interface URLSearchParams {
      * Returns a list of values in the search params.
      */
     values(): IterableIterator<string>;
-}
-
-interface VRDisplay {
-    requestPresent(layers: Iterable<VRLayer>): Promise<void>;
 }
 
 interface WEBGL_draw_buffers {

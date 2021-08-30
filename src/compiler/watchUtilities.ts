@@ -184,7 +184,7 @@ namespace ts {
             const rootResult = tryReadDirectory(rootDir, rootDirPath);
             let rootSymLinkResult: FileSystemEntries | undefined;
             if (rootResult !== undefined) {
-                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
+                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath, directoryExists);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
@@ -353,6 +353,25 @@ namespace ts {
                 cleanExtendedConfigCache(extendedConfigCache, key as Path, toPath);
             }
         });
+    }
+
+    /**
+     * Updates watchers based on the package json files used in module resolution
+     */
+    export function updatePackageJsonWatch(
+        lookups: readonly (readonly [Path, object | boolean])[],
+        packageJsonWatches: ESMap<Path, FileWatcher>,
+        createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
+    ) {
+        const newMap = new Map(lookups);
+        mutateMap(
+            packageJsonWatches,
+            newMap,
+            {
+                createNewValue: createPackageJsonWatch,
+                onDeleteValue: closeFileWatcher
+            }
+        );
     }
 
     /**

@@ -2,7 +2,7 @@
 // This API is only in webworker
 importScripts("")
 >importScripts("") : void
->importScripts : (...urls: string[]) => void
+>importScripts : (...urls: (string | URL)[]) => void
 >"" : ""
 
 // This should not raise a compiler error

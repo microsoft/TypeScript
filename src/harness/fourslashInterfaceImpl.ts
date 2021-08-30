@@ -23,6 +23,10 @@ namespace FourSlashInterface {
             return this.state.getRanges();
         }
 
+        public rangesInFile(fileName?: string): FourSlash.Range[] {
+            return this.state.getRangesInFile(fileName);
+        }
+
         public spans(): ts.TextSpan[] {
             return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
         }
@@ -44,12 +48,16 @@ namespace FourSlashInterface {
         }
     }
 
-    export class Plugins {
+    export class Config {
         constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
             this.state.configurePlugin(pluginName, configuration);
+        }
+
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions): void {
+            this.state.setCompilerOptionsForInferredProjects(options);
         }
     }
 
@@ -245,6 +253,10 @@ namespace FourSlashInterface {
             for (const options of optionsArray) {
                 this.state.verifyCompletions(options);
             }
+        }
+
+        public getInlayHints(expected: readonly VerifyInlayHintsOptions[], span: ts.TextSpan, preference?: ts.InlayHintsOptions) {
+            this.state.verifyInlayHints(expected, span, preference);
         }
 
         public quickInfoIs(expectedText: string, expectedDocumentation?: string) {
@@ -1401,7 +1413,7 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
-        export const undefinedVarEntry: ExpectedCompletionEntry = {
+        export const undefinedVarEntry: ExpectedCompletionEntryObject = {
             name: "undefined",
             kind: "var",
             sortText: SortText.GlobalsOrKeywords
@@ -1560,11 +1572,14 @@ namespace FourSlashInterface {
         ];
 
         export function globalsPlus(plus: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
+            const firstEntry = plus[0];
+            const afterUndefined = typeof firstEntry !== "string" && firstEntry.sortText! > undefinedVarEntry.sortText!;
             return [
                 globalThisEntry,
                 ...globalsVars,
-                ...plus,
+                ...afterUndefined ? ts.emptyArray : plus,
                 undefinedVarEntry,
+                ...afterUndefined ? plus : ts.emptyArray,
                 ...globalKeywords];
         }
 
@@ -1661,6 +1676,14 @@ namespace FourSlashInterface {
         readonly range: FourSlash.Range;
         readonly containerName?: string;
         readonly containerKind?: ts.ScriptElementKind;
+    }
+
+    export interface VerifyInlayHintsOptions {
+        text: string;
+        position: number;
+        kind?: ts.InlayHintKind;
+        whitespaceBefore?: boolean;
+        whitespaceAfter?: boolean;
     }
 
     export type ArrayOrSingle<T> = T | readonly T[];

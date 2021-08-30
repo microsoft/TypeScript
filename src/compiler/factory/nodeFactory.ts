@@ -94,6 +94,8 @@ namespace ts {
             updateConstructSignature,
             createIndexSignature,
             updateIndexSignature,
+            createClassStaticBlockDeclaration,
+            updateClassStaticBlockDeclaration,
             createTemplateLiteralTypeSpan,
             updateTemplateLiteralTypeSpan,
             createKeywordTypeNode,
@@ -494,8 +496,11 @@ namespace ts {
             createArraySliceCall,
             createArrayConcatCall,
             createObjectDefinePropertyCall,
+            createReflectGetCall,
+            createReflectSetCall,
             createPropertyDescriptor,
             createCallBinding,
+            createAssignmentTargetWrapper,
 
             // Utilities
             inlineExpressions,
@@ -525,12 +530,25 @@ namespace ts {
                 elements = [];
             }
             else if (isNodeArray(elements)) {
-                // Ensure the transform flags have been aggregated for this NodeArray
-                if (elements.transformFlags === undefined) {
-                    aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                if (hasTrailingComma === undefined || elements.hasTrailingComma === hasTrailingComma) {
+                    // Ensure the transform flags have been aggregated for this NodeArray
+                    if (elements.transformFlags === undefined) {
+                        aggregateChildrenFlags(elements as MutableNodeArray<T>);
+                    }
+                    Debug.attachNodeArrayDebugInfo(elements);
+                    return elements;
                 }
-                Debug.attachNodeArrayDebugInfo(elements);
-                return elements;
+
+                // This *was* a `NodeArray`, but the `hasTrailingComma` option differs. Recreate the
+                // array with the same elements, text range, and transform flags but with the updated
+                // value for `hasTrailingComma`
+                const array = elements.slice() as MutableNodeArray<T>;
+                array.pos = elements.pos;
+                array.end = elements.end;
+                array.hasTrailingComma = hasTrailingComma;
+                array.transformFlags = elements.transformFlags;
+                Debug.attachNodeArrayDebugInfo(array);
+                return array;
             }
 
             // Since the element list of a node array is typically created by starting with an empty array and
@@ -983,8 +1001,10 @@ namespace ts {
                 case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                     transformFlags = TransformFlags.ContainsTypeScript;
                     break;
-                case SyntaxKind.StaticKeyword:
                 case SyntaxKind.SuperKeyword:
+                    transformFlags = TransformFlags.ContainsES2015 | TransformFlags.ContainsLexicalSuper;
+                    break;
+                case SyntaxKind.StaticKeyword:
                     transformFlags = TransformFlags.ContainsES2015;
                     break;
                 case SyntaxKind.ThisKeyword:
@@ -1039,18 +1059,18 @@ namespace ts {
         // @api
         function createModifiersFromModifierFlags(flags: ModifierFlags) {
             const result: Modifier[] = [];
-            if (flags & ModifierFlags.Export) { result.push(createModifier(SyntaxKind.ExportKeyword)); }
-            if (flags & ModifierFlags.Ambient) { result.push(createModifier(SyntaxKind.DeclareKeyword)); }
-            if (flags & ModifierFlags.Default) { result.push(createModifier(SyntaxKind.DefaultKeyword)); }
-            if (flags & ModifierFlags.Const) { result.push(createModifier(SyntaxKind.ConstKeyword)); }
-            if (flags & ModifierFlags.Public) { result.push(createModifier(SyntaxKind.PublicKeyword)); }
-            if (flags & ModifierFlags.Private) { result.push(createModifier(SyntaxKind.PrivateKeyword)); }
-            if (flags & ModifierFlags.Protected) { result.push(createModifier(SyntaxKind.ProtectedKeyword)); }
-            if (flags & ModifierFlags.Abstract) { result.push(createModifier(SyntaxKind.AbstractKeyword)); }
-            if (flags & ModifierFlags.Static) { result.push(createModifier(SyntaxKind.StaticKeyword)); }
-            if (flags & ModifierFlags.Override) { result.push(createModifier(SyntaxKind.OverrideKeyword)); }
-            if (flags & ModifierFlags.Readonly) { result.push(createModifier(SyntaxKind.ReadonlyKeyword)); }
-            if (flags & ModifierFlags.Async) { result.push(createModifier(SyntaxKind.AsyncKeyword)); }
+            if (flags & ModifierFlags.Export) result.push(createModifier(SyntaxKind.ExportKeyword));
+            if (flags & ModifierFlags.Ambient) result.push(createModifier(SyntaxKind.DeclareKeyword));
+            if (flags & ModifierFlags.Default) result.push(createModifier(SyntaxKind.DefaultKeyword));
+            if (flags & ModifierFlags.Const) result.push(createModifier(SyntaxKind.ConstKeyword));
+            if (flags & ModifierFlags.Public) result.push(createModifier(SyntaxKind.PublicKeyword));
+            if (flags & ModifierFlags.Private) result.push(createModifier(SyntaxKind.PrivateKeyword));
+            if (flags & ModifierFlags.Protected) result.push(createModifier(SyntaxKind.ProtectedKeyword));
+            if (flags & ModifierFlags.Abstract) result.push(createModifier(SyntaxKind.AbstractKeyword));
+            if (flags & ModifierFlags.Static) result.push(createModifier(SyntaxKind.StaticKeyword));
+            if (flags & ModifierFlags.Override) result.push(createModifier(SyntaxKind.OverrideKeyword));
+            if (flags & ModifierFlags.Readonly) result.push(createModifier(SyntaxKind.ReadonlyKeyword));
+            if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
             return result;
         }
 
@@ -1399,6 +1419,38 @@ namespace ts {
                 || node.type !== type
                 || node.body !== body
                 ? updateBaseFunctionLikeDeclaration(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+                : node;
+        }
+
+        // @api
+        function createClassStaticBlockDeclaration(
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            const node = createBaseGenericNamedDeclaration<ClassStaticBlockDeclaration>(
+                SyntaxKind.ClassStaticBlockDeclaration,
+                decorators,
+                modifiers,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined
+            );
+            node.body = body;
+            node.transformFlags = propagateChildFlags(body) | TransformFlags.ContainsClassFields;
+            return node;
+        }
+
+        // @api
+        function updateClassStaticBlockDeclaration(
+            node: ClassStaticBlockDeclaration,
+            decorators: readonly Decorator[] | undefined,
+            modifiers: readonly Modifier[] | undefined,
+            body: Block
+        ): ClassStaticBlockDeclaration {
+            return node.decorators !== decorators
+                || node.modifier !== modifiers
+                || node.body !== body
+                ? update(createClassStaticBlockDeclaration(decorators, modifiers, body), node)
                 : node;
         }
 
@@ -2184,7 +2236,12 @@ namespace ts {
         // @api
         function createArrayLiteralExpression(elements?: readonly Expression[], multiLine?: boolean) {
             const node = createBaseExpression<ArrayLiteralExpression>(SyntaxKind.ArrayLiteralExpression);
-            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(createNodeArray(elements));
+            // Ensure we add a trailing comma for something like `[NumericLiteral(1), NumericLiteral(2), OmittedExpresion]` so that
+            // we end up with `[1, 2, ,]` instead of `[1, 2, ]` otherwise the `OmittedExpression` will just end up being treated like
+            // a trailing comma.
+            const lastElement = elements && lastOrUndefined(elements);
+            const elementsArray = createNodeArray(elements, lastElement && isOmittedExpression(lastElement) ? true : undefined);
+            node.elements = parenthesizerRules().parenthesizeExpressionsOfCommaDelimitedList(elementsArray);
             node.multiLine = multiLine;
             node.transformFlags |= propagateChildrenFlags(node.elements);
             return node;
@@ -2572,7 +2629,7 @@ namespace ts {
                 propagateChildFlags(node.equalsGreaterThanToken) |
                 TransformFlags.ContainsES2015;
             if (modifiersToFlags(node.modifiers) & ModifierFlags.Async) {
-                node.transformFlags |= TransformFlags.ContainsES2017;
+                node.transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis;
             }
             return node;
         }
@@ -2667,6 +2724,14 @@ namespace ts {
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPrefixUnary(operand);
             node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if ((operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken) &&
+                isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
@@ -2682,7 +2747,14 @@ namespace ts {
             const node = createBaseExpression<PostfixUnaryExpression>(SyntaxKind.PostfixUnaryExpression);
             node.operator = operator;
             node.operand = parenthesizerRules().parenthesizeOperandOfPostfixUnary(operand);
-            node.transformFlags = propagateChildFlags(node.operand);
+            node.transformFlags |= propagateChildFlags(node.operand);
+            // Only set this flag for non-generated identifiers and non-"local" names. See the
+            // comment in `visitPreOrPostfixUnaryExpression` in module.ts
+            if (isIdentifier(node.operand) &&
+                !isGeneratedIdentifier(node.operand) &&
+                !isLocalName(node.operand)) {
+                node.transformFlags |= TransformFlags.ContainsUpdateExpressionForIdentifier;
+            }
             return node;
         }
 
@@ -5383,6 +5455,15 @@ namespace ts {
         }
 
         function createMethodCall(object: Expression, methodName: string | Identifier, argumentsList: readonly Expression[]) {
+            // Preserve the optionality of `object`.
+            if (isCallChain(object)) {
+                return createCallChain(
+                    createPropertyAccessChain(object, /*questionDotToken*/ undefined, methodName),
+                    /*questionDotToken*/ undefined,
+                    /*typeArguments*/ undefined,
+                    argumentsList
+                );
+            }
             return createCallExpression(
                 createPropertyAccessExpression(object, methodName),
                 /*typeArguments*/ undefined,
@@ -5416,6 +5497,14 @@ namespace ts {
 
         function createObjectDefinePropertyCall(target: Expression, propertyName: string | Expression, attributes: Expression) {
             return createGlobalMethodCall("Object", "defineProperty", [target, asExpression(propertyName), attributes]);
+        }
+
+        function createReflectGetCall(target: Expression, propertyKey: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "get", receiver ? [target, propertyKey, receiver] : [target, propertyKey]);
+        }
+
+        function createReflectSetCall(target: Expression, propertyKey: Expression, value: Expression, receiver?: Expression): CallExpression {
+            return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
         }
 
         function tryAddPropertyAssignment(properties: Push<PropertyAssignment>, propertyName: string, expression: Expression | undefined) {
@@ -5591,6 +5680,34 @@ namespace ts {
             }
 
             return { target, thisArg };
+        }
+
+        function createAssignmentTargetWrapper(paramName: Identifier, expression: Expression): LeftHandSideExpression {
+            return createPropertyAccessExpression(
+                // Explicit parens required because of v8 regression (https://bugs.chromium.org/p/v8/issues/detail?id=9560)
+                createParenthesizedExpression(
+                    createObjectLiteralExpression([
+                        createSetAccessorDeclaration(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            "value",
+                            [createParameterDeclaration(
+                                /*decorators*/ undefined,
+                                /*modifiers*/ undefined,
+                                /*dotDotDotToken*/ undefined,
+                                paramName,
+                                /*questionToken*/ undefined,
+                                /*type*/ undefined,
+                                /*initializer*/ undefined
+                            )],
+                            createBlock([
+                                createExpressionStatement(expression)
+                            ])
+                        )
+                    ])
+                ),
+                "value"
+            );
         }
 
         function inlineExpressions(expressions: readonly Expression[]) {
@@ -6031,7 +6148,7 @@ namespace ts {
         }
 
         let token = rawTextScanner.scan();
-        if (token === SyntaxKind.CloseBracketToken) {
+        if (token === SyntaxKind.CloseBraceToken) {
             token = rawTextScanner.reScanTemplateToken(/*isTaggedTemplate*/ false);
         }
 
@@ -6479,7 +6596,7 @@ namespace ts {
         // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
-        if (flags) destEmitNode.flags = flags;
+        if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
         if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);

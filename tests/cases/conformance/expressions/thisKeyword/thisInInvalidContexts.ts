@@ -1,8 +1,3 @@
-//'this' in static member initializer
-class ErrClass1 {
-    static t = this; // Error
-}
-
 class BaseErrClass {
     constructor(t: any) { }
 }

@@ -14,7 +14,9 @@
 //
 
 /* @internal */
-let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { return this; })(); // eslint-disable-line prefer-const
+let debugObjectHost: { CollectGarbage(): void } = (function (this: any) { // eslint-disable-line prefer-const
+    return this;
+})();
 
 // We need to use 'null' to interface with the managed side.
 /* eslint-disable no-in-operator */
@@ -280,7 +282,7 @@ namespace ts {
         prepareCallHierarchy(fileName: string, position: number): string;
         provideCallHierarchyIncomingCalls(fileName: string, position: number): string;
         provideCallHierarchyOutgoingCalls(fileName: string, position: number): string;
-
+        provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string;
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
 
@@ -1064,6 +1066,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `provideCallHierarchyOutgoingCalls('${fileName}', ${position})`,
                 () => this.languageService.provideCallHierarchyOutgoingCalls(fileName, position)
+            );
+        }
+
+        public provideInlayHints(fileName: string, span: TextSpan, preference: InlayHintsOptions | undefined): string {
+            return this.forwardJSONCall(
+                `provideInlayHints('${fileName}', '${JSON.stringify(span)}', ${JSON.stringify(preference)})`,
+                () => this.languageService.provideInlayHints(fileName, span, preference)
             );
         }
 

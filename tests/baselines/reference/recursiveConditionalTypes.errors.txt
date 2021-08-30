@@ -6,16 +6,16 @@ tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' 
 tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type 'Awaited<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Awaited<T>'.
 tests/cases/compiler/recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(46,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(49,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
+tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
   Type 'number extends M ? number[] : _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
     Type 'number[] | _TupleOf<number, M, []>' is not assignable to type 'TupleOf<number, N>'.
       Type 'number[]' is not assignable to type 'TupleOf<number, N>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(51,5): error TS2322: Type 'TupleOf<number, N>' is not assignable to type 'TupleOf<number, M>'.
   Type 'number extends N ? number[] : _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
     Type 'number[] | _TupleOf<number, N, []>' is not assignable to type 'TupleOf<number, M>'.
       Type 'number[]' is not assignable to type 'TupleOf<number, M>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(116,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument of type 'Grow2<[], T>' is not assignable to parameter of type 'Grow1<[], T>'.
   Type '[] | Grow2<[string], T>' is not assignable to type 'Grow1<[], T>'.
     Type '[]' is not assignable to type 'Grow1<[], T>'.
       Type 'Grow2<[string], T>' is not assignable to type 'Grow1<[number], T>'.
@@ -84,8 +84,9 @@ tests/cases/compiler/recursiveConditionalTypes.ts(116,9): error TS2345: Argument
     type TT1 = TupleOf<number, 0 | 2 | 4>;
     type TT2 = TupleOf<number, number>;
     type TT3 = TupleOf<number, any>;
-    type TT4 = TupleOf<number, 100>;  // Depth error
-               ~~~~~~~~~~~~~~~~~~~~
+    type TT4 = TupleOf<number, 100>;
+    type TT5 = TupleOf<number, 1000>;  // Depth error
+               ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {

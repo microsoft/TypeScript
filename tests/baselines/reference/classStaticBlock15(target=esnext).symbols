@@ -1,0 +1,30 @@
+=== tests/cases/conformance/classes/classStaticBlock/classStaticBlock15.ts ===
+var _C__1;
+>_C__1 : Symbol(_C__1, Decl(classStaticBlock15.ts, 0, 3))
+
+class C {
+>C : Symbol(C, Decl(classStaticBlock15.ts, 0, 10))
+
+  static #_1 = 1;
+>#_1 : Symbol(C.#_1, Decl(classStaticBlock15.ts, 2, 9))
+
+  static #_3 = 3;
+>#_3 : Symbol(C.#_3, Decl(classStaticBlock15.ts, 3, 17))
+
+  static #_5 = 5;
+>#_5 : Symbol(C.#_5, Decl(classStaticBlock15.ts, 4, 17))
+
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+  static {}
+}
+
+console.log(_C__1)
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>_C__1 : Symbol(_C__1, Decl(classStaticBlock15.ts, 0, 3))
+

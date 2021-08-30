@@ -16,7 +16,7 @@ const z: Foo<number> = x;
 // Repro from #30118
 
 class Bar<T extends string> {
-  private static instance: Bar<string>[];
+  private static instance: Bar<string>[] = [];
 
   cast(_name: ([T] extends [string] ? string : string)) { }
   
@@ -41,5 +41,6 @@ var Bar = /** @class */ (function () {
     Bar.prototype.pushThis = function () {
         Bar.instance.push(this);
     };
+    Bar.instance = [];
     return Bar;
 }());
