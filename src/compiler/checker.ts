@@ -26394,7 +26394,7 @@ namespace ts {
         function isSymbolWithSymbolName(symbol: Symbol) {
             const firstDecl = symbol.declarations?.[0];
             return isKnownSymbol(symbol) || (firstDecl && isNamedDeclaration(firstDecl) && isComputedPropertyName(firstDecl.name) &&
-                isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol));
+                isTypeAssignableToKind(checkComputedPropertyName(firstDecl.name), TypeFlags.ESSymbol, /*strict*/ true));
         }
 
         function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], keyType: Type): IndexInfo {
@@ -26566,7 +26566,10 @@ namespace ts {
 
                 if (computedNameType && !(computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique)) {
                     if (isTypeAssignableTo(computedNameType, stringNumberSymbolType)) {
-                        if (isTypeAssignableTo(computedNameType, numberType)) {
+                        if (computedNameType.flags & TypeFlags.Any) {
+                            hasComputedStringProperty = true;
+                        }
+                        else if (isTypeAssignableTo(computedNameType, numberType)) {
                             hasComputedNumberProperty = true;
                         }
                         else if (isTypeAssignableTo(computedNameType, esSymbolType)) {
