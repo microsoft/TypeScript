@@ -1679,8 +1679,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -1739,6 +1739,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -1760,8 +1769,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -1819,6 +1828,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -8717,8 +8735,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -8777,6 +8795,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -8798,8 +8825,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -8857,6 +8884,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -13511,8 +13547,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -13571,6 +13607,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -13592,8 +13637,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -13651,6 +13696,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -20549,8 +20603,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -20609,6 +20663,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -20630,8 +20693,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -20689,6 +20752,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -24595,8 +24667,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -24655,6 +24727,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -24676,8 +24757,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -24735,6 +24816,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -29796,8 +29886,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -29856,6 +29946,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -29877,8 +29976,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -29936,6 +30035,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -33796,8 +33904,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -33856,6 +33964,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -33877,8 +33994,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -33936,6 +34053,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -38951,8 +39077,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -39011,6 +39137,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -39032,8 +39167,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -39091,6 +39226,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -44152,8 +44296,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -44212,6 +44356,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -44233,8 +44386,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -44292,6 +44445,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -49353,8 +49515,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -49413,6 +49575,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -49434,8 +49605,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -49493,6 +49664,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -54554,8 +54734,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -54614,6 +54794,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -54635,8 +54824,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -54694,6 +54883,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -58595,8 +58793,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -58655,6 +58853,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -58676,8 +58883,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -58735,6 +58942,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -62636,8 +62852,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -62696,6 +62912,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -62717,8 +62942,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -62776,6 +63001,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -66677,8 +66911,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -66737,6 +66971,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -66758,8 +67001,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -66817,6 +67060,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -70718,8 +70970,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -70778,6 +71030,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -70799,8 +71060,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -70858,6 +71119,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -74759,8 +75029,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -74819,6 +75089,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -74840,8 +75119,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -74899,6 +75178,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -78800,8 +79088,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -78860,6 +79148,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -78881,8 +79178,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -78940,6 +79237,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -83142,8 +83448,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -83202,6 +83508,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -83223,8 +83538,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -83282,6 +83597,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -88435,8 +88759,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -88495,6 +88819,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -88516,8 +88849,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -88575,6 +88908,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
@@ -93088,8 +93430,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -93148,6 +93490,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -93169,8 +93520,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -93228,6 +93579,15 @@
             }
           ],
           "tags": [
+            {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
             {
               "name": "param",
               "text": [
