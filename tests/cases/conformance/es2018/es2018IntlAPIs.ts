@@ -1,5 +1,4 @@
-// @target: es5
-// @lib: es6,es2018
+// @target: es2018
 
 // Sample from
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
