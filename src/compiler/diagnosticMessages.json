@@ -5824,7 +5824,7 @@
         "category": "Message",
         "code": 6929
     },
-    "`false` unless target is ESNext or above ES2022": {
+    "`true` for ES2022 and above, including ESNext.": {
         "category": "Message",
         "code": 6930
     },
