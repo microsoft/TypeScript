@@ -198,11 +198,11 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptions {
-        compactDisplay?: "short" | "long";
-        notation?: "standard" | "scientific" | "engineering" | "compact";
-        signDisplay?: "auto" | "never" | "always";
-        unit?: NumberFormatUnit;
-        unitDisplay?: "short" | "long" | "narrow";
+        compactDisplay?: "short" | "long" | undefined;
+        notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
+        signDisplay?: "auto" | "never" | "always" | undefined;
+        unit?: NumberFormatUnit | undefined;
+        unitDisplay?: "short" | "long" | "narrow" | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -214,16 +214,16 @@ declare namespace Intl {
     }
 
     interface DateTimeFormatOptions {
-        calendar?: string;
-        dayPeriod?: "narrow" | "short" | "long";
-        numberingSystem?: string;
-        hourCycle?: "h11" | "h12" | "h23" | "h24";
+        calendar?: string | undefined;
+        dayPeriod?: "narrow" | "short" | "long" | undefined;
+        numberingSystem?: string | undefined;
+        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
     }
 
     interface DateTimeFormatOptions {
-        dateStyle?: "full" | "long" | "medium" | "short";
-        timeStyle?: "full" | "long" | "medium" | "short";
-        hourCycle?: "h11" | "h12" | "h23" | "h24";
+        dateStyle?: "full" | "long" | "medium" | "short" | undefined;
+        timeStyle?: "full" | "long" | "medium" | "short" | undefined;
+        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
     }
 
     type LocaleHourCycleKey = "h12" | "h23" | "h11" | "h24";
@@ -345,7 +345,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options: {localeMatcher: RelativeTimeFormatLocaleMatcher}): BCP47LanguageTag[];
+        supportedLocalesOf(locales: BCP47LanguageTag | BCP47LanguageTag[], options?: {localeMatcher: RelativeTimeFormatLocaleMatcher}): BCP47LanguageTag[];
     };
 
 }

@@ -5,13 +5,13 @@ declare namespace Intl {
     type PluralRuleType = "cardinal" | "ordinal";
 
     interface PluralRulesOptions {
-        localeMatcher?: "lookup" | "best fit";
-        type?: PluralRuleType;
-        minimumIntegerDigits?: number;
-        minimumFractionDigits?: number;
-        maximumFractionDigits?: number;
-        minimumSignificantDigits?: number;
-        maximumSignificantDigits?: number;
+        localeMatcher?: "lookup" | "best fit" | undefined;
+        type?: PluralRuleType | undefined;
+        minimumIntegerDigits?: number | undefined;
+        minimumFractionDigits?: number | undefined;
+        maximumFractionDigits?: number | undefined;
+        minimumSignificantDigits?: number | undefined;
+        maximumSignificantDigits?: number | undefined;
     }
 
     interface ResolvedPluralRulesOptions {
@@ -33,10 +33,8 @@ declare namespace Intl {
     const PluralRules: {
         new (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
         (locales?: string | string[], options?: PluralRulesOptions): PluralRules;
-        supportedLocalesOf(
-            locales: string | string[],
-            options?: PluralRulesOptions,
-        ): string[];
+
+        supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit" }): string[];
     };
 
     interface NumberFormatPart {
