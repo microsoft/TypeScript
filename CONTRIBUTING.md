@@ -222,7 +222,7 @@ gulp baseline-accept
 ```
 
 This will change the files in `tests\baselines\reference`, which should be included as part of your commit.
-Be sure to validate the changes carefully -- apparently unrelated changes to baselines can be clues about something you didn't think of.
+Be sure to validate the changes carefully, apparently unrelated changes to baselines can be clues about something you didn't think of.
 
 ## Localization
 
