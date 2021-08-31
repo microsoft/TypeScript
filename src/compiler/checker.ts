@@ -37702,6 +37702,7 @@ namespace ts {
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
                 const hasStatic = isStatic(member);
+                const isJs = isInJSFile(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (!declaredProp) {
@@ -37727,9 +37728,17 @@ namespace ts {
                         }
 
                         if (!baseHasAbstract) {
-                            const diag = memberIsParameterProperty ?
-                                Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
-                                Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
+                            let diag: DiagnosticMessage;
+                            if (isJs) {
+                                diag = memberIsParameterProperty ?
+                                    Diagnostics.This_parameter_property_must_have_a_leading_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0 :
+                                    Diagnostics.This_member_must_have_a_leading_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0;
+                            }
+                            else {
+                                diag = memberIsParameterProperty ?
+                                    Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
+                                    Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
+                            }
                             error(member, diag, baseClassName);
                         }
                         else if (hasAbstractModifier(member) && baseHasAbstract) {

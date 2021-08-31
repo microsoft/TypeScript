@@ -3817,6 +3817,14 @@
         "category": "Error",
         "code": 4118
     },
+    "This member must have a leading JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a leading JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
