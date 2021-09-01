@@ -30560,7 +30560,7 @@ namespace ts {
             if (node.kind === SyntaxKind.TypeAssertionExpression) {
                 const file = getSourceFileOfNode(node);
                 if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
-                    grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_this_extension_Use_an_as_expression_instead);
+                    grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
                 }
             }
             return checkAssertionWorker(node, node.type, node.expression);
@@ -41806,7 +41806,7 @@ namespace ts {
 
             if (node.typeParameters && !(length(node.typeParameters) > 1 || node.typeParameters.hasTrailingComma || node.typeParameters[0].constraint)) {
                 if (file && fileExtensionIsOneOf(file.fileName, [Extension.Mts, Extension.Cts])) {
-                    grammarErrorOnNode(node.typeParameters[0], Diagnostics.This_syntax_is_reserved_in_files_with_this_extension_Add_a_trailing_comma_or_explicit_constraint);
+                    grammarErrorOnNode(node.typeParameters[0], Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint);
                 }
             }
 

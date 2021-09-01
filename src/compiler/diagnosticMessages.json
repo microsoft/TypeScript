@@ -5888,11 +5888,11 @@
         "category": "Error",
         "code": 7058
     },
-    "This syntax is reserved in files with this extension. Use an `as` expression instead.": {
+    "This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.": {
         "category": "Error",
         "code": 7059
     },
-    "This syntax is reserved in files with this extension. Add a trailing comma or explicit constraint.": {
+    "This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.": {
         "category": "Error",
         "code": 7060
     },
