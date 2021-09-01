@@ -6,1033 +6,515 @@
       "name": "14"
     },
     "completionList": {
-      "isGlobalCompletion": true,
-      "isMemberCompletion": false,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
       "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 1094,
+        "length": 6
+      },
       "entries": [
         {
-          "name": "globalThis",
-          "kind": "module",
+          "name": "method2",
+          "kind": "method",
           "kindModifiers": "",
-          "sortText": "15"
-        },
-        {
-          "name": "eval",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "parseInt",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "parseFloat",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "isNaN",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "isFinite",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "decodeURI",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "decodeURIComponent",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "encodeURI",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "encodeURIComponent",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "escape",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "unescape",
-          "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "NaN",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Infinity",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Object",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Function",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "String",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Boolean",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Number",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Math",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Date",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "RegExp",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Error",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "EvalError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "RangeError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "ReferenceError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "SyntaxError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "TypeError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "URIError",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "JSON",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "ArrayBuffer",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "DataView",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Uint8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Uint8ClampedArray",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Int16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Int32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Float32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Float64Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Intl",
-          "kind": "module",
-          "kindModifiers": "declare",
-          "sortText": "15"
-        },
-        {
-          "name": "Foo",
-          "kind": "class",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
-        {
-          "name": "foo",
-          "kind": "var",
-          "kindModifiers": "",
-          "sortText": "11"
-        },
-        {
-          "name": "undefined",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "undefined",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "break",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "(",
+              "kind": "punctuation"
+            },
             {
-              "text": "break",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "case",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "method",
+              "kind": "text"
+            },
             {
-              "text": "case",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "catch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ")",
+              "kind": "punctuation"
+            },
             {
-              "text": "catch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "class",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
-              "text": "class",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "const",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "Foo",
+              "kind": "className"
+            },
             {
-              "text": "const",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "continue",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ".",
+              "kind": "punctuation"
+            },
             {
-              "text": "continue",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "debugger",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "method2",
+              "kind": "methodName"
+            },
             {
-              "text": "debugger",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "default",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "(",
+              "kind": "punctuation"
+            },
             {
-              "text": "default",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "delete",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ")",
+              "kind": "punctuation"
+            },
             {
-              "text": "delete",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "do",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ":",
+              "kind": "punctuation"
+            },
             {
-              "text": "do",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "else",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "else",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "enum",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "enum",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "export",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "export",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "extends",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "extends",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "false",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "false",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "finally",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "finally",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "for",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "for",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "function",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "function",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "if",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "if",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "import",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "import",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "in",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "in",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "instanceof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "instanceof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "new",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "new",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "null",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "null",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "return",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "return",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "super",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "super",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "switch",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "switch",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "this",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "this",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "throw",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "throw",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "true",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "true",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "try",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "try",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "typeof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "typeof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "var",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "void",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
               "text": "void",
               "kind": "keyword"
             }
-          ]
-        },
-        {
-          "name": "while",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+          ],
+          "documentation": [],
+          "tags": [
             {
-              "text": "while",
-              "kind": "keyword"
+              "name": "mytag"
             }
           ]
         },
         {
-          "name": "with",
-          "kind": "keyword",
+          "name": "property1",
+          "kind": "property",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "with",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "implements",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "(",
+              "kind": "punctuation"
+            },
             {
-              "text": "implements",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "interface",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "property",
+              "kind": "text"
+            },
             {
-              "text": "interface",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "let",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ")",
+              "kind": "punctuation"
+            },
             {
-              "text": "let",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "package",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
-              "text": "package",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "yield",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "Foo",
+              "kind": "className"
+            },
             {
-              "text": "yield",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "as",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ".",
+              "kind": "punctuation"
+            },
             {
-              "text": "as",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "asserts",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": "property1",
+              "kind": "propertyName"
+            },
             {
-              "text": "asserts",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "any",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": ":",
+              "kind": "punctuation"
+            },
             {
-              "text": "any",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "async",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "async",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "await",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "await",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "boolean",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "boolean",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "declare",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "declare",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "infer",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "infer",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "keyof",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "keyof",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "module",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "module",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "namespace",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "namespace",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "never",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "never",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "readonly",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "readonly",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "number",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "number",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "object",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "object",
-              "kind": "keyword"
-            }
-          ]
-        },
-        {
-          "name": "string",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+              "text": " ",
+              "kind": "space"
+            },
             {
               "text": "string",
               "kind": "keyword"
             }
-          ]
-        },
-        {
-          "name": "symbol",
-          "kind": "keyword",
-          "kindModifiers": "",
-          "sortText": "15",
-          "displayParts": [
+          ],
+          "documentation": [],
+          "tags": [
             {
-              "text": "symbol",
-              "kind": "keyword"
+              "name": "mytag",
+              "text": [
+                {
+                  "text": "comment1 comment2",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         },
         {
-          "name": "type",
-          "kind": "keyword",
+          "name": "property2",
+          "kind": "property",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "type",
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property2",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
               "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "mytag1",
+              "text": [
+                {
+                  "text": "some comments\nsome more comments about mytag1",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "mytag2",
+              "text": [
+                {
+                  "text": "here all the comments are on a new line",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "mytag3"
+            },
+            {
+              "name": "mytag"
             }
           ]
         },
         {
-          "name": "unique",
-          "kind": "keyword",
+          "name": "method3",
+          "kind": "method",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "unique",
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method3",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
               "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "a value",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         },
         {
-          "name": "unknown",
-          "kind": "keyword",
+          "name": "method4",
+          "kind": "method",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "unknown",
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method4",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "foo",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
               "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "foo",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "A value.",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "returns",
+              "text": [
+                {
+                  "text": "Another value",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "mytag"
             }
           ]
         },
         {
-          "name": "bigint",
-          "kind": "keyword",
+          "name": "method5",
+          "kind": "method",
           "kindModifiers": "",
-          "sortText": "15",
+          "sortText": "11",
           "displayParts": [
             {
-              "text": "bigint",
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method5",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
               "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "mytag"
+            }
+          ]
+        },
+        {
+          "name": "newMethod",
+          "kind": "method",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "method",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "newMethod",
+              "kind": "methodName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "method documentation",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "mytag",
+              "text": [
+                {
+                  "text": "a JSDoc tag",
+                  "kind": "text"
+                }
+              ]
             }
           ]
         }

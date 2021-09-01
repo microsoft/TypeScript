@@ -1706,6 +1706,7 @@ namespace ts.server {
                     readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
+                    useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
             return this.projectService.host;
