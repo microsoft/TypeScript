@@ -1166,7 +1166,7 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-            defaultValueDescription: "false"
+            defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
         {
             name: "keyofStringsOnly",
