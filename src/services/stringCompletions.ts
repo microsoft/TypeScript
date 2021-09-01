@@ -347,7 +347,7 @@ namespace ts.Completions.StringCompletions {
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
         return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
-            getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
+            getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
 

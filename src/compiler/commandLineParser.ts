@@ -3201,7 +3201,7 @@ namespace ts {
         // Rather than re-query this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
-        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -3447,7 +3447,7 @@ namespace ts {
         }
         for (const ext of extensionGroup) {
             if (fileExtensionIs(file, ext)) {
-                break;
+                return false;
             }
             const higherPriorityPath = keyMapper(changeExtension(file, ext));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
@@ -3478,7 +3478,7 @@ namespace ts {
         for (let i = extensionGroup.length - 1; i >= 0; i--) {
             const ext = extensionGroup[i];
             if (fileExtensionIs(file, ext)) {
-                break;
+                return;
             }
             const lowerPriorityPath = keyMapper(changeExtension(file, ext));
             wildcardFiles.delete(lowerPriorityPath);

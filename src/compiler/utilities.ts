@@ -6738,7 +6738,7 @@ namespace ts {
     }
 
     /**
-     *  List of supported extensions in order of file resolution precedence.
+     *  Groups of supported extensions in order of file resolution precedence. (eg, TS > TSX > DTS and seperately, CTS > DCTS)
      */
     export const supportedTSExtensions: readonly Extension[][] = [[Extension.Ts, Extension.Tsx, Extension.Dts], [Extension.Cts, Extension.Dcts], [Extension.Mts, Extension.Dmts]];
     export const supportedTSExtensionsFlat: readonly Extension[] = flatten(supportedTSExtensions);
@@ -6769,9 +6769,9 @@ namespace ts {
         return extensions;
     }
 
-    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly Extension[][]): readonly Extension[][];
-    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][];
-    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][] {
+    export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly Extension[][]): readonly Extension[][];
+    export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][];
+    export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][] {
         if (!options || !options.resolveJsonModule) return supportedExtensions;
         if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
         if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
@@ -6794,7 +6794,7 @@ namespace ts {
         if (!fileName) return false;
 
         const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
-        for (const extension of flatten(getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions))) {
+        for (const extension of flatten(getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions))) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }

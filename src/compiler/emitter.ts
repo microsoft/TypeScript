@@ -108,22 +108,11 @@ namespace ts {
 
     /* @internal */
     export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
-        if (fileExtensionIs(fileName, Extension.Json)) {
-            return Extension.Json;
-        }
-
-        if (options.jsx === JsxEmit.Preserve) {
-            if (fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx])) {
-                return Extension.Jsx;
-            }
-        }
-        if (fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs])) {
-            return Extension.Mjs;
-        }
-        if (fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs])) {
-            return Extension.Cjs;
-        }
-        return Extension.Js;
+        return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
+        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+        fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
+        fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
+        Extension.Js;
     }
 
     function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
