@@ -22930,7 +22930,7 @@ namespace ts {
                 // if body of ForStatement will be converted to function then we'll need a extra machinery to propagate reassigned values back.
                 if (isForStatement(container)) {
                     const varDeclList = getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList);
-                    if (varDeclList && varDeclList.parent === container && isAssignedInBodyOfForStatement(node, container)) {
+                    if (varDeclList && varDeclList.parent === container && isReassignedInHeadOrBodyOfForStatement(node, container)) {
                         getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.NeedsLoopOutParameter;
                     }
                 }
@@ -22949,7 +22949,14 @@ namespace ts {
             return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfNode(decl));
         }
 
-        function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
+        function needsLoopOutParameter(node: Node, container: ForStatement) {
+            return node === container.statement ||
+            (node === container.condition || node === container.incrementor) &&
+            (!!container.condition && ((getNodeLinks(container.condition).flags & NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0) ||
+            !!container.incrementor && ((getNodeLinks(container.incrementor).flags & NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0));
+        }
+
+        function isReassignedInHeadOrBodyOfForStatement(node: Node, container: ForStatement) {
             // skip parenthesized nodes
             let current: Node = node;
             while (current.parent.kind === SyntaxKind.ParenthesizedExpression) {
@@ -22971,8 +22978,9 @@ namespace ts {
             }
 
             // at this point we know that node is the target of assignment
-            // now check that modification happens inside the statement part of the ForStatement
-            return !!findAncestor(current, n => n === container ? "quit" : n === container.statement);
+            // now check that modification happens inside the head part or statement part of the ForStatement
+            const part = getPartOfForStatementContainingNode(node, container);
+            return !!part && needsLoopOutParameter(part, container);
         }
 
         function captureLexicalThis(node: Node, container: Node): void {

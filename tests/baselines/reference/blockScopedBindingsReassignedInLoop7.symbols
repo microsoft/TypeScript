@@ -1,0 +1,21 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop7.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(blockScopedBindingsReassignedInLoop7.ts, 0, 0))
+
+    function func(a:()=>void){
+>func : Symbol(func, Decl(blockScopedBindingsReassignedInLoop7.ts, 0, 15))
+>a : Symbol(a, Decl(blockScopedBindingsReassignedInLoop7.ts, 1, 18))
+
+    }
+    for (let i = 0; func(() => console.log(i)), i < 100;i++) {
+>i : Symbol(i, Decl(blockScopedBindingsReassignedInLoop7.ts, 4, 12))
+>func : Symbol(func, Decl(blockScopedBindingsReassignedInLoop7.ts, 0, 15))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>i : Symbol(i, Decl(blockScopedBindingsReassignedInLoop7.ts, 4, 12))
+>i : Symbol(i, Decl(blockScopedBindingsReassignedInLoop7.ts, 4, 12))
+>i : Symbol(i, Decl(blockScopedBindingsReassignedInLoop7.ts, 4, 12))
+        
+    }
+}

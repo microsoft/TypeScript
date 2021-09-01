@@ -1,0 +1,29 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop7.ts ===
+function f1() {
+>f1 : () => void
+
+    function func(a:()=>void){
+>func : (a: () => void) => void
+>a : () => void
+
+    }
+    for (let i = 0; func(() => console.log(i)), i < 100;i++) {
+>i : number
+>0 : 0
+>func(() => console.log(i)), i < 100 : boolean
+>func(() => console.log(i)) : void
+>func : (a: () => void) => void
+>() => console.log(i) : () => void
+>console.log(i) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>i : number
+>i < 100 : boolean
+>i : number
+>100 : 100
+>i++ : number
+>i : number
+        
+    }
+}
