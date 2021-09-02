@@ -55,7 +55,10 @@ namespace ts.refactor {
         const token = getTokenAtPosition(file, span.start);
         const importDecl = considerPartialSpans ? findAncestor(token, isImportDeclaration) : getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl)) return { error: "Selection is not an import declaration." };
-        if (importDecl.getEnd() < span.start + span.length) return undefined;
+
+        const end = span.start + span.length;
+        const nextToken = findNextToken(importDecl, importDecl.parent, file);
+        if (nextToken && end > nextToken.getStart()) return undefined;
 
         const { importClause } = importDecl;
         if (!importClause) {
