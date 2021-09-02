@@ -79,7 +79,6 @@
         "gulp-newer": "latest",
         "gulp-rename": "latest",
         "gulp-sourcemaps": "latest",
-        "istanbul": "latest",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",

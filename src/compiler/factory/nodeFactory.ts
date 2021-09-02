@@ -4939,14 +4939,16 @@ namespace ts {
         }
 
         // @api
-        function createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block) {
+        function createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block) {
             const node = createBaseNode<CatchClause>(SyntaxKind.CatchClause);
-            variableDeclaration = !isString(variableDeclaration) ? variableDeclaration : createVariableDeclaration(
-                variableDeclaration,
-                /*exclamationToken*/ undefined,
-                /*type*/ undefined,
-                /*initializer*/ undefined
-            );
+            if (typeof variableDeclaration === "string" || variableDeclaration && !isVariableDeclaration(variableDeclaration)) {
+                variableDeclaration = createVariableDeclaration(
+                    variableDeclaration,
+                    /*exclamationToken*/ undefined,
+                    /*type*/ undefined,
+                    /*initializer*/ undefined
+                );
+            }
             node.variableDeclaration = variableDeclaration;
             node.block = block;
             node.transformFlags |=
