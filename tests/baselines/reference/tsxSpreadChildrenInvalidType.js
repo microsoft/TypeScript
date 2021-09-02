@@ -44,17 +44,26 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 function Todo(prop) {
     return React.createElement("div", null, prop.key.toString() + prop.todo);
 }
 function TodoList(_a) {
     var todos = _a.todos;
-    return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
+    return React.createElement.apply(React, __spreadArray(["div", null], React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }), false));
 }
 function TodoListNoError(_a) {
     var todos = _a.todos;
     // any is not checked
-    return React.createElement("div", null, React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
+    return React.createElement.apply(React, __spreadArray(["div", null], React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }), false));
 }
 var x;
 React.createElement(TodoList, __assign({}, x));

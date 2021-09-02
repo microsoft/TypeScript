@@ -547,7 +547,8 @@ namespace ts {
         }
 
         function visitJsxExpression(node: JsxExpression) {
-            return visitNode(node.expression, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return node.dotDotDotToken ? factory.createSpreadElement(expression!) : expression;
         }
     }
 
