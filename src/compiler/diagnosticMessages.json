@@ -5668,6 +5668,11 @@
         "category": "Message",
         "code": 6929
     },
+    "`true` for ES2022 and above, including ESNext.": {
+        "category": "Message",
+        "code": 6930
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",

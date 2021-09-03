@@ -2253,6 +2253,11 @@ namespace ts {
         readonly expression: Expression;
     }
 
+    /* @internal */
+    export interface JSDocTypeAssertion extends ParenthesizedExpression {
+        readonly _jsDocTypeAssertionBrand: never;
+    }
+
     export interface ArrayLiteralExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.ArrayLiteralExpression;
         readonly elements: NodeArray<Expression>;
@@ -4264,6 +4269,8 @@ namespace ts {
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
+        /* @internal */ getPromiseType(): Type;
+        /* @internal */ getPromiseLikeType(): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
@@ -6461,6 +6468,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
+        useCaseSensitiveFileNames?: boolean | (() => boolean);
     }
 
     /**
@@ -6890,7 +6898,9 @@ namespace ts {
         PartiallyEmittedExpressions = 1 << 3,
 
         Assertions = TypeAssertions | NonNullAssertions,
-        All = Parentheses | Assertions | PartiallyEmittedExpressions
+        All = Parentheses | Assertions | PartiallyEmittedExpressions,
+
+        ExcludeJSDocTypeAssertion = 1 << 4,
     }
 
     /* @internal */
@@ -7446,7 +7456,7 @@ namespace ts {
         updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause;
         createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]): HeritageClause;
         updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
-        createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block): CatchClause;
+        createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
         updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
 
         //

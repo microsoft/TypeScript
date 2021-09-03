@@ -1163,7 +1163,7 @@ namespace ts {
 
             // The originalFileName could not be actual source file name if file found was d.ts from referecned project
             // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
-            const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.originalFileName, file.path);
+            const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.path);
             if (resultFromDts) return resultFromDts;
 
             // If preserveSymlinks is true, module resolution wont jump the symlink
@@ -1171,13 +1171,12 @@ namespace ts {
             // Note:: Currently we try the real path only if the
             // file is from node_modules to avoid having to run real path on all file paths
             if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
-            const realDeclarationFileName = host.realpath(file.originalFileName);
-            const realDeclarationPath = toPath(realDeclarationFileName);
-            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationFileName, realDeclarationPath);
+            const realDeclarationPath = toPath(host.realpath(file.originalFileName));
+            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationPath);
         }
 
-        function getRedirectReferenceForResolutionFromSourceOfProject(fileName: string, filePath: Path) {
-            const source = getSourceOfProjectReferenceRedirect(fileName);
+        function getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path) {
+            const source = getSourceOfProjectReferenceRedirect(filePath);
             if (isString(source)) return getResolvedProjectReferenceToRedirect(source);
             if (!source) return undefined;
             // Output of .d.ts file so return resolved ref that matches the out file name
@@ -2472,7 +2471,7 @@ namespace ts {
         function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, packageId: PackageId | undefined, reason: FileIncludeReason): void {
             getSourceFileFromReferenceWorker(
                 fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
+                fileName => findSourceFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
                 (diagnostic, ...args) => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, diagnostic, args),
                 reason
             );
@@ -2514,20 +2513,21 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
             tracing?.push(tracing.Phase.Program, "findSourceFile", {
                 fileName,
                 isDefaultLib: isDefaultLib || undefined,
                 fileIncludeKind: (FileIncludeKind as any)[reason.kind],
             });
-            const result = findSourceFileWorker(fileName, path, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
+            const result = findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
             tracing?.pop();
             return result;
         }
 
-        function findSourceFileWorker(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+            const path = toPath(fileName);
             if (useSourceOfProjectReferenceRedirect) {
-                let source = getSourceOfProjectReferenceRedirect(fileName);
+                let source = getSourceOfProjectReferenceRedirect(path);
                 // If preserveSymlinks is true, module resolution wont jump the symlink
                 // but the resolved real path may be the .d.ts from project reference
                 // Note:: Currently we try the real path only if the
@@ -2537,12 +2537,12 @@ namespace ts {
                     options.preserveSymlinks &&
                     isDeclarationFileName(fileName) &&
                     stringContains(fileName, nodeModulesPathPart)) {
-                    const realPath = host.realpath(fileName);
-                    if (realPath !== fileName) source = getSourceOfProjectReferenceRedirect(realPath);
+                    const realPath = toPath(host.realpath(fileName));
+                    if (realPath !== path) source = getSourceOfProjectReferenceRedirect(realPath);
                 }
                 if (source) {
                     const file = isString(source) ?
-                        findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
+                        findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
                         undefined;
                     if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
                     return file;
@@ -2750,8 +2750,8 @@ namespace ts {
             return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
         }
 
-        function getSourceOfProjectReferenceRedirect(file: string) {
-            if (!isDeclarationFileName(file)) return undefined;
+        function getSourceOfProjectReferenceRedirect(path: Path) {
+            if (!isDeclarationFileName(path)) return undefined;
             if (mapFromToProjectReferenceRedirectSource === undefined) {
                 mapFromToProjectReferenceRedirectSource = new Map();
                 forEachResolvedProjectReference(resolvedRef => {
@@ -2772,7 +2772,7 @@ namespace ts {
                     }
                 });
             }
-            return mapFromToProjectReferenceRedirectSource.get(toPath(file));
+            return mapFromToProjectReferenceRedirectSource.get(path);
         }
 
         function isSourceOfProjectReferenceRedirect(fileName: string) {
@@ -2954,10 +2954,8 @@ namespace ts {
                         modulesWithElidedImports.set(file.path, true);
                     }
                     else if (shouldAddFile) {
-                        const path = toPath(resolvedFileName);
                         findSourceFile(
                             resolvedFileName,
-                            path,
                             /*isDefaultLib*/ false,
                             /*ignoreNoDefaultLib*/ false,
                             { kind: FileIncludeKind.Import, file: file.path, index, },
@@ -3691,7 +3689,7 @@ namespace ts {
         useSourceOfProjectReferenceRedirect: boolean;
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
-        getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
+        getSourceOfProjectReferenceRedirect(path: Path): SourceOfProjectReferenceRedirect | undefined;
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
@@ -3778,9 +3776,9 @@ namespace ts {
         }
 
         function fileExistsIfProjectReferenceDts(file: string) {
-            const source = host.getSourceOfProjectReferenceRedirect(file);
+            const source = host.getSourceOfProjectReferenceRedirect(host.toPath(file));
             return source !== undefined ?
-                isString(source) ? originalFileExists.call(host.compilerHost, source) : true :
+                isString(source) ? originalFileExists.call(host.compilerHost, source) as boolean : true :
                 undefined;
         }
 
