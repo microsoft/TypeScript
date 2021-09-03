@@ -38,15 +38,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_0_modifier_cannot_be_used_with_an_interface_declaration_1045" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A '{0}' modifier cannot be used with an interface declaration.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Модификатор "{0}" не может быть использован с объявлением интерфейса.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_0_parameter_must_be_the_first_parameter_2680" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A '{0}' parameter must be the first parameter.]]></Val>
@@ -140,15 +131,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_class_may_only_extend_another_class_2311" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A class may only extend another class.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Класс может расширять только другой класс.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_class_member_cannot_have_the_0_keyword_1248" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A class member cannot have the '{0}' keyword.]]></Val>
@@ -226,15 +208,6 @@
           <Val><![CDATA[A computed property name must be of type 'string', 'number', 'symbol', or 'any'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Имя вычисляемого свойства должно иметь тип string, number, symbol или any.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_computed_property_name_of_the_form_0_must_be_of_type_symbol_2471" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A computed property name of the form '{0}' must be of type 'symbol'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Имя вычисляемого свойства в форме "{0}" должно иметь тип symbol.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -644,15 +617,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not_18001" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A path in an 'extends' option must be relative or rooted, but '{0}' is not.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Путь в параметре extends должен быть относительным или указанным от корня, но "{0}" не является ни тем ни другим.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";A_promise_must_have_a_then_method_1059" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[A promise must have a 'then' method.]]></Val>
@@ -868,15 +832,6 @@
           <Val><![CDATA[A 'set' accessor parameter cannot have an initializer.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Параметр метода доступа set не может иметь инициализатор.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";A_signature_with_an_implementation_cannot_use_a_string_literal_type_2381" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[A signature with an implementation cannot use a string literal type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Сигнатура с реализацией не может использовать тип строкового литерала.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1238,15 +1193,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Add_class_tag_95102" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '@class' tag]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить тег @class]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Add_const_to_all_unresolved_variables_95082" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Add 'const' to all unresolved variables]]></Val>
@@ -1456,24 +1402,6 @@
           <Val><![CDATA[Add qualifier to all unresolved variables matching a member name]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Добавить квалификатор ко всем неразрешенным переменным, соответствующим имени члена]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_parameter_95104" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add 'this' parameter.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавьте параметр this.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Add_this_tag_95103" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Add '@this' tag]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Добавить тег @this]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1826,15 +1754,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";An_async_function_or_method_must_have_a_valid_awaitable_return_type_1057" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An async function or method must have a valid awaitable return type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Асинхронная функция или метод должны иметь допустимый тип возвращаемого значения, поддерживающий ожидание.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_in_2697" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[An async function or method must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your '--lib' option.]]></Val>
@@ -2044,15 +1963,6 @@
           <Val><![CDATA[An import path cannot end with a '{0}' extension. Consider importing '{1}' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Путь импорта не может заканчиваться расширением "{0}". Попробуйте импортировать "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";An_index_expression_argument_must_be_of_type_string_number_symbol_or_any_2342" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[An index expression argument must be of type 'string', 'number', 'symbol', or 'any'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Аргумент выражения индекса должен иметь тип string, number, symbol или any.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2287,15 +2197,6 @@
           <Val><![CDATA[Annotate with type from JSDoc]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Заметка с типом из JSDoc]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Annotate_with_types_from_JSDoc_95010" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Annotate with types from JSDoc]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Заметки с типами из JSDoc]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3608,15 +3509,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Classes_containing_abstract_methods_must_be_marked_abstract_2514" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Classes containing abstract methods must be marked abstract.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Классы, содержащие абстрактные методы, должны быть отмечены как абстрактные.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Classes_may_not_have_a_field_named_constructor_18006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Classes may not have a field named 'constructor'.]]></Val>
@@ -4060,15 +3952,6 @@
           <Val><![CDATA[Convert default export to named export]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Преобразовать экспорт по умолчанию в именованный экспорт]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Convert_function_0_to_class_95002" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Convert function '{0}' to class]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Преобразование функции "{0}" в класс]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -4781,15 +4664,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Did_you_mean_to_parenthesize_this_function_type_1360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Did you mean to parenthesize this function type?]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Вы хотели заключить этот тип функции в скобки?]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Did_you_mean_to_use_a_Colon_An_can_only_follow_a_property_name_when_the_containing_object_literal_is_1312" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Did you mean to use a ':'? An '=' can only follow a property name when the containing object literal is part of a destructuring pattern.]]></Val>
@@ -5252,15 +5126,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Duplicate_identifier_super_Compiler_uses_super_to_capture_base_class_reference_2401" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Duplicate identifier '_super'. Compiler uses '_super' to capture base class reference.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Повторяющийся идентификатор "_super". Компилятор использует "_super" для получения ссылки на базовый класс.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference_2399" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Duplicate identifier '_this'. Compiler uses variable declaration '_this' to capture 'this' reference.]]></Val>
@@ -5690,15 +5555,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Enables_experimental_support_for_ES7_async_functions_6068" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enables experimental support for ES7 async functions.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Включает экспериментальную поддержку для асинхронных функций ES7.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Enables_experimental_support_for_ES7_decorators_6065" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Enables experimental support for ES7 decorators.]]></Val>
@@ -5852,15 +5708,6 @@
           <Prev Cat="Text">
             <Val><![CDATA[Enum name cannot be '{0}']]></Val>
           </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Enum_type_0_circularly_references_itself_2586" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Enum type '{0}' circularly references itself.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип перечисления "{0}" циклически ссылается сам на себя.]]></Val>
-          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -6050,24 +5897,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_2656" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Exported external package typings file '{0}' is not a module. Please contact the package author to update the package definition.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Файл экспортированных внешних типизаций пакета "{0}" не является модулем. Обратитесь к автору пакета для обновления определения пакета.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_pack_2654" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Exported external package typings file cannot contain tripleslash references. Please contact the package author to update the package definition.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Файл экспортированных внешних типизаций пакета не может содержать ссылки с тройной косой чертой. Обратитесь к автору пакета для обновления определения пакета.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Exported_type_alias_0_has_or_is_using_private_name_1_4081" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Exported type alias '{0}' has or is using private name '{1}'.]]></Val>
@@ -6163,15 +5992,6 @@
           <Val><![CDATA[Expression resolves to '_super' that compiler uses to capture base class reference.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Разрешение выражения дает идентификатор "_super", который используется компилятором для получения ссылки на базовый класс.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Expression_resolves_to_variable_declaration_0_that_compiler_uses_to_support_async_functions_2521" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Expression resolves to variable declaration '{0}' that compiler uses to support async functions.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Разрешение выражения дает объявление переменной "{0}", которое используется компилятором для поддержки асинхронных функций.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6916,15 +6736,6 @@
           <Val><![CDATA[Generators are not allowed in an ambient context.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Генераторы не разрешается использовать в окружающем контексте.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Generators_are_only_available_when_targeting_ECMAScript_2015_or_higher_1220" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Generators are only available when targeting ECMAScript 2015 or higher.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Генераторы доступны только при разработке для ECMAScript 2015 или более поздних версий.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7835,15 +7646,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSDoc_type_0_circularly_references_itself_2587" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSDoc type '{0}' circularly references itself.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип JSDoc "{0}" циклически ссылается сам на себя.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";JSDoc_typedef_tag_should_either_have_a_type_annotation_or_be_followed_by_property_or_member_tags_8021" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.]]></Val>
@@ -7871,15 +7673,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";JSX_attribute_expected_17003" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX attribute expected.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ожидался атрибут JSX.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";JSX_attributes_must_only_be_assigned_a_non_empty_expression_17000" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[JSX attributes must only be assigned a non-empty 'expression'.]]></Val>
@@ -7894,15 +7687,6 @@
           <Val><![CDATA[JSX element '{0}' has no corresponding closing tag.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Элемент JSX "{0}" не содержит соответствующий закрывающий тег.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_element_attributes_type_0_may_not_be_a_union_type_2600" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX element attributes type '{0}' may not be a union type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип атрибутов элемента JSX "{0}" не может быть типом объединения.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7945,15 +7729,6 @@
           <Val><![CDATA[JSX element type '{0}' does not have any construct or call signatures.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип элемента JSX "{0}" не имеет конструкций или сигнатур вызова.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements_2605" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[JSX element type '{0}' is not a constructor function for JSX elements.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип элемента JSX "{0}" не является функцией конструктора для элементов JSX.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8065,15 +7840,6 @@
           <Val><![CDATA[Language and Environment]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Язык и среда]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Language_service_is_disabled_9004" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Language service is disabled.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Языковая служба отключена.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9023,18 +8789,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Only_identifiers_Slashqualified_names_with_optional_type_arguments_are_currently_supported_in_a_clas_9002" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[В предложениях extends класса сейчас поддерживаются только идентификаторы или полные имена с необязательными аргументами типа.]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clauses.]]></Val>
-          </Prev>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Only_named_exports_may_use_export_type_1383" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Only named exports may use 'export type'.]]></Val>
@@ -9166,15 +8920,6 @@
           <Val><![CDATA[Option '{0}' cannot be specified without specifying option '{1}' or option '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Параметр "{0}" нельзя указывать без указания параметра "{1}" или "{2}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_0_should_have_array_of_strings_as_a_value_6103" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option '{0}' should have array of strings as a value.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "{0}" должен иметь массив строк в качестве значения.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10076,15 +9821,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Projects_to_reference_6300" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Projects to reference]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Проекты для ссылки]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Property_0_cannot_have_an_initializer_because_it_is_marked_abstract_1267" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' cannot have an initializer because it is marked abstract.]]></Val>
@@ -10099,15 +9835,6 @@
           <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Свойство "{0}" поступает из сигнатуры индекса, поэтому доступ к нему должен осуществляться с помощью ["{0}"]5D;.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_does_not_exist_on_const_enum_1_2479" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' does not exist on 'const' enum '{1}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Свойство "{0}" не существует в перечислении const "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10258,15 +9985,6 @@
           <Val><![CDATA[Property '{0}' is incompatible with index signature.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Свойство "{0}" несовместимо с сигнатурой индекса.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Property_0_is_incompatible_with_rest_element_type_2573" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Property '{0}' is incompatible with rest element type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Свойство "{0}" несовместимо с типом элементов rest.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10501,15 +10219,6 @@
           <Val><![CDATA[Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Предоставление полной поддержки для итерируемых элементов в for-of, расширение и деструктуризация при выборе целевой платформы ES5 или ES3.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Provides_a_root_package_name_when_using_outFile_with_declarations_1390" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Provides a root package name when using outFile with declarations.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Предоставляет имя корневого пакета при использовании outFile с объявлениями.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11036,15 +10745,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolving_from_node_modules_folder_6118" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolving from node_modules folder...]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Идет разрешение из папки node_modules...]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Resolving_module_0_from_1_6086" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[======== Resolving module '{0}' from '{1}'. ========]]></Val>
@@ -11120,15 +10820,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Resolving_using_primary_search_paths_6117" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Resolving using primary search paths...]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Идет разрешение с помощью первичных путей поиска...]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Resolving_with_primary_search_path_0_6121" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Resolving with primary search path '{0}'.]]></Val>
@@ -11155,15 +10846,6 @@
           <Val><![CDATA[Rest parameter '{0}' implicitly has an 'any[]5D;' type, but a better type may be inferred from usage.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Параметр rest "{0}" неявно имеет тип "any[]5D;", но из использования можно определить более подходящий тип.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Rest_signatures_are_incompatible_2572" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Rest signatures are incompatible.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Сигнатуры элемента rest несовместимы.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11800,15 +11482,6 @@
           <Val><![CDATA[Source provides no match for variadic element at position {0} in target.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Источник не предоставляет соответствия для элемента с переменным числом аргументов в позиции {0} в целевом объекте.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Specialized_overload_signature_is_not_assignable_to_any_non_specialized_signature_2382" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Specialized overload signature is not assignable to any non-specialized signature.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Специализированная сигнатура перегрузки не поддерживает назначение неспециализированной сигнатуре.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12458,15 +12131,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Symbol_reference_does_not_refer_to_the_global_Symbol_constructor_object_2470" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['Symbol' reference does not refer to the global Symbol constructor object.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ссылка Symbol не ссылается на глобальный объект конструктора Symbol.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Synchronously_call_callbacks_and_update_the_state_of_directory_watchers_on_platforms_that_don_t_supp_6704" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Synchronously call callbacks and update the state of directory watchers on platforms that don`t support recursive watching natively.]]></Val>
@@ -12599,18 +12263,6 @@
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Текст оператора if не может быть пустым.]]></Val>
           </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_bundledPackageName_option_must_be_provided_when_using_outFile_and_node_module_resolution_with_de_1391" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The 'bundledPackageName' option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Параметр "bundledPackageName" должен быть указан при использовании outFile и разрешения модуля узла с выпуском объявления.]]></Val>
-          </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[The `bundledPackageName` option must be provided when using outFile and node module resolution with declaration emit.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -13094,15 +12746,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_return_type_of_a_JSX_element_constructor_must_return_an_object_type_2601" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The return type of a JSX element constructor must return an object type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Тип возвращаемого значения конструктора элемента JSX должен возвращать тип объекта.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_return_type_of_a_get_accessor_must_be_assignable_to_its_set_accessor_type_2380" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The return type of a 'get' accessor must be assignable to its 'set' accessor type]]></Val>
@@ -13232,15 +12875,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_target_of_an_assignment_must_be_a_variable_or_a_property_access_2541" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The target of an assignment must be a variable or a property access.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Целевой объект назначения должен быть переменной или доступом к свойству.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";The_target_of_an_object_rest_assignment_may_not_be_an_optional_property_access_2778" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The target of an object rest assignment may not be an optional property access.]]></Val>
@@ -13282,15 +12916,6 @@
           <Val><![CDATA[The type '{0}' is 'readonly' and cannot be assigned to the mutable type '{1}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тип "{0}" является "readonly" и не может быть назначен изменяемому типу "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_typ_2453" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Аргумент типа для параметра типа "{0}" невозможно вывести из использования. Рассмотрите возможность явного указания аргументов типа.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14033,15 +13658,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0_2455" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Type argument candidate '{1}' is not a valid type argument because it is not a supertype of candidate '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Кандидат аргумента типа "{1}" является недопустимым аргументом, так как это не супертип кандидата "{0}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";Type_argument_expected_1140" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Type argument expected.]]></Val>
@@ -14689,15 +14305,6 @@
           <Val><![CDATA[Unreachable code detected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Обнаружен недостижимый код.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Unsupported_locale_0_6049" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Unsupported locale '{0}'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Неподдерживаемый языковой стандарт "{0}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15497,15 +15104,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";_0_modifier_cannot_appear_on_a_data_property_1043" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot appear on a data property.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Модификатор "{0}" не может содержаться в свойстве данных.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";_0_modifier_cannot_appear_on_a_module_or_namespace_element_1044" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' modifier cannot appear on a module or namespace element.]]></Val>
@@ -15574,15 +15172,6 @@
           <Val><![CDATA['{0}' modifier cannot be used with '{1}' modifier.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Модификатор "{0}" не может использоваться с модификатором "{1}".]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";_0_modifier_cannot_be_used_with_a_class_declaration_1041" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' modifier cannot be used with a class declaration.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Модификатор "{0}" не может использоваться с объявлением класса.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15679,15 +15268,6 @@
           <Val><![CDATA['{0}' tag already specified.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Тег "{0}" уже указан.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";_0_tag_cannot_be_used_independently_as_a_top_level_JSDoc_tag_1253" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['{0}' tag cannot be used independently as a top level JSDoc tag.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Невозможно использовать тег "{0}" независимо в качестве тега верхнего уровня JSDoc.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15830,15 +15410,6 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";class_expressions_are_not_currently_supported_9003" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['class' expressions are not currently supported.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Выражения class в настоящий момент не поддерживаются.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
       <Item ItemId=";const_declarations_can_only_be_declared_inside_a_block_1156" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['const' declarations can only be declared inside a block.]]></Val>
@@ -15931,15 +15502,6 @@
           <Val><![CDATA['delete' cannot be called on an identifier in strict mode.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Невозможно вызвать оператор delete с идентификатором в строгом режиме.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";delete_this_Project_0_is_up_to_date_because_it_was_previously_built_6360" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[delete this - Project '{0}' is up to date because it was previously built]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[удалить это — проект "{0}" не требует обновления, так как был собран ранее]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16057,15 +15619,6 @@
           <Val><![CDATA['for await' loops are only allowed within async functions and at the top levels of modules.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Циклы "for await" допускаются только в асинхронных функциях и на верхних уровнях модулей.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";get_and_set_accessor_must_have_the_same_this_type_2682" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA['get' and 'set' accessor must have the same 'this' type.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Методы доступа "get" и "set" должны иметь одинаковый тип "this".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -16465,6 +16018,15 @@
           <Val><![CDATA['this' implicitly has type 'any' because it does not have a type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[this неявно содержит тип any, так как он не имеет аннотации типа.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";true_for_ES2022_and_above_including_ESNext_6930" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[`true` for ES2022 and above, including ESNext.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[true для ES2022 и выше, включая ESNext.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
