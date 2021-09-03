@@ -10,8 +10,6 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,8): e
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(12,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(13,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(14,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(20,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(21,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(22,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(29,14): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
@@ -20,7 +18,7 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(30,22): 
 tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: number; }'.
 
 
-==== tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts (20 errors) ====
+==== tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts (18 errors) ====
     // Missing properties
     function f1() {
         var { x, y } = {};
@@ -69,10 +67,6 @@ tests/cases/conformance/es6/destructuring/missingAndExcessProperties.ts(31,16): 
     // Excess properties
     function f3() {
         var { } = { x: 0, y: 0 };
-                    ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-                          ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
         var { x } = { x: 0, y: 0 };
                             ~
 !!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
