@@ -1,3 +1,4 @@
+//// [mappedTypeAsClauseRelationships.ts]
 // From original issue #45212:
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 type H<T> = T[keyof Methods<T>]; // Ok
@@ -25,3 +26,16 @@ function fun2<T>(val: T) {
 }
 
 
+
+
+//// [mappedTypeAsClauseRelationships.js]
+function fun(val) {
+    var x = val; // Ok
+    var y = val; // Error
+}
+function fun2(val) {
+    var x = val; // Ok
+    var y = val; // Ok
+    var z = val; // Error
+    var w = val; // Error
+}

@@ -18584,132 +18584,66 @@ namespace ts {
                     }
                 }
                 else if (isGenericMappedType(target)) {
-                    if (!target.declaration.nameType) {
-                        // A source type T is related to a target type { [P in X]: T[P] }
-                        const template = getTemplateTypeFromMappedType(target);
-                        const modifiers = getMappedTypeModifiers(target);
-                        // Why are we excluding the case where we have exclude optional modifiers?
-                        if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
-                            // If:
-                            // - template type has shape `T[R]`
-                            // - template's object type `T` = `S` (source)
-                            // - template's index type `R` = `P` (its parameter type)
-                            // In other words: `S <: { [P in X]: S[P] }`
-                            if (template.flags & TypeFlags.IndexedAccess && (template as IndexedAccessType).objectType === source &&
-                                (template as IndexedAccessType).indexType === getTypeParameterFromMappedType(target)) {
-                                return Ternary.True;
-                            }
-                            // Otherwise, if `S` is not generic mapped type:
-                            if (!isGenericMappedType(source)) {
-                                // Constraint would be `X` in `{ [P in X]: ... }`
-                                const targetConstraint = getConstraintTypeFromMappedType(target);
-                                // Keys (properties) of type `S`
-                                const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
-                                const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
-                                const filteredByApplicability = includeOptional ? intersectTypes(targetConstraint, sourceKeys) : undefined;
-                                // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
-                                // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
-                                if (includeOptional
-                                    ? !(filteredByApplicability!.flags & TypeFlags.Never)
-                                    // Here we check that `Q <: keyof S`
-                                    : isRelatedTo(targetConstraint, sourceKeys)) {
-                                    const templateType = getTemplateTypeFromMappedType(target);
-                                    const typeParameter = getTypeParameterFromMappedType(target);
+                    // Check if source type `S` is related to target type `{ [P in Q]: T }` or `{ [P in Q as R]: T}`.
+                    const keysRemapped = !!target.declaration.nameType;
+                    const templateType = getTemplateTypeFromMappedType(target);
+                    const modifiers = getMappedTypeModifiers(target);
+                    if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
+                        // If the mapped type has shape `{ [P in Q]: T[P] }`,
+                        // source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
+                        if (!keysRemapped && templateType.flags & TypeFlags.IndexedAccess && (templateType as IndexedAccessType).objectType === source &&
+                            (templateType as IndexedAccessType).indexType === getTypeParameterFromMappedType(target)) {
+                            return Ternary.True;
+                        }
+                        if (!isGenericMappedType(source)) {
+                            // If target has shape `{ [P in Q as R]: T}`, then its keys have type `R`.
+                            // If target has shape `{ [P in Q]: T }`, then its keys have type `Q`.
+                            const targetKeys = keysRemapped ? getNameTypeFromMappedType(target)! : getConstraintTypeFromMappedType(target);
+                            // Type of the keys of source type `S`, i.e. `keyof S`.
+                            const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
+                            const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
+                            const filteredByApplicability = includeOptional ? intersectTypes(targetKeys, sourceKeys) : undefined;
+                            // A source type `S` is related to a target type `{ [P in Q]: T }` if `Q` is related to `keyof S` and `S[Q]` is related to `T`.
+                            // A source type `S` is related to a target type `{ [P in Q as R]: T }` if `R` is related to `keyof S` and `S[R]` is related to `T.
+                            // A source type `S` is related to a target type `{ [P in Q]?: T }` if some constituent `Q'` of `Q` is related to `keyof S` and `S[Q']` is related to `T`.
+                            // A source type `S` is related to a target type `{ [P in Q as R]?: T }` if some constituent `R'` of `R` is related to `keyof S` and `S[R']` is related to `T`.
+                            if (includeOptional
+                                ? !(filteredByApplicability!.flags & TypeFlags.Never)
+                                : isRelatedTo(targetKeys, sourceKeys)) {
+                                const typeParameter = getTypeParameterFromMappedType(target);
 
-                                    // Fastpath: When the template has the form Obj[P] where P is the mapped type parameter, directly compare `source` with `Obj`
-                                    // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `source[P]`
-                                    const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
-                                    if (nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
-                                        if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, reportErrors)) {
-                                            return result;
-                                        }
-                                    }
-                                    else {
-                                        const indexingType = filteredByApplicability ? getIntersectionType([filteredByApplicability, typeParameter]) : typeParameter;
-                                        // Get `S[P]`
-                                        const indexedAccessType = getIndexedAccessType(source, indexingType);
-                                        // Now we check if `S[P] <: X`
-                                        if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                                            return result;
-                                        }
+                                // Fastpath: When the template type has the form `Obj[P]` where `P` is the mapped type parameter, directly compare source `S` with `Obj`
+                                // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `S[P]`.
+                                const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
+                                if (!keysRemapped && nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
+                                    if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, reportErrors)) {
+                                        return result;
                                     }
                                 }
-                                originalErrorInfo = errorInfo;
-                                resetErrorInfo(saveErrorInfo);
-                            }
-                        }
-                    }
-                    else { // Keys are remapped
-                        // A source type T is related to a target type { [P in Q as R]: X }
-                        // const template = getTemplateTypeFromMappedType(target);
-                        const modifiers = getMappedTypeModifiers(target);
-                        // TODO: Why are we excluding the case where we have exclude optional modifiers?
-                        if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
-                            // >> Don't think this works if we have key remapping.
-                            // >> There might be other simple common cases though.
-                            // If:
-                            // - template type has shape `T[R]`
-                            // - template's object type `T` = `S` (source)
-                            // - template's index type `R` = `P` (its parameter type)
-                            // In other words: `S <: { [P in X]: S[P] }`
-                            // if (template.flags & TypeFlags.IndexedAccess && (template as IndexedAccessType).objectType === source &&
-                            //     (template as IndexedAccessType).indexType === getTypeParameterFromMappedType(target)) {
-                            //     return Ternary.True;
-                            // }
-                            // Otherwise, if `S` is not generic mapped type:
-                            if (!isGenericMappedType(source)) {
-                                // Target keys would be `R` in `{ [P in Q as R]: X }`
-                                const targetKeys = getNameTypeFromMappedType(target)!; // Target has a name type
+                                else {
+                                    // We need to compare the type of a property on the source type `S` to the type of the same property on the target type,
+                                    // so we need to construct an indexing type representing a property, and then use indexing type to index the source type for comparison.
 
-                                // const targetConstraint = getConstraintTypeFromMappedType(target);
-
-                                // Keys of type `S`
-                                const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
-
-                                // const includeOptional = modifiers & MappedTypeModifiers.IncludeOptional;
-                                // const filteredByApplicability = includeOptional ? intersectTypes(targetKeys, sourceKeys) : undefined;
-
-                                // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
-                                //>> TODO: A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
-                                // if (includeOptional
-                                //     ? !(filteredByApplicability!.flags & TypeFlags.Never)
-                                //     // Here we check that `Q <: keyof S`
-                                //     : isRelatedTo(targetConstraint, sourceKeys)) {
-                                //     const templateType = getTemplateTypeFromMappedType(target);
-                                //     const typeParameter = getTypeParameterFromMappedType(target);
-
-                                //     // Fastpath: When the template has the form Obj[P] where P is the mapped type parameter, directly compare `source` with `Obj`
-                                //     // to avoid creating the (potentially very large) number of new intermediate types made by manufacturing `source[P]`
-                                //     const nonNullComponent = extractTypesOfKind(templateType, ~TypeFlags.Nullable);
-                                //     if (nonNullComponent.flags & TypeFlags.IndexedAccess && (nonNullComponent as IndexedAccessType).indexType === typeParameter) {
-                                //         if (result = isRelatedTo(source, (nonNullComponent as IndexedAccessType).objectType, reportErrors)) {
-                                //             return result;
-                                //         }
-                                //     }
-                                //     else {
-                                //         const indexingType = filteredByApplicability ? getIntersectionType([filteredByApplicability, typeParameter]) : typeParameter;
-                                //         // Get `S[P]`
-                                //         const indexedAccessType = getIndexedAccessType(source, indexingType);
-                                //         // Now we check if `S[P] <: X`
-                                //         if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                                //             return result;
-                                //         }
-                                //     }
-                                if (isRelatedTo(targetKeys, sourceKeys)) {
-                                    const templateType = getTemplateTypeFromMappedType(target);
-                                    // const typeParameter = getTypeParameterFromMappedType(target);
-
-                                    const indexingType = targetKeys; // >> Is that right?
-                                    // Get `S[R]`
+                                    // If the target type has shape `{ [P in Q]: T }`, then a property of the target has type `P`.
+                                    // If the target type has shape `{ [P in Q]?: T }`, then a property of the target has type `P`,
+                                    // but the property is optional, so we only want to compare properties `P` that are common between `keyof S` and `Q`.
+                                    // If the target type has shape `{ [P in Q as R]: T }`, then a property of the target has type `R`.
+                                    // If the target type has shape `{ [P in Q as R]?: T }`, then a property of the target has type `R`,
+                                    // but the property is optional, so we only want to compare properties `R` that are common between `keyof S` and `R`.
+                                    const indexingType = keysRemapped
+                                        ? (filteredByApplicability || targetKeys)
+                                        : filteredByApplicability
+                                            ? getIntersectionType([filteredByApplicability, typeParameter])
+                                            : typeParameter;
                                     const indexedAccessType = getIndexedAccessType(source, indexingType);
-                                    // >> That part fails:
+                                    // Compare `S[indexingType]` to `T`, where `T` is the type of a property of the target type.
                                     if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
                                         return result;
                                     }
                                 }
-                                originalErrorInfo = errorInfo;
-                                resetErrorInfo(saveErrorInfo);
                             }
+                            originalErrorInfo = errorInfo;
+                            resetErrorInfo(saveErrorInfo);
                         }
                     }
                 }
