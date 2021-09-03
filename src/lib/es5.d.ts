@@ -1445,11 +1445,13 @@ interface Promise<T> {
  */
 type Awaited<T> =
     T extends null | undefined ? T : // special case for `null | undefined` when not in `--noImplicitAny` mode
-    T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
-        F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
-            Awaited<V> : // recursively unwrap the value
-            never : // the argument to `then` was not callable.
-    T; // non-thenable
+        T extends object ? // `await` only unwraps object types with a callable then. Non-object types are not unwrapped.
+            T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
+                F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
+                    Awaited<V> : // recursively unwrap the value
+                    never : // the argument to `then` was not callable.
+            T : // argument was not an object
+        T; // non-thenable
 
 interface ArrayLike<T> {
     readonly length: number;
