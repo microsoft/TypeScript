@@ -3148,8 +3148,8 @@ namespace ts {
             return symbol.parent ? getFullyQualifiedName(symbol.parent, containingLocation) + "." + symbolToString(symbol) : symbolToString(symbol, containingLocation, /*meaning*/ undefined, SymbolFormatFlags.DoNotIncludeSymbolChain | SymbolFormatFlags.AllowAnyNodeKind);
         }
 
-        function getFullQualifiedName(node: QualifiedName) {
-            while(isQualifiedName(node.parent)) {
+        function getContainingQualifiedNameNode(node: QualifiedName) {
+            while (isQualifiedName(node.parent)) {
                 node = node.parent;
             }
             return node;
@@ -3223,13 +3223,13 @@ namespace ts {
                         const declarationName = declarationNameToString(right);
                         const suggestionForNonexistentModule = getSuggestedSymbolForNonexistentModule(right, namespace);
                         const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
-                        const fullQualifiedName = isQualifiedName(name) && getFullQualifiedName(name);
-                        const canSuggestTypeof = fullQualifiedName && !isTypeOfExpression(fullQualifiedName.parent) && tryGetQualifiedNameAsValue(fullQualifiedName);
+                        const containingQualifiedName = isQualifiedName(name) && getContainingQualifiedNameNode(name);
+                        const canSuggestTypeof = containingQualifiedName && !isTypeOfExpression(containingQualifiedName.parent) && tryGetQualifiedNameAsValue(containingQualifiedName);
                         if (suggestionForNonexistentModule) {
                             error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestionForNonexistentModule));
                         }
                         else if (canSuggestTypeof) {
-                            error(name, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, entityNameToString(fullQualifiedName as QualifiedName));
+                            error(containingQualifiedName, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, entityNameToString(containingQualifiedName));
                         }
                         else if (meaning & SymbolFlags.Namespace && exportedTypeSymbol && isQualifiedName(name.parent)) {
                             error(name.parent.right, Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1, symbolToString(exportedTypeSymbol), unescapeLeadingUnderscores(name.parent.right.escapedText));
