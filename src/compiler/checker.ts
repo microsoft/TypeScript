@@ -18745,7 +18745,6 @@ namespace ts {
                         }
                     }
                 }
-                // >> HERE
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
@@ -18772,7 +18771,6 @@ namespace ts {
                             }
                         }
                     }
-                    // >> HERE: source is conditional, target is not
                     else {
                         // conditionals aren't related to one another via distributive constraint as it is much too inaccurate and allows way
                         // more assignments than are desirable (since it maps the source check type to its constraint, it loses information)
