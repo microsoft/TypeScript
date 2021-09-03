@@ -3156,6 +3156,30 @@ namespace ts {
             return symbol.parent ? getFullyQualifiedName(symbol.parent, containingLocation) + "." + symbolToString(symbol) : symbolToString(symbol, containingLocation, /*meaning*/ undefined, SymbolFormatFlags.DoNotIncludeSymbolChain | SymbolFormatFlags.AllowAnyNodeKind);
         }
 
+        function getContainingQualifiedNameNode(node: QualifiedName) {
+            while (isQualifiedName(node.parent)) {
+                node = node.parent;
+            }
+            return node;
+        }
+
+        function tryGetQualifiedNameAsValue(node: QualifiedName) {
+            let left: Identifier | QualifiedName = getFirstIdentifier(node);
+            let symbol = resolveName(left, left.escapedText, SymbolFlags.Value, undefined, left, /*isUse*/ true);
+            if (!symbol) {
+                return undefined;
+            }
+            while (isQualifiedName(left.parent)) {
+                const type = getTypeOfSymbol(symbol);
+                symbol = getPropertyOfType(type, left.parent.right.escapedText);
+                if (!symbol) {
+                    return undefined;
+                }
+                left = left.parent;
+            }
+            return symbol;
+        }
+
         /**
          * Resolves a qualified name and any involved aliases.
          */
@@ -3205,10 +3229,22 @@ namespace ts {
                     if (!ignoreErrors) {
                         const namespaceName = getFullyQualifiedName(namespace);
                         const declarationName = declarationNameToString(right);
-                        const suggestion = getSuggestedSymbolForNonexistentModule(right, namespace);
-                        suggestion ?
-                            error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestion)) :
+                        const suggestionForNonexistentModule = getSuggestedSymbolForNonexistentModule(right, namespace);
+                        const exportedTypeSymbol = getMergedSymbol(getSymbol(getExportsOfSymbol(namespace), right.escapedText, SymbolFlags.Type));
+                        const containingQualifiedName = isQualifiedName(name) && getContainingQualifiedNameNode(name);
+                        const canSuggestTypeof = containingQualifiedName && !isTypeOfExpression(containingQualifiedName.parent) && tryGetQualifiedNameAsValue(containingQualifiedName);
+                        if (suggestionForNonexistentModule) {
+                            error(right, Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2, namespaceName, declarationName, symbolToString(suggestionForNonexistentModule));
+                        }
+                        else if (canSuggestTypeof) {
+                            error(containingQualifiedName, Diagnostics._0_refers_to_a_value_but_is_being_used_as_a_type_here_Did_you_mean_typeof_0, entityNameToString(containingQualifiedName));
+                        }
+                        else if (meaning & SymbolFlags.Namespace && exportedTypeSymbol && isQualifiedName(name.parent)) {
+                            error(name.parent.right, Diagnostics.Cannot_access_0_1_because_0_is_a_type_but_not_a_namespace_Did_you_mean_to_retrieve_the_type_of_the_property_1_in_0_with_0_1, symbolToString(exportedTypeSymbol), unescapeLeadingUnderscores(name.parent.right.escapedText));
+                        }
+                        else {
                             error(right, Diagnostics.Namespace_0_has_no_exported_member_1, namespaceName, declarationName);
+                        }
                     }
                     return undefined;
                 }
