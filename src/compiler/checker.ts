@@ -17740,6 +17740,13 @@ namespace ts {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
                     }
                     else {
+                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
+                            const suggestion = getSuggestionForNonexistentStringLiteral(source as StringLiteralType, target as UnionType);
+                            if (suggestion) {
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, sourceType, targetType, suggestion);
+                                return;
+                            }
+                        }
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
                 }
@@ -28125,6 +28132,16 @@ namespace ts {
             }
 
             return suggestion;
+        }
+
+        function getSuggestionForNonexistentStringLiteral(source: StringLiteralType, target: UnionType): string | undefined {
+            const candidates: string[] = [];
+            for (const type of target.types) {
+                if (type.flags & TypeFlags.StringLiteral) {
+                    candidates.push((type as StringLiteralType).value);
+                }
+            }
+            return getSpellingSuggestion(source.value, candidates, (name) => name);
         }
 
         /**
