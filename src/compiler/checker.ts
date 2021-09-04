@@ -15322,19 +15322,17 @@ namespace ts {
                     if (newRoot.outerTypeParameters) {
                         const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
                         const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
-                        if (!newRoot.instantiations!.get(getTypeListId(typeArguments))) {
-                            const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
-                            const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
-                            if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
-                                root = newRoot;
-                                mapper = newRootMapper;
-                                aliasSymbol = undefined;
-                                aliasTypeArguments = undefined;
-                                if (newRoot.aliasSymbol) {
-                                    tailCount++;
-                                }
-                                return true;
+                        const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
+                        const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                        if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                            root = newRoot;
+                            mapper = newRootMapper;
+                            aliasSymbol = undefined;
+                            aliasTypeArguments = undefined;
+                            if (newRoot.aliasSymbol) {
+                                tailCount++;
                             }
+                            return true;
                         }
                     }
                 }
