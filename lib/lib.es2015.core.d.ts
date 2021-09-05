@@ -276,42 +276,31 @@ interface NumberConstructor {
     parseInt(string: string, radix?: number): number;
 }
 
+/**
+* Return a empty object type if the param's type is undefined
+*/
+type Undefined2Object<T> = T extends undefined ? {} : T;
+
+/**
+* Remove the first tow item of tuple
+*/
+type RemoveFirstTwo<T extends unknown[], First, Second> =  T extends [a: First, b: Second, ...rest: infer P] ? P : [];
+
+/**
+* Convert tuple to intersection with tuple item's type
+*/
+type Tuple2Intersection<T extends unknown[]> = T[2] extends undefined
+  ? Undefined2Object<T[0]> & Undefined2Object<T[1]>
+  : Tuple2Intersection<[T[0], T[1]]> & Tuple2Intersection<RemoveFirstTwo<T, T[0], T[1]>>;
+
 interface ObjectConstructor {
-    /**
-     * Copy the values of all of the enumerable own properties from one or more source objects to a
-     * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source The source object from which to copy properties.
-     */
-    assign<T, U>(target: T, source: U): T & U;
-
-    /**
-     * Copy the values of all of the enumerable own properties from one or more source objects to a
-     * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source1 The first source object from which to copy properties.
-     * @param source2 The second source object from which to copy properties.
-     */
-    assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
-
-    /**
-     * Copy the values of all of the enumerable own properties from one or more source objects to a
-     * target object. Returns the target object.
-     * @param target The target object to copy to.
-     * @param source1 The first source object from which to copy properties.
-     * @param source2 The second source object from which to copy properties.
-     * @param source3 The third source object from which to copy properties.
-     */
-    assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
-
     /**
      * Copy the values of all of the enumerable own properties from one or more source objects to a
      * target object. Returns the target object.
      * @param target The target object to copy to.
      * @param sources One or more source objects from which to copy properties
      */
-    assign(target: object, ...sources: any[]): any;
-
+    assign<T extends object, R extends object[]>(target: T, ...sources: R): Tuple2Intersection<[T, ...R]>;
     /**
      * Returns an array of all symbol properties found directly on object o.
      * @param o Object to retrieve the symbols from.
