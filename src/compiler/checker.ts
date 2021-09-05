@@ -17741,9 +17741,9 @@ namespace ts {
                     }
                     else {
                         if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
-                            const suggestion = getSuggestionForNonexistentStringLiteral(source as StringLiteralType, target as UnionType);
-                            if (suggestion) {
-                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, sourceType, targetType, suggestion);
+                            const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
+                            if (suggestedType) {
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, sourceType, targetType, typeToString(suggestedType));
                                 return;
                             }
                         }
@@ -28134,14 +28134,9 @@ namespace ts {
             return suggestion;
         }
 
-        function getSuggestionForNonexistentStringLiteral(source: StringLiteralType, target: UnionType): string | undefined {
-            const candidates: string[] = [];
-            for (const type of target.types) {
-                if (type.flags & TypeFlags.StringLiteral) {
-                    candidates.push((type as StringLiteralType).value);
-                }
-            }
-            return getSpellingSuggestion(source.value, candidates, (name) => name);
+        function getSuggestedTypeForNonexistentStringLiteralType(source: StringLiteralType, target: UnionType): StringLiteralType | undefined {
+            const candidates = target.types.filter((type): type is StringLiteralType => !!(type.flags & TypeFlags.StringLiteral));
+            return getSpellingSuggestion(source.value, candidates, (type) => type.value);
         }
 
         /**
