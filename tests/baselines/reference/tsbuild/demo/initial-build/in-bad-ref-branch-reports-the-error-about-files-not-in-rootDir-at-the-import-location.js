@@ -208,7 +208,7 @@ Output::
 [[90m12:00:00 AM[0m] Skipping build of project '/src/zoo/tsconfig.json' because its dependency '/src/animals' was not built
 
 
-Found 7 errors.
+Found 7 errors in 0 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

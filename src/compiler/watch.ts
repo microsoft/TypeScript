@@ -7,7 +7,7 @@ namespace ts {
     } : undefined;
 
     /**
-     * Create a function that reports error by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports error by writing to the system and handles the formatting of the diagnostic
      */
     export function createDiagnosticReporter(system: System, pretty?: boolean): DiagnosticReporter {
         const host: FormatDiagnosticsHost = system === sys && sysFormatDiagnosticsHost ? sysFormatDiagnosticsHost : {
@@ -101,15 +101,51 @@ namespace ts {
         return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
     }
 
+    export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]) {
+        return filter(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error)
+            .map(
+                errorDiagnostic => {
+                    if(errorDiagnostic.file === undefined) return;
+                    return `${errorDiagnostic.file.fileName}`;
+            })
+            .filter((value, index, self) => self !== undefined && self.indexOf(value) === index)
+            .map((fileName: string) => {
+                const diagnosticForFileName = find(diagnostics, diagnostic =>
+                    diagnostic.file !== undefined && diagnostic.file.fileName === fileName
+                );
+
+                if(diagnosticForFileName !== undefined) {
+                    const { line } = getLineAndCharacterOfPosition(diagnosticForFileName.file!, diagnosticForFileName.start!);
+                    return `${fileName}:${line + 1}`;
+                }
+            });
+    }
+
     export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
         return errorCount === 1 ?
             Diagnostics.Found_1_error_Watching_for_file_changes :
             Diagnostics.Found_0_errors_Watching_for_file_changes;
     }
 
-    export function getErrorSummaryText(errorCount: number, newLine: string) {
+    export function getErrorSummaryText(
+        errorCount: number,
+        filesInError: readonly (string | undefined)[],
+        newLine: string
+    ) {
         if (errorCount === 0) return "";
-        const d = createCompilerDiagnostic(errorCount === 1 ? Diagnostics.Found_1_error : Diagnostics.Found_0_errors, errorCount);
+        const d = errorCount === 1 ?
+            createCompilerDiagnostic(
+                filesInError[0] !== undefined ?
+                    Diagnostics.Found_1_error_in_1 :
+                    Diagnostics.Found_1_error,
+                errorCount,
+                filesInError[0]) :
+            createCompilerDiagnostic(
+                filesInError.length === 1 ?
+                    Diagnostics.Found_0_errors_in_1_file :
+                    Diagnostics.Found_0_errors_in_1_files,
+                errorCount,
+                filesInError.length);
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
@@ -350,7 +386,7 @@ namespace ts {
         }
 
         if (reportSummary) {
-            reportSummary(getErrorCountForSummary(diagnostics));
+            reportSummary(getErrorCountForSummary(diagnostics), getFilesInErrorForSummary(diagnostics));
         }
 
         return {
@@ -656,7 +692,7 @@ namespace ts {
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
-            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
+            input.reportErrorSummary || input.options.pretty ? (errorCount, filesInError) => system.write(getErrorSummaryText(errorCount, filesInError, system.newLine)) : undefined
         );
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
         return exitStatus;

@@ -54,7 +54,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -278,7 +278,7 @@ Output::
     'prop1' is declared here.
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -462,7 +462,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -589,7 +589,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -630,7 +630,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -674,7 +674,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 3 errors.
+Found 3 errors in 3 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -875,7 +875,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 3 errors.
+Found 3 errors in 3 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -909,7 +909,7 @@ Output::
     'prop1' is declared here.
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
@@ -943,7 +943,7 @@ Output::
     'prop1' is declared here.
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
@@ -982,7 +982,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 3 errors.
+Found 3 errors in 3 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -1131,7 +1131,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
@@ -1290,7 +1290,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in /src/project/src/noChangeFileWithEmitSpecificError.ts:1
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 

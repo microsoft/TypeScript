@@ -4834,6 +4834,18 @@
         "category": "Message",
         "code": 6257
     },
+    "Found 1 error in {1}": {
+        "category": "Message",
+        "code": 6258
+    },
+    "Found {0} errors in 1 file.": {
+        "category": "Message",
+        "code": 6259
+    },
+    "Found {0} errors in {1} files.": {
+        "category": "Message",
+        "code": 6260
+    },
 
     "Enable project compilation": {
         "category": "Message",

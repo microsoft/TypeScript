@@ -47,7 +47,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
@@ -196,7 +196,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
@@ -238,7 +238,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
@@ -365,7 +365,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
@@ -488,7 +488,7 @@ Output::
 [7m [0m [91m                     ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 2 errors.
+Found 2 errors in 2 files.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]

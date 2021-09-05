@@ -46,7 +46,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in /src/src/main.ts:2
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]
@@ -172,7 +172,7 @@ Output::
 [7m [0m [91m      ~[0m
 
 
-Found 1 error.
+Found 1 error in /src/src/main.ts:2
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 Program root files: ["/src/shared/types/db.ts","/src/src/main.ts","/src/src/other.ts"]

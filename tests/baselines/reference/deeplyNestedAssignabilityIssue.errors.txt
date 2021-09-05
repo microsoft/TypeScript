@@ -65,5 +65,5 @@
         }
     }
     
-Found 2 errors.
+Found 2 errors in 1 file.
 

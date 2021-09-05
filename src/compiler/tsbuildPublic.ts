@@ -76,7 +76,7 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number) => void;
+    export type ReportEmitErrorSummary = (errorCount: number, filesInError: (string | undefined)[]) => void;
 
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         createDirectory?(path: string): void;
@@ -2002,10 +2002,12 @@ namespace ts {
         const canReportSummary = state.watch || !!state.host.reportErrorSummary;
         const { diagnostics } = state;
         let totalErrors = 0;
+        let filesInError: (string | undefined)[] = [];
         if (isCircularBuildOrder(buildOrder)) {
             reportBuildQueue(state, buildOrder.buildOrder);
             reportErrors(state, buildOrder.circularDiagnostics);
             if (canReportSummary) totalErrors += getErrorCountForSummary(buildOrder.circularDiagnostics);
+            if (canReportSummary) filesInError = [...filesInError, ...getFilesInErrorForSummary(buildOrder.circularDiagnostics)];
         }
         else {
             // Report errors from the other projects
@@ -2016,13 +2018,14 @@ namespace ts {
                 }
             });
             if (canReportSummary) diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+            if (canReportSummary) diagnostics.forEach(singleProjectErrors => [...filesInError, ...getFilesInErrorForSummary(singleProjectErrors)]);
         }
 
         if (state.watch) {
             reportWatchStatus(state, getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
         }
         else if (state.host.reportErrorSummary) {
-            state.host.reportErrorSummary(totalErrors);
+            state.host.reportErrorSummary(totalErrors, filesInError);
         }
     }
 

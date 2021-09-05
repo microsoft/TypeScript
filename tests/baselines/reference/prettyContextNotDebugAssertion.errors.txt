@@ -15,5 +15,5 @@
     
 !!! error TS1005: '}' expected.
 !!! related TS1007 tests/cases/compiler/index.ts:1:11: The parser expected to find a '}' to match the '{' token here.
-Found 1 error.
+Found 1 error in tests/cases/compiler/index.ts:2
 
