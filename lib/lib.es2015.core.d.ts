@@ -282,16 +282,16 @@ interface NumberConstructor {
 type Undefined2Object<T> = T extends undefined ? {} : T;
 
 /**
-* Remove the first tow item of tuple
+* Remove the first two item of tuple
 */
 type RemoveFirstTwo<T extends unknown[], First, Second> =  T extends [a: First, b: Second, ...rest: infer P] ? P : [];
 
 /**
 * Convert tuple to intersection with tuple item's type
 */
-type Tuple2Intersection<T extends unknown[]> = T[2] extends undefined
+type MergeTuple<T extends unknown[]> = T[2] extends undefined
   ? Undefined2Object<T[0]> & Undefined2Object<T[1]>
-  : Tuple2Intersection<[T[0], T[1]]> & Tuple2Intersection<RemoveFirstTwo<T, T[0], T[1]>>;
+  : MergeTuple<[T[0], T[1]]> & MergeTuple<RemoveFirstTwo<T, T[0], T[1]>>;
 
 interface ObjectConstructor {
     /**
@@ -300,7 +300,7 @@ interface ObjectConstructor {
      * @param target The target object to copy to.
      * @param sources One or more source objects from which to copy properties
      */
-    assign<T extends object, R extends object[]>(target: T, ...sources: R): Tuple2Intersection<[T, ...R]>;
+    assign<T extends object, R extends object[]>(target: T, ...sources: R): MergeTuple<[T, ...R]>;
     /**
      * Returns an array of all symbol properties found directly on object o.
      * @param o Object to retrieve the symbols from.
