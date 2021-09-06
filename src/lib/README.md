@@ -8,14 +8,14 @@ There are three main domains of APIs in `src/lib`:
  - **DOM APIs** - e.g. APIs which are available in Web Browsers
  - **Intl APIs** - e.g. APIs scoped to `Intl` which are documented in [ECMA-402](https://www.ecma-international.org/publications-and-standards/standards/ecma-402/)
 
-Finished proposals, anything in here can safely be added according to the years the proposal was added:
-
- - [JavaScript](https://github.com/tc39/proposals/blob/master/finished-proposals.md)
- - [Intl](https://github.com/tc39/proposals/blob/master/ecma402/finished-proposals.md)
-
 ## How do we figure out when to add something?
 
 TypeScript has a rule-of-thumb to only add something when it has got far enough through the standards process that it is more or less confirmed. For JavaScript APIs and language features, that usually means the proposal is at stage 3 or later.
+
+You can find the source of truth for modern language features and Intl APIs in these completed proposal lists:
+
+ - [JavaScript](https://github.com/tc39/proposals/blob/master/finished-proposals.md)
+ - [Intl](https://github.com/tc39/proposals/blob/master/ecma402/finished-proposals.md)
 
 For the DOM APIs, which are a bit more free-form we have ask that APIs are available (un-prefixed/flagged) in at least 2 browser _engines_ (e.g. not just 2 chromium browsers.) 
 
@@ -23,4 +23,4 @@ For the DOM APIs, which are a bit more free-form we have ask that APIs are avail
 
 The DOM files ending in `.generated.d.ts` aren't meant to be edited by hand.
 
-If you need to make changes to such files, make a change to the input files for [**our library generator**](https://github.com/Microsoft/TSJS-lib-generator).
+If you need to make changes to such files, make a change to the input files for [**our library generator**](https://github.com/microsoft/TypeScript-DOM-lib-generator).

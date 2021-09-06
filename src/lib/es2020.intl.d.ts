@@ -197,6 +197,10 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    interface NumberFormatPart {
+        type: "compact" | "currency" | "decimal" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign" | "unit" | "unknown";
+    }
+
     interface NumberFormatOptions {
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
@@ -217,10 +221,7 @@ declare namespace Intl {
         calendar?: string | undefined;
         dayPeriod?: "narrow" | "short" | "long" | undefined;
         numberingSystem?: string | undefined;
-        hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
-    }
 
-    interface DateTimeFormatOptions {
         dateStyle?: "full" | "long" | "medium" | "short" | undefined;
         timeStyle?: "full" | "long" | "medium" | "short" | undefined;
         hourCycle?: "h11" | "h12" | "h23" | "h24" | undefined;
