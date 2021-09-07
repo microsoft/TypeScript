@@ -12789,7 +12789,7 @@ namespace ts {
 
         function isValidIndexKeyType(type: Type): boolean {
             return !!(type.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol)) || isPatternLiteralType(type) ||
-                !!(type.flags & TypeFlags.Intersection) && !isGenericIndexType(type) && !isGenericObjectType(type) && some((type as IntersectionType).types, isValidIndexKeyType);
+                !!(type.flags & TypeFlags.Intersection) && !isGenericType(type) && some((type as IntersectionType).types, isValidIndexKeyType);
         }
 
         function getConstraintDeclaration(type: TypeParameter): TypeNode | undefined {
@@ -14545,10 +14545,14 @@ namespace ts {
             return neverType;
         }
 
+        function isKeyTypeIncluded(keyType: Type, include: TypeFlags): boolean {
+            return !!(keyType.flags & include || keyType.flags & TypeFlags.Intersection && some((keyType as IntersectionType).types, t => isKeyTypeIncluded(t, include)));
+        }
+
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags, includeOrigin: boolean) {
             const origin = includeOrigin && (getObjectFlags(type) & (ObjectFlags.ClassOrInterface | ObjectFlags.Reference) || type.aliasSymbol) ? createOriginIndexType(type) : undefined;
             const propertyTypes = map(getPropertiesOfType(type), prop => getLiteralTypeFromProperty(prop, include));
-            const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && info.keyType.flags & include ?
+            const indexKeyTypes = map(getIndexInfosOfType(type), info => info !== enumNumberIndexInfo && isKeyTypeIncluded(info.keyType, include) ?
                 info.keyType === stringType && include & TypeFlags.Number ? stringOrNumberType : info.keyType : neverType);
             return getUnionType(concatenate(propertyTypes, indexKeyTypes), UnionReduction.Literal,
                 /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, origin);
