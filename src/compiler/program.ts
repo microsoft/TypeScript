@@ -887,6 +887,8 @@ namespace ts {
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
         let usesUriStyleNodeCoreModules = false;
+        // Used when resolving something like 'dom' for libs
+        // const libResolveCache = createModuleResolutionCache(currentDirectory, host.getCanonicalFileName, { moduleResolution: ModuleResolutionKind.NodeJs });
 
         /**
          * map with
@@ -995,7 +997,7 @@ namespace ts {
                 }
                 else {
                     forEach(options.lib, (libFileName, index) => {
-                        processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
+                        processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false, { kind: FileIncludeKind.LibFile, index });
                     });
                 }
             }
@@ -1737,7 +1739,7 @@ namespace ts {
                 return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return some(options.lib, libFileName => equalityComparer(file.fileName, combinePaths(defaultLibraryPath, libFileName)));
+                return some(options.lib, libFileName => equalityComparer(file.fileName,  pathForLibFile(libFileName)));
             }
         }
 
@@ -2406,7 +2408,7 @@ namespace ts {
             const libName = toFileNameLowerCase(ref.fileName);
             const libFileName = libMap.get(libName);
             if (libFileName) {
-                return getSourceFile(combinePaths(defaultLibraryPath, libFileName));
+                return getSourceFile(pathForLibFile(libFileName));
             }
         }
 
@@ -2883,13 +2885,32 @@ namespace ts {
             }
         }
 
+        function pathForLibFile(libFileName: string): string {
+            // Support resolving to lib.dom.d.ts -> @typescript/dom, and
+            //                      lib.dom.iterable.d.ts -> @typescript/dom/iterable
+            //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/es2015/symbol-wellknown
+            const components = libFileName.split(".");
+            let path = components[1];
+            let i = 2;
+            while (components[i] && components[i] !== "d") {
+                path += (i === 2 ? "/" : "-") + components[i];
+                i++;
+            }
+            // const localOverride = resolveModuleNameFromCache("@typescript/" + path, currentDirectory, libResolveCache);
+            const localOverride = resolveModuleName("@typescript/" + path, currentDirectory, { moduleResolution: ModuleResolutionKind.NodeJs }, host);
+            if (localOverride?.resolvedModule) {
+                return localOverride.resolvedModule.resolvedFileName;
+            }
+            return combinePaths(defaultLibraryPath, libFileName);
+        }
+
         function processLibReferenceDirectives(file: SourceFile) {
             forEach(file.libReferenceDirectives, (libReference, index) => {
                 const libName = toFileNameLowerCase(libReference.fileName);
                 const libFileName = libMap.get(libName);
                 if (libFileName) {
                     // we ignore any 'no-default-lib' reference set on this file.
-                    processRootFile(combinePaths(defaultLibraryPath, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
+                    processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index, });
                 }
                 else {
                     const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
