@@ -1,7 +1,7 @@
 declare namespace Intl {
 
     interface DateTimeFormatOptions {
-        formatMatcher?: "basic" | "best fit" | "best fit";
+        formatMatcher?: "basic" | "best fit" | "best fit" | undefined;
         dateStyle?: "full" | "long" | "medium" | "short" | undefined;
         timeStyle?: "full" | "long" | "medium" | "short" | undefined;
         dayPeriod?: "narrow" | "short" | "long" | undefined;

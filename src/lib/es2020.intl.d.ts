@@ -197,8 +197,9 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
+    type ES2020NumberFormatPartType = ES2018NumberFormatPartType | "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
     interface NumberFormatPart {
-        type: "compact" | "currency" | "decimal" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign" | "unit" | "unknown";
+        type: ES2020NumberFormatPartType
     }
 
     interface NumberFormatOptions {
