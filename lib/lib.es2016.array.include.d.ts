@@ -24,7 +24,7 @@ interface Array<T> {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: T, fromIndex?: number): boolean;
 }
 
 interface ReadonlyArray<T> {
@@ -33,7 +33,7 @@ interface ReadonlyArray<T> {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: T, fromIndex?: number): boolean;
 }
 
 interface Int8Array {
@@ -42,7 +42,7 @@ interface Int8Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Uint8Array {
@@ -51,7 +51,7 @@ interface Uint8Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Uint8ClampedArray {
@@ -60,7 +60,7 @@ interface Uint8ClampedArray {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Int16Array {
@@ -69,7 +69,7 @@ interface Int16Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Uint16Array {
@@ -78,7 +78,7 @@ interface Uint16Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Int32Array {
@@ -87,7 +87,7 @@ interface Int32Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Uint32Array {
@@ -96,7 +96,7 @@ interface Uint32Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Float32Array {
@@ -105,7 +105,7 @@ interface Float32Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
 
 interface Float64Array {
@@ -114,5 +114,5 @@ interface Float64Array {
      * @param searchElement The element to search for.
      * @param fromIndex The position in this array at which to begin searching for searchElement.
      */
-    includes(searchElement: unknown, fromIndex?: number): boolean;
+    includes(searchElement: number, fromIndex?: number): boolean;
 }
