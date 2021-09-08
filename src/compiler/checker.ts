@@ -15265,10 +15265,18 @@ namespace ts {
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
             let result;
             let extraTypes: Type[] | undefined;
+            let tailCount = 0;
             // We loop here for an immediately nested conditional type in the false position, effectively treating
             // types of the form 'A extends B ? X : C extends D ? Y : E extends F ? Z : ...' as a single construct for
-            // purposes of resolution. This means such types aren't subject to the instantiation depth limiter.
+            // purposes of resolution. We also loop here when resolution of a conditional type ends in resolution of
+            // another (or, through recursion, possibly the same) conditional type. In the potentially tail-recursive
+            // cases we increment the tail recursion counter and stop after 1000 iterations.
             while (true) {
+                if (tailCount === 1000) {
+                    error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+                    result = errorType;
+                    break;
+                }
                 const isUnwrapped = isTypicalNondistributiveConditional(root);
                 const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
                 const checkTypeInstantiable = isGenericType(checkType);
@@ -15312,6 +15320,9 @@ namespace ts {
                                 root = newRoot;
                                 continue;
                             }
+                            if (canTailRecurse(falseType, mapper)) {
+                                continue;
+                            }
                         }
                         result = instantiateType(falseType, mapper);
                         break;
@@ -15322,7 +15333,12 @@ namespace ts {
                     //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                     // doesn't immediately resolve to 'string' instead of being deferred.
                     if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                        result = instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper);
+                        const trueType = getTypeFromTypeNode(root.node.trueType);
+                        const trueMapper = combinedMapper || mapper;
+                        if (canTailRecurse(trueType, trueMapper)) {
+                            continue;
+                        }
+                        result = instantiateType(trueType, trueMapper);
                         break;
                     }
                 }
@@ -15338,6 +15354,32 @@ namespace ts {
                 break;
             }
             return extraTypes ? getUnionType(append(extraTypes, result)) : result;
+            // We tail-recurse for generic conditional types that (a) have not already been evaluated and cached, and
+            // (b) are non distributive, have a check type that is unaffected by instantiation, or have a non-union check
+            // type. Note that recursion is possible only through aliased conditional types, so we only increment the tail
+            // recursion counter for those.
+            function canTailRecurse(newType: Type, newMapper: TypeMapper | undefined) {
+                if (newType.flags & TypeFlags.Conditional && newMapper) {
+                    const newRoot = (newType as ConditionalType).root;
+                    if (newRoot.outerTypeParameters) {
+                        const typeParamMapper = combineTypeMappers((newType as ConditionalType).mapper, newMapper);
+                        const typeArguments = map(newRoot.outerTypeParameters, t => getMappedType(t, typeParamMapper));
+                        const newRootMapper = createTypeMapper(newRoot.outerTypeParameters, typeArguments);
+                        const newCheckType = newRoot.isDistributive ? getMappedType(newRoot.checkType, newRootMapper) : undefined;
+                        if (!newCheckType || newCheckType === newRoot.checkType || !(newCheckType.flags & (TypeFlags.Union | TypeFlags.Never))) {
+                            root = newRoot;
+                            mapper = newRootMapper;
+                            aliasSymbol = undefined;
+                            aliasTypeArguments = undefined;
+                            if (newRoot.aliasSymbol) {
+                                tailCount++;
+                            }
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
         }
 
         function getTrueTypeFromConditionalType(type: ConditionalType) {
@@ -16358,8 +16400,8 @@ namespace ts {
             if (!couldContainTypeVariables(type)) {
                 return type;
             }
-            if (instantiationDepth === 500 || instantiationCount >= 5000000) {
-                // We have reached 500 recursive type instantiations, or 5M type instantiations caused by the same statement
+            if (instantiationDepth === 100 || instantiationCount >= 5000000) {
+                // We have reached 100 recursive type instantiations, or 5M type instantiations caused by the same statement
                 // or expression. There is a very high likelyhood we're dealing with a combination of infinite generic types
                 // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
                 tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
