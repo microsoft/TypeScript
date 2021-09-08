@@ -3580,6 +3580,18 @@
           ]
         },
         {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "as",
           "kind": "keyword",
           "kindModifiers": "",
@@ -8285,6 +8297,18 @@
           "displayParts": [
             {
               "text": "yield",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
               "kind": "keyword"
             }
           ]

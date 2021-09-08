@@ -899,3 +899,27 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 311, 41))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
 
+// Repro from #45772
+
+type Id = string & { __tag: 'id '};
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+>__tag : Symbol(__tag, Decl(indexSignatures1.ts, 315, 20))
+
+type Rec1 = { [key: Id]: number };
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+>key : Symbol(key, Decl(indexSignatures1.ts, 316, 15))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type Rec2 = Record<Id, number>;
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type K1 = keyof Rec1;  // Id
+>K1 : Symbol(K1, Decl(indexSignatures1.ts, 317, 31))
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+
+type K2 = keyof Rec2;  // Id
+>K2 : Symbol(K2, Decl(indexSignatures1.ts, 319, 21))
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
+
