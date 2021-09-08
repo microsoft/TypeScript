@@ -41,5 +41,121 @@ async function main() {
     ])
 }
 
+// non-generic
+async function f1(x: string) {
+    // y: string
+    const y = await x;
+}
+
+async function f2(x: unknown) {
+    // y: unknown
+    const y = await x;
+}
+
+async function f3(x: object) {
+    // y: object
+    const y = await x;
+}
+
+async function f4(x: Promise<string>) {
+    // y: string
+    const y = await x;
+}
+
+async function f5(x: Promise<unknown>) {
+    // y: unknown
+    const y = await x;
+}
+
+async function f6(x: Promise<object>) {
+    // y: object
+    const y = await x;
+}
+
+// generic
+
+async function f7<T>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f8<T extends any>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f9<T extends unknown>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f10<T extends {}>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f11<T extends { then(onfulfilled: (value: unknown) => void): void }>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f12<T extends string | object>(x: T) {
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+}
+
+async function f13<T extends string>(x: T) {
+    // NOTE: T belongs to the domain of primitive types
+
+    // y: T
+    const y = await x;
+}
+
+async function f14<T extends { x: number }>(x: T) {
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+}
+
+async function f15<T extends { then: number }>(x: T) {
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+}
+
+async function f16<T extends number & { then(): void }>(x: T) {
+    // NOTE: T belongs to the domain of primitive types (regardless of `then`)
+
+    // y: T
+    const y = await x;
+}
+
+
 // helps with tests where '.types' just prints out the type alias name
 type _Expect<TActual extends TExpected, TExpected> = TActual;

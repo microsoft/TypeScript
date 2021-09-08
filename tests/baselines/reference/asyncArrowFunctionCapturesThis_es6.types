@@ -6,9 +6,9 @@ class C {
 >method : () => void
 
       var fn = async () => await this;      
->fn : () => Promise<Awaited<this>>
->async () => await this : () => Promise<Awaited<this>>
->await this : Awaited<this>
+>fn : () => Promise<this>
+>async () => await this : () => Promise<this>
+>await this : this
 >this : this
    }
 }

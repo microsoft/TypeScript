@@ -1444,7 +1444,7 @@ interface Promise<T> {
  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
  */
 type Awaited<T> =
-    T extends null | undefined ? T : // special case for `null | undefined` when not in `--noImplicitAny` mode
+    T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
         T extends object ? // `await` only unwraps object types with a callable then. Non-object types are not unwrapped.
             T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
                 F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
