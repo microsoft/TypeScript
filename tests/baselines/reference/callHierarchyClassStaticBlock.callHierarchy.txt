@@ -1,0 +1,139 @@
+╭ name: bar
+├ kind: function
+├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts
+├ span:
+│ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:7:9-11:10
+│ │  7:         function bar() {
+│ │             ^^^^^^^^^^^^^^^^
+│ │  8:             baz();
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │  9:             quxx();
+│ │     ^^^^^^^^^^^^^^^^^^^
+│ │ 10:             baz();
+│ │     ^^^^^^^^^^^^^^^^^^
+│ │ 11:         }
+│ │     ^^^^^^^^^
+│ ╰
+├ selectionSpan:
+│ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:7:18-7:21
+│ │ 7:         function bar() {
+│ │                     ^^^
+│ ╰
+├ incoming:
+│ ╭ from:
+│ │ ╭ name: foo
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:3:9-5:10
+│ │ │ │ 3:         function foo() {
+│ │ │ │            ^^^^^^^^^^^^^^^^
+│ │ │ │ 4:             bar();
+│ │ │ │    ^^^^^^^^^^^^^^^^^^
+│ │ │ │ 5:         }
+│ │ │ │    ^^^^^^^^^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:3:18-3:21
+│ │ │ │ 3:         function foo() {
+│ │ │ │                     ^^^
+│ │ │ ╰
+│ │ ├ incoming:
+│ │ │ ╭ from:
+│ │ │ │ ╭ name: static {}
+│ │ │ │ ├ kind: constructor
+│ │ │ │ ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts
+│ │ │ │ ├ span:
+│ │ │ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:2:5-14:6
+│ │ │ │ │ │  2:     static {
+│ │ │ │ │ │         ^^^^^^^^
+│ │ │ │ │ │  3:         function foo() {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  4:             bar();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  5:         }
+│ │ │ │ │ │     ^^^^^^^^^
+│ │ │ │ │ │  6:
+│ │ │ │ │ │     ^
+│ │ │ │ │ │  7:         function bar() {
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  8:             baz();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │  9:             quxx();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 10:             baz();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^^^^^
+│ │ │ │ │ │ 11:         }
+│ │ │ │ │ │     ^^^^^^^^^
+│ │ │ │ │ │ 12:
+│ │ │ │ │ │     ^
+│ │ │ │ │ │ 13:         foo();
+│ │ │ │ │ │     ^^^^^^^^^^^^^^
+│ │ │ │ │ │ 14:     }
+│ │ │ │ │ │     ^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ├ selectionSpan:
+│ │ │ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:2:5-2:11
+│ │ │ │ │ │ 2:     static {
+│ │ │ │ │ │        ^^^^^^
+│ │ │ │ │ ╰
+│ │ │ │ ╰ incoming: none
+│ │ │ ├ fromSpans:
+│ │ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:13:9-13:12
+│ │ │ │ │ 13:         foo();
+│ │ │ │ │             ^^^
+│ │ ╰ ╰ ╰
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:4:13-4:16
+│ │ │ 4:             bar();
+│ │ │                ^^^
+│ ╰ ╰
+├ outgoing:
+│ ╭ to:
+│ │ ╭ name: baz
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:17:1-18:2
+│ │ │ │ 17: function baz() {
+│ │ │ │     ^^^^^^^^^^^^^^^^
+│ │ │ │ 18: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:17:10-17:13
+│ │ │ │ 17: function baz() {
+│ │ │ │              ^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:8:13-8:16
+│ │ │ 8:             baz();
+│ │ │                ^^^
+│ │ ╰
+│ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:10:13-10:16
+│ │ │ 10:             baz();
+│ │ │                 ^^^
+│ ╰ ╰
+│ ╭ to:
+│ │ ╭ name: quxx
+│ │ ├ kind: function
+│ │ ├ file: /tests/cases/fourslash/callHierarchyClassStaticBlock.ts
+│ │ ├ span:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:20:1-21:2
+│ │ │ │ 20: function quxx() {
+│ │ │ │     ^^^^^^^^^^^^^^^^^
+│ │ │ │ 21: }
+│ │ │ │     ^
+│ │ │ ╰
+│ │ ├ selectionSpan:
+│ │ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:20:10-20:14
+│ │ │ │ 20: function quxx() {
+│ │ │ │              ^^^^
+│ │ │ ╰
+│ │ ╰ outgoing: none
+│ ├ fromSpans:
+│ │ ╭ /tests/cases/fourslash/callHierarchyClassStaticBlock.ts:9:13-9:17
+│ │ │ 9:             quxx();
+│ │ │                ^^^^
+╰ ╰ ╰

@@ -1,0 +1,41 @@
+tests/cases/conformance/override/override20.ts(25,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+tests/cases/conformance/override/override20.ts(28,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+
+
+==== tests/cases/conformance/override/override20.ts (2 errors) ====
+    const Foo: C1 & C2 =
+        class {
+            m1() { }
+            m2() { }
+        }
+    
+    interface I1 {
+        m1(): void;
+    }
+    
+    interface I2 {
+        m1(): void;
+        m2(): void;
+    }
+    
+    interface C1 {
+        new(...args: any[]): I1;
+    }
+    
+    interface C2 {
+        new(...args: any[]): I2;
+    }
+    
+    export class Bar extends Foo {
+        m1() {
+        ~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+            super.m1();
+        }
+        m2() {
+        ~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'I1 & I2'.
+            super.m2();
+        }
+    }
+    

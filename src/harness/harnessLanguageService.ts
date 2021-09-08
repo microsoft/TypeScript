@@ -86,7 +86,7 @@ namespace Harness.LanguageService {
         }
 
         public getChangeRange(oldScript: ts.IScriptSnapshot): ts.TextChangeRange {
-            const oldShim = <ScriptSnapshot>oldScript;
+            const oldShim = oldScript as ScriptSnapshot;
             return this.scriptInfo.getTextChangeRangeBetweenVersions(oldShim.version, this.version);
         }
     }
@@ -325,7 +325,8 @@ namespace Harness.LanguageService {
                     readFile: fileName => {
                         const scriptInfo = this.getScriptInfo(fileName);
                         return scriptInfo && scriptInfo.content;
-                    }
+                    },
+                    useCaseSensitiveFileNames: this.useCaseSensitiveFileNames()
                 };
                 this.getModuleResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName)!;
@@ -599,6 +600,9 @@ namespace Harness.LanguageService {
         provideCallHierarchyOutgoingCalls(fileName: string, position: number) {
             return unwrapJSONCallResult(this.shim.provideCallHierarchyOutgoingCalls(fileName, position));
         }
+        provideInlayHints(fileName: string, span: ts.TextSpan, preference: ts.InlayHintsOptions) {
+            return unwrapJSONCallResult(this.shim.provideInlayHints(fileName, span, preference));
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -826,7 +830,7 @@ namespace Harness.LanguageService {
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
             // eslint-disable-next-line no-restricted-globals
-            return setTimeout(callback, ms, args);
+            return setTimeout(callback, ms, ...args);
         }
 
         clearTimeout(timeoutId: any): void {

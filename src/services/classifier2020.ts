@@ -79,7 +79,7 @@ namespace ts.classifier.v2020 {
                 inJSXElement = false;
             }
 
-            if (isIdentifier(node) && !inJSXElement && !inImportClause(node)) {
+            if (isIdentifier(node) && !inJSXElement && !inImportClause(node) && !isInfinityOrNaNString(node.escapedText)) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
                 if (symbol) {
                     if (symbol.flags & SymbolFlags.Alias) {
@@ -90,7 +90,7 @@ namespace ts.classifier.v2020 {
                         let modifierSet = 0;
                         if (node.parent) {
                             const parentIsDeclaration = (isBindingElement(node.parent) || tokenFromDeclarationMapping.get(node.parent.kind) === typeIdx);
-                            if (parentIsDeclaration && (<NamedDeclaration>node.parent).name === node) {
+                            if (parentIsDeclaration && (node.parent as NamedDeclaration).name === node) {
                                 modifierSet = 1 << TokenModifier.declaration;
                             }
                         }

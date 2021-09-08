@@ -57,7 +57,7 @@ namespace ts {
                 }
             }
 
-            if (isFunctionLikeDeclaration(node)) {
+            if (canBeConvertedToAsync(node)) {
                 addConvertToAsyncFunctionDiagnostics(node, checker, diags);
             }
             node.forEachChild(check);
@@ -139,33 +139,40 @@ namespace ts {
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
     export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+        if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
             return false;
         }
 
         // ensure all chained calls are valid
-        let currentNode = node.expression;
+        let currentNode = node.expression.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
-                return false;
+            if (isCallExpression(currentNode)) {
+                if (!hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+                    return false;
+                }
+                currentNode = currentNode.expression.expression;
             }
-            currentNode = currentNode.expression;
+            else {
+                currentNode = currentNode.expression;
+            }
         }
         return true;
     }
 
-    function isPromiseHandler(node: Node): node is CallExpression {
+    function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
         return isCallExpression(node) && (
-            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
-            hasPropertyAccessExpressionWithName(node, "catch"));
+            hasPropertyAccessExpressionWithName(node, "then") ||
+            hasPropertyAccessExpressionWithName(node, "catch") ||
+            hasPropertyAccessExpressionWithName(node, "finally"));
     }
 
-    function hasSupportedNumberOfArguments(node: CallExpression) {
-        if (node.arguments.length > 2) return false;
-        if (node.arguments.length < 2) return true;
-        return some(node.arguments, arg => {
-            return arg.kind === SyntaxKind.NullKeyword ||
-                isIdentifier(arg) && arg.text === "undefined";
+    function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+        const name = node.expression.name.text;
+        const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
+        if (node.arguments.length > maxArguments) return false;
+        if (node.arguments.length < maxArguments) return true;
+        return maxArguments === 1 || some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword || isIdentifier(arg) && arg.text === "undefined";
         });
     }
 
@@ -174,6 +181,11 @@ namespace ts {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
+                const functionFlags = getFunctionFlags(arg as FunctionDeclaration | FunctionExpression);
+                if (functionFlags & FunctionFlags.Generator) {
+                    return false;
+                }
+                // falls through
             case SyntaxKind.ArrowFunction:
                 visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 // falls through
@@ -212,5 +224,17 @@ namespace ts {
         }
 
         return false;
+    }
+
+    export function canBeConvertedToAsync(node: Node): node is FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction {
+        switch (node.kind) {
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

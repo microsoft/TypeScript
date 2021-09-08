@@ -60,6 +60,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
@@ -69,6 +74,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/react/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 
@@ -177,6 +186,9 @@ Program files::
 Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.tsx (computed .d.ts)
+
 WatchedFiles::
 /users/username/projects/project/tsconfig.json:
   {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
@@ -184,6 +196,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/react/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 

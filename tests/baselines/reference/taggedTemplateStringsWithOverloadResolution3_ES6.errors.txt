@@ -113,7 +113,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
                      ~~~~~~~
 !!! error TS2551: Property 'toFixed' does not exist on type 'string'. Did you mean 'fixed'?
-!!! related TS2728 /.ts/lib.es2015.core.d.ts:472:5: 'fixed' is declared here.
+!!! related TS2728 /.ts/lib.es2015.core.d.ts:485:5: 'fixed' is declared here.
     fn5 `${ (n) => n.substr(0) }`;
     
     

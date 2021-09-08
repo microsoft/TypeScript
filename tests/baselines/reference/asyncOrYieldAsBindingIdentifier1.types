@@ -1,0 +1,96 @@
+=== tests/cases/conformance/async/es6/functionDeclarations/asyncOrYieldAsBindingIdentifier1.ts ===
+function f_let () {
+>f_let : () => void
+
+    let await = 1
+>await : number
+>1 : 1
+}
+
+function f1_var () {
+>f1_var : () => void
+
+    var await = 1
+>await : number
+>1 : 1
+}
+
+function f1_const () {
+>f1_const : () => void
+
+    const await = 1
+>await : 1
+>1 : 1
+}
+
+async function f2_let () {
+>f2_let : () => Promise<void>
+
+    let await = 1
+>await : number
+>1 : 1
+}
+
+async function f2_var () {
+>f2_var : () => Promise<void>
+
+    var await = 1
+>await : number
+>1 : 1
+}
+
+async function f2_const () {
+>f2_const : () => Promise<void>
+
+    const await = 1
+>await : 1
+>1 : 1
+}
+
+function f3_let () {
+>f3_let : () => void
+
+    let yield = 2
+>yield : number
+>2 : 2
+}
+
+function f3_var () {
+>f3_var : () => void
+
+    var yield = 2
+>yield : number
+>2 : 2
+}
+
+function f3_const () {
+>f3_const : () => void
+
+    const yield = 2
+>yield : 2
+>2 : 2
+}
+
+function * f4_let () {
+>f4_let : () => Generator<never, void, unknown>
+
+    let yield = 2;
+>yield : number
+>2 : 2
+}
+
+function * f4_var () {
+>f4_var : () => Generator<never, void, unknown>
+
+    var yield = 2;
+>yield : number
+>2 : 2
+}
+
+function * f4_const () {
+>f4_const : () => Generator<never, void, unknown>
+
+    const yield = 2;
+>yield : 2
+>2 : 2
+}

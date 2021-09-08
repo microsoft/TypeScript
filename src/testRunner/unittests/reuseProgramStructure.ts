@@ -73,7 +73,7 @@ namespace ts {
         }
 
         getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
-            const oldText = <SourceText>oldSnapshot;
+            const oldText = oldSnapshot as SourceText;
             let oldSpan: TextSpan;
             let newLength: number;
             switch (oldText.changedPart ^ this.changedPart) {
@@ -98,7 +98,7 @@ namespace ts {
     }
 
     function createSourceFileWithText(fileName: string, sourceText: SourceText, target: ScriptTarget) {
-        const file = <SourceFileWithText>createSourceFile(fileName, sourceText.getFullText(), target);
+        const file = createSourceFile(fileName, sourceText.getFullText(), target) as SourceFileWithText;
         file.sourceText = sourceText;
         file.version = "" + sourceText.getVersion();
         return file;
@@ -107,7 +107,7 @@ namespace ts {
     export function createTestCompilerHost(texts: readonly NamedSourceText[], target: ScriptTarget, oldProgram?: ProgramWithSourceTexts, useGetSourceFileByPath?: boolean) {
         const files = arrayToMap(texts, t => t.name, t => {
             if (oldProgram) {
-                let oldFile = <SourceFileWithText>oldProgram.getSourceFile(t.name);
+                let oldFile = oldProgram.getSourceFile(t.name) as SourceFileWithText;
                 if (oldFile && oldFile.redirectInfo) {
                     oldFile = oldFile.redirectInfo.unredirected;
                 }
@@ -146,7 +146,7 @@ namespace ts {
 
     export function newProgram(texts: NamedSourceText[], rootNames: string[], options: CompilerOptions, useGetSourceFileByPath?: boolean): ProgramWithSourceTexts {
         const host = createTestCompilerHost(texts, options.target!, /*oldProgram*/ undefined, useGetSourceFileByPath);
-        const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host);
+        const program = createProgram(rootNames, options, host) as ProgramWithSourceTexts;
         program.sourceTexts = texts;
         program.host = host;
         return program;
@@ -158,7 +158,7 @@ namespace ts {
         }
         updater(newTexts);
         const host = createTestCompilerHost(newTexts, options.target!, oldProgram, useGetSourceFileByPath);
-        const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
+        const program = createProgram(rootNames, options, host, oldProgram) as ProgramWithSourceTexts;
         program.sourceTexts = newTexts;
         program.host = host;
         return program;
@@ -262,7 +262,7 @@ namespace ts {
         it("fails if change affects type references", () => {
             const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
             const program2 = updateProgram(program1, ["a.ts"], { types: ["b"] }, noop);
-            assert.equal(program2.structureIsReused, StructureIsReused.Not);
+            assert.equal(program2.structureIsReused, StructureIsReused.SafeModules);
         });
 
         it("succeeds if change doesn't affect type references", () => {
@@ -335,7 +335,7 @@ namespace ts {
         });
 
         it("resolution cache follows imports", () => {
-            (<any>Error).stackTraceLimit = Infinity;
+            (Error as any).stackTraceLimit = Infinity;
 
             const files = [
                 { name: "a.ts", text: SourceText.New("", "import {_} from 'b'", "var x = 1") },
@@ -677,8 +677,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program2: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -701,8 +701,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'."
                 ], "program3: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -726,8 +726,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_4: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -767,8 +767,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_6: reuse module resolutions in f2 since it is unchanged");
             }
 
@@ -787,8 +787,8 @@ namespace ts {
                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                    "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
-                    "Reusing resolution of module './f1' to file 'f2.ts' from old program."
+                    "Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.",
+                    "Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.",
                 ], "program_7 should reuse module resolutions in f2 since it is unchanged");
             }
         });

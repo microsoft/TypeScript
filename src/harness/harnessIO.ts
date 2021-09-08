@@ -25,6 +25,7 @@ namespace Harness {
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
         getMemoryUsage?(): number | undefined;
+        joinPath(...components: string[]): string
     }
 
     export let IO: IO;
@@ -60,6 +61,10 @@ namespace Harness {
             const dirPath = pathModule.dirname(path);
             // Node will just continue to repeat the root path, rather than return null
             return dirPath === path ? undefined : dirPath;
+        }
+
+        function joinPath(...components: string[]) {
+            return pathModule.join(...components);
         }
 
         function enumerateTestFiles(runner: RunnerBase) {
@@ -156,6 +161,7 @@ namespace Harness {
             tryEnableSourceMapsForHost: () => ts.sys.tryEnableSourceMapsForHost && ts.sys.tryEnableSourceMapsForHost(),
             getMemoryUsage: () => ts.sys.getMemoryUsage && ts.sys.getMemoryUsage(),
             getEnvironmentVariable: name => ts.sys.getEnvironmentVariable(name),
+            joinPath
         };
     }
 
@@ -213,7 +219,7 @@ namespace Harness {
             }
 
             public Close() {
-                if (this.currentLine !== undefined) { this.lines.push(this.currentLine); }
+                if (this.currentLine !== undefined) this.lines.push(this.currentLine);
                 this.currentLine = undefined!;
             }
 
@@ -365,7 +371,7 @@ namespace Harness {
                 case "list":
                     return ts.parseListTypeOption(option, value, errors);
                 default:
-                    return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
+                    return ts.parseCustomTypeOption(option as ts.CommandLineOptionOfCustomType, value, errors);
             }
         }
 
@@ -1388,7 +1394,12 @@ namespace Harness {
                     throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
                 }
                 else {
-                    throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                    if (!IO.fileExists(expected)) {
+                        throw new Error(`New baseline created at ${IO.joinPath("tests", "baselines","local", relativeFileName)}`);
+                    }
+                    else {
+                        throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                    }
                 }
             }
         }
@@ -1482,5 +1493,5 @@ namespace Harness {
         return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 100;
+    if (Error) (Error as any).stackTraceLimit = 100;
 }

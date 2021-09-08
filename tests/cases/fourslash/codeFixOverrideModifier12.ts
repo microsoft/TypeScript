@@ -11,6 +11,6 @@
 
 verify.codeFix({
     description: "Add 'override' modifier",
-    newRangeContent: "override abstract bar() {}",
+    newRangeContent: "abstract override bar() {}",
     index: 0
 })

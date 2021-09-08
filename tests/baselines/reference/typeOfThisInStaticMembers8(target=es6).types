@@ -1,0 +1,77 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers8.ts ===
+class C {
+>C : C
+
+    static f = 1;
+>f : number
+>1 : 1
+
+    static arrowFunctionBoundary = () => this.f + 1;
+>arrowFunctionBoundary : () => number
+>() => this.f + 1 : () => number
+>this.f + 1 : number
+>this.f : number
+>this : typeof C
+>f : number
+>1 : 1
+
+    static functionExprBoundary = function () { return this.f + 2 };
+>functionExprBoundary : () => any
+>function () { return this.f + 2 } : () => any
+>this.f + 2 : any
+>this.f : any
+>this : any
+>f : any
+>2 : 2
+
+    static classExprBoundary = class { a = this.f + 3 };
+>classExprBoundary : typeof (Anonymous class)
+>class { a = this.f + 3 } : typeof (Anonymous class)
+>a : any
+>this.f + 3 : any
+>this.f : any
+>this : this
+>f : any
+>3 : 3
+
+    static functionAndClassDeclBoundary = (() => {
+>functionAndClassDeclBoundary : void
+>(() => {        function foo () {            return this.f + 4        }        class CC {            a = this.f + 5            method () {                return this.f + 6            }        }    })() : void
+>(() => {        function foo () {            return this.f + 4        }        class CC {            a = this.f + 5            method () {                return this.f + 6            }        }    }) : () => void
+>() => {        function foo () {            return this.f + 4        }        class CC {            a = this.f + 5            method () {                return this.f + 6            }        }    } : () => void
+
+        function foo () {
+>foo : () => any
+
+            return this.f + 4
+>this.f + 4 : any
+>this.f : any
+>this : any
+>f : any
+>4 : 4
+        }
+        class CC {
+>CC : CC
+
+            a = this.f + 5
+>a : any
+>this.f + 5 : any
+>this.f : any
+>this : this
+>f : any
+>5 : 5
+
+            method () {
+>method : () => any
+
+                return this.f + 6
+>this.f + 6 : any
+>this.f : any
+>this : this
+>f : any
+>6 : 6
+            }
+        }
+    })();
+}
+

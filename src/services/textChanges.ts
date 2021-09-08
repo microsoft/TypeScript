@@ -6,25 +6,25 @@ namespace ts.textChanges {
      * It can be changed to side-table later if we decide that current design is too invasive.
      */
     function getPos(n: TextRange): number {
-        const result = (<any>n).__pos;
+        const result = (n as any).__pos;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setPos(n: TextRange, pos: number): void {
         Debug.assert(typeof pos === "number");
-        (<any>n).__pos = pos;
+        (n as any).__pos = pos;
     }
 
     function getEnd(n: TextRange): number {
-        const result = (<any>n).__end;
+        const result = (n as any).__end;
         Debug.assert(typeof result === "number");
         return result;
     }
 
     function setEnd(n: TextRange, end: number): void {
         Debug.assert(typeof end === "number");
-        (<any>n).__end = end;
+        (n as any).__end = end;
     }
 
     export interface ConfigurableStart {
@@ -174,7 +174,9 @@ namespace ts.textChanges {
             return node.getStart(sourceFile);
         }
         if (leadingTriviaOption === LeadingTriviaOption.StartLine) {
-            return getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile);
+            const startPos = node.getStart(sourceFile);
+            const pos = getLineStartPositionForPosition(startPos, sourceFile);
+            return rangeContainsPosition(node, pos) ? pos : startPos;
         }
         if (leadingTriviaOption === LeadingTriviaOption.JSDoc) {
             const JSDocComments = getJSDocCommentRanges(node, sourceFile.text);
@@ -991,7 +993,7 @@ namespace ts.textChanges {
             const { options = {}, range: { pos } } = change;
             const format = (n: Node) => getFormattedTextOfNode(n, sourceFile, pos, options, newLineCharacter, formatContext, validate);
             const text = change.kind === ChangeKind.ReplaceWithMultipleNodes
-                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options!.joiner || newLineCharacter) // TODO: GH#18217
+                ? change.nodes.map(n => removeSuffix(format(n), newLineCharacter)).join(change.options?.joiner || newLineCharacter)
                 : format(change.node);
             // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
             const noIndent = (options.preserveLeadingWhitespace || options.indentation !== undefined || getLineStartPositionForPosition(pos, sourceFile) === pos) ? text : text.replace(/^\s+/, "");
@@ -1022,7 +1024,12 @@ namespace ts.textChanges {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const file: SourceFileLike = {
+                text,
+                getLineAndCharacterOfPosition(pos) {
+                    return getLineAndCharacterOfPosition(this, pos);
+                }
+            };
             const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
             return applyChanges(text, changes);
         }
@@ -1054,7 +1061,7 @@ namespace ts.textChanges {
     }
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode)!; // TODO: GH#18217
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited) ? visited : Object.create(visited) as Node;
         setTextRangePosEnd(newNode, getPos(node), getEnd(node));

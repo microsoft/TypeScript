@@ -41,7 +41,7 @@ namespace ts {
         }
 
         Debug.assertNode(visitedNode, test);
-        return <T>visitedNode;
+        return visitedNode as T;
     }
 
     /**
@@ -119,12 +119,12 @@ namespace ts {
                     if (isArray(visited)) {
                         for (const visitedNode of visited) {
                             void Debug.assertNode(visitedNode, test);
-                            updated.push(<T>visitedNode);
+                            updated.push(visitedNode as T);
                         }
                     }
                     else {
                         void Debug.assertNode(visited, test);
-                        updated.push(<T>visited);
+                        updated.push(visited as T);
                     }
                 }
             }
@@ -474,6 +474,15 @@ namespace ts {
                     nodeVisitor(node.name, visitor, isPropertyName),
                     visitParameterList(node.parameters, visitor, context, nodesVisitor),
                     visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+
+            case SyntaxKind.ClassStaticBlockDeclaration:
+                Debug.type<ClassStaticBlockDeclaration>(node);
+                context.startLexicalEnvironment();
+                context.suspendLexicalEnvironment();
+                return factory.updateClassStaticBlockDeclaration(node,
+                        nodesVisitor(node.decorators, visitor, isDecorator),
+                        nodesVisitor(node.modifiers, visitor, isModifier),
+                        visitFunctionBody(node.body, visitor, context, nodeVisitor));
 
             case SyntaxKind.CallSignature:
                 Debug.type<CallSignatureDeclaration>(node);
