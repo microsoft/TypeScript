@@ -18,11 +18,17 @@ namespace ts {
         if (!pretty) {
             return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
+        
 
         const diagnostics: Diagnostic[] = new Array(1);
         return diagnostic => {
             diagnostics[0] = diagnostic;
-            system.write(formatDiagnosticsWithColorAndContext(diagnostics, host) + host.getNewLine());
+            if (diagnostic.code === 2322) {
+                system.write(format2322DiagnosticsWithColorAndContext(diagnostics, host) + host.getNewLine());
+            }
+            else {
+                system.write(formatDiagnosticsWithColorAndContext(diagnostics, host) + host.getNewLine());
+            }
             diagnostics[0] = undefined!; // TODO: GH#18217
         };
     }

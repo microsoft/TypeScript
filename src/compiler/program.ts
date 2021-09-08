@@ -484,6 +484,62 @@ namespace ts {
         return output;
     }
 
+    export function format2322DiagnosticsWithColorAndContext(diagnostics: readonly AssignmentDiagnostic[], host: FormatDiagnosticsHost): string {
+        let output = "";
+        const p = require("prettier");
+        const table = require("as-table");
+        for (const diagnostic of diagnostics) {
+            if (diagnostic.file) {
+                const { file, start } = diagnostic;
+                output += formatLocation(file, start!, host); // TODO: GH#18217
+                output += " - ";
+            }
+            output += formatColorAndReset(diagnosticCategoryName(diagnostic), getCategoryFormat(diagnostic.category));
+            output += formatColorAndReset(` TS${diagnostic.code}: `, ForegroundColorEscapeSequences.Grey);
+
+            output += host.getNewLine();
+
+            // console.log(diagnostic);
+            const a = createProgram({ rootNames: [], options: {} });
+            const t = createTypeChecker(a, false);
+
+            const sourceStr = t.typeToString(diagnostic.sourceType!);
+            const targetStr = t.typeToString(diagnostic.targetType!);
+
+            const left = p.format(`type TXM = ${sourceStr}`, { printWidth: 80, filepath: "x.ts" }).replace("type TXM = ", "").trim();
+            const right = p.format(`type TXM = ${targetStr}`, { printWidth: 80, filepath: "x.ts" }).replace("type TXM = ", "").trim();
+
+            output += table([
+                [ "Type:", "is not assignable to: " ],
+                ["", ""],
+                [ left, right ],
+            ], { align: [ "l", "l" ] });
+            output += host.getNewLine();
+
+            // output += flattenDiagnosticMessageText(diagnostic.messageText, host.getNewLine());
+
+            if (diagnostic.file) {
+                output += host.getNewLine();
+                output += formatCodeSpan(diagnostic.file, diagnostic.start!, diagnostic.length!, "", getCategoryFormat(diagnostic.category), host); // TODO: GH#18217
+            }
+            if (diagnostic.relatedInformation) {
+                output += host.getNewLine();
+                for (const { file, start, length, messageText } of diagnostic.relatedInformation) {
+                    if (file) {
+                        output += host.getNewLine();
+                        output += halfIndent + formatLocation(file, start!, host); // TODO: GH#18217
+                        output += formatCodeSpan(file, start!, length!, indent, ForegroundColorEscapeSequences.Cyan, host); // TODO: GH#18217
+                    }
+                    output += host.getNewLine();
+                    output += indent + flattenDiagnosticMessageText(messageText, host.getNewLine());
+                }
+            }
+            output += host.getNewLine();
+        }
+        return output;
+    }
+
+
     export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageChain | undefined, newLine: string, indent = 0): string {
         if (isString(diag)) {
             return diag;

@@ -17533,7 +17533,9 @@ namespace ts {
                         }
                     }
                 }
-                const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                const diag: AssignmentDiagnostic = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                diag.sourceType = source;
+                diag.targetType = target;
                 if (relatedInfo) {
                     addRelatedInfo(diag, ...relatedInfo);
                 }

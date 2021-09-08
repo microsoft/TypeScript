@@ -5883,6 +5883,11 @@ namespace ts {
         next?: DiagnosticMessageChain[];
     }
 
+    export interface AssignmentDiagnostic extends Diagnostic {
+        sourceType?: Type
+        targetType?: Type
+    }
+
     export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};

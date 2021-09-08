@@ -28,6 +28,10 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "dependencies": {
+        "prettier": "^2.3.2",
+        "as-table":"^1.0.55"
+            },
     "devDependencies": {
         "@octokit/rest": "latest",
         "@types/browserify": "latest",
