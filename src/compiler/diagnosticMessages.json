@@ -4834,6 +4834,10 @@
         "category": "Message",
         "code": 6257
     },
+    "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
+        "category": "Error",
+        "code": 6258
+    },
 
     "Enable project compilation": {
         "category": "Message",

@@ -2852,6 +2852,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2894,6 +2895,9 @@ namespace ts {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         };
         const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
@@ -2911,6 +2915,10 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
