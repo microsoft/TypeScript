@@ -218,6 +218,8 @@ declare namespace Intl {
         signDisplay?: "auto" | "never" | "always";
         unit?: NumberFormatUnit;
         unitDisplay?: "short" | "long" | "narrow";
+        currencyDisplay?: string;
+        currencySign?: string;
     }
 
     interface DateTimeFormatOptions {
