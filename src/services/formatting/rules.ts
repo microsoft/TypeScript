@@ -95,7 +95,6 @@ namespace ts.formatting {
             // Also should not apply to })
             rule("SpaceBetweenCloseBraceAndElse", SyntaxKind.CloseBraceToken, SyntaxKind.ElseKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
             rule("SpaceBetweenCloseBraceAndWhile", SyntaxKind.CloseBraceToken, SyntaxKind.WhileKeyword, [isNonJsxSameLineTokenContext], RuleAction.InsertSpace),
-            rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.DeleteSpace),
 
             // Add a space after control dec context if the next character is an open bracket ex: 'if (false)[a, b] = [1, 2];' -> 'if (false) [a, b] = [1, 2];'
             rule("SpaceAfterConditionalClosingParen", SyntaxKind.CloseParenToken, SyntaxKind.OpenBracketToken, [isControlDeclContext], RuleAction.InsertSpace),
@@ -270,13 +269,16 @@ namespace ts.formatting {
             // Insert a space after { and before } in single-line contexts, but remove space from empty object literals {}.
             rule("SpaceAfterOpenBrace", SyntaxKind.OpenBraceToken, anyToken, [isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isBraceWrappedContext], RuleAction.InsertSpace),
             rule("SpaceBeforeCloseBrace", anyToken, SyntaxKind.CloseBraceToken, [isOptionEnabledOrUndefined("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isBraceWrappedContext], RuleAction.InsertSpace),
-            rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isNonJsxSameLineTokenContext, isObjectContext], RuleAction.DeleteSpace),
             rule("NoSpaceAfterOpenBrace", SyntaxKind.OpenBraceToken, anyToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
             rule("NoSpaceBeforeCloseBrace", anyToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            // Insert a space after opening and before closing empty brace brackets
-            rule("SpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")], RuleAction.InsertSpace),
-            rule("NoSpaceBetweenEmptyBraceBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces"), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            // Insert a space after opening and before closing empty block brackets
+            rule("SpaceBetweenEmptyBlockBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [or(isOptionEnabled("insertSpaceInEmptyBlocks"), isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces"))], RuleAction.InsertSpace),
+            rule("NoSpaceBetweenEmptyBlockBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [or(isOptionDisabled("insertSpaceInEmptyBlocks"), isOptionDisabled("insertSpaceAfterOpeningAndBeforeClosingEmptyBraces")), isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+
+            // Insert a space after opening and before closing empty object brackets
+            rule("SpaceBetweenEmptyObjectBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionEnabled("insertSpaceInEmptyObjects"), isObjectContext], RuleAction.InsertSpace),
+            rule("NoSpaceBetweenEmptyObjectBrackets", SyntaxKind.OpenBraceToken, SyntaxKind.CloseBraceToken, [isOptionDisabledOrUndefined("insertSpaceInEmptyObjects"), isObjectContext, isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             // Insert space after opening and before closing template string braces
             rule("SpaceAfterTemplateHeadAndMiddle", [SyntaxKind.TemplateHead, SyntaxKind.TemplateMiddle], anyToken, [isOptionEnabled("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces"), isNonJsxTextContext], RuleAction.InsertSpace, RuleFlags.CanDeleteNewLines),

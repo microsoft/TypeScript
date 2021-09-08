@@ -6110,12 +6110,15 @@ declare namespace ts {
         readonly insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        /** @deprecated Use insertSpaceInEmptyBlocks instead. */
         readonly insertSpaceAfterOpeningAndBeforeClosingEmptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         readonly insertSpaceAfterTypeAssertion?: boolean;
         readonly insertSpaceBeforeFunctionParenthesis?: boolean;
+        readonly insertSpaceInEmptyObjects?: boolean;
+        readonly insertSpaceInEmptyBlocks?: boolean;
         readonly placeOpenBraceOnNewLineForFunctions?: boolean;
         readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
         readonly insertSpaceBeforeTypeAnnotation?: boolean;
