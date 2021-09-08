@@ -1,7 +1,0 @@
-error TS5095: Option 'preserveValueImports' may be enabled only when 'module' is set to 'es2015' or later.
-
-
-!!! error TS5095: Option 'preserveValueImports' may be enabled only when 'module' is set to 'es2015' or later.
-==== tests/cases/conformance/externalModules/typeOnly/noErasingImportedNames_module.ts (0 errors) ====
-    export {};
-    

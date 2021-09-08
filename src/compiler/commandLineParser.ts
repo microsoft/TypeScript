@@ -1173,7 +1173,7 @@ namespace ts {
             type: "boolean",
             affectsEmit: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Disable_the_removal_of_unused_imported_identifiers_from_the_JavaScript_output
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
         },
 
         {

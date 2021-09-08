@@ -1408,19 +1408,19 @@
         "category": "Error",
         "code": 1443
     },
-    "'{0}' is a type and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1444
     },
-    "'{0}' resolves to a type-only declaration and must be imported with a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
         "category": "Error",
         "code": 1446
     },
-    "'{0}' resolves to a type-only declaration and must be re-exported with a type-only re-export when 'isolatedModules' is enabled.": {
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 1448
     },
-    "Disable the removal of unused imported identifiers from the JavaScript output.": {
+    "Preserve unused imported values in the JavaScript output that would otherwise be removed.": {
         "category": "Message",
         "code": 1449
     },
@@ -4054,7 +4054,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option 'preserveValueImports' may be enabled only when 'module' is set to 'es2015' or later.": {
+    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },

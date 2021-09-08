@@ -3308,7 +3308,7 @@ namespace ts {
             }
 
             if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-                createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_may_be_enabled_only_when_module_is_set_to_es2015_or_later);
+                createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files

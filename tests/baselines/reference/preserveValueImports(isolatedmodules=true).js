@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/externalModules/typeOnly/noErasingImportedNames.ts] ////
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports.ts] ////
 
 //// [a.ts]
 export default {};

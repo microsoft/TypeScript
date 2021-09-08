@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/externalModules/typeOnly/noErasingImportedNames_errors.ts] ////
+//// [tests/cases/conformance/externalModules/typeOnly/preserveValueImports_errors.ts] ////
 
 //// [a.ts]
 export type A = {};

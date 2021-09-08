@@ -1,8 +1,8 @@
-//// [noErasingImportedNames_module.ts]
+//// [preserveValueImports_module.ts]
 export {};
 
 
-//// [noErasingImportedNames_module.js]
+//// [preserveValueImports_module.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
