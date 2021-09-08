@@ -38618,10 +38618,11 @@ namespace ts {
                             case SyntaxKind.ImportSpecifier:
                             case SyntaxKind.ImportEqualsDeclaration: {
                                 if (compilerOptions.preserveValueImports) {
+                                    Debug.assertIsDefined(node.name, "An ImportClause with a symbol should have a name");
                                     const message = isType
                                         ? Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled
                                         : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled;
-                                    const name = idText(node.kind === SyntaxKind.ImportSpecifier ? node.propertyName || node.name : node.name!);
+                                    const name = idText(node.kind === SyntaxKind.ImportSpecifier ? node.propertyName || node.name : node.name);
                                     addTypeOnlyDeclarationRelatedInfo(
                                         error(node, message, name),
                                         isType ? undefined : typeOnlyAlias,
