@@ -4295,12 +4295,12 @@ declare var Float64Array: Float64ArrayConstructor;
 
 declare namespace Intl {
     interface CollatorOptions {
-        usage?: string;
-        localeMatcher?: string;
-        numeric?: boolean;
-        caseFirst?: string;
-        sensitivity?: string;
-        ignorePunctuation?: boolean;
+        usage?: string | undefined;
+        localeMatcher?: string | undefined;
+        numeric?: boolean | undefined;
+        caseFirst?: string | undefined;
+        sensitivity?: string | undefined;
+        ignorePunctuation?: boolean | undefined;
     }
 
     interface ResolvedCollatorOptions {
@@ -4324,17 +4324,17 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptions {
-        localeMatcher?: string;
-        style?: string;
-        currency?: string;
-        currencyDisplay?: string;
-        currencySign?: string;
-        useGrouping?: boolean;
-        minimumIntegerDigits?: number;
-        minimumFractionDigits?: number;
-        maximumFractionDigits?: number;
-        minimumSignificantDigits?: number;
-        maximumSignificantDigits?: number;
+        localeMatcher?: string | undefined;
+        style?: string | undefined;
+        currency?: string | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
+        useGrouping?: boolean | undefined;
+        minimumIntegerDigits?: number | undefined;
+        minimumFractionDigits?: number | undefined;
+        maximumFractionDigits?: number | undefined;
+        minimumSignificantDigits?: number | undefined;
+        maximumSignificantDigits?: number | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -4362,19 +4362,19 @@ declare namespace Intl {
     };
 
     interface DateTimeFormatOptions {
-        localeMatcher?: "best fit" | "lookup";
-        weekday?: "long" | "short" | "narrow";
-        era?: "long" | "short" | "narrow";
-        year?: "numeric" | "2-digit";
-        month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
-        day?: "numeric" | "2-digit";
-        hour?: "numeric" | "2-digit";
-        minute?: "numeric" | "2-digit";
-        second?: "numeric" | "2-digit";
-        timeZoneName?: "long" | "short";
-        formatMatcher?: "best fit" | "basic";
-        hour12?: boolean;
-        timeZone?: string;
+        localeMatcher?: "best fit" | "lookup" | undefined;
+        weekday?: "long" | "short" | "narrow" | undefined;
+        era?: "long" | "short" | "narrow" | undefined;
+        year?: "numeric" | "2-digit" | undefined;
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
+        day?: "numeric" | "2-digit" | undefined;
+        hour?: "numeric" | "2-digit" | undefined;
+        minute?: "numeric" | "2-digit" | undefined;
+        second?: "numeric" | "2-digit" | undefined;
+        timeZoneName?: "long" | "short" | undefined;
+        formatMatcher?: "best fit" | "basic" | undefined;
+        hour12?: boolean | undefined;
+        timeZone?: string | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {
