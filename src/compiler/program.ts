@@ -501,7 +501,7 @@ namespace ts {
 
             // console.log(diagnostic);
             const a = createProgram({ rootNames: [], options: {} });
-            const t = createTypeChecker(a, false);
+            const t = createTypeChecker(a, /*produceDiagnostics:*/ false);
 
             const sourceStr = t.typeToString(diagnostic.sourceType!);
             const targetStr = t.typeToString(diagnostic.targetType!);

@@ -18,7 +18,6 @@ namespace ts {
         if (!pretty) {
             return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
-        
 
         const diagnostics: Diagnostic[] = new Array(1);
         return diagnostic => {
