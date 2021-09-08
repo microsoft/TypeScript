@@ -1,6 +1,7 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @declaration: true
+// @outDir: out
 // @Filename: file.js
 
 /**
@@ -37,12 +38,6 @@ const aNumber = [0];
  * @template {string | number} [T=string]
  * @template U - error: Required type parameters cannot follow optional type parameters
  * @typedef {[T, U]} E
- */
-
-/**
- * @template {string | number} [T=string]
- * @template U - error: Required type parameters cannot follow optional type parameters
- * @typedef {[T, U]} F
  */
 
 /**

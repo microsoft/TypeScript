@@ -1,6 +1,7 @@
 // @allowJs: true
 // @checkJs: true
-// @noEmit: true
+// @outDir: out
+// @declaration: true
 // @Filename: file.js
 
 /**

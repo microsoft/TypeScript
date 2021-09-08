@@ -43,12 +43,6 @@ const aNumber = [0];
  */
 
 /**
- * @template {string | number} [T=string]
- * @template U - error: Required type parameters cannot follow optional type parameters
- * @typedef {[T, U]} F
- */
-
-/**
  * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
  * @template [U=T]
  * @typedef {[T, U]} G
@@ -62,8 +56,8 @@ const aNumber = [0];
  */
 function f1(a, b) {}
 >f1 : Symbol(f1, Decl(file.js, 12, 20))
->a : Symbol(a, Decl(file.js, 54, 12))
->b : Symbol(b, Decl(file.js, 54, 14))
+>a : Symbol(a, Decl(file.js, 48, 12))
+>b : Symbol(b, Decl(file.js, 48, 14))
 
  /**
  * @template {string | number} [T=string]
@@ -72,9 +66,9 @@ function f1(a, b) {}
  * @param {U} b
  */
 function f2(a, b) {}
->f2 : Symbol(f2, Decl(file.js, 54, 20))
->a : Symbol(a, Decl(file.js, 62, 12))
->b : Symbol(b, Decl(file.js, 62, 14))
+>f2 : Symbol(f2, Decl(file.js, 48, 20))
+>a : Symbol(a, Decl(file.js, 56, 12))
+>b : Symbol(b, Decl(file.js, 56, 14))
 
 /**
  * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
@@ -83,7 +77,7 @@ function f2(a, b) {}
  * @param {U} b
  */
 function f3(a, b) {}
->f3 : Symbol(f3, Decl(file.js, 62, 20))
->a : Symbol(a, Decl(file.js, 70, 12))
->b : Symbol(b, Decl(file.js, 70, 14))
+>f3 : Symbol(f3, Decl(file.js, 56, 20))
+>a : Symbol(a, Decl(file.js, 64, 12))
+>b : Symbol(b, Decl(file.js, 64, 14))
 

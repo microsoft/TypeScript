@@ -51,12 +51,6 @@ const aNumber = [0];
  */
 
 /**
- * @template {string | number} [T=string]
- * @template U - error: Required type parameters cannot follow optional type parameters
- * @typedef {[T, U]} F
- */
-
-/**
  * @template [T=U] - error: Type parameter defaults can only reference previously declared type parameters.
  * @template [U=T]
  * @typedef {[T, U]} G
