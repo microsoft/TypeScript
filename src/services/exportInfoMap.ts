@@ -203,7 +203,7 @@ namespace ts {
                 key += `,${symbol.parent.name}`;
                 symbol = symbol.parent;
             }
-            return key;
+            return `${key},${getSourceFileOfNode(symbol.declarations![0]).fileName}`;
         }
 
         function fileIsGlobalOnly(file: SourceFile) {
