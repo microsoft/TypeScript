@@ -2052,7 +2052,9 @@ namespace ts {
                     lastSelfReferenceLocation = location;
                 }
                 lastLocation = location;
-                location = location.parent;
+                location = isJSDocTemplateTag(location) ?
+                    getEffectiveContainerForJSDocTemplateTag(location) || location.parent :
+                    location.parent;
             }
 
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
@@ -12901,7 +12903,7 @@ namespace ts {
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
             const tp = getDeclarationOfKind<TypeParameterDeclaration>(typeParameter.symbol, SyntaxKind.TypeParameter)!;
-            const host = isJSDocTemplateTag(tp.parent) ? getHostSignatureFromJSDoc(tp.parent) : tp.parent;
+            const host = isJSDocTemplateTag(tp.parent) ? getEffectiveContainerForJSDocTemplateTag(tp.parent) : tp.parent;
             return host && getSymbolOfNode(host);
         }
 
@@ -33673,7 +33675,7 @@ namespace ts {
                 }
             }
 
-            checkTypeParameters(node.typeParameters);
+            checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
 
             forEach(node.parameters, checkParameter);
 
@@ -35306,6 +35308,7 @@ namespace ts {
                 checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             }
             checkSourceElement(node.typeExpression);
+            checkTypeParameters(getEffectiveTypeParameterDeclarations(node));
         }
 
         function checkJSDocTemplateTag(node: JSDocTemplateTag): void {
