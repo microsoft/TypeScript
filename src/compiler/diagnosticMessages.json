@@ -1372,6 +1372,22 @@
         "category": "Error",
         "code": 1443
     },
+    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1444
+    },
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1446
+    },
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 1448
+    },
+    "Preserve unused imported values in the JavaScript output that would otherwise be removed.": {
+        "category": "Message",
+        "code": 1449
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -3910,6 +3926,10 @@
         "category": "Error",
         "code": 5094
     },
+    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+        "category": "Error",
+        "code": 5095
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4834,6 +4854,10 @@
         "category": "Message",
         "code": 6257
     },
+    "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
+        "category": "Error",
+        "code": 6258
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -5668,6 +5692,11 @@
         "category": "Message",
         "code": 6929
     },
+    "`true` for ES2022 and above, including ESNext.": {
+        "category": "Message",
+        "code": 6930
+    },
+
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
