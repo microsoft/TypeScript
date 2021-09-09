@@ -1,0 +1,13 @@
+/// <reference path="../fourslash.ts"/>
+
+////     ;
+////     /*
+////     
+//// */
+
+format.document();
+verify.currentFileContentIs(
+`;
+    /*
+ 
+*/`);
