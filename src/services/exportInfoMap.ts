@@ -186,8 +186,7 @@ namespace ts {
         function key(importedName: string, symbol: Symbol, moduleName: string, checker: TypeChecker) {
             const unquoted = stripQuotes(moduleName);
             const moduleKey = isExternalModuleNameRelative(unquoted) ? "/" : unquoted;
-            const targetKey = symbol.flags & SymbolFlags.Alias ? createSymbolKey(skipAlias(symbol, checker)) : moduleName;
-            return `${importedName}|${targetKey}|${moduleKey}`;
+            return `${importedName}|${createSymbolKey(skipAlias(symbol, checker), unquoted)}|${moduleKey}`;
         }
 
         function parseKey(key: string) {
@@ -197,15 +196,20 @@ namespace ts {
             return { symbolName, ambientModuleName };
         }
 
-        function createSymbolKey(symbol: Symbol) {
+        function createSymbolKey(symbol: Symbol, sourceModuleName: string) {
             let key = symbol.name;
+            let seenModule = false;
             while (symbol.parent) {
+                seenModule = isExternalModuleSymbol(symbol.parent);
                 key += `,${symbol.parent.name}`;
                 symbol = symbol.parent;
             }
-            const decl = symbol.declarations?.[0];
-            const fileName = decl && getSourceFileOfNode(decl).fileName;
-            return `${key},${fileName}`;
+            if (!seenModule) {
+                const decl = symbol.declarations?.[0];
+                const fileName = decl && getSourceFileOfNode(decl).fileName;
+                key += fileName || sourceModuleName;
+            }
+            return key;
         }
 
         function fileIsGlobalOnly(file: SourceFile) {
