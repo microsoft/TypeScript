@@ -1480,6 +1480,25 @@ namespace ts.FindAllReferences {
                     state.addStringOrCommentReference(sourceFile.fileName, createTextSpan(position, search.text.length));
                 }
 
+                const callExpr = findAncestor(referenceLocation, isCallExpression);
+                if (callExpr && isStringLiteralLike(referenceLocation)) {
+                    // In the case where the reference node is a string literal within a
+                    // call expression, the current symbol we're searching for might be
+                    // a reference to a property name for one of the parameters of the
+                    // call's resolved signature.
+                    const sig = state.checker.getResolvedSignature(callExpr);
+                    if (sig) {
+                        const params = sig.getParameters();
+                        for (let i = 0; i < params.length; i++) {
+                            const paramType = state.checker.getParameterType(sig, i);
+                            const prop = paramType.getProperty(referenceLocation.text);
+                            if (prop) {
+                                const relatedSymbol = getRelatedSymbol(search, prop, referenceLocation, state);
+                                if (relatedSymbol) addReference(referenceLocation, relatedSymbol, state);
+                            }
+                        }
+                    }
+                }
                 return;
             }
 
@@ -2004,18 +2023,49 @@ namespace ts.FindAllReferences {
 
         function getReferencesForStringLiteral(node: StringLiteralLike, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
             const type = getContextualTypeFromParentOrAncestorTypeNode(node, checker);
+            const callExpr = findAncestor(node, isCallExpression);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
-                    if (isStringLiteralLike(ref) && ref.text === node.text) {
-                        if (type) {
-                            const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
-                            if (type !== checker.getStringType() && type === refType) {
-                                return nodeEntry(ref, EntryKind.StringLiteral);
-                            }
-                        }
-                        else {
+                    // Special case: Every string literal refers at least to itself.
+                    if (node === ref) return nodeEntry(ref, EntryKind.StringLiteral);
+
+                    // When evaluating references for a string literal, guarantee that the string literal
+                    // node is either global or that any reference shares the same scope.  Global literals
+                    // might all refer to each other, but if the string literal being considered is in a
+                    // call expression, any reference should also be from the same call expression.
+                    const refHasSameScope = !callExpr || callExpr === findAncestor(ref, isCallExpression);
+                    const refHasSameText = isStringLiteralLike(ref) || isPropertyNameLiteral(ref) && getTextOfIdentifierOrLiteral(ref) === node.text;
+
+                    if (type && isStringLiteralLike(ref) && refHasSameText) {
+                        const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
+                        if ((refHasSameScope || !type.isStringLiteral() || type.isUnionOrIntersection()) && type === refType) {
+                            // Reference globally or contextually matches the given string literal by referencing
+                            // the same union or intersection type or sharing a similar scope.
                             return nodeEntry(ref, EntryKind.StringLiteral);
+                        }
+                    }
+                    if (callExpr) {
+                        if (refHasSameScope && isPropertyNameLiteral(ref) && refHasSameText) {
+                            // Reference is the property name of an object literal argument.
+                            return nodeEntry(ref, EntryKind.SearchedLocalFoundProperty);
+                        }
+
+                        const sig = checker.getResolvedSignature(callExpr);
+                        if (sig) {
+                            const params = sig.getParameters();
+                            for (let i = 0; i < params.length; i++) {
+                                const paramType = checker.getParameterType(sig, i);
+                                if (isLiteralTypeNode(ref.parent) && paramType.isStringLiteral() && refHasSameText) {
+                                    // Reference is the definition of a string literal parameter.
+                                    return nodeEntry(ref, EntryKind.StringLiteral);
+                                }
+                                const prop = paramType.getProperty(node.text);
+                                if (prop && prop === checker.getSymbolAtLocation(ref)) {
+                                    // Reference is a property name in one of the parameter types.
+                                    return nodeEntry(ref, EntryKind.SearchedLocalFoundProperty);
+                                }
+                            }
                         }
                     }
                 });
