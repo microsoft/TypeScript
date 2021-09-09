@@ -1,0 +1,8 @@
+=== tests/cases/compiler/commaDelimitedListComments.ts ===
+const arr1 = [
+>arr1 : Symbol(arr1, Decl(commaDelimitedListComments.ts, 0, 5))
+
+  1, // first
+  2, // second
+  3 // third
+];

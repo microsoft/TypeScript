@@ -21,7 +21,7 @@ class C {
 function A() { }
 A.prototype = {
     : 1,
-    : function () { },
+    : function () { }, // Error
     get () { return ""; } // Error
 };
 var B = /** @class */ (function () {
@@ -31,7 +31,7 @@ var B = /** @class */ (function () {
 }());
 B.prototype = {
     : 2,
-    : function () { },
+    : function () { }, // Error
     get () { return ""; } // Error
 };
 var C = /** @class */ (function () {

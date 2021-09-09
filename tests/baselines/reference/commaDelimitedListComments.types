@@ -1,0 +1,15 @@
+=== tests/cases/compiler/commaDelimitedListComments.ts ===
+const arr1 = [
+>arr1 : number[]
+>[  1, // first  2, // second  3 // third] : number[]
+
+  1, // first
+>1 : 1
+
+  2, // second
+>2 : 2
+
+  3 // third
+>3 : 3
+
+];

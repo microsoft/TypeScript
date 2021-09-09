@@ -4301,6 +4301,21 @@ namespace ts {
                                 shouldDecreaseIndentAfterEmit = true;
                             }
 
+                            // Emit comments for comma-delimited list nodes.
+                            // i.e
+                            //       var array = [...
+                            //          2, /* comment */
+                            //          ...
+                            //       ];
+                            if (mayEmitInterveningComments && format & ListFormat.CommaDelimited) {
+                                if (emitTrailingCommentsOfPosition) {
+                                    if (child.kind !== SyntaxKind.PropertyAssignment) {
+                                        const commentRange = getCommentRange(child);
+                                        emitTrailingCommentsOfPosition(commentRange.pos, /*prefixSpace*/ true);
+                                    }
+                                }
+                            }
+
                             writeLine(separatingLineTerminatorCount);
                             shouldEmitInterveningComments = false;
                         }

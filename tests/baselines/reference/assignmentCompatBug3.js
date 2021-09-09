@@ -28,7 +28,7 @@ foo(x + y);
 //// [assignmentCompatBug3.js]
 function makePoint(x, y) {
     return {
-        get x() { return x; },
+        get x() { return x; }, // shouldn't be "void"
         get y() { return y; },
         //x: "yo",
         //y: "boo",
