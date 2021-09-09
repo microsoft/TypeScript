@@ -186,8 +186,8 @@ namespace ts {
         function key(importedName: string, symbol: Symbol, moduleName: string, checker: TypeChecker) {
             const unquoted = stripQuotes(moduleName);
             const moduleKey = isExternalModuleNameRelative(unquoted) ? "/" : unquoted;
-            const target = skipAlias(symbol, checker);
-            return `${importedName}|${createSymbolKey(target)}|${moduleKey}`;
+            const targetKey = symbol.flags & SymbolFlags.Alias ? createSymbolKey(skipAlias(symbol, checker)) : moduleName;
+            return `${importedName}|${targetKey}|${moduleKey}`;
         }
 
         function parseKey(key: string) {
@@ -203,7 +203,9 @@ namespace ts {
                 key += `,${symbol.parent.name}`;
                 symbol = symbol.parent;
             }
-            return `${key},${getSourceFileOfNode(symbol.declarations![0]).fileName}`;
+            const decl = symbol.declarations?.[0];
+            const fileName = decl && getSourceFileOfNode(decl).fileName;
+            return `${key},${fileName}`;
         }
 
         function fileIsGlobalOnly(file: SourceFile) {
