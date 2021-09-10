@@ -214,7 +214,7 @@ declare namespace Intl {
         compactDisplay?: "short" | "long";
         notation?: "standard" | "scientific" | "engineering" | "compact";
         signDisplay?: "auto" | "never" | "always";
-        unit?: stringt;
+        unit?: string;
         unitDisplay?: "short" | "long" | "narrow";
     }
 
