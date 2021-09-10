@@ -37,9 +37,12 @@ declare namespace Intl {
         supportedLocalesOf(locales: string | string[], options?: { localeMatcher?: "lookup" | "best fit" }): string[];
     };
 
+    // We can only have one definition for 'type' in TypeScript, and so you can learn where the keys come from here:
     type ES2018NumberFormatPartType = "literal" | "nan" | "infinity" | "percent" | "integer" | "group" | "decimal" | "fraction" | "plusSign" | "minusSign" | "percentSign" | "currency" | "code" | "symbol" | "name";
+    type ES2020NumberFormatPartType = "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
+
     interface NumberFormatPart {
-        type: ES2018NumberFormatPartType;
+        type: ES2018NumberFormatPartType | ES2020NumberFormatPartType;
         value: string;
     }
 

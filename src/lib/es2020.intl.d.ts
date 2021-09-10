@@ -197,11 +197,6 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
-    interface NumberFormatPart {
-        // es2020 ones start after "name"
-        type: "literal" | "nan" | "infinity" | "percent" | "integer" | "group" | "decimal" | "fraction" | "plusSign" | "minusSign" | "percentSign" | "currency" | "code" | "symbol" | "name" | "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
-    }
-
     interface NumberFormatOptions {
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
