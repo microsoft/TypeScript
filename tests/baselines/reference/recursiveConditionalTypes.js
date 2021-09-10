@@ -1,9 +1,9 @@
 //// [recursiveConditionalTypes.ts]
 // Awaiting promises
 
-type Awaited<T> =
+type __Awaited<T> =
     T extends null | undefined ? T :
-    T extends PromiseLike<infer U> ? Awaited<U> :
+    T extends PromiseLike<infer U> ? __Awaited<U> :
     T;
 
 type MyPromise<T> = {
@@ -12,11 +12,11 @@ type MyPromise<T> = {
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 
-type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
-type P1 = Awaited<any>;
-type P2 = Awaited<InfinitePromise<number>>;  // Error
+type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+type P1 = __Awaited<any>;
+type P2 = __Awaited<InfinitePromise<number>>;  // Error
 
-function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) {
+function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
     ta = ua;
     ua = ta;  // Error
     ta = tx;  // Error
@@ -172,15 +172,15 @@ function f21(x, y) {
 
 
 //// [recursiveConditionalTypes.d.ts]
-declare type Awaited<T> = T extends null | undefined ? T : T extends PromiseLike<infer U> ? Awaited<U> : T;
+declare type __Awaited<T> = T extends null | undefined ? T : T extends PromiseLike<infer U> ? __Awaited<U> : T;
 declare type MyPromise<T> = {
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 };
 declare type InfinitePromise<T> = Promise<InfinitePromise<T>>;
-declare type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
-declare type P1 = Awaited<any>;
-declare type P2 = Awaited<InfinitePromise<number>>;
-declare function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>): void;
+declare type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+declare type P1 = __Awaited<any>;
+declare type P2 = __Awaited<InfinitePromise<number>>;
+declare function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>): void;
 declare type Flatten<T extends readonly unknown[]> = T extends unknown[] ? _Flatten<T>[] : readonly _Flatten<T>[];
 declare type _Flatten<T> = T extends readonly (infer U)[] ? _Flatten<U> : T;
 declare type InfiniteArray<T> = InfiniteArray<T>[];

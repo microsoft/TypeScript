@@ -913,28 +913,29 @@ namespace ts {
         // and they will not get an error from not having unrelated library files
         let deferredGlobalESSymbolConstructorSymbol: Symbol | undefined;
         let deferredGlobalESSymbolConstructorTypeSymbol: Symbol | undefined;
-        let deferredGlobalESSymbolType: ObjectType;
+        let deferredGlobalESSymbolType: ObjectType | undefined;
         let deferredGlobalTypedPropertyDescriptorType: GenericType;
-        let deferredGlobalPromiseType: GenericType;
-        let deferredGlobalPromiseLikeType: GenericType;
+        let deferredGlobalPromiseType: GenericType | undefined;
+        let deferredGlobalPromiseLikeType: GenericType | undefined;
         let deferredGlobalPromiseConstructorSymbol: Symbol | undefined;
-        let deferredGlobalPromiseConstructorLikeType: ObjectType;
-        let deferredGlobalIterableType: GenericType;
-        let deferredGlobalIteratorType: GenericType;
-        let deferredGlobalIterableIteratorType: GenericType;
-        let deferredGlobalGeneratorType: GenericType;
-        let deferredGlobalIteratorYieldResultType: GenericType;
-        let deferredGlobalIteratorReturnResultType: GenericType;
-        let deferredGlobalAsyncIterableType: GenericType;
-        let deferredGlobalAsyncIteratorType: GenericType;
-        let deferredGlobalAsyncIterableIteratorType: GenericType;
-        let deferredGlobalAsyncGeneratorType: GenericType;
-        let deferredGlobalTemplateStringsArrayType: ObjectType;
+        let deferredGlobalPromiseConstructorLikeType: ObjectType | undefined;
+        let deferredGlobalIterableType: GenericType | undefined;
+        let deferredGlobalIteratorType: GenericType | undefined;
+        let deferredGlobalIterableIteratorType: GenericType | undefined;
+        let deferredGlobalGeneratorType: GenericType | undefined;
+        let deferredGlobalIteratorYieldResultType: GenericType | undefined;
+        let deferredGlobalIteratorReturnResultType: GenericType | undefined;
+        let deferredGlobalAsyncIterableType: GenericType | undefined;
+        let deferredGlobalAsyncIteratorType: GenericType | undefined;
+        let deferredGlobalAsyncIterableIteratorType: GenericType | undefined;
+        let deferredGlobalAsyncGeneratorType: GenericType | undefined;
+        let deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalImportMetaExpressionType: ObjectType;
-        let deferredGlobalExtractSymbol: Symbol;
-        let deferredGlobalOmitSymbol: Symbol;
-        let deferredGlobalBigIntType: ObjectType;
+        let deferredGlobalExtractSymbol: Symbol | undefined;
+        let deferredGlobalOmitSymbol: Symbol | undefined;
+        let deferredGlobalAwaitedSymbol: Symbol | undefined;
+        let deferredGlobalBigIntType: ObjectType | undefined;
 
         const allPotentiallyUnusedIdentifiers = new Map<Path, PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -13391,28 +13392,48 @@ namespace ts {
             return getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
         }
 
+        function getGlobalTypeAliasSymbol(name: __String, arity: number, reportErrors: boolean): Symbol | undefined {
+            const symbol = getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
+            if (symbol) {
+                // Resolve the declared type of the symbol. This resolves type parameters for the type
+                // alias so that we can check arity.
+                getDeclaredTypeOfSymbol(symbol);
+                if (length(getSymbolLinks(symbol).typeParameters) !== arity) {
+                    const decl = symbol.declarations && find(symbol.declarations, isTypeAliasDeclaration);
+                    error(decl, Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity);
+                    return undefined;
+                }
+            }
+            return symbol;
+        }
+
         function getGlobalSymbol(name: __String, meaning: SymbolFlags, diagnostic: DiagnosticMessage | undefined): Symbol | undefined {
             // Don't track references for global symbols anyway, so value if `isReference` is arbitrary
             return resolveName(undefined, name, meaning, diagnostic, name, /*isUse*/ false);
         }
 
-        function getGlobalType(name: __String, arity: 0, reportErrors: boolean): ObjectType;
-        function getGlobalType(name: __String, arity: number, reportErrors: boolean): GenericType;
+        function getGlobalType(name: __String, arity: 0, reportErrors: true): ObjectType;
+        function getGlobalType(name: __String, arity: 0, reportErrors: boolean): ObjectType | undefined;
+        function getGlobalType(name: __String, arity: number, reportErrors: true): GenericType;
+        function getGlobalType(name: __String, arity: number, reportErrors: boolean): GenericType | undefined;
         function getGlobalType(name: __String, arity: number, reportErrors: boolean): ObjectType | undefined {
             const symbol = getGlobalTypeSymbol(name, reportErrors);
             return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
         }
 
         function getGlobalTypedPropertyDescriptorType() {
-            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+            // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            return deferredGlobalTypedPropertyDescriptorType ||= getGlobalType("TypedPropertyDescriptor" as __String, /*arity*/ 1, /*reportErrors*/ true) || emptyGenericType;
         }
 
         function getGlobalTemplateStringsArrayType() {
-            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+            // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            return deferredGlobalTemplateStringsArrayType ||= getGlobalType("TemplateStringsArray" as __String, /*arity*/ 0, /*reportErrors*/ true) || emptyObjectType;
         }
 
         function getGlobalImportMetaType() {
-            return deferredGlobalImportMetaType || (deferredGlobalImportMetaType = getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+            // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            return deferredGlobalImportMetaType ||= getGlobalType("ImportMeta" as __String, /*arity*/ 0, /*reportErrors*/ true) || emptyObjectType;
         }
 
         function getGlobalImportMetaExpressionType() {
@@ -13433,72 +13454,72 @@ namespace ts {
             return deferredGlobalImportMetaExpressionType;
         }
 
-        function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
-            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as __String, reportErrors));
+        function getGlobalESSymbolConstructorSymbol(reportErrors: boolean): Symbol | undefined {
+            return deferredGlobalESSymbolConstructorSymbol ||= getGlobalValueSymbol("Symbol" as __String, reportErrors);
         }
 
-        function getGlobalESSymbolConstructorTypeSymbol(reportErrors: boolean) {
-            return deferredGlobalESSymbolConstructorTypeSymbol || (deferredGlobalESSymbolConstructorTypeSymbol = getGlobalTypeSymbol("SymbolConstructor" as __String, reportErrors));
+        function getGlobalESSymbolConstructorTypeSymbol(reportErrors: boolean): Symbol | undefined {
+            return deferredGlobalESSymbolConstructorTypeSymbol ||= getGlobalTypeSymbol("SymbolConstructor" as __String, reportErrors);
         }
 
         function getGlobalESSymbolType(reportErrors: boolean) {
-            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return (deferredGlobalESSymbolType ||= getGlobalType("Symbol" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalPromiseType(reportErrors: boolean) {
-            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalPromiseType ||= getGlobalType("Promise" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalPromiseLikeType(reportErrors: boolean) {
-            return deferredGlobalPromiseLikeType || (deferredGlobalPromiseLikeType = getGlobalType("PromiseLike" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalPromiseLikeType ||= getGlobalType("PromiseLike" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
-            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as __String, reportErrors));
+            return deferredGlobalPromiseConstructorSymbol ||= getGlobalValueSymbol("Promise" as __String, reportErrors);
         }
 
         function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
-            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return (deferredGlobalPromiseConstructorLikeType ||= getGlobalType("PromiseConstructorLike" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalAsyncIterableType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalAsyncIterableType ||= getGlobalType("AsyncIterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+            return (deferredGlobalAsyncIteratorType ||= getGlobalType("AsyncIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalAsyncIterableIteratorType ||= getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncGeneratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncGeneratorType || (deferredGlobalAsyncGeneratorType = getGlobalType("AsyncGenerator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+            return (deferredGlobalAsyncGeneratorType ||= getGlobalType("AsyncGenerator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableType(reportErrors: boolean) {
-            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalIterableType ||= getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+            return (deferredGlobalIteratorType ||= getGlobalType("Iterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalIterableIteratorType ||= getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalGeneratorType(reportErrors: boolean) {
-            return deferredGlobalGeneratorType || (deferredGlobalGeneratorType = getGlobalType("Generator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+            return (deferredGlobalGeneratorType ||= getGlobalType("Generator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIteratorYieldResultType(reportErrors: boolean) {
-            return deferredGlobalIteratorYieldResultType || (deferredGlobalIteratorYieldResultType = getGlobalType("IteratorYieldResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalIteratorYieldResultType ||= getGlobalType("IteratorYieldResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIteratorReturnResultType(reportErrors: boolean) {
-            return deferredGlobalIteratorReturnResultType || (deferredGlobalIteratorReturnResultType = getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return (deferredGlobalIteratorReturnResultType ||= getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType | undefined {
@@ -13506,16 +13527,26 @@ namespace ts {
             return symbol && getTypeOfGlobalSymbol(symbol, arity) as GenericType;
         }
 
-        function getGlobalExtractSymbol(): Symbol {
-            return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        function getGlobalExtractSymbol(): Symbol | undefined {
+            // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            deferredGlobalExtractSymbol ||= getGlobalTypeAliasSymbol("Extract" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalExtractSymbol === unknownSymbol ? undefined : deferredGlobalExtractSymbol;
         }
 
-        function getGlobalOmitSymbol(): Symbol {
-            return deferredGlobalOmitSymbol || (deferredGlobalOmitSymbol = getGlobalSymbol("Omit" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        function getGlobalOmitSymbol(): Symbol | undefined {
+            // We always report an error, so cache a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            deferredGlobalOmitSymbol ||= getGlobalTypeAliasSymbol("Omit" as __String, /*arity*/ 2, /*reportErrors*/ true) || unknownSymbol;
+            return deferredGlobalOmitSymbol === unknownSymbol ? undefined : deferredGlobalOmitSymbol;
+        }
+
+        function getGlobalAwaitedSymbol(reportErrors: boolean): Symbol | undefined {
+            // Only cache `unknownSymbol` if we are reporting errors so that we don't report the error more than once.
+            deferredGlobalAwaitedSymbol ||= getGlobalTypeAliasSymbol("Awaited" as __String, /*arity*/ 1, reportErrors) || (reportErrors ? unknownSymbol : undefined);
+            return deferredGlobalAwaitedSymbol === unknownSymbol ? undefined : deferredGlobalAwaitedSymbol;
         }
 
         function getGlobalBigIntType(reportErrors: boolean) {
-            return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return (deferredGlobalBigIntType ||= getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         /**
@@ -25405,8 +25436,9 @@ namespace ts {
                     }
 
                     if (functionFlags & FunctionFlags.Async) { // Async function or AsyncGenerator function
+                        // Get the awaited type without the `Awaited<T>` alias
                         const contextualAwaitedType = mapType(contextualReturnType, getAwaitedType);
-                        return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                        return contextualAwaitedType && getUnionType([unwrapAwaitedType(contextualAwaitedType), createPromiseLikeType(contextualAwaitedType)]);
                     }
 
                     return contextualReturnType; // Regular function or Generator function
@@ -25419,7 +25451,7 @@ namespace ts {
             const contextualType = getContextualType(node, contextFlags);
             if (contextualType) {
                 const contextualAwaitedType = getAwaitedType(contextualType);
-                return contextualAwaitedType && getUnionType([contextualAwaitedType, createPromiseLikeType(contextualAwaitedType)]);
+                return contextualAwaitedType && getUnionType([unwrapAwaitedType(contextualAwaitedType), createPromiseLikeType(contextualAwaitedType)]);
             }
             return undefined;
         }
@@ -32751,8 +32783,8 @@ namespace ts {
                 let wouldWorkWithAwait = false;
                 const errNode = errorNode || operatorToken;
                 if (isRelated) {
-                    const awaitedLeftType = getAwaitedType(leftType);
-                    const awaitedRightType = getAwaitedType(rightType);
+                    const awaitedLeftType = unwrapAwaitedType(getAwaitedType(leftType));
+                    const awaitedRightType = unwrapAwaitedType(getAwaitedType(rightType));
                     wouldWorkWithAwait = !(awaitedLeftType === leftType && awaitedRightType === rightType)
                         && !!(awaitedLeftType && awaitedRightType)
                         && isRelated(awaitedLeftType, awaitedRightType);
@@ -34797,6 +34829,11 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise = getTypeArguments(type as GenericType)[0];
             }
 
+            // primitives with a `{ then() }` won't be unwrapped/adopted.
+            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+                return undefined;
+            }
+
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String)!; // TODO: GH#18217
             if (isTypeAny(thenFunction)) {
                 return undefined;
@@ -34839,11 +34876,80 @@ namespace ts {
         }
 
         /**
-         * Determines whether a type has a callable `then` member.
+         * Determines whether a type is an object with a callable `then` member.
          */
         function isThenableType(type: Type): boolean {
+            if (allTypesAssignableToKind(type, TypeFlags.Primitive | TypeFlags.Never)) {
+                // primitive types cannot be considered "thenable" since they are not objects.
+                return false;
+            }
+
             const thenFunction = getTypeOfPropertyOfType(type, "then" as __String);
             return !!thenFunction && getSignaturesOfType(getTypeWithFacts(thenFunction, TypeFacts.NEUndefinedOrNull), SignatureKind.Call).length > 0;
+        }
+
+        interface AwaitedTypeInstantiation extends Type {
+            _awaitedTypeBrand: never;
+            aliasSymbol: Symbol;
+            aliasTypeArguments: readonly Type[];
+        }
+
+        function isAwaitedTypeInstantiation(type: Type): type is AwaitedTypeInstantiation {
+            if (type.flags & TypeFlags.Conditional) {
+                const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ false);
+                return !!awaitedSymbol && type.aliasSymbol === awaitedSymbol && type.aliasTypeArguments?.length === 1;
+            }
+            return false;
+        }
+
+        /**
+         * For a generic `Awaited<T>`, gets `T`.
+         */
+        function unwrapAwaitedType(type: Type): Type;
+        function unwrapAwaitedType(type: Type | undefined): Type | undefined;
+        function unwrapAwaitedType(type: Type | undefined) {
+            if (!type) return undefined;
+            return type.flags & TypeFlags.Union ? mapType(type, unwrapAwaitedType) :
+                isAwaitedTypeInstantiation(type) ? type.aliasTypeArguments[0] :
+                type;
+        }
+
+        function createAwaitedTypeIfNeeded(type: Type): Type {
+            // We wrap type `T` in `Awaited<T>` based on the following conditions:
+            // - `T` is not already an `Awaited<U>`, and
+            // - `T` is generic, and
+            // - One of the following applies:
+            //   - `T` has no base constraint, or
+            //   - The base constraint of `T` is `any`, `unknown`, `object`, or `{}`, or
+            //   - The base constraint of `T` is an object type with a callable `then` method.
+
+            if (isTypeAny(type)) {
+                return type;
+            }
+
+            // If this is already an `Awaited<T>`, just return it. This helps to avoid `Awaited<Awaited<T>>` in higher-order.
+            if (isAwaitedTypeInstantiation(type)) {
+                return type;
+            }
+
+            // Only instantiate `Awaited<T>` if `T` contains possibly non-primitive types.
+            if (isGenericObjectType(type)) {
+                const baseConstraint = getBaseConstraintOfType(type);
+                // Only instantiate `Awaited<T>` if `T` has no base constraint, or the base constraint of `T` is `any`, `unknown`, `{}`, `object`,
+                // or is promise-like.
+                if (!baseConstraint || (baseConstraint.flags & TypeFlags.AnyOrUnknown) || isEmptyObjectType(baseConstraint) || isThenableType(baseConstraint)) {
+                    // Nothing to do if `Awaited<T>` doesn't exist
+                    const awaitedSymbol = getGlobalAwaitedSymbol(/*reportErrors*/ true);
+                    if (awaitedSymbol) {
+                        // Unwrap unions that may contain `Awaited<T>`, otherwise its possible to manufacture an `Awaited<Awaited<T> | U>` where
+                        // an `Awaited<T | U>` would suffice.
+                        return getTypeAliasInstantiation(awaitedSymbol, [unwrapAwaitedType(type)]);
+                    }
+                }
+            }
+
+            Debug.assert(getPromisedTypeOfPromise(type) === undefined, "type provided should not be a non-generic 'promise'-like.");
+            return type;
         }
 
         /**
@@ -34861,21 +34967,22 @@ namespace ts {
                 return type;
             }
 
+            // If this is already an `Awaited<T>`, just return it. This avoids `Awaited<Awaited<T>>` in higher-order
+            if (isAwaitedTypeInstantiation(type)) {
+                return type;
+            }
+
+            // If we've already cached an awaited type, return a possible `Awaited<T>` for it.
             const typeAsAwaitable = type as PromiseOrAwaitableType;
             if (typeAsAwaitable.awaitedTypeOfType) {
-                return typeAsAwaitable.awaitedTypeOfType;
+                return createAwaitedTypeIfNeeded(typeAsAwaitable.awaitedTypeOfType);
             }
 
             // For a union, get a union of the awaited types of each constituent.
-            //
-            return typeAsAwaitable.awaitedTypeOfType =
-                mapType(type, errorNode ? constituentType => getAwaitedTypeWorker(constituentType, errorNode, diagnosticMessage, arg0) : getAwaitedTypeWorker);
-        }
-
-        function getAwaitedTypeWorker(type: Type, errorNode?: Node, diagnosticMessage?: DiagnosticMessage, arg0?: string | number): Type | undefined {
-            const typeAsAwaitable = type as PromiseOrAwaitableType;
-            if (typeAsAwaitable.awaitedTypeOfType) {
-                return typeAsAwaitable.awaitedTypeOfType;
+            if (type.flags & TypeFlags.Union) {
+                const mapper = errorNode ? (constituentType: Type) => getAwaitedType(constituentType, errorNode, diagnosticMessage, arg0) : getAwaitedType;
+                typeAsAwaitable.awaitedTypeOfType = mapType(type, mapper);
+                return typeAsAwaitable.awaitedTypeOfType && createAwaitedTypeIfNeeded(typeAsAwaitable.awaitedTypeOfType);
             }
 
             const promisedType = getPromisedTypeOfPromise(type);
@@ -34930,7 +35037,7 @@ namespace ts {
                     return undefined;
                 }
 
-                return typeAsAwaitable.awaitedTypeOfType = awaitedType;
+                return createAwaitedTypeIfNeeded(typeAsAwaitable.awaitedTypeOfType = awaitedType);
             }
 
             // The type was not a promise, so it could not be unwrapped any further.
@@ -34950,13 +35057,13 @@ namespace ts {
             // be treated as a promise, they can cast to <any>.
             if (isThenableType(type)) {
                 if (errorNode) {
-                    if (!diagnosticMessage) return Debug.fail();
+                    Debug.assertIsDefined(diagnosticMessage);
                     error(errorNode, diagnosticMessage, arg0);
                 }
                 return undefined;
             }
 
-            return typeAsAwaitable.awaitedTypeOfType = type;
+            return createAwaitedTypeIfNeeded(typeAsAwaitable.awaitedTypeOfType = type);
         }
 
         /**
@@ -35006,7 +35113,7 @@ namespace ts {
                 if (globalPromiseType !== emptyGenericType && !isReferenceToType(returnType, globalPromiseType)) {
                     // The promise type was not a valid type reference to the global promise type, so we
                     // report an error and return the unknown type.
-                    error(returnTypeNode, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, typeToString(getAwaitedType(returnType) || voidType));
+                    error(returnTypeNode, Diagnostics.The_return_type_of_an_async_function_or_method_must_be_the_global_Promise_T_type_Did_you_mean_to_write_Promise_0, typeToString(unwrapAwaitedType(getAwaitedType(returnType)) || voidType));
                     return;
                 }
             }
@@ -36878,6 +36985,10 @@ namespace ts {
             if (iterationTypes === noIterationTypes) return noIterationTypes;
             if (iterationTypes === anyIterationTypes) return anyIterationTypes;
             const { yieldType, returnType, nextType } = iterationTypes;
+            // if we're requesting diagnostics, report errors for a missing `Awaited<T>`.
+            if (errorNode) {
+                getGlobalAwaitedSymbol(/*reportErrors*/ true);
+            }
             return createIterationTypes(
                 getAwaitedType(yieldType, errorNode) || anyType,
                 getAwaitedType(returnType, errorNode) || anyType,
@@ -36904,7 +37015,9 @@ namespace ts {
                     getIterationTypesOfIterableCached(type, asyncIterationTypesResolver) ||
                     getIterationTypesOfIterableFast(type, asyncIterationTypesResolver);
                 if (iterationTypes) {
-                    return iterationTypes;
+                    return use & IterationUse.ForOfFlag ?
+                        getAsyncFromSyncIterationTypes(iterationTypes, errorNode) :
+                        iterationTypes;
                 }
             }
 
@@ -36993,7 +37106,7 @@ namespace ts {
                 // While we define these as `any` and `undefined` in our libs by default, a custom lib *could* use
                 // different definitions.
                 const { returnType, nextType } = getIterationTypesOfGlobalIterableType(globalType, resolver);
-                return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(yieldType, returnType, nextType));
+                return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
             }
 
             // As an optimization, if the type is an instantiation of the following global type, then
@@ -37001,7 +37114,7 @@ namespace ts {
             // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
             if (isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
                 const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
-                return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(yieldType, returnType, nextType));
+                return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
             }
         }
 
@@ -37333,8 +37446,8 @@ namespace ts {
         function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
             const isGenerator = !!(functionFlags & FunctionFlags.Generator);
             const isAsync = !!(functionFlags & FunctionFlags.Async);
-            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) ?? errorType :
-                isAsync ? getAwaitedType(returnType) ?? errorType :
+            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
+                isAsync ? unwrapAwaitedType(getAwaitedType(returnType)) || errorType :
                 returnType;
         }
 

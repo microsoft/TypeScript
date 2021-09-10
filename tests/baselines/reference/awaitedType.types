@@ -1,0 +1,352 @@
+=== tests/cases/compiler/awaitedType.ts ===
+type T1 = Awaited<number>;
+>T1 : number
+
+type T2 = Awaited<Promise<number>>;
+>T2 : number
+
+type T3 = Awaited<number | Promise<number>>;
+>T3 : number
+
+type T4 = Awaited<number | Promise<string>>;
+>T4 : T4
+
+type T5 = Awaited<{ then: number }>;
+>T5 : { then: number; }
+>then : number
+
+type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
+>T6 : never
+>then : () => void
+
+type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
+>T7 : never
+>then : (x: number) => void
+>x : number
+
+type T8 = Awaited<{ then(x: () => void): void }>; // unknown
+>T8 : unknown
+>then : (x: () => void) => void
+>x : () => void
+
+type T9 = Awaited<any>;
+>T9 : any
+
+type T10 = Awaited<never>;
+>T10 : never
+
+type T11 = Awaited<unknown>;
+>T11 : unknown
+
+type T12 = Awaited<Promise<Promise<number>>>;
+>T12 : number
+
+type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
+>T13 : string | number
+>null : null
+>null : null
+
+type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
+>T14 : string | number
+
+type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+>T15 : string | number
+>null : null
+>null : null
+
+interface BadPromise { then(cb: (value: BadPromise) => void): void; }
+>then : (cb: (value: BadPromise) => void) => void
+>cb : (value: BadPromise) => void
+>value : BadPromise
+
+type T16 = Awaited<BadPromise>; // error
+>T16 : any
+
+interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
+>then : (cb: (value: BadPromise2) => void) => void
+>cb : (value: BadPromise2) => void
+>value : BadPromise2
+
+interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
+>then : (cb: (value: BadPromise1) => void) => void
+>cb : (value: BadPromise1) => void
+>value : BadPromise1
+
+type T17 = Awaited<BadPromise1>; // error
+>T17 : any
+
+// https://github.com/microsoft/TypeScript/issues/33562
+type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
+>MaybePromise : MaybePromise<T>
+
+declare function MaybePromise<T>(value: T): MaybePromise<T>;
+>MaybePromise : <T>(value: T) => MaybePromise<T>
+>value : T
+
+async function main() {
+>main : () => Promise<void>
+
+    let aaa: number;
+>aaa : number
+
+    let bbb: string;
+>bbb : string
+
+    [
+>[        aaa,        bbb,    ] = await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
+>[        aaa,        bbb,    ] : [number, string]
+
+        aaa,
+>aaa : number
+
+        bbb,
+>bbb : string
+
+    ] = await Promise.all([
+>await Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : [number, string, boolean]
+>Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>Promise : PromiseConstructor
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, MaybePromise<true>]
+
+        MaybePromise(1),
+>MaybePromise(1) : 1 | Promise<1> | PromiseLike<1>
+>MaybePromise : <T>(value: T) => MaybePromise<T>
+>1 : 1
+
+        MaybePromise('2'),
+>MaybePromise('2') : "2" | Promise<"2"> | PromiseLike<"2">
+>MaybePromise : <T>(value: T) => MaybePromise<T>
+>'2' : "2"
+
+        MaybePromise(true),
+>MaybePromise(true) : true | Promise<true> | PromiseLike<true>
+>MaybePromise : <T>(value: T) => MaybePromise<T>
+>true : true
+
+    ])
+}
+
+// non-generic
+async function f1(x: string) {
+>f1 : (x: string) => Promise<void>
+>x : string
+
+    // y: string
+    const y = await x;
+>y : string
+>await x : string
+>x : string
+}
+
+async function f2(x: unknown) {
+>f2 : (x: unknown) => Promise<void>
+>x : unknown
+
+    // y: unknown
+    const y = await x;
+>y : unknown
+>await x : unknown
+>x : unknown
+}
+
+async function f3(x: object) {
+>f3 : (x: object) => Promise<void>
+>x : object
+
+    // y: object
+    const y = await x;
+>y : object
+>await x : object
+>x : object
+}
+
+async function f4(x: Promise<string>) {
+>f4 : (x: Promise<string>) => Promise<void>
+>x : Promise<string>
+
+    // y: string
+    const y = await x;
+>y : string
+>await x : string
+>x : Promise<string>
+}
+
+async function f5(x: Promise<unknown>) {
+>f5 : (x: Promise<unknown>) => Promise<void>
+>x : Promise<unknown>
+
+    // y: unknown
+    const y = await x;
+>y : unknown
+>await x : unknown
+>x : Promise<unknown>
+}
+
+async function f6(x: Promise<object>) {
+>f6 : (x: Promise<object>) => Promise<void>
+>x : Promise<object>
+
+    // y: object
+    const y = await x;
+>y : object
+>await x : object
+>x : Promise<object>
+}
+
+// generic
+
+async function f7<T>(x: T) {
+>f7 : <T>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Awaited<T>
+>await x : Awaited<T>
+>x : T
+}
+
+async function f8<T extends any>(x: T) {
+>f8 : <T extends unknown>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Awaited<T>
+>await x : Awaited<T>
+>x : T
+}
+
+async function f9<T extends unknown>(x: T) {
+>f9 : <T extends unknown>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Awaited<T>
+>await x : Awaited<T>
+>x : T
+}
+
+async function f10<T extends {}>(x: T) {
+>f10 : <T extends {}>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Awaited<T>
+>await x : Awaited<T>
+>x : T
+}
+
+async function f11<T extends { then(onfulfilled: (value: unknown) => void): void }>(x: T) {
+>f11 : <T extends { then(onfulfilled: (value: unknown) => void): void; }>(x: T) => Promise<void>
+>then : (onfulfilled: (value: unknown) => void) => void
+>onfulfilled : (value: unknown) => void
+>value : unknown
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : unknown
+>await x : unknown
+>x : T
+}
+
+async function f12<T extends string | object>(x: T) {
+>f12 : <T extends string | object>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Awaited<T>
+>await x : Awaited<T>
+>x : T
+}
+
+async function f13<T extends string>(x: T) {
+>f13 : <T extends string>(x: T) => Promise<void>
+>x : T
+
+    // NOTE: T belongs to the domain of primitive types
+
+    // y: T
+    const y = await x;
+>y : T
+>await x : T
+>x : T
+}
+
+async function f14<T extends { x: number }>(x: T) {
+>f14 : <T extends { x: number; }>(x: T) => Promise<void>
+>x : number
+>x : T
+
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+>y : T
+>await x : T
+>x : T
+}
+
+async function f15<T extends { then: number }>(x: T) {
+>f15 : <T extends { then: number; }>(x: T) => Promise<void>
+>then : number
+>x : T
+
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+>y : T
+>await x : T
+>x : T
+}
+
+async function f16<T extends number & { then(): void }>(x: T) {
+>f16 : <T extends number & { then(): void; }>(x: T) => Promise<void>
+>then : () => void
+>x : T
+
+    // NOTE: T belongs to the domain of primitive types (regardless of `then`)
+
+    // y: T
+    const y = await x;
+>y : T
+>await x : T
+>x : T
+}
+
+
+// helps with tests where '.types' just prints out the type alias name
+type _Expect<TActual extends TExpected, TExpected> = TActual;
+>_Expect : TActual
+

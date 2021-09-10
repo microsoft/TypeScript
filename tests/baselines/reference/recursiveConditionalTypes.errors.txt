@@ -1,10 +1,10 @@
 tests/cases/compiler/recursiveConditionalTypes.ts(16,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
-tests/cases/compiler/recursiveConditionalTypes.ts(20,5): error TS2322: Type 'Awaited<T>' is not assignable to type 'Awaited<U>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(20,5): error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
   Type 'T' is not assignable to type 'U'.
     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
-tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type 'Awaited<T>'.
-tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type 'Awaited<T>' is not assignable to type 'T'.
-  'T' could be instantiated with an arbitrary type which could be unrelated to 'Awaited<T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(21,5): error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
+tests/cases/compiler/recursiveConditionalTypes.ts(22,5): error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
 tests/cases/compiler/recursiveConditionalTypes.ts(35,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/compiler/recursiveConditionalTypes.ts(47,12): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/compiler/recursiveConditionalTypes.ts(50,5): error TS2322: Type 'TupleOf<number, M>' is not assignable to type 'TupleOf<number, N>'.
@@ -28,9 +28,9 @@ tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument
 ==== tests/cases/compiler/recursiveConditionalTypes.ts (9 errors) ====
     // Awaiting promises
     
-    type Awaited<T> =
+    type __Awaited<T> =
         T extends null | undefined ? T :
-        T extends PromiseLike<infer U> ? Awaited<U> :
+        T extends PromiseLike<infer U> ? __Awaited<U> :
         T;
     
     type MyPromise<T> = {
@@ -39,26 +39,26 @@ tests/cases/compiler/recursiveConditionalTypes.ts(117,9): error TS2345: Argument
     
     type InfinitePromise<T> = Promise<InfinitePromise<T>>;
     
-    type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
-    type P1 = Awaited<any>;
-    type P2 = Awaited<InfinitePromise<number>>;  // Error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+    type P1 = __Awaited<any>;
+    type P2 = __Awaited<InfinitePromise<number>>;  // Error
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
-    function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) {
+    function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
         ta = ua;
         ua = ta;  // Error
         ~~
-!!! error TS2322: Type 'Awaited<T>' is not assignable to type 'Awaited<U>'.
+!!! error TS2322: Type '__Awaited<T>' is not assignable to type '__Awaited<U>'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
 !!! error TS2322:     'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
         ta = tx;  // Error
         ~~
-!!! error TS2322: Type 'T' is not assignable to type 'Awaited<T>'.
+!!! error TS2322: Type 'T' is not assignable to type '__Awaited<T>'.
         tx = ta;  // Error
         ~~
-!!! error TS2322: Type 'Awaited<T>' is not assignable to type 'T'.
-!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Awaited<T>'.
+!!! error TS2322: Type '__Awaited<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '__Awaited<T>'.
     }
     
     // Flattening arrays

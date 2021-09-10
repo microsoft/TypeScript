@@ -4,9 +4,9 @@
 
 // Awaiting promises
 
-type Awaited<T> =
+type __Awaited<T> =
     T extends null | undefined ? T :
-    T extends PromiseLike<infer U> ? Awaited<U> :
+    T extends PromiseLike<infer U> ? __Awaited<U> :
     T;
 
 type MyPromise<T> = {
@@ -15,11 +15,11 @@ type MyPromise<T> = {
 
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 
-type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
-type P1 = Awaited<any>;
-type P2 = Awaited<InfinitePromise<number>>;  // Error
+type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+type P1 = __Awaited<any>;
+type P2 = __Awaited<InfinitePromise<number>>;  // Error
 
-function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) {
+function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
     ta = ua;
     ua = ta;  // Error
     ta = tx;  // Error
