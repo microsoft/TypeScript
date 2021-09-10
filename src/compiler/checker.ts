@@ -10937,24 +10937,33 @@ namespace ts {
             const types = type.types;
             const mixinFlags = findMixins(types);
             const mixinCount = countWhere(mixinFlags, (b) => b);
+            const allTypeSignatures = types.map((t) => getSignaturesOfType(t, SignatureKind.Construct));
+            // Flag mixins with only publicly accessible constructors
+            const accessibleMixinFlags = mixinFlags.map((flag, i) => flag && allTypeSignatures[i].every(({declaration}) => declaration && !getSelectedEffectiveModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier)));
             for (let i = 0; i < types.length; i++) {
-                const t = type.types[i];
-                // When an intersection type contains mixin constructor types, the construct signatures from
-                // those types are discarded and their return types are mixed into the return types of all
-                // other construct signatures in the intersection type. For example, the intersection type
-                // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
-                // 'new(s: string) => A & B'.
-                if (!mixinFlags[i]) {
-                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
-                    if (signatures.length && mixinCount > 0) {
-                        signatures = map(signatures, s => {
-                            const clone = cloneSignature(s);
-                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, mixinFlags, i);
-                            return clone;
-                        });
-                    }
-                    constructSignatures = appendSignatures(constructSignatures, signatures);
+                const t = types[i];
+                let signatures = allTypeSignatures[i];
+                // When an intersection type contains mixin constructor types...
+                if (mixinFlags[i]) {
+                    // ...the NON-PUBLICLY ACCESSIBLE construct signatures (private, protected) from those mixin types
+                    // are kept and added to the intersection type construct signatures
+                    signatures = signatures.filter(({declaration}) => declaration && getSelectedEffectiveModifierFlags(declaration, ModifierFlags.NonPublicAccessibilityModifier));
                 }
+                else if (signatures.length && mixinCount > 0) {
+                    // ...the PUBLICLY ACCESSIBLE construct signatures from those mixin types
+                    // are discarded and their return types are mixed into the return types of all
+                    // other construct signatures in the intersection type. For example, the intersection type
+                    // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
+                    // 'new(s: string) => A & B'.
+                    signatures = map(signatures, s => {
+                        const clone = cloneSignature(s);
+                        // accessibleMixinFlags is used here to prevent the return types of construct signatures of mixins with non-public constructors
+                        // getting mixed into the intersection type's construct signatures.
+                        clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, accessibleMixinFlags, i);
+                        return clone;
+                    });
+                }
+                constructSignatures = appendSignatures(constructSignatures, signatures);
                 callSignatures = appendSignatures(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 indexInfos = reduceLeft(getIndexInfosOfType(t), (infos, newInfo) => appendIndexInfo(infos, newInfo, /*union*/ false), indexInfos);
             }
