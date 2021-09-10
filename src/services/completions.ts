@@ -662,10 +662,18 @@ namespace ts.Completions {
             sourceDisplay = [textPart(origin.moduleSpecifier)];
             if (importCompletionNode) {
                 ({ insertText, replacementSpan } = getInsertTextAndReplacementSpanForImportCompletion(name, importCompletionNode, origin, useSemicolons, options, preferences));
-                isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
+                isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined; // >> Using snippet here.
             }
         }
 
+        if (isMethodOverrideCompletion(symbol, location)) {
+            ({ insertText } = getInsertTextForMethodOverrideCompletion(typeChecker, options, name, symbol, location));
+            // replacementSpan = undefined; // >> TODO
+            isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
+            hasAction = true;
+        }
+
+        // >> Should this actually be here and not at the very end of the function?
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
             return undefined;
         }
@@ -685,7 +693,7 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location), // TODO: GH#18217
+            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),
@@ -699,6 +707,58 @@ namespace ts.Completions {
             isImportStatementCompletion: !!importCompletionNode || undefined,
             data,
         };
+    }
+
+    // >> TODO: Find better location for code
+    function isMethodOverrideCompletion(symbol: Symbol, location: Node): boolean {
+        return !!(symbol.flags & SymbolFlags.Method) && isPropertyDeclaration(location.parent);
+        // >> TODO: add more checks. e.g. the method suggestion could come from an interface the class implements,
+        // or some other possibilities?
+    }
+
+    function getInsertTextForMethodOverrideCompletion(_typeChecker: TypeChecker, options: CompilerOptions, name: string, symbol: Symbol, location: Node) {
+        // const methodType = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+        // const signatures = methodType.getCallSignatures();
+        const methodDeclarations = symbol.declarations?.filter(isMethodDeclaration);
+        // >> TODO: what should we do if we have more than 1 signature? when could that happen?
+        if (methodDeclarations?.length === 1) {
+            const originalDeclaration = methodDeclarations[0];
+            const modifiers = originalDeclaration.modifiers?.filter(modifier => {
+                switch (modifier.kind) { // >> Simplify this if we only need to filter out "abstract" modifier.
+                    case SyntaxKind.AbstractKeyword:
+                        return false;
+                    default:
+                        return true;
+                }
+            });
+            if (options.noImplicitOverride) {
+                modifiers?.push(factory.createModifier(SyntaxKind.OverrideKeyword));
+                // Assuming it's ok if this modifier is duplicated.
+            }
+
+            const completionDeclaration = factory.createMethodDeclaration(
+                /*decorators*/ undefined, // I'm guessing we don't want to deal with decorators?
+                /*modifiers*/ modifiers,
+                /*asteriskToken*/ originalDeclaration.asteriskToken,
+                /*name*/ name,
+                /*questionToken*/ originalDeclaration.questionToken,
+                /*typeParameters*/ originalDeclaration.typeParameters,
+                /*parameters*/ originalDeclaration.parameters,
+                /*type*/ originalDeclaration.type,
+                /*body*/ factory.createBlock([], /*multiLine*/ true));
+            // const insertText = completionDeclaration.getText(location.getSourceFile());
+            // const insertText = completionDeclaration.getText(); // Doesn't work with synthetic nodes
+            const printer = createPrinter({
+                removeComments: true,
+                module: options.module,
+                target: options.target,
+            });
+            const insertText = printer.printNode(EmitHint.Unspecified, completionDeclaration, location.getSourceFile());
+            return {
+                insertText,
+            };
+        }
+        return { };
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {

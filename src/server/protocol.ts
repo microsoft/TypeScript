@@ -2289,7 +2289,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source`.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
         /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
