@@ -1,8 +1,9 @@
 /user.ts(2,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
 /user.ts(17,10): error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
+/user.ts(25,10): error TS1448: 'CC' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
 
 
-==== /user.ts (2 errors) ====
+==== /user.ts (3 errors) ====
     // Error, can't re-export something that's only a type.
     export { T } from "./exportT";
              ~
@@ -25,6 +26,17 @@
              ~~~~~~~
 !!! error TS1205: Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.
     
+    // Ok, type-only import indicates that the export can be elided.
+    import type { T as TT } from "./exportT";
+    export { TT };
+    
+    // Error, type-only declaration is in a different file.
+    import { C as CC } from "./reExportValueAsTypeOnly";
+    export { CC };
+             ~~
+!!! error TS1448: 'CC' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.
+!!! related TS1377 /reExportValueAsTypeOnly.ts:1:15: 'CC' was exported here.
+    
 ==== /exportT.ts (0 errors) ====
     export type T = number;
     
@@ -45,4 +57,7 @@
     declare module "baz" {
         export { T } from "foo"; // Also allowed.
     }
+    
+==== /reExportValueAsTypeOnly.ts (0 errors) ====
+    export type { C } from "./exportValue";
     

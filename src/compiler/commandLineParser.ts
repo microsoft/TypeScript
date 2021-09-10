@@ -571,7 +571,7 @@ namespace ts {
             type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -1169,6 +1169,14 @@ namespace ts {
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
             defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Emit,
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",
