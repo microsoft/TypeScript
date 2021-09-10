@@ -1,0 +1,143 @@
+=== tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts ===
+function PrivateConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+>PrivateConstructorMixinGenericBaseType : Symbol(PrivateConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 0, 0))
+>TBase : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 0, 48))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 0, 66))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 0, 90))
+>TBase : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 0, 48))
+
+    return class PrivateConstructorMixinGenericBaseType extends Base {
+>PrivateConstructorMixinGenericBaseType : Symbol(PrivateConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 1, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 0, 90))
+
+      private constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 2, 26))
+
+        super();
+>super : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 0, 48))
+      }
+    }
+  }
+  
+  function PrivateConstructorMixin(Base: new(...args: any[]) => any) {
+>PrivateConstructorMixin : Symbol(PrivateConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 6, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 8, 35))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 8, 45))
+
+    return class PrivateConstructorMixin extends Base {
+>PrivateConstructorMixin : Symbol(PrivateConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 9, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 8, 35))
+
+      private constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 10, 26))
+
+        super();
+>super : Symbol(__type, Decl(mixinClassesConstructorAccessibility.ts, 8, 40))
+      }
+    }
+  }
+  
+  function ProtectedConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+>ProtectedConstructorMixinGenericBaseType : Symbol(ProtectedConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 14, 3))
+>TBase : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 16, 52))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 16, 70))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 16, 94))
+>TBase : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 16, 52))
+
+    return class ProtectedConstructorMixinGenericBaseType extends Base {
+>ProtectedConstructorMixinGenericBaseType : Symbol(ProtectedConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 17, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 16, 94))
+
+      protected constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 18, 28))
+
+        super();
+>super : Symbol(TBase, Decl(mixinClassesConstructorAccessibility.ts, 16, 52))
+      }
+    }
+  }
+  
+  function ProtectedConstructorMixin(Base: new(...args: any[]) => any) {
+>ProtectedConstructorMixin : Symbol(ProtectedConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 22, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 24, 37))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 24, 47))
+
+    return class ProtectedConstructorMixin extends Base {
+>ProtectedConstructorMixin : Symbol(ProtectedConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 25, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 24, 37))
+
+      protected constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 26, 28))
+
+        super();
+>super : Symbol(__type, Decl(mixinClassesConstructorAccessibility.ts, 24, 42))
+      }
+    }
+  }
+  
+  function PublicConstructorMixinGenericBaseType(Base: new(...args: any[]) => any) {
+>PublicConstructorMixinGenericBaseType : Symbol(PublicConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 30, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 32, 49))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 32, 59))
+
+    return class PublicConstructorMixinGenericBaseType extends Base {
+>PublicConstructorMixinGenericBaseType : Symbol(PublicConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 33, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 32, 49))
+
+      constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 34, 18))
+
+        super();
+>super : Symbol(__type, Decl(mixinClassesConstructorAccessibility.ts, 32, 54))
+      }
+    }
+  }
+  
+  function PublicConstructorMixin(Base: new(...args: any[]) => any) {
+>PublicConstructorMixin : Symbol(PublicConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 38, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 40, 34))
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 40, 44))
+
+    return class PublicConstructorMixin extends Base {
+>PublicConstructorMixin : Symbol(PublicConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 41, 10))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 40, 34))
+
+      constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinClassesConstructorAccessibility.ts, 42, 18))
+
+        super();
+>super : Symbol(__type, Decl(mixinClassesConstructorAccessibility.ts, 40, 39))
+      }
+    }
+  }
+  
+  class Base {
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+
+    constructor() {}
+  }
+  
+  new (PrivateConstructorMixin(Base))(); // error: PrivateConstructorMixin is private
+>PrivateConstructorMixin : Symbol(PrivateConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 6, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+
+  new (PrivateConstructorMixinGenericBaseType(Base))(); // error: PrivateConstructorMixinGenericBaseType is private
+>PrivateConstructorMixinGenericBaseType : Symbol(PrivateConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+  
+  new (ProtectedConstructorMixin(Base))(); // error: ProtectedConstructorMixin is protected
+>ProtectedConstructorMixin : Symbol(ProtectedConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 22, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+
+  new (ProtectedConstructorMixinGenericBaseType(Base))(); // error: ProtectedConstructorMixinGenericBaseType is protected
+>ProtectedConstructorMixinGenericBaseType : Symbol(ProtectedConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 14, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+  
+  new (PublicConstructorMixin(Base))();
+>PublicConstructorMixin : Symbol(PublicConstructorMixin, Decl(mixinClassesConstructorAccessibility.ts, 38, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+
+  new (PublicConstructorMixinGenericBaseType(Base))();
+>PublicConstructorMixinGenericBaseType : Symbol(PublicConstructorMixinGenericBaseType, Decl(mixinClassesConstructorAccessibility.ts, 30, 3))
+>Base : Symbol(Base, Decl(mixinClassesConstructorAccessibility.ts, 46, 3))
+

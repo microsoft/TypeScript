@@ -1,0 +1,169 @@
+=== tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts ===
+function PrivateConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+>PrivateConstructorMixinGenericBaseType : <TBase extends new (...args: any[]) => any>(Base: TBase) => { new (...args: any[]): PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & TBase
+>args : any[]
+>Base : TBase
+
+    return class PrivateConstructorMixinGenericBaseType extends Base {
+>class PrivateConstructorMixinGenericBaseType extends Base {      private constructor(...args: any[]) {        super();      }    } : { new (...args: any[]): PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & TBase
+>PrivateConstructorMixinGenericBaseType : { new (...args: any[]): PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & TBase
+>Base : TBase
+
+      private constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : TBase
+      }
+    }
+  }
+  
+  function PrivateConstructorMixin(Base: new(...args: any[]) => any) {
+>PrivateConstructorMixin : (Base: new (...args: any[]) => any) => typeof PrivateConstructorMixin
+>Base : new (...args: any[]) => any
+>args : any[]
+
+    return class PrivateConstructorMixin extends Base {
+>class PrivateConstructorMixin extends Base {      private constructor(...args: any[]) {        super();      }    } : typeof PrivateConstructorMixin
+>PrivateConstructorMixin : typeof PrivateConstructorMixin
+>Base : new (...args: any[]) => any
+
+      private constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : new (...args: any[]) => any
+      }
+    }
+  }
+  
+  function ProtectedConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+>ProtectedConstructorMixinGenericBaseType : <TBase extends new (...args: any[]) => any>(Base: TBase) => { new (...args: any[]): ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & TBase
+>args : any[]
+>Base : TBase
+
+    return class ProtectedConstructorMixinGenericBaseType extends Base {
+>class ProtectedConstructorMixinGenericBaseType extends Base {      protected constructor(...args: any[]) {        super();      }    } : { new (...args: any[]): ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & TBase
+>ProtectedConstructorMixinGenericBaseType : { new (...args: any[]): ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & TBase
+>Base : TBase
+
+      protected constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : TBase
+      }
+    }
+  }
+  
+  function ProtectedConstructorMixin(Base: new(...args: any[]) => any) {
+>ProtectedConstructorMixin : (Base: new (...args: any[]) => any) => typeof ProtectedConstructorMixin
+>Base : new (...args: any[]) => any
+>args : any[]
+
+    return class ProtectedConstructorMixin extends Base {
+>class ProtectedConstructorMixin extends Base {      protected constructor(...args: any[]) {        super();      }    } : typeof ProtectedConstructorMixin
+>ProtectedConstructorMixin : typeof ProtectedConstructorMixin
+>Base : new (...args: any[]) => any
+
+      protected constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : new (...args: any[]) => any
+      }
+    }
+  }
+  
+  function PublicConstructorMixinGenericBaseType(Base: new(...args: any[]) => any) {
+>PublicConstructorMixinGenericBaseType : (Base: new (...args: any[]) => any) => typeof PublicConstructorMixinGenericBaseType
+>Base : new (...args: any[]) => any
+>args : any[]
+
+    return class PublicConstructorMixinGenericBaseType extends Base {
+>class PublicConstructorMixinGenericBaseType extends Base {      constructor(...args: any[]) {        super();      }    } : typeof PublicConstructorMixinGenericBaseType
+>PublicConstructorMixinGenericBaseType : typeof PublicConstructorMixinGenericBaseType
+>Base : new (...args: any[]) => any
+
+      constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : new (...args: any[]) => any
+      }
+    }
+  }
+  
+  function PublicConstructorMixin(Base: new(...args: any[]) => any) {
+>PublicConstructorMixin : (Base: new (...args: any[]) => any) => typeof PublicConstructorMixin
+>Base : new (...args: any[]) => any
+>args : any[]
+
+    return class PublicConstructorMixin extends Base {
+>class PublicConstructorMixin extends Base {      constructor(...args: any[]) {        super();      }    } : typeof PublicConstructorMixin
+>PublicConstructorMixin : typeof PublicConstructorMixin
+>Base : new (...args: any[]) => any
+
+      constructor(...args: any[]) {
+>args : any[]
+
+        super();
+>super() : void
+>super : new (...args: any[]) => any
+      }
+    }
+  }
+  
+  class Base {
+>Base : Base
+
+    constructor() {}
+  }
+  
+  new (PrivateConstructorMixin(Base))(); // error: PrivateConstructorMixin is private
+>new (PrivateConstructorMixin(Base))() : any
+>(PrivateConstructorMixin(Base)) : typeof PrivateConstructorMixin
+>PrivateConstructorMixin(Base) : typeof PrivateConstructorMixin
+>PrivateConstructorMixin : (Base: new (...args: any[]) => any) => typeof PrivateConstructorMixin
+>Base : typeof Base
+
+  new (PrivateConstructorMixinGenericBaseType(Base))(); // error: PrivateConstructorMixinGenericBaseType is private
+>new (PrivateConstructorMixinGenericBaseType(Base))() : any
+>(PrivateConstructorMixinGenericBaseType(Base)) : { new (...args: any[]): PrivateConstructorMixinGenericBaseType<typeof Base>.PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & typeof Base
+>PrivateConstructorMixinGenericBaseType(Base) : { new (...args: any[]): PrivateConstructorMixinGenericBaseType<typeof Base>.PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & typeof Base
+>PrivateConstructorMixinGenericBaseType : <TBase extends new (...args: any[]) => any>(Base: TBase) => { new (...args: any[]): PrivateConstructorMixinGenericBaseType; prototype: PrivateConstructorMixinGenericBaseType<any>.PrivateConstructorMixinGenericBaseType; } & TBase
+>Base : typeof Base
+  
+  new (ProtectedConstructorMixin(Base))(); // error: ProtectedConstructorMixin is protected
+>new (ProtectedConstructorMixin(Base))() : any
+>(ProtectedConstructorMixin(Base)) : typeof ProtectedConstructorMixin
+>ProtectedConstructorMixin(Base) : typeof ProtectedConstructorMixin
+>ProtectedConstructorMixin : (Base: new (...args: any[]) => any) => typeof ProtectedConstructorMixin
+>Base : typeof Base
+
+  new (ProtectedConstructorMixinGenericBaseType(Base))(); // error: ProtectedConstructorMixinGenericBaseType is protected
+>new (ProtectedConstructorMixinGenericBaseType(Base))() : any
+>(ProtectedConstructorMixinGenericBaseType(Base)) : { new (...args: any[]): ProtectedConstructorMixinGenericBaseType<typeof Base>.ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & typeof Base
+>ProtectedConstructorMixinGenericBaseType(Base) : { new (...args: any[]): ProtectedConstructorMixinGenericBaseType<typeof Base>.ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & typeof Base
+>ProtectedConstructorMixinGenericBaseType : <TBase extends new (...args: any[]) => any>(Base: TBase) => { new (...args: any[]): ProtectedConstructorMixinGenericBaseType; prototype: ProtectedConstructorMixinGenericBaseType<any>.ProtectedConstructorMixinGenericBaseType; } & TBase
+>Base : typeof Base
+  
+  new (PublicConstructorMixin(Base))();
+>new (PublicConstructorMixin(Base))() : PublicConstructorMixin
+>(PublicConstructorMixin(Base)) : typeof PublicConstructorMixin
+>PublicConstructorMixin(Base) : typeof PublicConstructorMixin
+>PublicConstructorMixin : (Base: new (...args: any[]) => any) => typeof PublicConstructorMixin
+>Base : typeof Base
+
+  new (PublicConstructorMixinGenericBaseType(Base))();
+>new (PublicConstructorMixinGenericBaseType(Base))() : PublicConstructorMixinGenericBaseType
+>(PublicConstructorMixinGenericBaseType(Base)) : typeof PublicConstructorMixinGenericBaseType
+>PublicConstructorMixinGenericBaseType(Base) : typeof PublicConstructorMixinGenericBaseType
+>PublicConstructorMixinGenericBaseType : (Base: new (...args: any[]) => any) => typeof PublicConstructorMixinGenericBaseType
+>Base : typeof Base
+

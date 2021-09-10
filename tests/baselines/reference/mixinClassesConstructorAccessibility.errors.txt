@@ -1,0 +1,75 @@
+tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts(53,3): error TS2673: Constructor of class 'PrivateConstructorMixin' is private and only accessible within the class declaration.
+tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts(54,3): error TS2673: Constructor of class 'PrivateConstructorMixinGenericBaseType' is private and only accessible within the class declaration.
+tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts(56,3): error TS2674: Constructor of class 'ProtectedConstructorMixin' is protected and only accessible within the class declaration.
+tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts(57,3): error TS2674: Constructor of class 'ProtectedConstructorMixinGenericBaseType' is protected and only accessible within the class declaration.
+
+
+==== tests/cases/conformance/classes/mixinClassesConstructorAccessibility.ts (4 errors) ====
+    function PrivateConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+        return class PrivateConstructorMixinGenericBaseType extends Base {
+          private constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      function PrivateConstructorMixin(Base: new(...args: any[]) => any) {
+        return class PrivateConstructorMixin extends Base {
+          private constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      function ProtectedConstructorMixinGenericBaseType<TBase extends new(...args: any[]) => any>(Base: TBase) {
+        return class ProtectedConstructorMixinGenericBaseType extends Base {
+          protected constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      function ProtectedConstructorMixin(Base: new(...args: any[]) => any) {
+        return class ProtectedConstructorMixin extends Base {
+          protected constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      function PublicConstructorMixinGenericBaseType(Base: new(...args: any[]) => any) {
+        return class PublicConstructorMixinGenericBaseType extends Base {
+          constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      function PublicConstructorMixin(Base: new(...args: any[]) => any) {
+        return class PublicConstructorMixin extends Base {
+          constructor(...args: any[]) {
+            super();
+          }
+        }
+      }
+      
+      class Base {
+        constructor() {}
+      }
+      
+      new (PrivateConstructorMixin(Base))(); // error: PrivateConstructorMixin is private
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2673: Constructor of class 'PrivateConstructorMixin' is private and only accessible within the class declaration.
+      new (PrivateConstructorMixinGenericBaseType(Base))(); // error: PrivateConstructorMixinGenericBaseType is private
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2673: Constructor of class 'PrivateConstructorMixinGenericBaseType' is private and only accessible within the class declaration.
+      
+      new (ProtectedConstructorMixin(Base))(); // error: ProtectedConstructorMixin is protected
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2674: Constructor of class 'ProtectedConstructorMixin' is protected and only accessible within the class declaration.
+      new (ProtectedConstructorMixinGenericBaseType(Base))(); // error: ProtectedConstructorMixinGenericBaseType is protected
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2674: Constructor of class 'ProtectedConstructorMixinGenericBaseType' is protected and only accessible within the class declaration.
+      
+      new (PublicConstructorMixin(Base))();
+      new (PublicConstructorMixinGenericBaseType(Base))();
