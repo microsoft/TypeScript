@@ -197,16 +197,16 @@ declare namespace Intl {
         ): UnicodeBCP47LocaleIdentifier[];
     };
 
-    type ES2020NumberFormatPartType = ES2018NumberFormatPartType | "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
     interface NumberFormatPart {
-        type: ES2020NumberFormatPartType
+        // es2020 ones start after "name"
+        type: "literal" | "nan" | "infinity" | "percent" | "integer" | "group" | "decimal" | "fraction" | "plusSign" | "minusSign" | "percentSign" | "currency" | "code" | "symbol" | "name" | "compact" | "exponentInteger" | "exponentMinusSign" | "exponentSeparator" | "unit" | "unknown";
     }
 
     interface NumberFormatOptions {
         compactDisplay?: "short" | "long" | undefined;
         notation?: "standard" | "scientific" | "engineering" | "compact" | undefined;
         signDisplay?: "auto" | "never" | "always" | undefined;
-        unit?: NumberFormatUnit | undefined;
+        unit?: string | undefined;
         unitDisplay?: "short" | "long" | "narrow" | undefined;
     }
 
@@ -214,7 +214,7 @@ declare namespace Intl {
         compactDisplay?: "short" | "long";
         notation?: "standard" | "scientific" | "engineering" | "compact";
         signDisplay?: "auto" | "never" | "always";
-        unit?: NumberFormatUnit;
+        unit?: stringt;
         unitDisplay?: "short" | "long" | "narrow";
     }
 
