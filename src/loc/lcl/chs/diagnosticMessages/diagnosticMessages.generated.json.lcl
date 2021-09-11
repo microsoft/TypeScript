@@ -8967,6 +8967,9 @@
       <Item ItemId=";Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[选项 "preserveValueImports" 只能在 "module" 设置为 "es2015" 或更高版本时使用。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -9558,6 +9561,9 @@
       <Item ItemId=";Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Preserve unused imported values in the JavaScript output that would otherwise be removed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[保留 JavaScript 输出中未使用的导入值，否则将删除这些值。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -14982,6 +14988,9 @@
       <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" 是一种类型，在同时启用了 "preserveValueImports" 和 "isolatedModules" 时，必须使用仅类型导入进行导入。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15285,12 +15294,18 @@
       <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveVa_1446" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" 解析为仅类型声明，并且在同时启用了 "preserveValueImports" 和 "isolatedModules" 时，必须使用仅类型导入进行导入。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_isol_1448" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" 解析为仅类型声明，并且在启用 "isolatedModules" 时必须使用仅类型重新导出进行重新导出。]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
