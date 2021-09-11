@@ -30,20 +30,20 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(315,19): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(323,5): error TS2376: A 'super' call must be the first statement in the constructor to refer to 'super' or 'this' when a derived class contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(325,14): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(349,17): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(355,20): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(349,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(355,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(361,23): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(367,21): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(373,29): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(355,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(361,23): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(367,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(373,29): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(373,29): error TS2495: Type 'void' is not an array type or a string type.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(379,20): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(379,20): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(385,26): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(379,20): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(385,26): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(391,17): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(385,26): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(391,17): error TS1345: An expression of type 'void' cannot be tested for truthiness.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(397,21): error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(391,17): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(397,21): error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts (46 errors) ====
@@ -525,7 +525,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 for(super();;) {}
                     ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -533,9 +533,9 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 for(a; super();) {}
                        ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-                       ~~~~~~~
 !!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
+                       ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -543,7 +543,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 for(a; b; super()) {}
                           ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -551,7 +551,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 for(; ; super()) { break; }
                         ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -559,7 +559,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 for (const x of super()) {}
                                 ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
                                 ~~~~~~~
 !!! error TS2495: Type 'void' is not an array type or a string type.
             }
@@ -569,9 +569,9 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 while (super()) {}
                        ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-                       ~~~~~~~
 !!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
+                       ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -579,9 +579,9 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 do {} while (super());
                              ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-                             ~~~~~~~
 !!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
+                             ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -589,9 +589,9 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 if (super()) {}
                     ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
-                    ~~~~~~~
 !!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
+                    ~~~~~~~
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
         class extends Base {
@@ -599,7 +599,7 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
             constructor() {
                 switch (super()) {}
                         ~~~~~~~
-!!! error TS1279: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
+!!! error TS2401: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties, parameter properties, or private identifiers.
             }
         },
     ]

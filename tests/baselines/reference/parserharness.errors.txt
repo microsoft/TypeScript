@@ -2,7 +2,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,21): er
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,29): error TS2694: Namespace 'Harness' has no exported member 'Assert'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,21): error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(43,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
@@ -140,8 +140,8 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
     
     declare var assert: Harness.Assert;
-                                ~~~~~~
-!!! error TS2694: Namespace 'Harness' has no exported member 'Assert'.
+                        ~~~~~~~~~~~~~~
+!!! error TS2749: 'Harness.Assert' refers to a value, but is being used as a type here. Did you mean 'typeof Harness.Assert'?
     declare var it;
     declare var describe;
     declare var run;

@@ -627,7 +627,7 @@ namespace ts.NavigationBar {
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                return hasSyntacticModifier(a, ModifierFlags.Static) === hasSyntacticModifier(b, ModifierFlags.Static);
+                return isStatic(a) === isStatic(b);
             case SyntaxKind.ModuleDeclaration:
                 return areSameModule(a as ModuleDeclaration, b as ModuleDeclaration)
                     && getFullyQualifiedModuleName(a as ModuleDeclaration) === getFullyQualifiedModuleName(b as ModuleDeclaration);

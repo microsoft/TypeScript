@@ -152,10 +152,10 @@ let y22 = nonpartial(x22);
 >nonpartial : <T>(x: Partial<T>) => T
 >x22 : { a: number | undefined; b?: string[] | undefined; }
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
->Awaited : Awaited<T>
+type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+>__Awaited : __Awaited<T>
 
-type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
+type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
 >Awaitified : Awaitified<T>
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;

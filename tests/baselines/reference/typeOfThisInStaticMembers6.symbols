@@ -1,0 +1,16 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers6.ts ===
+class C {
+>C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
+
+    static f = 1
+>f : Symbol(C.f, Decl(typeOfThisInStaticMembers6.ts, 0, 9))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(typeOfThisInStaticMembers6.ts, 2, 1))
+>C : Symbol(C, Decl(typeOfThisInStaticMembers6.ts, 0, 0))
+
+    static c = super();
+>c : Symbol(D.c, Decl(typeOfThisInStaticMembers6.ts, 4, 19))
+}
+

@@ -1,0 +1,31 @@
+=== tests/cases/compiler/inheritedConstructorPropertyContextualType.ts ===
+interface State {
+>State : Symbol(State, Decl(inheritedConstructorPropertyContextualType.ts, 0, 0))
+
+    version: 2
+>version : Symbol(State.version, Decl(inheritedConstructorPropertyContextualType.ts, 0, 17))
+}
+declare class Base<S> {
+>Base : Symbol(Base, Decl(inheritedConstructorPropertyContextualType.ts, 2, 1))
+>S : Symbol(S, Decl(inheritedConstructorPropertyContextualType.ts, 3, 19))
+
+    state: S
+>state : Symbol(Base.state, Decl(inheritedConstructorPropertyContextualType.ts, 3, 23))
+>S : Symbol(S, Decl(inheritedConstructorPropertyContextualType.ts, 3, 19))
+}
+class Assignment extends Base<State> {
+>Assignment : Symbol(Assignment, Decl(inheritedConstructorPropertyContextualType.ts, 5, 1))
+>Base : Symbol(Base, Decl(inheritedConstructorPropertyContextualType.ts, 2, 1))
+>State : Symbol(State, Decl(inheritedConstructorPropertyContextualType.ts, 0, 0))
+
+    constructor() {
+        super()
+>super : Symbol(Base, Decl(inheritedConstructorPropertyContextualType.ts, 2, 1))
+
+        this.state = { version: 2 }
+>this.state : Symbol(Base.state, Decl(inheritedConstructorPropertyContextualType.ts, 3, 23))
+>this : Symbol(Assignment, Decl(inheritedConstructorPropertyContextualType.ts, 5, 1))
+>state : Symbol(Base.state, Decl(inheritedConstructorPropertyContextualType.ts, 3, 23))
+>version : Symbol(version, Decl(inheritedConstructorPropertyContextualType.ts, 9, 22))
+    }
+}

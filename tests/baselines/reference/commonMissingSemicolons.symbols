@@ -1,0 +1,93 @@
+=== tests/cases/compiler/commonMissingSemicolons.ts ===
+async function myAsyncFunction1() {}
+>myAsyncFunction1 : Symbol(myAsyncFunction1, Decl(commonMissingSemicolons.ts, 0, 0))
+
+asynd function myAsyncFunction2() {}
+>myAsyncFunction2 : Symbol(myAsyncFunction2, Decl(commonMissingSemicolons.ts, 1, 5))
+
+sasync function myAsyncFunction3() {}
+>myAsyncFunction3 : Symbol(myAsyncFunction3, Decl(commonMissingSemicolons.ts, 2, 6))
+
+// Arrow functions don't (yet?) parse as nicely as standalone functions.
+// Eventually it would be good to get them the same "did you mean" for typos such as "asyncd".
+const myAsyncArrow1 = async () => 3;
+>myAsyncArrow1 : Symbol(myAsyncArrow1, Decl(commonMissingSemicolons.ts, 6, 5))
+
+const myAsyncArrow2 = asyncd () => 3;
+>myAsyncArrow2 : Symbol(myAsyncArrow2, Decl(commonMissingSemicolons.ts, 7, 5))
+
+class MyClass1 {}
+>MyClass1 : Symbol(MyClass1, Decl(commonMissingSemicolons.ts, 7, 37))
+
+clasd MyClass2 {}
+classs MyClass3 {}
+
+const myConst1 = 1;
+>myConst1 : Symbol(myConst1, Decl(commonMissingSemicolons.ts, 13, 5))
+
+consd myConst2 = 1;
+constd myConst3 = 1;
+
+declare const myDeclareConst1: 1;
+>myDeclareConst1 : Symbol(myDeclareConst1, Decl(commonMissingSemicolons.ts, 17, 13))
+
+declared const myDeclareConst2: 1;
+>myDeclareConst2 : Symbol(myDeclareConst2, Decl(commonMissingSemicolons.ts, 18, 14))
+
+declare constd myDeclareConst3: 1;
+declared constd myDeclareConst4: 1;
+declareconst myDeclareConst5;
+
+function myFunction1() { }
+>myFunction1 : Symbol(myFunction1, Decl(commonMissingSemicolons.ts, 21, 29))
+
+functiond myFunction2() { }
+function function() { }
+> : Symbol((Missing), Decl(commonMissingSemicolons.ts, 24, 27), Decl(commonMissingSemicolons.ts, 25, 8))
+> : Symbol((Missing), Decl(commonMissingSemicolons.ts, 24, 27), Decl(commonMissingSemicolons.ts, 25, 8))
+
+functionMyFunction;
+
+interface myInterface1 { }
+>myInterface1 : Symbol(myInterface1, Decl(commonMissingSemicolons.ts, 26, 19))
+
+interfaced myInterface2 { }
+interface interface { }
+>interface : Symbol(interface, Decl(commonMissingSemicolons.ts, 29, 27))
+
+interface { }
+interface void { }
+interfaceMyInterface { }
+
+let let = 1;
+>let : Symbol(let, Decl(commonMissingSemicolons.ts, 35, 3))
+
+let let1 = 1;
+>let1 : Symbol(let1, Decl(commonMissingSemicolons.ts, 36, 3))
+
+letd let2 = 1;
+letMyLet;
+
+type type;
+>type : Symbol(type, Decl(commonMissingSemicolons.ts, 38, 9))
+
+type type1 = {};
+>type1 : Symbol(type1, Decl(commonMissingSemicolons.ts, 40, 10))
+
+type type2 = type;
+>type2 : Symbol(type2, Decl(commonMissingSemicolons.ts, 41, 16))
+>type : Symbol(type, Decl(commonMissingSemicolons.ts, 38, 9))
+
+type type3 = {};
+>type3 : Symbol(type3, Decl(commonMissingSemicolons.ts, 42, 18))
+
+typed type4 = {}
+typed type5 = type;
+typeMyType;
+
+var myVar1 = 1;
+>myVar1 : Symbol(myVar1, Decl(commonMissingSemicolons.ts, 48, 3))
+
+vard myVar2 = 1;
+varMyVar;
+

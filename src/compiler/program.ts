@@ -556,7 +556,7 @@ namespace ts {
             // Visit project references first
             if (cbRef) {
                 const result = cbRef(projectReferences, parent);
-                if (result) { return result; }
+                if (result) return result;
             }
 
             return forEach(resolvedProjectReferences, (resolvedRef, index) => {
@@ -886,6 +886,7 @@ namespace ts {
         let sourceFileToPackageName = new Map<Path, string>();
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
+        let usesUriStyleNodeCoreModules = false;
 
         /**
          * map with
@@ -1054,6 +1055,7 @@ namespace ts {
             getSourceFileByPath,
             getSourceFiles: () => files,
             getMissingFilePaths: () => missingFilePaths!, // TODO: GH#18217
+            getModuleResolutionCache: () => moduleResolutionCache,
             getFilesByNameMap: () => filesByName,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
@@ -1086,6 +1088,7 @@ namespace ts {
             getLibFileFromReference,
             sourceFileToPackageName,
             redirectTargetsMap,
+            usesUriStyleNodeCoreModules,
             isEmittedFile,
             getConfigFileParsingDiagnostics,
             getResolvedModuleWithFailedLookupLocationsFromCache,
@@ -1160,7 +1163,7 @@ namespace ts {
 
             // The originalFileName could not be actual source file name if file found was d.ts from referecned project
             // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
-            const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.originalFileName, file.path);
+            const resultFromDts = getRedirectReferenceForResolutionFromSourceOfProject(file.path);
             if (resultFromDts) return resultFromDts;
 
             // If preserveSymlinks is true, module resolution wont jump the symlink
@@ -1168,13 +1171,12 @@ namespace ts {
             // Note:: Currently we try the real path only if the
             // file is from node_modules to avoid having to run real path on all file paths
             if (!host.realpath || !options.preserveSymlinks || !stringContains(file.originalFileName, nodeModulesPathPart)) return undefined;
-            const realDeclarationFileName = host.realpath(file.originalFileName);
-            const realDeclarationPath = toPath(realDeclarationFileName);
-            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationFileName, realDeclarationPath);
+            const realDeclarationPath = toPath(host.realpath(file.originalFileName));
+            return realDeclarationPath === file.path ? undefined : getRedirectReferenceForResolutionFromSourceOfProject(realDeclarationPath);
         }
 
-        function getRedirectReferenceForResolutionFromSourceOfProject(fileName: string, filePath: Path) {
-            const source = getSourceOfProjectReferenceRedirect(fileName);
+        function getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path) {
+            const source = getSourceOfProjectReferenceRedirect(filePath);
             if (isString(source)) return getResolvedProjectReferenceToRedirect(source);
             if (!source) return undefined;
             // Output of .d.ts file so return resolved ref that matches the out file name
@@ -1634,6 +1636,7 @@ namespace ts {
 
             sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             redirectTargetsMap = oldProgram.redirectTargetsMap;
+            usesUriStyleNodeCoreModules = oldProgram.usesUriStyleNodeCoreModules;
 
             return StructureIsReused.Completely;
         }
@@ -1896,7 +1899,7 @@ namespace ts {
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken | undefined): readonly Diagnostic[] {
             return concatenate(
-                filterSemanticDiagnotics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
+                filterSemanticDiagnostics(getBindAndCheckDiagnosticsForFile(sourceFile, cancellationToken), options),
                 getProgramDiagnostics(sourceFile)
             );
         }
@@ -1918,8 +1921,8 @@ namespace ts {
                 const isCheckJs = isCheckJsEnabledForFile(sourceFile, options);
                 const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
                 // By default, only type-check .ts, .tsx, 'Deferred' and 'External' files (external files are added by plugins)
-                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX ||
-                    sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
+                    || sourceFile.scriptKind === ScriptKind.External || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
                 const bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
                 const checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
 
@@ -2234,7 +2237,7 @@ namespace ts {
         }
 
         function getOptionsDiagnosticsOfConfigFile() {
-            if (!options.configFile) { return emptyArray; }
+            if (!options.configFile) return emptyArray;
             let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
             forEachResolvedProjectReference(resolvedRef => {
                 diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
@@ -2326,6 +2329,9 @@ namespace ts {
                     // only through top - level external module names. Relative external module names are not permitted.
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
                         imports = append(imports, moduleNameExpr);
+                        if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
+                            usesUriStyleNodeCoreModules = startsWith(moduleNameExpr.text, "node:");
+                        }
                     }
                 }
                 else if (isModuleDeclaration(node)) {
@@ -2370,7 +2376,7 @@ namespace ts {
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                     else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                        imports = append(imports, node.arguments[0] as StringLiteralLike);
+                        imports = append(imports, node.arguments[0]);
                     }
                     else if (isLiteralImportTypeNode(node)) {
                         imports = append(imports, node.argument.literal);
@@ -2465,7 +2471,7 @@ namespace ts {
         function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, packageId: PackageId | undefined, reason: FileIncludeReason): void {
             getSourceFileFromReferenceWorker(
                 fileName,
-                fileName => findSourceFile(fileName, toPath(fileName), isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
+                fileName => findSourceFile(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId), // TODO: GH#18217
                 (diagnostic, ...args) => addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, diagnostic, args),
                 reason
             );
@@ -2507,20 +2513,21 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
             tracing?.push(tracing.Phase.Program, "findSourceFile", {
                 fileName,
                 isDefaultLib: isDefaultLib || undefined,
                 fileIncludeKind: (FileIncludeKind as any)[reason.kind],
             });
-            const result = findSourceFileWorker(fileName, path, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
+            const result = findSourceFileWorker(fileName, isDefaultLib, ignoreNoDefaultLib, reason, packageId);
             tracing?.pop();
             return result;
         }
 
-        function findSourceFileWorker(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+        function findSourceFileWorker(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, reason: FileIncludeReason, packageId: PackageId | undefined): SourceFile | undefined {
+            const path = toPath(fileName);
             if (useSourceOfProjectReferenceRedirect) {
-                let source = getSourceOfProjectReferenceRedirect(fileName);
+                let source = getSourceOfProjectReferenceRedirect(path);
                 // If preserveSymlinks is true, module resolution wont jump the symlink
                 // but the resolved real path may be the .d.ts from project reference
                 // Note:: Currently we try the real path only if the
@@ -2530,12 +2537,12 @@ namespace ts {
                     options.preserveSymlinks &&
                     isDeclarationFileName(fileName) &&
                     stringContains(fileName, nodeModulesPathPart)) {
-                    const realPath = host.realpath(fileName);
-                    if (realPath !== fileName) source = getSourceOfProjectReferenceRedirect(realPath);
+                    const realPath = toPath(host.realpath(fileName));
+                    if (realPath !== path) source = getSourceOfProjectReferenceRedirect(realPath);
                 }
                 if (source) {
                     const file = isString(source) ?
-                        findSourceFile(source, toPath(source), isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
+                        findSourceFile(source, isDefaultLib, ignoreNoDefaultLib, reason, packageId) :
                         undefined;
                     if (file) addFileToFilesByName(file, path, /*redirectedPath*/ undefined);
                     return file;
@@ -2743,8 +2750,8 @@ namespace ts {
             return ts.forEachResolvedProjectReference(resolvedProjectReferences, cb);
         }
 
-        function getSourceOfProjectReferenceRedirect(file: string) {
-            if (!isDeclarationFileName(file)) return undefined;
+        function getSourceOfProjectReferenceRedirect(path: Path) {
+            if (!isDeclarationFileName(path)) return undefined;
             if (mapFromToProjectReferenceRedirectSource === undefined) {
                 mapFromToProjectReferenceRedirectSource = new Map();
                 forEachResolvedProjectReference(resolvedRef => {
@@ -2765,7 +2772,7 @@ namespace ts {
                     }
                 });
             }
-            return mapFromToProjectReferenceRedirectSource.get(toPath(file));
+            return mapFromToProjectReferenceRedirectSource.get(path);
         }
 
         function isSourceOfProjectReferenceRedirect(fileName: string) {
@@ -2947,10 +2954,8 @@ namespace ts {
                         modulesWithElidedImports.set(file.path, true);
                     }
                     else if (shouldAddFile) {
-                        const path = toPath(resolvedFileName);
                         findSourceFile(
                             resolvedFileName,
-                            path,
                             /*isDefaultLib*/ false,
                             /*ignoreNoDefaultLib*/ false,
                             { kind: FileIncludeKind.Import, file: file.path, index, },
@@ -3042,6 +3047,9 @@ namespace ts {
         function verifyCompilerOptions() {
             if (options.strictPropertyInitialization && !getStrictOptionValue(options, "strictNullChecks")) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "strictPropertyInitialization", "strictNullChecks");
+            }
+            if (options.exactOptionalPropertyTypes && !getStrictOptionValue(options, "strictNullChecks")) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "exactOptionalPropertyTypes", "strictNullChecks");
             }
 
             if (options.isolatedModules) {
@@ -3295,6 +3303,10 @@ namespace ts {
                 if (options.jsx === JsxEmit.React) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_when_option_jsx_is_1, "jsxImportSource", inverseJsxOptionMap.get("" + options.jsx));
                 }
+            }
+
+            if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
+                createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -3567,7 +3579,7 @@ namespace ts {
             createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2, option3);
         }
 
-        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
+        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0?: string) {
             createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
         }
 
@@ -3582,7 +3594,7 @@ namespace ts {
             }
         }
 
-        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number) {
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
             const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
             const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
                 !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
@@ -3608,7 +3620,7 @@ namespace ts {
             return _compilerOptionsObjectLiteralSyntax || undefined;
         }
 
-        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0: string | number, arg1?: string | number, arg2?: string | number): boolean {
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
             const props = getPropertyAssignment(objectLiteral, key1, key2);
             for (const prop of props) {
                 programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
@@ -3665,10 +3677,13 @@ namespace ts {
             if (host.getSymlinkCache) {
                 return host.getSymlinkCache();
             }
-            return symlinks || (symlinks = discoverProbableSymlinks(
-                files,
-                getCanonicalFileName,
-                host.getCurrentDirectory()));
+            if (!symlinks) {
+                symlinks = createSymlinkCache(currentDirectory, getCanonicalFileName);
+            }
+            if (files && resolvedTypeReferenceDirectives && !symlinks.hasProcessedResolutions()) {
+                symlinks.setSymlinksFromResolutions(files, resolvedTypeReferenceDirectives);
+            }
+            return symlinks;
         }
     }
 
@@ -3678,7 +3693,7 @@ namespace ts {
         useSourceOfProjectReferenceRedirect: boolean;
         toPath(fileName: string): Path;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
-        getSourceOfProjectReferenceRedirect(fileName: string): SourceOfProjectReferenceRedirect | undefined;
+        getSourceOfProjectReferenceRedirect(path: Path): SourceOfProjectReferenceRedirect | undefined;
         forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
     }
 
@@ -3765,9 +3780,9 @@ namespace ts {
         }
 
         function fileExistsIfProjectReferenceDts(file: string) {
-            const source = host.getSourceOfProjectReferenceRedirect(file);
+            const source = host.getSourceOfProjectReferenceRedirect(host.toPath(file));
             return source !== undefined ?
-                isString(source) ? originalFileExists.call(host.compilerHost, source) : true :
+                isString(source) ? originalFileExists.call(host.compilerHost, source) as boolean : true :
                 undefined;
         }
 
@@ -3888,7 +3903,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function filterSemanticDiagnotics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
+    export function filterSemanticDiagnostics(diagnostic: readonly Diagnostic[], option: CompilerOptions): readonly Diagnostic[] {
         return filter(diagnostic, d => !d.skippedOn || !option[d.skippedOn]);
     }
 

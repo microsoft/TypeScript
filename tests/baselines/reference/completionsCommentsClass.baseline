@@ -14,7 +14,7 @@
           "name": "globalThis",
           "kind": "module",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "module",
@@ -35,7 +35,7 @@
           "name": "eval",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -116,7 +116,7 @@
           "name": "parseInt",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -242,7 +242,7 @@
           "name": "parseFloat",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -323,7 +323,7 @@
           "name": "isNaN",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -404,7 +404,7 @@
           "name": "isFinite",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -485,7 +485,7 @@
           "name": "decodeURI",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -566,7 +566,7 @@
           "name": "decodeURIComponent",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -647,7 +647,7 @@
           "name": "encodeURI",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -728,7 +728,7 @@
           "name": "encodeURIComponent",
           "kind": "function",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -840,8 +840,8 @@
         {
           "name": "escape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "5",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -900,6 +900,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -921,8 +930,8 @@
         {
           "name": "unescape",
           "kind": "function",
-          "kindModifiers": "declare",
-          "sortText": "5",
+          "kindModifiers": "deprecated,declare",
+          "sortText": "23",
           "displayParts": [
             {
               "text": "function",
@@ -981,6 +990,15 @@
           ],
           "tags": [
             {
+              "name": "deprecated",
+              "text": [
+                {
+                  "text": "A legacy feature for browser compatibility",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
               "name": "param",
               "text": [
                 {
@@ -1003,7 +1021,7 @@
           "name": "NaN",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "var",
@@ -1036,7 +1054,7 @@
           "name": "Infinity",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "var",
@@ -1069,7 +1087,7 @@
           "name": "Object",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1123,7 +1141,7 @@
           "name": "Function",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1177,7 +1195,7 @@
           "name": "String",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1231,7 +1249,7 @@
           "name": "Boolean",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1280,7 +1298,7 @@
           "name": "Number",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1334,7 +1352,7 @@
           "name": "Math",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1388,7 +1406,7 @@
           "name": "Date",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1442,7 +1460,7 @@
           "name": "RegExp",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1491,7 +1509,7 @@
           "name": "Error",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1540,7 +1558,7 @@
           "name": "EvalError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1589,7 +1607,7 @@
           "name": "RangeError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1638,7 +1656,7 @@
           "name": "ReferenceError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1687,7 +1705,7 @@
           "name": "SyntaxError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1736,7 +1754,7 @@
           "name": "TypeError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1785,7 +1803,7 @@
           "name": "URIError",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1834,7 +1852,7 @@
           "name": "JSON",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1888,7 +1906,7 @@
           "name": "Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -1949,7 +1967,7 @@
           "name": "ArrayBuffer",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2003,7 +2021,7 @@
           "name": "DataView",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2052,7 +2070,7 @@
           "name": "Int8Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2106,7 +2124,7 @@
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2160,7 +2178,7 @@
           "name": "Uint8ClampedArray",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2214,7 +2232,7 @@
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2268,7 +2286,7 @@
           "name": "Uint16Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2322,7 +2340,7 @@
           "name": "Int32Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2376,7 +2394,7 @@
           "name": "Uint32Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2430,7 +2448,7 @@
           "name": "Float32Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2484,7 +2502,7 @@
           "name": "Float64Array",
           "kind": "var",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -2538,7 +2556,7 @@
           "name": "Intl",
           "kind": "module",
           "kindModifiers": "declare",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "namespace",
@@ -2559,7 +2577,7 @@
           "name": "c2",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -2585,7 +2603,7 @@
           "name": "i2",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2618,7 +2636,7 @@
           "name": "i2_c",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2659,7 +2677,7 @@
           "name": "c3",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -2680,7 +2698,7 @@
           "name": "i3",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2713,7 +2731,7 @@
           "name": "i3_c",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2754,7 +2772,7 @@
           "name": "c4",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -2780,7 +2798,7 @@
           "name": "i4",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2813,7 +2831,7 @@
           "name": "i4_c",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2854,7 +2872,7 @@
           "name": "c5",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -2880,7 +2898,7 @@
           "name": "i5",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2913,7 +2931,7 @@
           "name": "i5_c",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -2954,7 +2972,7 @@
           "name": "c6",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -2980,7 +2998,7 @@
           "name": "i6",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -3013,7 +3031,7 @@
           "name": "i6_c",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -3054,7 +3072,7 @@
           "name": "a",
           "kind": "class",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "class",
@@ -3075,7 +3093,7 @@
           "name": "m",
           "kind": "module",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "namespace",
@@ -3096,7 +3114,7 @@
           "name": "myVar",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "var",
@@ -3145,7 +3163,7 @@
           "name": "undefined",
           "kind": "var",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "var",
@@ -3166,7 +3184,7 @@
           "name": "break",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "break",
@@ -3178,7 +3196,7 @@
           "name": "case",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "case",
@@ -3190,7 +3208,7 @@
           "name": "catch",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "catch",
@@ -3202,7 +3220,7 @@
           "name": "class",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "class",
@@ -3214,7 +3232,7 @@
           "name": "const",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "const",
@@ -3226,7 +3244,7 @@
           "name": "continue",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "continue",
@@ -3238,7 +3256,7 @@
           "name": "debugger",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "debugger",
@@ -3250,7 +3268,7 @@
           "name": "default",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "default",
@@ -3262,7 +3280,7 @@
           "name": "delete",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "delete",
@@ -3274,7 +3292,7 @@
           "name": "do",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "do",
@@ -3286,7 +3304,7 @@
           "name": "else",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "else",
@@ -3298,7 +3316,7 @@
           "name": "enum",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "enum",
@@ -3310,7 +3328,7 @@
           "name": "export",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "export",
@@ -3322,7 +3340,7 @@
           "name": "extends",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "extends",
@@ -3334,7 +3352,7 @@
           "name": "false",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "false",
@@ -3346,7 +3364,7 @@
           "name": "finally",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "finally",
@@ -3358,7 +3376,7 @@
           "name": "for",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "for",
@@ -3370,7 +3388,7 @@
           "name": "function",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "function",
@@ -3382,7 +3400,7 @@
           "name": "if",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "if",
@@ -3394,7 +3412,7 @@
           "name": "import",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "import",
@@ -3406,7 +3424,7 @@
           "name": "in",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "in",
@@ -3418,7 +3436,7 @@
           "name": "instanceof",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "instanceof",
@@ -3430,7 +3448,7 @@
           "name": "new",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "new",
@@ -3442,7 +3460,7 @@
           "name": "null",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "null",
@@ -3454,7 +3472,7 @@
           "name": "return",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "return",
@@ -3466,7 +3484,7 @@
           "name": "super",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "super",
@@ -3478,7 +3496,7 @@
           "name": "switch",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "switch",
@@ -3490,7 +3508,7 @@
           "name": "this",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "this",
@@ -3502,7 +3520,7 @@
           "name": "throw",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "throw",
@@ -3514,7 +3532,7 @@
           "name": "true",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "true",
@@ -3526,7 +3544,7 @@
           "name": "try",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "try",
@@ -3538,7 +3556,7 @@
           "name": "typeof",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "typeof",
@@ -3550,7 +3568,7 @@
           "name": "var",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "var",
@@ -3562,7 +3580,7 @@
           "name": "void",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "void",
@@ -3574,7 +3592,7 @@
           "name": "while",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "while",
@@ -3586,7 +3604,7 @@
           "name": "with",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "with",
@@ -3598,7 +3616,7 @@
           "name": "implements",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "implements",
@@ -3610,7 +3628,7 @@
           "name": "interface",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "interface",
@@ -3622,7 +3640,7 @@
           "name": "let",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "let",
@@ -3634,7 +3652,7 @@
           "name": "package",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "package",
@@ -3646,7 +3664,7 @@
           "name": "yield",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "yield",
@@ -3655,10 +3673,22 @@
           ]
         },
         {
+          "name": "abstract",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "abstract",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "as",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "as",
@@ -3670,7 +3700,7 @@
           "name": "asserts",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "asserts",
@@ -3682,7 +3712,7 @@
           "name": "any",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "any",
@@ -3694,7 +3724,7 @@
           "name": "async",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "async",
@@ -3706,7 +3736,7 @@
           "name": "await",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "await",
@@ -3718,7 +3748,7 @@
           "name": "boolean",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "boolean",
@@ -3730,7 +3760,7 @@
           "name": "declare",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "declare",
@@ -3742,7 +3772,7 @@
           "name": "infer",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "infer",
@@ -3754,7 +3784,7 @@
           "name": "keyof",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "keyof",
@@ -3766,7 +3796,7 @@
           "name": "module",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "module",
@@ -3778,7 +3808,7 @@
           "name": "namespace",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "namespace",
@@ -3790,7 +3820,7 @@
           "name": "never",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "never",
@@ -3802,7 +3832,7 @@
           "name": "readonly",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "readonly",
@@ -3814,7 +3844,7 @@
           "name": "number",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "number",
@@ -3826,7 +3856,7 @@
           "name": "object",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "object",
@@ -3838,7 +3868,7 @@
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "string",
@@ -3850,7 +3880,7 @@
           "name": "symbol",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "symbol",
@@ -3862,7 +3892,7 @@
           "name": "type",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "type",
@@ -3874,7 +3904,7 @@
           "name": "unique",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "unique",
@@ -3886,7 +3916,7 @@
           "name": "unknown",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "unknown",
@@ -3898,7 +3928,7 @@
           "name": "bigint",
           "kind": "keyword",
           "kindModifiers": "",
-          "sortText": "5",
+          "sortText": "15",
           "displayParts": [
             {
               "text": "bigint",

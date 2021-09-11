@@ -366,7 +366,7 @@ namespace ts {
                 FileSystemEntryKind.Directory,
                 (_eventName: string, relativeFileName) => {
                     // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                    if (!isString(relativeFileName)) { return; }
+                    if (!isString(relativeFileName)) return;
                     const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                     // Some applications save a working file via rename operations
                     const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
@@ -1162,6 +1162,7 @@ namespace ts {
         useCaseSensitiveFileNames: boolean;
         write(s: string): void;
         writeOutputIsTTY?(): boolean;
+        getWidthOfTerminal?(): number;
         readFile(path: string, encoding?: string): string | undefined;
         getFileSize?(path: string): number;
         writeFile(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -1265,6 +1266,7 @@ namespace ts {
             let activeSession: import("inspector").Session | "stopping" | undefined;
             let profilePath = "./profile.cpuprofile";
 
+            let hitSystemWatcherLimit = false;
 
             const Buffer: {
                 new (input: string, encoding?: string): any;
@@ -1277,7 +1279,7 @@ namespace ts {
 
             const platform: string = _os.platform();
             const useCaseSensitiveFileNames = isFileSystemCaseSensitive();
-            const realpathSync = useCaseSensitiveFileNames ? (_fs.realpathSync.native ?? _fs.realpathSync) : _fs.realpathSync;
+            const realpathSync = _fs.realpathSync.native ?? _fs.realpathSync;
 
             const fsSupportsRecursiveFsWatch = isNode4OrLater && (process.platform === "win32" || process.platform === "darwin");
             const getCurrentDirectory = memoize(() => process.cwd());
@@ -1307,6 +1309,9 @@ namespace ts {
                 useCaseSensitiveFileNames,
                 write(s: string): void {
                     process.stdout.write(s);
+                },
+                getWidthOfTerminal(){
+                    return process.stdout.columns;
                 },
                 writeOutputIsTTY() {
                     return process.stdout.isTTY;
@@ -1615,6 +1620,12 @@ namespace ts {
                             options = { persistent: true };
                         }
                     }
+
+                    if (hitSystemWatcherLimit) {
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Defaulting to fsWatchFile`);
+                        return watchPresentFileSystemEntryWithFsWatchFile();
+                    }
+
                     try {
                         const presentWatcher = _fs.watch(
                             fileOrDirectory,
@@ -1631,6 +1642,8 @@ namespace ts {
                         // Catch the exception and use polling instead
                         // Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                         // so instead of throwing error, use fs.watchFile
+                        hitSystemWatcherLimit ||= e.code === "ENOSPC";
+                        sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                         return watchPresentFileSystemEntryWithFsWatchFile();
                     }
                 }
@@ -1652,7 +1665,6 @@ namespace ts {
                  * Eg. on linux the number of watches are limited and one could easily exhaust watches and the exception ENOSPC is thrown when creating watcher at that point
                  */
                 function watchPresentFileSystemEntryWithFsWatchFile(): FileWatcher {
-                    sysLog(`sysLog:: ${fileOrDirectory}:: Changing to fsWatchFile`);
                     return watchFile(
                         fileOrDirectory,
                         createFileWatcherCallback(callback),
@@ -1792,7 +1804,7 @@ namespace ts {
             }
 
             function readDirectory(path: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath);
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries, realpath, directoryExists);
             }
 
             function fileSystemEntryExists(path: string, entryKind: FileSystemEntryKind): boolean {

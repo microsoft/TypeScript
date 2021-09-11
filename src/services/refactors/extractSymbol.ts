@@ -215,7 +215,6 @@ namespace ts.refactor.extractSymbol {
         export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
         export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
         export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
-        export const cannotExtractToOtherFunctionLike = createMessage("Cannot extract method to a function-like scope that is not a function");
         export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
         export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
     }
@@ -399,7 +398,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -412,7 +411,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
@@ -1142,7 +1141,7 @@ namespace ts.refactor.extractSymbol {
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        let initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
         ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
 
@@ -1376,7 +1375,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(body as Expression)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();
@@ -1605,7 +1604,7 @@ namespace ts.refactor.extractSymbol {
         const expression = !isReadonlyArray(targetRange.range)
             ? targetRange.range
             : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
-                ? (targetRange.range[0] as ExpressionStatement).expression
+                ? targetRange.range[0].expression
                 : undefined;
 
         let expressionDiagnostic: Diagnostic | undefined;
@@ -1624,10 +1623,7 @@ namespace ts.refactor.extractSymbol {
             usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
             substitutionsPerScope.push(new Map<string, Expression>());
 
-            functionErrorsPerScope.push(
-                isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
-                    ? [createDiagnosticForNode(scope, Messages.cannotExtractToOtherFunctionLike)]
-                    : []);
+            functionErrorsPerScope.push([]);
 
             const constantErrors = [];
             if (expressionDiagnostic) {

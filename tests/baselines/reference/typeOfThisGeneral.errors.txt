@@ -1,0 +1,220 @@
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(14,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(18,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(24,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(29,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(37,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(83,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(87,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(98,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts(106,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+
+
+==== tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts (10 errors) ====
+    class MyTestClass {
+        private canary: number;
+        static staticCanary: number;
+    
+        constructor() {
+            //type of 'this' in constructor body is the class instance type
+            var p = this.canary;
+            var p: number;
+            this.canary = 3;
+        }
+    
+        //type of 'this' in member function param list is the class instance type
+        memberFunc(t = this) {
+            var t: MyTestClass;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:13:16: 't' was also declared here.
+    
+            //type of 'this' in member function body is the class instance type
+            var p = this;
+            var p: MyTestClass;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:17:13: 'p' was also declared here.
+        }
+    
+        //type of 'this' in member accessor(get and set) body is the class instance type
+        get prop() {
+            var p = this;
+            var p: MyTestClass;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:23:13: 'p' was also declared here.
+            return this;
+        }
+        set prop(v) {
+            var p = this;
+            var p: MyTestClass;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:28:13: 'p' was also declared here.
+            p = v;
+            v = p;
+        }
+    
+        someFunc = () => {
+            //type of 'this' in member variable initializer is the class instance type
+            var t = this;
+            var t: MyTestClass;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:36:13: 't' was also declared here.
+        };
+    
+        //type of 'this' in static function param list is constructor function type
+        static staticFn(t = this) {
+            var t: typeof MyTestClass;
+            var t = MyTestClass;
+            t.staticCanary;
+    
+            //type of 'this' in static function body is constructor function type
+            var p = this;
+            var p: typeof MyTestClass;
+            var p = MyTestClass;
+            p.staticCanary;
+        }
+    
+        static get staticProp() {
+            //type of 'this' in static accessor body is constructor function type
+            var p = this;
+            var p: typeof MyTestClass;
+            var p = MyTestClass;
+            p.staticCanary;
+            return this;
+        }
+        static set staticProp(v: typeof MyTestClass) {
+            //type of 'this' in static accessor body is constructor function type
+            var p = this;
+            var p: typeof MyTestClass;
+            var p = MyTestClass;
+            p.staticCanary;
+        }
+    }
+    
+    class MyGenericTestClass<T, U> {
+        private canary: number;
+        static staticCanary: number;
+    
+        constructor() {
+            //type of 'this' in constructor body is the class instance type
+            var p = this.canary;
+            var p: number;
+            this.canary = 3;
+        }
+    
+        //type of 'this' in member function param list is the class instance type
+        memberFunc(t = this) {
+            var t: MyGenericTestClass<T, U>;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:82:16: 't' was also declared here.
+    
+            //type of 'this' in member function body is the class instance type
+            var p = this;
+            var p: MyGenericTestClass<T, U>;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:86:13: 'p' was also declared here.
+        }
+    
+        //type of 'this' in member accessor(get and set) body is the class instance type
+        get prop() {
+            var p = this;
+            var p: MyGenericTestClass<T, U>;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:92:13: 'p' was also declared here.
+            return this;
+        }
+        set prop(v) {
+            var p = this;
+            var p: MyGenericTestClass<T, U>;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:97:13: 'p' was also declared here.
+            p = v;
+            v = p;
+        }
+    
+        someFunc = () => {
+            //type of 'this' in member variable initializer is the class instance type
+            var t = this;
+            var t: MyGenericTestClass<T, U>;
+                ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
+!!! related TS6203 tests/cases/conformance/expressions/thisKeyword/typeOfThisGeneral.ts:105:13: 't' was also declared here.
+        };
+    
+        //type of 'this' in static function param list is constructor function type
+        static staticFn(t = this) {
+            var t: typeof MyGenericTestClass;
+            var t = MyGenericTestClass;
+            t.staticCanary;
+    
+            //type of 'this' in static function body is constructor function type
+            var p = this;
+            var p: typeof MyGenericTestClass;
+            var p = MyGenericTestClass;
+            p.staticCanary;
+        }
+    
+        static get staticProp() {
+            //type of 'this' in static accessor body is constructor function type
+            var p = this;
+            var p: typeof MyGenericTestClass;
+            var p = MyGenericTestClass;
+            p.staticCanary;
+            return this;
+        }
+        static set staticProp(v: typeof MyGenericTestClass) {
+            //type of 'this' in static accessor body is constructor function type
+            var p = this;
+            var p: typeof MyGenericTestClass;
+            var p = MyGenericTestClass;
+            p.staticCanary;
+        }
+    }
+    
+    //type of 'this' in a function declaration param list is Any
+    function fn(s = this) {
+        var s: any;
+        s.spaaaaaaace = 4;
+    
+        //type of 'this' in a function declaration body is Any
+        var t: any;
+        var t = this;
+        this.spaaaaace = 4;
+    }
+    
+    //type of 'this' in a function expression param list list is Any
+    var q1 = function (s = this) {
+        var s: any;
+        s.spaaaaaaace = 4;
+    
+        //type of 'this' in a function expression body is Any
+        var t: any;
+        var t = this;
+        this.spaaaaace = 4;
+    }
+    
+    //type of 'this' in a fat arrow expression param list is typeof globalThis
+    var q2 = (s = this) => {
+        var s: typeof globalThis;
+        s.spaaaaaaace = 4;
+    
+        //type of 'this' in a fat arrow expression body is typeof globalThis
+        var t: typeof globalThis;
+        var t = this;
+        this.spaaaaace = 4;
+    }
+    
+    //type of 'this' in global module is GlobalThis
+    var t: typeof globalThis;
+    var t = this;
+    this.spaaaaace = 4;
+    
+    

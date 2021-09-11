@@ -1,0 +1,72 @@
+=== tests/cases/compiler/argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.ts ===
+function A() {
+>A : () => typeof T
+
+  return class T {
+>class T {     a = arguments  } : typeof T
+>T : typeof T
+
+     a = arguments
+>a : any
+>arguments : any
+  }
+}
+
+function A1() {
+>A1 : () => T
+
+  return new class T {
+>new class T {     a = arguments  } : T
+>class T {     a = arguments  } : typeof T
+>T : typeof T
+
+     a = arguments
+>a : any
+>arguments : any
+  }
+}
+
+function B() {
+>B : () => typeof T
+
+  return class T {
+>class T {     a = { b: arguments }  } : typeof T
+>T : typeof T
+
+     a = { b: arguments }
+>a : { b: any; }
+>{ b: arguments } : { b: any; }
+>b : any
+>arguments : any
+  }
+}
+
+function B1() {
+>B1 : () => T
+
+  return new class T {
+>new class T {     a = { b: arguments }  } : T
+>class T {     a = { b: arguments }  } : typeof T
+>T : typeof T
+
+     a = { b: arguments }
+>a : { b: any; }
+>{ b: arguments } : { b: any; }
+>b : any
+>arguments : any
+  }
+}
+
+function C() {
+>C : () => typeof T
+
+  return class T {
+>class T {     a = function () { arguments }  } : typeof T
+>T : typeof T
+
+     a = function () { arguments }
+>a : () => void
+>function () { arguments } : () => void
+>arguments : IArguments
+  }
+}

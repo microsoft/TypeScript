@@ -718,7 +718,9 @@ export function someFn() { }`),
                 const alphaExtendedConfigFile: File = {
                     path: "/a/b/alpha.tsconfig.json",
                     content: JSON.stringify({
-                        strict: true
+                        compilerOptions: {
+                            strict: true
+                        }
                     })
                 };
                 const project1Config: File = {
@@ -734,7 +736,9 @@ export function someFn() { }`),
                 const bravoExtendedConfigFile: File = {
                     path: "/a/b/bravo.tsconfig.json",
                     content: JSON.stringify({
-                        strict: true
+                        compilerOptions: {
+                            strict: true
+                        }
                     })
                 };
                 const otherFile: File = {

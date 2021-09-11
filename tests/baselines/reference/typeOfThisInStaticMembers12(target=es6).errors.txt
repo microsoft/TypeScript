@@ -1,0 +1,23 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts(4,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts(4,17): error TS2465: 'this' cannot be referenced in a computed property name.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts(5,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts(5,10): error TS2465: 'this' cannot be referenced in a computed property name.
+
+
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers12.ts (4 errors) ====
+    class C {
+        static readonly c: "foo" = "foo"
+        static bar =  class Inner {
+            static [this.c] = 123;
+                   ~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+                    ~~~~
+!!! error TS2465: 'this' cannot be referenced in a computed property name.
+            [this.c] = 123;
+            ~~~~~~~~
+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
+             ~~~~
+!!! error TS2465: 'this' cannot be referenced in a computed property name.
+        }
+    }
+    

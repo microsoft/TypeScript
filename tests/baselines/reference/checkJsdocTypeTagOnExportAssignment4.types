@@ -1,0 +1,12 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment4.js ===
+
+No type information for this code.=== tests/cases/compiler/a.js ===
+/**
+No type information for this code. * @typedef {number} Foo
+No type information for this code. */
+No type information for this code.
+No type information for this code./** @type {Foo} */
+No type information for this code.export default "";
+No type information for this code.
+No type information for this code.
+No type information for this code.

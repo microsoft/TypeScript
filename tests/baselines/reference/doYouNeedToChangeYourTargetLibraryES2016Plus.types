@@ -147,6 +147,17 @@ const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
 >null as any : any
 >null : null
 
+const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
+>testNumberFormatFormatToParts : any
+>new Intl.NumberFormat("en-US").formatToParts() : any
+>new Intl.NumberFormat("en-US").formatToParts : any
+>new Intl.NumberFormat("en-US") : Intl.NumberFormat
+>Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>Intl : typeof Intl
+>NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
+>"en-US" : "en-US"
+>formatToParts : any
+
 // es2019
 const testArrayFlat = [].flat();
 >testArrayFlat : any
@@ -255,14 +266,4 @@ const testStringReplaceAll = "".replaceAll();
 >replaceAll : any
 
 // esnext
-const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToParts();
->testNumberFormatFormatToParts : any
->new Intl.NumberFormat("en-US").formatToParts() : any
->new Intl.NumberFormat("en-US").formatToParts : any
->new Intl.NumberFormat("en-US") : Intl.NumberFormat
->Intl.NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->Intl : typeof Intl
->NumberFormat : { (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; new (locales?: string | string[], options?: Intl.NumberFormatOptions): Intl.NumberFormat; supportedLocalesOf(locales: string | string[], options?: Intl.NumberFormatOptions): string[]; }
->"en-US" : "en-US"
->formatToParts : any
 

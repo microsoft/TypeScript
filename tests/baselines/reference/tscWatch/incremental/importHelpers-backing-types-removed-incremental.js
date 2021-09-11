@@ -44,6 +44,11 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/tslib/index.d.ts (used version)
+/users/username/projects/project/index.tsx (used version)
+
 WatchedFiles::
 
 FsWatches::
@@ -57,7 +62,7 @@ exitCode:: ExitStatus.Success
 exports.__esModule = true;
 exports.x = void 0;
 var tslib_1 = require("tslib");
-exports.x = tslib_1.__assign({});
+exports.x = (0, tslib_1.__assign)({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -141,6 +146,9 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/index.tsx
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/index.tsx (computed .d.ts)
 
 WatchedFiles::
 

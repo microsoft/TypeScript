@@ -1,0 +1,106 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassDefaultNamed.ts",
+      "position": 0,
+      "name": "1"
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassDefaultNamed.ts",
+      "position": 7,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 7,
+        "length": 7
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassDefaultNamed.ts",
+      "position": 15,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 15,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassDefaultNamed.ts",
+      "position": 21,
+      "name": "4"
+    },
+    "quickInfo": {
+      "kind": "class",
+      "kindModifiers": "export",
+      "textSpan": {
+        "start": 21,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "C",
+          "kind": "className"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassDefaultNamed.ts",
+      "position": 23,
+      "name": "5"
+    }
+  }
+]
