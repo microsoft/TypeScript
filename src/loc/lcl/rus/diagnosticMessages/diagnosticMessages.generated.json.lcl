@@ -8963,6 +8963,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later_5095" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Параметр "preserveValueImports" можно использовать лишь в случае, если для параметра "module" установлено значение "es2015" или более позднее.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Option_project_cannot_be_mixed_with_source_files_on_a_command_line_5042" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Option 'project' cannot be mixed with source files on a command line.]]></Val>
@@ -9544,6 +9553,15 @@
           <Val><![CDATA[Prefix with 'declare']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Добавить префикс "declare"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed_1449" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Preserve unused imported values in the JavaScript output that would otherwise be removed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Сохранить неиспользуемые импортированные значения в выходных данных JavaScript, которые в противном случае были бы удалены.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -14966,6 +14984,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedMod_1444" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" является типом. Чтобы импортировать его, необходимо использовать импорт, распространяющийся только на тип, если включены параметры "preserveValueImports" и "isolatedModules".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_5075" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.]]></Val>
@@ -15259,6 +15286,24 @@
           <Val><![CDATA['{0}' refers to a value, but is being used as a type here. Did you mean 'typeof {0}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["{0}" относится к значению, но здесь используется как тип. Возможно, вы имели в виду "typeof {0}"?]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveVa_1446" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" разрешается в объявление, распространяющееся только на тип. Чтобы импортировать его, необходимо использовать импорт, распространяющийся только на тип, если включены параметры "preserveValueImports" и "isolatedModules".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";_0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_isol_1448" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA["{0}" разрешается в объявление, распространяющееся только на тип. Чтобы повторно его экспортировать, необходимо использовать повторный экспорт, распространяющийся только на тип, если включен параметр "isolatedModules".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
