@@ -38,6 +38,13 @@
 ////    <>/*8*/</>
 ////</div>;
 
+// @Filename: /9.tsx
+////const x = <p>
+////    <>
+////        <>/*9*/
+////    </>
+////</p>
+
 verify.jsxClosingTag({
     0: { newText: "</>" },
     1: undefined,
@@ -48,4 +55,5 @@ verify.jsxClosingTag({
     6: { newText: "</>" },
     7: { newText: "</>" },
     8: undefined,
+    9: { newText: "</>" },
 });

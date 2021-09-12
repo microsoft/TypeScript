@@ -337,13 +337,15 @@ var donkey = <div>
 >div : any
 
     <diddy>
-><diddy> : any
+><diddy>    <diddy/> : any
 >diddy : () => any
 
     <diddy/>
-> : any
+><diddy/> : any
+>diddy : () => any
 
 </div>;
+> : any
 >div : any
 
 function noSelfcloseTrailingTag() { }
@@ -355,14 +357,16 @@ var donkey = <div>
 >div : any
 
     <diddy<boolean> bananas="please">
-><diddy<boolean> bananas="please"> : any
+><diddy<boolean> bananas="please">    <diddy/> : any
 >diddy : () => any
 >bananas : string
 
     <diddy/>
-> : any
+><diddy/> : any
+>diddy : () => any
 
 </div>;
+> : any
 >div : any
 
 function noSelfcloseTypeArgAttrsTrailingTag() { }
@@ -508,13 +512,12 @@ var donkey = <div>
 >div : any
 
     <diddy>
-><diddy> : any
+><diddy>    Cranky Wrinkly Funky : any
 >diddy : () => any
 
     Cranky Wrinkly Funky
-> : any
-
 </div>;
+> : any
 >div : any
 
 function noSelfcloseTrailingText() { }
@@ -526,14 +529,13 @@ var donkey = <div>
 >div : any
 
     <diddy<boolean> bananas="please">
-><diddy<boolean> bananas="please"> : any
+><diddy<boolean> bananas="please">    Cranky Wrinkly Funky : any
 >diddy : () => any
 >bananas : string
 
     Cranky Wrinkly Funky
-> : any
-
 </div>;
+> : any
 >div : any
 
 function noSelfcloseTypeArgAttrsTrailingText() { }
