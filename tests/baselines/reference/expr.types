@@ -208,7 +208,7 @@ function f() {
     n||n;
 >n||n : number
 >n : number
->n : number
+>n : 0
 
     n||e;
 >n||e : number
@@ -238,7 +238,7 @@ function f() {
     s||s;
 >s||s : string
 >s : string
->s : string
+>s : ""
 
     s||e;
 >s||e : string | E

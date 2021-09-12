@@ -22560,6 +22560,28 @@ namespace ts {
             return filterType(type, t => (getTypeFacts(t) & include) !== 0);
         }
 
+        function truthyTypeFilter(type: Type, truthiness: boolean): Type | undefined {
+            if (!truthiness) {
+                if (type.flags & TypeFlags.BigInt) {
+                    return zeroBigIntType;
+                }
+                else if (type.flags & TypeFlags.Boolean) {
+                    return falseType;
+                }
+                else if (type.flags & TypeFlags.String) {
+                    return emptyStringType;
+                }
+                else if (type.flags & TypeFlags.Number) {
+                    return zeroType;
+                }
+            }
+
+            const facts = getTypeFacts(type);
+            const include = truthiness ? TypeFacts.Truthy : TypeFacts.Falsy;
+
+            return ((facts & include) === 0) ? undefined : type;
+        }
+
         function getTypeWithDefault(type: Type, defaultExpression: Expression) {
             return defaultExpression ?
                 getUnionType([getNonUndefinedType(type), getTypeOfExpression(defaultExpression)]) :
@@ -22790,10 +22812,19 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ? every((type as UnionOrIntersectionType).types, f) : f(type);
         }
 
-        function filterType(type: Type, f: (t: Type) => boolean): Type {
+        // TODO: make this actually performant
+        function compactMap<T>(array: T[], f: (item: T) => T | undefined) {
+            const result = compact(map(array, f));
+
+            return result.length === array.length && every(array, (item, i) => item === result[i])
+                ? array
+                : result;
+        }
+
+        function filterAndNarrowType(type: Type, narrow: (t: Type) => Type | undefined) {
             if (type.flags & TypeFlags.Union) {
                 const types = (type as UnionType).types;
-                const filtered = filter(types, f);
+                const filtered = compactMap(types, narrow);
                 if (filtered === types) {
                     return type;
                 }
@@ -22806,7 +22837,7 @@ namespace ts {
                     // Otherwise, if we have exactly one type left in the origin set, return that as the filtered type.
                     // Otherwise, construct a new filtered origin type.
                     const originTypes = (origin as UnionType).types;
-                    const originFiltered = filter(originTypes, t => !!(t.flags & TypeFlags.Union) || f(t));
+                    const originFiltered = compactMap(originTypes, t=> !!(t.flags & TypeFlags.Union) ? t : narrow(t));
                     if (originTypes.length - originFiltered.length === types.length - filtered.length) {
                         if (originFiltered.length === 1) {
                             return originFiltered[0];
@@ -22816,7 +22847,16 @@ namespace ts {
                 }
                 return getUnionTypeFromSortedList(filtered, (type as UnionType).objectFlags, /*aliasSymbol*/ undefined, /*aliasTypeArguments*/ undefined, newOrigin);
             }
-            return type.flags & TypeFlags.Never || f(type) ? type : neverType;
+
+            if (type.flags & TypeFlags.Never) {
+                return type;
+            }
+
+            return narrow(type) || neverType;
+        }
+
+        function filterType(type: Type, f: (t: Type) => boolean): Type {
+            return filterAndNarrowType(type, (t) => f(t) ? t : undefined);
         }
 
         function removeType(type: Type, targetType: Type) {
@@ -23756,7 +23796,7 @@ namespace ts {
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
                 if (isMatchingReference(reference, expr)) {
                     return type.flags & TypeFlags.Unknown && assumeTrue ? nonNullUnknownType :
-                        getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
+                        filterAndNarrowType(type, t => truthyTypeFilter(t, assumeTrue));
                 }
                 if (strictNullChecks && assumeTrue && optionalChainContainsReference(expr, reference)) {
                     type = getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);

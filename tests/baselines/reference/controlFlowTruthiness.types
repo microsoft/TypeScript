@@ -18,7 +18,7 @@ function f1() {
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -42,7 +42,7 @@ function f2() {
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -63,7 +63,7 @@ function f3() {
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
 }
 
@@ -82,7 +82,7 @@ function f4() {
 >foo : () => string | undefined
 
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
     }
     else {
         x; // string
@@ -115,10 +115,10 @@ function f5() {
     }
     else {
         x; // string | undefined
->x : string | undefined
+>x : "" | undefined
 
         y; // string | undefined
->y : string | undefined
+>y : "" | undefined
     }
 }
 
@@ -153,7 +153,7 @@ function f6() {
 >x : string | undefined
 
         y; // string | undefined
->y : string | undefined
+>y : "" | undefined
     }
 }
 

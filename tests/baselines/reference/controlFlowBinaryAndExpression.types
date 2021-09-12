@@ -17,7 +17,7 @@ let cond: boolean;
 >0 : 0
 
 x; // string | number
->x : string | number
+>x : number | ""
 
 x = "";
 >x = "" : ""

@@ -171,7 +171,7 @@ var rc3 = a3 || a3;         // number    || number is number
 >rc3 : number
 >a3 || a3 : number
 >a3 : number
->a3 : number
+>a3 : 0
 
 var rc4 = a4 || a3;         // string    || number is string | number
 >rc4 : string | number
@@ -237,7 +237,7 @@ var rd4 = a4 || a4;         // string    || string is string
 >rd4 : string
 >a4 || a4 : string
 >a4 : string
->a4 : string
+>a4 : ""
 
 var rd5 = a5 || a4;         // void      || string is void | string
 >rd5 : string

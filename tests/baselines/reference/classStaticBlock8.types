@@ -111,7 +111,7 @@ function foo (v: number) {
 >4 : 4
             }
             switch (v) {
->v : number
+>v : 0 | 1 | 3
 
                 default: break; // valid
             }
