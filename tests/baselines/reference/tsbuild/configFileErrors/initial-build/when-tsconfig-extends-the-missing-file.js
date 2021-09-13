@@ -42,7 +42,7 @@ Output::
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/src/tsconfig.second.json'. Specified 'include' paths were '["**/*"]' and 'exclude' paths were '[]'.
 
 
-Found 4 errors in 0 files.
+Found 4 errors.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 

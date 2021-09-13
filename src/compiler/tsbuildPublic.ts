@@ -76,7 +76,12 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number, filesInError: (string | undefined)[]) => void;
+    export type ReportEmitErrorSummary = (errorCount: number, filesInError: (ReportFileInError | undefined)[]) => void;
+
+    export interface ReportFileInError {
+        fileName: string;
+        line: number;
+    }
 
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         createDirectory?(path: string): void;
@@ -2002,7 +2007,7 @@ namespace ts {
         const canReportSummary = state.watch || !!state.host.reportErrorSummary;
         const { diagnostics } = state;
         let totalErrors = 0;
-        let filesInError: (string | undefined)[] = [];
+        let filesInError: (ReportFileInError | undefined)[] = [];
         if (isCircularBuildOrder(buildOrder)) {
             reportBuildQueue(state, buildOrder.buildOrder);
             reportErrors(state, buildOrder.circularDiagnostics);

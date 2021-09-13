@@ -207,7 +207,7 @@ namespace ts.tscWatch {
     export function checkNormalBuildErrors(
         host: WatchedSystem,
         errors: readonly Diagnostic[] | readonly string[],
-        files: readonly string[],
+        files: readonly ReportFileInError[],
         reportErrorSummary?: boolean
     ) {
         checkOutputErrors(
