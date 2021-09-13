@@ -329,6 +329,7 @@ namespace ts {
         let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
+        let inlineLevel = 0;
         let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
@@ -23064,7 +23065,6 @@ namespace ts {
             let key: string | undefined;
             let isKeySet = false;
             let flowDepth = 0;
-            let inlineLevel = 0;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
