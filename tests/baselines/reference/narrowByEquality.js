@@ -3,6 +3,7 @@ declare let x: number | string | boolean
 declare let n: number;
 declare let s: string;
 declare let b: boolean;
+declare let xUnknown: unknown;
 
 if (x == n) {
     x;
@@ -57,6 +58,11 @@ function test(level: number | string):number {
     return 0;
 }
 
+// From issue #32798
+if (xUnknown == null) {
+    xUnknown;
+}
+
 
 //// [narrowByEquality.js]
 "use strict";
@@ -98,4 +104,8 @@ function test(level) {
         return level;
     }
     return 0;
+}
+// From issue #32798
+if (xUnknown == null) {
+    xUnknown;
 }
