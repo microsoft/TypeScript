@@ -3943,10 +3943,6 @@
         "category": "Message",
         "code": 6002
     },
-    "Specify the location where debugger should locate map files instead of generated locations.": {
-        "category": "Message",
-        "code": 6003
-    },
     "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
         "code": 6004
@@ -4512,10 +4508,6 @@
     "The character set of the input files.": {
         "category": "Message",
         "code": 6163
-    },
-    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
-        "category": "Message",
-        "code": 6164
     },
     "Do not truncate error messages.": {
         "category": "Message",
