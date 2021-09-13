@@ -897,3 +897,26 @@ function foo({ kind, payload }: Data) {
     }
 }
 
+// Repro from #45830
+
+const obj = {
+>obj : { fn: () => boolean; }
+>{    fn: () => true} : { fn: () => boolean; }
+
+    fn: () => true
+>fn : () => boolean
+>() => true : () => boolean
+>true : true
+
+};
+
+if (a) { }
+>a : boolean
+
+const a = obj.fn();
+>a : boolean
+>obj.fn() : boolean
+>obj.fn : () => boolean
+>obj : { fn: () => boolean; }
+>fn : () => boolean
+

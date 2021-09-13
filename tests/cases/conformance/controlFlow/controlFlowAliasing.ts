@@ -273,3 +273,13 @@ function foo({ kind, payload }: Data) {
         let t: number = payload;
     }
 }
+
+// Repro from #45830
+
+const obj = {
+    fn: () => true
+};
+
+if (a) { }
+
+const a = obj.fn();
