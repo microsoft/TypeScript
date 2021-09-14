@@ -887,8 +887,6 @@ namespace ts {
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<Path, string>();
         let usesUriStyleNodeCoreModules = false;
-        // Used when resolving something like 'dom' for libs
-        // const libResolveCache = createModuleResolutionCache(currentDirectory, host.getCanonicalFileName, { moduleResolution: ModuleResolutionKind.NodeJs });
 
         /**
          * map with
@@ -1739,7 +1737,7 @@ namespace ts {
                 return equalityComparer(file.fileName, getDefaultLibraryFileName());
             }
             else {
-                return some(options.lib, libFileName => equalityComparer(file.fileName,  pathForLibFile(libFileName)));
+                return some(options.lib, libFileName => equalityComparer(file.fileName, pathForLibFile(libFileName)));
             }
         }
 
@@ -2896,7 +2894,7 @@ namespace ts {
                 path += (i === 2 ? "/" : "-") + components[i];
                 i++;
             }
-            // const localOverride = resolveModuleNameFromCache("@typescript/" + path, currentDirectory, libResolveCache);
+
             const localOverride = resolveModuleName("@typescript/" + path, currentDirectory, { moduleResolution: ModuleResolutionKind.NodeJs }, host);
             if (localOverride?.resolvedModule) {
                 return localOverride.resolvedModule.resolvedFileName;
