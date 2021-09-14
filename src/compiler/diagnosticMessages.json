@@ -3300,6 +3300,10 @@
         "category": "Error",
         "code": 2819
     },
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2820
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
