@@ -148,26 +148,31 @@ namespace ts {
                 distinctFileNamesWithLines[0]) :
             createCompilerDiagnostic(
                 distinctFileNamesWithLines.length === 0 ?
-                    Diagnostics.Found_0_errors : 
+                    Diagnostics.Found_0_errors :
                     distinctFileNamesWithLines.length === 1 ?
                         Diagnostics.Found_0_errors_in_1_file :
                         Diagnostics.Found_0_errors_in_1_files,
                 errorCount,
                 distinctFileNamesWithLines.length);
-        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles) : ''}`;
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}${errorCount > 1 ? createTabularErrorsDisplay(nonNilFiles) : ""}`;
     }
 
     function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[]) {
+        const BASE_LEFT_PADDING = 6;
         let tabularData = "";
         const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file!.fileName === value!.fileName));
         if(distinctFiles.length === 0) return tabularData;
-        
+
         const headerRow = "Errors   Files\n";
         tabularData += headerRow;
         distinctFiles.forEach(file => {
             const errorCountForFile = countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName);
-            tabularData += `     ${errorCountForFile}   ${file!.fileName}:${file!.line}\n`;
-        })
+            const errorCountDigitsLength = Math.log(errorCountForFile) * Math.LOG10E + 1 | 0;
+            const leftPadding = errorCountDigitsLength < BASE_LEFT_PADDING ?
+                " ".repeat(BASE_LEFT_PADDING - errorCountDigitsLength)
+                : "";
+            tabularData += `${leftPadding}${errorCountForFile}   ${file!.fileName}:${file!.line}\n`;
+        });
 
         return tabularData;
     }
