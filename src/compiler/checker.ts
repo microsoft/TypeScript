@@ -303,7 +303,7 @@ namespace ts {
             host.getSourceFiles().forEach(sf => {
                 if (!sf.resolvedModules) return;
 
-                forEachEntry(sf.resolvedModules, r => {
+                sf.resolvedModules.forEach(r => {
                     if (r && r.packageId) map.set(r.packageId.name, r.extension === Extension.Dts || !!map.get(r.packageId.name));
                 });
             });
@@ -3325,7 +3325,13 @@ namespace ts {
                 return ambientModule;
             }
             const currentSourceFile = getSourceFileOfNode(location);
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference)!; // TODO: GH#18217
+            const contextSpecifier = isStringLiteralLike(location)
+                ? location
+                :   (isImportCall(location) ? location : findAncestor(location, isImportCall))?.arguments[0] ||
+                    (isImportDeclaration(location) ? location : findAncestor(location, isImportDeclaration))?.moduleSpecifier ||
+                    (isExternalModuleImportEqualsDeclaration(location) ? location : findAncestor(location, isExternalModuleImportEqualsDeclaration))?.moduleReference.expression ||
+                    (isExportDeclaration(location) ? location : findAncestor(location, isExportDeclaration))?.moduleSpecifier;
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : undefined)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {

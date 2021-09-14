@@ -4843,6 +4843,35 @@
         "code": 6257
     },
 
+    "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
+        "category": "Message",
+        "code": 6270
+    },
+    "Import specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6271
+    },
+    "Invalid import specifier '{0}' has no possible resolutions.": {
+        "category": "Message",
+        "code": 6272
+    },
+    "package.json scope '{0}' has no imports defined.": {
+        "category": "Message",
+        "code": 6273
+    },
+    "package.json scope '{0}' explicitly maps specifier '{1}' to null.": {
+        "category": "Message",
+        "code": 6274
+    },
+    "package.json scope '{0}' has invalid type for target of specifier '{1}'": {
+        "category": "Message",
+        "code": 6275
+    },
+    "Export specifier '{0}' does not exist in package.json scope at path '{1}'.": {
+        "category": "Message",
+        "code": 6276
+    },
+
     "Enable project compilation": {
         "category": "Message",
         "code": 6302

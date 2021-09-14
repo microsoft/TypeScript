@@ -127,7 +127,7 @@ namespace ts.codefix {
     function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
         if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);
+        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
         if (!resolvedModule) return undefined;
 
         return context.program.getSourceFile(resolvedModule.resolvedFileName);

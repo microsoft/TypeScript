@@ -206,7 +206,7 @@ namespace ts {
     describe("unittests:: moduleResolution:: Node module resolution - non-relative paths", () => {
         it("computes correct commonPrefix for moduleName cache", () => {
             const resolutionCache = createModuleResolutionCache("/", (f) => f);
-            let cache = resolutionCache.getOrCreateCacheForModuleName("a");
+            let cache = resolutionCache.getOrCreateCacheForModuleName("a", /*mode*/ undefined);
             cache.set("/sub", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -219,7 +219,7 @@ namespace ts {
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("b");
+            cache = resolutionCache.getOrCreateCacheForModuleName("b", /*mode*/ undefined);
             cache.set("/sub/dir/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -234,7 +234,7 @@ namespace ts {
             assert.isDefined(cache.get("/sub"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("c");
+            cache = resolutionCache.getOrCreateCacheForModuleName("c", /*mode*/ undefined);
             cache.set("/foo/bar", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -248,7 +248,7 @@ namespace ts {
             assert.isDefined(cache.get("/foo"));
             assert.isDefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("d");
+            cache = resolutionCache.getOrCreateCacheForModuleName("d", /*mode*/ undefined);
             cache.set("/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -261,7 +261,7 @@ namespace ts {
             assert.isDefined(cache.get("/foo"));
             assert.isUndefined(cache.get("/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("e");
+            cache = resolutionCache.getOrCreateCacheForModuleName("e", /*mode*/ undefined);
             cache.set("c:/foo", {
                 resolvedModule: {
                     originalPath: undefined,
@@ -275,7 +275,7 @@ namespace ts {
             assert.isDefined(cache.get("c:/"));
             assert.isUndefined(cache.get("d:/"));
 
-            cache = resolutionCache.getOrCreateCacheForModuleName("f");
+            cache = resolutionCache.getOrCreateCacheForModuleName("f", /*mode*/ undefined);
             cache.set("/foo/bar/baz", {
                 resolvedModule: undefined,
                 failedLookupLocations: [],
