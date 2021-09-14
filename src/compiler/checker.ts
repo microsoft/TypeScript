@@ -23240,9 +23240,10 @@ namespace ts {
 
         function isConstantReference(node: Node): boolean {
             switch (node.kind) {
-                case SyntaxKind.Identifier:
+                case SyntaxKind.Identifier: {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    return isConstVariable(symbol) || !!symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter && !isParameterAssigned(symbol);
+                    return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
+                }
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
@@ -24376,37 +24377,38 @@ namespace ts {
                 node.kind === SyntaxKind.PropertyDeclaration)!;
         }
 
-        // Check if a parameter is assigned anywhere within its declaring function.
-        function isParameterAssigned(symbol: Symbol) {
+        // Check if a parameter or catch variable is assigned anywhere
+        function isSymbolAssigned(symbol: Symbol) {
             if (!symbol.valueDeclaration) {
                 return false;
             }
-            const func = getRootDeclaration(symbol.valueDeclaration).parent as FunctionLikeDeclaration;
-            const links = getNodeLinks(func);
+            const parent = getRootDeclaration(symbol.valueDeclaration).parent;
+            const links = getNodeLinks(parent);
             if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
                 links.flags |= NodeCheckFlags.AssignmentsMarked;
-                if (!hasParentWithAssignmentsMarked(func)) {
-                    markParameterAssignments(func);
+                if (!hasParentWithAssignmentsMarked(parent)) {
+                    markNodeAssignments(parent);
                 }
             }
             return symbol.isAssigned || false;
         }
 
         function hasParentWithAssignmentsMarked(node: Node) {
-            return !!findAncestor(node.parent, node => isFunctionLike(node) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
+            return !!findAncestor(node.parent, node =>
+                (isFunctionLike(node) || isCatchClause(node)) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
         }
 
-        function markParameterAssignments(node: Node) {
+        function markNodeAssignments(node: Node) {
             if (node.kind === SyntaxKind.Identifier) {
                 if (isAssignmentTarget(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    if (symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter) {
+                    if (isParameterOrCatchClauseVariable(symbol)) {
                         symbol.isAssigned = true;
                     }
                 }
             }
             else {
-                forEachChild(node, markParameterAssignments);
+                forEachChild(node, markNodeAssignments);
             }
         }
 
@@ -24644,7 +24646,7 @@ namespace ts {
             // analysis to include the immediately enclosing function.
             while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
                 flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
-                (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isParameterAssigned(localOrExportSymbol))) {
+                (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSymbolAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
