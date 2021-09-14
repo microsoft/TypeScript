@@ -2895,7 +2895,7 @@ namespace ts {
                 i++;
             }
             // The strange "/fake.file" is to ensure we first resolve in node_modules for the current directory.
-            const localOverride = resolveModuleName("@typescript/" + path, currentDirectory + "/fake.file", { moduleResolution: ModuleResolutionKind.NodeJs }, host);
+            const localOverride = resolveModuleName("@typescript/" + path, currentDirectory + "/fake.file", { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
             if (localOverride?.resolvedModule) {
                 return localOverride.resolvedModule.resolvedFileName;
             }
