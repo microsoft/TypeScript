@@ -3327,8 +3327,7 @@ namespace ts {
             }
             emitExpression(node.moduleSpecifier);
             if (node.assertClause) {
-                writeSpace();
-                emit(node.assertClause);
+                emitWithLeadingSpace(node.assertClause);
             }
             writeTrailingSemicolon();
         }
@@ -3399,8 +3398,7 @@ namespace ts {
                 emitExpression(node.moduleSpecifier);
             }
             if (node.assertClause) {
-                writeSpace();
-                emit(node.assertClause);
+                emitWithLeadingSpace(node.assertClause);
             }
             writeTrailingSemicolon();
         }

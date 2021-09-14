@@ -39000,11 +39000,11 @@ namespace ts {
         function checkAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
             if (declaration.assertClause) {
                 if (moduleKind !== ModuleKind.ESNext) {
-                    error(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
                 }
 
                 if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
-                    error(declaration.assertClause, Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
+                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
                 }
             }
         }
@@ -43162,22 +43162,6 @@ namespace ts {
             return false;
         }
 
-        function checkGrammarImportCallArguments(node: ImportCall, nodeArguments: NodeArray<Expression>): boolean {
-            if (moduleKind !== ModuleKind.ESNext) {
-                // We are allowed trailing comma after proposal-import-assertions.
-                checkGrammarForDisallowedTrailingComma(nodeArguments);
-
-                if (nodeArguments.length > 1) {
-                    const assertionArgument = nodeArguments[1];
-                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_import_only_supports_a_second_argument_when_the_module_option_is_set_to_esnext);
-                }
-            }
-            if (nodeArguments.length !== 1) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_only_have_a_specifier_and_an_optional_assertion_as_arguments);
-            }
-            return false;
-        }
-
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system_or_umd);
@@ -43188,9 +43172,20 @@ namespace ts {
             }
 
             const nodeArguments = node.arguments;
-            if (checkGrammarImportCallArguments(node, nodeArguments)) {
-                return true;
+            if (moduleKind !== ModuleKind.ESNext) {
+                // We are allowed trailing comma after proposal-import-assertions.
+                checkGrammarForDisallowedTrailingComma(nodeArguments);
+
+                if (nodeArguments.length > 1) {
+                    const assertionArgument = nodeArguments[1];
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_import_only_supports_a_second_argument_when_the_module_option_is_set_to_esnext);
+                }
             }
+
+            if (nodeArguments.length  === 0 || nodeArguments.length > 2) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_only_have_a_specifier_and_an_optional_assertion_as_arguments);
+            }
+
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
             if (nodeArguments.length && isSpreadElement(nodeArguments[0])) {

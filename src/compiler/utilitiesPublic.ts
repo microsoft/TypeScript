@@ -1378,7 +1378,6 @@ namespace ts {
     /* @internal */
     export function isAssignmentPattern(node: Node): node is AssignmentPattern {
         const kind = node.kind;
-
         return kind === SyntaxKind.ArrayLiteralExpression
             || kind === SyntaxKind.ObjectLiteralExpression;
     }
