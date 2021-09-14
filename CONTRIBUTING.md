@@ -72,7 +72,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ### Using a development container
 
-This repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
+If you prefer to develop using containers, this repository includes a [development container](https://code.visualstudio.com/docs/remote/containers) that you can use to quickly create an isolated development environment with all the tools you need to start working on TypeScript. To get started with a dev container and VS Code, either:
 
 - Clone the TypeScript repository locally and use the `Open Folder in Container` command.
 - Use the `Clone Repository in Container Volume` command to clone the TypeScript repository into a new container.

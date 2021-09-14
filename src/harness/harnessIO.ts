@@ -219,7 +219,7 @@ namespace Harness {
             }
 
             public Close() {
-                if (this.currentLine !== undefined) { this.lines.push(this.currentLine); }
+                if (this.currentLine !== undefined) this.lines.push(this.currentLine);
                 this.currentLine = undefined!;
             }
 

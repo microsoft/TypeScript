@@ -65,11 +65,12 @@ namespace ts {
                 fileExists: path => {
                     assert.isTrue(directories.has(getDirectoryPath(path)), `'fileExists' '${path}' request in non-existing directory`);
                     return map.has(path);
-                }
+                },
+                useCaseSensitiveFileNames: true
             };
         }
         else {
-            return { readFile, realpath, fileExists: path => map.has(path) };
+            return { readFile, realpath, fileExists: path => map.has(path), useCaseSensitiveFileNames: true };
         }
         function readFile(path: string): string | undefined {
             const file = map.get(path);

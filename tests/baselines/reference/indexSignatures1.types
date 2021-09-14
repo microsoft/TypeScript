@@ -1051,3 +1051,22 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >sym : unique symbol
 >'hello ' : "hello "
 
+// Repro from #45772
+
+type Id = string & { __tag: 'id '};
+>Id : Id
+>__tag : "id "
+
+type Rec1 = { [key: Id]: number };
+>Rec1 : Rec1
+>key : Id
+
+type Rec2 = Record<Id, number>;
+>Rec2 : Rec2
+
+type K1 = keyof Rec1;  // Id
+>K1 : Id
+
+type K2 = keyof Rec2;  // Id
+>K2 : Id
+

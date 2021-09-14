@@ -53,7 +53,9 @@ namespace ts.codefix {
 
             const token = getTokenAtPosition(sourceFile, start);
             let declaration: Declaration | undefined;
-            const changes = textChanges.ChangeTracker.with(context, changes => { declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences); });
+            const changes = textChanges.ChangeTracker.with(context, changes => {
+                declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences);
+            });
             const name = declaration && getNameOfDeclaration(declaration);
             return !name || changes.length === 0 ? undefined
                 : [createCodeFixAction(fixId, changes, [getDiagnostic(errorCode, token), name.getText(sourceFile)], fixId, Diagnostics.Infer_all_types_from_usage)];

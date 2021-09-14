@@ -1523,9 +1523,14 @@ namespace ts.FindAllReferences {
             }
 
             // Use the parent symbol if the location is commonjs require syntax on javascript files only.
-            referenceSymbol = isInJSFile(referenceLocation) && referenceLocation.parent.kind === SyntaxKind.BindingElement && isRequireVariableDeclaration(referenceLocation.parent)
-                ? referenceLocation.parent.symbol
-                : referenceSymbol;
+            if (isInJSFile(referenceLocation)
+                && referenceLocation.parent.kind === SyntaxKind.BindingElement
+                && isRequireVariableDeclaration(referenceLocation.parent)) {
+                referenceSymbol = referenceLocation.parent.symbol;
+                // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
+                // this case, just skip it, since the bound identifiers are not an alias of the import.
+                if (!referenceSymbol) return;
+            }
 
             getImportOrExportReferences(referenceLocation, referenceSymbol, search, state);
         }
@@ -1998,13 +2003,13 @@ namespace ts.FindAllReferences {
         }
 
         function getReferencesForStringLiteral(node: StringLiteralLike, sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): SymbolAndEntries[] {
-            const type = getContextualTypeOrAncestorTypeNodeType(node, checker);
+            const type = getContextualTypeFromParentOrAncestorTypeNode(node, checker);
             const references = flatMap(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
                 return mapDefined(getPossibleSymbolReferenceNodes(sourceFile, node.text), ref => {
                     if (isStringLiteralLike(ref) && ref.text === node.text) {
                         if (type) {
-                            const refType = getContextualTypeOrAncestorTypeNodeType(ref, checker);
+                            const refType = getContextualTypeFromParentOrAncestorTypeNode(ref, checker);
                             if (type !== checker.getStringType() && type === refType) {
                                 return nodeEntry(ref, EntryKind.StringLiteral);
                             }
@@ -2197,7 +2202,7 @@ namespace ts.FindAllReferences {
         }
 
         function isStaticSymbol(symbol: Symbol): boolean {
-            if (!symbol.valueDeclaration) { return false; }
+            if (!symbol.valueDeclaration) return false;
             const modifierFlags = getEffectiveModifierFlags(symbol.valueDeclaration);
             return !!(modifierFlags & ModifierFlags.Static);
         }

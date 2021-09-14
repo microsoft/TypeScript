@@ -8,7 +8,7 @@ tests/cases/conformance/importAssertion/3.ts(3,25): error TS1324: Dynamic import
 tests/cases/conformance/importAssertion/3.ts(4,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(5,26): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(7,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
-tests/cases/conformance/importAssertion/3.ts(8,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(8,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
 tests/cases/conformance/importAssertion/3.ts(9,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(10,25): error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
 tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comma not allowed.
@@ -65,7 +65,7 @@ tests/cases/conformance/importAssertion/3.ts(10,52): error TS1009: Trailing comm
 !!! error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.
     const f = import()
               ~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const g = import('./0', {}, {})
                             ~~
 !!! error TS1324: Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.

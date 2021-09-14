@@ -16,6 +16,6 @@ const [r0Def, r0, r1Def, r1, r2Def, r2, r3] = test.ranges();
 verify.referenceGroups([r0, r1], [{ definition: "(property) I.property1: number", ranges: [r0, r1, r2] }]);
 verify.referenceGroups(r2, [
     { definition: "(property) I.property1: number", ranges: [r0, r1] },
-    { definition: "var property1: number", ranges: [r2, r3] },
+    { definition: "(parameter) property1: number", ranges: [r2, r3] },
 ]);
-verify.referenceGroups(r3, [{ definition: "var property1: number", ranges: [r2, r3] }]);
+verify.referenceGroups(r3, [{ definition: "(parameter) property1: number", ranges: [r2, r3] }]);

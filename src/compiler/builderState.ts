@@ -258,9 +258,9 @@ namespace ts {
             if (sourceFile.moduleAugmentations.length) {
                 const checker = program.getTypeChecker();
                 for (const moduleName of sourceFile.moduleAugmentations) {
-                    if (!isStringLiteral(moduleName)) { continue; }
+                    if (!isStringLiteral(moduleName)) continue;
                     const symbol = checker.getSymbolAtLocation(moduleName);
-                    if (!symbol) { continue; }
+                    if (!symbol) continue;
 
                     // Add any file other than our own as reference
                     addReferenceFromAmbientModule(symbol);

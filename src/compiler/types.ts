@@ -2258,6 +2258,11 @@ namespace ts {
         readonly expression: Expression;
     }
 
+    /* @internal */
+    export interface JSDocTypeAssertion extends ParenthesizedExpression {
+        readonly _jsDocTypeAssertionBrand: never;
+    }
+
     export interface ArrayLiteralExpression extends PrimaryExpression {
         readonly kind: SyntaxKind.ArrayLiteralExpression;
         readonly elements: NodeArray<Expression>;
@@ -2598,14 +2603,14 @@ namespace ts {
 
     export interface JsxExpression extends Expression {
         readonly kind: SyntaxKind.JsxExpression;
-        readonly parent: JsxElement | JsxAttributeLike;
+        readonly parent: JsxElement | JsxFragment | JsxAttributeLike;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly expression?: Expression;
     }
 
     export interface JsxText extends LiteralLikeNode {
         readonly kind: SyntaxKind.JsxText;
-        readonly parent: JsxElement;
+        readonly parent: JsxElement | JsxFragment;
         readonly containsOnlyTriviaWhiteSpaces: boolean;
     }
 
@@ -3127,6 +3132,14 @@ namespace ts {
         | ImportOrExportSpecifier
         ;
 
+    export type TypeOnlyAliasDeclaration =
+        | ImportClause & { readonly isTypeOnly: true, readonly name: Identifier }
+        | ImportEqualsDeclaration & { readonly isTypeOnly: true }
+        | NamespaceImport & { readonly parent: ImportClause & { readonly isTypeOnly: true } }
+        | ImportSpecifier & { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } }
+        | ExportSpecifier & { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } }
+        ;
+
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -3433,7 +3446,7 @@ namespace ts {
     // function, the node property references the function (which in turn has a flowNode
     // property for the containing control flow).
     export interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration;
+        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
     }
 
     // FlowLabel represents a junction with multiple possible preceding control flows.
@@ -4239,7 +4252,7 @@ namespace ts {
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
-        /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
+        /** Exclude accesses to private properties. */
         /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
@@ -4287,6 +4300,8 @@ namespace ts {
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
+        /* @internal */ getPromiseType(): Type;
+        /* @internal */ getPromiseLikeType(): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
@@ -4352,7 +4367,7 @@ namespace ts {
          * This should be called in a loop climbing parents of the symbol, so we'll get `N`.
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
-        /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
+        getTypePredicateOfSignature(signature: Signature): TypePredicate | undefined;
         /* @internal */ resolveExternalModuleName(moduleSpecifier: Expression): Symbol | undefined;
         /**
          * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
@@ -4378,6 +4393,7 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): readonly TypeParameter[] | undefined;
         /* @internal */ isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
+        /* @internal */ isPropertyAccessible(node: Node, isSuper: boolean, isWrite: boolean, containingType: Type, property: Symbol): boolean;
     }
 
     /* @internal */
@@ -6072,6 +6088,7 @@ namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        preserveValueImports?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
         /* @internal */ pretty?: boolean;
@@ -6165,7 +6182,7 @@ namespace ts {
     export const enum ImportsNotUsedAsValues {
         Remove,
         Preserve,
-        Error
+        Error,
     }
 
     export const enum NewLineKind {
@@ -6483,6 +6500,7 @@ namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
+        useCaseSensitiveFileNames?: boolean | (() => boolean);
     }
 
     /**
@@ -6912,7 +6930,9 @@ namespace ts {
         PartiallyEmittedExpressions = 1 << 3,
 
         Assertions = TypeAssertions | NonNullAssertions,
-        All = Parentheses | Assertions | PartiallyEmittedExpressions
+        All = Parentheses | Assertions | PartiallyEmittedExpressions,
+
+        ExcludeJSDocTypeAssertion = 1 << 4,
     }
 
     /* @internal */
@@ -7472,7 +7492,7 @@ namespace ts {
         updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause;
         createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]): HeritageClause;
         updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
-        createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block): CatchClause;
+        createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
         updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
 
         //

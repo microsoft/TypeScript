@@ -764,14 +764,14 @@ namespace ts {
         }
 
         function removeResolutionsFromProjectReferenceRedirects(filePath: Path) {
-            if (!fileExtensionIs(filePath, Extension.Json)) { return; }
+            if (!fileExtensionIs(filePath, Extension.Json)) return;
 
             const program = resolutionHost.getCurrentProgram();
-            if (!program) { return; }
+            if (!program) return;
 
             // If this file is input file for the referenced project, get it
             const resolvedProjectReference = program.getResolvedProjectReferenceByPath(filePath);
-            if (!resolvedProjectReference) { return; }
+            if (!resolvedProjectReference) return;
 
             // filePath is for the projectReference and the containing file is from this project reference, invalidate the resolution
             resolvedProjectReference.commandLine.fileNames.forEach(f => removeResolutionsOfFile(resolutionHost.toPath(f)));

@@ -156,7 +156,7 @@ namespace ts.InlayHints {
             for (let i = 0; i < args.length; ++i) {
                 const originalArg = args[i];
                 const arg = skipParentheses(originalArg);
-                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableExpression(arg)) {
+                if (shouldShowLiteralParameterNameHintsOnly(preferences) && !isHintableLiteral(arg)) {
                     continue;
                 }
 
@@ -202,17 +202,22 @@ namespace ts.InlayHints {
             return some(ranges, range => regex.test(sourceFileText.substring(range.pos, range.end)));
         }
 
-        function isHintableExpression(node: Node) {
+        function isHintableLiteral(node: Node) {
             switch (node.kind) {
-                case SyntaxKind.PrefixUnaryExpression:
-                    return isLiteralExpression((node as PrefixUnaryExpression).operand);
+                case SyntaxKind.PrefixUnaryExpression: {
+                    const operand = (node as PrefixUnaryExpression).operand;
+                    return isLiteralExpression(operand) || isIdentifier(operand) && isInfinityOrNaNString(operand.escapedText);
+                }
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
-                case SyntaxKind.ArrowFunction:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.ObjectLiteralExpression:
-                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.NullKeyword:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.TemplateExpression:
                     return true;
+                case SyntaxKind.Identifier: {
+                    const name = (node as Identifier).escapedText;
+                    return isUndefined(name) || isInfinityOrNaNString(name);
+                }
             }
             return isLiteralExpression(node);
         }
@@ -309,6 +314,10 @@ namespace ts.InlayHints {
                 Debug.assertIsDefined(typeNode, "should always get typenode");
                 printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
             });
+        }
+
+        function isUndefined(name: __String) {
+            return name === "undefined";
         }
     }
 }

@@ -1,11 +1,11 @@
-tests/cases/conformance/importAssertion/3.ts(2,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(3,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(4,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(5,12): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(7,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(8,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(9,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
-tests/cases/conformance/importAssertion/3.ts(10,11): message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(2,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(3,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(4,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(5,12): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(7,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(8,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(9,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(10,11): message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
 
 
 ==== tests/cases/conformance/importAssertion/0.ts (0 errors) ====
@@ -33,28 +33,28 @@ tests/cases/conformance/importAssertion/3.ts(10,11): message TS1444: Dynamic imp
     const a = import('./0')
     const b = import('./0', { assert: { type: "json" } })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const c = import('./0', { assert: { type: "json", ttype: "typo" } })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const d = import('./0', { assert: {} })
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const dd = import('./0', {})
                ~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     declare function foo(): any;
     const e = import('./0', foo())
               ~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const f = import()
               ~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const g = import('./0', {}, {})
               ~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     const h = import('./0', { assert: { type: "json" }},)
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS1444: Dynamic import must only have a specifier and an optional assertion as arguments
+!!! message TS1450: Dynamic import must only have a specifier and an optional assertion as arguments
     
     

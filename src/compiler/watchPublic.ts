@@ -404,6 +404,10 @@ namespace ts {
                 });
                 parsedConfigs = undefined;
             }
+            if (packageJsonMap) {
+                clearMap(packageJsonMap, closeFileWatcher);
+                packageJsonMap = undefined!;
+            }
         }
 
         function getCurrentBuilderProgram() {

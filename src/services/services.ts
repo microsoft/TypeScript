@@ -139,7 +139,9 @@ namespace ts {
 
         if (isJSDocCommentContainingNode(node)) {
             /** Don't add trivia for "tokens" since this is in a comment. */
-            node.forEachChild(child => { children.push(child); });
+            node.forEachChild(child => {
+                children.push(child);
+            });
             return children;
         }
 
@@ -2086,9 +2088,14 @@ namespace ts {
             const token = findPrecedingToken(position, sourceFile);
             if (!token) return undefined;
             const element = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningElement(token.parent) ? token.parent.parent
-                : isJsxText(token) ? token.parent : undefined;
+                : isJsxText(token) && isJsxElement(token.parent) ? token.parent : undefined;
             if (element && isUnclosedTag(element)) {
                 return { newText: `</${element.openingElement.tagName.getText(sourceFile)}>` };
+            }
+            const fragment = token.kind === SyntaxKind.GreaterThanToken && isJsxOpeningFragment(token.parent) ? token.parent.parent
+                : isJsxText(token) && isJsxFragment(token.parent) ? token.parent : undefined;
+            if (fragment && isUnclosedFragment(fragment)) {
+                return { newText: "</>" };
             }
         }
 
@@ -2330,6 +2337,10 @@ namespace ts {
         function isUnclosedTag({ openingElement, closingElement, parent }: JsxElement): boolean {
             return !tagNamesAreEquivalent(openingElement.tagName, closingElement.tagName) ||
                 isJsxElement(parent) && tagNamesAreEquivalent(openingElement.tagName, parent.openingElement.tagName) && isUnclosedTag(parent);
+        }
+
+        function isUnclosedFragment({ closingFragment, parent }: JsxFragment): boolean {
+            return !!(closingFragment.flags & NodeFlags.ThisNodeHasError) || (isJsxFragment(parent) && isUnclosedFragment(parent));
         }
 
         function getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined {

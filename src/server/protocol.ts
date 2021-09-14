@@ -2562,11 +2562,7 @@ namespace ts.server.protocol {
         body?: SignatureHelpItems;
     }
 
-    export const enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum",
-    }
+    export type InlayHintKind = "Type" | "Parameter" | "Enum";
 
     export interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
@@ -2587,7 +2583,7 @@ namespace ts.server.protocol {
     export interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

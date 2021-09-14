@@ -232,8 +232,8 @@ namespace ts {
             else if (canCopySemanticDiagnostics) {
                 const sourceFile = newProgram.getSourceFileByPath(sourceFilePath)!;
 
-                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
-                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
+                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) return;
+                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) return;
 
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);

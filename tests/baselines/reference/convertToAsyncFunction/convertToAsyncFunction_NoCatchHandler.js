@@ -7,8 +7,6 @@ function /*[#|*/f/*|]*/() {
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f() {
-    try {
-        const x = await fetch('https://typescriptlang.org');
-        return x.statusText;
-    } catch (e) { }
+    const x = await fetch('https://typescriptlang.org');
+    return x.statusText;
 }

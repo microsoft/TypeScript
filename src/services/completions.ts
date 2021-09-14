@@ -1180,7 +1180,7 @@ namespace ts.Completions {
             case SyntaxKind.CaseKeyword:
                 return getSwitchedType(cast(parent, isCaseClause), checker);
             case SyntaxKind.OpenBraceToken:
-                return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
+                return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
                 const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile);
                 return argInfo ?
@@ -1338,13 +1338,16 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
-                        if ((isCallExpression(node) || isFunctionLike(node)) &&
-                            node.end === contextToken.pos &&
-                            node.getChildCount(sourceFile) &&
-                            last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken) {
+                        const leftmostAccessExpression = getLeftmostAccessExpression(propertyAccessToConvert);
+                        if (nodeIsMissing(leftmostAccessExpression) ||
+                            ((isCallExpression(node) || isFunctionLike(node)) &&
+                                node.end === contextToken.pos &&
+                                node.getChildCount(sourceFile) &&
+                                last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken)) {
                             // This is likely dot from incorrectly parsed expression and user is starting to write spread
                             // eg: Math.min(./**/)
                             // const x = function (./**/) {}
+                            // ({./**/})
                             return undefined;
                         }
                         break;
@@ -1497,7 +1500,10 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
-        const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
+
+        const literals = mapDefined(
+            contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+            t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
         const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
         return {
@@ -2216,14 +2222,9 @@ namespace ts.Completions {
                 if (canGetType) {
                     const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
                     if (!typeForObject) return GlobalsSearch.Fail;
-                    // In a binding pattern, get only known properties (unless in the same scope).
-                    // Everywhere else we will get all possible properties.
-                    const containerClass = getContainingClass(objectLikeContainer);
-                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(symbol =>
-                        // either public
-                        !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.NonPublicAccessibilityModifier)
-                        // or we're in it
-                        || containerClass && contains(typeForObject.symbol.declarations, containerClass));
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject).filter(propertySymbol => {
+                        return typeChecker.isPropertyAccessible(objectLikeContainer, /*isSuper*/ false, /*writing*/ false, typeForObject, propertySymbol);
+                    });
                     existingMembers = objectLikeContainer.elements;
                 }
             }
@@ -2959,6 +2960,7 @@ namespace ts.Completions {
                         || kind === SyntaxKind.ModuleKeyword
                         || kind === SyntaxKind.TypeKeyword
                         || kind === SyntaxKind.NamespaceKeyword
+                        || kind === SyntaxKind.AbstractKeyword
                         || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);
@@ -3055,16 +3057,9 @@ namespace ts.Completions {
             ? checker.getUnionType([contextualType, completionsType!])
             : contextualType;
 
-        const properties = type.isUnion()
-            ? checker.getAllPossiblePropertiesOfTypes(type.types.filter(memberType =>
-                // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.
-                !(memberType.flags & TypeFlags.Primitive ||
-                    checker.isArrayLikeType(memberType) ||
-                    typeHasCallOrConstructSignatures(memberType, checker) ||
-                    checker.isTypeInvalidDueToUnionDiscriminant(memberType, obj))))
-            : type.getApparentProperties();
-
-        return hasCompletionsType ? properties.filter(hasDeclarationOtherThanSelf) : properties;
+        const properties = getApparentProperties(type, obj, checker);
+        return type.isClass() && containsNonPublicProperties(properties) ? [] :
+            hasCompletionsType ? filter(properties, hasDeclarationOtherThanSelf) : properties;
 
         // Filter out members whose only declaration is the object literal itself to avoid
         // self-fulfilling completions like:
@@ -3074,6 +3069,20 @@ namespace ts.Completions {
         function hasDeclarationOtherThanSelf(member: Symbol) {
             return some(member.declarations, decl => decl.parent !== obj);
         }
+    }
+
+    function getApparentProperties(type: Type, node: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker) {
+        if (!type.isUnion()) return type.getApparentProperties();
+        return checker.getAllPossiblePropertiesOfTypes(filter(type.types, memberType =>
+            !(memberType.flags & TypeFlags.Primitive
+                || checker.isArrayLikeType(memberType)
+                || checker.isTypeInvalidDueToUnionDiscriminant(memberType, node)
+                || typeHasCallOrConstructSignatures(memberType, checker)
+                || memberType.isClass() && containsNonPublicProperties(memberType.getApparentProperties()))));
+    }
+
+    function containsNonPublicProperties(props: Symbol[]) {
+        return some(props, p => !!(getDeclarationModifierFlagsFromSymbol(p) & ModifierFlags.NonPublicAccessibilityModifier));
     }
 
     /**

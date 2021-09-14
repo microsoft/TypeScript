@@ -1568,19 +1568,29 @@ namespace ts {
     export function noop(_?: {} | null | undefined): void { }
 
     /** Do nothing and return false */
-    export function returnFalse(): false { return false; }
+    export function returnFalse(): false {
+        return false;
+    }
 
     /** Do nothing and return true */
-    export function returnTrue(): true { return true; }
+    export function returnTrue(): true {
+        return true;
+    }
 
     /** Do nothing and return undefined */
-    export function returnUndefined(): undefined { return undefined; }
+    export function returnUndefined(): undefined {
+        return undefined;
+    }
 
     /** Returns its argument. */
-    export function identity<T>(x: T) { return x; }
+    export function identity<T>(x: T) {
+        return x;
+    }
 
     /** Returns lower case string */
-    export function toLowerCase(x: string) { return x.toLowerCase(); }
+    export function toLowerCase(x: string) {
+        return x.toLowerCase();
+    }
 
     // We convert the file names to lower case as key for file name on case insensitive file system
     // While doing so we need to handle special characters (eg \u0130) to ensure that we dont convert

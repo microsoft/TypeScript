@@ -85,13 +85,15 @@ namespace Harness {
                 }
                 compilerTest = new CompilerTest(fileName, payload, configuration);
             });
-            it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
-            it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
-            it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
-            it(`Correct JS output for ${fileName}`, () => { if (this.emit) compilerTest.verifyJavaScriptOutput(); });
-            it(`Correct Sourcemap output for ${fileName}`, () => { compilerTest.verifySourceMapOutput(); });
-            it(`Correct type/symbol baselines for ${fileName}`, () => { compilerTest.verifyTypesAndSymbols(); });
-            after(() => { compilerTest = undefined!; });
+            it(`Correct errors for ${fileName}`, () => compilerTest.verifyDiagnostics());
+            it(`Correct module resolution tracing for ${fileName}`, () => compilerTest.verifyModuleResolution());
+            it(`Correct sourcemap content for ${fileName}`, () => compilerTest.verifySourceMapRecord());
+            it(`Correct JS output for ${fileName}`, () => (this.emit && compilerTest.verifyJavaScriptOutput()));
+            it(`Correct Sourcemap output for ${fileName}`, () => compilerTest.verifySourceMapOutput());
+            it(`Correct type/symbol baselines for ${fileName}`, () => compilerTest.verifyTypesAndSymbols());
+            after(() => {
+                compilerTest = undefined!;
+            });
         }
 
         private parseOptions() {

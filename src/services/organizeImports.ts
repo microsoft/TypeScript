@@ -31,7 +31,7 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            if (!ambientModule.body) { continue; }
+            if (!ambientModule.body) continue;
 
             const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
