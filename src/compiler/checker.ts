@@ -17743,7 +17743,7 @@ namespace ts {
                         if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
                             const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
                             if (suggestedType) {
-                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, sourceType, targetType, typeToString(suggestedType));
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
                                 return;
                             }
                         }
@@ -28136,7 +28136,7 @@ namespace ts {
 
         function getSuggestedTypeForNonexistentStringLiteralType(source: StringLiteralType, target: UnionType): StringLiteralType | undefined {
             const candidates = target.types.filter((type): type is StringLiteralType => !!(type.flags & TypeFlags.StringLiteral));
-            return getSpellingSuggestion(source.value, candidates, (type) => type.value);
+            return getSpellingSuggestion(source.value, candidates, type => type.value);
         }
 
         /**
