@@ -66,13 +66,11 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         if (actionName === addBracesAction.name) {
             const returnStatement = factory.createReturnStatement(expression);
             body = factory.createBlock([returnStatement], /* multiLine */ true);
-            suppressLeadingAndTrailingTrivia(body);
             copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesAction.name && returnStatement) {
             const actualExpression = expression || factory.createVoidZero();
             body = needsParentheses(actualExpression) ? factory.createParenthesizedExpression(actualExpression) : actualExpression;
-            suppressLeadingAndTrailingTrivia(body);
             copyTrailingAsLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
             copyTrailingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);

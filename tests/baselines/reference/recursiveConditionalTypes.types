@@ -1,13 +1,13 @@
 === tests/cases/compiler/recursiveConditionalTypes.ts ===
 // Awaiting promises
 
-type Awaited<T> =
->Awaited : Awaited<T>
+type __Awaited<T> =
+>__Awaited : __Awaited<T>
 
     T extends null | undefined ? T :
 >null : null
 
-    T extends PromiseLike<infer U> ? Awaited<U> :
+    T extends PromiseLike<infer U> ? __Awaited<U> :
     T;
 
 type MyPromise<T> = {
@@ -23,42 +23,42 @@ type MyPromise<T> = {
 type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 >InfinitePromise : InfinitePromise<T>
 
-type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : string | number | null | undefined
 >null : null
 
-type P1 = Awaited<any>;
+type P1 = __Awaited<any>;
 >P1 : any
 
-type P2 = Awaited<InfinitePromise<number>>;  // Error
+type P2 = __Awaited<InfinitePromise<number>>;  // Error
 >P2 : any
 
-function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) {
->f11 : <T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) => void
+function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
+>f11 : <T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) => void
 >tx : T
->ta : Awaited<T>
+>ta : __Awaited<T>
 >ux : U
->ua : Awaited<U>
+>ua : __Awaited<U>
 
     ta = ua;
->ta = ua : Awaited<U>
->ta : Awaited<T>
->ua : Awaited<U>
+>ta = ua : __Awaited<U>
+>ta : __Awaited<T>
+>ua : __Awaited<U>
 
     ua = ta;  // Error
->ua = ta : Awaited<T>
->ua : Awaited<U>
->ta : Awaited<T>
+>ua = ta : __Awaited<T>
+>ua : __Awaited<U>
+>ta : __Awaited<T>
 
     ta = tx;  // Error
 >ta = tx : T
->ta : Awaited<T>
+>ta : __Awaited<T>
 >tx : T
 
     tx = ta;  // Error
->tx = ta : Awaited<T>
+>tx = ta : __Awaited<T>
 >tx : T
->ta : Awaited<T>
+>ta : __Awaited<T>
 }
 
 // Flattening arrays

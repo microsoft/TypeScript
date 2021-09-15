@@ -1,4 +1,4 @@
-tests/cases/compiler/genericFunduleInModule.ts(8,10): error TS2694: Namespace 'A' has no exported member 'B'.
+tests/cases/compiler/genericFunduleInModule.ts(8,8): error TS2749: 'A.B' refers to a value, but is being used as a type here. Did you mean 'typeof A.B'?
 
 
 ==== tests/cases/compiler/genericFunduleInModule.ts (1 errors) ====
@@ -10,6 +10,6 @@ tests/cases/compiler/genericFunduleInModule.ts(8,10): error TS2694: Namespace 'A
     }
     
     var b: A.B;
-             ~
-!!! error TS2694: Namespace 'A' has no exported member 'B'.
+           ~~~
+!!! error TS2749: 'A.B' refers to a value, but is being used as a type here. Did you mean 'typeof A.B'?
     A.B(1);

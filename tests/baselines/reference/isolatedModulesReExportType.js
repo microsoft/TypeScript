@@ -21,6 +21,9 @@ declare module "baz" {
     export { T } from "foo"; // Also allowed.
 }
 
+//// [reExportValueAsTypeOnly.ts]
+export type { C } from "./exportValue";
+
 //// [user.ts]
 // Error, can't re-export something that's only a type.
 export { T } from "./exportT";
@@ -40,6 +43,14 @@ export type T3 = T;
 import { T } from "./exportT";
 export { T as T4 };
 
+// Ok, type-only import indicates that the export can be elided.
+import type { T as TT } from "./exportT";
+export { TT };
+
+// Error, type-only declaration is in a different file.
+import { C as CC } from "./reExportValueAsTypeOnly";
+export { CC };
+
 
 //// [exportT.js]
 "use strict";
@@ -57,6 +68,9 @@ var C = /** @class */ (function () {
     return C;
 }());
 exports.C = C;
+//// [reExportValueAsTypeOnly.js]
+"use strict";
+exports.__esModule = true;
 //// [user.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
