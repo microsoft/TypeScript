@@ -7409,4 +7409,13 @@ namespace ts {
     export function isInfinityOrNaNString(name: string | __String): boolean {
         return name === "Infinity" || name === "-Infinity" || name === "NaN";
     }
+
+    export function isCatchClauseVariableDeclaration(node: Node) {
+        return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
+    }
+
+    export function isParameterOrCatchClauseVariable(symbol: Symbol) {
+        const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
+        return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
+    }
 }
