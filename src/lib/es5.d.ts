@@ -1472,6 +1472,19 @@ interface Promise<T> {
     catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
+/**
+ * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
+ */
+type Awaited<T> =
+    T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
+        T extends object ? // `await` only unwraps object types with a callable then. Non-object types are not unwrapped.
+            T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
+                F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
+                    Awaited<V> : // recursively unwrap the value
+                    never : // the argument to `then` was not callable.
+            T : // argument was not an object
+        T; // non-thenable
+
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
@@ -4295,12 +4308,12 @@ declare var Float64Array: Float64ArrayConstructor;
 
 declare namespace Intl {
     interface CollatorOptions {
-        usage?: string;
-        localeMatcher?: string;
-        numeric?: boolean;
-        caseFirst?: string;
-        sensitivity?: string;
-        ignorePunctuation?: boolean;
+        usage?: string | undefined;
+        localeMatcher?: string | undefined;
+        numeric?: boolean | undefined;
+        caseFirst?: string | undefined;
+        sensitivity?: string | undefined;
+        ignorePunctuation?: boolean | undefined;
     }
 
     interface ResolvedCollatorOptions {
@@ -4324,17 +4337,17 @@ declare namespace Intl {
     };
 
     interface NumberFormatOptions {
-        localeMatcher?: string;
-        style?: string;
-        currency?: string;
-        currencyDisplay?: string;
-        currencySign?: string;
-        useGrouping?: boolean;
-        minimumIntegerDigits?: number;
-        minimumFractionDigits?: number;
-        maximumFractionDigits?: number;
-        minimumSignificantDigits?: number;
-        maximumSignificantDigits?: number;
+        localeMatcher?: string | undefined;
+        style?: string | undefined;
+        currency?: string | undefined;
+        currencyDisplay?: string | undefined;
+        currencySign?: string | undefined;
+        useGrouping?: boolean | undefined;
+        minimumIntegerDigits?: number | undefined;
+        minimumFractionDigits?: number | undefined;
+        maximumFractionDigits?: number | undefined;
+        minimumSignificantDigits?: number | undefined;
+        maximumSignificantDigits?: number | undefined;
     }
 
     interface ResolvedNumberFormatOptions {
@@ -4362,19 +4375,19 @@ declare namespace Intl {
     };
 
     interface DateTimeFormatOptions {
-        localeMatcher?: "best fit" | "lookup";
-        weekday?: "long" | "short" | "narrow";
-        era?: "long" | "short" | "narrow";
-        year?: "numeric" | "2-digit";
-        month?: "numeric" | "2-digit" | "long" | "short" | "narrow";
-        day?: "numeric" | "2-digit";
-        hour?: "numeric" | "2-digit";
-        minute?: "numeric" | "2-digit";
-        second?: "numeric" | "2-digit";
-        timeZoneName?: "long" | "short";
-        formatMatcher?: "best fit" | "basic";
-        hour12?: boolean;
-        timeZone?: string;
+        localeMatcher?: "best fit" | "lookup" | undefined;
+        weekday?: "long" | "short" | "narrow" | undefined;
+        era?: "long" | "short" | "narrow" | undefined;
+        year?: "numeric" | "2-digit" | undefined;
+        month?: "numeric" | "2-digit" | "long" | "short" | "narrow" | undefined;
+        day?: "numeric" | "2-digit" | undefined;
+        hour?: "numeric" | "2-digit" | undefined;
+        minute?: "numeric" | "2-digit" | undefined;
+        second?: "numeric" | "2-digit" | undefined;
+        timeZoneName?: "long" | "short" | undefined;
+        formatMatcher?: "best fit" | "basic" | undefined;
+        hour12?: boolean | undefined;
+        timeZone?: string | undefined;
     }
 
     interface ResolvedDateTimeFormatOptions {

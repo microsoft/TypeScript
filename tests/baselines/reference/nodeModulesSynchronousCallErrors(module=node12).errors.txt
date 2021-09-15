@@ -1,16 +1,16 @@
-tests/cases/conformance/node/index.ts(3,22): error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/subfolder/index.ts(2,17): error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/subfolder/index.ts(3,22): error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.ts(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/subfolder/index.ts(2,17): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/subfolder/index.ts(3,22): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 
 
 ==== tests/cases/conformance/node/subfolder/index.ts (2 errors) ====
     // cjs format file
     import {h} from "../index.js";
                     ~~~~~~~~~~~~~
-!!! error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import mod = require("../index.js");
                          ~~~~~~~~~~~~~
-!!! error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import {f as _f} from "./index.js";
     import mod2 = require("./index.js");
     export async function f() {
@@ -23,7 +23,7 @@ tests/cases/conformance/node/subfolder/index.ts(3,22): error TS1445: Module '../
     import {h as _h} from "./index.js";
     import mod = require("./index.js");
                          ~~~~~~~~~~~~
-!!! error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import {f} from "./subfolder/index.js";
     import mod2 = require("./subfolder/index.js");
     export async function h() {

@@ -2598,14 +2598,14 @@ namespace ts {
 
     export interface JsxExpression extends Expression {
         readonly kind: SyntaxKind.JsxExpression;
-        readonly parent: JsxElement | JsxAttributeLike;
+        readonly parent: JsxElement | JsxFragment | JsxAttributeLike;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly expression?: Expression;
     }
 
     export interface JsxText extends LiteralLikeNode {
         readonly kind: SyntaxKind.JsxText;
-        readonly parent: JsxElement;
+        readonly parent: JsxElement | JsxFragment;
         readonly containsOnlyTriviaWhiteSpaces: boolean;
     }
 
@@ -3107,6 +3107,14 @@ namespace ts {
         | ImportEqualsDeclaration
         | NamespaceImport
         | ImportOrExportSpecifier
+        ;
+
+    export type TypeOnlyAliasDeclaration =
+        | ImportClause & { readonly isTypeOnly: true, readonly name: Identifier }
+        | ImportEqualsDeclaration & { readonly isTypeOnly: true }
+        | NamespaceImport & { readonly parent: ImportClause & { readonly isTypeOnly: true } }
+        | ImportSpecifier & { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } }
+        | ExportSpecifier & { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } }
         ;
 
     /**
@@ -4283,6 +4291,8 @@ namespace ts {
         /* @internal */ createArrayType(elementType: Type): Type;
         /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
+        /* @internal */ getPromiseType(): Type;
+        /* @internal */ getPromiseLikeType(): Type;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
@@ -6075,6 +6085,7 @@ namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        preserveValueImports?: boolean;
         /* @internal */ preserveWatchOutput?: boolean;
         project?: string;
         /* @internal */ pretty?: boolean;
@@ -6172,7 +6183,7 @@ namespace ts {
     export const enum ImportsNotUsedAsValues {
         Remove,
         Preserve,
-        Error
+        Error,
     }
 
     export const enum NewLineKind {
@@ -7488,7 +7499,7 @@ namespace ts {
         updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause;
         createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]): HeritageClause;
         updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
-        createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block): CatchClause;
+        createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
         updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
 
         //
