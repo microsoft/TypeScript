@@ -508,3 +508,12 @@ tests/cases/conformance/types/members/indexSignatures1.ts(312,43): error TS2322:
 !!! error TS2322: Type '{ [sym]: string; }' is not assignable to type '{ [key: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and '[sym]' does not exist in type '{ [key: number]: string; }'.
     
+    // Repro from #45772
+    
+    type Id = string & { __tag: 'id '};
+    type Rec1 = { [key: Id]: number };
+    type Rec2 = Record<Id, number>;
+    
+    type K1 = keyof Rec1;  // Id
+    type K2 = keyof Rec2;  // Id
+    
