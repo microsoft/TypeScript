@@ -27882,24 +27882,27 @@ namespace ts {
             return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
         }
 
-        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
-            const originalName = name;
+        function getSuggestedSymbolForNonexistentProperty(propertyName: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
             let props = getPropertiesOfType(containingType);
-            if (typeof name !== "string") {
-                const parent = name.parent;
+            let name: string;
+            if (typeof propertyName === "string") {
+                name = propertyName;
+            }
+            else {
+                name = idText(propertyName);
+                const parent = propertyName.parent;
                 if (isPropertyAccessExpression(parent)) {
                     props = filter(props, prop => isValidPropertyAccessForCompletions(parent, containingType, prop));
                 }
-                name = idText(name);
             }
             const suggestion = getSpellingSuggestionForName(name, props, SymbolFlags.Value);
             if (suggestion) {
                 return suggestion;
             }
             // If we have `#typo in expr` then we can still look up potential privateIdentifiers from the surrounding classes
-            if (typeof originalName !== "string" && isPrivateIdentifierInInExpression(originalName.parent)) {
+            if (typeof propertyName !== "string" && isPrivateIdentifierInInExpression(propertyName.parent)) {
                 const privateIdentifiers: Symbol[] = [];
-                forEachEnclosingClass(originalName, (klass: ClassLikeDeclaration) => {
+                forEachEnclosingClass(propertyName, (klass: ClassLikeDeclaration) => {
                     forEach(klass.members, member => {
                         if (isPrivateIdentifierClassElementDeclaration(member)) {
                             privateIdentifiers.push(member.symbol);
