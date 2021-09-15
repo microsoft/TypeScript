@@ -27899,8 +27899,8 @@ namespace ts {
             if (suggestion) {
                 return suggestion;
             }
-            // If we have `#typo in expr` then we can still look up potential privateIdentifiers from the surrounding classes
-            if (typeof propertyName !== "string" && isPrivateIdentifierInInExpression(propertyName.parent)) {
+
+            if (typeof propertyName !== "string" && isPrivateIdentifier(propertyName)) {
                 const privateIdentifiers: Symbol[] = [];
                 forEachEnclosingClass(propertyName, (klass: ClassLikeDeclaration) => {
                     forEach(klass.members, member => {
