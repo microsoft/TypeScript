@@ -1,9 +1,9 @@
-tests/cases/conformance/node/index.cts(2,21): error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(3,21): error TS1445: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(6,21): error TS1445: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(9,21): error TS1445: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(11,22): error TS1445: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(12,22): error TS1445: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(2,21): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(3,21): error TS1471: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(6,21): error TS1471: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(9,21): error TS1471: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(11,22): error TS1471: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(12,22): error TS1471: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 
 
 ==== tests/cases/conformance/node/subfolder/index.ts (0 errors) ====
@@ -74,27 +74,27 @@ tests/cases/conformance/node/index.cts(12,22): error TS1445: Module './subfolder
     // ESM-format imports below should issue errors
     import * as m1 from "./index.js";
                         ~~~~~~~~~~~~
-!!! error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m2 from "./index.mjs";
                         ~~~~~~~~~~~~~
-!!! error TS1445: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m3 from "./index.cjs";
     import * as m4 from "./subfolder/index.js";
     import * as m5 from "./subfolder/index.mjs";
                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1445: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m6 from "./subfolder/index.cjs";
     import * as m7 from "./subfolder2/index.js";
     import * as m8 from "./subfolder2/index.mjs";
                         ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1445: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m9 from "./subfolder2/index.cjs";
     import * as m10 from "./subfolder2/another/index.js";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1445: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m11 from "./subfolder2/another/index.mjs";
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1445: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './subfolder2/another/index.mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as m12 from "./subfolder2/another/index.cjs";
     void m1;
     void m2;
