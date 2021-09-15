@@ -1412,6 +1412,15 @@ namespace ts {
         }
     }
 
+    function loadJSOrExactTSFileName(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
+        if ((extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) && fileExtensionIsOneOf(candidate, [Extension.Dts, Extension.Dcts, Extension.Dmts])) {
+            const result = tryFile(candidate, onlyRecordFailures, state);
+            return result !== undefined ? { path: candidate, ext: forEach([Extension.Dts, Extension.Dcts, Extension.Dmts], e => fileExtensionIs(candidate, e) ? e : undefined)! } : undefined;
+        }
+
+        return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
+    }
+
     /** Try to return an existing file that adds one of the `extensions` to `candidate`. */
     function tryAddingExtensions(candidate: string, extensions: Extensions, originalExtension: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
         if (!onlyRecordFailures) {
@@ -1859,12 +1868,12 @@ namespace ts {
                 }
                 const finalPath = getNormalizedAbsolutePath(pattern ? resolvedTarget.replace(/\*/g, subpath) : resolvedTarget + subpath, state.host.getCurrentDirectory?.());
 
-                return toSearchResult(withPackageId(scope, loadModuleFromFileNoImplicitExtensions(extensions, finalPath, /*onlyRecordFailures*/ false, state)));
+                return toSearchResult(withPackageId(scope, loadJSOrExactTSFileName(extensions, finalPath, /*onlyRecordFailures*/ false, state)));
             }
             else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
                 if (!Array.isArray(target)) {
                     for (const key of getOwnKeys(target as MapLike<unknown>)) {
-                        if (key === "default" || state.conditions.indexOf(key) >= 0) {
+                        if (key === "default" || state.conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(state.conditions, key)) {
                             const subTarget = (target as MapLike<unknown>)[key];
                             const result = loadModuleFromTargetImportOrExport(subTarget, subpath, pattern);
                             if (result) {
@@ -1899,6 +1908,14 @@ namespace ts {
                 trace(state.host, Diagnostics.package_json_scope_0_has_invalid_type_for_target_of_specifier_1, scope.packageDirectory, moduleName);
             }
             return toSearchResult(/*value*/ undefined);
+        }
+
+        function isApplicableVersionedTypesKey(conditions: string[], key: string) {
+            if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
+            if (!startsWith(key, "types@")) return false;
+            const range = VersionRange.tryParse(key.substring("types@".length));
+            if (!range) return false;
+            return range.test(version);
         }
     }
 
