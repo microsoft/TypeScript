@@ -1126,7 +1126,7 @@ namespace ts {
         return isImportSpecifier(node) || isExportSpecifier(node);
     }
 
-    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration {
+    export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration {
         switch (node.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:

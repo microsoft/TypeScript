@@ -1,9 +1,9 @@
 tests/cases/conformance/node/allowJs/index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-tests/cases/conformance/node/allowJs/index.js(3,22): error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.js(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-tests/cases/conformance/node/allowJs/subfolder/index.js(2,17): error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/subfolder/index.js(2,17): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/subfolder/index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
-tests/cases/conformance/node/allowJs/subfolder/index.js(3,22): error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/subfolder/index.js(3,22): error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/subfolder/index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 
 
@@ -11,12 +11,12 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(5,1): error TS8002: 'imp
     // cjs format file
     import {h} from "../index.js";
                     ~~~~~~~~~~~~~
-!!! error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import mod = require("../index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~
-!!! error TS1445: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '../index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import {f as _f} from "./index.js";
     import mod2 = require("./index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +33,7 @@ tests/cases/conformance/node/allowJs/subfolder/index.js(5,1): error TS8002: 'imp
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~
-!!! error TS1445: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import {f} from "./subfolder/index.js";
     import mod2 = require("./subfolder/index.js");
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

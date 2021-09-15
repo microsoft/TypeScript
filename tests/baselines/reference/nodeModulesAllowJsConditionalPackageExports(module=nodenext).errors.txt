@@ -1,5 +1,5 @@
-tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1445: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1445: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(3,22): error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(4,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
@@ -40,10 +40,10 @@ tests/cases/conformance/node/allowJs/node_modules/inner/index.d.ts(2,13): error 
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
                          ~~~~~~~~~~~~~
-!!! error TS1445: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "package";
                           ~~~~~~~~~
-!!! error TS1445: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     cjs;
     mjs;
     type;

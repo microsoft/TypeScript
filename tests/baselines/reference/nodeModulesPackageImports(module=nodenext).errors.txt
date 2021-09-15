@@ -1,5 +1,5 @@
-tests/cases/conformance/node/index.cts(3,22): error TS1445: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(4,23): error TS1445: Module '#type' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(3,22): error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(4,23): error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 
 
 ==== tests/cases/conformance/node/index.ts (0 errors) ====
@@ -23,10 +23,10 @@ tests/cases/conformance/node/index.cts(4,23): error TS1445: Module '#type' canno
     import * as cjs from "#cjs";
     import * as mjs from "#mjs";
                          ~~~~~~
-!!! error TS1445: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '#mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "#type";
                           ~~~~~~~
-!!! error TS1445: Module '#type' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module '#type' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
     cjs;
     mjs;
     type;
