@@ -2894,8 +2894,7 @@ namespace ts {
                 path += (i === 2 ? "/" : "-") + components[i];
                 i++;
             }
-
-            const resolveFrom = combinePaths(currentDirectory, `/__lib_node_modules_lookup_${libFileName}__.ts`);
+            const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
             const localOverrideModuleResult = resolveModuleName("@typescript/" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
             if (localOverrideModuleResult?.resolvedModule) {
                 return localOverrideModuleResult.resolvedModule.resolvedFileName;
