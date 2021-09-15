@@ -2894,10 +2894,11 @@ namespace ts {
                 path += (i === 2 ? "/" : "-") + components[i];
                 i++;
             }
-            // The strange "/fake.file" is to ensure we first resolve in node_modules for the current directory.
-            const localOverride = resolveModuleName("@typescript/" + path, currentDirectory + "/fake.file", { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
-            if (localOverride?.resolvedModule) {
-                return localOverride.resolvedModule.resolvedFileName;
+
+            const resolveFrom = combinePaths(currentDirectory, `/__lib_node_modules_lookup_${libFileName}__.ts`);
+            const localOverrideModuleResult = resolveModuleName("@typescript/" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
+            if (localOverrideModuleResult?.resolvedModule) {
+                return localOverrideModuleResult.resolvedModule.resolvedFileName;
             }
             return combinePaths(defaultLibraryPath, libFileName);
         }
