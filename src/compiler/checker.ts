@@ -37721,7 +37721,7 @@ namespace ts {
                             error(
                                 member,
                                 isJs ?
-                                    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1  :
+                                    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1 :
                                     Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1,
                                 baseClassName,
                                 symbolToString(suggestion)) :
@@ -37739,13 +37739,13 @@ namespace ts {
                         }
 
                         if (!baseHasAbstract) {
-                            const diag =  memberIsParameterProperty ?
+                            const diag = memberIsParameterProperty ?
                                 isJs ?
                                     Diagnostics.This_parameter_property_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0 :
                                     Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
                                 isJs ?
                                     Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0 :
-                                    Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0
+                                    Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
                             error(member, diag, baseClassName);
                         }
                         else if (hasAbstractModifier(member) && baseHasAbstract) {
