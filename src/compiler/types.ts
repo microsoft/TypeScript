@@ -8547,6 +8547,7 @@ namespace ts {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
         readonly provideRefactorNotApplicableReason?: boolean;
+        readonly jsxSnippetCompletion?: "auto" | "braces" | "none";
     }
 
     /** Represents a bigint literal value without requiring bigint support */

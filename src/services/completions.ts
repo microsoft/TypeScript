@@ -675,6 +675,37 @@ namespace ts.Completions {
             hasAction = !importCompletionNode;
         }
 
+        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location); // TODO: GH#18217
+        if (kind === ScriptElementKind.jsxAttribute && preferences.jsxSnippetCompletion && preferences.jsxSnippetCompletion !== "none") {
+            let useBraces = preferences.jsxSnippetCompletion === "braces";
+            const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+
+            // If is boolean like or undefined, don't return a snippet we want just to return the completion.
+            if (preferences.jsxSnippetCompletion === "auto"
+                && !(type.flags & TypeFlags.BooleanLike)
+                && !(type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.BooleanLike | TypeFlags.Undefined))))
+            ) {
+                if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
+                    // If is string like or undefined use quotes
+                    insertText = `${name}=${quote(sourceFile, preferences, "$1")}`;
+                    isSnippet = true;
+                }
+                else {
+                    // Use braces for everything else
+                    useBraces = true;
+                }
+            }
+
+            if (useBraces) {
+                insertText = `${name}={$1}`;
+                isSnippet = true;
+            }
+
+            if (isSnippet) {
+                replacementSpan = createTextSpanFromNode(location, sourceFile);
+            }
+        }
+
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
         // 'getSymbolKind' which is permissible given that it is backwards compatible; but
         // really we should consider passing the meaning for the node so that we don't report
@@ -685,7 +716,7 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location), // TODO: GH#18217
+            kind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),

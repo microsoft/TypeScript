@@ -658,6 +658,7 @@ declare namespace FourSlashInterface {
         readonly includeAutomaticOptionalChainCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly jsxSnippetCompletion?: "auto" | "braces" | "none";
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
