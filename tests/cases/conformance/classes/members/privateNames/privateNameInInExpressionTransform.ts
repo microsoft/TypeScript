@@ -1,4 +1,4 @@
-// @target: es2020
+// @target: esnext, es2020
 
 class Foo {
     #field = 1;
