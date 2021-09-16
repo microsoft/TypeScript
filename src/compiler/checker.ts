@@ -23665,9 +23665,7 @@ namespace ts {
                     return type;
                 }
                 const classSymbol = symbol.parent!;
-                const classDecl = symbol.valueDeclaration;
-                Debug.assert(classDecl, "should always have a declaration");
-                const targetType = hasStaticModifier(classDecl)
+                const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
                 return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
