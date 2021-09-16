@@ -2,7 +2,7 @@
 
 ////class A {
 ////   #foo: number;
-////   static isA(v: any) {
+////   static isA(v: A) {
 ////     [|return #fo in v;|]
 ////   }
 ////}

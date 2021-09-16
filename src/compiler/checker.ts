@@ -27882,36 +27882,16 @@ namespace ts {
             return getSpellingSuggestionForName(name, arrayFrom(getMembersOfSymbol(baseType.symbol).values()), SymbolFlags.ClassMember);
         }
 
-        function getSuggestedSymbolForNonexistentProperty(propertyName: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
+        function getSuggestedSymbolForNonexistentProperty(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
             let props = getPropertiesOfType(containingType);
-            let name: string;
-            if (typeof propertyName === "string") {
-                name = propertyName;
-            }
-            else {
-                name = idText(propertyName);
-                const parent = propertyName.parent;
+            if (typeof name !== "string") {
+                const parent = name.parent;
                 if (isPropertyAccessExpression(parent)) {
                     props = filter(props, prop => isValidPropertyAccessForCompletions(parent, containingType, prop));
                 }
+                name = idText(name);
             }
-            const suggestion = getSpellingSuggestionForName(name, props, SymbolFlags.Value);
-            if (suggestion) {
-                return suggestion;
-            }
-
-            if (typeof propertyName !== "string" && isPrivateIdentifier(propertyName)) {
-                const privateIdentifiers: Symbol[] = [];
-                forEachEnclosingClass(propertyName, (klass: ClassLikeDeclaration) => {
-                    forEach(klass.members, member => {
-                        if (isPrivateIdentifierClassElementDeclaration(member)) {
-                            privateIdentifiers.push(member.symbol);
-                        }
-                    });
-                });
-                return getSpellingSuggestionForName(name, privateIdentifiers, SymbolFlags.Value);
-            }
-            return undefined;
+            return getSpellingSuggestionForName(name, props, SymbolFlags.Value);
         }
 
         function getSuggestedSymbolForNonexistentJSXAttribute(name: Identifier | PrivateIdentifier | string, containingType: Type): Symbol | undefined {
