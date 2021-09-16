@@ -294,7 +294,7 @@ namespace ts.codefix {
             */
             const newNodes = [
                 makeConst(/*modifiers*/ undefined, rename, assignment.right),
-                makeExportDeclaration([factory.createExportSpecifier(rename, text)]),
+                makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, rename, text)]),
             ];
             changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
         }
@@ -317,7 +317,7 @@ namespace ts.codefix {
         return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
     }
     function reExportDefault(moduleSpecifier: string): ExportDeclaration {
-        return makeExportDeclaration([factory.createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
+        return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
     function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {

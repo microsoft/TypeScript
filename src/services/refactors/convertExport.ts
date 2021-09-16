@@ -256,6 +256,6 @@ namespace ts.refactor {
     }
 
     function makeExportSpecifier(propertyName: string, name: string): ExportSpecifier {
-        return factory.createExportSpecifier(propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
+        return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
     }
 }

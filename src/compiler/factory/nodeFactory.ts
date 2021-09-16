@@ -4161,8 +4161,9 @@ namespace ts {
         }
 
         // @api
-        function createExportSpecifier(propertyName: string | Identifier | undefined, name: string | Identifier) {
+        function createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier) {
             const node = createBaseNode<ExportSpecifier>(SyntaxKind.ExportSpecifier);
+            node.isTypeOnly = isTypeOnly;
             node.propertyName = asName(propertyName);
             node.name = asName(name);
             node.transformFlags |=
@@ -4173,10 +4174,11 @@ namespace ts {
         }
 
         // @api
-        function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
-            return node.propertyName !== propertyName
+        function updateExportSpecifier(node: ExportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+            return node.isTypeOnly !== isTypeOnly
+                || node.propertyName !== propertyName
                 || node.name !== name
-                ? update(createExportSpecifier(propertyName, name), node)
+                ? update(createExportSpecifier(isTypeOnly, propertyName, name), node)
                 : node;
         }
 
@@ -5443,7 +5445,7 @@ namespace ts {
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
                 createNamedExports([
-                    createExportSpecifier(/*propertyName*/ undefined, exportName)
+                    createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, exportName)
                 ])
             );
         }

@@ -103,7 +103,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
-                factory.createNamedExports([factory.createExportSpecifier(synthName, oldIdentifier)]),
+                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),
             );
             setOriginalNode(exportDecl, node);
 

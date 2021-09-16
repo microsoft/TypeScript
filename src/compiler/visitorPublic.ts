@@ -1131,6 +1131,7 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
                 Debug.type<ExportSpecifier>(node);
                 return factory.updateExportSpecifier(node,
+                    node.isTypeOnly,
                     nodeVisitor(node.propertyName, visitor, isIdentifier),
                     nodeVisitor(node.name, visitor, isIdentifier));
 

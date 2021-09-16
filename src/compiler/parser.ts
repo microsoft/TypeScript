@@ -7417,7 +7417,7 @@ namespace ts {
             }
             const node = kind === SyntaxKind.ImportSpecifier
                 ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
-                : factory.createExportSpecifier(propertyName, name);
+                : factory.createExportSpecifier(isTypeOnly, propertyName, name);
             return finishNode(node, pos);
 
             function parseNameWithKeywordCheck() {

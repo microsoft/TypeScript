@@ -1252,7 +1252,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 /*isTypeOnly*/ false,
                                 factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
-                                    return factory.createExportSpecifier(gen, exp);
+                                    return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, exp);
                                 }))
                             ));
                         }
