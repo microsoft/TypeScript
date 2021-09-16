@@ -2856,7 +2856,7 @@ namespace ts {
          * @param node The import specifier node.
          */
         function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
-            return shouldEmitAliasDeclaration(node) ? node : undefined;
+            return !node.isTypeOnly && shouldEmitAliasDeclaration(node) ? node : undefined;
         }
 
         /**
@@ -2934,7 +2934,7 @@ namespace ts {
          */
         function visitExportSpecifier(node: ExportSpecifier): VisitResult<ExportSpecifier> {
             // Elide an export specifier if it does not reference a value.
-            return resolver.isValueAliasDeclaration(node) ? node : undefined;
+            return !node.isTypeOnly && resolver.isValueAliasDeclaration(node) ? node : undefined;
         }
 
         /**

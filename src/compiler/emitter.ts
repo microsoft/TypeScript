@@ -3427,6 +3427,10 @@ namespace ts {
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
+            if (node.isTypeOnly) {
+                writeKeyword("type");
+                writeSpace();
+            }
             if (node.propertyName) {
                 emit(node.propertyName);
                 writeSpace();
