@@ -12,7 +12,7 @@ declare namespace Intl {
         formatMatcher?: "basic" | "best fit" | "best fit";
         dateStyle?: "full" | "long" | "medium" | "short";
         timeStyle?: "full" | "long" | "medium" | "short";
-        hourCycle?: "h11" | "h12" | "h23" | "h24"
+        hourCycle?: "h11" | "h12" | "h23" | "h24";
         dayPeriod?: "narrow" | "short" | "long";
         fractionalSecondDigits?: 0 | 1 | 2 | 3;
     }
