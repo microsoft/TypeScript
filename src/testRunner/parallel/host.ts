@@ -4,7 +4,7 @@ namespace Harness.Parallel.Host {
         const Base = Mocha.reporters.Base;
         const color = Base.color;
         const cursor = Base.cursor;
-        const ms = require("ms").default as typeof import("ms")["default"];
+        const ms = require("ms") as typeof import("ms");
         const readline = require("readline") as typeof import("readline");
         const os = require("os") as typeof import("os");
         const tty = require("tty") as typeof import("tty");
