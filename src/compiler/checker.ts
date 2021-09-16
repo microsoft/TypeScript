@@ -24477,7 +24477,19 @@ namespace ts {
         }
 
         function isExportOrExportExpression(location: Node) {
-            return !!findAncestor(location, e => e.parent && isExportAssignment(e.parent) && e.parent.expression === e && isEntityNameExpression(e));
+            return !!findAncestor(location, n => {
+                const parent = n.parent;
+                if (parent === undefined) {
+                    return "quit";
+                }
+                if (isExportAssignment(parent)) {
+                    return parent.expression === n && isEntityNameExpression(n);
+                }
+                if (isExportSpecifier(parent)) {
+                    return parent.name === n || parent.propertyName === n;
+                }
+                return false;
+            });
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
