@@ -1,4 +1,5 @@
 // @module: esnext
+// @declaration: true
 
 // @Filename: /mod.ts
 export const as = 0;
@@ -40,3 +41,6 @@ type; // Error (cannot resolve name)
 as; // Error (cannot resolve name)
 something; // Error (used in emitting position)
 s; // Error (used in emitting position)
+
+// @Filename: /g.ts
+import type { type something } from "./mod.js"; // Error

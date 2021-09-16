@@ -7098,10 +7098,6 @@ namespace ts {
             || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
     }
 
-    export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
-        return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
-    }
-
     function isShorthandPropertyNameUseSite(useSite: Node) {
         return isIdentifier(useSite) && isShorthandPropertyAssignment(useSite.parent) && useSite.parent.name === useSite;
     }

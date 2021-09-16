@@ -2199,8 +2199,7 @@ namespace ts {
             if (!isValidTypeOnlyAliasUseSite(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
-                    const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
-                    const message = isExport
+                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                         ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                         : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
                     const unescapedName = unescapeLeadingUnderscores(name);
@@ -2218,7 +2217,7 @@ namespace ts {
                 diagnostic,
                 createDiagnosticForNode(
                     typeOnlyDeclaration,
-                    typeOnlyDeclarationIsExport(typeOnlyDeclaration) ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
+                    typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
                     unescapedName));
         }
 
@@ -2586,7 +2585,7 @@ namespace ts {
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
             if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false) && !node.isTypeOnly) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
-                const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                const isExport = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
                 const message = isExport
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                     : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
@@ -2594,9 +2593,7 @@ namespace ts {
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here;
 
-                // Non-null assertion is safe because the optionality comes from ImportClause,
-                // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
-                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
+                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name.escapedText);
                 addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
             }
         }
@@ -3050,13 +3047,13 @@ namespace ts {
          * and issue an error if so.
          *
          * @param aliasDeclaration The alias declaration not marked as type-only
+         * @param immediateTarget The symbol to which the alias declaration immediately resolves
+         * @param finalTarget The symbol to which the alias declaration ultimately resolves
+         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
          * has already been marked as not resolving to a type-only alias. Used when recursively resolving qualified
          * names of import aliases, e.g. `import C = a.b.C`. If namespace `a` is not found to be type-only, the
          * import declaration will initially be marked as not resolving to a type-only symbol. But, namespace `b`
          * must still be checked for a type-only marker, overwriting the previous negative result if found.
-         * @param immediateTarget The symbol to which the alias declaration immediately resolves
-         * @param finalTarget The symbol to which the alias declaration ultimately resolves
-         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
          */
         function markSymbolOfAliasDeclarationIfTypeOnly(
             aliasDeclaration: Declaration | undefined,
@@ -3090,7 +3087,7 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
@@ -39170,11 +39167,15 @@ namespace ts {
         }
 
         function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
-            const isTypeOnlyExportStar = node.isTypeOnly && node.exportClause?.kind !== SyntaxKind.NamedExports;
-            if (isTypeOnlyExportStar) {
-                grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+            if (node.isTypeOnly) {
+                if (node.exportClause?.kind === SyntaxKind.NamedExports) {
+                    return checkGrammarNamedImportsOrExports(node.exportClause);
+                }
+                else {
+                    return grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+                }
             }
-            return !isTypeOnlyExportStar;
+            return false;
         }
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
@@ -43190,7 +43191,22 @@ namespace ts {
             if (node.isTypeOnly && node.name && node.namedBindings) {
                 return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
             }
+            if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return checkGrammarNamedImportsOrExports(node.namedBindings);
+            }
             return false;
+        }
+
+        function checkGrammarNamedImportsOrExports(namedBindings: NamedImportsOrExports): boolean {
+            return !!forEach<ImportSpecifier | ExportSpecifier, boolean>(namedBindings.elements, specifier => {
+                if (specifier.isTypeOnly) {
+                    return grammarErrorOnFirstToken(
+                        specifier,
+                        specifier.kind === SyntaxKind.ImportSpecifier
+                            ? Diagnostics.The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement
+                            : Diagnostics.The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement);
+                }
+            });
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {

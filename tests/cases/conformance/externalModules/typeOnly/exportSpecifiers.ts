@@ -1,4 +1,5 @@
 // @module: esnext
+// @declaration: true
 
 // @Filename: /imports.ts
 import { type, as, something, foo, bar } from "./exports.js";
@@ -17,3 +18,4 @@ export { type as };
 export { type something };
 export { type type as foo };
 export { type as as bar };
+export type { type something as whatever }; // Error
