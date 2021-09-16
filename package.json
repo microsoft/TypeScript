@@ -46,7 +46,6 @@
         "@types/minimist": "latest",
         "@types/mkdirp": "latest",
         "@types/mocha": "latest",
-        "@types/ms": "latest",
         "@types/node": "latest",
         "@types/node-fetch": "^2.3.4",
         "@types/q": "latest",
