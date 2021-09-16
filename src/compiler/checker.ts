@@ -7257,6 +7257,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports([factory.createImportSpecifier(
+                                        /*isTypeOnly*/ false,
                                         propertyName && isIdentifier(propertyName) ? factory.createIdentifier(idText(propertyName)) : undefined,
                                         factory.createIdentifier(localName)
                                     )])),
@@ -7365,6 +7366,7 @@ namespace ts {
                                     /*importClause*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
+                                            /*isTypeOnly*/ false,
                                             localName !== verbatimTargetName ? factory.createIdentifier(verbatimTargetName) : undefined,
                                             factory.createIdentifier(localName)
                                         )

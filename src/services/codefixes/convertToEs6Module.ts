@@ -480,7 +480,7 @@ namespace ts.codefix {
         }
 
         const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
-            factory.createImportSpecifier(propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
+            factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
         if (!namedBindings) {
             // If it was unused, ensure that we at least import *something*.
             needDefaultImport = true;
@@ -573,7 +573,7 @@ namespace ts.codefix {
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
-        return factory.createImportSpecifier(propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
+        return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
     }
 
     function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {

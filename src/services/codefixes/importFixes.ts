@@ -759,7 +759,7 @@ namespace ts.codefix {
         if (namedImports.length) {
             const existingSpecifiers = clause.namedBindings && cast(clause.namedBindings, isNamedImports).elements;
             const newSpecifiers = stableSort(
-                namedImports.map(name => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(name))),
+                namedImports.map(name => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(name))),
                 OrganizeImports.compareImportOrExportSpecifiers);
 
             if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
@@ -839,7 +839,7 @@ namespace ts.codefix {
         if (imports.defaultImport !== undefined || imports.namedImports?.length) {
             statements = combine(statements, makeImport(
                 imports.defaultImport === undefined ? undefined : factory.createIdentifier(imports.defaultImport),
-                imports.namedImports?.map(n => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
+                imports.namedImports?.map(n => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(n))), moduleSpecifier, quotePreference, imports.typeOnly));
         }
         const { namespaceLikeImport, typeOnly } = imports;
         if (namespaceLikeImport) {

@@ -4047,8 +4047,9 @@ namespace ts {
         }
 
         // @api
-        function createImportSpecifier(propertyName: Identifier | undefined, name: Identifier) {
+        function createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
             const node = createBaseNode<ImportSpecifier>(SyntaxKind.ImportSpecifier);
+            node.isTypeOnly = isTypeOnly;
             node.propertyName = propertyName;
             node.name = name;
             node.transformFlags |=
@@ -4059,10 +4060,11 @@ namespace ts {
         }
 
         // @api
-        function updateImportSpecifier(node: ImportSpecifier, propertyName: Identifier | undefined, name: Identifier) {
-            return node.propertyName !== propertyName
+        function updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier) {
+            return node.isTypeOnly !== isTypeOnly
+                || node.propertyName !== propertyName
                 || node.name !== name
-                ? update(createImportSpecifier(propertyName, name), node)
+                ? update(createImportSpecifier(isTypeOnly, propertyName, name), node)
                 : node;
         }
 
