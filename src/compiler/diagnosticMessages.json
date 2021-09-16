@@ -3709,7 +3709,26 @@
         "category": "Error",
         "code": 4118
     },
-
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
