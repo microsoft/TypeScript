@@ -2844,9 +2844,12 @@ namespace ts {
                 return shouldEmitAliasDeclaration(node) ? node : undefined;
             }
             else {
-                // Elide named imports if all of its import specifiers are elided.
+                // Elide named imports if all of its import specifiers are elided and settings allow.
+                const allowEmpty = compilerOptions.preserveValueImports && (
+                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
+                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
                 const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
-                return some(elements) ? factory.updateNamedImports(node, elements) : undefined;
+                return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
             }
         }
 
@@ -2889,13 +2892,15 @@ namespace ts {
                 return node;
             }
 
-            if (!resolver.isValueAliasDeclaration(node)) {
-                // Elide the export declaration if it does not export a value.
-                return undefined;
-            }
-
             // Elide the export declaration if all of its named exports are elided.
-            const exportClause = visitNode(node.exportClause, visitNamedExportBindings, isNamedExportBindings);
+            const allowEmpty = !!node.moduleSpecifier && (
+                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
+                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error);
+            const exportClause = visitNode(
+                node.exportClause,
+                (bindings: NamedExportBindings) => visitNamedExportBindings(bindings, allowEmpty),
+                isNamedExportBindings);
+
             return exportClause
                 ? factory.updateExportDeclaration(
                     node,
@@ -2913,18 +2918,18 @@ namespace ts {
          *
          * @param node The named exports node.
          */
-        function visitNamedExports(node: NamedExports): VisitResult<NamedExports> {
+        function visitNamedExports(node: NamedExports, allowEmpty: boolean): VisitResult<NamedExports> {
             // Elide the named exports if all of its export specifiers were elided.
             const elements = visitNodes(node.elements, visitExportSpecifier, isExportSpecifier);
-            return some(elements) ? factory.updateNamedExports(node, elements) : undefined;
+            return allowEmpty || some(elements) ? factory.updateNamedExports(node, elements) : undefined;
         }
 
         function visitNamespaceExports(node: NamespaceExport): VisitResult<NamespaceExport> {
             return factory.updateNamespaceExport(node, visitNode(node.name, visitor, isIdentifier));
         }
 
-        function visitNamedExportBindings(node: NamedExportBindings): VisitResult<NamedExportBindings> {
-            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node);
+        function visitNamedExportBindings(node: NamedExportBindings, allowEmpty: boolean): VisitResult<NamedExportBindings> {
+            return isNamespaceExport(node) ? visitNamespaceExports(node) : visitNamedExports(node, allowEmpty);
         }
 
         /**
