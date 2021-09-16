@@ -1,5 +1,5 @@
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2552: Cannot find name '#fiel'. Did you mean '#field'?
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2304: Cannot find name '#fiel'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS2304: Cannot find name '#field'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS2304: Cannot find name '#field'.
@@ -36,7 +36,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
     
             const b = #fiel in v; // Bad - typo in privateID
                       ~~~~~
-!!! error TS2552: Cannot find name '#fiel'. Did you mean '#field'?
+!!! error TS2304: Cannot find name '#fiel'.
     
             const c = (#field) in v; // Bad - privateID is not an expression on its own
                        ~~~~~~
