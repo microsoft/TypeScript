@@ -1,0 +1,45 @@
+=== tests/cases/compiler/keyRemappingKeyofResult.ts ===
+export const sym = Symbol("")
+>sym : unique symbol
+>Symbol("") : unique symbol
+>Symbol : SymbolConstructor
+>"" : ""
+
+type Orig = { [k: string]: any, str: any, [sym]: any }
+>Orig : Orig
+>k : string
+>str : any
+>[sym] : any
+>sym : unique symbol
+
+type Okay = Exclude<keyof Orig, never>
+>Okay : Okay
+
+// type Okay = string | number | typeof sym
+
+type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
+>Remapped : Remapped
+
+/* type Remapped = {
+    str: any;
+    [sym]: any;
+} */
+// no string index signature, right?
+
+type Oops = Exclude<keyof Remapped, never>
+>Oops : Oops
+
+declare let x: Oops;
+>x : Oops
+
+x = sym;
+>x = sym : unique symbol
+>x : Oops
+>sym : unique symbol
+
+x = "str";
+>x = "str" : "str"
+>x : Oops
+>"str" : "str"
+
+// type Oops = typeof sym <-- what happened to "str"?
