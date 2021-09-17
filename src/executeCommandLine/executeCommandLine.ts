@@ -1036,7 +1036,7 @@ namespace ts {
             sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
             const output: string[] = [sys.newLine, ...getHeader(sys,"Created a new tsconfig.json with:")];
             output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
-		    output.push(`You can learn more at https://aka.ms/tsconfig.json` + sys.newLine);
+            output.push(`You can learn more at https://aka.ms/tsconfig.json` + sys.newLine);
             for (const line of output) {
                 sys.write(line);
             }

@@ -2373,7 +2373,7 @@ namespace ts {
                 if (newValue !== defaultValue) {
                     result.push(`${tab}${cmd.name}: ${newValue}`);
                 }
-                else if (cmd.name in defaultInitCompilerOptions) {
+                else if (hasProperty(defaultInitCompilerOptions, cmd.name)) {
                     result.push(`${tab}${cmd.name}: ${defaultValue}`);
                 }
             });
