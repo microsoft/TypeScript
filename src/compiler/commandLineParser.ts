@@ -1337,7 +1337,7 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.ES2016,
         strict: true,
         esModuleInterop: true,
         forceConsistentCasingInFileNames: true,
