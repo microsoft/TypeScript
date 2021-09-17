@@ -683,7 +683,7 @@ namespace ts.Completions {
             // If is boolean like or undefined, don't return a snippet we want just to return the completion.
             if (preferences.jsxAttributeCompletionStyle === "auto"
                 && !(type.flags & TypeFlags.BooleanLike)
-                && !(type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.BooleanLike | TypeFlags.Undefined))))
+                && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
             ) {
                 if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
                     // If is string like or undefined use quotes

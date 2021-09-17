@@ -10,7 +10,7 @@
 ////             prop_c: any;
 ////             prop_d: { p1: string; }
 ////             prop_e: string | undefined;
-////             prop_f: boolean | undefined;
+////             prop_f: boolean | undefined | { p1: string; };
 ////             prop_g: { p1: string; } | undefined;
 ////             prop_h?: string;
 ////             prop_i?: boolean;
@@ -83,6 +83,7 @@ verify.completions({
         }
     ],
     preferences: {
-        jsxAttributeCompletionStyle: "auto"
+        jsxAttributeCompletionStyle: "auto",
+        includeCompletionsWithSnippetText: true
     }
 });

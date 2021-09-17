@@ -26,70 +26,50 @@ verify.completions({
     exact: [
         {
             name: "prop_a",
-            insertText: "prop_a={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_b",
-            insertText: "prop_b={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_c",
-            insertText: "prop_c={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_d",
-            insertText: "prop_d={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_e",
-            insertText: "prop_e={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_f",
-            insertText: "prop_f={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_g",
-            insertText: "prop_g={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
         },
         {
             name: "prop_h",
-            insertText: "prop_h={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
             sortText: completion.SortText.OptionalMember,
         },
         {
             name: "prop_i",
-            insertText: "prop_i={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
             sortText: completion.SortText.OptionalMember,
         },
         {
             name: "prop_j",
-            insertText: "prop_j={$1}",
-            replacementSpan: test.ranges()[0],
-            isSnippet: true,
+            isSnippet: undefined,
             sortText: completion.SortText.OptionalMember,
         }
     ],
     preferences: {
-        jsxAttributeCompletionStyle: "braces",
-        includeCompletionsWithSnippetText: true
+        jsxAttributeCompletionStyle: "auto",
+        includeCompletionsWithSnippetText: false
     }
 });
