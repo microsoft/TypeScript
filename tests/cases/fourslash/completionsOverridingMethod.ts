@@ -8,15 +8,19 @@
 ////    f/*a*/    
 ////}
 
+// format.setFormatOptions({
+//     newLineCharacter: "\n",
+// });
+// format.setOption("newline", "\n");
 
 verify.completions({
     marker: "a",
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
     },
     // exact: [
-
     // ],
     includes: [
         {
@@ -29,8 +33,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-`foo(param1: string, param2: boolean): Promise<void> {
-}`,
+"foo(param1: string, param2: boolean): Promise<void> {\r\n}",
         }
     ],
 });

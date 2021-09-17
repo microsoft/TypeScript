@@ -273,7 +273,7 @@ namespace ts.Completions {
 
         switch (completionData.kind) {
             case CompletionDataKind.Data:
-                const response = completionInfoFromData(sourceFile, typeChecker, compilerOptions, log, completionData, preferences);
+                const response = completionInfoFromData(sourceFile, host, program, compilerOptions, log, completionData, preferences);
                 if (response?.isIncomplete) {
                     incompleteCompletionsCache?.set(response);
                 }
@@ -387,7 +387,14 @@ namespace ts.Completions {
         return location?.kind === SyntaxKind.Identifier ? createTextSpanFromNode(location) : undefined;
     }
 
-    function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, preferences: UserPreferences): CompletionInfo | undefined {
+    function completionInfoFromData(
+        sourceFile: SourceFile,
+        host: LanguageServiceHost,
+        program: Program,
+        compilerOptions: CompilerOptions,
+        log: Log, completionData: CompletionData,
+        preferences: UserPreferences,
+    ): CompletionInfo | undefined {
         const {
             symbols,
             completionKind,
@@ -425,7 +432,8 @@ namespace ts.Completions {
                 /* contextToken */ undefined,
                 location,
                 sourceFile,
-                typeChecker,
+                host,
+                program,
                 compilerOptions.target!,
                 log,
                 completionKind,
@@ -453,7 +461,8 @@ namespace ts.Completions {
                 /* contextToken */ undefined,
                 location,
                 sourceFile,
-                typeChecker,
+                host,
+                program,
                 compilerOptions.target!,
                 log,
                 completionKind,
@@ -594,7 +603,8 @@ namespace ts.Completions {
         contextToken: Node | undefined,
         location: Node,
         sourceFile: SourceFile,
-        typeChecker: TypeChecker,
+        host: LanguageServiceHost,
+        program: Program,
         name: string,
         needsConvertPropertyAccess: boolean,
         origin: SymbolOriginInfo | undefined,
@@ -612,7 +622,9 @@ namespace ts.Completions {
         let isSnippet: true | undefined;
         let sourceDisplay;
         let hasAction;
+        let kindModifiers;
 
+        const typeChecker = program.getTypeChecker();
         const insertQuestionDot = origin && originIsNullableMember(origin);
         const useBraces = origin && originIsSymbolMember(origin) || needsConvertPropertyAccess;
         if (origin && originIsThisType(origin)) {
@@ -667,10 +679,8 @@ namespace ts.Completions {
         }
 
         if (isMethodOverrideCompletion(symbol, location)) {
-            ({ insertText } = getInsertTextForMethodOverrideCompletion(typeChecker, options, name, symbol, location));
-            // replacementSpan = undefined; // >> TODO
-            isSnippet = preferences.includeCompletionsWithSnippetText ? true : undefined;
-            hasAction = true;
+            ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location));
+            kindModifiers = SymbolDisplay.getSymbolModifiers(typeChecker, symbol); // >> TODO: remove `abstract` modifier from symbol?
         }
 
         // >> Should this actually be here and not at the very end of the function?
@@ -694,7 +704,7 @@ namespace ts.Completions {
         return {
             name,
             kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location),
-            kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
+            kindModifiers: kindModifiers || SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),
             hasAction: hasAction ? true : undefined,
@@ -716,49 +726,97 @@ namespace ts.Completions {
         // or some other possibilities?
     }
 
-    function getInsertTextForMethodOverrideCompletion(_typeChecker: TypeChecker, options: CompilerOptions, name: string, symbol: Symbol, location: Node) {
-        // const methodType = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
-        // const signatures = methodType.getCallSignatures();
-        const methodDeclarations = symbol.declarations?.filter(isMethodDeclaration);
-        // >> TODO: what should we do if we have more than 1 signature? when could that happen?
-        if (methodDeclarations?.length === 1) {
-            const originalDeclaration = methodDeclarations[0];
-            const modifiers = originalDeclaration.modifiers?.filter(modifier => {
-                switch (modifier.kind) { // >> Simplify this if we only need to filter out "abstract" modifier.
-                    case SyntaxKind.AbstractKeyword:
-                        return false;
-                    default:
-                        return true;
-                }
-            });
-            if (options.noImplicitOverride) {
-                modifiers?.push(factory.createModifier(SyntaxKind.OverrideKeyword));
-                // Assuming it's ok if this modifier is duplicated.
-            }
-
-            const completionDeclaration = factory.createMethodDeclaration(
-                /*decorators*/ undefined, // I'm guessing we don't want to deal with decorators?
-                /*modifiers*/ modifiers,
-                /*asteriskToken*/ originalDeclaration.asteriskToken,
-                /*name*/ name,
-                /*questionToken*/ originalDeclaration.questionToken,
-                /*typeParameters*/ originalDeclaration.typeParameters,
-                /*parameters*/ originalDeclaration.parameters,
-                /*type*/ originalDeclaration.type,
-                /*body*/ factory.createBlock([], /*multiLine*/ true));
-            // const insertText = completionDeclaration.getText(location.getSourceFile());
-            // const insertText = completionDeclaration.getText(); // Doesn't work with synthetic nodes
-            const printer = createPrinter({
-                removeComments: true,
-                module: options.module,
-                target: options.target,
-            });
-            const insertText = printer.printNode(EmitHint.Unspecified, completionDeclaration, location.getSourceFile());
-            return {
-                insertText,
-            };
+    function getEntryForMemberCompletion(
+        host: LanguageServiceHost,
+        program: Program,
+        options: CompilerOptions,
+        preferences: UserPreferences,
+        name: string,
+        symbol: Symbol,
+        location: Node): { insertText: string, isSnippet?: true } {
+        const classLikeDeclaration = findAncestor(location, isClassLike);
+        if (!classLikeDeclaration) {
+            return { insertText: name };
         }
-        return { };
+
+        let isSnippet: true | undefined;
+        let insertText: string = name;
+        const sourceFile = location.getSourceFile();
+        const printer = createPrinter({
+            removeComments: true,
+            module: options.module,
+            target: options.target,
+            omitTrailingSemicolon: true,
+        });
+        const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
+        codefix.addNewNodeForMemberSymbol(
+            symbol,
+            classLikeDeclaration,
+            sourceFile,
+            { program, host },
+            preferences,
+            importAdder,
+            /* addClassElement */ nodeToEntry);
+
+
+        function nodeToEntry(node: PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction): void {
+            if (!isPropertyDeclaration(node) && node.body && isBlock(node.body)) { // Declaration has body, so we might need to transform this completion into a snippet.
+                factory.updateBlock(node.body, []); // TODO: add tabstop if editor supports snippets
+                if (preferences.includeCompletionsWithSnippetText) {
+                    // TODO: add tabstop if editor supports snippets
+                    isSnippet = true;
+                }
+                insertText = printer.printNode(EmitHint.Unspecified, node, sourceFile);
+            }
+            else { // Declaration has no body or body is not a block.
+                insertText = printer.printNode(EmitHint.Unspecified, node, sourceFile);
+            }
+        }
+        // ** ----- ** //
+
+        // const methodDeclarations = symbol.declarations?.filter(isMethodDeclaration);
+        // // >> TODO: what should we do if we have more than 1 signature? when could that happen?
+        // if (methodDeclarations?.length === 1) {
+        //     const originalDeclaration = methodDeclarations[0];
+        //     const modifiers = originalDeclaration.modifiers?.filter(modifier => {
+        //         switch (modifier.kind) { // >> Simplify this if we only need to filter out "abstract" modifier.
+        //             case SyntaxKind.AbstractKeyword:
+        //                 return false;
+        //             default:
+        //                 return true;
+        //         }
+        //     });
+        //     if (options.noImplicitOverride) {
+        //         modifiers?.push(factory.createModifier(SyntaxKind.OverrideKeyword));
+        //         // Assuming it's ok if this modifier is duplicated.
+        //     }
+
+        //     const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
+        //     const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier(tabStop));
+        //     const completionDeclaration = factory.createMethodDeclaration(
+        //         /*decorators*/ undefined, // I'm guessing we don't want to deal with decorators?
+        //         /*modifiers*/ modifiers,
+        //         /*asteriskToken*/ originalDeclaration.asteriskToken,
+        //         /*name*/ name,
+        //         /*questionToken*/ originalDeclaration.questionToken,
+        //         /*typeParameters*/ originalDeclaration.typeParameters,
+        //         /*parameters*/ originalDeclaration.parameters,
+        //         /*type*/ originalDeclaration.type,
+        //         /*body*/ factory.createBlock([tabStopStatement], /*multiLine*/ true));
+
+        //     const printer = createPrinter({
+        //         removeComments: true,
+        //         module: options.module,
+        //         target: options.target,
+        //         omitTrailingSemicolon: true,
+        //     });
+        //     const insertText = printer.printNode(EmitHint.Unspecified, completionDeclaration, location.getSourceFile());
+        //     return {
+        //         insertText,
+        //         isSnippet: preferences.includeCompletionsWithSnippetText ? true as const : undefined,
+        //     };
+        // }
+        return { insertText, isSnippet };
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {
@@ -821,7 +879,8 @@ namespace ts.Completions {
         contextToken: Node | undefined,
         location: Node,
         sourceFile: SourceFile,
-        typeChecker: TypeChecker,
+        host: LanguageServiceHost,
+        program: Program,
         target: ScriptTarget,
         log: Log,
         kind: CompletionKind,
@@ -839,6 +898,7 @@ namespace ts.Completions {
         const start = timestamp();
         const variableDeclaration = getVariableDeclaration(location);
         const useSemicolons = probablyUsesSemicolons(sourceFile);
+        const typeChecker = program.getTypeChecker();
         // Tracks unique names.
         // Value is set to false for global variables or completions from external module exports, because we can have multiple of those;
         // true otherwise. Based on the order we add things we will always see locals first, then globals, then module exports.
@@ -861,7 +921,8 @@ namespace ts.Completions {
                 contextToken,
                 location,
                 sourceFile,
-                typeChecker,
+                host,
+                program,
                 name,
                 needsConvertPropertyAccess,
                 origin,

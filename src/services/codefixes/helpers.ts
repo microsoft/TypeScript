@@ -29,9 +29,18 @@ namespace ts.codefix {
     }
 
     /**
-     * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
+     * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: Node) => void): void {
+    export function addNewNodeForMemberSymbol(
+        symbol: Symbol,
+        enclosingDeclaration: ClassLikeDeclaration,
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        // addClassElement: (node: ClassElement | FunctionExpression | ArrowFunction) => void,
+        addClassElement: (node: PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction) => void,
+    ): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
