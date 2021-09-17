@@ -17842,6 +17842,13 @@ namespace ts {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
                     }
                     else {
+                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
+                            const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
+                            if (suggestedType) {
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
+                                return;
+                            }
+                        }
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
                 }
@@ -23244,9 +23251,10 @@ namespace ts {
 
         function isConstantReference(node: Node): boolean {
             switch (node.kind) {
-                case SyntaxKind.Identifier:
+                case SyntaxKind.Identifier: {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    return isConstVariable(symbol) || !!symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter && !isParameterAssigned(symbol);
+                    return isConstVariable(symbol) || isParameterOrCatchClauseVariable(symbol) && !isSymbolAssigned(symbol);
+                }
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     // The resolvedSymbol property is initialized by checkPropertyAccess or checkElementAccess before we get here.
@@ -24380,37 +24388,38 @@ namespace ts {
                 node.kind === SyntaxKind.PropertyDeclaration)!;
         }
 
-        // Check if a parameter is assigned anywhere within its declaring function.
-        function isParameterAssigned(symbol: Symbol) {
+        // Check if a parameter or catch variable is assigned anywhere
+        function isSymbolAssigned(symbol: Symbol) {
             if (!symbol.valueDeclaration) {
                 return false;
             }
-            const func = getRootDeclaration(symbol.valueDeclaration).parent as FunctionLikeDeclaration;
-            const links = getNodeLinks(func);
+            const parent = getRootDeclaration(symbol.valueDeclaration).parent;
+            const links = getNodeLinks(parent);
             if (!(links.flags & NodeCheckFlags.AssignmentsMarked)) {
                 links.flags |= NodeCheckFlags.AssignmentsMarked;
-                if (!hasParentWithAssignmentsMarked(func)) {
-                    markParameterAssignments(func);
+                if (!hasParentWithAssignmentsMarked(parent)) {
+                    markNodeAssignments(parent);
                 }
             }
             return symbol.isAssigned || false;
         }
 
         function hasParentWithAssignmentsMarked(node: Node) {
-            return !!findAncestor(node.parent, node => isFunctionLike(node) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
+            return !!findAncestor(node.parent, node =>
+                (isFunctionLike(node) || isCatchClause(node)) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
         }
 
-        function markParameterAssignments(node: Node) {
+        function markNodeAssignments(node: Node) {
             if (node.kind === SyntaxKind.Identifier) {
                 if (isAssignmentTarget(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    if (symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration).kind === SyntaxKind.Parameter) {
+                    if (isParameterOrCatchClauseVariable(symbol)) {
                         symbol.isAssigned = true;
                     }
                 }
             }
             else {
-                forEachChild(node, markParameterAssignments);
+                forEachChild(node, markNodeAssignments);
             }
         }
 
@@ -24479,7 +24488,19 @@ namespace ts {
         }
 
         function isExportOrExportExpression(location: Node) {
-            return !!findAncestor(location, e => e.parent && isExportAssignment(e.parent) && e.parent.expression === e && isEntityNameExpression(e));
+            return !!findAncestor(location, n => {
+                const parent = n.parent;
+                if (parent === undefined) {
+                    return "quit";
+                }
+                if (isExportAssignment(parent)) {
+                    return parent.expression === n && isEntityNameExpression(n);
+                }
+                if (isExportSpecifier(parent)) {
+                    return parent.name === n || parent.propertyName === n;
+                }
+                return false;
+            });
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
@@ -24648,7 +24669,7 @@ namespace ts {
             // analysis to include the immediately enclosing function.
             while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
                 flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
-                (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isParameterAssigned(localOrExportSymbol))) {
+                (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSymbolAssigned(localOrExportSymbol))) {
                 flowContainer = getControlFlowContainer(flowContainer);
             }
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
@@ -28239,6 +28260,11 @@ namespace ts {
             }
 
             return suggestion;
+        }
+
+        function getSuggestedTypeForNonexistentStringLiteralType(source: StringLiteralType, target: UnionType): StringLiteralType | undefined {
+            const candidates = target.types.filter((type): type is StringLiteralType => !!(type.flags & TypeFlags.StringLiteral));
+            return getSpellingSuggestion(source.value, candidates, type => type.value);
         }
 
         /**
@@ -38047,6 +38073,7 @@ namespace ts {
             function checkClassMember(member: ClassElement | ParameterPropertyDeclaration, memberIsParameterProperty?: boolean) {
                 const hasOverride = hasOverrideModifier(member);
                 const hasStatic = isStatic(member);
+                const isJs = isInJSFile(member);
                 if (baseWithThis && (hasOverride || compilerOptions.noImplicitOverride)) {
                     const declaredProp = member.name && getSymbolAtLocation(member.name) || getSymbolAtLocation(member);
                     if (!declaredProp) {
@@ -38062,8 +38089,19 @@ namespace ts {
                     if (prop && !baseProp && hasOverride) {
                         const suggestion = getSuggestedSymbolForNonexistentClassMember(symbolName(declaredProp), baseType);
                         suggestion ?
-                            error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1, baseClassName, symbolToString(suggestion)) :
-                            error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0, baseClassName);
+                            error(
+                                member,
+                                isJs ?
+                                    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1 :
+                                    Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_Did_you_mean_1,
+                                baseClassName,
+                                symbolToString(suggestion)) :
+                            error(
+                                member,
+                                isJs ?
+                                    Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_it_is_not_declared_in_the_base_class_0 :
+                                    Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0,
+                                baseClassName);
                     }
                     else if (prop && baseProp?.declarations && compilerOptions.noImplicitOverride && !nodeInAmbientContext) {
                         const baseHasAbstract = some(baseProp.declarations, hasAbstractModifier);
@@ -38073,8 +38111,12 @@ namespace ts {
 
                         if (!baseHasAbstract) {
                             const diag = memberIsParameterProperty ?
-                                Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
-                                Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
+                                isJs ?
+                                    Diagnostics.This_parameter_property_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0 :
+                                    Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0 :
+                                isJs ?
+                                    Diagnostics.This_member_must_have_a_JSDoc_comment_with_an_override_tag_because_it_overrides_a_member_in_the_base_class_0 :
+                                    Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0;
                             error(member, diag, baseClassName);
                         }
                         else if (hasAbstractModifier(member) && baseHasAbstract) {
@@ -38084,7 +38126,12 @@ namespace ts {
                 }
                 else if (hasOverride) {
                     const className = typeToString(type);
-                    error(member, Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class, className);
+                    error(
+                        member,
+                        isJs ?
+                            Diagnostics.This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_containing_class_0_does_not_extend_another_class :
+                            Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class,
+                        className);
                 }
             }
         }

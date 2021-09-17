@@ -432,11 +432,10 @@ namespace ts.formatting {
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, indentation, /*indentNextTokenOrTrivia*/ false,
                     item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
+                if (options.trimTrailingWhitespace !== false) {
+                    trimTrailingWhitespacesForRemainingRange(leadingTrivia);
+                }
             }
-        }
-
-        if (options.trimTrailingWhitespace !== false) {
-            trimTrailingWhitespacesForRemainingRange();
         }
 
         return edits;
@@ -1142,13 +1141,29 @@ namespace ts.formatting {
         }
 
         /**
-         * Trimming will be done for lines after the previous range
+         * Trimming will be done for lines after the previous range.
+         * Exclude comments as they had been previously processed.
          */
-        function trimTrailingWhitespacesForRemainingRange() {
-            const startPosition = previousRange ? previousRange.end : originalRange.pos;
+        function trimTrailingWhitespacesForRemainingRange(trivias: TextRangeWithKind<SyntaxKind>[]) {
+            let startPos = previousRange ? previousRange.end : originalRange.pos;
+            for (const trivia of trivias) {
+                if (isComment(trivia.kind)) {
+                    if (startPos < trivia.pos) {
+                        trimTrailingWitespacesForPositions(startPos, trivia.pos - 1, previousRange);
+                    }
 
-            const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
-            const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
+                    startPos = trivia.end + 1;
+                }
+            }
+
+            if (startPos < originalRange.end) {
+                trimTrailingWitespacesForPositions(startPos, originalRange.end, previousRange);
+            }
+        }
+
+        function trimTrailingWitespacesForPositions(startPos: number, endPos: number, previousRange: TextRangeWithKind) {
+            const startLine = sourceFile.getLineAndCharacterOfPosition(startPos).line;
+            const endLine = sourceFile.getLineAndCharacterOfPosition(endPos).line;
 
             trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }

@@ -3304,13 +3304,17 @@
         "category": "Error",
         "code": 2819
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2820
     },
-    "Import assertions cannot be used with type-only imports or exports.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3717,7 +3721,26 @@
         "category": "Error",
         "code": 4118
     },
-
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
