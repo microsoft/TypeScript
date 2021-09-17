@@ -401,6 +401,12 @@ namespace ts {
         public kind!: SyntaxKind.PrivateIdentifier;
         public escapedText!: __String;
         public symbol!: Symbol;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _updateExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
         constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
             super(pos, end);
         }

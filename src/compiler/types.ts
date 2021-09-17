@@ -1209,7 +1209,8 @@ namespace ts {
         readonly expression: Expression;
     }
 
-    export interface PrivateIdentifier extends Node {
+    // Typed as a PrimaryExpression due to its presence in BinaryExpressions (#field in expr)
+    export interface PrivateIdentifier extends PrimaryExpression {
         readonly kind: SyntaxKind.PrivateIdentifier;
         // escaping not strictly necessary
         // avoids gotchas in transforms and utils

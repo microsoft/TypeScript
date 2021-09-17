@@ -4614,7 +4614,7 @@ namespace ts {
 
             const inToken = parseTokenNode<Token<SyntaxKind.InKeyword>>();
             const exp = parseBinaryExpressionOrHigher(OperatorPrecedence.Relational);
-            return finishNode(factory.createBinaryExpression(id as Node as Expression, inToken, exp), pos);
+            return finishNode(factory.createBinaryExpression(id, inToken, exp), pos);
         }
 
         function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence): Expression {

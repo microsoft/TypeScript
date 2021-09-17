@@ -23885,7 +23885,8 @@ namespace ts {
                     return type;
                 }
 
-                const privateId = expr.left as Node as PrivateIdentifier;
+                const privateId = expr.left;
+                Debug.assertNode(privateId, isPrivateIdentifier);
                 const symbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
                 if (symbol === undefined) {
                     return type;
@@ -32324,7 +32325,8 @@ namespace ts {
         }
 
         function checkPrivateIdentifierInInExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            const privateId = node.left as Node as PrivateIdentifier;
+            const privateId = node.left;
+            Debug.assertNode(privateId, isPrivateIdentifier);
             const exp = node.right;
             let rightType = checkExpression(exp, checkMode);
 

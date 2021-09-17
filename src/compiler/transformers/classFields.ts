@@ -282,7 +282,9 @@ namespace ts {
             if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
                 return node;
             }
-            const info = accessPrivateIdentifier(node.left as Node as PrivateIdentifier);
+            const privId = node.left;
+            Debug.assertNode(privId, isPrivateIdentifier);
+            const info = accessPrivateIdentifier(privId);
             if (info) {
                 const receiver = visitNode(node.right, visitor, isExpression);
 
