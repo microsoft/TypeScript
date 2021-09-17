@@ -1452,7 +1452,7 @@ namespace ts.server {
             });
         }
 
-        private provideInlayHints(args: protocol.InlayHintsRequestArgs) {
+        private provideInlayHints(args: protocol.InlayHintsRequestArgs): readonly protocol.InlayHintItem[] {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const hints = project.getLanguageService().provideInlayHints(file, args, this.getPreferences(file));

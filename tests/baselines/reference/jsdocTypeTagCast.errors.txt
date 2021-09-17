@@ -123,4 +123,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     }
     
     
-    
+    var asConst1 = /** @type {const} */(1);
+    var asConst2 = /** @type {const} */({
+        x: 1
+    });

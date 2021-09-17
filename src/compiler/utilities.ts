@@ -1364,7 +1364,7 @@ namespace ts {
 
     // Warning: This has the same semantics as the forEach family of functions,
     //          in that traversal terminates in the event that 'visitor' supplies a truthy value.
-    export function forEachReturnStatement<T>(body: Block, visitor: (stmt: ReturnStatement) => T): T | undefined {
+    export function forEachReturnStatement<T>(body: Block | Statement, visitor: (stmt: ReturnStatement) => T): T | undefined {
 
         return traverse(body);
 
@@ -2638,13 +2638,13 @@ namespace ts {
         let result: (JSDoc | JSDocTag)[] | undefined;
         // Pull parameter comments from declaring function as well
         if (isVariableLike(hostNode) && hasInitializer(hostNode) && hasJSDocNodes(hostNode.initializer!)) {
-            result = append(result, last((hostNode.initializer as HasJSDoc).jsDoc!));
+            result = addRange(result, filterOwnedJSDocTags(hostNode, last((hostNode.initializer as HasJSDoc).jsDoc!)));
         }
 
         let node: Node | undefined = hostNode;
         while (node && node.parent) {
             if (hasJSDocNodes(node)) {
-                result = append(result, last(node.jsDoc!));
+                result = addRange(result, filterOwnedJSDocTags(hostNode, last(node.jsDoc!)));
             }
 
             if (node.kind === SyntaxKind.Parameter) {
@@ -2658,6 +2658,26 @@ namespace ts {
             node = getNextJSDocCommentLocation(node);
         }
         return result || emptyArray;
+    }
+
+    function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
+        if (isJSDoc(jsDoc)) {
+            const ownedTags = filter(jsDoc.tags, tag => ownsJSDocTag(hostNode, tag));
+            return jsDoc.tags === ownedTags ? [jsDoc] : ownedTags;
+        }
+        return ownsJSDocTag(hostNode, jsDoc) ? [jsDoc] : undefined;
+    }
+
+    /**
+     * Determines whether a host node owns a jsDoc tag. A `@type` tag attached to a
+     * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
+     */
+    function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
+        return !isJSDocTypeTag(tag)
+            || !tag.parent
+            || !isJSDoc(tag.parent)
+            || !isParenthesizedExpression(tag.parent.parent)
+            || tag.parent.parent === hostNode;
     }
 
     export function getNextJSDocCommentLocation(node: Node) {
@@ -2705,6 +2725,18 @@ namespace ts {
         }
         const parameter = find(decl.parameters, p => p.name.kind === SyntaxKind.Identifier && p.name.escapedText === name);
         return parameter && parameter.symbol;
+    }
+
+    export function getEffectiveContainerForJSDocTemplateTag(node: JSDocTemplateTag) {
+        if (isJSDoc(node.parent) && node.parent.tags) {
+            // A @template tag belongs to any @typedef, @callback, or @enum tags in the same comment block, if they exist.
+            const typeAlias = find(node.parent.tags, isJSDocTypeAlias);
+            if (typeAlias) {
+                return typeAlias;
+            }
+        }
+        // otherwise it belongs to the host it annotates
+        return getHostSignatureFromJSDoc(node);
     }
 
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
@@ -2903,10 +2935,13 @@ namespace ts {
         return [child, node];
     }
 
-    export function skipParentheses(node: Expression): Expression;
-    export function skipParentheses(node: Node): Node;
-    export function skipParentheses(node: Node): Node {
-        return skipOuterExpressions(node, OuterExpressionKinds.Parentheses);
+    export function skipParentheses(node: Expression, excludeJSDocTypeAssertions?: boolean): Expression;
+    export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node;
+    export function skipParentheses(node: Node, excludeJSDocTypeAssertions?: boolean): Node {
+        const flags = excludeJSDocTypeAssertions ?
+            OuterExpressionKinds.Parentheses | OuterExpressionKinds.ExcludeJSDocTypeAssertion :
+            OuterExpressionKinds.Parentheses;
+        return skipOuterExpressions(node, flags);
     }
 
     // a node is delete target iff. it is PropertyAccessExpression/ElementAccessExpression with parentheses skipped
@@ -6214,7 +6249,9 @@ namespace ts {
     }
 
     export interface SymlinkedDirectory {
+        /** Matches the casing returned by `realpath`.  Used to compute the `realpath` of children. */
         real: string;
+        /** toPath(real).  Stored to avoid repeated recomputation. */
         realPath: Path;
     }
 
@@ -7375,5 +7412,14 @@ namespace ts {
     /* @internal */
     export function isInfinityOrNaNString(name: string | __String): boolean {
         return name === "Infinity" || name === "-Infinity" || name === "NaN";
+    }
+
+    export function isCatchClauseVariableDeclaration(node: Node) {
+        return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
+    }
+
+    export function isParameterOrCatchClauseVariable(symbol: Symbol) {
+        const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
+        return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
     }
 }

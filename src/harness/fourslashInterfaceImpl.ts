@@ -48,12 +48,16 @@ namespace FourSlashInterface {
         }
     }
 
-    export class Plugins {
+    export class Config {
         constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
             this.state.configurePlugin(pluginName, configuration);
+        }
+
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions): void {
+            this.state.setCompilerOptionsForInferredProjects(options);
         }
     }
 
@@ -967,6 +971,12 @@ namespace FourSlashInterface {
             kindModifiers: "declare",
             sortText: SortText.GlobalsOrKeywords
         });
+        const deprecatedFunctionEntry = (name: string): ExpectedCompletionEntryObject => ({
+            name,
+            kind: "function",
+            kindModifiers: "deprecated,declare",
+            sortText: SortText.DeprecatedGlobalsOrKeywords
+        });
         const varEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
             kind: "var",
@@ -989,6 +999,12 @@ namespace FourSlashInterface {
             kind: "method",
             kindModifiers: "declare",
             sortText: SortText.LocationPriority
+        });
+        const deprecatedMethodEntry = (name: string): ExpectedCompletionEntryObject => ({
+            name,
+            kind: "method",
+            kindModifiers: "deprecated,declare",
+            sortText: SortText.DeprecatedLocationPriority
         });
         const propertyEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1079,6 +1095,7 @@ namespace FourSlashInterface {
             typeEntry("PromiseConstructorLike"),
             interfaceEntry("PromiseLike"),
             interfaceEntry("Promise"),
+            typeEntry("Awaited"),
             interfaceEntry("ArrayLike"),
             typeEntry("Partial"),
             typeEntry("Required"),
@@ -1223,7 +1240,7 @@ namespace FourSlashInterface {
             methodEntry("toLocaleUpperCase"),
             methodEntry("trim"),
             propertyEntry("length"),
-            methodEntry("substr"),
+            deprecatedMethodEntry("substr"),
             methodEntry("valueOf"),
         ];
 
@@ -1276,6 +1293,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",
@@ -1327,8 +1345,8 @@ namespace FourSlashInterface {
             functionEntry("decodeURIComponent"),
             functionEntry("encodeURI"),
             functionEntry("encodeURIComponent"),
-            functionEntry("escape"),
-            functionEntry("unescape"),
+            deprecatedFunctionEntry("escape"),
+            deprecatedFunctionEntry("unescape"),
             varEntry("NaN"),
             varEntry("Infinity"),
             varEntry("Object"),
@@ -1479,6 +1497,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",

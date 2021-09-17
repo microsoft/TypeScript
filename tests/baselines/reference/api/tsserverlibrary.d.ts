@@ -1387,13 +1387,13 @@ declare namespace ts {
     }
     export interface JsxExpression extends Expression {
         readonly kind: SyntaxKind.JsxExpression;
-        readonly parent: JsxElement | JsxAttributeLike;
+        readonly parent: JsxElement | JsxFragment | JsxAttributeLike;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly expression?: Expression;
     }
     export interface JsxText extends LiteralLikeNode {
         readonly kind: SyntaxKind.JsxText;
-        readonly parent: JsxElement;
+        readonly parent: JsxElement | JsxFragment;
         readonly containsOnlyTriviaWhiteSpaces: boolean;
     }
     export type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -1694,6 +1694,28 @@ declare namespace ts {
     }
     export type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
     export type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier;
+    export type TypeOnlyAliasDeclaration = ImportClause & {
+        readonly isTypeOnly: true;
+        readonly name: Identifier;
+    } | ImportEqualsDeclaration & {
+        readonly isTypeOnly: true;
+    } | NamespaceImport & {
+        readonly parent: ImportClause & {
+            readonly isTypeOnly: true;
+        };
+    } | ImportSpecifier & {
+        readonly parent: NamedImports & {
+            readonly parent: ImportClause & {
+                readonly isTypeOnly: true;
+            };
+        };
+    } | ExportSpecifier & {
+        readonly parent: NamedExports & {
+            readonly parent: ExportDeclaration & {
+                readonly isTypeOnly: true;
+            };
+        };
+    };
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -2706,8 +2728,8 @@ declare namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        resolvedTrueType: Type;
-        resolvedFalseType: Type;
+        resolvedTrueType?: Type;
+        resolvedFalseType?: Type;
     }
     export interface TemplateLiteralType extends InstantiableType {
         texts: readonly string[];
@@ -2910,6 +2932,7 @@ declare namespace ts {
         preserveConstEnums?: boolean;
         noImplicitOverride?: boolean;
         preserveSymlinks?: boolean;
+        preserveValueImports?: boolean;
         project?: string;
         reactNamespace?: string;
         jsxFactory?: string;
@@ -3065,6 +3088,7 @@ declare namespace ts {
         realpath?(path: string): string;
         getCurrentDirectory?(): string;
         getDirectories?(path: string): string[];
+        useCaseSensitiveFileNames?: boolean | (() => boolean);
     }
     /**
      * Represents the result of module resolution.
@@ -3225,7 +3249,8 @@ declare namespace ts {
         NonNullAssertions = 4,
         PartiallyEmittedExpressions = 8,
         Assertions = 6,
-        All = 15
+        All = 15,
+        ExcludeJSDocTypeAssertion = 16
     }
     export type TypeOfTag = "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
     export interface NodeFactory {
@@ -3628,7 +3653,7 @@ declare namespace ts {
         updateDefaultClause(node: DefaultClause, statements: readonly Statement[]): DefaultClause;
         createHeritageClause(token: HeritageClause["token"], types: readonly ExpressionWithTypeArguments[]): HeritageClause;
         updateHeritageClause(node: HeritageClause, types: readonly ExpressionWithTypeArguments[]): HeritageClause;
-        createCatchClause(variableDeclaration: string | VariableDeclaration | undefined, block: Block): CatchClause;
+        createCatchClause(variableDeclaration: string | BindingName | VariableDeclaration | undefined, block: Block): CatchClause;
         updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block): CatchClause;
         createPropertyAssignment(name: string | PropertyName, initializer: Expression): PropertyAssignment;
         updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression): PropertyAssignment;
@@ -4327,7 +4352,7 @@ declare namespace ts {
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
-    function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyCompatibleAliasDeclaration;
+    function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
@@ -5896,7 +5921,7 @@ declare namespace ts {
     interface InlayHint {
         text: string;
         position: number;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -8749,11 +8774,7 @@ declare namespace ts.server.protocol {
     interface SignatureHelpResponse extends Response {
         body?: SignatureHelpItems;
     }
-    enum InlayHintKind {
-        Type = "Type",
-        Parameter = "Parameter",
-        Enum = "Enum"
-    }
+    type InlayHintKind = "Type" | "Parameter" | "Enum";
     interface InlayHintsRequestArgs extends FileRequestArgs {
         /**
          * Start position of the span.
@@ -8771,7 +8792,7 @@ declare namespace ts.server.protocol {
     interface InlayHintItem {
         text: string;
         position: Location;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }
@@ -11085,7 +11106,7 @@ declare namespace ts {
     /** @deprecated Use `factory.updateHeritageClause` or the factory supplied by your transformation context instead. */
     const updateHeritageClause: (node: HeritageClause, types: readonly ExpressionWithTypeArguments[]) => HeritageClause;
     /** @deprecated Use `factory.createCatchClause` or the factory supplied by your transformation context instead. */
-    const createCatchClause: (variableDeclaration: string | VariableDeclaration | undefined, block: Block) => CatchClause;
+    const createCatchClause: (variableDeclaration: string | VariableDeclaration | BindingName | undefined, block: Block) => CatchClause;
     /** @deprecated Use `factory.updateCatchClause` or the factory supplied by your transformation context instead. */
     const updateCatchClause: (node: CatchClause, variableDeclaration: VariableDeclaration | undefined, block: Block) => CatchClause;
     /** @deprecated Use `factory.createPropertyAssignment` or the factory supplied by your transformation context instead. */

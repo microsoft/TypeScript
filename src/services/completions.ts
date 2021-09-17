@@ -1180,7 +1180,7 @@ namespace ts.Completions {
             case SyntaxKind.CaseKeyword:
                 return getSwitchedType(cast(parent, isCaseClause), checker);
             case SyntaxKind.OpenBraceToken:
-                return isJsxExpression(parent) && parent.parent.kind !== SyntaxKind.JsxElement ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
+                return isJsxExpression(parent) && !isJsxElement(parent.parent) && !isJsxFragment(parent.parent) ? checker.getContextualTypeForJsxAttribute(parent.parent) : undefined;
             default:
                 const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile);
                 return argInfo ?
@@ -1338,13 +1338,16 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
-                        if ((isCallExpression(node) || isFunctionLike(node)) &&
-                            node.end === contextToken.pos &&
-                            node.getChildCount(sourceFile) &&
-                            last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken) {
+                        const leftmostAccessExpression = getLeftmostAccessExpression(propertyAccessToConvert);
+                        if (nodeIsMissing(leftmostAccessExpression) ||
+                            ((isCallExpression(node) || isFunctionLike(node)) &&
+                                node.end === contextToken.pos &&
+                                node.getChildCount(sourceFile) &&
+                                last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken)) {
                             // This is likely dot from incorrectly parsed expression and user is starting to write spread
                             // eg: Math.min(./**/)
                             // const x = function (./**/) {}
+                            // ({./**/})
                             return undefined;
                         }
                         break;
@@ -1497,7 +1500,10 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
         const contextualType = previousToken && getContextualType(previousToken, position, sourceFile, typeChecker);
-        const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
+
+        const literals = mapDefined(
+            contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]),
+            t => t.isLiteral() && !(t.flags & TypeFlags.EnumLiteral) ? t.value : undefined);
 
         const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
         return {
@@ -2954,6 +2960,7 @@ namespace ts.Completions {
                         || kind === SyntaxKind.ModuleKeyword
                         || kind === SyntaxKind.TypeKeyword
                         || kind === SyntaxKind.NamespaceKeyword
+                        || kind === SyntaxKind.AbstractKeyword
                         || isTypeKeyword(kind) && kind !== SyntaxKind.UndefinedKeyword;
                 case KeywordCompletionFilters.FunctionLikeBodyKeywords:
                     return isFunctionLikeBodyKeyword(kind);

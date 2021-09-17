@@ -720,7 +720,7 @@ namespace ts {
     export interface InlayHint {
         text: string;
         position: number;
-        kind?: InlayHintKind;
+        kind: InlayHintKind;
         whitespaceBefore?: boolean;
         whitespaceAfter?: boolean;
     }

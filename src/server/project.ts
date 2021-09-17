@@ -1706,6 +1706,7 @@ namespace ts.server {
                     readFile: this.projectService.host.readFile.bind(this.projectService.host),
                     getDirectories: this.projectService.host.getDirectories.bind(this.projectService.host),
                     trace: this.projectService.host.trace?.bind(this.projectService.host),
+                    useCaseSensitiveFileNames: this.program.useCaseSensitiveFileNames(),
                 };
             }
             return this.projectService.host;
@@ -1919,16 +1920,25 @@ namespace ts.server {
             }
 
             if (dependencyNames) {
-                const resolutions = map(arrayFrom(dependencyNames.keys()), name => resolveTypeReferenceDirective(
-                    name,
-                    rootFileName,
-                    compilerOptions,
-                    moduleResolutionHost));
+                const resolutions = mapDefined(arrayFrom(dependencyNames.keys()), name => {
+                    const types = resolveTypeReferenceDirective(
+                        name,
+                        rootFileName,
+                        compilerOptions,
+                        moduleResolutionHost);
+
+                    if (types.resolvedTypeReferenceDirective) {
+                        return types.resolvedTypeReferenceDirective;
+                    }
+                    if (compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
+                        return tryResolveJSModule(name, hostProject.currentDirectory, moduleResolutionHost);
+                    }
+                });
 
                 const symlinkCache = hostProject.getSymlinkCache();
                 for (const resolution of resolutions) {
-                    if (!resolution.resolvedTypeReferenceDirective?.resolvedFileName) continue;
-                    const { resolvedFileName, originalPath } = resolution.resolvedTypeReferenceDirective;
+                    if (!resolution.resolvedFileName) continue;
+                    const { resolvedFileName, originalPath } = resolution;
                     if (!program.getSourceFile(resolvedFileName) && (!originalPath || !program.getSourceFile(originalPath))) {
                         rootNames = append(rootNames, resolvedFileName);
                         // Avoid creating a large project that would significantly slow down time to editor interactivity
