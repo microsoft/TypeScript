@@ -23635,6 +23635,9 @@ namespace ts {
                                 return narrowByInKeyword(type, expr.left, assumeTrue);
                             }
                         }
+                        else if (isPrivateIdentifier(expr.left)) {
+                            return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
+                        }
                         break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
@@ -23653,13 +23656,13 @@ namespace ts {
                 return type;
             }
 
-            function narrowTypeByPrivateIdentifierInInExpression(type: Type, expr: PrivateIdentifierInInExpression, assumeTrue: boolean): Type {
-                const target = getReferenceCandidate(expr.expression);
+            function narrowTypeByPrivateIdentifierInInExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
+                const target = getReferenceCandidate(expr.right);
                 if (!isMatchingReference(reference, target)) {
                     return type;
                 }
 
-                const privateId = expr.name;
+                const privateId = expr.left as Node as PrivateIdentifier;
                 const symbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
                 if (symbol === undefined) {
                     return type;
@@ -24119,8 +24122,6 @@ namespace ts {
                         return narrowType(type, (expr as ParenthesizedExpression | NonNullExpression).expression, assumeTrue);
                     case SyntaxKind.BinaryExpression:
                         return narrowTypeByBinaryExpression(type, expr as BinaryExpression, assumeTrue);
-                    case SyntaxKind.PrivateIdentifierInInExpression:
-                        return narrowTypeByPrivateIdentifierInInExpression(type, expr as PrivateIdentifierInInExpression, assumeTrue);
                     case SyntaxKind.PrefixUnaryExpression:
                         if ((expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken) {
                             return narrowType(type, (expr as PrefixUnaryExpression).operand, !assumeTrue);
@@ -31938,9 +31939,9 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
-        function checkPrivateIdentifierInInExpression(node: PrivateIdentifierInInExpression, checkMode?: CheckMode) {
-            const privateId = node.name;
-            const exp = node.expression;
+        function checkPrivateIdentifierInInExpression(node: BinaryExpression, checkMode?: CheckMode) {
+            const privateId = node.left as Node as PrivateIdentifier;
+            const exp = node.right;
             let rightType = checkExpression(exp, checkMode);
 
             const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
@@ -32021,6 +32022,11 @@ namespace ts {
                 if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     state.skip = true;
                     setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
+                    return state;
+                }
+                else if (node.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left)) {
+                    state.skip = true;
+                    setLastResult(state, checkPrivateIdentifierInInExpression(node, checkMode));
                     return state;
                 }
 
@@ -33162,8 +33168,6 @@ namespace ts {
                     return checkPostfixUnaryExpression(node as PostfixUnaryExpression);
                 case SyntaxKind.BinaryExpression:
                     return checkBinaryExpression(node as BinaryExpression, checkMode);
-                case SyntaxKind.PrivateIdentifierInInExpression:
-                    return checkPrivateIdentifierInInExpression(node as PrivateIdentifierInInExpression, checkMode);
                 case SyntaxKind.ConditionalExpression:
                     return checkConditionalExpression(node as ConditionalExpression, checkMode);
                 case SyntaxKind.SpreadElement:
@@ -39663,7 +39667,7 @@ namespace ts {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
             }
 
-            if (isPrivateIdentifier(name) && isPrivateIdentifierInInExpression(name.parent)) {
+            if (isPrivateIdentifier(name) && isBinaryExpression(name.parent)) {
                 const links = getNodeLinks(name.parent);
                 if (links.resolvedSymbol) {
                     return links.resolvedSymbol;

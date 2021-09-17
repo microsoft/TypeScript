@@ -56,8 +56,8 @@ namespace ts.codefix {
             }
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
-        else if (isPrivateIdentifierInInExpression(parent) && parent.name === node) {
-            const receiverType = checker.getTypeAtLocation(parent.expression);
+        else if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(parent.left) && parent.left === node) {
+            const receiverType = checker.getTypeAtLocation(parent.right);
             Debug.assert(isPrivateIdentifier(node), "Expected a privateIdentifier for spelling (in)");
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, receiverType);
         }

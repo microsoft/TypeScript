@@ -133,7 +133,7 @@ class Foo {
         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
     }
     whitespace(v) {
-        const a = v && /*0*/ #field/*1*/ 
+        const a = v && /*0*/ #field /*1*/
             /*2*/ in /*3*/
                 /*4*/ v; /*5*/
     }

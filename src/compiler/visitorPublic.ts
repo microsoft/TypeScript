@@ -802,13 +802,6 @@ namespace ts {
                     nodeVisitor(node.operatorToken, tokenVisitor, isBinaryOperatorToken),
                     nodeVisitor(node.right, visitor, isExpression));
 
-            case SyntaxKind.PrivateIdentifierInInExpression:
-                Debug.type<PrivateIdentifierInInExpression>(node);
-                return factory.updatePrivateIdentifierInInExpression(node,
-                    nodeVisitor((node).name, visitor, isMemberName),
-                    nodeVisitor((node).inToken, tokenVisitor, isToken),
-                    nodeVisitor((node).expression, visitor, isExpression));
-
             case SyntaxKind.ConditionalExpression:
                 Debug.type<ConditionalExpression>(node);
                 return factory.updateConditionalExpression(node,

@@ -446,10 +446,6 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators);
             case SyntaxKind.CommaListExpression:
                 return visitNodes(cbNode, cbNodes, (node as CommaListExpression).elements);
-            case SyntaxKind.PrivateIdentifierInInExpression:
-                return visitNode(cbNode, (node as PrivateIdentifierInInExpression).name) ||
-                    visitNode(cbNode, (node as PrivateIdentifierInInExpression).inToken) ||
-                    visitNode(cbNode, (node as PrivateIdentifierInInExpression).expression);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (node as JsxElement).openingElement) ||
@@ -4472,7 +4468,7 @@ namespace ts {
 
             const inToken = parseTokenNode<Token<SyntaxKind.InKeyword>>();
             const exp = parseBinaryExpressionOrHigher(OperatorPrecedence.Relational);
-            return finishNode(factory.createPrivateIdentifierInInExpression(id, inToken, exp), pos);
+            return finishNode(factory.createBinaryExpression(id as Node as Expression, inToken, exp), pos);
         }
 
         function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence): Expression {
@@ -4482,9 +4478,10 @@ namespace ts {
 
             const pos = getNodePos();
             const tryPrivateIdentifierInIn = token() === SyntaxKind.PrivateIdentifier && !inDisallowInContext() && lookAhead(nextTokenIsInKeyword);
-            const leftOperand = tryPrivateIdentifierInIn
-                ? parsePrivateIdentifierInInExpression(pos)
-                : parseUnaryExpressionOrHigher();
+            const leftOperand =
+                tryPrivateIdentifierInIn
+                ? parsePrivateIdentifierInInExpression(pos) :
+                 parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand, pos);
         }
 

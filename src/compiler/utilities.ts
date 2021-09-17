@@ -1921,7 +1921,6 @@ namespace ts {
             case SyntaxKind.YieldExpression:
             case SyntaxKind.AwaitExpression:
             case SyntaxKind.MetaProperty:
-            case SyntaxKind.PrivateIdentifierInInExpression:
                 return true;
             case SyntaxKind.QualifiedName:
                 while (node.parent.kind === SyntaxKind.QualifiedName) {
@@ -3646,7 +3645,6 @@ namespace ts {
                 return OperatorPrecedence.Member;
 
             case SyntaxKind.AsExpression:
-            case SyntaxKind.PrivateIdentifierInInExpression:
                 return OperatorPrecedence.Relational;
 
             case SyntaxKind.ThisKeyword:

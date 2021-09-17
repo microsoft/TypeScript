@@ -881,8 +881,6 @@ namespace ts {
                     return (expr as PrefixUnaryExpression).operator === SyntaxKind.ExclamationToken && isNarrowingExpression((expr as PrefixUnaryExpression).operand);
                 case SyntaxKind.TypeOfExpression:
                     return isNarrowingExpression((expr as TypeOfExpression).expression);
-                case SyntaxKind.PrivateIdentifierInInExpression:
-                    return isNarrowingExpression((expr as PrivateIdentifierInInExpression).expression);
             }
             return false;
         }
@@ -919,7 +917,7 @@ namespace ts {
         }
 
         function isNarrowableInOperands(left: Expression, right: Expression) {
-            return isStringLiteralLike(left) && isNarrowingExpression(right);
+            return (isStringLiteralLike(left) || isPrivateIdentifier(left)) && isNarrowingExpression(right);
         }
 
         function isNarrowingBinaryExpression(expr: BinaryExpression) {

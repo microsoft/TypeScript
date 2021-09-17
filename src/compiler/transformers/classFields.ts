@@ -207,8 +207,6 @@ namespace ts {
                         return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded);
                     case SyntaxKind.BinaryExpression:
                         return visitBinaryExpression(node as BinaryExpression, valueIsDiscarded);
-                    case SyntaxKind.PrivateIdentifierInInExpression:
-                        return visitPrivateIdentifierInInExpression(node as PrivateIdentifierInInExpression);
                     case SyntaxKind.CallExpression:
                         return visitCallExpression(node as CallExpression);
                     case SyntaxKind.TaggedTemplateExpression:
@@ -280,13 +278,13 @@ namespace ts {
         /**
          * Visits `#id in expr`
          */
-        function visitPrivateIdentifierInInExpression(node: PrivateIdentifierInInExpression) {
+        function visitPrivateIdentifierInInExpression(node: BinaryExpression) {
             if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
                 return node;
             }
-            const info = accessPrivateIdentifier(node.name);
+            const info = accessPrivateIdentifier(node.left as Node as PrivateIdentifier);
             if (info) {
-                const receiver = visitNode(node.expression, visitor, isExpression);
+                const receiver = visitNode(node.right, visitor, isExpression);
 
                 return setOriginalNode(
                     context.getEmitHelperFactory().createClassPrivateFieldInHelper(receiver, info.brandCheckIdentifier),
@@ -849,6 +847,9 @@ namespace ts {
                         }
                     }
                 }
+            }
+            if (node.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left)) {
+                return visitPrivateIdentifierInInExpression(node);
             }
             return visitEachChild(node, visitor, context);
         }
