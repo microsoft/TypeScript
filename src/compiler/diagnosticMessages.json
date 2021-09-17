@@ -924,11 +924,11 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import only supports a second argument when the '--module' option is set to 'esnext'.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -1388,7 +1388,7 @@
         "category": "Message",
         "code": 1449
     },
-    "Dynamic import must only have a specifier and an optional assertion as arguments": {
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
         "category": "Message",
         "code": 1450
     },

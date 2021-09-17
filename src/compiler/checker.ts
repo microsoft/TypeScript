@@ -933,6 +933,7 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalImportMetaExpressionType: ObjectType;
+        let deferredGlobalImportCallOptionsType: ObjectType | undefined;
         let deferredGlobalExtractSymbol: Symbol | undefined;
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
@@ -13458,6 +13459,11 @@ namespace ts {
                 deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
             }
             return deferredGlobalImportMetaExpressionType;
+        }
+
+        function getGlobalImportCallOptionsType(reportErrors: boolean) {
+            // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
+            return (deferredGlobalImportCallOptionsType ||= getGlobalType("ImportCallOptions" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean): Symbol | undefined {
@@ -30587,13 +30593,21 @@ namespace ts {
             }
             const specifier = node.arguments[0];
             const specifierType = checkExpressionCached(specifier);
+            const optionsType = node.arguments.length > 1 ? checkExpressionCached(node.arguments[1]) : undefined;
             // Even though multiple arguments is grammatically incorrect, type-check extra arguments for completion
-            for (let i = 1; i < node.arguments.length; ++i) {
+            for (let i = 2; i < node.arguments.length; ++i) {
                 checkExpressionCached(node.arguments[i]);
             }
 
             if (specifierType.flags & TypeFlags.Undefined || specifierType.flags & TypeFlags.Null || !isTypeAssignableTo(specifierType, stringType)) {
                 error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
+            }
+
+            if (optionsType) {
+                const importCallOptionsType = getGlobalImportCallOptionsType(/*reportErrors*/ true);
+                if (importCallOptionsType !== emptyObjectType) {
+                    checkTypeAssignableTo(optionsType, getNullableType(importCallOptionsType, TypeFlags.Undefined), node.arguments[1]);
+                }
             }
 
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
@@ -43178,19 +43192,19 @@ namespace ts {
 
                 if (nodeArguments.length > 1) {
                     const assertionArgument = nodeArguments[1];
-                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_import_only_supports_a_second_argument_when_the_module_option_is_set_to_esnext);
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext);
                 }
             }
 
-            if (nodeArguments.length  === 0 || nodeArguments.length > 2) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_only_have_a_specifier_and_an_optional_assertion_as_arguments);
+            if (nodeArguments.length === 0 || nodeArguments.length > 2) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments);
             }
 
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
-            const spreadElement = forEach(nodeArguments, isSpreadElement);
+            const spreadElement = find(nodeArguments, isSpreadElement);
             if (spreadElement) {
-                return grammarErrorOnNode(nodeArguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+                return grammarErrorOnNode(spreadElement, Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element);
             }
             return false;
         }

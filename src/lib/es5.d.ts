@@ -597,6 +597,23 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
 interface ImportMeta {
 }
 
+/**
+ * The type for the optional second argument to `import()`.
+ *
+ * If your host environment supports additional options, this type may be
+ * augmented via interface merging.
+ */
+interface ImportCallOptions {
+    assert?: ImportAssertions;
+}
+
+/**
+ * The type for the `assert` property of the optional second argument to `import()`.
+ */
+interface ImportAssertions {
+    [key: string]: string;
+}
+
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     readonly E: number;
