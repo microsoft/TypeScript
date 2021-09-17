@@ -89,6 +89,6 @@ verify.completions({
         }
     ],
     preferences: {
-        jsxSnippetCompletion: "braces"
+        jsxAttributeCompletionStyle: "braces"
     }
 });

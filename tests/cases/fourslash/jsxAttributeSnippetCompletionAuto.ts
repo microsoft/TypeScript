@@ -83,6 +83,6 @@ verify.completions({
         }
     ],
     preferences: {
-        jsxSnippetCompletion: "auto"
+        jsxAttributeCompletionStyle: "auto"
     }
 });

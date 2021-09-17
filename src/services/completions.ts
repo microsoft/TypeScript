@@ -676,12 +676,12 @@ namespace ts.Completions {
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location); // TODO: GH#18217
-        if (kind === ScriptElementKind.jsxAttribute && preferences.jsxSnippetCompletion && preferences.jsxSnippetCompletion !== "none") {
-            let useBraces = preferences.jsxSnippetCompletion === "braces";
+        if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+            let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
             // If is boolean like or undefined, don't return a snippet we want just to return the completion.
-            if (preferences.jsxSnippetCompletion === "auto"
+            if (preferences.jsxAttributeCompletionStyle === "auto"
                 && !(type.flags & TypeFlags.BooleanLike)
                 && !(type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.BooleanLike | TypeFlags.Undefined))))
             ) {

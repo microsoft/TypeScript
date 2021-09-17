@@ -3391,7 +3391,7 @@ namespace ts.server.protocol {
         readonly provideRefactorNotApplicableReason?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly includePackageJsonAutoImports?: "auto" | "on" | "off";
-        readonly jsxSnippetCompletion?: "auto" | "braces" | "none";
+        readonly jsxAttributeCompletionStyle?: "auto" | "braces" | "none";
 
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;

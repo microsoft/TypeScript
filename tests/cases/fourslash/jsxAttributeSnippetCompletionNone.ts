@@ -69,6 +69,6 @@ verify.completions({
         }
     ],
     preferences: {
-        jsxSnippetCompletion: "none"
+        jsxAttributeCompletionStyle: "none"
     }
 });
