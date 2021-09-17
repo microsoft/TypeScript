@@ -65,7 +65,7 @@ namespace ts {
     /* @internal */
     export interface MapConstructor {
         // eslint-disable-next-line @typescript-eslint/prefer-function-type
-        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>): ESMap<K, V>;
+        new <K, V>(iterable?: readonly (readonly [K, V])[] | ReadonlyESMap<K, V>, count?: number): ESMap<K, V>;
     }
 
     /** ES6 Set interface, only read methods included. */

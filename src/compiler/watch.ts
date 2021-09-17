@@ -19,7 +19,7 @@ namespace ts {
             return diagnostic => system.write(formatDiagnostic(diagnostic, host));
         }
 
-        const diagnostics: Diagnostic[] = new Array(1);
+        const diagnostics: Diagnostic[] = presizedArray(1);
         return diagnostic => {
             diagnostics[0] = diagnostic;
             system.write(formatDiagnosticsWithColorAndContext(diagnostics, host) + host.getNewLine());

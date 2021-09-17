@@ -358,7 +358,7 @@ namespace ts {
     export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) => U): U[] | undefined {
         let result: U[] | undefined;
         if (array) {
-            result = [];
+            result = presizedArray(array.length);
             for (let i = 0; i < array.length; i++) {
                 result.push(f(array[i], i));
             }
@@ -684,7 +684,7 @@ namespace ts {
             return undefined;
         }
 
-        const result = new Map<K2, V2>();
+        const result = new Map<K2, V2>(undefined, map.size);
         map.forEach((value, key) => {
             const [newKey, newValue] = f(key, value);
             result.set(newKey, newValue);
@@ -784,8 +784,8 @@ namespace ts {
     export function deduplicate<T>(array: readonly T[], equalityComparer: EqualityComparer<T>, comparer?: Comparer<T>): T[] {
         return array.length === 0 ? [] :
             array.length === 1 ? array.slice() :
-            comparer ? deduplicateRelational(array, equalityComparer, comparer) :
-            deduplicateEquality(array, equalityComparer);
+                comparer ? deduplicateRelational(array, equalityComparer, comparer) :
+                    deduplicateEquality(array, equalityComparer);
     }
 
     /**
@@ -1065,7 +1065,7 @@ namespace ts {
             else {
                 i++;
                 return { value: array[i - 1], done: false };
-            }
+                }
         }};
     }
 
@@ -1318,15 +1318,19 @@ namespace ts {
     }
 
     export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
-        const result = new Array(count);
+        const result = presizedArray<T>(count);
         for (let i = 0; i < count; i++) {
             result[i] = f(i);
         }
         return result;
     }
 
+    export function presizedArray<T>(length?: number): T[] {
+        return Array.from({ length } as any);
+    }
+
     /** Shims `Array.from`. */
-    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U, count?: number): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
         const result: (T | U)[] = [];
@@ -1389,7 +1393,7 @@ namespace ts {
     export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ESMap<string, T>;
     export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): ESMap<string, U>;
     export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): ESMap<K, V1 | V2> {
-        const result = new Map<K, V1 | V2>();
+        const result = new Map<K, V1 | V2>(undefined, array.length);
         for (const value of array) {
             const key = makeKey(value);
             if (key !== undefined) result.set(key, makeValue(value));
@@ -1422,7 +1426,8 @@ namespace ts {
     export function group<T>(values: readonly T[], getGroupId: (value: T) => string): readonly (readonly T[])[];
     export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
     export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
-        return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
+        const multiMap = arrayToMultiMap(values, getGroupId);
+        return arrayFrom(multiMap.values(), resultSelector, multiMap.size);
     }
 
     export function clone<T>(object: T): T {
@@ -1743,9 +1748,9 @@ namespace ts {
     function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
-            b === undefined ? Comparison.GreaterThan :
-            a < b ? Comparison.LessThan :
-            Comparison.GreaterThan;
+                b === undefined ? Comparison.GreaterThan :
+                    a < b ? Comparison.LessThan :
+                        Comparison.GreaterThan;
     }
 
     /**
@@ -1926,8 +1931,8 @@ namespace ts {
     export function compareProperties<T, K extends keyof T>(a: T | undefined, b: T | undefined, key: K, comparer: Comparer<T[K]>): Comparison {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
-            b === undefined ? Comparison.GreaterThan :
-            comparer(a[key], b[key]);
+                b === undefined ? Comparison.GreaterThan :
+                    comparer(a[key], b[key]);
     }
 
     /** True is greater than false. */
@@ -1977,8 +1982,8 @@ namespace ts {
     }
 
     function levenshteinWithMax(s1: string, s2: string, max: number): number | undefined {
-        let previous = new Array(s2.length + 1);
-        let current = new Array(s2.length + 1);
+        let previous = presizedArray<number>(s2.length + 1);
+        let current = presizedArray<number>(s2.length + 1);
         /** Represents any value > max. We don't care about the particular value. */
         const big = max + 0.01;
 
@@ -1998,7 +2003,7 @@ namespace ts {
             }
             for (let j = minJ; j <= maxJ; j++) {
                 // case difference should be significantly cheaper than other differences
-                const substitutionDistance = s1[i - 1].toLowerCase() === s2[j-1].toLowerCase()
+                const substitutionDistance = s1[i - 1].toLowerCase() === s2[j - 1].toLowerCase()
                     ? (previous[j - 1] + 0.1)
                     : (previous[j - 1] + 2);
                 const dist = c1 === s2.charCodeAt(j - 1)

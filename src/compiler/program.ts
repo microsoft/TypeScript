@@ -1300,7 +1300,7 @@ namespace ts {
                                 oldResolvedModule.packageId && packageIdToString(oldResolvedModule.packageId)
                             );
                         }
-                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        (result || (result = presizedArray(moduleNames.length)))[i] = oldResolvedModule;
                         (reusedNames || (reusedNames = [])).push(moduleName);
                         continue;
                     }
@@ -1321,7 +1321,7 @@ namespace ts {
                 }
 
                 if (resolvesToAmbientModuleInNonModifiedFile) {
-                    (result || (result = new Array(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
+                    (result || (result = presizedArray(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
                 }
                 else {
                     // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.

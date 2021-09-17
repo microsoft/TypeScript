@@ -976,7 +976,7 @@ namespace ts {
                     const parameter = parameters[i + firstParameterOffset];
                     if (decorators || parameter.decorators) {
                         if (!decorators) {
-                            decorators = new Array(numParameters);
+                            decorators = presizedArray(numParameters);
                         }
 
                         decorators[i] = parameter.decorators;

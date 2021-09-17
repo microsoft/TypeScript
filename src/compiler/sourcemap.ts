@@ -638,7 +638,7 @@ namespace ts {
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
         const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]));
+        const sourceToSourceIndexMap = new Map(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i]), sourceFileAbsolutePaths.length);
         let decodedMappings: readonly MappedPosition[] | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: readonly SortedReadonlyArray<SourceMappedPosition>[] | undefined;

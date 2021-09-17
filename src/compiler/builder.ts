@@ -751,7 +751,7 @@ namespace ts {
                         value :
                         { version: value.version, signature, affectsGlobalScope: value.affectsGlobalScope } :
                     { version: value.version, signature: false, affectsGlobalScope: value.affectsGlobalScope };
-        });
+        }, state.fileInfos.size());
 
         let referencedMap: ProgramBuildInfoReferencedMap | undefined;
         if (state.referencedMap) {

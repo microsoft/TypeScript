@@ -1211,8 +1211,8 @@ namespace ts {
             result.parent = symbol.parent;
             if (symbol.valueDeclaration) result.valueDeclaration = symbol.valueDeclaration;
             if (symbol.constEnumOnlyModule) result.constEnumOnlyModule = true;
-            if (symbol.members) result.members = new Map(symbol.members);
-            if (symbol.exports) result.exports = new Map(symbol.exports);
+            if (symbol.members) result.members = new Map(symbol.members, symbol.members.size());
+            if (symbol.exports) result.exports = new Map(symbol.exports, symbol.exports.size());
             recordMergedSymbol(result, symbol);
             return result;
         }
@@ -2756,8 +2756,8 @@ namespace ts {
             result.declarations = deduplicate(concatenate(valueSymbol.declarations, typeSymbol.declarations), equateValues);
             result.parent = valueSymbol.parent || typeSymbol.parent;
             if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;
-            if (typeSymbol.members) result.members = new Map(typeSymbol.members);
-            if (valueSymbol.exports) result.exports = new Map(valueSymbol.exports);
+            if (typeSymbol.members) result.members = new Map(typeSymbol.members, typeSymbol.members.size());
+            if (valueSymbol.exports) result.exports = new Map(valueSymbol.exports, valueSymbol.exports.size());
             return result;
         }
 
@@ -6148,7 +6148,7 @@ namespace ts {
                 // export const x: <T>(x: T) => T
                 // export const y: <T_1>(x: T_1) => T_1
                 if (initial.typeParameterNames) {
-                    initial.typeParameterNames = new Map(initial.typeParameterNames);
+                    initial.typeParameterNames = new Map(initial.typeParameterNames, initial.typeParameterNames.size);
                 }
                 if (initial.typeParameterNamesByText) {
                     initial.typeParameterNamesByText = new Set(initial.typeParameterNamesByText);
@@ -9123,8 +9123,8 @@ namespace ts {
                 result.parent = symbol;
                 result.target = fileSymbol;
                 if (fileSymbol.valueDeclaration) result.valueDeclaration = fileSymbol.valueDeclaration;
-                if (fileSymbol.members) result.members = new Map(fileSymbol.members);
-                if (fileSymbol.exports) result.exports = new Map(fileSymbol.exports);
+                if (fileSymbol.members) result.members = new Map(fileSymbol.members, fileSymbol.members.size);
+                if (fileSymbol.exports) result.exports = new Map(fileSymbol.exports, fileSymbol.exports.size);
                 const members = createSymbolTable();
                 members.set("exports" as __String, result);
                 return createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
@@ -13722,7 +13722,7 @@ namespace ts {
             const properties: Symbol[] = [];
             let combinedFlags: ElementFlags = 0;
             if (arity) {
-                typeParameters = new Array(arity);
+                typeParameters = presizedArray(arity);
                 for (let i = 0; i < arity; i++) {
                     const typeParameter = typeParameters[i] = createTypeParameter();
                     const flags = elementFlags[i];
