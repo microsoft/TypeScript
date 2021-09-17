@@ -2350,7 +2350,7 @@ namespace ts {
 
     /**
      * Generate a list of the compiler options whose value is not the default.
-     * @param options commandlineOptions to be evaluated.
+     * @param options compilerOptions to be evaluated.
     /** @internal */
     export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: string): string {
         const compilerOptionsMap = getSerializedCompilerOption(options);
@@ -2364,7 +2364,7 @@ namespace ts {
             const result: string[] = [];
              const tab = makePadding(2);
             commandOptionsWithoutBuild.forEach(cmd => {
-                if (!cmd.showInSimplifiedHelpView || !compilerOptionsMap.has(cmd.name)) {
+                if (!compilerOptionsMap.has(cmd.name)) {
                     return;
                 }
 
@@ -2383,7 +2383,6 @@ namespace ts {
 
     /**
      * Get the compiler options to be written into the tsconfig.json.
-     *
      * @param options commandlineOptions to be included in the compileOptions.
      */
     function getSerializedCompilerOption(options: CompilerOptions): ESMap<string, CompilerOptionsValue> {
