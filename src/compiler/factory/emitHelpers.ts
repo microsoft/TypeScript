@@ -967,6 +967,18 @@ namespace ts {
             };`
     };
 
+    /**
+     * Parameters:
+     *  @param receiver — The object being checked if it has the private member.
+     *  @param state — One of the following:
+     *      - A WeakMap when the member is a private instance field.
+     *      - A WeakSet when the member is a private instance method or accessor.
+     *      - A function value that should be the undecorated class constructor when the member is a private static fields, method, or accessor.
+     *
+     * Usage:
+     * This helper is used to transform `#field in expression` to
+     *      `__classPrivateFieldIn(expression, <weakMap/weakSet/constructor>)`
+     */
     export const classPrivateFieldInHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldIn",
         importName: "__classPrivateFieldIn",
