@@ -20,48 +20,56 @@ var validCommentedFancyMulti: string = 'nope';
 var invalidCommentedPlainSingle: number = 'nope';
 >invalidCommentedPlainSingle : Symbol(invalidCommentedPlainSingle, Decl(ts-expect-error.ts, 14, 3))
 
+// @ts-expect-error TS2322
+var matchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+>matchedTsCodeCommentedPlainSingleWithCode : Symbol(matchedTsCodeCommentedPlainSingleWithCode, Decl(ts-expect-error.ts, 17, 3))
+
 /*
  @ts-expect-error */
 var invalidCommentedPlainMulti: number = 'nope';
->invalidCommentedPlainMulti : Symbol(invalidCommentedPlainMulti, Decl(ts-expect-error.ts, 18, 3))
+>invalidCommentedPlainMulti : Symbol(invalidCommentedPlainMulti, Decl(ts-expect-error.ts, 21, 3))
+
+// @ts-expect-error TS9999
+var mismatchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+>mismatchedTsCodeCommentedPlainSingleWithCode : Symbol(mismatchedTsCodeCommentedPlainSingleWithCode, Decl(ts-expect-error.ts, 24, 3))
 
 // @ts-expect-error
 var validCommentedPlainSingle: string = 'nope';
->validCommentedPlainSingle : Symbol(validCommentedPlainSingle, Decl(ts-expect-error.ts, 21, 3))
+>validCommentedPlainSingle : Symbol(validCommentedPlainSingle, Decl(ts-expect-error.ts, 27, 3))
 
 /* @ts-expect-error */
 var validCommentedPlainMulti1: string = 'nope';
->validCommentedPlainMulti1 : Symbol(validCommentedPlainMulti1, Decl(ts-expect-error.ts, 24, 3))
+>validCommentedPlainMulti1 : Symbol(validCommentedPlainMulti1, Decl(ts-expect-error.ts, 30, 3))
 
 /*
 @ts-expect-error */
 var validCommentedPlainMulti2: string = 'nope';
->validCommentedPlainMulti2 : Symbol(validCommentedPlainMulti2, Decl(ts-expect-error.ts, 28, 3))
+>validCommentedPlainMulti2 : Symbol(validCommentedPlainMulti2, Decl(ts-expect-error.ts, 34, 3))
 
 var invalidPlain: number = 'nope';
->invalidPlain : Symbol(invalidPlain, Decl(ts-expect-error.ts, 30, 3))
+>invalidPlain : Symbol(invalidPlain, Decl(ts-expect-error.ts, 36, 3))
 
 var validPlain: string = 'nope';
->validPlain : Symbol(validPlain, Decl(ts-expect-error.ts, 32, 3))
+>validPlain : Symbol(validPlain, Decl(ts-expect-error.ts, 38, 3))
 
 // @ts-expect-error
 (({ a: true } as const).a === false); // <-- compiles (as expected via comment)
->({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 35, 3))
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 41, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 41, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 41, 3))
 
 (({ a: true } as const).a === false); // Should error
->({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 36, 3))
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 42, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 42, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 42, 3))
 
 (({ a: true } as const).a === false); // error
->({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 38, 3))
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 44, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 44, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 44, 3))
 
 (({ a: true } as const).a === false); // error
->({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
->a : Symbol(a, Decl(ts-expect-error.ts, 39, 3))
+>({ a: true } as const).a : Symbol(a, Decl(ts-expect-error.ts, 45, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 45, 3))
+>a : Symbol(a, Decl(ts-expect-error.ts, 45, 3))
 

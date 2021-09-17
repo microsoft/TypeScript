@@ -286,12 +286,12 @@ namespace ts {
     /**
      * Test for whether a single line comment with leading whitespace trimmed's text contains a directive.
      */
-    const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExSingleLine = /^\/\/\/?\s*@(ts-expect-error|ts-ignore)(?: TS(\d+))?/;
 
     /**
      * Test for whether a multi-line comment with leading whitespace trimmed's last line contains a directive.
      */
-    const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)/;
+    const commentDirectiveRegExMultiLine = /^(?:\/|\*)*\s*@(ts-expect-error|ts-ignore)(?: TS(\d+))?/;
 
     function lookupInUnicodeMap(code: number, map: readonly number[]): boolean {
         // Bail out quickly if it couldn't possibly be in the map.
@@ -2194,7 +2194,7 @@ namespace ts {
             commentDirectiveRegEx: RegExp,
             lineStart: number,
         ) {
-            const type = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
+            const {type, code} = getDirectiveFromComment(trimStringStart(text), commentDirectiveRegEx);
             if (type === undefined) {
                 return commentDirectives;
             }
@@ -2204,6 +2204,7 @@ namespace ts {
                 {
                     range: { pos: lineStart, end: pos },
                     type,
+                    code
                 },
             );
         }
@@ -2211,18 +2212,19 @@ namespace ts {
         function getDirectiveFromComment(text: string, commentDirectiveRegEx: RegExp) {
             const match = commentDirectiveRegEx.exec(text);
             if (!match) {
-                return undefined;
+                return { type: undefined, code: undefined };
             }
-
+            let type;
             switch (match[1]) {
                 case "ts-expect-error":
-                    return CommentDirectiveType.ExpectError;
-
+                    type = CommentDirectiveType.ExpectError;
+                    break;
                 case "ts-ignore":
-                    return CommentDirectiveType.Ignore;
+                    type = CommentDirectiveType.Ignore;
+                    break;
             }
 
-            return undefined;
+            return {type, code: match[2]};
         }
 
         /**

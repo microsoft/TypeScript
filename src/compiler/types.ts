@@ -3624,6 +3624,7 @@ namespace ts {
     export interface CommentDirective {
         range: TextRange;
         type: CommentDirectiveType,
+        code?: string | undefined
     }
 
     /* @internal */
@@ -8528,7 +8529,7 @@ namespace ts {
     /* @internal */
     export interface CommentDirectivesMap {
         getUnusedExpectations(): CommentDirective[];
-        markUsed(matchedLine: number): boolean;
+        markUsed(matchedLine: number, diagCode: number): boolean;
     }
 
     export interface UserPreferences {

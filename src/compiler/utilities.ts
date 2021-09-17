@@ -458,11 +458,14 @@ namespace ts {
                 .map(([_, directive]) => directive);
         }
 
-        function markUsed(line: number) {
-            if (!directivesByLine.has(`${line}`)) {
+        function markUsed(line: number, diagCode: number) {
+            const directive = directivesByLine.get(`${line}`);
+            if (!directive) {
                 return false;
             }
-
+            if(directive.type === CommentDirectiveType.ExpectError && directive.code !== undefined && parseInt(directive.code, 10) !== diagCode) {
+                return false;
+            }
             usedLines.set(`${line}`, true);
             return true;
         }

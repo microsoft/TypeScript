@@ -1939,7 +1939,12 @@ namespace ts {
             const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
 
             for (const errorExpectation of directives.getUnusedExpectations()) {
-                diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+                if (errorExpectation.code) {
+                    diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.ts_expect_error_unexpected_due_to_error_code_mismatch));
+                }
+                else {
+                    diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
+                }
             }
 
             return diagnostics;
@@ -1968,7 +1973,7 @@ namespace ts {
          * @returns The line index marked as preceding the diagnostic, or -1 if none was.
          */
         function markPrecedingCommentDirectiveLine(diagnostic: Diagnostic, directives: CommentDirectivesMap) {
-            const { file, start } = diagnostic;
+            const { file, start, code } = diagnostic;
             if (!file) {
                 return -1;
             }
@@ -1978,7 +1983,7 @@ namespace ts {
             let line = computeLineAndCharacterOfPosition(lineStarts, start!).line - 1; // TODO: GH#18217
             while (line >= 0) {
                 // As soon as that line is known to have a comment directive, use that
-                if (directives.markUsed(line)) {
+                if (directives.markUsed(line, code)) {
                     return line;
                 }
 

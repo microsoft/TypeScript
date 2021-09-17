@@ -25,10 +25,20 @@ var invalidCommentedPlainSingle: number = 'nope';
 >invalidCommentedPlainSingle : number
 >'nope' : "nope"
 
+// @ts-expect-error TS2322
+var matchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+>matchedTsCodeCommentedPlainSingleWithCode : number
+>'nope' : "nope"
+
 /*
  @ts-expect-error */
 var invalidCommentedPlainMulti: number = 'nope';
 >invalidCommentedPlainMulti : number
+>'nope' : "nope"
+
+// @ts-expect-error TS9999
+var mismatchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+>mismatchedTsCodeCommentedPlainSingleWithCode : number
 >'nope' : "nope"
 
 // @ts-expect-error

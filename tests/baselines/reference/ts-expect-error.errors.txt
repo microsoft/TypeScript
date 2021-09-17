@@ -1,15 +1,17 @@
 tests/cases/conformance/directives/ts-expect-error.ts(8,1): error TS2578: Unused '@ts-expect-error' directive.
 tests/cases/conformance/directives/ts-expect-error.ts(11,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(21,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(24,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(28,1): error TS2578: Unused '@ts-expect-error' directive.
-tests/cases/conformance/directives/ts-expect-error.ts(31,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/directives/ts-expect-error.ts(37,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(39,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
-tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(24,1): error TS2579: '@ts-expect-error' unexpected due to error code mismatch.
+tests/cases/conformance/directives/ts-expect-error.ts(25,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-expect-error.ts(27,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(30,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(34,1): error TS2578: Unused '@ts-expect-error' directive.
+tests/cases/conformance/directives/ts-expect-error.ts(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/directives/ts-expect-error.ts(43,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(45,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
+tests/cases/conformance/directives/ts-expect-error.ts(46,2): error TS2367: This condition will always return 'false' since the types 'true' and 'false' have no overlap.
 
 
-==== tests/cases/conformance/directives/ts-expect-error.ts (9 errors) ====
+==== tests/cases/conformance/directives/ts-expect-error.ts (11 errors) ====
     // @ts-expect-error additional commenting
     var invalidCommentedFancySingle: number = 'nope';
     
@@ -30,9 +32,19 @@ tests/cases/conformance/directives/ts-expect-error.ts(40,2): error TS2367: This 
     // @ts-expect-error
     var invalidCommentedPlainSingle: number = 'nope';
     
+    // @ts-expect-error TS2322
+    var matchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+    
     /*
      @ts-expect-error */
     var invalidCommentedPlainMulti: number = 'nope';
+    
+    // @ts-expect-error TS9999
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2579: '@ts-expect-error' unexpected due to error code mismatch.
+    var mismatchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     // @ts-expect-error
     ~~~~~~~~~~~~~~~~~~~

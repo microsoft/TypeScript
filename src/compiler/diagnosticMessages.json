@@ -2442,6 +2442,10 @@
         "category": "Error",
         "code": 2578
     },
+    "'@ts-expect-error' unexpected due to error code mismatch.": {
+        "category": "Error",
+        "code": 2579
+    },
     "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.": {
         "category": "Error",
         "code": 2580

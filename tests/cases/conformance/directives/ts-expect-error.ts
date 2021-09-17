@@ -14,9 +14,15 @@ var validCommentedFancyMulti: string = 'nope';
 // @ts-expect-error
 var invalidCommentedPlainSingle: number = 'nope';
 
+// @ts-expect-error TS2322
+var matchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
+
 /*
  @ts-expect-error */
 var invalidCommentedPlainMulti: number = 'nope';
+
+// @ts-expect-error TS9999
+var mismatchedTsCodeCommentedPlainSingleWithCode: number = 'nope';
 
 // @ts-expect-error
 var validCommentedPlainSingle: string = 'nope';
