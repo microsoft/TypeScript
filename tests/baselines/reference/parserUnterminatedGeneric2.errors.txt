@@ -1,5 +1,5 @@
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(2,5): error TS1435: Unknown keyword or identifier. Did you mean 'interface ICompiledExpression'?
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(2,5): error TS2304: Cannot find name 'interfaceICompiledExpression'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(2,34): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(3,42): error TS1005: '=>' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,9): error TS2304: Cannot find name 'assign'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,16): error TS2304: Cannot find name 'context'.
@@ -19,9 +19,9 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
     declare module ng {
         interfaceICompiledExpression {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1435: Unknown keyword or identifier. Did you mean 'interface ICompiledExpression'?
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'interfaceICompiledExpression'.
-                                     ~
-!!! error TS1005: ';' expected.
             (context: any, locals?: any): any;
                                              ~
 !!! error TS1005: '=>' expected.

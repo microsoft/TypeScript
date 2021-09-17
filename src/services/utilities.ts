@@ -758,7 +758,7 @@ namespace ts {
         if (isClassDeclaration(node)) {
             // for class and function declarations, use the `default` modifier
             // when the declaration is unnamed.
-            const defaultModifier = find(node.modifiers!, isDefaultModifier);
+            const defaultModifier = node.modifiers && find(node.modifiers, isDefaultModifier);
             if (defaultModifier) return defaultModifier;
         }
         if (isClassExpression(node)) {
@@ -796,11 +796,9 @@ namespace ts {
         return lastTypeNode;
     }
 
-    export function getContextualTypeOrAncestorTypeNodeType(node: Expression, checker: TypeChecker) {
-        const contextualType = checker.getContextualType(node);
-        if (contextualType) {
-            return contextualType;
-        }
+    export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+        const contextualType = getContextualTypeFromParent(node, checker);
+        if (contextualType) return contextualType;
 
         const ancestorTypeNode = getAncestorTypeNode(node);
         return ancestorTypeNode && checker.getTypeAtLocation(ancestorTypeNode);
@@ -2054,7 +2052,9 @@ namespace ts {
     // Display-part writer helpers
     // #region
     export function isFirstDeclarationOfSymbolParameter(symbol: Symbol) {
-        return symbol.declarations && symbol.declarations.length > 0 && symbol.declarations[0].kind === SyntaxKind.Parameter;
+        const declaration = symbol.declarations ? firstOrUndefined(symbol.declarations) : undefined;
+        return !!findAncestor(declaration, n =>
+            isParameter(n) ? true : isBindingElement(n) || isObjectBindingPattern(n) || isArrayBindingPattern(n) ? false : "quit");
     }
 
     const displayPartWriter = getDisplayPartWriter();
@@ -2159,19 +2159,19 @@ namespace ts {
             if (flags & SymbolFlags.Variable) {
                 return isFirstDeclarationOfSymbolParameter(symbol) ? SymbolDisplayPartKind.parameterName : SymbolDisplayPartKind.localName;
             }
-            else if (flags & SymbolFlags.Property) { return SymbolDisplayPartKind.propertyName; }
-            else if (flags & SymbolFlags.GetAccessor) { return SymbolDisplayPartKind.propertyName; }
-            else if (flags & SymbolFlags.SetAccessor) { return SymbolDisplayPartKind.propertyName; }
-            else if (flags & SymbolFlags.EnumMember) { return SymbolDisplayPartKind.enumMemberName; }
-            else if (flags & SymbolFlags.Function) { return SymbolDisplayPartKind.functionName; }
-            else if (flags & SymbolFlags.Class) { return SymbolDisplayPartKind.className; }
-            else if (flags & SymbolFlags.Interface) { return SymbolDisplayPartKind.interfaceName; }
-            else if (flags & SymbolFlags.Enum) { return SymbolDisplayPartKind.enumName; }
-            else if (flags & SymbolFlags.Module) { return SymbolDisplayPartKind.moduleName; }
-            else if (flags & SymbolFlags.Method) { return SymbolDisplayPartKind.methodName; }
-            else if (flags & SymbolFlags.TypeParameter) { return SymbolDisplayPartKind.typeParameterName; }
-            else if (flags & SymbolFlags.TypeAlias) { return SymbolDisplayPartKind.aliasName; }
-            else if (flags & SymbolFlags.Alias) { return SymbolDisplayPartKind.aliasName; }
+            if (flags & SymbolFlags.Property) return SymbolDisplayPartKind.propertyName;
+            if (flags & SymbolFlags.GetAccessor) return SymbolDisplayPartKind.propertyName;
+            if (flags & SymbolFlags.SetAccessor) return SymbolDisplayPartKind.propertyName;
+            if (flags & SymbolFlags.EnumMember) return SymbolDisplayPartKind.enumMemberName;
+            if (flags & SymbolFlags.Function) return SymbolDisplayPartKind.functionName;
+            if (flags & SymbolFlags.Class) return SymbolDisplayPartKind.className;
+            if (flags & SymbolFlags.Interface) return SymbolDisplayPartKind.interfaceName;
+            if (flags & SymbolFlags.Enum) return SymbolDisplayPartKind.enumName;
+            if (flags & SymbolFlags.Module) return SymbolDisplayPartKind.moduleName;
+            if (flags & SymbolFlags.Method) return SymbolDisplayPartKind.methodName;
+            if (flags & SymbolFlags.TypeParameter) return SymbolDisplayPartKind.typeParameterName;
+            if (flags & SymbolFlags.TypeAlias) return SymbolDisplayPartKind.aliasName;
+            if (flags & SymbolFlags.Alias) return SymbolDisplayPartKind.aliasName;
 
             return SymbolDisplayPartKind.text;
         }
@@ -2249,14 +2249,14 @@ namespace ts {
             : "linkplain";
         const parts = [linkPart(`{@${prefix} `)];
         if (!link.name) {
-            if (link.text) {parts.push(linkTextPart(link.text));}
+            if (link.text) parts.push(linkTextPart(link.text));
         }
         else {
             const symbol = checker?.getSymbolAtLocation(link.name);
             const decl = symbol?.valueDeclaration || symbol?.declarations?.[0];
             if (decl) {
                 parts.push(linkNamePart(link.name, decl));
-                if (link.text) {parts.push(linkTextPart(link.text));}
+                if (link.text) parts.push(linkTextPart(link.text));
             }
             else {
                 parts.push(linkTextPart(getTextOfNode(link.name) + " " + link.text));
@@ -2633,7 +2633,7 @@ namespace ts {
     export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
-        const notAccessible = () => { typeIsAccessible = false; };
+        const notAccessible = () => typeIsAccessible = false;
         const res = checker.typeToTypeNode(type, enclosingScope, NodeBuilderFlags.NoTruncation, {
             trackSymbol: (symbol, declaration, meaning) => {
                 typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
@@ -2793,8 +2793,12 @@ namespace ts {
     }
 
     export function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
-        try { return cb(); }
-        catch { return undefined; }
+        try {
+            return cb();
+        }
+        catch {
+            return undefined;
+        }
     }
 
     export function tryIOAndConsumeErrors<T>(host: unknown, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
@@ -3080,6 +3084,22 @@ namespace ts {
         return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 
+    /* @internal */
+    export function getFixableErrorSpanExpression(sourceFile: SourceFile, span: TextSpan): Expression | undefined {
+        const token = getTokenAtPosition(sourceFile, span.start);
+        // Checker has already done work to determine that await might be possible, and has attached
+        // related info to the node, so start by finding the expression that exactly matches up
+        // with the diagnostic range.
+        const expression = findAncestor(token, node => {
+            if (node.getStart(sourceFile) < span.start || node.getEnd() > textSpanEnd(span)) {
+                return "quit";
+            }
+            return isExpression(node) && textSpansEqual(span, createTextSpanFromNode(node, sourceFile));
+        }) as Expression | undefined;
+
+        return expression;
+    }
+
     /**
      * If the provided value is an array, the mapping function is applied to each element; otherwise, the mapping function is applied
      * to the provided value itself.
@@ -3167,263 +3187,17 @@ namespace ts {
         return isInJSFile(declaration) || !findAncestor(declaration, isGlobalScopeAugmentation);
     }
 
-    export const enum ImportKind {
-        Named,
-        Default,
-        Namespace,
-        CommonJS,
-    }
-
-    export const enum ExportKind {
-        Named,
-        Default,
-        ExportEquals,
-        UMD,
-    }
-
-    /** Information about how a symbol is exported from a module. */
-    export interface SymbolExportInfo {
-        symbol: Symbol;
-        moduleSymbol: Symbol;
-        exportKind: ExportKind;
-        /** If true, can't use an es6 import from a js file. */
-        exportedSymbolIsTypeOnly: boolean;
-        /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
-        isFromPackageJson: boolean;
-    }
-
-    export interface ExportMapCache {
-        clear(): void;
-        get(file: Path, checker: TypeChecker): MultiMap<string, SymbolExportInfo> | undefined;
-        getProjectVersion(): string | undefined;
-        set(suggestions: MultiMap<string, SymbolExportInfo>, projectVersion?: string): void;
-        isEmpty(): boolean;
-        /** @returns Whether the change resulted in the cache being cleared */
-        onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean): boolean;
-    }
-    export function createExportMapCache(): ExportMapCache {
-        let cache: MultiMap<string, SymbolExportInfo> | undefined;
-        let projectVersion: string | undefined;
-        let usableByFileName: Path | undefined;
-        const wrapped: ExportMapCache = {
-            isEmpty() {
-                return !cache;
-            },
-            clear() {
-                cache = undefined;
-                projectVersion = undefined;
-            },
-            set(suggestions, version) {
-                cache = suggestions;
-                if (version) {
-                    projectVersion = version;
-                }
-            },
-            get: (file) => {
-                if (usableByFileName && file !== usableByFileName) {
-                    return undefined;
-                }
-                return cache;
-            },
-            getProjectVersion: () => projectVersion,
-            onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean) {
-                if (fileIsGlobalOnly(oldSourceFile) && fileIsGlobalOnly(newSourceFile)) {
-                    // File is purely global; doesn't affect export map
-                    return false;
-                }
-                if (
-                    usableByFileName && usableByFileName !== newSourceFile.path ||
-                    // If ATA is enabled, auto-imports uses existing imports to guess whether you want auto-imports from node.
-                    // Adding or removing imports from node could change the outcome of that guess, so could change the suggestions list.
-                    typeAcquisitionEnabled && consumesNodeCoreModules(oldSourceFile) !== consumesNodeCoreModules(newSourceFile) ||
-                    // Module agumentation and ambient module changes can add or remove exports available to be auto-imported.
-                    // Changes elsewhere in the file can change the *type* of an export in a module augmentation,
-                    // but type info is gathered in getCompletionEntryDetails, which doesn’t use the cache.
-                    !arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations) ||
-                    !ambientModuleDeclarationsAreEqual(oldSourceFile, newSourceFile)
-                ) {
-                    this.clear();
-                    return true;
-                }
-                usableByFileName = newSourceFile.path;
-                return false;
-            },
-        };
-        if (Debug.isDebugging) {
-            Object.defineProperty(wrapped, "__cache", { get: () => cache });
-        }
-        return wrapped;
-
-        function fileIsGlobalOnly(file: SourceFile) {
-            return !file.commonJsModuleIndicator && !file.externalModuleIndicator && !file.moduleAugmentations && !file.ambientModuleNames;
-        }
-
-        function ambientModuleDeclarationsAreEqual(oldSourceFile: SourceFile, newSourceFile: SourceFile) {
-            if (!arrayIsEqualTo(oldSourceFile.ambientModuleNames, newSourceFile.ambientModuleNames)) {
-                return false;
-            }
-            let oldFileStatementIndex = -1;
-            let newFileStatementIndex = -1;
-            for (const ambientModuleName of newSourceFile.ambientModuleNames) {
-                const isMatchingModuleDeclaration = (node: Statement) => isNonGlobalAmbientModule(node) && node.name.text === ambientModuleName;
-                oldFileStatementIndex = findIndex(oldSourceFile.statements, isMatchingModuleDeclaration, oldFileStatementIndex + 1);
-                newFileStatementIndex = findIndex(newSourceFile.statements, isMatchingModuleDeclaration, newFileStatementIndex + 1);
-                if (oldSourceFile.statements[oldFileStatementIndex] !== newSourceFile.statements[newFileStatementIndex]) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-
-    export interface ModuleSpecifierResolutionCacheHost {
-        watchNodeModulesForPackageJsonChanges(directoryPath: string): FileWatcher;
-    }
-
-    export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
-        let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
-        let cache: ESMap<Path, ResolvedModuleSpecifierInfo> | undefined;
-        let currentKey: string | undefined;
-        const result: ModuleSpecifierCache = {
-            get(fromFileName, toFileName, preferences) {
-                if (!cache || currentKey !== key(fromFileName, preferences)) return undefined;
-                return cache.get(toFileName);
-            },
-            set(fromFileName, toFileName, preferences, modulePaths, moduleSpecifiers) {
-                ensureCache(fromFileName, preferences).set(toFileName, createInfo(modulePaths, moduleSpecifiers, /*isAutoImportable*/ true));
-
-                // If any module specifiers were generated based off paths in node_modules,
-                // a package.json file in that package was read and is an input to the cached.
-                // Instead of watching each individual package.json file, set up a wildcard
-                // directory watcher for any node_modules referenced and clear the cache when
-                // it sees any changes.
-                if (moduleSpecifiers) {
-                    for (const p of modulePaths) {
-                        if (p.isInNodeModules) {
-                            // No trailing slash
-                            const nodeModulesPath = p.path.substring(0, p.path.indexOf(nodeModulesPathPart) + nodeModulesPathPart.length - 1);
-                            if (!containedNodeModulesWatchers?.has(nodeModulesPath)) {
-                                (containedNodeModulesWatchers ||= new Map()).set(
-                                    nodeModulesPath,
-                                    host.watchNodeModulesForPackageJsonChanges(nodeModulesPath),
-                                );
-                            }
-                        }
-                    }
-                }
-            },
-            setModulePaths(fromFileName, toFileName, preferences, modulePaths) {
-                const cache = ensureCache(fromFileName, preferences);
-                const info = cache.get(toFileName);
-                if (info) {
-                    info.modulePaths = modulePaths;
-                }
-                else {
-                    cache.set(toFileName, createInfo(modulePaths, /*moduleSpecifiers*/ undefined, /*isAutoImportable*/ undefined));
-                }
-            },
-            setIsAutoImportable(fromFileName, toFileName, preferences, isAutoImportable) {
-                const cache = ensureCache(fromFileName, preferences);
-                const info = cache.get(toFileName);
-                if (info) {
-                    info.isAutoImportable = isAutoImportable;
-                }
-                else {
-                    cache.set(toFileName, createInfo(/*modulePaths*/ undefined, /*moduleSpecifiers*/ undefined, isAutoImportable));
-                }
-            },
-            clear() {
-                containedNodeModulesWatchers?.forEach(watcher => watcher.close());
-                cache?.clear();
-                containedNodeModulesWatchers?.clear();
-                currentKey = undefined;
-            },
-            count() {
-                return cache ? cache.size : 0;
-            }
-        };
-        if (Debug.isDebugging) {
-            Object.defineProperty(result, "__cache", { get: () => cache });
-        }
-        return result;
-
-        function ensureCache(fromFileName: Path, preferences: UserPreferences) {
-            const newKey = key(fromFileName, preferences);
-            if (cache && (currentKey !== newKey)) {
-                result.clear();
-            }
-            currentKey = newKey;
-            return cache ||= new Map();
-        }
-
-        function key(fromFileName: Path, preferences: UserPreferences) {
-            return `${fromFileName},${preferences.importModuleSpecifierEnding},${preferences.importModuleSpecifierPreference}`;
-        }
-
-        function createInfo(
-            modulePaths: readonly ModulePath[] | undefined,
-            moduleSpecifiers: readonly string[] | undefined,
-            isAutoImportable: boolean | undefined,
-        ): ResolvedModuleSpecifierInfo {
-            return { modulePaths, moduleSpecifiers, isAutoImportable };
-        }
-    }
-
-    export function isImportableFile(
-        program: Program,
-        from: SourceFile,
-        to: SourceFile,
-        preferences: UserPreferences,
-        packageJsonFilter: PackageJsonImportFilter | undefined,
-        moduleSpecifierResolutionHost: ModuleSpecifierResolutionHost,
-        moduleSpecifierCache: ModuleSpecifierCache | undefined,
-    ): boolean {
-        if (from === to) return false;
-        const cachedResult = moduleSpecifierCache?.get(from.path, to.path, preferences);
-        if (cachedResult?.isAutoImportable !== undefined) {
-            return cachedResult.isAutoImportable;
-        }
-
-        const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
-        const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
-        const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
-            from.fileName,
-            to.fileName,
-            moduleSpecifierResolutionHost,
-            /*preferSymlinks*/ false,
-            toPath => {
-                const toFile = program.getSourceFile(toPath);
-                // Determine to import using toPath only if toPath is what we were looking at
-                // or there doesnt exist the file in the program by the symlink
-                return (toFile === to || !toFile) &&
-                    isImportablePath(from.fileName, toPath, getCanonicalFileName, globalTypingsCache);
-            }
-        );
-
-        if (packageJsonFilter) {
-            const isAutoImportable = hasImportablePath && packageJsonFilter.allowsImportingSourceFile(to, moduleSpecifierResolutionHost);
-            moduleSpecifierCache?.setIsAutoImportable(from.path, to.path, preferences, isAutoImportable);
-            return isAutoImportable;
-        }
-
-        return hasImportablePath;
-    }
-
-    /**
-     * Don't include something from a `node_modules` that isn't actually reachable by a global import.
-     * A relative import to node_modules is usually a bad idea.
-     */
-    function isImportablePath(fromPath: string, toPath: string, getCanonicalFileName: GetCanonicalFileName, globalCachePath?: string): boolean {
-        // If it's in a `node_modules` but is not reachable from here via a global import, don't bother.
-        const toNodeModules = forEachAncestorDirectory(toPath, ancestor => getBaseFileName(ancestor) === "node_modules" ? ancestor : undefined);
-        const toNodeModulesParent = toNodeModules && getDirectoryPath(getCanonicalFileName(toNodeModules));
-        return toNodeModulesParent === undefined
-            || startsWith(getCanonicalFileName(fromPath), toNodeModulesParent)
-            || (!!globalCachePath && startsWith(getCanonicalFileName(globalCachePath), toNodeModulesParent));
-    }
-
     export function isDeprecatedDeclaration(decl: Declaration) {
         return !!(getCombinedNodeFlagsAlwaysIncludeJSDoc(decl) & ModifierFlags.Deprecated);
+    }
+
+    export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+        const decisionFromFile = firstDefined(file.imports, node => {
+            if (JsTyping.nodeCoreModules.has(node.text)) {
+                return startsWith(node.text, "node:");
+            }
+        });
+        return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
     }
 
     // #endregion

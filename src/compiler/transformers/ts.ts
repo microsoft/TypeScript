@@ -567,35 +567,12 @@ namespace ts {
                 visitLexicalEnvironment(node.statements, sourceElementVisitor, context, /*start*/ 0, alwaysStrict));
         }
 
-        /**
-         * Tests whether we should emit a __decorate call for a class declaration.
-         */
-        function shouldEmitDecorateCallForClass(node: ClassDeclaration) {
-            if (node.decorators && node.decorators.length > 0) {
-                return true;
-            }
-
-            const constructor = getFirstConstructorWithBody(node);
-            if (constructor) {
-                return forEach(constructor.parameters, shouldEmitDecorateCallForParameter);
-            }
-
-            return false;
-        }
-
-        /**
-         * Tests whether we should emit a __decorate call for a parameter declaration.
-         */
-        function shouldEmitDecorateCallForParameter(parameter: ParameterDeclaration) {
-            return parameter.decorators !== undefined && parameter.decorators.length > 0;
-        }
-
         function getClassFacts(node: ClassDeclaration, staticProperties: readonly PropertyDeclaration[]) {
             let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             const extendsClauseElement = getEffectiveBaseTypeNode(node);
             if (extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword) facts |= ClassFacts.IsDerivedClass;
-            if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (classOrConstructorParameterIsDecorated(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
             if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
             else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
@@ -846,7 +823,12 @@ namespace ts {
 
             const location = moveRangePastDecorators(node);
             const classAlias = getClassAliasIfNeeded(node);
-            const declName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const declName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
 
             //  ... = class ${name} ${heritageClauses} {
             //      ${members}
@@ -1256,7 +1238,12 @@ namespace ts {
             }
 
             const classAlias = classAliases && classAliases[getOriginalNodeId(node)];
-            const localName = factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
+
+            // When we transform to ES5/3 this will be moved inside an IIFE and should reference the name
+            // without any block-scoped variable collision handling
+            const localName = languageVersion <= ScriptTarget.ES2015 ?
+                factory.getInternalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true) :
+                factory.getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true);
             const decorate = emitHelpers().createDecorateHelper(decoratorExpressions, localName);
             const expression = factory.createAssignment(localName, classAlias ? factory.createAssignment(classAlias, decorate) : decorate);
             setEmitFlags(expression, EmitFlags.NoComments);
@@ -2804,7 +2791,7 @@ namespace ts {
         }
 
         /**
-         * Visits an import declaration, eliding it if it is not referenced and `importsNotUsedAsValues` is not 'preserve'.
+         * Visits an import declaration, eliding it if it is type-only or if it has an import clause that may be elided.
          *
          * @param node The import declaration node.
          */
@@ -2834,29 +2821,27 @@ namespace ts {
         }
 
         /**
-         * Visits an import clause, eliding it if it is not referenced.
+         * Visits an import clause, eliding it if its `name` and `namedBindings` may both be elided.
          *
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
-            if (node.isTypeOnly) {
-                return undefined;
-            }
+            Debug.assert(!node.isTypeOnly);
             // Elide the import clause if we elide both its name and its named bindings.
-            const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
+            const name = shouldEmitAliasDeclaration(node) ? node.name : undefined;
             const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
             return (name || namedBindings) ? factory.updateImportClause(node, /*isTypeOnly*/ false, name, namedBindings) : undefined;
         }
 
         /**
-         * Visits named import bindings, eliding it if it is not referenced.
+         * Visits named import bindings, eliding them if their targets, their references, and the compilation settings allow.
          *
          * @param node The named import bindings node.
          */
         function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
             if (node.kind === SyntaxKind.NamespaceImport) {
                 // Elide a namespace import if it is not referenced.
-                return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+                return shouldEmitAliasDeclaration(node) ? node : undefined;
             }
             else {
                 // Elide named imports if all of its import specifiers are elided.
@@ -2866,13 +2851,12 @@ namespace ts {
         }
 
         /**
-         * Visits an import specifier, eliding it if it is not referenced.
+         * Visits an import specifier, eliding it if its target, its references, and the compilation settings allow.
          *
          * @param node The import specifier node.
          */
         function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
-            // Elide an import specifier if it is not referenced.
-            return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
+            return shouldEmitAliasDeclaration(node) ? node : undefined;
         }
 
         /**
@@ -2889,8 +2873,7 @@ namespace ts {
         }
 
         /**
-         * Visits an export declaration, eliding it if it does not contain a clause that resolves
-         * to a value.
+         * Visits an export declaration, eliding it if it does not contain a clause that resolves to a value.
          *
          * @param node The export declaration node.
          */
@@ -2963,7 +2946,7 @@ namespace ts {
             // preserve old compiler's behavior: emit 'var' for import declaration (even if we do not consider them referenced) when
             // - current file is not external module
             // - import declaration is top level and target is value imported by entity name
-            return resolver.isReferencedAliasDeclaration(node)
+            return shouldEmitAliasDeclaration(node)
                 || (!isExternalModule(currentSourceFile)
                     && resolver.isTopLevelValueImportEqualsWithEntityName(node));
         }
@@ -2980,7 +2963,7 @@ namespace ts {
             }
 
             if (isExternalModuleImportEqualsDeclaration(node)) {
-                const isReferenced = resolver.isReferencedAliasDeclaration(node);
+                const isReferenced = shouldEmitAliasDeclaration(node);
                 // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
                 if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
                     return setOriginalNode(
@@ -3370,6 +3353,12 @@ namespace ts {
             }
 
             return isPropertyAccessExpression(node) || isElementAccessExpression(node) ? resolver.getConstantValue(node) : undefined;
+        }
+
+        function shouldEmitAliasDeclaration(node: Node): boolean {
+            return compilerOptions.preserveValueImports
+                ? resolver.isValueAliasDeclaration(node)
+                : resolver.isReferencedAliasDeclaration(node);
         }
     }
 }

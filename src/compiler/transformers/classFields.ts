@@ -759,7 +759,7 @@ namespace ts {
                     visitNode(node.right, visitor)
                 );
                 const expr = some(pendingExpressions) ?
-                    factory.inlineExpressions(compact([...pendingExpressions!, node])) :
+                    factory.inlineExpressions(compact([...pendingExpressions, node])) :
                     node;
                 pendingExpressions = savedPendingExpressions;
                 return expr;
@@ -947,7 +947,7 @@ namespace ts {
         function getClassFacts(node: ClassLikeDeclaration) {
             let facts = ClassFacts.None;
             const original = getOriginalNode(node);
-            if (isClassDeclaration(original) && some(original.decorators)) {
+            if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(original)) {
                 facts |= ClassFacts.ClassWasDecorated;
             }
             for (const member of node.members) {

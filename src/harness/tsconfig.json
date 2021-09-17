@@ -38,7 +38,6 @@
         "virtualFileSystemWithWatch.ts",
         "fourslashImpl.ts",
         "fourslashInterfaceImpl.ts",
-        "typeWriter.ts",
-        "loggedIO.ts"
+        "typeWriter.ts"
     ]
 }

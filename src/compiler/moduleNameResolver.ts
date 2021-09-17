@@ -280,6 +280,11 @@ namespace ts {
     }
     const nodeModulesAtTypes = combinePaths("node_modules", "@types");
 
+    function arePathsEqual(path1: string, path2: string, host: ModuleResolutionHost): boolean {
+        const useCaseSensitiveFileNames = typeof host.useCaseSensitiveFileNames === "function" ? host.useCaseSensitiveFileNames() : host.useCaseSensitiveFileNames;
+        return comparePaths(path1, path2, !useCaseSensitiveFileNames) === Comparison.EqualTo;
+    }
+
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -343,7 +348,7 @@ namespace ts {
             resolvedTypeReferenceDirective = {
                 primary,
                 resolvedFileName,
-                originalPath: fileName === resolvedFileName ? undefined : fileName,
+                originalPath: arePathsEqual(fileName, resolvedFileName, host) ? undefined : fileName,
                 packageId,
                 isExternalLibraryImport: pathContainsNodeModules(fileName),
             };
@@ -494,6 +499,7 @@ namespace ts {
     export interface PackageJsonInfoCache {
         /*@internal*/ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
         /*@internal*/ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
+        /*@internal*/ entries(): [Path, PackageJsonInfo | boolean][];
         clear(): void;
     }
 
@@ -559,7 +565,7 @@ namespace ts {
 
     function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
         let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
-        return { getPackageJsonInfo, setPackageJsonInfo, clear };
+        return { getPackageJsonInfo, setPackageJsonInfo, clear, entries };
         function getPackageJsonInfo(packageJsonPath: string) {
             return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
         }
@@ -568,6 +574,10 @@ namespace ts {
         }
         function clear() {
             cache = undefined;
+        }
+        function entries() {
+            const iter = cache?.entries();
+            return iter ? arrayFrom(iter) : [];
         }
     }
 
@@ -1073,9 +1083,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string | undefined {
-        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
-        return resolvedModule && resolvedModule.resolvedFileName;
+    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost) {
+        return tryResolveJSModuleWorker(moduleName, initialDir, host).resolvedModule;
     }
 
     const jsOnlyExtensions = [Extensions.JavaScript];
@@ -1118,7 +1127,7 @@ namespace ts {
                 let resolvedValue = resolved.value;
                 if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
                     const path = realPath(resolvedValue.path, host, traceEnabled);
-                    const originalPath = path === resolvedValue.path ? undefined : resolvedValue.path;
+                    const originalPath = arePathsEqual(path, resolvedValue.path, host) ? undefined : resolvedValue.path;
                     resolvedValue = { ...resolvedValue, path, originalPath };
                 }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.

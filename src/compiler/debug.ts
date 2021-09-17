@@ -221,7 +221,7 @@ namespace ts {
                 assert(
                     node !== undefined && (test === undefined || test(node)),
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
                     stackCrawlMark || assertNode);
             }
         }
@@ -246,7 +246,7 @@ namespace ts {
                 assert(
                     test === undefined || node === undefined || test(node),
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} did not pass test '${getFunctionName(test!)}'.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} did not pass test '${getFunctionName(test!)}'.`,
                     stackCrawlMark || assertOptionalNode);
             }
         }
@@ -259,7 +259,7 @@ namespace ts {
                 assert(
                     kind === undefined || node === undefined || node.kind === kind,
                     message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node!.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
+                    () => `Node ${formatSyntaxKind(node?.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
                     stackCrawlMark || assertOptionalToken);
             }
         }

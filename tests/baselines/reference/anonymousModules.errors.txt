@@ -1,9 +1,9 @@
 tests/cases/compiler/anonymousModules.ts(1,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/anonymousModules.ts(1,8): error TS1005: ';' expected.
+tests/cases/compiler/anonymousModules.ts(1,8): error TS1437: Namespace must be given a name.
 tests/cases/compiler/anonymousModules.ts(4,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/anonymousModules.ts(4,9): error TS1005: ';' expected.
+tests/cases/compiler/anonymousModules.ts(4,9): error TS1437: Namespace must be given a name.
 tests/cases/compiler/anonymousModules.ts(10,2): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
+tests/cases/compiler/anonymousModules.ts(10,9): error TS1437: Namespace must be given a name.
 
 
 ==== tests/cases/compiler/anonymousModules.ts (6 errors) ====
@@ -11,14 +11,14 @@ tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
            ~
-!!! error TS1005: ';' expected.
+!!! error TS1437: Namespace must be given a name.
     	export var foo = 1;
     
     	module {
     	~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     	       ~
-!!! error TS1005: ';' expected.
+!!! error TS1437: Namespace must be given a name.
     		export var bar = 1;
     	}
     
@@ -28,7 +28,7 @@ tests/cases/compiler/anonymousModules.ts(10,9): error TS1005: ';' expected.
     	~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     	       ~
-!!! error TS1005: ';' expected.
+!!! error TS1437: Namespace must be given a name.
     		var x = bar;
     	}
     }

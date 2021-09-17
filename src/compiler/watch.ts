@@ -418,6 +418,7 @@ namespace ts {
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
+        PackageJson: "package.json file",
     };
 
     export interface WatchTypeRegistry {
@@ -431,6 +432,7 @@ namespace ts {
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
+        PackageJson: "package.json file",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {

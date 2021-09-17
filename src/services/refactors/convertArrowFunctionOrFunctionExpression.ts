@@ -141,7 +141,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const token = getTokenAtPosition(file, startPosition);
         const typeChecker = program.getTypeChecker();
         const func = tryGetFunctionFromVariableDeclaration(file, typeChecker, token.parent);
-        if (func && !containingThis(func.body)) {
+        if (func && !containingThis(func.body) && !typeChecker.containsArgumentsReference(func)) {
             return { selectedVariableDeclaration: true, func };
         }
 
@@ -150,7 +150,8 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             maybeFunc &&
             (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
             !rangeContainsRange(maybeFunc.body, token) &&
-            !containingThis(maybeFunc.body)
+            !containingThis(maybeFunc.body) &&
+            !typeChecker.containsArgumentsReference(maybeFunc)
         ) {
             if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };

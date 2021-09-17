@@ -15,7 +15,7 @@ tests/cases/compiler/reservedWords2.ts(5,9): error TS2567: Enum declarations can
 tests/cases/compiler/reservedWords2.ts(5,10): error TS1359: Identifier expected. 'throw' is a reserved word that cannot be used here.
 tests/cases/compiler/reservedWords2.ts(5,18): error TS1005: '=>' expected.
 tests/cases/compiler/reservedWords2.ts(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-tests/cases/compiler/reservedWords2.ts(6,8): error TS1005: ';' expected.
+tests/cases/compiler/reservedWords2.ts(6,8): error TS2819: Namespace name cannot be 'void'.
 tests/cases/compiler/reservedWords2.ts(7,11): error TS2300: Duplicate identifier '(Missing)'.
 tests/cases/compiler/reservedWords2.ts(7,11): error TS1005: ':' expected.
 tests/cases/compiler/reservedWords2.ts(7,19): error TS2300: Duplicate identifier '(Missing)'.
@@ -77,7 +77,7 @@ tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declarati
     ~~~~~~
 !!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
            ~~~~
-!!! error TS1005: ';' expected.
+!!! error TS2819: Namespace name cannot be 'void'.
     var {while, return} = { while: 1, return: 2 };
               
 !!! error TS2300: Duplicate identifier '(Missing)'.

@@ -46,3 +46,7 @@ const c: types.C<string> = "";
 >types : Symbol(types, Decl(b.ts, 0, 11))
 >C : Symbol(types.C, Decl(a.ts, 1, 29))
 
+const d = { types };
+>d : Symbol(d, Decl(b.ts, 7, 5))
+>types : Symbol(types, Decl(b.ts, 7, 11))
+

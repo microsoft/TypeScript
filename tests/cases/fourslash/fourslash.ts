@@ -111,6 +111,20 @@ declare module ts {
         exportName: string;
     }
 
+    interface CompilerOptions {
+        module?: string;
+        target?: string;
+        jsx?: string;
+        allowJs?: boolean;
+        maxNodeModulesJsDepth?: number;
+        strictNullChecks?: boolean;
+        sourceMap?: boolean;
+        allowSyntheticDefaultImports?: boolean;
+        allowNonTsExtensions?: boolean;
+        resolveJsonModule?: boolean;
+        [key: string]: string | number | boolean | undefined;
+    }
+
     function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
 }
 
@@ -200,8 +214,9 @@ declare namespace FourSlashInterface {
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
     }
-    class plugins {
+    class config {
         configurePlugin(pluginName: string, configuration: any): void;
+        setCompilerOptionsForInferredProjects(options: ts.CompilerOptions)
     }
     class goTo {
         marker(name?: string | Marker): void;
@@ -810,7 +825,7 @@ declare namespace FourSlashInterface {
 declare function ignoreInterpolations(diagnostic: string | ts.DiagnosticMessage): FourSlashInterface.DiagnosticIgnoredInterpolations;
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
-declare var plugins: FourSlashInterface.plugins;
+declare var config: FourSlashInterface.config;
 declare var goTo: FourSlashInterface.goTo;
 declare var verify: FourSlashInterface.verify;
 declare var edit: FourSlashInterface.edit;
@@ -822,21 +837,21 @@ declare function classification(format: "2020"): FourSlashInterface.ModernClassi
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const enum SortText {
-        LocalDeclarationPriority = "0",
-        LocationPriority = "1",
-        OptionalMember = "2",
-        MemberDeclaredBySpreadAssignment = "3",
-        SuggestedClassMembers = "4",
-        GlobalsOrKeywords = "5",
-        AutoImportSuggestions = "6",
-        JavascriptIdentifiers = "7",
-        DeprecatedLocalDeclarationPriority = "8",
-        DeprecatedLocationPriority = "9",
-        DeprecatedOptionalMember = "10",
-        DeprecatedMemberDeclaredBySpreadAssignment = "11",
-        DeprecatedSuggestedClassMembers = "12",
-        DeprecatedGlobalsOrKeywords = "13",
-        DeprecatedAutoImportSuggestions = "14"
+        LocalDeclarationPriority = "10",
+        LocationPriority = "11",
+        OptionalMember = "12",
+        MemberDeclaredBySpreadAssignment = "13",
+        SuggestedClassMembers = "14",
+        GlobalsOrKeywords = "15",
+        AutoImportSuggestions = "16",
+        JavascriptIdentifiers = "17",
+        DeprecatedLocalDeclarationPriority = "18",
+        DeprecatedLocationPriority = "19",
+        DeprecatedOptionalMember = "20",
+        DeprecatedMemberDeclaredBySpreadAssignment = "21",
+        DeprecatedSuggestedClassMembers = "22",
+        DeprecatedGlobalsOrKeywords = "23",
+        DeprecatedAutoImportSuggestions = "24"
     }
     export const enum CompletionSource {
         ThisProperty = "ThisProperty/"

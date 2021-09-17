@@ -183,6 +183,10 @@ WatchedFiles::
   {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts","pollingInterval":250}
 /a/lib/lib.d.ts:
   {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/users/username/projects/project/node_modules/react/jsx-runtime/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/package.json","pollingInterval":250}
+/users/username/projects/project/node_modules/react/package.json:
+  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
 
 FsWatches::
 

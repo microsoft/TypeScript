@@ -29,8 +29,9 @@ namespace ts.JsTyping {
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    export const nodeCoreModuleList: readonly string[] = [
+    const unprefixedNodeCoreModuleList = [
         "assert",
+        "assert/strict",
         "async_hooks",
         "buffer",
         "child_process",
@@ -39,14 +40,18 @@ namespace ts.JsTyping {
         "constants",
         "crypto",
         "dgram",
+        "diagnostics_channel",
         "dns",
+        "dns/promises",
         "domain",
         "events",
         "fs",
+        "fs/promises",
         "http",
         "https",
         "http2",
         "inspector",
+        "module",
         "net",
         "os",
         "path",
@@ -57,16 +62,26 @@ namespace ts.JsTyping {
         "readline",
         "repl",
         "stream",
+        "stream/promises",
         "string_decoder",
         "timers",
+        "timers/promises",
         "tls",
+        "trace_events",
         "tty",
         "url",
         "util",
+        "util/types",
         "v8",
         "vm",
+        "wasi",
+        "worker_threads",
         "zlib"
     ];
+
+    export const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
+
+    export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
 
     export const nodeCoreModules = new Set(nodeCoreModuleList);
 

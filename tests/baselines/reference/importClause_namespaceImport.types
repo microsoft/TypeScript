@@ -45,3 +45,8 @@ const c: types.C<string> = "";
 >types : any
 >"" : ""
 
+const d = { types };
+>d : { types: typeof types; }
+>{ types } : { types: typeof types; }
+>types : typeof types
+

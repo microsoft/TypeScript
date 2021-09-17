@@ -71,6 +71,7 @@ namespace ts {
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
+        ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -223,7 +224,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Output_Formatting,
-            description: Diagnostics.Enable_color_and_formatting_in_output_to_make_compiler_errors_easier_to_read,
+            description: Diagnostics.Enable_color_and_formatting_in_TypeScript_s_output_to_make_compiler_errors_easier_to_read,
             defaultValueDescription: "true"
         },
         {
@@ -553,7 +554,7 @@ namespace ts {
             type: "boolean",
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
-            description: Diagnostics.Disable_emitting_file_from_a_compilation,
+            description: Diagnostics.Disable_emitting_files_from_a_compilation,
             transpileOptionValue: undefined,
             defaultValueDescription: "false"
         },
@@ -570,7 +571,7 @@ namespace ts {
             type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -727,7 +728,7 @@ namespace ts {
             type: "boolean",
             affectsSemanticDiagnostics: true,
             category: Diagnostics.Type_Checking,
-            description: Diagnostics.Add_undefined_to_a_type_when_accessed_using_an_index
+            description: Diagnostics.Ensure_overriding_members_in_derived_classes_are_marked_with_an_override_modifier
         },
         {
             name: "noPropertyAccessFromIndexSignature",
@@ -1166,8 +1167,16 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-            defaultValueDescription: "false"
+            defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Emit,
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",
@@ -2852,6 +2861,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2894,6 +2904,9 @@ namespace ts {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         };
         const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
@@ -2911,6 +2924,10 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };

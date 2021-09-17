@@ -11,6 +11,7 @@
     "files": [
         "types.ts",
         "utilities.ts",
+        "exportInfoMap.ts",
         "classifier.ts",
         "classifier2020.ts",
         "stringCompletions.ts",
@@ -56,6 +57,7 @@
         "codefixes/addMissingDeclareProperty.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/addNameToNamelessParameter.ts",
+        "codefixes/addOptionalPropertyUndefined.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
         "codefixes/convertFunctionToEs6Class.ts",
         "codefixes/convertToAsyncFunction.ts",

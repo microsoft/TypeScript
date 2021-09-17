@@ -119,6 +119,29 @@ namespace ts.projectSystem {
                         completions.entries.find(entry => (entry.data as any)?.moduleSpecifier?.startsWith("dep-a"))!);
                 });
         });
+
+        it("works for transient symbols between requests", () => {
+            const constantsDts: File = {
+                path: "/lib/foo/constants.d.ts",
+                content: `
+                    type Signals = "SIGINT" | "SIGABRT";
+                    declare const exp: {} & { [K in Signals]: K };
+                    export = exp;`,
+            };
+            const exportingFiles = createExportingModuleFiles("/lib/a", Completions.moduleSpecifierResolutionLimit, 1, i => `S${i}`);
+            const { typeToTriggerCompletions, session } = setup([tsconfigFile, indexFile, ...exportingFiles, constantsDts]);
+            openFilesForSession([indexFile], session);
+
+            typeToTriggerCompletions(indexFile.path, "s", completions => {
+                const sigint = completions.entries.find(e => e.name === "SIGINT");
+                assert(sigint);
+                assert(!(sigint!.data as any).moduleSpecifier);
+            })
+            .continueTyping("i", completions => {
+                const sigint = completions.entries.find(e => e.name === "SIGINT");
+                assert((sigint!.data as any).moduleSpecifier);
+            });
+        });
     });
 
     function setup(files: File[]) {
@@ -140,11 +163,11 @@ namespace ts.projectSystem {
 
         return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
 
-        function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb: (completions: protocol.CompletionInfo) => void) {
+        function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb?: (completions: protocol.CompletionInfo) => void) {
             const project = projectService.getDefaultProjectForFile(server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
             return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
-            function type(typedCharacters: string, cb: (completions: protocol.CompletionInfo) => void, isIncompleteContinuation: boolean) {
+            function type(typedCharacters: string, cb: ((completions: protocol.CompletionInfo) => void) | undefined, isIncompleteContinuation: boolean) {
                 const file = Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
                 const { line, character } = getLineAndCharacterOfPosition(file, file.text.length);
                 const oneBasedEditPosition = { line: line + 1, offset: character + 1 };
@@ -174,7 +197,7 @@ namespace ts.projectSystem {
                     }
                 }).response as protocol.CompletionInfo;
 
-                cb(Debug.checkDefined(response));
+                cb?.(Debug.checkDefined(response));
                 return {
                     backspace,
                     continueTyping: (typedCharacters: string, cb: (completions: protocol.CompletionInfo) => void) => {

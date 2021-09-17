@@ -18,7 +18,7 @@
           "name": "length",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -84,7 +84,7 @@
           "name": "toString",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -158,7 +158,7 @@
           "name": "toLocaleString",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -232,7 +232,7 @@
           "name": "pop",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -322,7 +322,7 @@
           "name": "push",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -439,7 +439,7 @@
           "name": "concat",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -941,7 +941,7 @@
           "name": "join",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1054,7 +1054,7 @@
           "name": "reverse",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1160,7 +1160,7 @@
           "name": "shift",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1250,7 +1250,7 @@
           "name": "slice",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1440,7 +1440,7 @@
           "name": "sort",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1722,7 +1722,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if first argument is less than second argument, zero if they're equal and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
+                  "text": "Function used to determine the order of the elements. It is expected to return\r\na negative value if the first argument is less than the second argument, zero if they're equal, and a positive\r\nvalue otherwise. If omitted, the elements are sorted in ascending, ASCII character order.\r\n```ts\r\n[11,2,22,1].sort((a, b) => a - b)\r\n```",
                   "kind": "text"
                 }
               ]
@@ -1733,7 +1733,7 @@
           "name": "splice",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -1956,7 +1956,7 @@
           "name": "unshift",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -2073,7 +2073,7 @@
           "name": "indexOf",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -2223,7 +2223,7 @@
           "name": "lastIndexOf",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -2373,7 +2373,7 @@
           "name": "every",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -2961,7 +2961,7 @@
           "name": "some",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -3327,7 +3327,7 @@
           "name": "forEach",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -3693,7 +3693,7 @@
           "name": "map",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -4079,7 +4079,7 @@
           "name": "filter",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -4659,7 +4659,7 @@
           "name": "reduce",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",
@@ -5395,7 +5395,7 @@
           "name": "reduceRight",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "1",
+          "sortText": "11",
           "displayParts": [
             {
               "text": "(",

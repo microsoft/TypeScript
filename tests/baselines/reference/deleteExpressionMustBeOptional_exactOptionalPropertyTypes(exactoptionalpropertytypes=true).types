@@ -45,6 +45,9 @@ type BB = {
 declare const f: Foo
 >f : Foo
 
+declare const g: Partial<Foo>
+>g : Partial<Foo>
+
 declare const a: AA
 >a : AA
 
@@ -109,6 +112,66 @@ delete f.j
 >delete f.j : boolean
 >f.j : any
 >f : Foo
+>j : any
+
+delete g.a
+>delete g.a : boolean
+>g.a : number | undefined
+>g : Partial<Foo>
+>a : number | undefined
+
+delete g.b
+>delete g.b : boolean
+>g.b : number | undefined
+>g : Partial<Foo>
+>b : number | undefined
+
+delete g.c
+>delete g.c : boolean
+>g.c : number | null | undefined
+>g : Partial<Foo>
+>c : number | null | undefined
+
+delete g.d
+>delete g.d : boolean
+>g.d : number | undefined
+>g : Partial<Foo>
+>d : number | undefined
+
+delete g.e
+>delete g.e : boolean
+>g.e : number | null | undefined
+>g : Partial<Foo>
+>e : number | null | undefined
+
+delete g.f
+>delete g.f : boolean
+>g.f : number | null | undefined
+>g : Partial<Foo>
+>f : number | null | undefined
+
+delete g.g
+>delete g.g : boolean
+>g.g : unknown
+>g : Partial<Foo>
+>g : unknown
+
+delete g.h
+>delete g.h : boolean
+>g.h : any
+>g : Partial<Foo>
+>h : any
+
+delete g.i
+>delete g.i : boolean
+>g.i : undefined
+>g : Partial<Foo>
+>i : undefined
+
+delete g.j
+>delete g.j : boolean
+>g.j : any
+>g : Partial<Foo>
 >j : any
 
 delete a.a

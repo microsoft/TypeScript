@@ -414,7 +414,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -509,7 +509,7 @@ sourceFile:../lib/file0.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -1118,7 +1118,7 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/app/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":2200,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1370,"end":2200,"kind":"text"}]},{"pos":2200,"end":2797,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file3.ts","./file4.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2228,"kind":"prepend","data":"../lib/module.js","texts":[{"pos":1398,"end":2228,"kind":"text"}]},{"pos":2228,"end":2825,"kind":"text"}],"sources":{"helpers":["typescript:rest","typescript:read","typescript:spreadArray"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"prepend","data":"../lib/module.d.ts","texts":[{"pos":0,"end":265,"kind":"text"}]},{"pos":265,"end":441,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1142,7 +1142,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1150,10 +1150,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (868-1368):: typescript:rest
+emitHelpers: (896-1396):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1166,9 +1166,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1370-2200):: ../lib/module.js texts:: 1
+prepend: (1398-2228):: ../lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1370-2200)
+text: (1398-2228)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -1196,7 +1196,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (2200-2797)
+text: (2228-2825)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1263,32 +1263,32 @@ declare const appfile4_ar: number[];
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1368,
+          "pos": 896,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1370,
-          "end": 2200,
+          "pos": 1398,
+          "end": 2228,
           "kind": "prepend",
           "data": "../lib/module.js",
           "texts": [
             {
-              "pos": 1370,
-              "end": 2200,
+              "pos": 1398,
+              "end": 2228,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2200,
-          "end": 2797,
+          "pos": 2228,
+          "end": 2825,
           "kind": "text"
         }
       ],
@@ -1535,7 +1535,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
@@ -1612,7 +1612,7 @@ sourceFile:file0.ts
 >>>            ar[i] = from[i];
 >>>        }
 >>>    }
->>>    return to.concat(ar || from);
+>>>    return to.concat(ar || Array.prototype.slice.call(from));
 >>>};
 >>>var __rest = (this && this.__rest) || function (s, e) {
 >>>    var t = {};
@@ -1949,7 +1949,7 @@ sourceFile:global.ts
 >>>//# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":866,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":868,"end":1368,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1370,"end":2200,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file0.ts","./file1.ts","./file2.ts","./global.ts"],"js":{"sections":[{"pos":0,"end":504,"kind":"emitHelpers","data":"typescript:read"},{"pos":506,"end":894,"kind":"emitHelpers","data":"typescript:spreadArray"},{"pos":896,"end":1396,"kind":"emitHelpers","data":"typescript:rest"},{"pos":1398,"end":2228,"kind":"text"}],"sources":{"helpers":["typescript:read","typescript:spreadArray","typescript:rest"]}},"dts":{"sections":[{"pos":0,"end":265,"kind":"text"}]}},"version":"FakeTSVersion"}
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1973,7 +1973,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (506-866):: typescript:spreadArray
+emitHelpers: (506-894):: typescript:spreadArray
 var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
         if (ar || !(i in from)) {
@@ -1981,10 +1981,10 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
             ar[i] = from[i];
         }
     }
-    return to.concat(ar || from);
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 ----------------------------------------------------------------------
-emitHelpers: (868-1368):: typescript:rest
+emitHelpers: (896-1396):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -1997,7 +1997,7 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-text: (1370-2200)
+text: (1398-2228)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -2062,19 +2062,19 @@ declare const globalConst = 10;
         },
         {
           "pos": 506,
-          "end": 866,
+          "end": 894,
           "kind": "emitHelpers",
           "data": "typescript:spreadArray"
         },
         {
-          "pos": 868,
-          "end": 1368,
+          "pos": 896,
+          "end": 1396,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1370,
-          "end": 2200,
+          "pos": 1398,
+          "end": 2228,
           "kind": "text"
         }
       ],
