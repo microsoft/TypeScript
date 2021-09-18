@@ -1,4 +1,4 @@
-=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithUnionType.ts ===
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts ===
 // Regression test for GH#45489
 
 declare let foo: { a: number } & { id: number }

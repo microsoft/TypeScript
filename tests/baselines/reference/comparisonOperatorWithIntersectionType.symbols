@@ -1,0 +1,12 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts ===
+// Regression test for GH#45489
+
+declare let foo: { a: number } & { id: number }
+>foo : Symbol(foo, Decl(comparisonOperatorWithIntersectionType.ts, 2, 11))
+>a : Symbol(a, Decl(comparisonOperatorWithIntersectionType.ts, 2, 18))
+>id : Symbol(id, Decl(comparisonOperatorWithIntersectionType.ts, 2, 34))
+
+const bar = foo > 1;
+>bar : Symbol(bar, Decl(comparisonOperatorWithIntersectionType.ts, 3, 5))
+>foo : Symbol(foo, Decl(comparisonOperatorWithIntersectionType.ts, 2, 11))
+
