@@ -180,6 +180,36 @@ namespace ts {
         return updated;
     }
 
+    function visitClassElements(nodes: NodeArray<ClassElement>, visitor: Visitor, context: TransformationContext, nodeVisitor = visitNode, nodesVisitor = visitNodes, tokenVisitor?: Visitor) {
+        return nodesVisitor(nodes, visitClassElement, isClassElement);
+
+        function visitClassElement(node: ClassElement) {
+            // class fields starts it's own lexical scope for variable declaration
+            if (!isPropertyDeclaration(node)) return visitor(node);
+
+            return factory.updatePropertyDeclaration(node,
+                nodesVisitor(node.decorators, visitor, isDecorator),
+                nodesVisitor(node.modifiers, visitor, isModifier),
+                nodeVisitor(node.name, visitor, isPropertyName),
+                // QuestionToken and ExclamationToken is uniqued in Property Declaration and the signature of 'updateProperty' is that too
+                nodeVisitor(node.questionToken || node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
+                nodeVisitor(node.type, visitor, isTypeNode),
+                (() => {
+                    // a virtual lexical environment. if initializer statements/variable hoisted in class fields,
+                    // it return an iife to host those statements.
+                    context.startLexicalEnvironment();
+                    const updated = nodeVisitor(node.initializer, visitor, isExpression);
+                    const statements = context.endLexicalEnvironment();
+
+                    if (statements?.length) {
+                        return factory.createImmediatelyInvokedArrowFunction(statements.concat(factory.createReturnStatement(updated)));
+                    }
+                    return updated;
+                })()
+            );
+        }
+    }
+
     function addDefaultValueAssignmentsIfNeeded(parameters: NodeArray<ParameterDeclaration>, context: TransformationContext) {
         let result: ParameterDeclaration[] | undefined;
         for (let i = 0; i < parameters.length; i++) {
@@ -1016,7 +1046,7 @@ namespace ts {
                     nodeVisitor(node.name, visitor, isIdentifier),
                     nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
-                    nodesVisitor(node.members, visitor, isClassElement));
+                    visitClassElements(node.members, visitor, context, nodeVisitor, nodesVisitor, tokenVisitor));
 
             case SyntaxKind.InterfaceDeclaration:
                 Debug.type<InterfaceDeclaration>(node);
