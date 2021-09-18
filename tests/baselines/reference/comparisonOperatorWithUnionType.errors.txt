@@ -1,0 +1,10 @@
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithUnionType.ts(4,13): error TS2365: Operator '>' cannot be applied to types '{ a: number; } & { id: number; }' and 'number'.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithUnionType.ts (1 errors) ====
+    // Regression test for GH#45489
+    
+    declare let foo: { a: number } & { id: number }
+    const bar = foo > 1;
+                ~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ a: number; } & { id: number; }' and 'number'.

@@ -1,0 +1,14 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithUnionType.ts ===
+// Regression test for GH#45489
+
+declare let foo: { a: number } & { id: number }
+>foo : { a: number; } & { id: number; }
+>a : number
+>id : number
+
+const bar = foo > 1;
+>bar : boolean
+>foo > 1 : boolean
+>foo : { a: number; } & { id: number; }
+>1 : 1
+
