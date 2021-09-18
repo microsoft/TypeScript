@@ -50,20 +50,22 @@ function avoidSignatureToBeCaptured(): void {
 
 
 //// [doExpressionReturn.js]
-function returnTypeInfer() { var _a; var _b = {}, _c; try {
-    const y = ((() => { throw _c = 1, _b; })(), _a);
+function returnTypeInfer() { var _a = {}, _b; try {
+    var _c;
+    const y = ((() => { throw _b = 1, _a; })(), _c);
 }
 catch (_d) {
-    if (_d == _b)
-        return _c;
+    if (_d == _a)
+        return _b;
     throw _d;
 } }
-function returnTypeCheck() { var _a; var _b = {}, _c; try {
-    const y = ((() => { throw _c = 1, _b; })(), _a);
+function returnTypeCheck() { var _a = {}, _b; try {
+    var _c;
+    const y = ((() => { throw _b = 1, _a; })(), _c);
 }
 catch (_d) {
-    if (_d == _b)
-        return _c;
+    if (_d == _a)
+        return _b;
     throw _d;
 } }
 function avoidFalsePositive() {
@@ -75,84 +77,86 @@ function avoidFalsePositive() {
         _a = 1;
     })(), _a);
 }
-function tryCatch() { var _a, _b, _c; var _d = {}, _e; try {
+function tryCatch() { var _a = {}, _b; try {
+    var _c, _d, _e;
     try {
         const y = ((() => { if (v)
-            throw _d; _a = 1; })(), _a);
+            throw _a; _c = 1; })(), _c);
     }
     catch (_f) {
-        if (_f == _d)
+        if (_f == _a)
             throw _f;
         1;
     }
     try {
         const y = ((() => { if (v)
-            throw _d; _b = 1; })(), _b);
+            throw _a; _d = 1; })(), _d);
     }
     catch (_g) {
-        if (_g == _d)
+        if (_g == _a)
             throw _g;
         var e = _g;
         1;
     }
     try {
         const y = ((() => { if (v)
-            throw _d; _c = 1; })(), _c);
+            throw _a; _e = 1; })(), _e);
     }
     catch (_h) {
-        if (_h == _d)
+        if (_h == _a)
             throw _h;
         var { a = 1 } = _h;
         1;
     }
 }
 catch (_j) {
-    if (_j == _d)
-        return _e;
+    if (_j == _a)
+        return _b;
     throw _j;
 } }
-function avoidSignatureToBeCaptured() { var _a, _b, _c; var _d = {}, _e; try {
+function avoidSignatureToBeCaptured() { var _a = {}, _b; try {
+    var _c, _d, _e;
     const a = ((() => {
         try {
             if (v)
-                throw _d;
-            _a = 1;
-        }
-        catch (_f) {
-            if (_f == _d)
-                throw _f;
-            _a = 1;
-        }
-    })(), _a);
-    const b = ((() => {
-        try {
-            if (v)
-                throw _d;
-            _b = 1;
-        }
-        catch (_f) {
-            if (_f == _d)
-                throw _f;
-            var d = _f;
-            _b = 1;
-        }
-    })(), _b);
-    const c = ((() => {
-        try {
-            if (v)
-                throw _d;
+                throw _a;
             _c = 1;
         }
         catch (_f) {
-            if (_f == _d)
+            if (_f == _a)
                 throw _f;
-            var { a = 1 } = _f;
             _c = 1;
         }
     })(), _c);
+    const b = ((() => {
+        try {
+            if (v)
+                throw _a;
+            _d = 1;
+        }
+        catch (_f) {
+            if (_f == _a)
+                throw _f;
+            var d = _f;
+            _d = 1;
+        }
+    })(), _d);
+    const c = ((() => {
+        try {
+            if (v)
+                throw _a;
+            _e = 1;
+        }
+        catch (_f) {
+            if (_f == _a)
+                throw _f;
+            var { a = 1 } = _f;
+            _e = 1;
+        }
+    })(), _e);
 }
 catch (_f) {
-    if (_f == _d)
-        return _e;
+    if (_f == _a)
+        return _b;
     throw _f;
 } }

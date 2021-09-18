@@ -125,28 +125,115 @@ namespace ts {
             }
         }
         function visitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): Node {
+            const nodesVisitor = visitNodes;
+            const nodeVisitor = visitNode;
+
             return startControlFlowContext(() => {
                 currentReturnContext = { type: ControlFlow.Return, signal: undefined };
-                return visitEachChild(node, child => {
-                    if (child === node.body) {
-                        return visitBody(node.body);
-                    }
-                    return visitor(child);
-                }, context);
+                const tokenVisitor = undefined;
+                // Note: the following switch statement is directly copied from visitorPublic, visitEachChild function.
+                // BUT all of visitFunctionBody logic is handled specially.
+                // We need to collect all InitializationStatement in the TransformationContext.
+                // TODO: ? maybe we can add a addBlockScopeWrapper(node => createWrapperNodes(node)) to the TransformationContext?
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                        Debug.type<FunctionDeclaration>(node);
+                        return factory.updateFunctionDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                            nodeVisitor(node.name, visitor, isIdentifier),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            nodeVisitor(node.type, visitor, isTypeNode),
+                            visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+                    case SyntaxKind.MethodDeclaration:
+                        Debug.type<MethodDeclaration>(node);
+                        return factory.updateMethodDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                            nodeVisitor(node.name, visitor, isPropertyName),
+                            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            nodeVisitor(node.type, visitor, isTypeNode),
+                            visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+                    case SyntaxKind.GetAccessor:
+                        Debug.type<GetAccessorDeclaration>(node);
+                        return factory.updateGetAccessorDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.name, visitor, isPropertyName),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            nodeVisitor(node.type, visitor, isTypeNode),
+                            visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+
+                    case SyntaxKind.SetAccessor:
+                        Debug.type<SetAccessorDeclaration>(node);
+                        return factory.updateSetAccessorDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.name, visitor, isPropertyName),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+                    case SyntaxKind.Constructor:
+                        Debug.type<ConstructorDeclaration>(node);
+                        return factory.updateConstructorDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            visitFunctionBody(node.body!, visitor, context, nodeVisitor));
+                    case SyntaxKind.FunctionExpression:
+                        Debug.type<FunctionExpression>(node);
+                        return factory.updateFunctionExpression(node,
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+                            nodeVisitor(node.name, visitor, isIdentifier),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            nodeVisitor(node.type, visitor, isTypeNode),
+                            visitFunctionBody(node.body, visitor, context, nodeVisitor));
+                    case SyntaxKind.ArrowFunction:
+                        Debug.type<ArrowFunction>(node);
+                        return factory.updateArrowFunction(node,
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            visitParameterList(node.parameters, visitor, context, nodesVisitor),
+                            nodeVisitor(node.type, visitor, isTypeNode),
+                            nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken),
+                            visitFunctionBody(node.body, visitor, context, nodeVisitor));
+                }
             });
-            function visitBody(child: ConciseBody): ConciseBody {
-                let nextBody = visitor(child);
+            // The logic is copied from visitFunctionBody
+            function visitFunctionBody(node: Block, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): Block
+            function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): ConciseBody
+            function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor = visitNode): FunctionBody | ConciseBody {
+                context.resumeLexicalEnvironment();
+                let updated = nodeVisitor(node, visitor, isConciseBody);
+                const declarations = context.endLexicalEnvironment();
+                if (some(declarations)) {
+                    if (!updated) {
+                        updated = context.factory.createBlock(declarations);
+                    }
+                    else {
+                        const block = context.factory.converters.convertToFunctionBlock(updated);
+                        const statements = factory.mergeLexicalEnvironment(block.statements, declarations);
+                        updated = context.factory.updateBlock(block, statements);
+                    }
+                }
+                // Do expression logic here. We need to make sure our signal handler also wraps the InitializationStatements.
                 if (currentReturnContext?.signal) {
                     const { signal: [currentSignal, operand] } = currentReturnContext;
                     // to code: if (signal == currentReturnContext.signal) return operand
-                    nextBody = wrapBlockToHandleSignal(nextBody, [currentReturnContext], (possibleSignal) => [
+                    updated = wrapBlockToHandleSignal(updated, [currentReturnContext], (possibleSignal) => [
                         factory.createIfStatement(
                             factory.createEquality(possibleSignal, currentSignal),
                             factory.createReturnStatement(operand),
                         )
                     ]);
                 }
-                return nextBody;
+                return updated;
             }
         }
         function visitIterationStatement<T extends IterationStatement>(node: T, label: Identifier | undefined): Statement {

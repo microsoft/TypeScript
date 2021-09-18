@@ -297,16 +297,19 @@ namespace ts {
     /* @internal*/ export function visitFunctionBody(node: FunctionBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): FunctionBody | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
     /* @internal*/ export function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor?: NodeVisitor): ConciseBody; // eslint-disable-line @typescript-eslint/unified-signatures
     export function visitFunctionBody(node: ConciseBody | undefined, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): ConciseBody | undefined {
+        // ! Any new changes should be also sync to transformer/doExpression as it copied implementation of this function
         context.resumeLexicalEnvironment();
-        const updated = nodeVisitor(node, visitor, isConciseBody);
+        let updated = nodeVisitor(node, visitor, isConciseBody);
         const declarations = context.endLexicalEnvironment();
         if (some(declarations)) {
             if (!updated) {
-                return context.factory.createBlock(declarations);
+                updated = context.factory.createBlock(declarations);
             }
-            const block = context.factory.converters.convertToFunctionBlock(updated);
-            const statements = factory.mergeLexicalEnvironment(block.statements, declarations);
-            return context.factory.updateBlock(block, statements);
+            else {
+                const block = context.factory.converters.convertToFunctionBlock(updated);
+                const statements = factory.mergeLexicalEnvironment(block.statements, declarations);
+                updated = context.factory.updateBlock(block, statements);
+            }
         }
         return updated;
     }
