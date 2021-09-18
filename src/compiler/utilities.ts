@@ -7422,4 +7422,28 @@ namespace ts {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
     }
+
+    function isIdentifierAndNotUndefined(node: Node | undefined): node is Identifier {
+        return !!node && node.kind === SyntaxKind.Identifier;
+    }
+    function* getDeclaredNamesInBindingName(node: BindingPattern | BindingName): Generator<Identifier> {
+        if (node.kind === SyntaxKind.Identifier) {
+            yield node;
+            return;
+        }
+        for (const name of node.elements) {
+            if (name.kind === SyntaxKind.OmittedExpression) continue;
+            if (name.kind === SyntaxKind.BindingElement) {
+                yield* arrayFrom(getDeclaredNamesInBindingName(name.name));
+            }
+        }
+    }
+    export function getNamesOfDeclaration(statement: Statement): readonly Identifier[] {
+        if (isVariableStatement(statement)) {
+            return filter(flatMap(statement.declarationList.declarations, declaration => {
+                return arrayFrom(getDeclaredNamesInBindingName(declaration.name))
+            }), isIdentifierAndNotUndefined);
+        }
+        return filter([getNameOfDeclaration(statement as DeclarationStatement)], isIdentifierAndNotUndefined);
+    }
 }

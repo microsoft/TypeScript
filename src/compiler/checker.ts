@@ -6485,17 +6485,6 @@ namespace ts {
                 visitSymbolTable(symbolTable);
                 return mergeRedundantStatements(results);
 
-                function isIdentifierAndNotUndefined(node: Node | undefined): node is Identifier {
-                    return !!node && node.kind === SyntaxKind.Identifier;
-                }
-
-                function getNamesOfDeclaration(statement: Statement): Identifier[] {
-                    if (isVariableStatement(statement)) {
-                        return filter(map(statement.declarationList.declarations, getNameOfDeclaration), isIdentifierAndNotUndefined);
-                    }
-                    return filter([getNameOfDeclaration(statement as DeclarationStatement)], isIdentifierAndNotUndefined);
-                }
-
                 function flattenExportAssignedNamespace(statements: Statement[]) {
                     const exportAssignment = find(statements, isExportAssignment);
                     const nsIndex = findIndex(statements, isModuleDeclaration);
@@ -36582,12 +36571,6 @@ namespace ts {
         function checkVariableStatement(node: VariableStatement) {
             // Grammar checking
             if (!checkGrammarDecoratorsAndModifiers(node) && !checkGrammarVariableDeclarationList(node.declarationList)) checkGrammarForDisallowedLetOrConstStatement(node);
-            const declarationKind = node.declarationList.flags;
-            if (languageVersion < ScriptTarget.ESNext && !(declarationKind & NodeFlags.Let) && !(declarationKind & NodeFlags.Const)) {
-                // var statement cannot appears inside a do-expression if target is not ESNext.
-                // cause the way our transpile it doesn't support this kind of var declaration hoisting.
-                if (findDirectDoExpressionAncestorUnderFunctionBoundary(node)) grammarErrorOnNode(node, Diagnostics.A_var_declaration_cannot_be_used_within_a_do_expression_unless_the_target_is_ESNext);
-            }
             forEach(node.declarationList.declarations, checkSourceElement);
         }
 

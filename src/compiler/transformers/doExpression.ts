@@ -2,6 +2,9 @@
 namespace ts {
     export function transformDoExpression(context: TransformationContext, node: SourceFile) {
         const { factory } = context;
+        const nodesVisitor = visitNodes;
+        const nodeVisitor = visitNode;
+
         //#region contexts
         const enum ControlFlow {
             Return, Break, Continue,
@@ -120,14 +123,13 @@ namespace ts {
                 case SyntaxKind.BreakStatement:
                 case SyntaxKind.ContinueStatement:
                     return visitControlFlow(node as ReturnStatement | BreakStatement | ContinueStatement);
+                case SyntaxKind.VariableStatement:
+                    return visitVariableStatement(node as VariableStatement);
                 default:
                     return visitEachChild(node, visitor, context);
             }
         }
         function visitFunctionLikeDeclaration<T extends FunctionLikeDeclaration>(node: T): Node {
-            const nodesVisitor = visitNodes;
-            const nodeVisitor = visitNode;
-
             return startControlFlowContext(() => {
                 currentReturnContext = { type: ControlFlow.Return, signal: undefined };
                 const tokenVisitor = undefined;
@@ -544,6 +546,25 @@ namespace ts {
                 };
             }
             return visitEachChild(node, visitor, context);
+        }
+        function visitVariableStatement(node: VariableStatement) {
+            if (isVarConst(node.declarationList) || isLet(node.declarationList) || !currentDoContext) {
+                return visitEachChild(node, visitor, context);
+            }
+            const names = getNamesOfDeclaration(node);
+            for (const name of names) {
+                context.hoistVariableDeclaration(name);
+            }
+            const next: Expression[] = [];
+            for (const decl of node.declarationList.declarations) {
+                if (!decl.initializer) continue;
+                if (decl.name.kind === SyntaxKind.Identifier) {
+                    next.push(factory.createAssignment(decl.name, decl.initializer));
+                    continue;
+                }
+                next.push(factory.createAssignment(factory.converters.convertToAssignmentPattern(decl.name), decl.initializer));
+            }
+            return next.map(factory.createExpressionStatement).map(node => visitEachChild(node, visitor, context));
         }
 
         /**

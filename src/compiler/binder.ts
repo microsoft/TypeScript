@@ -1195,7 +1195,7 @@ namespace ts {
                 }
             }
             if (node.kind === SyntaxKind.ReturnStatement && findDirectDoExpressionAncestorUnderFunctionBoundary(node)?.async) {
-                // DoExpression should not affect the control flow by return
+                // Async DoExpression should not affect the control flow by return
             }
             else currentFlow = unreachableFlow;
         }
@@ -1853,9 +1853,6 @@ namespace ts {
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.CaseBlock:
                     return ContainerFlags.IsBlockScopedContainer;
-
-                case SyntaxKind.DoExpression:
-                    return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsBlockScopedContainer;
 
                 case SyntaxKind.Block:
                     // do not treat blocks directly inside a function as a block-scoped-container.

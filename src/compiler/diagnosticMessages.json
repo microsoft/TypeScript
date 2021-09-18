@@ -1392,13 +1392,9 @@
 
     "Declaration or iteration cannot present at end of the do expression": {
         "category": "Error",
-        "code": 1996
-    },
-    "A return statement cannot be used within an async do expression": {
-        "category": "Error",
         "code": 1997
     },
-    "A var declaration cannot be used within a do expression unless the target is ESNext.": {
+    "A return statement cannot be used within an async do expression": {
         "category": "Error",
         "code": 1998
     },
