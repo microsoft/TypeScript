@@ -7446,4 +7446,76 @@ namespace ts {
         }
         return filter([getNameOfDeclaration(statement as DeclarationStatement)], isIdentifierAndNotUndefined);
     }
+
+    /** @internal */
+    export function collectAllDoExpressionEdges(node: DoExpression): [edge: Expression[], emptyPart: Node[]] {
+        const edges: Expression[] = [];
+        const empty: Node[] = [];
+
+        collectEdges(node.block);
+        return [edges, empty];
+
+        function collectEdges(node: StatementWithCompletionValue) {
+            switch (node.kind) {
+                case SyntaxKind.ExpressionStatement:
+                    edges.push(node.expression);
+                    break;
+                case SyntaxKind.IfStatement: {
+                    if (canProduceCompletionValue(node.thenStatement)) collectEdges(node.thenStatement);
+                    else empty.push(node.thenStatement);
+                    if (node.elseStatement) {
+                        if (canProduceCompletionValue(node.elseStatement)) collectEdges(node.elseStatement);
+                        else empty.push(node.elseStatement);
+                    };
+                    break;
+                }
+                case SyntaxKind.TryStatement: {
+                    collectEdges(node.tryBlock);
+                    if (node.catchClause) collectEdges(node.catchClause.block);
+                    break;
+                }
+                case SyntaxKind.Block: {
+                    const lastOne = findLast(node.statements, canProduceCompletionValue);
+                    if (!lastOne) empty.push(node);
+                    else collectEdges(lastOne);
+                    break;
+                }
+                case SyntaxKind.SwitchStatement: {
+                    const fallthroughClauses: Node[] = [];
+                    for (const clause of node.caseBlock.clauses) {
+                        if (!clause.statements.length) {
+                            fallthroughClauses.push(clause);
+                            continue;
+                        }
+                        fallthroughClauses.length = 0;
+                        const lastOne = findLast(clause.statements, canProduceCompletionValue);
+                        if (!lastOne) empty.push(node);
+                        else collectEdges(lastOne);
+                    }
+                    if (fallthroughClauses.length) empty.push(last(empty));
+                    break;
+                }
+                case SyntaxKind.LabeledStatement: {
+                    if (canProduceCompletionValue(node.statement)) collectEdges(node.statement);
+                    break;
+                }
+            }
+        }
+    }
+    export type StatementWithCompletionValue = ExpressionStatement | IfStatement | TryStatement | Block | SwitchStatement | LabeledStatement;
+    /** @internal */
+    export function canProduceCompletionValue(node: Statement): node is StatementWithCompletionValue {
+        if (node.kind === SyntaxKind.LabeledStatement) return canProduceCompletionValue((node as LabeledStatement).statement);
+        switch (node.kind) {
+            case SyntaxKind.ExpressionStatement:
+            case SyntaxKind.IfStatement:
+            case SyntaxKind.TryStatement:
+            case SyntaxKind.Block:
+            case SyntaxKind.SwitchStatement:
+            // with can provide completion value but it's impossible to transform that correctly.
+            // case SyntaxKind.WithStatement:
+                return true;
+        }
+        return false;
+    }
 }

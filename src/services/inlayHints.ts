@@ -60,6 +60,9 @@ namespace ts.InlayHints {
             else if (preferences.includeInlayEnumMemberValueHints && isEnumMember(node)) {
                 visitEnumMember(node);
             }
+            else if (/* preferences.includeDoExpressionReturnPositionHints && */ isDoExpression(node)) {
+                visitDoExpression(node);
+            }
             else if (shouldShowParameterNameHints(preferences) && (isCallExpression(node) || isNewExpression(node))) {
                 visitCallOrNewExpression(node);
             }
@@ -103,6 +106,29 @@ namespace ts.InlayHints {
                 kind: InlayHintKind.Enum,
                 whitespaceBefore: true,
             });
+        }
+
+        function addDoExpressionReturnPositionHints(text: string, position: number) {
+            result.push({
+                text: truncation(text, maxHintsLength),
+                position,
+                kind: InlayHintKind.Type,
+                whitespaceBefore: true,
+                whitespaceAfter: true,
+            });
+        }
+
+        function visitDoExpression(node: DoExpression) {
+            const [edges] = collectAllDoExpressionEdges(node);
+            for (const edge of edges) {
+                if (isAsExpression(edge)) {
+                    addDoExpressionReturnPositionHints("/* do expression */", edge.end);
+                }
+                else {
+                    const type = checker.getTypeAtLocation(edge);
+                    addDoExpressionReturnPositionHints("as " + printTypeInSingleLine(type), edge.end);
+                }
+            };
         }
 
         function visitEnumMember(member: EnumMember) {

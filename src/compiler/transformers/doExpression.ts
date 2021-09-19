@@ -528,7 +528,7 @@ namespace ts {
         }
         function visitBlock(node: Block, directChildOfDoExpr: boolean) {
             if (!currentDoContext) return visitEachChild(node, visitor, context);
-            const lastMeaningfulNode = findLast(node.statements, canBeMeaningfulNode);
+            const lastMeaningfulNode = findLast(node.statements, canProduceCompletionValue);
             const shouldTrackOld = currentDoContext.shouldTrack;
             const shouldTrack = shouldTrackOld || directChildOfDoExpr;
             return visitEachChild(node, child => {
@@ -789,20 +789,6 @@ namespace ts {
             const initExpr = init(temp);
             map.set(key, [temp, initExpr]);
             return apply(temp);
-        }
-        function canBeMeaningfulNode(node: Statement): boolean {
-            if (node.kind === SyntaxKind.LabeledStatement) return canBeMeaningfulNode((node as LabeledStatement).statement);
-            switch (node.kind) {
-                case SyntaxKind.ExpressionStatement:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.TryStatement:
-                case SyntaxKind.Block:
-                case SyntaxKind.SwitchStatement:
-                // with can provide completion value but it's impossible to transform that correctly.
-                // case SyntaxKind.WithStatement:
-                    return true;
-            }
-            return false;
         }
     }
 }
