@@ -33411,7 +33411,7 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            if (isJSDocTypeAssertion(node)) {
+            if (hasJSDocNodes(node) && isJSDocTypeAssertion(node)) {
                 const type = getJSDocTypeAssertionType(node);
                 return checkAssertionWorker(type, type, node.expression, checkMode);
             }
