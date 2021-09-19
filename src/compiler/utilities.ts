@@ -7441,7 +7441,7 @@ namespace ts {
     export function getNamesOfDeclaration(statement: Statement): readonly Identifier[] {
         if (isVariableStatement(statement)) {
             return filter(flatMap(statement.declarationList.declarations, declaration => {
-                return arrayFrom(getDeclaredNamesInBindingName(declaration.name))
+                return arrayFrom(getDeclaredNamesInBindingName(declaration.name));
             }), isIdentifierAndNotUndefined);
         }
         return filter([getNameOfDeclaration(statement as DeclarationStatement)], isIdentifierAndNotUndefined);

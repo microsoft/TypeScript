@@ -91,7 +91,7 @@ namespace ts {
         function visitor(node: Node): VisitResult<Node> {
             if (isFunctionLikeDeclaration(node)) return visitFunctionLikeDeclaration(node);
             if (isIterationStatement(node, /** lookInLabeledStatements */ false)) return visitIterationStatement(node, /** label */ undefined);
-            if (isClassLike(node)) return visitClassLike(node);
+            if (isClassDeclaration(node) || isClassExpression(node)) return visitClassLike(node);
 
             if (isSuperProperty(node)) return visitSuperPropertyExpression(node);
 
@@ -208,8 +208,8 @@ namespace ts {
                 }
             });
             // The logic is copied from visitFunctionBody
-            function visitFunctionBody(node: Block, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): Block
-            function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): ConciseBody
+            function visitFunctionBody(node: Block, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): Block;
+            function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor): ConciseBody;
             function visitFunctionBody(node: ConciseBody, visitor: Visitor, context: TransformationContext, nodeVisitor = visitNode): FunctionBody | ConciseBody {
                 context.resumeLexicalEnvironment();
                 let updated = nodeVisitor(node, visitor, isConciseBody);
@@ -271,8 +271,45 @@ namespace ts {
                 return result;
             }
         }
-        function visitClassLike<T extends ClassExpression | ClassDeclaration>(node: T): T {
-            return startControlFlowContext(() => visitEachChild(node, visitor, context));
+        function visitClassLike(node: ClassExpression): ClassExpression;
+        function visitClassLike(node: ClassDeclaration): ClassDeclaration;
+        function visitClassLike(node: ClassExpression | ClassDeclaration): ClassExpression | ClassDeclaration;
+        function visitClassLike(node: ClassExpression | ClassDeclaration): ClassExpression | ClassDeclaration {
+            return startControlFlowContext(
+                () => {
+                    if (isClassDeclaration(node)) {
+                        return factory.updateClassDeclaration(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.name, visitor, isIdentifier),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
+                            nodesVisitor(node.members, visitClassElement, isClassElement));
+                    }
+                    else {
+                        return factory.updateClassExpression(node,
+                            nodesVisitor(node.decorators, visitor, isDecorator),
+                            nodesVisitor(node.modifiers, visitor, isModifier),
+                            nodeVisitor(node.name, visitor, isIdentifier),
+                            nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
+                            nodesVisitor(node.heritageClauses, visitor, isHeritageClause),
+                            nodesVisitor(node.members, visitClassElement, isClassElement));
+                    }
+                }
+            );
+        }
+        function visitClassElement(node: ClassElement) {
+            if (!isPropertyDeclaration(node)) return visitEachChild(node, visitor, context);
+
+            context.startLexicalEnvironment();
+            const updated = visitEachChild(node, visitor, context);
+            const declarations = context.endLexicalEnvironment() || [];
+            if (!declarations.length) return updated;
+            return factory.updatePropertyDeclaration(
+                node, node.decorators, node.modifiers,
+                node.name, node.questionToken || node.exclamationToken, node.type,
+                factory.createImmediatelyInvokedArrowFunction(declarations.concat(factory.createReturnStatement(updated.initializer)))
+            );
         }
         function visitLabelledStatement(node: LabeledStatement): Node {
             // why it will be undefined?
@@ -411,7 +448,7 @@ namespace ts {
             }
             function visitDefaultOrCaseBlock(node: CaseOrDefaultClause) {
                 return startBreakContext(/** label */ undefined, /** allowAmbientBreak */ true, () => {
-                    let updated = visitEachChild(node, visitor, context);
+                    const updated = visitEachChild(node, visitor, context);
                     if (!currentBreakContext?.signal) return updated;
                     needHoist = true;
                     const { signal } = currentBreakContext;
