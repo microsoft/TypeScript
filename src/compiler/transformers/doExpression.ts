@@ -351,9 +351,85 @@ namespace ts {
                 return visitor(child);
             }, context);
         }
-        function visitSwitch(node: SwitchStatement): SwitchStatement {
-            // TODO:
-            return visitEachChild(node, visitor, context);
+        /**
+         * In order to break from do expression inside a switch statement,
+         * we need to wrap each case with try-catch.
+         *
+         * But all cases shares the same lexical scope. We need to make sure the following code works:
+         *
+         * switch (item) {
+         *     case a: const b = expr;
+         *     case c: console.log(b); (do { break })
+         * }
+         */
+        function visitSwitch(node: SwitchStatement) {
+            let needHoist = false;
+            let updated = factory.updateSwitchStatement(node,
+                nodeVisitor(node.expression, visitor, isExpression),
+                nodeVisitor(node.caseBlock, visitCaseBlock, isCaseBlock)
+            );
+            if (!needHoist) return updated;
+            // No luck, need to do a second-pass to collect and hoist all variables.
+            // hope this case (break an outer switch in do expression) is uncommon
+            const hoistedVars: Identifier[] = [];
+            const hoistedFunctions: FunctionLikeDeclaration[] = [];
+            updated = visitEachChild(updated, collectVisitor, context);
+            if (hoistedFunctions.length + hoistedVars.length === 0) return updated;
+            const statements: Statement[] = [];
+            if (hoistedVars.length) {
+                statements.push(factory.createVariableStatement(/** modifiers */ undefined,
+                    hoistedVars.map(v => factory.createVariableDeclaration(v))
+                ));
+            }
+            statements.push.apply(statements, hoistedFunctions);
+            statements.push(updated);
+            return factory.createBlock(statements);
+
+            function collectVisitor(node: Node): VisitResult<Node> {
+                if (node.kind !== SyntaxKind.FunctionExpression && node.kind !== SyntaxKind.ArrowFunction && isFunctionLikeDeclaration(node)) return collectFunctionLikeDeclaration(node);
+                if (node.kind === SyntaxKind.VariableStatement) return collectVariableStatement(node as VariableStatement);
+                if (node.kind === SyntaxKind.ClassDeclaration) return collectClassDeclaration(node as ClassDeclaration);
+                return visitEachChild(node, collectVisitor, context);
+            }
+            function collectVariableStatement(node: VariableStatement) {
+                const { init, names } = convertVariableDeclarationToAssignment(node);
+                hoistedVars.push.apply(hoistedVars, names);
+                return init;
+            }
+            function collectFunctionLikeDeclaration(node: FunctionLikeDeclaration) {
+                hoistedFunctions.push(node);
+                return [];
+            }
+            function collectClassDeclaration(node: ClassDeclaration) {
+                const name = node.name!;
+                // node.name may be undefined in export default class { ... }.
+                hoistedVars.push(name);
+                return factory.createAssignment(name, factory.createClassExpression(node.decorators, node.modifiers, node.name, node.typeParameters, node.heritageClauses, node.members));
+            }
+            function visitCaseBlock(node: CaseBlock) {
+                return visitEachChild(node, visitDefaultOrCaseBlock, context);
+            }
+            function visitDefaultOrCaseBlock(node: CaseOrDefaultClause) {
+                return startBreakContext(/** label */ undefined, /** allowAmbientBreak */ true, () => {
+                    let updated = visitEachChild(node, visitor, context);
+                    if (!currentBreakContext?.signal) return updated;
+                    needHoist = true;
+                    const { signal } = currentBreakContext;
+                    const blockLike = factory.liftToBlock(updated.statements);
+                    const block = blockLike.kind === SyntaxKind.Block ? blockLike as Block : factory.createBlock([blockLike]);
+
+                    const handleBlock = wrapBlockToHandleSignal(block, [currentBreakContext], (possibleSignal) => [
+                        factory.createIfStatement(
+                            factory.createEquality(possibleSignal, signal),
+                            factory.createBreakStatement(),
+                        )
+                    ]);
+                    if (isDefaultClause(node)) {
+                        return factory.createDefaultClause(handleBlock.statements);
+                    }
+                    return factory.createCaseClause(node.expression, handleBlock.statements);
+                });
+            }
         }
 
         /**
@@ -542,22 +618,26 @@ namespace ts {
             if (isVarConst(node.declarationList) || isLet(node.declarationList) || !currentDoContext) {
                 return visitEachChild(node, visitor, context);
             }
-            const names = getNamesOfDeclaration(node);
+            const { init, names } = convertVariableDeclarationToAssignment(node);
             for (const name of names) {
                 context.hoistVariableDeclaration(name);
             }
-            const next: Expression[] = [];
+            return init.map(node => visitEachChild(node, visitor, context));
+        }
+
+        function convertVariableDeclarationToAssignment(node: VariableStatement) {
+            const names = getNamesOfDeclaration(node);
+            const init: Expression[] = [];
             for (const decl of node.declarationList.declarations) {
                 if (!decl.initializer) continue;
                 if (decl.name.kind === SyntaxKind.Identifier) {
-                    next.push(factory.createAssignment(decl.name, decl.initializer));
+                    init.push(factory.createAssignment(decl.name, decl.initializer));
                     continue;
                 }
-                next.push(factory.createAssignment(factory.converters.convertToAssignmentPattern(decl.name), decl.initializer));
+                init.push(factory.createAssignment(factory.converters.convertToAssignmentPattern(decl.name), decl.initializer));
             }
-            return next.map(factory.createExpressionStatement).map(node => visitEachChild(node, visitor, context));
+            return { names, init: init.map(factory.createExpressionStatement) };
         }
-
         /**
          * ```js
          * { Block }
@@ -590,7 +670,7 @@ namespace ts {
                         else {
                             return [signal];
                         }
-                    })
+                    }),
                 )),
                 factory.createTryStatement(
                     factory.converters.convertToFunctionBlock(node),
