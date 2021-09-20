@@ -857,7 +857,8 @@ namespace ts.codefix {
                         typeOnly,
                         /*name*/ undefined,
                         factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name))),
-                    quotedModuleSpecifier);
+                    quotedModuleSpecifier,
+                    /*assertClause*/ undefined);
             statements = combine(statements, declaration);
         }
         return Debug.checkDefined(statements);

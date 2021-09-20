@@ -933,6 +933,7 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType | undefined;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalImportMetaExpressionType: ObjectType;
+        let deferredGlobalImportCallOptionsType: ObjectType | undefined;
         let deferredGlobalExtractSymbol: Symbol | undefined;
         let deferredGlobalOmitSymbol: Symbol | undefined;
         let deferredGlobalAwaitedSymbol: Symbol | undefined;
@@ -6568,7 +6569,7 @@ namespace ts {
 
                 function inlineExportModifiers(statements: Statement[]) {
                     // Pass 3: Move all `export {}`'s to `export` modifiers where possible
-                    const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !!d.exportClause && isNamedExports(d.exportClause));
+                    const index = findIndex(statements, d => isExportDeclaration(d) && !d.moduleSpecifier && !d.assertClause && !!d.exportClause && isNamedExports(d.exportClause));
                     if (index >= 0) {
                         const exportDecl = statements[index] as ExportDeclaration & { readonly exportClause: NamedExports };
                         const replacements = mapDefined(exportDecl.exportClause.elements, e => {
@@ -6600,7 +6601,8 @@ namespace ts {
                                     exportDecl.exportClause,
                                     replacements
                                 ),
-                                exportDecl.moduleSpecifier
+                                exportDecl.moduleSpecifier,
+                                exportDecl.assertClause
                             );
                         }
                     }
@@ -7260,7 +7262,8 @@ namespace ts {
                                         propertyName && isIdentifier(propertyName) ? factory.createIdentifier(idText(propertyName)) : undefined,
                                         factory.createIdentifier(localName)
                                     )])),
-                                    factory.createStringLiteral(specifier)
+                                    factory.createStringLiteral(specifier),
+                                    /*importClause*/ undefined
                                 ), ModifierFlags.None);
                                 break;
                             }
@@ -7336,7 +7339,8 @@ namespace ts {
                                 // We use `target.parent || target` below as `target.parent` is unset when the target is a module which has been export assigned
                                 // And then made into a default by the `esModuleInterop` or `allowSyntheticDefaultImports` flag
                                 // In such cases, the `target` refers to the module itself already
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceImport:
@@ -7344,7 +7348,8 @@ namespace ts {
                                 /*decorators*/ undefined,
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(/*isTypeOnly*/ false, /*importClause*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.NamespaceExport:
@@ -7369,7 +7374,8 @@ namespace ts {
                                             factory.createIdentifier(localName)
                                         )
                                     ])),
-                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context))
+                                factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
+                                 /*assertClause*/ undefined
                             ), ModifierFlags.None);
                             break;
                         case SyntaxKind.ExportSpecifier:
@@ -13453,6 +13459,10 @@ namespace ts {
                 deferredGlobalImportMetaExpressionType = createAnonymousType(symbol, members, emptyArray, emptyArray, emptyArray);
             }
             return deferredGlobalImportMetaExpressionType;
+        }
+
+        function getGlobalImportCallOptionsType(reportErrors: boolean) {
+            return (deferredGlobalImportCallOptionsType ||= getGlobalType("ImportCallOptions" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean): Symbol | undefined {
@@ -25547,6 +25557,12 @@ namespace ts {
         }
 
         function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
+            if (isImportCall(callTarget)) {
+                return argIndex === 0 ? stringType :
+                    argIndex === 1 ? getGlobalImportCallOptionsType(/*reportErrors*/ false) :
+                    anyType;
+            }
+
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
@@ -26007,10 +26023,6 @@ namespace ts {
                 case SyntaxKind.AwaitExpression:
                     return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
                 case SyntaxKind.CallExpression:
-                    if ((parent as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                        return stringType;
-                    }
-                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -30606,15 +30618,24 @@ namespace ts {
             if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
             }
+
             const specifier = node.arguments[0];
             const specifierType = checkExpressionCached(specifier);
+            const optionsType = node.arguments.length > 1 ? checkExpressionCached(node.arguments[1]) : undefined;
             // Even though multiple arguments is grammatically incorrect, type-check extra arguments for completion
-            for (let i = 1; i < node.arguments.length; ++i) {
+            for (let i = 2; i < node.arguments.length; ++i) {
                 checkExpressionCached(node.arguments[i]);
             }
 
             if (specifierType.flags & TypeFlags.Undefined || specifierType.flags & TypeFlags.Null || !isTypeAssignableTo(specifierType, stringType)) {
                 error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
+            }
+
+            if (optionsType) {
+                const importCallOptionsType = getGlobalImportCallOptionsType(/*reportErrors*/ true);
+                if (importCallOptionsType !== emptyObjectType) {
+                    checkTypeAssignableTo(optionsType, getNullableType(importCallOptionsType, TypeFlags.Undefined), node.arguments[1]);
+                }
             }
 
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
@@ -39039,6 +39060,18 @@ namespace ts {
             }
         }
 
+        function checkAssertClause(declaration: ImportDeclaration | ExportDeclaration) {
+            if (declaration.assertClause) {
+                if (moduleKind !== ModuleKind.ESNext) {
+                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext);
+                }
+
+                if (isImportDeclaration(declaration) ? declaration.importClause?.isTypeOnly : declaration.isTypeOnly) {
+                    return grammarErrorOnNode(declaration.assertClause, Diagnostics.Import_assertions_cannot_be_used_with_type_only_imports_or_exports);
+                }
+            }
+        }
+
         function checkImportDeclaration(node: ImportDeclaration) {
             if (checkGrammarModuleElementContext(node, Diagnostics.An_import_declaration_can_only_be_used_in_a_namespace_or_module)) {
                 // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
@@ -39070,7 +39103,7 @@ namespace ts {
                     }
                 }
             }
-
+            checkAssertClause(node);
         }
 
         function checkImportEqualsDeclaration(node: ImportEqualsDeclaration) {
@@ -39165,6 +39198,7 @@ namespace ts {
                     }
                 }
             }
+            checkAssertClause(node);
         }
 
         function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
@@ -43201,14 +43235,25 @@ namespace ts {
             }
 
             const nodeArguments = node.arguments;
-            if (nodeArguments.length !== 1) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            if (moduleKind !== ModuleKind.ESNext) {
+                // We are allowed trailing comma after proposal-import-assertions.
+                checkGrammarForDisallowedTrailingComma(nodeArguments);
+
+                if (nodeArguments.length > 1) {
+                    const assertionArgument = nodeArguments[1];
+                    return grammarErrorOnNode(assertionArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext);
+                }
             }
-            checkGrammarForDisallowedTrailingComma(nodeArguments);
+
+            if (nodeArguments.length === 0 || nodeArguments.length > 2) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_can_only_accept_a_module_specifier_and_an_optional_assertion_as_arguments);
+            }
+
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
-            if (isSpreadElement(nodeArguments[0])) {
-                return grammarErrorOnNode(nodeArguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+            const spreadElement = find(nodeArguments, isSpreadElement);
+            if (spreadElement) {
+                return grammarErrorOnNode(spreadElement, Diagnostics.Argument_of_dynamic_import_cannot_be_spread_element);
             }
             return false;
         }
