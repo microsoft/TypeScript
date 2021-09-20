@@ -27,10 +27,12 @@ let foo = Foo.A as const;
 >Foo.A : Symbol(Foo.A, Decl(enum.ts, 0, 17))
 >Foo : Symbol(Foo, Decl(test.ts, 0, 8))
 >A : Symbol(Foo.A, Decl(enum.ts, 0, 17))
+>const : Symbol(const)
 
 let bar = Bar.A as const;
 >bar : Symbol(bar, Decl(test.ts, 7, 3))
 >Bar.A : Symbol(Bar.A, Decl(test.ts, 2, 10))
 >Bar : Symbol(Bar, Decl(test.ts, 0, 27))
 >A : Symbol(Bar.A, Decl(test.ts, 2, 10))
+>const : Symbol(const)
 

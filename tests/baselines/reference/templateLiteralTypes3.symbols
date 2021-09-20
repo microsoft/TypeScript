@@ -84,26 +84,31 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >x4 : Symbol(x4, Decl(templateLiteralTypes3.ts, 22, 7))
 >foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
 >s : Symbol(s, Decl(templateLiteralTypes3.ts, 18, 30))
+>const : Symbol(const)
 
     let x5 = foo1(`*${n}*` as const);
 >x5 : Symbol(x5, Decl(templateLiteralTypes3.ts, 23, 7))
 >foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
 >n : Symbol(n, Decl(templateLiteralTypes3.ts, 18, 40))
+>const : Symbol(const)
 
     let x6 = foo1(`*${b}*` as const);
 >x6 : Symbol(x6, Decl(templateLiteralTypes3.ts, 24, 7))
 >foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
 >b : Symbol(b, Decl(templateLiteralTypes3.ts, 18, 51))
+>const : Symbol(const)
 
     let x7 = foo1(`*${t}*` as const);
 >x7 : Symbol(x7, Decl(templateLiteralTypes3.ts, 25, 7))
 >foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
 >t : Symbol(t, Decl(templateLiteralTypes3.ts, 18, 63))
+>const : Symbol(const)
 
     let x8 = foo1(`**${s}**` as const);
 >x8 : Symbol(x8, Decl(templateLiteralTypes3.ts, 26, 7))
 >foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
 >s : Symbol(s, Decl(templateLiteralTypes3.ts, 18, 30))
+>const : Symbol(const)
 }
 
 // Inference to a placeholder immediately followed by another placeholder infers a single
@@ -197,22 +202,27 @@ function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
     x = `*${s}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
 >s : Symbol(s, Decl(templateLiteralTypes3.ts, 54, 30))
+>const : Symbol(const)
 
     x = `*${n}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
 >n : Symbol(n, Decl(templateLiteralTypes3.ts, 54, 40))
+>const : Symbol(const)
 
     x = `*${b}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
 >b : Symbol(b, Decl(templateLiteralTypes3.ts, 54, 51))
+>const : Symbol(const)
 
     x = `*${t}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
 >t : Symbol(t, Decl(templateLiteralTypes3.ts, 54, 63))
+>const : Symbol(const)
 
     x = `**${s}**` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
 >s : Symbol(s, Decl(templateLiteralTypes3.ts, 54, 30))
+>const : Symbol(const)
 }
 
 function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
@@ -239,18 +249,22 @@ function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
     x = `*${s}*` as const;  // Error
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
 >s : Symbol(s, Decl(templateLiteralTypes3.ts, 66, 30))
+>const : Symbol(const)
 
     x = `*${n}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
 >n : Symbol(n, Decl(templateLiteralTypes3.ts, 66, 40))
+>const : Symbol(const)
 
     x = `*${b}*` as const;  // Error
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
 >b : Symbol(b, Decl(templateLiteralTypes3.ts, 66, 51))
+>const : Symbol(const)
 
     x = `*${t}*` as const;
 >x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
 >t : Symbol(t, Decl(templateLiteralTypes3.ts, 66, 63))
+>const : Symbol(const)
 }
 
 // Repro from #43060
@@ -331,6 +345,7 @@ const templated1: Templated = `${value1} abc` as const;
 >templated1 : Symbol(templated1, Decl(templateLiteralTypes3.ts, 100, 5))
 >Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
 >value1 : Symbol(value1, Decl(templateLiteralTypes3.ts, 99, 5))
+>const : Symbol(const)
 
 // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
 
@@ -341,6 +356,7 @@ const templated2: Templated = `${value2} abc` as const;
 >templated2 : Symbol(templated2, Decl(templateLiteralTypes3.ts, 104, 5))
 >Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
 >value2 : Symbol(value2, Decl(templateLiteralTypes3.ts, 103, 5))
+>const : Symbol(const)
 
 // Repro from #43620
 

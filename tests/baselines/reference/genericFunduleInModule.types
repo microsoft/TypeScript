@@ -17,7 +17,7 @@ module A {
 }
 
 var b: A.B;
->b : any
+>b : A.B
 >A : any
 
 A.B(1);

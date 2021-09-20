@@ -6,5 +6,6 @@ var foo = async (): Promise<void> => {
    // Legal to use 'await' in a type context.
    var v: await;
 >v : Symbol(v, Decl(asyncArrowFunction10_es5.ts, 2, 6))
+>await : Symbol(await)
 }
 

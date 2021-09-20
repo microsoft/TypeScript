@@ -298,18 +298,23 @@ function f6() {
 
     const t1 = [1, 2] as const;
 >t1 : Symbol(t1, Decl(strictOptionalProperties1.ts, 78, 9))
+>const : Symbol(const)
 
     const t2 = [1, 2, ,] as const;
 >t2 : Symbol(t2, Decl(strictOptionalProperties1.ts, 79, 9))
+>const : Symbol(const)
 
     const t3 = [1, 2, , ,] as const;
 >t3 : Symbol(t3, Decl(strictOptionalProperties1.ts, 80, 9))
+>const : Symbol(const)
 
     const t4 = [1, , 2] as const;
 >t4 : Symbol(t4, Decl(strictOptionalProperties1.ts, 81, 9))
+>const : Symbol(const)
 
     const t5 = [1, , , 2] as const;
 >t5 : Symbol(t5, Decl(strictOptionalProperties1.ts, 82, 9))
+>const : Symbol(const)
 }
 
 // Example from #13195
