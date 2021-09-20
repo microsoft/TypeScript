@@ -32045,14 +32045,48 @@ namespace ts {
         }
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
-            if (leftType === silentNeverType || rightType === silentNeverType) {
-                return silentNeverType;
+            if (isPrivateIdentifier(left)) {
+                const privateId = left;
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
+                if (lexicallyScopedSymbol === undefined) {
+                    if (!getContainingClass(privateId)) {
+                        error(privateId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                    }
+                    else {
+                        const suggestion = getSuggestedSymbolForNonexistentProperty(privateId, rightType);
+                        if (suggestion) {
+                            const suggestedName = symbolName(suggestion);
+                            error(privateId, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(privateId), suggestedName);
+                        }
+                        else {
+                            error(privateId, Diagnostics.Cannot_find_name_0, diagnosticName(privateId));
+                        }
+                    }
+                    return anyType;
+                }
+
+                markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
+                getNodeLinks(privateId.parent).resolvedSymbol = lexicallyScopedSymbol;
+                if (rightType === silentNeverType) {
+                    return silentNeverType;
+                }
+                rightType = checkNonNullType(rightType, right);
             }
-            leftType = checkNonNullType(leftType, left);
-            rightType = checkNonNullType(rightType, right);
+            else {
+                if (leftType === silentNeverType || rightType === silentNeverType) {
+                    return silentNeverType;
+                }
+                leftType = checkNonNullType(leftType, left);
+                rightType = checkNonNullType(rightType, right);
+
+                // Require the left operand to be of type Any, the String primite type, or the Number primite type.
+                if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
+                    isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
+                    error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
+                }
+            }
             // TypeScript 1.0 spec (April 2014): 4.15.5
-            // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
-            // and the right operand to be
+            // The in operator requires right operand to be
             //
             //   1. assignable to the non-primitive type,
             //   2. an unconstrained type parameter,
@@ -32070,15 +32104,6 @@ namespace ts {
             // unless *all* instantiations would result in an error.
             //
             // The result is always of the Boolean primitive type.
-            if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
-                  isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
-                error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
-            }
-            checkInExpressionRHS(right, rightType);
-            return booleanType;
-        }
-
-        function checkInExpressionRHS(right: Expression, rightType: Type) {
             const rightTypeConstraint = getConstraintOfType(rightType);
             if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive) ||
                 rightTypeConstraint && (
@@ -32088,6 +32113,7 @@ namespace ts {
             ) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_not_be_a_primitive);
             }
+            return booleanType;
         }
 
         function checkObjectLiteralAssignment(node: ObjectLiteralExpression, sourceType: Type, rightIsThis?: boolean): Type {
@@ -32324,41 +32350,6 @@ namespace ts {
             return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
         }
 
-        function checkPrivateIdentifierInInExpression(node: BinaryExpression, checkMode?: CheckMode) {
-            const privateId = node.left;
-            Debug.assertNode(privateId, isPrivateIdentifier);
-            const exp = node.right;
-            let rightType = checkExpression(exp, checkMode);
-
-            const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
-            if (lexicallyScopedSymbol === undefined) {
-                if (!getContainingClass(node)) {
-                    error(privateId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
-                }
-                else {
-                    const suggestion = getSuggestedSymbolForNonexistentProperty(privateId, rightType);
-                    if (suggestion) {
-                        const suggestedName = symbolName(suggestion);
-                        error(privateId, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(privateId), suggestedName);
-                    }
-                    else {
-                        error(privateId, Diagnostics.Cannot_find_name_0, diagnosticName(privateId));
-                    }
-                }
-                return anyType;
-            }
-
-            markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-            getNodeLinks(node).resolvedSymbol = lexicallyScopedSymbol;
-
-            if (rightType === silentNeverType) {
-                return silentNeverType;
-            }
-            rightType = checkNonNullType(rightType, exp);
-            checkInExpressionRHS(exp, rightType);
-            return booleanType;
-        }
-
         function createCheckBinaryExpression() {
             interface WorkArea {
                 readonly checkMode: CheckMode | undefined;
@@ -32408,11 +32399,6 @@ namespace ts {
                 if (operator === SyntaxKind.EqualsToken && (node.left.kind === SyntaxKind.ObjectLiteralExpression || node.left.kind === SyntaxKind.ArrayLiteralExpression)) {
                     state.skip = true;
                     setLastResult(state, checkDestructuringAssignment(node.left, checkExpression(node.right, checkMode), checkMode, node.right.kind === SyntaxKind.ThisKeyword));
-                    return state;
-                }
-                else if (node.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left)) {
-                    state.skip = true;
-                    setLastResult(state, checkPrivateIdentifierInInExpression(node, checkMode));
                     return state;
                 }
 
@@ -40290,7 +40276,7 @@ namespace ts {
                 if (links.resolvedSymbol) {
                     return links.resolvedSymbol;
                 }
-                checkPrivateIdentifierInInExpression(name.parent);
+                checkBinaryExpression(name.parent, CheckMode.Normal);
                 return links.resolvedSymbol;
             }
 
