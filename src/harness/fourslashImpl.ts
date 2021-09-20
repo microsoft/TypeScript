@@ -637,7 +637,8 @@ namespace FourSlash {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)
                     || Harness.getConfigNameFromFileName(fileName)
-                    || !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))) return;
+                    || !ts.getAllowJSCompilerOption(this.getProgram().getCompilerOptions()) && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))
+                    || ts.getBaseFileName(fileName) === "package.json") return;
                 const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
@@ -1928,7 +1929,7 @@ namespace FourSlash {
         }
 
         public baselineSyntacticAndSemanticDiagnostics() {
-            const files = this.getCompilerTestFiles();
+            const files = ts.filter(this.getCompilerTestFiles(), f => !ts.endsWith(f.unitName, ".json"));
             const result = this.getSyntacticDiagnosticBaselineText(files)
                 + Harness.IO.newLine()
                 + Harness.IO.newLine()

@@ -3458,7 +3458,7 @@ namespace ts {
                          * @see https://github.com/microsoft/TypeScript/issues/42151
                          */
                         if (moduleKind >= ModuleKind.ES2015) {
-                            replacedImportSource += ".js";
+                            replacedImportSource += tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js";
                         }
                         error(errorNode, diag, tsExtension, replacedImportSource);
                     }
