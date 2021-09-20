@@ -15,4 +15,4 @@
 goTo.marker("");
 verify.importFixAtPosition([
 `import { Component, type ComponentProps } from "./exports.js";
-interface MoreProps extends /**/ComponentProps {}`]);
+interface MoreProps extends ComponentProps {}`]);
