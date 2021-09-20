@@ -885,7 +885,10 @@ namespace ts.codefix {
 
         if (namedImports.length) {
             const newSpecifiers = stableSort(
-                namedImports.map(namedImport => factory.createImportSpecifier(needsTypeOnly(namedImport), /*propertyName*/ undefined, factory.createIdentifier(namedImport.name))),
+                namedImports.map(namedImport => factory.createImportSpecifier(
+                    !clause.isTypeOnly && needsTypeOnly(namedImport),
+                    /*propertyName*/ undefined,
+                    factory.createIdentifier(namedImport.name))),
                 OrganizeImports.compareImportOrExportSpecifiers);
 
             if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
