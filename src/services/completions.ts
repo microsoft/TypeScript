@@ -675,7 +675,7 @@ namespace ts.Completions {
             hasAction = !importCompletionNode;
         }
 
-        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location); // TODO: GH#18217
+        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
         if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
             let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
             const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
@@ -687,7 +687,7 @@ namespace ts.Completions {
             ) {
                 if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
                     // If is string like or undefined use quotes
-                    insertText = `${name}=${quote(sourceFile, preferences, "$1")}`;
+                    insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
                     isSnippet = true;
                 }
                 else {
@@ -697,7 +697,7 @@ namespace ts.Completions {
             }
 
             if (useBraces) {
-                insertText = `${name}={$1}`;
+                insertText = `${escapeSnippetText(name)}={$1}`;
                 isSnippet = true;
             }
 
@@ -732,6 +732,10 @@ namespace ts.Completions {
         };
     }
 
+    function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, "\\$");
+    }
+
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {
         return {
             exportName: origin.exportName,
@@ -754,10 +758,10 @@ namespace ts.Completions {
         const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
         const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
-            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
-            case ImportKind.Default: return { replacementSpan, insertText: `import ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name} from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${escapeSnippetText(name)}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
+            case ImportKind.Default: return { replacementSpan, insertText: `import ${escapeSnippetText(name)}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${escapeSnippetText(name)} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Named: return { replacementSpan, insertText: `import { ${escapeSnippetText(name)}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
         }
     }
 
