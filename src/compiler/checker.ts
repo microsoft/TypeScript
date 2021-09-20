@@ -13462,7 +13462,6 @@ namespace ts {
         }
 
         function getGlobalImportCallOptionsType(reportErrors: boolean) {
-            // We always report an error, so store a result in the event we could not resolve the symbol to prevent reporting it multiple times
             return (deferredGlobalImportCallOptionsType ||= getGlobalType("ImportCallOptions" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
@@ -25558,6 +25557,12 @@ namespace ts {
         }
 
         function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
+            if (isImportCall(callTarget)) {
+                return argIndex === 0 ? stringType :
+                    argIndex === 1 ? getGlobalImportCallOptionsType(/*reportErrors*/ false) :
+                    anyType;
+            }
+
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
@@ -26018,10 +26023,6 @@ namespace ts {
                 case SyntaxKind.AwaitExpression:
                     return getContextualTypeForAwaitOperand(parent as AwaitExpression, contextFlags);
                 case SyntaxKind.CallExpression:
-                    if ((parent as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                        return stringType;
-                    }
-                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -30617,6 +30618,7 @@ namespace ts {
             if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
             }
+
             const specifier = node.arguments[0];
             const specifierType = checkExpressionCached(specifier);
             const optionsType = node.arguments.length > 1 ? checkExpressionCached(node.arguments[1]) : undefined;
