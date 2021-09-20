@@ -84,15 +84,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
 const mod = __importStar(require("inner"));
 mod.correctVersionApplied;
-//// [index.mjs]
-// esm format file
-export const importConditionApplied = true;
-//// [index.cjs]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.wrongConditionApplied = void 0;
-// cjs format file
-exports.wrongConditionApplied = true;
 
 
 //// [index.d.ts]
@@ -101,7 +92,3 @@ export {};
 export {};
 //// [index.d.cts]
 export {};
-//// [index.d.mts]
-export declare const importConditionApplied = true;
-//// [index.d.cts]
-export declare const wrongConditionApplied = true;

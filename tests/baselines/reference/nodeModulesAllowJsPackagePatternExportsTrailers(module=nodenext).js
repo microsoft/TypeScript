@@ -110,44 +110,6 @@ const typei = __importStar(require("inner/js/index.js"));
 cjsi;
 mjsi;
 typei;
-//// [index.mjs]
-// esm format file
-import * as cjs from "inner/cjs/index.cjs";
-import * as mjs from "inner/mjs/index.mjs";
-import * as type from "inner/js/index.js";
-export { cjs };
-export { mjs };
-export { type };
-//// [index.cjs]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.type = exports.mjs = exports.cjs = void 0;
-// cjs format file
-const cjs = __importStar(require("inner/cjs/index.cjs"));
-exports.cjs = cjs;
-const mjs = __importStar(require("inner/mjs/index.mjs"));
-exports.mjs = mjs;
-const type = __importStar(require("inner/js/index.js"));
-exports.type = type;
 
 
 //// [index.d.ts]
@@ -156,17 +118,3 @@ export {};
 export {};
 //// [index.d.cts]
 export {};
-//// [index.d.mts]
-import * as cjs from "inner/cjs/index.cjs";
-import * as mjs from "inner/mjs/index.mjs";
-import * as type from "inner/js/index.js";
-export { cjs };
-export { mjs };
-export { type };
-//// [index.d.cts]
-import * as cjs from "inner/cjs/index.cjs";
-import * as mjs from "inner/mjs/index.mjs";
-import * as type from "inner/js/index.js";
-export { cjs };
-export { mjs };
-export { type };

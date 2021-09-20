@@ -191,50 +191,6 @@ cjsi.cjsSource;
 mjsi.cjsSource;
 typei.implicitCjsSource;
 ts.cjsSource;
-//// [index.mjs]
-// esm format file
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
-export const mjsSource = true;
-//// [index.cjs]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.cjsSource = exports.ts = exports.type = exports.mjs = exports.cjs = void 0;
-// cjs format file
-const cjs = __importStar(require("inner/a"));
-exports.cjs = cjs;
-const mjs = __importStar(require("inner/b"));
-exports.mjs = mjs;
-const type = __importStar(require("inner"));
-exports.type = type;
-const ts = __importStar(require("inner/types"));
-exports.ts = ts;
-exports.cjsSource = true;
 
 
 //// [index.d.ts]
@@ -243,23 +199,3 @@ export {};
 export {};
 //// [index.d.cts]
 export {};
-//// [index.d.mts]
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
-export declare const mjsSource = true;
-//// [index.d.cts]
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
-export declare const cjsSource = true;

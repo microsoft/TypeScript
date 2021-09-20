@@ -1,71 +1,74 @@
-//// [tests/cases/conformance/node/nodeModulesPackageExports.ts] ////
+//// [tests/cases/conformance/node/nodeModulesDeclarationEmitWithPackageExports.ts] ////
 
 //// [index.ts]
 // esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-cjs;
-mjs;
-type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.mts]
 // esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-cjs;
-mjs;
-type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.cts]
 // cjs format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-cjs;
-mjs;
-type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.d.ts]
 // cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
-export { cjs };
-export { mjs };
-export { type };
+cjs;
+mjs;
+type;
+export const cjsMain = true;
 //// [index.d.mts]
 // esm format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
-export { cjs };
-export { mjs };
-export { type };
+cjs;
+mjs;
+type;
+export const esm = true;
 //// [index.d.cts]
 // cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
-export { cjs };
-export { mjs };
-export { type };
+cjs;
+mjs;
+type;
+export const cjsNonmain = true;
 //// [package.json]
 {
     "name": "package",
@@ -93,29 +96,29 @@ export { type };
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-cjs;
-mjs;
-type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.mjs]
 // esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-cjs;
-mjs;
-type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-cjsi;
-mjsi;
-typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
 //// [index.cjs]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -138,24 +141,58 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 // cjs format file
 const cjs = __importStar(require("package/cjs"));
 const mjs = __importStar(require("package/mjs"));
 const type = __importStar(require("package"));
-cjs;
-mjs;
-type;
+exports.a = cjs;
+exports.b = mjs;
+exports.c = type;
 const cjsi = __importStar(require("inner/cjs"));
 const mjsi = __importStar(require("inner/mjs"));
 const typei = __importStar(require("inner"));
-cjsi;
-mjsi;
-typei;
+exports.d = cjsi;
+exports.e = mjsi;
+exports.f = typei;
 
 
 //// [index.d.ts]
-export {};
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
 //// [index.d.mts]
-export {};
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
 //// [index.d.cts]
-export {};
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
