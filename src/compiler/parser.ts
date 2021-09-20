@@ -5042,12 +5042,12 @@ namespace ts {
                     && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName)
                     && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
                     // when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
-                    // restructure (<div>(...<span></div>)) --> (<div>(...<span></span>)</div>)
+                    // restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
                     // (no need to error; the parent will error)
-                    const end = lastChild.openingElement.end; // newly-created children and closing are both zero-width end/end
+                    const end = lastChild.children.end;
                     const newLast = finishNode(factory.createJsxElement(
                         lastChild.openingElement,
-                        createNodeArray([], end, end),
+                        lastChild.children,
                         finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
                     lastChild.openingElement.pos,
                     end);
