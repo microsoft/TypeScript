@@ -47,9 +47,9 @@
 //// let componenet = <MainButton onClick={()=>{}} ext/*5*/ra-prop>GO</MainButton>;
 
 verify.quickInfos({
-    1: "function MainButton(linkProps: LinkProps): any (+1 overload)",
+    1: "function MainButton(linkProps: LinkProps): JSX.Element (+1 overload)",
     2: "(JSX attribute) LinkProps.to: string",
-    3: "function MainButton(buttonProps: ButtonProps): any (+1 overload)",
-    4: "(method) ButtonProps.onClick(event?: any): void",
+    3: "function MainButton(buttonProps: ButtonProps): JSX.Element (+1 overload)",
+    4: "(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void",
     5: "(JSX attribute) extra-prop: true"
 });
