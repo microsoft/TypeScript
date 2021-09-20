@@ -7,7 +7,14 @@ namespace ts.codefix {
      * @param importAdder If provided, type annotations will use identifier type references instead of ImportTypeNodes, and the missing imports will be added to the importAdder.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: readonly Symbol[], sourceFile: SourceFile, context: TypeConstructionContext, preferences: UserPreferences, importAdder: ImportAdder | undefined, addClassElement: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(
+        classDeclaration: ClassLikeDeclaration,
+        possiblyMissingSymbols: readonly Symbol[],
+        sourceFile: SourceFile,
+        context: TypeConstructionContext,
+        preferences: UserPreferences,
+        importAdder: ImportAdder | undefined,
+        addClassElement: (node: AddNode) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
@@ -28,6 +35,8 @@ namespace ts.codefix {
         host: LanguageServiceHost;
     }
 
+    type AddNode = PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction;
+
     /**
      * `addClassElement` will not be called if we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
@@ -38,8 +47,7 @@ namespace ts.codefix {
         context: TypeConstructionContext,
         preferences: UserPreferences,
         importAdder: ImportAdder | undefined,
-        // addClassElement: (node: ClassElement | FunctionExpression | ArrowFunction) => void,
-        addClassElement: (node: PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction) => void,
+        addClassElement: (node: AddNode) => void,
     ): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {

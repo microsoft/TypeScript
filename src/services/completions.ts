@@ -243,7 +243,6 @@ namespace ts.Completions {
 
         // If the request is a continuation of an earlier `isIncomplete` response,
         // we can continue it from the cached previous response.
-        const typeChecker = program.getTypeChecker();
         const compilerOptions = program.getCompilerOptions();
         const incompleteCompletionsCache = preferences.allowIncompleteCompletions ? host.getIncompleteCompletionsCache?.() : undefined;
         if (incompleteCompletionsCache && completionKind === CompletionTriggerKind.TriggerForIncompleteCompletions && previousToken && isIdentifier(previousToken)) {
@@ -256,7 +255,7 @@ namespace ts.Completions {
             incompleteCompletionsCache?.clear();
         }
 
-        const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, typeChecker, compilerOptions, host, log, preferences);
+        const stringCompletions = StringCompletions.getStringLiteralCompletions(sourceFile, position, previousToken, compilerOptions, host, program, log, preferences);
         if (stringCompletions) {
             return stringCompletions;
         }
