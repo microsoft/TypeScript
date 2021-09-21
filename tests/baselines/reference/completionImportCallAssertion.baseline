@@ -1,0 +1,140 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/main.ts",
+      "position": 24,
+      "name": "0"
+    },
+    "completionList": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "assert",
+          "kind": "property",
+          "kindModifiers": "declare,optional",
+          "sortText": "12",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportCallOptions",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "assert",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAssertions",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/main.ts",
+      "position": 57,
+      "name": "1"
+    },
+    "completionList": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": true,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 53,
+        "length": 4
+      },
+      "entries": [
+        {
+          "name": "assert",
+          "kind": "property",
+          "kindModifiers": "declare,optional",
+          "sortText": "12",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportCallOptions",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "assert",
+              "kind": "propertyName"
+            },
+            {
+              "text": "?",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAssertions",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": []
+        }
+      ]
+    }
+  }
+]
