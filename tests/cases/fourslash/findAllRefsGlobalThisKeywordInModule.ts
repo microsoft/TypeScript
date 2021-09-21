@@ -1,8 +1,7 @@
 /// <reference path='fourslash.ts' />
 // @noLib: true
 
-////[|this|];
+/////*1*/this;
 ////export const c = 1;
 
-const [glob] = test.ranges();
-verify.referenceGroups(glob, undefined);
+verify.baselineFindAllReferences('1')
