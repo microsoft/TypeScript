@@ -13190,7 +13190,9 @@ namespace ts {
             if (!name) {
                 return unknownSymbol;
             }
-            return resolveEntityName(name, meaning, ignoreErrors) || (ignoreErrors ? unknownSymbol : getUnresolvedSymbolForEntityName(name));
+            const symbol = resolveEntityName(name, meaning, ignoreErrors);
+            return symbol && symbol !== unknownSymbol ? symbol :
+                ignoreErrors ? unknownSymbol : getUnresolvedSymbolForEntityName(name);
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
@@ -40221,8 +40223,8 @@ namespace ts {
             }
             else if (isTypeReferenceIdentifier(name as EntityName)) {
                 const meaning = name.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
-                return resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true) ||
-                    getUnresolvedSymbolForEntityName(name as EntityName);
+                const symbol = resolveEntityName(name as EntityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                return symbol && symbol !== unknownSymbol ? symbol : getUnresolvedSymbolForEntityName(name as EntityName);
             }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
