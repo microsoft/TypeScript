@@ -44,13 +44,17 @@ namespace ts.codefix {
                 exportDeclaration.modifiers,
                 /*isTypeOnly*/ false,
                 factory.updateNamedExports(exportClause, filter(exportClause.elements, e => !contains(typeExportSpecifiers, e))),
-                exportDeclaration.moduleSpecifier);
+                exportDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined
+            );
             const typeExportDeclaration = factory.createExportDeclaration(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ true,
                 factory.createNamedExports(typeExportSpecifiers),
-                exportDeclaration.moduleSpecifier);
+                exportDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined
+            );
 
             changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
                 leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
