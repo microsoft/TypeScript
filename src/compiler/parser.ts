@@ -8624,6 +8624,7 @@ namespace ts {
                 newText,
                 aggressiveChecks
             );
+            result.impliedNodeFormat = sourceFile.impliedNodeFormat;
             return result;
         }
 

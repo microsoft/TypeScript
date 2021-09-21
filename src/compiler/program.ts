@@ -998,6 +998,7 @@ namespace ts {
             getSourceOfProjectReferenceRedirect,
             forEachResolvedProjectReference
         });
+        const readFile = host.readFile.bind(host) as typeof host.readFile;
 
         tracing?.push(tracing.Phase.Program, "shouldProgramCreateNewSourceFiles", { hasOldProgram: !!oldProgram });
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
@@ -1182,6 +1183,7 @@ namespace ts {
             isSourceOfProjectReferenceRedirect,
             emitBuildInfo,
             fileExists,
+            readFile,
             directoryExists,
             getSymlinkCache,
             realpath: host.realpath?.bind(host),
@@ -1444,6 +1446,7 @@ namespace ts {
             // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, index: number): boolean {
+                if (index >= length(oldSourceFile?.imports) + length(oldSourceFile?.moduleAugmentations)) return false; // mode index out of bounds, don't reuse resolution
                 const resolutionToFile = getResolvedModule(oldSourceFile, moduleName, oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, index));
                 const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
                 if (resolutionToFile && resolvedFile) {

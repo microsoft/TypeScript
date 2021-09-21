@@ -1831,7 +1831,7 @@ namespace ts {
                         isInExternalModule = true;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration).exports || emptySymbols;
+                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
                         if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
                             // It's an external module. First see if the module has an export default and if the local
@@ -1874,7 +1874,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
-                        if (result = lookup(getSymbolOfNode(location)!.exports!, name, meaning & SymbolFlags.EnumMember)) {
+                        if (result = lookup(getSymbolOfNode(location)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
                             break loop;
                         }
                         break;
@@ -4610,6 +4610,7 @@ namespace ts {
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
                         getFileIncludeReasons: () => host.getFileIncludeReasons(),
+                        readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
                     } : undefined },
                     encounteredError: false,
                     reportedDiagnostic: false,
