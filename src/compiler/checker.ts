@@ -33975,7 +33975,8 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
-                    if (left.kind === SyntaxKind.ArrayLiteralExpression || left.kind === SyntaxKind.ObjectLiteralExpression || right.kind === SyntaxKind.ArrayLiteralExpression || right.kind === SyntaxKind.ObjectLiteralExpression) {
+                    isLiteralExpression
+                    if (isLiteralExpressionOfObject(left) || isLiteralExpressionOfObject(right)) {
                         const eqType = operator === SyntaxKind.EqualsEqualsToken || operator === SyntaxKind.EqualsEqualsEqualsToken;
                         error(errorNode, Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value, eqType ? "false" : "true");
                     }
