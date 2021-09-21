@@ -1639,7 +1639,7 @@ namespace ts {
                 parseErrorAtCurrentToken(blankDiagnostic);
             }
             else {
-                parseErrorAtCurrentToken(nameDiagnostic, tokenToString(token()));
+                parseErrorAtCurrentToken(nameDiagnostic, scanner.getTokenValue());
             }
         }
 
