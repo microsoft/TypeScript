@@ -432,11 +432,11 @@ namespace ts.Completions.StringCompletions {
 
                 let foundFileName: string;
                 const outputExtension = moduleSpecifiers.tryGetJSExtensionForFile(filePath, host.getCompilationSettings());
-                if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIs(filePath, Extension.Json)) {
+                if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIsOneOf(filePath, [Extension.Json, Extension.Mts, Extension.Cts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Cjs])) {
                     foundFileName = removeFileExtension(getBaseFileName(filePath));
                     foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
                 }
-                else if (includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion && outputExtension) {
+                else if ((fileExtensionIsOneOf(filePath, [Extension.Mts, Extension.Cts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Cjs]) || includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion) && outputExtension) {
                     foundFileName = changeExtension(getBaseFileName(filePath), outputExtension);
                     foundFiles.set(foundFileName, outputExtension);
                 }
