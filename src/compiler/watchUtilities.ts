@@ -184,7 +184,7 @@ namespace ts {
             const rootResult = tryReadDirectory(rootDir, rootDirPath);
             let rootSymLinkResult: FileSystemEntries | undefined;
             if (rootResult !== undefined) {
-                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath, directoryExists);
+                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
