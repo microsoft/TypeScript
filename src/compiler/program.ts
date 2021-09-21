@@ -530,52 +530,31 @@ namespace ts {
     }
 
     /* @internal */
-    /**
-     * Are you sure you want to use this? If you have a bound and parent pointer'd sourcefile, as in the checker, getModeForUsageLocation is much more ergonomic
-     */
-    export function getModeForResolutionAtIndex(file: { statements: readonly Statement[], imports: readonly StringLiteralLike[], moduleAugmentations: readonly (StringLiteral | Identifier)[], impliedNodeFormat?: ModuleKind.CommonJS | ModuleKind.ESNext}, index: number) {
+    interface SourceFileImportsList {
+        imports: SourceFile["imports"];
+        moduleAugmentations: SourceFile["moduleAugmentations"];
+        impliedNodeFormat?: SourceFile["impliedNodeFormat"];
+    };
+
+    /* @internal */
+    export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number) {
         if (file.impliedNodeFormat === undefined) return undefined;
-        if (file.impliedNodeFormat !== ModuleKind.ESNext) {
-            const usage = getModuleNameStringLiteralAt(file, index);
-            if (usage.parent) {
-                // parent pointers are set - do the fast thing and just check if the parent is an import call expression
-                return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
-            }
-            // We can't rely on parent pointers being set - so instead we search for the usage in the top-level statements in the file,
-            // since that's the only place (module) import declarations and module augmentations (or definitions) are allowed.
-            // If the usage is anywhere else, by process of elimination, it must be an import call usage.
-            if (some(file.statements, s =>
-                (isImportDeclaration(s) && s.moduleSpecifier === usage) ||
-                (isImportEqualsDeclaration(s) && isExternalModuleReference(s.moduleReference) && skipParentheses(s.moduleReference.expression) === usage) ||
-                (isModuleDeclaration(s) && s.name === usage) ||
-                (isExportDeclaration(s) && s.moduleSpecifier === usage)
-            )) {
-                return ModuleKind.CommonJS;
-            }
-            return ModuleKind.ESNext;
-        }
-        // in an esnext format file, import require statements desugar to `require` calls, so should follow cjs resolution rules
-        const usage = getModuleNameStringLiteralAt(file, index);
-        if (usage.parent) {
-            // parent pointers are set - do the fast thing and just check if the parent is an import require statement
-            return isImportEqualsDeclaration(walkUpParenthesizedExpressions(usage.parent).parent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
-        }
-        // parent pointers are unset - check to see if the usage is refered to in any of the top-level import require statements, as that's the only place they should be valid
-        if (some(file.statements, s => isImportEqualsDeclaration(s) && isExternalModuleReference(s.moduleReference) && skipParentheses(s.moduleReference.expression) === usage)) {
-            return ModuleKind.CommonJS;
-        }
-        return ModuleKind.ESNext;
+        // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
+        // so it's safe to use them even pre-bind
+        return getModeForUsageLocation(file, getModuleNameStringLiteralAt(file, index));
     }
 
     /* @internal */
-    export function getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike) {
+    export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
         if (file.impliedNodeFormat === undefined) return undefined;
         if (file.impliedNodeFormat !== ModuleKind.ESNext) {
             // in cjs files, import call expressions are esm format, otherwise everything is cjs
             return isImportCall(walkUpParenthesizedExpressions(usage.parent)) ? ModuleKind.ESNext : ModuleKind.CommonJS;
         }
         // in esm files, import=require statements are cjs format, otherwise everything is esm
-        return isImportEqualsDeclaration(walkUpParenthesizedExpressions(usage.parent).parent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
+        // imports are only parent'd up to their containing declaration/expression, so access farther parents with care
+        const exprParentParent = walkUpParenthesizedExpressions(usage.parent)?.parent;
+        return exprParentParent && isImportEqualsDeclaration(exprParentParent) ? ModuleKind.CommonJS : ModuleKind.ESNext;
     }
 
     /* @internal */
@@ -1261,7 +1240,7 @@ namespace ts {
 
         function getRedirectReferenceForResolution(file: SourceFile) {
             const redirect = getResolvedProjectReferenceToRedirect(file.originalFileName);
-            if (redirect || !fileExtensionIs(file.originalFileName, Extension.Dts)) return redirect;
+            if (redirect || !fileExtensionIsOneOf(file.originalFileName, [Extension.Dts, Extension.Dcts, Extension.Dmts])) return redirect;
 
             // The originalFileName could not be actual source file name if file found was d.ts from referecned project
             // So in this case try to look up if this is output from referenced project, if it is use the redirected project in that case
@@ -2432,6 +2411,7 @@ namespace ts {
                     // An ExternalImportDeclaration in an AmbientExternalModuleDeclaration may reference other external modules
                     // only through top - level external module names. Relative external module names are not permitted.
                     if (moduleNameExpr && isStringLiteral(moduleNameExpr) && moduleNameExpr.text && (!inAmbientModule || !isExternalModuleNameRelative(moduleNameExpr.text))) {
+                        setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                         imports = append(imports, moduleNameExpr);
                         if (!usesUriStyleNodeCoreModules && currentNodeModulesDepth === 0 && !file.isDeclarationFile) {
                             usesUriStyleNodeCoreModules = startsWith(moduleNameExpr.text, "node:");
@@ -2440,6 +2420,7 @@ namespace ts {
                 }
                 else if (isModuleDeclaration(node)) {
                     if (isAmbientModule(node) && (inAmbientModule || hasSyntacticModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
+                        (node.name as Mutable<Node>).parent = node;
                         const nameText = getTextOfIdentifierOrLiteral(node.name);
                         // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                         // This will happen in two cases:
@@ -2476,13 +2457,16 @@ namespace ts {
                 while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                     const node = getNodeAtPosition(file, r.lastIndex);
                     if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                         imports = append(imports, node.arguments[0]);
                     }
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
                     else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                        setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                         imports = append(imports, node.arguments[0]);
                     }
                     else if (isLiteralImportTypeNode(node)) {
+                        setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                         imports = append(imports, node.argument.literal);
                     }
                 }
@@ -4123,7 +4107,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: {imports: readonly StringLiteralLike[], moduleAugmentations: readonly (StringLiteral | Identifier)[]}, index: number): StringLiteralLike {
+    export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: SourceFileImportsList, index: number): StringLiteralLike {
         if (index < imports.length) return imports[index];
         let augIndex = imports.length;
         for (const aug of moduleAugmentations) {

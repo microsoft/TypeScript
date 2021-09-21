@@ -189,7 +189,7 @@ namespace ts {
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
-            const mode = getModeForResolutionAtIndex({ statements: importingSourceFile.statements, imports: [importLiteral], moduleAugmentations: [], impliedNodeFormat: importingSourceFile.impliedNodeFormat }, 0);
+            const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);

@@ -187,28 +187,28 @@ export const implicitCjsSource = true;
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.mts ===
 // esm format file
 import * as cjs from "inner/a";
->cjs : typeof cjs
+>cjs : any
 
 import * as mjs from "inner/b";
->mjs : typeof cjs
+>mjs : typeof mjs
 
 import * as type from "inner";
->type : typeof cjs
+>type : typeof mjs
 
 import * as ts from "inner/types";
->ts : typeof cjs
+>ts : typeof mjs
 
 export { cjs };
->cjs : typeof cjs
+>cjs : any
 
 export { mjs };
->mjs : typeof cjs
+>mjs : typeof mjs
 
 export { type };
->type : typeof cjs
+>type : typeof mjs
 
 export { ts };
->ts : typeof cjs
+>ts : typeof mjs
 
 export const mjsSource = true;
 >mjsSource : true

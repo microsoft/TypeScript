@@ -91,20 +91,6 @@ export const cjsNonmain = true;
     }
 }
 
-//// [index.js]
-// esm format file
-import * as cjs from "package/cjs";
-import * as mjs from "package/mjs";
-import * as type from "package";
-export const a = cjs;
-export const b = mjs;
-export const c = type;
-import * as cjsi from "inner/cjs";
-import * as mjsi from "inner/mjs";
-import * as typei from "inner";
-export const d = cjsi;
-export const e = mjsi;
-export const f = typei;
 //// [index.mjs]
 // esm format file
 import * as cjs from "package/cjs";
@@ -155,21 +141,22 @@ const typei = __importStar(require("inner"));
 exports.d = cjsi;
 exports.e = mjsi;
 exports.f = typei;
-
-
-//// [index.d.ts]
+//// [index.js]
+// esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";
-export declare const a: typeof cjs;
-export declare const b: typeof mjs;
-export declare const c: typeof type;
+export const a = cjs;
+export const b = mjs;
+export const c = type;
 import * as cjsi from "inner/cjs";
 import * as mjsi from "inner/mjs";
 import * as typei from "inner";
-export declare const d: typeof cjsi;
-export declare const e: typeof mjsi;
-export declare const f: typeof typei;
+export const d = cjsi;
+export const e = mjsi;
+export const f = typei;
+
+
 //// [index.d.mts]
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
@@ -184,6 +171,19 @@ export declare const d: typeof cjsi;
 export declare const e: typeof mjsi;
 export declare const f: typeof typei;
 //// [index.d.cts]
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
+//// [index.d.ts]
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
 import * as type from "package";

@@ -1,6 +1,5 @@
 // @module: nodenext
 // @declaration: true
-// @outDir: out
 // @filename: index.ts
 // esm format file
 export {};

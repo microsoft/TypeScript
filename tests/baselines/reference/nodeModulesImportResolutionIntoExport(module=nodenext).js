@@ -23,14 +23,6 @@ type;
     }
 }
 
-//// [index.js]
-// esm format file
-import * as type from "#type";
-type;
-//// [index.mjs]
-// esm format file
-import * as type from "#type";
-type;
 //// [index.cjs]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -56,11 +48,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
 const type = __importStar(require("#type"));
 type;
+//// [index.js]
+// esm format file
+import * as type from "#type";
+type;
+//// [index.mjs]
+// esm format file
+import * as type from "#type";
+type;
 
 
+//// [index.d.cts]
+export {};
 //// [index.d.ts]
 export {};
 //// [index.d.mts]
-export {};
-//// [index.d.cts]
 export {};

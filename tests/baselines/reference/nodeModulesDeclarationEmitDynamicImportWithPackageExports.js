@@ -122,26 +122,165 @@ export {};
 //// [index.d.cts]
 export {};
 //// [other.d.ts]
-export declare const a: typeof import("./index.cjs");
-export declare const b: typeof import("./index.mjs");
+export declare const a: typeof import("package/cjs");
+export declare const b: typeof import("package/mjs");
 export declare const c: typeof import("package");
 export declare const f: {
     default: typeof import("inner");
     cjsMain: true;
+};
+//// [other2.d.ts]
+export declare const d: {
+    default: typeof import("inner/cjs");
+    cjsNonmain: true;
+};
+export declare const e: {
+    default: typeof import("inner/mjs");
+    esm: true;
 };
 //// [other.d.mts]
-export declare const a: typeof import("./index.cjs");
-export declare const b: typeof import("./index.mjs");
+export declare const a: typeof import("package/cjs");
+export declare const b: typeof import("package/mjs");
 export declare const c: typeof import("package");
 export declare const f: {
     default: typeof import("inner");
     cjsMain: true;
 };
+//// [other2.d.mts]
+export declare const d: {
+    default: typeof import("inner/cjs");
+    cjsNonmain: true;
+};
+export declare const e: {
+    default: typeof import("inner/mjs");
+    esm: true;
+};
 //// [other.d.cts]
-export declare const a: Promise<typeof import("./index.cjs")>;
-export declare const b: Promise<typeof import("./index.mjs")>;
+export declare const a: Promise<typeof import("package/cjs")>;
+export declare const b: Promise<typeof import("package/mjs")>;
 export declare const c: Promise<typeof import("package")>;
 export declare const f: Promise<{
     default: typeof import("inner");
     cjsMain: true;
 }>;
+//// [other2.d.cts]
+export declare const d: Promise<{
+    default: typeof import("inner/cjs");
+    cjsNonmain: true;
+}>;
+export declare const e: Promise<{
+    default: typeof import("inner/mjs");
+    esm: true;
+}>;
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/conformance/node/other.d.cts(2,47): error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/other.d.cts(3,47): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/other2.d.cts(6,28): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+
+
+==== tests/cases/conformance/node/index.d.ts (0 errors) ====
+    export {};
+    
+==== tests/cases/conformance/node/index.d.mts (0 errors) ====
+    export {};
+    
+==== tests/cases/conformance/node/index.d.cts (0 errors) ====
+    export {};
+    
+==== tests/cases/conformance/node/other.d.ts (0 errors) ====
+    export declare const a: typeof import("package/cjs");
+    export declare const b: typeof import("package/mjs");
+    export declare const c: typeof import("package");
+    export declare const f: {
+        default: typeof import("inner");
+        cjsMain: true;
+    };
+    
+==== tests/cases/conformance/node/other2.d.ts (0 errors) ====
+    export declare const d: {
+        default: typeof import("inner/cjs");
+        cjsNonmain: true;
+    };
+    export declare const e: {
+        default: typeof import("inner/mjs");
+        esm: true;
+    };
+    
+==== tests/cases/conformance/node/other.d.mts (0 errors) ====
+    export declare const a: typeof import("package/cjs");
+    export declare const b: typeof import("package/mjs");
+    export declare const c: typeof import("package");
+    export declare const f: {
+        default: typeof import("inner");
+        cjsMain: true;
+    };
+    
+==== tests/cases/conformance/node/other2.d.mts (0 errors) ====
+    export declare const d: {
+        default: typeof import("inner/cjs");
+        cjsNonmain: true;
+    };
+    export declare const e: {
+        default: typeof import("inner/mjs");
+        esm: true;
+    };
+    
+==== tests/cases/conformance/node/other.d.cts (2 errors) ====
+    export declare const a: Promise<typeof import("package/cjs")>;
+    export declare const b: Promise<typeof import("package/mjs")>;
+                                                  ~~~~~~~~~~~~~
+!!! error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    export declare const c: Promise<typeof import("package")>;
+                                                  ~~~~~~~~~
+!!! error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+    export declare const f: Promise<{
+        default: typeof import("inner");
+        cjsMain: true;
+    }>;
+    
+==== tests/cases/conformance/node/other2.d.cts (1 errors) ====
+    export declare const d: Promise<{
+        default: typeof import("inner/cjs");
+        cjsNonmain: true;
+    }>;
+    export declare const e: Promise<{
+        default: typeof import("inner/mjs");
+                               ~~~~~~~~~~~
+!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+        esm: true;
+    }>;
+    
+==== tests/cases/conformance/node/node_modules/inner/index.d.ts (0 errors) ====
+    // cjs format file
+    export const cjsMain = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+    // esm format file
+    export const esm = true;
+==== tests/cases/conformance/node/node_modules/inner/index.d.cts (0 errors) ====
+    // cjs format file
+    export const cjsNonmain = true;
+==== tests/cases/conformance/node/package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }
+==== tests/cases/conformance/node/node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }

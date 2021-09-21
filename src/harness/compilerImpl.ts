@@ -264,7 +264,9 @@ namespace compiler {
         const program = ts.createProgram(rootFiles || [], compilerOptions, host);
         const emitResult = program.emit();
         const postErrors = ts.getPreEmitDiagnostics(program);
-        const errors = preErrors && (preErrors.length !== postErrors.length) ? [...postErrors,
+        const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
+        const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
+        const errors = preErrors && (preErrors.length !== postErrors.length) ? [...shorterErrors!,
             ts.addRelatedInfo(
                 ts.createCompilerDiagnostic({
                     category: ts.DiagnosticCategory.Error,
@@ -278,7 +280,7 @@ namespace compiler {
                     key: "-1",
                     message: `The excess diagnostics are:`
                 }),
-                ...ts.filter(postErrors, p => !ts.some(preErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
+                ...ts.filter(longerErrors!, p => !ts.some(shorterErrors, p2 => ts.compareDiagnostics(p, p2) === ts.Comparison.EqualTo))
             )
         ] : postErrors;
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);

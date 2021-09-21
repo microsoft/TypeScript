@@ -1,5 +1,6 @@
 tests/cases/conformance/node/index.cts(3,22): error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/index.cts(4,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.mts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 
 
@@ -68,9 +69,11 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(2,13): error TS2303: 
     export { type };
     export { ts };
     export const implicitCjsSource = true;
-==== tests/cases/conformance/node/node_modules/inner/index.d.mts (0 errors) ====
+==== tests/cases/conformance/node/node_modules/inner/index.d.mts (1 errors) ====
     // esm format file
     import * as cjs from "inner/a";
+                ~~~
+!!! error TS2303: Circular definition of import alias 'cjs'.
     import * as mjs from "inner/b";
     import * as type from "inner";
     import * as ts from "inner/types";

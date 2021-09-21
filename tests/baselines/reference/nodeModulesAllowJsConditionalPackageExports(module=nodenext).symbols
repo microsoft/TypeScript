@@ -198,19 +198,19 @@ import * as ts from "inner/types";
 >ts : Symbol(ts, Decl(index.d.mts, 4, 6))
 
 export { cjs };
->cjs : Symbol(cjs.cjs, Decl(index.d.mts, 5, 8))
+>cjs : Symbol(mjs.cjs, Decl(index.d.mts, 5, 8))
 
 export { mjs };
->mjs : Symbol(cjs.mjs, Decl(index.d.mts, 6, 8))
+>mjs : Symbol(mjs.mjs, Decl(index.d.mts, 6, 8))
 
 export { type };
->type : Symbol(cjs.type, Decl(index.d.mts, 7, 8))
+>type : Symbol(mjs.type, Decl(index.d.mts, 7, 8))
 
 export { ts };
->ts : Symbol(cjs.ts, Decl(index.d.mts, 8, 8))
+>ts : Symbol(mjs.ts, Decl(index.d.mts, 8, 8))
 
 export const mjsSource = true;
->mjsSource : Symbol(cjs.mjsSource, Decl(index.d.mts, 9, 12))
+>mjsSource : Symbol(mjs.mjsSource, Decl(index.d.mts, 9, 12))
 
 === tests/cases/conformance/node/allowJs/node_modules/inner/index.d.cts ===
 // cjs format file

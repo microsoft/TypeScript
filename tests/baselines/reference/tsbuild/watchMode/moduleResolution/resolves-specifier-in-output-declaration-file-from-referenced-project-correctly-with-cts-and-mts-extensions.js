@@ -126,16 +126,19 @@ Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/buil
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.es2020.full.d.ts (used version)
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts (used version)
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts (used version)
 /user/username/projects/myproject/packages/pkg1/index.ts (used version)
 
@@ -327,6 +330,7 @@ Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/buil
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
@@ -435,6 +439,7 @@ Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/buil
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
@@ -555,6 +560,7 @@ Program options: {"outDir":"/user/username/projects/myproject/packages/pkg1/buil
 Program structureReused: Not
 Program files::
 /a/lib/lib.es2020.full.d.ts
+/user/username/projects/myproject/packages/pkg2/build/const.d.cts
 /user/username/projects/myproject/packages/pkg2/build/index.d.ts
 /user/username/projects/myproject/packages/pkg1/index.ts
 
