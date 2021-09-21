@@ -413,7 +413,8 @@ namespace ts.OrganizeImports {
     }
 
     export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T) {
-        return compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
+        return compareBooleans(s1.isTypeOnly, s2.isTypeOnly)
+            || compareIdentifiers(s1.propertyName || s1.name, s2.propertyName || s2.name)
             || compareIdentifiers(s1.name, s2.name);
     }
 
