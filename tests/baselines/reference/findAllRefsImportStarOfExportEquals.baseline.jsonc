@@ -1582,15 +1582,15 @@
   }
 ]
 
-// === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
-
 // === /c.ts ===
 // import /*FIND ALL REFS*/[|a|] from "a";
 // [|a|]();
 // [|a|].x;
+
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
 
 // === /node_modules/a/index.d.ts ===
 // declare function [|a|](): void;
@@ -2005,17 +2005,17 @@
     ]
   }
 ]
-
-// === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
 
 // === /c.ts ===
 // import [|a|] from "a";
 // /*FIND ALL REFS*/[|a|]();
 // [|a|].x;
 
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
+
 // === /node_modules/a/index.d.ts ===
 // declare function [|a|](): void;
 // declare namespace [|a|] {
@@ -2430,15 +2430,15 @@
   }
 ]
 
-// === /b.ts ===
-// import [|b|] from "a";
-// [|b|]();
-// [|b|].x;
-
 // === /c.ts ===
 // import [|a|] from "a";
 // [|a|]();
 // /*FIND ALL REFS*/[|a|].x;
+
+// === /b.ts ===
+// import [|b|] from "a";
+// [|b|]();
+// [|b|].x;
 
 // === /node_modules/a/index.d.ts ===
 // declare function [|a|](): void;

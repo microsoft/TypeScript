@@ -1,8 +1,8 @@
-// === /a.ts ===
-// export default function /*FIND ALL REFS*/[|a|]() {}
-
 // === /b.ts ===
 // import [|a|], * as ns from "./a";
+
+// === /a.ts ===
+// export default function /*FIND ALL REFS*/[|a|]() {}
 
 [
   {
@@ -171,11 +171,11 @@
   }
 ]
 
-// === /a.ts ===
-// export default function [|a|]() {}
-
 // === /b.ts ===
 // import /*FIND ALL REFS*/[|a|], * as ns from "./a";
+
+// === /a.ts ===
+// export default function [|a|]() {}
 
 [
   {

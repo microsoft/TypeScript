@@ -166,9 +166,6 @@
   }
 ]
 
-// === /b.ts ===
-// export const /*FIND ALL REFS*/[|x|] = 0;
-
 // === /c.ts ===
 // export { [|x|] } from "./b";
 // import { x } from "./a";
@@ -176,6 +173,9 @@
 
 // === /d.ts ===
 // import { [|x|] } from "./c";
+
+// === /b.ts ===
+// export const /*FIND ALL REFS*/[|x|] = 0;
 
 [
   {
@@ -418,9 +418,6 @@
   }
 ]
 
-// === /b.ts ===
-// export const [|x|] = 0;
-
 // === /c.ts ===
 // export { /*FIND ALL REFS*/[|x|] } from "./b";
 // import { x } from "./a";
@@ -428,6 +425,9 @@
 
 // === /d.ts ===
 // import { [|x|] } from "./c";
+
+// === /b.ts ===
+// export const [|x|] = 0;
 
 [
   {
@@ -1006,16 +1006,16 @@
   }
 ]
 
-// === /b.ts ===
-// export const [|x|] = 0;
+// === /d.ts ===
+// import { /*FIND ALL REFS*/[|x|] } from "./c";
 
 // === /c.ts ===
 // export { [|x|] } from "./b";
 // import { x } from "./a";
 // x;
 
-// === /d.ts ===
-// import { /*FIND ALL REFS*/[|x|] } from "./c";
+// === /b.ts ===
+// export const [|x|] = 0;
 
 [
   {

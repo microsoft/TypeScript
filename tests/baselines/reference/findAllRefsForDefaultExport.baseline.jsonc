@@ -1,9 +1,9 @@
-// === /tests/cases/fourslash/a.ts ===
-// export default function /*FIND ALL REFS*/[|f|]() {}
-
 // === /tests/cases/fourslash/b.ts ===
 // import [|g|] from "./a";
 // [|g|]();
+
+// === /tests/cases/fourslash/a.ts ===
+// export default function /*FIND ALL REFS*/[|f|]() {}
 
 [
   {

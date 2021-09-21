@@ -1,14 +1,8 @@
-// === /a.ts ===
-// export function /*FIND ALL REFS*/[|foo|](): void {}
-
 // === /b.ts ===
 // export { [|foo|] as [|bar|] } from "./a";
 
 // === /c.ts ===
 // export { [|foo|] as [|default|] } from "./a";
-
-// === /d.ts ===
-// export { [|default|] } from "./c";
 
 // === /e.ts ===
 // import { [|bar|] } from "./b";
@@ -16,6 +10,12 @@
 // import { [|default|] as [|bang|] } from "./c";
 // import [|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function /*FIND ALL REFS*/[|foo|](): void {}
 
 [
   {
@@ -846,9 +846,6 @@
     ]
   }
 ]
-
-// === /a.ts ===
-// export function [|foo|](): void {}
 
 // === /b.ts ===
 // export { /*FIND ALL REFS*/[|foo|] as [|bar|] } from "./a";
@@ -856,15 +853,18 @@
 // === /c.ts ===
 // export { [|foo|] as [|default|] } from "./a";
 
-// === /d.ts ===
-// export { [|default|] } from "./c";
-
 // === /e.ts ===
 // import { [|bar|] } from "./b";
 // import [|baz|] from "./c";
 // import { [|default|] as [|bang|] } from "./c";
 // import [|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function [|foo|](): void {}
 
 [
   {
@@ -1695,9 +1695,6 @@
     ]
   }
 ]
-
-// === /a.ts ===
-// export function [|foo|](): void {}
 
 // === /b.ts ===
 // export { [|foo|] as [|bar|] } from "./a";
@@ -1705,15 +1702,18 @@
 // === /c.ts ===
 // export { /*FIND ALL REFS*/[|foo|] as [|default|] } from "./a";
 
-// === /d.ts ===
-// export { [|default|] } from "./c";
-
 // === /e.ts ===
 // import { [|bar|] } from "./b";
 // import [|baz|] from "./c";
 // import { [|default|] as [|bang|] } from "./c";
 // import [|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /d.ts ===
+// export { [|default|] } from "./c";
+
+// === /a.ts ===
+// export function [|foo|](): void {}
 
 [
   {
@@ -2544,9 +2544,6 @@
     ]
   }
 ]
-
-// === /b.ts ===
-// export { foo as /*FIND ALL REFS*/[|bar|] } from "./a";
 
 // === /e.ts ===
 // import { [|bar|] } from "./b";
@@ -2555,6 +2552,9 @@
 // import boom from "./d";
 // [|bar|](); baz(); bang(); boom();
 
+// === /b.ts ===
+// export { foo as /*FIND ALL REFS*/[|bar|] } from "./a";
+
 [
   {
     "definition": {
@@ -2762,9 +2762,6 @@
     ]
   }
 ]
-
-// === /b.ts ===
-// export { foo as [|bar|] } from "./a";
 
 // === /e.ts ===
 // import { /*FIND ALL REFS*/[|bar|] } from "./b";
@@ -2773,6 +2770,9 @@
 // import boom from "./d";
 // [|bar|](); baz(); bang(); boom();
 
+// === /b.ts ===
+// export { foo as [|bar|] } from "./a";
+
 [
   {
     "definition": {
@@ -2980,9 +2980,6 @@
     ]
   }
 ]
-
-// === /b.ts ===
-// export { foo as [|bar|] } from "./a";
 
 // === /e.ts ===
 // import { [|bar|] } from "./b";
@@ -2991,6 +2988,9 @@
 // import boom from "./d";
 // /*FIND ALL REFS*/[|bar|](); baz(); bang(); boom();
 
+// === /b.ts ===
+// export { foo as [|bar|] } from "./a";
+
 [
   {
     "definition": {
@@ -3199,11 +3199,11 @@
   }
 ]
 
-// === /c.ts ===
-// export { foo as /*FIND ALL REFS*/[|default|] } from "./a";
-
 // === /d.ts ===
 // export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as /*FIND ALL REFS*/[|default|] } from "./a";
 
 // === /e.ts ===
 // import { bar } from "./b";
@@ -3745,11 +3745,11 @@
   }
 ]
 
-// === /c.ts ===
-// export { foo as [|default|] } from "./a";
-
 // === /d.ts ===
 // export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
 
 // === /e.ts ===
 // import { bar } from "./b";
@@ -4291,8 +4291,8 @@
   }
 ]
 
-// === /a.ts ===
-// export function [|foo|](): void {}
+// === /d.ts ===
+// export { /*FIND ALL REFS*/[|default|] } from "./c";
 
 // === /b.ts ===
 // export { [|foo|] as [|bar|] } from "./a";
@@ -4300,15 +4300,15 @@
 // === /c.ts ===
 // export { [|foo|] as [|default|] } from "./a";
 
-// === /d.ts ===
-// export { /*FIND ALL REFS*/[|default|] } from "./c";
-
 // === /e.ts ===
 // import { [|bar|] } from "./b";
 // import [|baz|] from "./c";
 // import { [|default|] as [|bang|] } from "./c";
 // import [|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
 
 [
   {
@@ -5140,11 +5140,11 @@
   }
 ]
 
-// === /c.ts ===
-// export { foo as [|default|] } from "./a";
-
 // === /d.ts ===
 // export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
 
 // === /e.ts ===
 // import { bar } from "./b";
@@ -5686,11 +5686,11 @@
   }
 ]
 
-// === /c.ts ===
-// export { foo as [|default|] } from "./a";
-
 // === /d.ts ===
 // export { [|default|] } from "./c";
+
+// === /c.ts ===
+// export { foo as [|default|] } from "./a";
 
 // === /e.ts ===
 // import { bar } from "./b";
@@ -6466,8 +6466,8 @@
   }
 ]
 
-// === /a.ts ===
-// export function [|foo|](): void {}
+// === /d.ts ===
+// export { [|default|] } from "./c";
 
 // === /b.ts ===
 // export { [|foo|] as [|bar|] } from "./a";
@@ -6475,15 +6475,15 @@
 // === /c.ts ===
 // export { [|foo|] as [|default|] } from "./a";
 
-// === /d.ts ===
-// export { [|default|] } from "./c";
-
 // === /e.ts ===
 // import { [|bar|] } from "./b";
 // import [|baz|] from "./c";
 // import { [|default|] as [|bang|] } from "./c";
 // import /*FIND ALL REFS*/[|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); [|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
 
 [
   {
@@ -7315,8 +7315,8 @@
   }
 ]
 
-// === /a.ts ===
-// export function [|foo|](): void {}
+// === /d.ts ===
+// export { [|default|] } from "./c";
 
 // === /b.ts ===
 // export { [|foo|] as [|bar|] } from "./a";
@@ -7324,15 +7324,15 @@
 // === /c.ts ===
 // export { [|foo|] as [|default|] } from "./a";
 
-// === /d.ts ===
-// export { [|default|] } from "./c";
-
 // === /e.ts ===
 // import { [|bar|] } from "./b";
 // import [|baz|] from "./c";
 // import { [|default|] as [|bang|] } from "./c";
 // import [|boom|] from "./d";
 // [|bar|](); [|baz|](); [|bang|](); /*FIND ALL REFS*/[|boom|]();
+
+// === /a.ts ===
+// export function [|foo|](): void {}
 
 [
   {

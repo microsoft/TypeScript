@@ -1,11 +1,11 @@
+// === /b.ts ===
+// import [|A|] = require("./a");
+// [|A|];
+
 // === /a.ts ===
 // export = class /*FIND ALL REFS*/[|A|] {
 //     m() { [|A|]; }
 // };
-
-// === /b.ts ===
-// import [|A|] = require("./a");
-// [|A|];
 
 [
   {
@@ -195,16 +195,16 @@
     ]
   }
 ]
+
+// === /b.ts ===
+// import [|A|] = require("./a");
+// [|A|];
 
 // === /a.ts ===
 // export = class [|A|] {
 //     m() { /*FIND ALL REFS*/[|A|]; }
 // };
 
-// === /b.ts ===
-// import [|A|] = require("./a");
-// [|A|];
-
 [
   {
     "definition": {
@@ -393,16 +393,16 @@
     ]
   }
 ]
-
-// === /a.ts ===
-// export = class [|A|] {
-//     m() { [|A|]; }
-// };
 
 // === /b.ts ===
 // import /*FIND ALL REFS*/[|A|] = require("./a");
 // [|A|];
 
+// === /a.ts ===
+// export = class [|A|] {
+//     m() { [|A|]; }
+// };
+
 [
   {
     "definition": {
@@ -592,14 +592,14 @@
   }
 ]
 
+// === /b.ts ===
+// import [|A|] = require("./a");
+// /*FIND ALL REFS*/[|A|];
+
 // === /a.ts ===
 // export = class [|A|] {
 //     m() { [|A|]; }
 // };
-
-// === /b.ts ===
-// import [|A|] = require("./a");
-// /*FIND ALL REFS*/[|A|];
 
 [
   {
