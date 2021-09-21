@@ -119,14 +119,14 @@ namespace ts.InlayHints {
         }
 
         function visitDoExpression(node: DoExpression) {
-            const [edges] = collectAllDoExpressionEdges(node);
-            for (const edge of edges) {
-                if (isAsExpression(edge)) {
-                    addDoExpressionReturnPositionHints("/* do expression */", edge.end);
+            const [leaves] = collectDoExpressionASTLeaves(node);
+            for (const leaf of leaves) {
+                if (isAsExpression(leaf)) {
+                    addDoExpressionReturnPositionHints("/* do expression */", leaf.end);
                 }
                 else {
-                    const type = checker.getTypeAtLocation(edge);
-                    addDoExpressionReturnPositionHints("as " + printTypeInSingleLine(type), edge.end);
+                    const type = checker.getTypeAtLocation(leaf);
+                    addDoExpressionReturnPositionHints("as " + printTypeInSingleLine(type), leaf.end);
                 }
             };
         }

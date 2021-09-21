@@ -7448,36 +7448,36 @@ namespace ts {
     }
 
     /** @internal */
-    export function collectAllDoExpressionEdges(node: DoExpression): [edge: Expression[], emptyPart: Node[]] {
-        const edges: Expression[] = [];
-        const empty: Node[] = [];
+    export function collectDoExpressionASTLeaves(node: DoExpression): [leaves: Expression[], missingLeaves: Node[]] {
+        const leaves: Expression[] = [];
+        const missingLeaves: Node[] = [];
 
-        collectEdges(node.block);
-        return [edges, empty];
+        collectLeaves(node.block);
+        return [leaves, missingLeaves];
 
-        function collectEdges(node: StatementWithCompletionValue) {
+        function collectLeaves(node: StatementWithCompletionValue) {
             switch (node.kind) {
                 case SyntaxKind.ExpressionStatement:
-                    edges.push(node.expression);
+                    leaves.push(node.expression);
                     break;
                 case SyntaxKind.IfStatement: {
-                    if (canProduceCompletionValue(node.thenStatement)) collectEdges(node.thenStatement);
-                    else empty.push(node.thenStatement);
+                    if (canProduceCompletionValue(node.thenStatement)) collectLeaves(node.thenStatement);
+                    else missingLeaves.push(node.thenStatement);
                     if (node.elseStatement) {
-                        if (canProduceCompletionValue(node.elseStatement)) collectEdges(node.elseStatement);
-                        else empty.push(node.elseStatement);
+                        if (canProduceCompletionValue(node.elseStatement)) collectLeaves(node.elseStatement);
+                        else missingLeaves.push(node.elseStatement);
                     };
                     break;
                 }
                 case SyntaxKind.TryStatement: {
-                    collectEdges(node.tryBlock);
-                    if (node.catchClause) collectEdges(node.catchClause.block);
+                    collectLeaves(node.tryBlock);
+                    if (node.catchClause) collectLeaves(node.catchClause.block);
                     break;
                 }
                 case SyntaxKind.Block: {
                     const lastOne = findLast(node.statements, canProduceCompletionValue);
-                    if (!lastOne) empty.push(node);
-                    else collectEdges(lastOne);
+                    if (!lastOne) missingLeaves.push(node);
+                    else collectLeaves(lastOne);
                     break;
                 }
                 case SyntaxKind.SwitchStatement: {
@@ -7489,14 +7489,14 @@ namespace ts {
                         }
                         fallthroughClauses.length = 0;
                         const lastOne = findLast(clause.statements, canProduceCompletionValue);
-                        if (!lastOne) empty.push(node);
-                        else collectEdges(lastOne);
+                        if (!lastOne) missingLeaves.push(node);
+                        else collectLeaves(lastOne);
                     }
-                    if (fallthroughClauses.length) empty.push(last(empty));
+                    if (fallthroughClauses.length) missingLeaves.push(last(missingLeaves));
                     break;
                 }
                 case SyntaxKind.LabeledStatement: {
-                    if (canProduceCompletionValue(node.statement)) collectEdges(node.statement);
+                    if (canProduceCompletionValue(node.statement)) collectLeaves(node.statement);
                     break;
                 }
             }
