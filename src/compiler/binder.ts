@@ -1211,7 +1211,7 @@ namespace ts {
 
         function bindBreakOrContinueFlow(node: BreakOrContinueStatement, breakTarget: FlowLabel | undefined, continueTarget: FlowLabel | undefined) {
             const flowLabel = node.kind === SyntaxKind.BreakStatement ? breakTarget : continueTarget;
-            if (flowLabel && !findDirectDoExpressionAncestorUnderBreakableContinuableOrFunctionBoundary(node)) {
+            if (flowLabel && !findDirectDoExpressionAncestorUnderBreakableContinuableOrFunctionBoundary(node)?.async) {
                 addAntecedent(flowLabel, currentFlow);
                 currentFlow = unreachableFlow;
             }
@@ -1930,7 +1930,6 @@ namespace ts {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                case SyntaxKind.DoExpression:
                 case SyntaxKind.JSDocFunctionType:
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
