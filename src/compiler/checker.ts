@@ -23846,6 +23846,9 @@ namespace ts {
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
+                        if (isPrivateIdentifier(expr.left)) {
+                            return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
+                        }
                         const target = getReferenceCandidate(expr.right);
                         const leftType = getTypeOfNode(expr.left);
                         if (leftType.flags & TypeFlags.StringLiteral) {
@@ -23857,9 +23860,6 @@ namespace ts {
                             if (isMatchingReference(reference, target)) {
                                 return narrowByInKeyword(type, name, assumeTrue);
                             }
-                        }
-                        else if (isPrivateIdentifier(expr.left)) {
-                            return narrowTypeByPrivateIdentifierInInExpression(type, expr, assumeTrue);
                         }
                         break;
                     case SyntaxKind.CommaToken:
@@ -32046,45 +32046,43 @@ namespace ts {
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (isPrivateIdentifier(left)) {
-                const privateId = left;
-                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(left.escapedText, left);
                 if (lexicallyScopedSymbol === undefined) {
-                    if (!getContainingClass(privateId)) {
-                        error(privateId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                    if (!getContainingClass(left)) {
+                        error(left, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
                     }
                     else {
-                        const suggestion = getSuggestedSymbolForNonexistentProperty(privateId, rightType);
+                        const suggestion = getSuggestedSymbolForNonexistentProperty(left, rightType);
                         if (suggestion) {
                             const suggestedName = symbolName(suggestion);
-                            error(privateId, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(privateId), suggestedName);
+                            error(left, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(left), suggestedName);
                         }
                         else {
-                            error(privateId, Diagnostics.Cannot_find_name_0, diagnosticName(privateId));
+                            error(left, Diagnostics.Cannot_find_name_0, diagnosticName(left));
                         }
                     }
                     return anyType;
                 }
 
                 markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-                getNodeLinks(privateId.parent).resolvedSymbol = lexicallyScopedSymbol;
+                getNodeLinks(left.parent).resolvedSymbol = lexicallyScopedSymbol;
                 if (rightType === silentNeverType) {
                     return silentNeverType;
                 }
-                rightType = checkNonNullType(rightType, right);
             }
             else {
                 if (leftType === silentNeverType || rightType === silentNeverType) {
                     return silentNeverType;
                 }
                 leftType = checkNonNullType(leftType, left);
-                rightType = checkNonNullType(rightType, right);
-
+                // TypeScript 1.0 spec (April 2014): 4.15.5
                 // Require the left operand to be of type Any, the String primite type, or the Number primite type.
                 if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
                     isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
                     error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
                 }
             }
+            rightType = checkNonNullType(rightType, right);
             // TypeScript 1.0 spec (April 2014): 4.15.5
             // The in operator requires the right operand to be
             //
