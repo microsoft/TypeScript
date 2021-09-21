@@ -46,7 +46,8 @@ namespace ts.codefix {
                     /*isTypeOnly*/ true,
                     importClause.name,
                     /*namedBindings*/ undefined),
-                importDeclaration.moduleSpecifier));
+                importDeclaration.moduleSpecifier,
+                /*assertClause*/ undefined));
         }
     }
 }

@@ -1213,7 +1213,7 @@ namespace ts.FindAllReferences {
             }
         }
 
-        /** Search for all occurences of an identifier in a source file (and filter out the ones that match). */
+        /** Search for all occurrences of an identifier in a source file (and filter out the ones that match). */
         function searchForName(sourceFile: SourceFile, search: Search, state: State): void {
             if (getNameTable(sourceFile).get(search.escapedText) !== undefined) {
                 getReferencesInSourceFile(sourceFile, search, state);
