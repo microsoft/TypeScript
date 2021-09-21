@@ -81,11 +81,6 @@ namespace ts {
             const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
             const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
             const emittedOperand = skipPartiallyEmittedExpressions(operand);
-            // If a privateIdentifier is on the left side, this is not a real expression and
-            // should not become parenthesized
-            if (isLeftSideOfBinary && isPrivateIdentifier(operand)) {
-                return false;
-            }
             if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > OperatorPrecedence.Assignment) {
                 // We need to parenthesize arrow functions on the right side to avoid it being
                 // parsed as parenthesized expression: `a && (() => {})`

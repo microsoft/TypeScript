@@ -3706,6 +3706,7 @@ namespace ts {
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
