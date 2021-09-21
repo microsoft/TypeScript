@@ -1,0 +1,26 @@
+tests/cases/conformance/importAssertion/1.ts(1,27): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/1.ts(2,30): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/2.ts(1,31): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+tests/cases/conformance/importAssertion/2.ts(2,33): error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+
+
+==== tests/cases/conformance/importAssertion/0.ts (0 errors) ====
+    export interface I { }
+    
+==== tests/cases/conformance/importAssertion/1.ts (2 errors) ====
+    export type {} from './0' assert { type: "json" }
+                              ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+    export type { I } from './0' assert { type: "json" }
+                                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+    
+==== tests/cases/conformance/importAssertion/2.ts (2 errors) ====
+    import type { I } from './0'  assert { type: "json" }
+                                  ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+    import type * as foo from './0' assert { type: "json" }
+                                    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2821: Import assertions are only supported when the '--module' option is set to 'esnext'.
+    
+    
