@@ -16,11 +16,6 @@
 // import { C } from "./a";
 // new [|C|]();
 
-// === /tests/cases/fourslash/d.ts ===
-// import * as a from "./a";
-// new a.[|C|]();
-// class d extends a.C { constructor() { [|super|](); }
-
 // === /tests/cases/fourslash/c.ts ===
 // import { C } from "./a";
 // class D extends C {
@@ -33,6 +28,11 @@
 // class E implements C {
 //     constructor() { super(); }
 // }
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.C { constructor() { [|super|](); }
 
 [
   {
@@ -311,11 +311,6 @@
 // import { C } from "./a";
 // new [|C|]();
 
-// === /tests/cases/fourslash/d.ts ===
-// import * as a from "./a";
-// new a.[|C|]();
-// class d extends a.C { constructor() { [|super|](); }
-
 // === /tests/cases/fourslash/c.ts ===
 // import { C } from "./a";
 // class D extends C {
@@ -328,6 +323,11 @@
 // class E implements C {
 //     constructor() { super(); }
 // }
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.C { constructor() { [|super|](); }
 
 [
   {
@@ -606,11 +606,6 @@
 // import { C } from "./a";
 // new [|C|]();
 
-// === /tests/cases/fourslash/d.ts ===
-// import * as a from "./a";
-// new a.[|C|]();
-// class d extends a.C { constructor() { [|super|](); }
-
 // === /tests/cases/fourslash/c.ts ===
 // import { C } from "./a";
 // class D extends C {
@@ -623,6 +618,11 @@
 // class E implements C {
 //     constructor() { super(); }
 // }
+
+// === /tests/cases/fourslash/d.ts ===
+// import * as a from "./a";
+// new a.[|C|]();
+// class d extends a.C { constructor() { [|super|](); }
 
 [
   {

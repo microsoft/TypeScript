@@ -1,9 +1,9 @@
+// === /a.ts ===
+// export const /*FIND ALL REFS*/[|x|] = 0;
+
 // === /b.ts ===
 // import { [|x|] as [|x|] } from "./a";
 // [|x|];
-
-// === /a.ts ===
-// export const /*FIND ALL REFS*/[|x|] = 0;
 
 [
   {
@@ -178,12 +178,12 @@
   }
 ]
 
+// === /a.ts ===
+// export const [|x|] = 0;
+
 // === /b.ts ===
 // import { /*FIND ALL REFS*/[|x|] as [|x|] } from "./a";
 // [|x|];
-
-// === /a.ts ===
-// export const [|x|] = 0;
 
 [
   {

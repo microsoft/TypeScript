@@ -1,12 +1,12 @@
+// === /a.js ===
+// module.exports = class /*FIND ALL REFS*/[|C|] {};
+// module.exports.D = class D {};
+
 // === /b.js ===
 // /** @type {import("[|./a|]")} */
 // const x = 0;
 // /** @type {import("./a").D} */
 // const y = 0;
-
-// === /a.js ===
-// module.exports = class /*FIND ALL REFS*/[|C|] {};
-// module.exports.D = class D {};
 
 [
   {

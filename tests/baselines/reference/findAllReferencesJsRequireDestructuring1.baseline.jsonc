@@ -1,8 +1,8 @@
-// === /Y.js ===
-// const { /*FIND ALL REFS*/[|x|]: { y } } = require("./X");
-
 // === /X.js ===
 // module.exports = { [|x|]: 1 };
+
+// === /Y.js ===
+// const { /*FIND ALL REFS*/[|x|]: { y } } = require("./X");
 
 [
   {

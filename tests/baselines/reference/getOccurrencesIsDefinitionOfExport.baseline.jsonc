@@ -1,9 +1,9 @@
+// === /tests/cases/fourslash/m.ts ===
+// export var /*FIND ALL REFS*/[|x|] = 12;
+
 // === /tests/cases/fourslash/main.ts ===
 // import { [|x|] } from "./m";
 // const y = [|x|];
-
-// === /tests/cases/fourslash/m.ts ===
-// export var /*FIND ALL REFS*/[|x|] = 12;
 
 [
   {
@@ -165,12 +165,12 @@
   }
 ]
 
+// === /tests/cases/fourslash/m.ts ===
+// export var [|x|] = 12;
+
 // === /tests/cases/fourslash/main.ts ===
 // import { /*FIND ALL REFS*/[|x|] } from "./m";
 // const y = [|x|];
-
-// === /tests/cases/fourslash/m.ts ===
-// export var [|x|] = 12;
 
 [
   {

@@ -1,8 +1,8 @@
-// === /c.ts ===
-// import { [|foo|] } from "./b";
-
 // === /a.ts ===
 // export function /*FIND ALL REFS*/[|foo|](): void {}
+
+// === /c.ts ===
+// import { [|foo|] } from "./b";
 
 [
   {
@@ -171,11 +171,11 @@
   }
 ]
 
-// === /c.ts ===
-// import { /*FIND ALL REFS*/[|foo|] } from "./b";
-
 // === /a.ts ===
 // export function [|foo|](): void {}
+
+// === /c.ts ===
+// import { /*FIND ALL REFS*/[|foo|] } from "./b";
 
 [
   {

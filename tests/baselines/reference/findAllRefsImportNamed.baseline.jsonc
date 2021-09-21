@@ -1,10 +1,10 @@
-// === /tests/cases/fourslash/f.ts ===
-// export { [|foo|] as [|foo|] }
-// function /*FIND ALL REFS*/[|foo|](a: number, b: number) { }
-
 // === /tests/cases/fourslash/b.ts ===
 // import x = require("./f");
 // x.[|foo|](1, 2);
+
+// === /tests/cases/fourslash/f.ts ===
+// export { [|foo|] as [|foo|] }
+// function /*FIND ALL REFS*/[|foo|](a: number, b: number) { }
 
 [
   {

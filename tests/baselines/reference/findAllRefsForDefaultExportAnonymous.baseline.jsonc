@@ -115,11 +115,11 @@
   }
 ]
 
-// === /b.ts ===
-// import /*FIND ALL REFS*/[|f|] from "./a";
-
 // === /a.ts ===
 // export [|default|] function() {}
+
+// === /b.ts ===
+// import /*FIND ALL REFS*/[|f|] from "./a";
 
 [
   {

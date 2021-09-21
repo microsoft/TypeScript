@@ -1,10 +1,10 @@
+// === /tests/cases/fourslash/a.ts ===
+// export function /*FIND ALL REFS*/[|f|]() {}
+
 // === /tests/cases/fourslash/b.ts ===
 // export { [|f|] as [|g|] } from "./a";
 // import { [|f|] } from "./a";
 // import { [|g|] } from "./b";
-
-// === /tests/cases/fourslash/a.ts ===
-// export function /*FIND ALL REFS*/[|f|]() {}
 
 [
   {
@@ -790,13 +790,13 @@
   }
 ]
 
+// === /tests/cases/fourslash/a.ts ===
+// export function [|f|]() {}
+
 // === /tests/cases/fourslash/b.ts ===
 // export { [|f|] as [|g|] } from "./a";
 // import { /*FIND ALL REFS*/[|f|] } from "./a";
 // import { [|g|] } from "./b";
-
-// === /tests/cases/fourslash/a.ts ===
-// export function [|f|]() {}
 
 [
   {

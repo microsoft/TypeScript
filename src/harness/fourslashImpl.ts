@@ -1167,12 +1167,11 @@ namespace FourSlash {
                 this.goToMarker(markerName);
                 const marker = this.getMarkerByName(markerName);
                 const references = this.languageService.findReferences(marker.fileName, marker.position);
-                const refsByFile = references
-                    ? ts.group(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
-                    : ts.emptyArray;
+                const refsByFile = ts.arrayToMultiMap(ts.sort(ts.flatMap(references, r => r.references), (a, b) => a.textSpan.start - b.textSpan.start), ref => ref.fileName)
+                const refsSorted = ts.sort(ts.arrayFrom(refsByFile.keys())).map(k => refsByFile.get(k)!)
 
                 // Write input files
-                const baselineContent = this.getBaselineContentForGroupedReferences(refsByFile, markerName);
+                const baselineContent = this.getBaselineContentForGroupedReferences(refsSorted, markerName);
 
                 // Write response JSON
                 return baselineContent + JSON.stringify(references, undefined, 2);

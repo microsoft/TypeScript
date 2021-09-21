@@ -1,10 +1,10 @@
-// === /c.js ===
-// require([|"./b"|]);
-// require("globals");
-
 // === /a.ts ===
 // /// <reference path="[|b.ts|]/*FIND ALL REFS*/" />
 // /// <reference types="globals" />
+
+// === /c.js ===
+// require([|"./b"|]);
+// require("globals");
 
 [
   {
@@ -48,13 +48,13 @@
   }
 ]
 
-// === /c.js ===
-// require("./b");
-// require([|"globals"|]);
-
 // === /a.ts ===
 // /// <reference path="b.ts" />
 // /// <reference types="[|globals|]/*FIND ALL REFS*/" />
+
+// === /c.js ===
+// require("./b");
+// require([|"globals"|]);
 
 [
   {

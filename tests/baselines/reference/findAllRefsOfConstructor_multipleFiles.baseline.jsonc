@@ -4,17 +4,17 @@
 // export default class extends A1 { }
 // export { [|B|] as [|B1|] } from "./f";
 
+// === /tests/cases/fourslash/b.ts ===
+// import B, { B1 } from "./a";
+// const d = new [|B|]("b");
+// const d1 = new [|B1|]("b1");
+
 // === /tests/cases/fourslash/f.ts ===
 // class A {
 //     /*FIND ALL REFS*/[|constructor|](s: string) {}
 // }
 // class B extends A { }
 // export { [|A|], [|B|] };
-
-// === /tests/cases/fourslash/b.ts ===
-// import B, { B1 } from "./a";
-// const d = new [|B|]("b");
-// const d1 = new [|B1|]("b1");
 
 [
   {

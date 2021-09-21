@@ -1,11 +1,11 @@
-// === /foo/types/types.ts ===
-// export type /*FIND ALL REFS*/[|Full|] = { prop: string; };
-
 // === /app.ts ===
 // import { foo } from './foo/types';
 // export type fullType = foo.[|Full|];
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo.[|Full|];
+
+// === /foo/types/types.ts ===
+// export type /*FIND ALL REFS*/[|Full|] = { prop: string; };
 
 [
   {
@@ -125,9 +125,6 @@
     ]
   }
 ]
-
-// === /foo/types/types.ts ===
-// export type [|Full|] = { prop: string; };
 
 // === /app.ts ===
 // import { foo } from './foo/types';
@@ -135,6 +132,9 @@
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo.[|Full|];
 
+// === /foo/types/types.ts ===
+// export type [|Full|] = { prop: string; };
+
 [
   {
     "definition": {
@@ -254,14 +254,14 @@
   }
 ]
 
-// === /foo/types/types.ts ===
-// export type [|Full|] = { prop: string; };
-
 // === /app.ts ===
 // import { foo } from './foo/types';
 // export type fullType = foo.[|Full|];
 // type namespaceImport = typeof import('./foo/types');
 // type fullType2 = import('./foo/types').foo./*FIND ALL REFS*/[|Full|];
+
+// === /foo/types/types.ts ===
+// export type [|Full|] = { prop: string; };
 
 [
   {

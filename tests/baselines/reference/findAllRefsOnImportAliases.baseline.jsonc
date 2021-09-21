@@ -1,3 +1,7 @@
+// === /tests/cases/fourslash/a.ts ===
+// export class /*FIND ALL REFS*/[|Class|] {
+// }
+
 // === /tests/cases/fourslash/b.ts ===
 // import { [|Class|] } from "./a";
 // 
@@ -5,10 +9,6 @@
 
 // === /tests/cases/fourslash/c.ts ===
 // export { [|Class|] } from "./a";
-
-// === /tests/cases/fourslash/a.ts ===
-// export class /*FIND ALL REFS*/[|Class|] {
-// }
 
 [
   {
@@ -223,6 +223,10 @@
     ]
   }
 ]
+
+// === /tests/cases/fourslash/a.ts ===
+// export class [|Class|] {
+// }
 
 // === /tests/cases/fourslash/b.ts ===
 // import { /*FIND ALL REFS*/[|Class|] } from "./a";
@@ -232,10 +236,6 @@
 // === /tests/cases/fourslash/c.ts ===
 // export { [|Class|] } from "./a";
 
-// === /tests/cases/fourslash/a.ts ===
-// export class [|Class|] {
-// }
-
 [
   {
     "definition": {
@@ -450,6 +450,10 @@
   }
 ]
 
+// === /tests/cases/fourslash/a.ts ===
+// export class [|Class|] {
+// }
+
 // === /tests/cases/fourslash/b.ts ===
 // import { [|Class|] } from "./a";
 // 
@@ -457,10 +461,6 @@
 
 // === /tests/cases/fourslash/c.ts ===
 // export { [|Class|] } from "./a";
-
-// === /tests/cases/fourslash/a.ts ===
-// export class [|Class|] {
-// }
 
 [
   {

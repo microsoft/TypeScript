@@ -2,14 +2,14 @@
 // import [|X|]/*FIND ALL REFS*/ from "x";
 // export function a(x: [|X|]): void;
 
-// === /node_modules/b/index.d.ts ===
-// import [|X|] from "x";
-// export const b: [|X|];
-
 // === /node_modules/a/node_modules/x/index.d.ts ===
 // export default class [|X|] {
 //     private x: number;
 // }
+
+// === /node_modules/b/index.d.ts ===
+// import [|X|] from "x";
+// export const b: [|X|];
 
 [
   {
@@ -237,16 +237,16 @@
 // === /node_modules/a/index.d.ts ===
 // import [|X|] from "x";
 // export function a(x: [|X|]): void;
-
-// === /node_modules/b/index.d.ts ===
-// import [|X|] from "x";
-// export const b: [|X|];
 
 // === /node_modules/a/node_modules/x/index.d.ts ===
 // export default class /*FIND ALL REFS*/[|X|] {
 //     private x: number;
 // }
 
+// === /node_modules/b/index.d.ts ===
+// import [|X|] from "x";
+// export const b: [|X|];
+
 [
   {
     "definition": {
@@ -470,10 +470,6 @@
   }
 ]
 
-// === /node_modules/b/index.d.ts ===
-// import [|X|]/*FIND ALL REFS*/ from "x";
-// export const b: [|X|];
-
 // === /node_modules/a/index.d.ts ===
 // import [|X|] from "x";
 // export function a(x: [|X|]): void;
@@ -482,6 +478,10 @@
 // export default class [|X|] {
 //     private x: number;
 // }
+
+// === /node_modules/b/index.d.ts ===
+// import [|X|]/*FIND ALL REFS*/ from "x";
+// export const b: [|X|];
 
 [
   {

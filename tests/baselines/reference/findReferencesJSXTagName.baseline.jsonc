@@ -1,13 +1,13 @@
+// === /tests/cases/fourslash/RedditSubmission.ts ===
+// export const [|SubmissionComp|] = (submission: SubmissionProps) =>
+//     <div style={{ fontFamily: "sans-serif" }}></div>;
+
 // === /tests/cases/fourslash/index.tsx ===
 // import { /*FIND ALL REFS*/[|SubmissionComp|] } from "./RedditSubmission"
 // function displaySubreddit(subreddit: string) {
 //     let components = submissions
 //         .map((value, index) => <[|SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />);
 // }
-
-// === /tests/cases/fourslash/RedditSubmission.ts ===
-// export const [|SubmissionComp|] = (submission: SubmissionProps) =>
-//     <div style={{ fontFamily: "sans-serif" }}></div>;
 
 [
   {
@@ -245,16 +245,16 @@
   }
 ]
 
+// === /tests/cases/fourslash/RedditSubmission.ts ===
+// export const /*FIND ALL REFS*/[|SubmissionComp|] = (submission: SubmissionProps) =>
+//     <div style={{ fontFamily: "sans-serif" }}></div>;
+
 // === /tests/cases/fourslash/index.tsx ===
 // import { [|SubmissionComp|] } from "./RedditSubmission"
 // function displaySubreddit(subreddit: string) {
 //     let components = submissions
 //         .map((value, index) => <[|SubmissionComp|] key={ index } elementPosition= { index } {...value.data} />);
 // }
-
-// === /tests/cases/fourslash/RedditSubmission.ts ===
-// export const /*FIND ALL REFS*/[|SubmissionComp|] = (submission: SubmissionProps) =>
-//     <div style={{ fontFamily: "sans-serif" }}></div>;
 
 [
   {

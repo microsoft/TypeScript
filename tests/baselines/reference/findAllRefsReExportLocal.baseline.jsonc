@@ -1918,15 +1918,15 @@
   }
 ]
 
-// === /b.ts ===
-// import { x, [|y|] } from "./a";
-// x; [|y|];
-
 // === /a.ts ===
 // var x;
 // export { x };
 // export { x as /*FIND ALL REFS*/[|y|] };
 
+// === /b.ts ===
+// import { x, [|y|] } from "./a";
+// x; [|y|];
+
 [
   {
     "definition": {
@@ -2118,16 +2118,16 @@
     ]
   }
 ]
+
+// === /a.ts ===
+// var x;
+// export { x };
+// export { x as [|y|] };
 
 // === /b.ts ===
 // import { x, /*FIND ALL REFS*/[|y|] } from "./a";
 // x; [|y|];
 
-// === /a.ts ===
-// var x;
-// export { x };
-// export { x as [|y|] };
-
 [
   {
     "definition": {
@@ -2320,14 +2320,14 @@
   }
 ]
 
-// === /b.ts ===
-// import { x, [|y|] } from "./a";
-// x; /*FIND ALL REFS*/[|y|];
-
 // === /a.ts ===
 // var x;
 // export { x };
 // export { x as [|y|] };
+
+// === /b.ts ===
+// import { x, [|y|] } from "./a";
+// x; /*FIND ALL REFS*/[|y|];
 
 [
   {

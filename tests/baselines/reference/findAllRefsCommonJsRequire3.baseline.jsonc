@@ -1,10 +1,10 @@
-// === /b.js ===
-// const { [|f|] } = require('./a')
-// /*FIND ALL REFS*/[|f|]
-
 // === /a.js ===
 // function [|f|]() { }
 // module.exports = { [|f|] }
+
+// === /b.js ===
+// const { [|f|] } = require('./a')
+// /*FIND ALL REFS*/[|f|]
 
 [
   {

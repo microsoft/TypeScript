@@ -178,16 +178,16 @@
   }
 ]
 
-// === /j.json ===
-// [|{ "x": 0 }|]
+// === /a.ts ===
+// import j = require("/*FIND ALL REFS*/[|./j.json|]");
+// j;
 
 // === /b.js ===
 // const j = require("[|./j.json|]");
 // j;
 
-// === /a.ts ===
-// import j = require("/*FIND ALL REFS*/[|./j.json|]");
-// j;
+// === /j.json ===
+// [|{ "x": 0 }|]
 
 [
   {
@@ -256,16 +256,16 @@
   }
 ]
 
-// === /j.json ===
-// [|{ "x": 0 }|]
+// === /a.ts ===
+// import j = require("[|./j.json|]");
+// j;
 
 // === /b.js ===
 // const j = require("/*FIND ALL REFS*/[|./j.json|]");
 // j;
 
-// === /a.ts ===
-// import j = require("[|./j.json|]");
-// j;
+// === /j.json ===
+// [|{ "x": 0 }|]
 
 [
   {

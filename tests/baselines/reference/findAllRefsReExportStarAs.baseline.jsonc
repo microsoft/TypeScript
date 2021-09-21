@@ -1,9 +1,9 @@
-// === /leafModule.ts ===
-// export const /*FIND ALL REFS*/[|hello|] = () => 'Hello';
-
 // === /importing.ts ===
 // import { Leaf } from './exporting';
 // Leaf.[|hello|]()
+
+// === /leafModule.ts ===
+// export const /*FIND ALL REFS*/[|hello|] = () => 'Hello';
 
 [
   {
@@ -94,14 +94,14 @@
     ]
   }
 ]
-
-// === /leafModule.ts ===
-// export const [|hello|] = () => 'Hello';
 
 // === /importing.ts ===
 // import { Leaf } from './exporting';
 // Leaf./*FIND ALL REFS*/[|hello|]()
 
+// === /leafModule.ts ===
+// export const [|hello|] = () => 'Hello';
+
 [
   {
     "definition": {
@@ -192,12 +192,12 @@
   }
 ]
 
+// === /exporting.ts ===
+// export * as /*FIND ALL REFS*/[|Leaf|] from './leafModule';
+
 // === /importing.ts ===
 // import { [|Leaf|] } from './exporting';
 // [|Leaf|].hello()
-
-// === /exporting.ts ===
-// export * as /*FIND ALL REFS*/[|Leaf|] from './leafModule';
 
 [
   {
@@ -302,14 +302,14 @@
     ]
   }
 ]
+
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
 
 // === /importing.ts ===
 // import { /*FIND ALL REFS*/[|Leaf|] } from './exporting';
 // [|Leaf|].hello()
 
-// === /exporting.ts ===
-// export * as [|Leaf|] from './leafModule';
-
 [
   {
     "definition": {
@@ -414,12 +414,12 @@
   }
 ]
 
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
+
 // === /importing.ts ===
 // import { [|Leaf|] } from './exporting';
 // /*FIND ALL REFS*/[|Leaf|].hello()
-
-// === /exporting.ts ===
-// export * as [|Leaf|] from './leafModule';
 
 [
   {

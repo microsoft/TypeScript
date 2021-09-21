@@ -1,8 +1,8 @@
-// === /c.ts ===
-// A.[|f|]();
-
 // === /b.ts ===
 // import { [|f|] } from "a";
+
+// === /c.ts ===
+// A.[|f|]();
 
 // === /node_modules/a/index.d.ts ===
 // export function /*FIND ALL REFS*/[|f|](): void;
@@ -184,11 +184,11 @@
   }
 ]
 
-// === /c.ts ===
-// A.[|f|]();
-
 // === /b.ts ===
 // import { /*FIND ALL REFS*/[|f|] } from "a";
+
+// === /c.ts ===
+// A.[|f|]();
 
 // === /node_modules/a/index.d.ts ===
 // export function [|f|](): void;
@@ -370,11 +370,11 @@
   }
 ]
 
-// === /c.ts ===
-// A./*FIND ALL REFS*/[|f|]();
-
 // === /b.ts ===
 // import { [|f|] } from "a";
+
+// === /c.ts ===
+// A./*FIND ALL REFS*/[|f|]();
 
 // === /node_modules/a/index.d.ts ===
 // export function [|f|](): void;

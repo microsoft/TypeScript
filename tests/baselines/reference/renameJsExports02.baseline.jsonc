@@ -1,8 +1,8 @@
-// === /tests/cases/fourslash/b.js ===
-// const [|A|] = require("./a");
-
 // === /tests/cases/fourslash/a.js ===
 // module.exports = class /*FIND ALL REFS*/[|A|] {}
+
+// === /tests/cases/fourslash/b.js ===
+// const [|A|] = require("./a");
 
 [
   {

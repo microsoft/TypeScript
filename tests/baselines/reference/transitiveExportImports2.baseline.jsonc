@@ -1,6 +1,3 @@
-// === /tests/cases/fourslash/c.ts ===
-// import { [|B|] } from "./b";
-
 // === /tests/cases/fourslash/a.ts ===
 // namespace /*FIND ALL REFS*/[|A|] {
 //     export const x = 0;
@@ -9,6 +6,9 @@
 // === /tests/cases/fourslash/b.ts ===
 // export import [|B|] = [|A|];
 // [|B|].x;
+
+// === /tests/cases/fourslash/c.ts ===
+// import { [|B|] } from "./b";
 
 [
   {
@@ -249,12 +249,12 @@
   }
 ]
 
-// === /tests/cases/fourslash/c.ts ===
-// import { [|B|] } from "./b";
-
 // === /tests/cases/fourslash/b.ts ===
 // export import /*FIND ALL REFS*/[|B|] = A;
 // [|B|].x;
+
+// === /tests/cases/fourslash/c.ts ===
+// import { [|B|] } from "./b";
 
 [
   {
@@ -440,12 +440,12 @@
   }
 ]
 
-// === /tests/cases/fourslash/c.ts ===
-// import { /*FIND ALL REFS*/[|B|] } from "./b";
-
 // === /tests/cases/fourslash/b.ts ===
 // export import [|B|] = A;
 // [|B|].x;
+
+// === /tests/cases/fourslash/c.ts ===
+// import { /*FIND ALL REFS*/[|B|] } from "./b";
 
 [
   {
