@@ -7,7 +7,7 @@ class Foo {
 
     check(v: any) {
         #field in v; // expect Foo's 'field' WeakMap
-        #method in v; // expect Foo's 'method' WeakSet
+        #method in v; // expect Foo's 'instances' WeakSet
         #staticField in v; // expect Foo's constructor
         #staticMethod in v; // expect Foo's constructor
     }
@@ -59,7 +59,7 @@ class Foo {
     }
     check(v) {
         __classPrivateFieldIn(_Foo_field, v); // expect Foo's 'field' WeakMap
-        __classPrivateFieldIn(_Foo_instances, v); // expect Foo's 'method' WeakSet
+        __classPrivateFieldIn(_Foo_instances, v); // expect Foo's 'instances' WeakSet
         __classPrivateFieldIn(_a, v); // expect Foo's constructor
         __classPrivateFieldIn(_a, v); // expect Foo's constructor
     }

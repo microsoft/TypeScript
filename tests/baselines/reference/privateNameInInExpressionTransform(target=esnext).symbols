@@ -21,7 +21,7 @@ class Foo {
         #field in v; // expect Foo's 'field' WeakMap
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
-        #method in v; // expect Foo's 'method' WeakSet
+        #method in v; // expect Foo's 'instances' WeakSet
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
         #staticField in v; // expect Foo's constructor

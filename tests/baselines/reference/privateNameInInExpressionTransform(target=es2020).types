@@ -24,7 +24,7 @@ class Foo {
 >#field in v : boolean
 >v : any
 
-        #method in v; // expect Foo's 'method' WeakSet
+        #method in v; // expect Foo's 'instances' WeakSet
 >#method in v : boolean
 >v : any
 

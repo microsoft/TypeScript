@@ -7,7 +7,7 @@ class Foo {
 
     check(v: any) {
         #field in v; // expect Foo's 'field' WeakMap
-        #method in v; // expect Foo's 'method' WeakSet
+        #method in v; // expect Foo's 'instances' WeakSet
         #staticField in v; // expect Foo's constructor
         #staticMethod in v; // expect Foo's constructor
     }
@@ -54,7 +54,7 @@ class Foo {
     static #staticMethod() { }
     check(v) {
         #field in v; // expect Foo's 'field' WeakMap
-        #method in v; // expect Foo's 'method' WeakSet
+        #method in v; // expect Foo's 'instances' WeakSet
         #staticField in v; // expect Foo's constructor
         #staticMethod in v; // expect Foo's constructor
     }
