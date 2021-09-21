@@ -30741,13 +30741,11 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const expr = (node as PropertyAccessExpression | ElementAccessExpression).expression;
-                    if (isIdentifier(expr)) {
-                        let symbol = getSymbolAtLocation(expr);
-                        if (symbol && symbol.flags & SymbolFlags.Alias) {
-                            symbol = resolveAlias(symbol);
-                        }
-                        return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                    let symbol = getTypeOfNode(expr).symbol;
+                    if (symbol && symbol.flags & SymbolFlags.Alias) {
+                        symbol = resolveAlias(symbol);
                     }
+                    return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
             }
             return false;
         }
