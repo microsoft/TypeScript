@@ -323,15 +323,9 @@ declare namespace FourSlashInterface {
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
         baselineFindAllReferences(...markerNames: string[]): void;
         baselineGetFileReferences(fileName: string): void;
-        noReferences(markerNameOrRange?: string | Range): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
-        /**
-         * @deprecated Use baselineFindAllReferences instead
-         * For each of starts, asserts the ranges that are referenced from there.
-         * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
-         */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
+        /** @deprecated Use baselineFindAllReferences instead */
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;
         rangesWithSameTextAreRenameLocations(...texts: string[]): void;
