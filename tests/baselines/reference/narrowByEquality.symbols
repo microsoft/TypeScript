@@ -122,3 +122,11 @@ if (xUnknown == null) {
 >xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
 }
 
+if (xUnknown != null) {
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+
+    xUnknown;
+>xUnknown : Symbol(xUnknown, Decl(narrowByEquality.ts, 4, 11))
+}
+
+

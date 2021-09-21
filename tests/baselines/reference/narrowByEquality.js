@@ -63,6 +63,11 @@ if (xUnknown == null) {
     xUnknown;
 }
 
+if (xUnknown != null) {
+    xUnknown;
+}
+
+
 
 //// [narrowByEquality.js]
 "use strict";
@@ -107,5 +112,8 @@ function test(level) {
 }
 // From issue #32798
 if (xUnknown == null) {
+    xUnknown;
+}
+if (xUnknown != null) {
     xUnknown;
 }

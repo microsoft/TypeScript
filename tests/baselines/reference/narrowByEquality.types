@@ -143,3 +143,13 @@ if (xUnknown == null) {
 >xUnknown : null | undefined
 }
 
+if (xUnknown != null) {
+>xUnknown != null : boolean
+>xUnknown : unknown
+>null : null
+
+    xUnknown;
+>xUnknown : unknown
+}
+
+

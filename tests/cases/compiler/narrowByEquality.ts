@@ -63,3 +63,8 @@ function test(level: number | string):number {
 if (xUnknown == null) {
     xUnknown;
 }
+
+if (xUnknown != null) {
+    xUnknown;
+}
+
