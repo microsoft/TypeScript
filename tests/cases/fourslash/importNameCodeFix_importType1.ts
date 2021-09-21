@@ -25,4 +25,4 @@ interface MoreProps extends ComponentProps {}`]);
 goTo.marker("b");
 verify.importFixAtPosition([
 `import someValue, { type ComponentProps } from "./exports.js";
-interface MoreProps extends /*b*/ComponentProps {}`]);
+interface MoreProps extends ComponentProps {}`]);
