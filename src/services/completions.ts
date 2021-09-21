@@ -391,7 +391,8 @@ namespace ts.Completions {
         host: LanguageServiceHost,
         program: Program,
         compilerOptions: CompilerOptions,
-        log: Log, completionData: CompletionData,
+        log: Log,
+        completionData: CompletionData,
         preferences: UserPreferences,
     ): CompletionInfo | undefined {
         const {
@@ -719,6 +720,7 @@ namespace ts.Completions {
     }
 
     // >> TODO: Find better location for code
+    // >> TODO: update this to `isMemberCompletion`... ?
     function isMethodOverrideCompletion(symbol: Symbol, location: Node): boolean {
         return !!(symbol.flags & SymbolFlags.Method) && isPropertyDeclaration(location.parent);
         // >> TODO: add more checks. e.g. the method suggestion could come from an interface the class implements,
@@ -748,6 +750,14 @@ namespace ts.Completions {
             omitTrailingSemicolon: true,
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
+        let body;
+        if (preferences.includeCompletionsWithSnippetText) {
+            isSnippet = true;
+            body = factory.createBlock([], /* multiline */ true); // TODO: add tabstop
+        }
+        else {
+            body = factory.createBlock([], /* multiline */ true);
+        }
         codefix.addNewNodeForMemberSymbol(
             symbol,
             classLikeDeclaration,
@@ -755,66 +765,34 @@ namespace ts.Completions {
             { program, host },
             preferences,
             importAdder,
-            /* addClassElement */ nodeToEntry);
-
-
-        function nodeToEntry(node: PropertyDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction): void {
-            if (!isPropertyDeclaration(node) && node.body && isBlock(node.body)) { // Declaration has body, so we might need to transform this completion into a snippet.
-                factory.updateBlock(node.body, []); // TODO: add tabstop if editor supports snippets
-                if (preferences.includeCompletionsWithSnippetText) {
-                    // TODO: add tabstop if editor supports snippets
-                    isSnippet = true;
+            node => {
+                if (isClassDeclaration(classLikeDeclaration) && hasAbstractModifier(classLikeDeclaration)) {
+                    // Add `abstract` modifier
+                    node = factory.updateModifiers(
+                        node,
+                        concatenate([factory.createModifier(SyntaxKind.AbstractKeyword)], node.modifiers),
+                    );
+                    if (isMethodDeclaration(node)) {
+                        // Remove method body
+                        // >> TODO: maybe move this up, when creating the body above?
+                        node = factory.updateMethodDeclaration(
+                            node,
+                            node.decorators,
+                            node.modifiers,
+                            node.asteriskToken,
+                            node.name,
+                            node.questionToken,
+                            node.typeParameters,
+                            node.parameters,
+                            node.type,
+                            /* body */ undefined,
+                        );
+                    }
                 }
                 insertText = printer.printNode(EmitHint.Unspecified, node, sourceFile);
-            }
-            else { // Declaration has no body or body is not a block.
-                insertText = printer.printNode(EmitHint.Unspecified, node, sourceFile);
-            }
-        }
-        // ** ----- ** //
+            },
+            body);
 
-        // const methodDeclarations = symbol.declarations?.filter(isMethodDeclaration);
-        // // >> TODO: what should we do if we have more than 1 signature? when could that happen?
-        // if (methodDeclarations?.length === 1) {
-        //     const originalDeclaration = methodDeclarations[0];
-        //     const modifiers = originalDeclaration.modifiers?.filter(modifier => {
-        //         switch (modifier.kind) { // >> Simplify this if we only need to filter out "abstract" modifier.
-        //             case SyntaxKind.AbstractKeyword:
-        //                 return false;
-        //             default:
-        //                 return true;
-        //         }
-        //     });
-        //     if (options.noImplicitOverride) {
-        //         modifiers?.push(factory.createModifier(SyntaxKind.OverrideKeyword));
-        //         // Assuming it's ok if this modifier is duplicated.
-        //     }
-
-        //     const tabStop = preferences.includeCompletionsWithSnippetText ? "$1" : "";
-        //     const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier(tabStop));
-        //     const completionDeclaration = factory.createMethodDeclaration(
-        //         /*decorators*/ undefined, // I'm guessing we don't want to deal with decorators?
-        //         /*modifiers*/ modifiers,
-        //         /*asteriskToken*/ originalDeclaration.asteriskToken,
-        //         /*name*/ name,
-        //         /*questionToken*/ originalDeclaration.questionToken,
-        //         /*typeParameters*/ originalDeclaration.typeParameters,
-        //         /*parameters*/ originalDeclaration.parameters,
-        //         /*type*/ originalDeclaration.type,
-        //         /*body*/ factory.createBlock([tabStopStatement], /*multiLine*/ true));
-
-        //     const printer = createPrinter({
-        //         removeComments: true,
-        //         module: options.module,
-        //         target: options.target,
-        //         omitTrailingSemicolon: true,
-        //     });
-        //     const insertText = printer.printNode(EmitHint.Unspecified, completionDeclaration, location.getSourceFile());
-        //     return {
-        //         insertText,
-        //         isSnippet: preferences.includeCompletionsWithSnippetText ? true as const : undefined,
-        //     };
-        // }
         return { insertText, isSnippet };
     }
 
