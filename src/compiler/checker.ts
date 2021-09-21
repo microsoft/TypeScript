@@ -32086,7 +32086,7 @@ namespace ts {
                 }
             }
             // TypeScript 1.0 spec (April 2014): 4.15.5
-            // The in operator requires right operand to be
+            // The in operator requires the right operand to be
             //
             //   1. assignable to the non-primitive type,
             //   2. an unconstrained type parameter,

@@ -973,7 +973,7 @@ namespace ts {
      *  @param state — One of the following:
      *      - A WeakMap when the member is a private instance field.
      *      - A WeakSet when the member is a private instance method or accessor.
-     *      - A function value that should be the undecorated class constructor when the member is a private static fields, method, or accessor.
+     *      - A function value that should be the undecorated class constructor when the member is a private static field, method, or accessor.
      *
      * Usage:
      * This helper is used to transform `#field in expression` to
