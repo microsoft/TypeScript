@@ -924,11 +924,11 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -1387,6 +1387,10 @@
     "Preserve unused imported values in the JavaScript output that would otherwise be removed.": {
         "category": "Message",
         "code": 1449
+    },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3303,6 +3307,14 @@
     "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2820
+    },
+    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
+        "category": "Error",
+        "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

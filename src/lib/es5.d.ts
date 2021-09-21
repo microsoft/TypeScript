@@ -597,6 +597,23 @@ interface TemplateStringsArray extends ReadonlyArray<string> {
 interface ImportMeta {
 }
 
+/**
+ * The type for the optional second argument to `import()`.
+ *
+ * If your host environment supports additional options, this type may be
+ * augmented via interface merging.
+ */
+interface ImportCallOptions {
+    assert?: ImportAssertions;
+}
+
+/**
+ * The type for the `assert` property of the optional second argument to `import()`.
+ */
+interface ImportAssertions {
+    [key: string]: string;
+}
+
 interface Math {
     /** The mathematical constant e. This is Euler's number, the base of natural logarithms. */
     readonly E: number;
@@ -1477,13 +1494,11 @@ interface Promise<T> {
  */
 type Awaited<T> =
     T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
-        T extends object ? // `await` only unwraps object types with a callable then. Non-object types are not unwrapped.
-            T extends { then(onfulfilled: infer F): any } ? // thenable, extracts the first argument to `then()`
-                F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
-                    Awaited<V> : // recursively unwrap the value
-                    never : // the argument to `then` was not callable.
-            T : // argument was not an object
-        T; // non-thenable
+        T extends object & { then(onfulfilled: infer F): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+            F extends ((value: infer V) => any) ? // if the argument to `then` is callable, extracts the argument
+                Awaited<V> : // recursively unwrap the value
+                never : // the argument to `then` was not callable
+        T; // non-object or non-thenable
 
 interface ArrayLike<T> {
     readonly length: number;
