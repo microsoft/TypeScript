@@ -1515,6 +1515,10 @@ namespace ts {
                         return emitNamedExports(node as NamedExports);
                     case SyntaxKind.ExportSpecifier:
                         return emitExportSpecifier(node as ExportSpecifier);
+                    case SyntaxKind.AssertClause:
+                        return emitAssertClause(node as AssertClause);
+                    case SyntaxKind.AssertEntry:
+                        return emitAssertEntry(node as AssertEntry);
                     case SyntaxKind.MissingDeclaration:
                         return;
 
@@ -3322,6 +3326,9 @@ namespace ts {
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
         }
 
@@ -3390,7 +3397,31 @@ namespace ts {
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
+        }
+
+        function emitAssertClause(node: AssertClause) {
+            emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            const elements = node.elements;
+            emitList(node, elements, ListFormat.ImportClauseEntries);
+        }
+
+        function emitAssertEntry(node: AssertEntry) {
+            emit(node.name);
+            writePunctuation(":");
+            writeSpace();
+
+            const value = node.value;
+            /** @see {emitPropertyAssignment} */
+            if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = getCommentRange(value);
+                emitTrailingCommentsOfPosition(commentRange.pos);
+            }
+            emit(value);
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {

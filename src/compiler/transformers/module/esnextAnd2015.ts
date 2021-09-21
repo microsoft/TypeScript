@@ -212,6 +212,7 @@ namespace ts {
                     )
                 ),
                 node.moduleSpecifier,
+                node.assertClause
             );
             setOriginalNode(importDecl, node.exportClause);
 
