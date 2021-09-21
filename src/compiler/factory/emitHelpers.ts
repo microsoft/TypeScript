@@ -34,7 +34,7 @@ namespace ts {
         // Class Fields Helpers
         createClassPrivateFieldGetHelper(receiver: Expression, state: Identifier, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
         createClassPrivateFieldSetHelper(receiver: Expression, state: Identifier, value: Expression, kind: PrivateIdentifierKind, f: Identifier | undefined): Expression;
-        createClassPrivateFieldInHelper(receiver: Expression, state: Identifier): Expression;
+        createClassPrivateFieldInHelper(state: Identifier, receiver: Expression): Expression;
     }
 
     export function createEmitHelperFactory(context: TransformationContext): EmitHelperFactory {
@@ -397,9 +397,9 @@ namespace ts {
             return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldSet"), /*typeArguments*/ undefined, args);
         }
 
-        function createClassPrivateFieldInHelper(receiver: Expression, state: Identifier) {
+        function createClassPrivateFieldInHelper(state: Identifier, receiver: Expression) {
             context.requestEmitHelper(classPrivateFieldInHelper);
-            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [receiver, state]);
+            return factory.createCallExpression(getUnscopedHelperName("__classPrivateFieldIn"), /* typeArguments*/ undefined, [state, receiver]);
         }
     }
 
@@ -969,11 +969,11 @@ namespace ts {
 
     /**
      * Parameters:
-     *  @param receiver — The object being checked if it has the private member.
      *  @param state — One of the following:
      *      - A WeakMap when the member is a private instance field.
      *      - A WeakSet when the member is a private instance method or accessor.
      *      - A function value that should be the undecorated class constructor when the member is a private static field, method, or accessor.
+     *  @param receiver — The object being checked if it has the private member.
      *
      * Usage:
      * This helper is used to transform `#field in expression` to
@@ -984,7 +984,7 @@ namespace ts {
         importName: "__classPrivateFieldIn",
         scoped: false,
         text: `
-            var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(receiver, state) {
+            var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
                 if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
                 return typeof state === "function" ? receiver === state : state.has(receiver);
             };`

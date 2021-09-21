@@ -289,7 +289,7 @@ namespace ts {
                 const receiver = visitNode(node.right, visitor, isExpression);
 
                 return setOriginalNode(
-                    context.getEmitHelperFactory().createClassPrivateFieldInHelper(receiver, info.brandCheckIdentifier),
+                    context.getEmitHelperFactory().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
                     node
                 );
             }

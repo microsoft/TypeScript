@@ -47,7 +47,7 @@ export { }
 
 
 //// [privateNameInInExpressionTransform.js]
-var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(receiver, state) {
+var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
     if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");
     return typeof state === "function" ? receiver === state : state.has(receiver);
 };
@@ -58,25 +58,25 @@ class Foo {
         _Foo_field.set(this, 1);
     }
     check(v) {
-        __classPrivateFieldIn(v, _Foo_field); // expect Foo's 'field' WeakMap
-        __classPrivateFieldIn(v, _Foo_instances); // expect Foo's 'method' WeakSet
-        __classPrivateFieldIn(v, _a); // expect Foo's constructor
-        __classPrivateFieldIn(v, _a); // expect Foo's constructor
+        __classPrivateFieldIn(_Foo_field, v); // expect Foo's 'field' WeakMap
+        __classPrivateFieldIn(_Foo_instances, v); // expect Foo's 'method' WeakSet
+        __classPrivateFieldIn(_a, v); // expect Foo's constructor
+        __classPrivateFieldIn(_a, v); // expect Foo's constructor
     }
     precedence(v) {
         // '==' has lower precedence than 'in'
         // '<'  has same precedence than 'in'
         // '<<' has higher precedence than 'in'
-        v == __classPrivateFieldIn(v, _Foo_field) == v; // Good precedence: ((v == (#field in v)) == v)
-        v << __classPrivateFieldIn(v << v, _Foo_field); // Good precedence: (v << (#field in (v << v)))
-        v << __classPrivateFieldIn(v, _Foo_field) == v; // Good precedence: ((v << (#field in v)) == v)
-        v == __classPrivateFieldIn(v, _Foo_field) < v; // Good precedence: (v == ((#field in v) < v))
-        __classPrivateFieldIn(v, _Foo_field) && __classPrivateFieldIn(v, _Foo_field); // Good precedence: ((#field in v) && (#field in v))
+        v == __classPrivateFieldIn(_Foo_field, v) == v; // Good precedence: ((v == (#field in v)) == v)
+        v << __classPrivateFieldIn(_Foo_field, v << v); // Good precedence: (v << (#field in (v << v)))
+        v << __classPrivateFieldIn(_Foo_field, v) == v; // Good precedence: ((v << (#field in v)) == v)
+        v == __classPrivateFieldIn(_Foo_field, v) < v; // Good precedence: (v == ((#field in v) < v))
+        __classPrivateFieldIn(_Foo_field, v) && __classPrivateFieldIn(_Foo_field, v); // Good precedence: ((#field in v) && (#field in v))
     }
     invalidLHS(v) {
         'prop' in v;
         10;
-        __classPrivateFieldIn(v, _Foo_field);
+        __classPrivateFieldIn(_Foo_field, v);
         10;
     }
 }
@@ -87,7 +87,7 @@ class Bar {
         _Bar_field.set(this, 1);
     }
     check(v) {
-        __classPrivateFieldIn(v, _Bar_field); // expect Bar's 'field' WeakMap
+        __classPrivateFieldIn(_Bar_field, v); // expect Bar's 'field' WeakMap
     }
 }
 _Bar_field = new WeakMap();
