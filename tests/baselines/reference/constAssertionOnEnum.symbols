@@ -34,3 +34,29 @@ let bar = Bar.A as const;
 >Bar : Symbol(Bar, Decl(test.ts, 0, 27))
 >A : Symbol(Bar.A, Decl(test.ts, 2, 10))
 
+=== tests/cases/conformance/expressions/typeAssertions/ns.ts ===
+namespace ns {
+>ns : Symbol(ns, Decl(ns.ts, 0, 0))
+
+    export enum Foo { X }
+>Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+
+    ns.Foo.X as const;
+>ns.Foo.X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+>ns.Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>ns : Symbol(ns, Decl(ns.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(ns.ts, 0, 14))
+>X : Symbol(Foo.X, Decl(ns.ts, 1, 21))
+}
+
+=== tests/cases/conformance/expressions/typeAssertions/more.ts ===
+export enum Foo { X }
+>Foo : Symbol(Foo, Decl(more.ts, 0, 0))
+>X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+
+(Foo).X as const;
+>(Foo).X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+>Foo : Symbol(Foo, Decl(more.ts, 0, 0))
+>X : Symbol(Foo.X, Decl(more.ts, 0, 17))
+
