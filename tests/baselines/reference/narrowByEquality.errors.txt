@@ -73,9 +73,13 @@ tests/cases/compiler/narrowByEquality.ts(55,9): error TS2322: Type 'string | num
     // From issue #32798
     if (xUnknown == null) {
         xUnknown;
+    } else {
+        xUnknown
     }
     
     if (xUnknown != null) {
+        xUnknown;
+    } else {
         xUnknown;
     }
     

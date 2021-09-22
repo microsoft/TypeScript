@@ -141,6 +141,10 @@ if (xUnknown == null) {
 
     xUnknown;
 >xUnknown : null | undefined
+
+} else {
+    xUnknown
+>xUnknown : unknown
 }
 
 if (xUnknown != null) {
@@ -150,6 +154,10 @@ if (xUnknown != null) {
 
     xUnknown;
 >xUnknown : unknown
+
+} else {
+    xUnknown;
+>xUnknown : null | undefined
 }
 
 

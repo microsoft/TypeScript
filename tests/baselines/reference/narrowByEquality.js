@@ -61,9 +61,13 @@ function test(level: number | string):number {
 // From issue #32798
 if (xUnknown == null) {
     xUnknown;
+} else {
+    xUnknown
 }
 
 if (xUnknown != null) {
+    xUnknown;
+} else {
     xUnknown;
 }
 
@@ -114,6 +118,12 @@ function test(level) {
 if (xUnknown == null) {
     xUnknown;
 }
+else {
+    xUnknown;
+}
 if (xUnknown != null) {
+    xUnknown;
+}
+else {
     xUnknown;
 }
