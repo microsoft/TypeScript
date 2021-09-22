@@ -108,7 +108,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   },
@@ -182,7 +182,7 @@
           "length": 19
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -195,7 +195,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }
@@ -298,7 +298,7 @@
           "length": 28
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -311,7 +311,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   },
@@ -398,7 +398,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }
@@ -501,7 +501,7 @@
           "length": 28
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -588,7 +588,7 @@
           "length": 19
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -601,7 +601,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }
@@ -704,7 +704,7 @@
           "length": 28
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -717,7 +717,7 @@
           "length": 4
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   },
@@ -791,7 +791,7 @@
           "length": 19
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {

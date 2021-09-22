@@ -142,7 +142,7 @@
           "length": 25
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
