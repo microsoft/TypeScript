@@ -1,0 +1,144 @@
+=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts ===
+export interface TypegenDisabled {
+  "@@xstate/typegen": false;
+>"@@xstate/typegen" : false
+>false : false
+}
+export interface TypegenEnabled {
+  "@@xstate/typegen": true;
+>"@@xstate/typegen" : true
+>true : true
+}
+interface TypegenMeta extends TypegenEnabled {
+  eventsCausingActions: Record<string, string>;
+>eventsCausingActions : Record<string, string>
+}
+
+type Prop<T, K> = K extends keyof T ? T[K] : never
+>Prop : Prop<T, K>
+
+type TypegenConstraint = TypegenMeta | TypegenDisabled;
+>TypegenConstraint : TypegenConstraint
+
+interface EventObject {
+  type: string;
+>type : string
+}
+
+interface MachineConfig<TTypesMeta = TypegenDisabled> {
+  types?: TTypesMeta;
+>types : TTypesMeta | undefined
+}
+
+type ActionFunction<
+>ActionFunction : ActionFunction<TEvent>
+
+  TEvent extends EventObject,
+> = (
+  event: TEvent,
+>event : TEvent
+
+) => void;
+
+interface MachineOptions {
+  actions?: Record<string, ActionFunction<EventObject>>
+>actions : Record<string, ActionFunction<EventObject>> | undefined
+}
+
+type TypegenMachineOptionsActions<
+>TypegenMachineOptionsActions : TypegenMachineOptionsActions<TEvent, TTypesMeta, TEventsCausingActions>
+
+  TEvent extends EventObject,
+  TTypesMeta,
+  TEventsCausingActions = Prop<TTypesMeta, "eventsCausingActions">
+> = {
+  [K in keyof TEventsCausingActions]?: ActionFunction<
+    Extract<TEvent, { type: TEventsCausingActions[K] } >
+>type : TEventsCausingActions[K]
+
+  >;
+};
+
+type GenerateActionsConfigPart<
+>GenerateActionsConfigPart : GenerateActionsConfigPart<TEvent, TTypesMeta>
+
+  TEvent extends EventObject,
+  TTypesMeta,
+> = {
+  actions?: TypegenMachineOptionsActions<TEvent, TTypesMeta>;
+>actions : TypegenMachineOptionsActions<TEvent, TTypesMeta, Prop<TTypesMeta, "eventsCausingActions">> | undefined
+
+};
+
+type MaybeTypegenMachineOptions<
+>MaybeTypegenMachineOptions : MaybeTypegenMachineOptions<TEvent, TTypesMeta>
+
+  TEvent extends EventObject,
+  TTypesMeta = TypegenDisabled
+> = TTypesMeta extends TypegenEnabled
+  ? GenerateActionsConfigPart<TEvent, TTypesMeta>
+  : MachineOptions;
+
+interface Model<TEvent extends EventObject> {
+  createMachine: {
+>createMachine : <TTypesMeta extends TypegenConstraint = TypegenDisabled>(config: MachineConfig<TTypesMeta>, implementations?: MaybeTypegenMachineOptions<TEvent, TTypesMeta> | undefined) => void
+
+    <TTypesMeta extends TypegenConstraint = TypegenDisabled>(
+      config: MachineConfig<TTypesMeta>,
+>config : MachineConfig<TTypesMeta>
+
+      implementations?: MaybeTypegenMachineOptions<
+>implementations : MaybeTypegenMachineOptions<TEvent, TTypesMeta> | undefined
+
+        TEvent,
+        TTypesMeta
+      >
+    ): void;
+  };
+}
+
+const model = {} as Model<
+>model : Model<{ type: "SAMPLE"; }>
+>{} as Model<  {    type: "SAMPLE";  }> : Model<{ type: "SAMPLE"; }>
+>{} : {}
+  {
+    type: "SAMPLE";
+>type : "SAMPLE"
+  }
+>;
+
+model.createMachine(
+>model.createMachine(  {},  {    actions: {      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    },  }) : void
+>model.createMachine : <TTypesMeta extends TypegenConstraint = TypegenDisabled>(config: MachineConfig<TTypesMeta>, implementations?: MaybeTypegenMachineOptions<{ type: "SAMPLE"; }, TTypesMeta> | undefined) => void
+>model : Model<{ type: "SAMPLE"; }>
+>createMachine : <TTypesMeta extends TypegenConstraint = TypegenDisabled>(config: MachineConfig<TTypesMeta>, implementations?: MaybeTypegenMachineOptions<{ type: "SAMPLE"; }, TTypesMeta> | undefined) => void
+
+  {},
+>{} : {}
+  {
+>{    actions: {      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    },  } : { actions: { custom: (ev: any) => void; }; }
+
+    actions: {
+>actions : { custom: (ev: any) => void; }
+>{      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    } : { custom: (ev: any) => void; }
+
+      custom: (ev) => {
+>custom : (ev: any) => void
+>(ev) => {        ev.type // string        ev.unknown // Error      } : (ev: any) => void
+>ev : any
+
+        ev.type // string
+>ev.type : any
+>ev : any
+>type : any
+
+        ev.unknown // Error
+>ev.unknown : any
+>ev : any
+>unknown : any
+
+      },
+    },
+  }
+);
+

@@ -1,0 +1,217 @@
+=== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts ===
+export interface TypegenDisabled {
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 0))
+
+  "@@xstate/typegen": false;
+>"@@xstate/typegen" : Symbol(TypegenDisabled["@@xstate/typegen"], Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 34))
+}
+export interface TypegenEnabled {
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 2, 1))
+
+  "@@xstate/typegen": true;
+>"@@xstate/typegen" : Symbol(TypegenEnabled["@@xstate/typegen"], Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 3, 33))
+}
+interface TypegenMeta extends TypegenEnabled {
+>TypegenMeta : Symbol(TypegenMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 5, 1))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 2, 1))
+
+  eventsCausingActions: Record<string, string>;
+>eventsCausingActions : Symbol(TypegenMeta.eventsCausingActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 6, 46))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+}
+
+type Prop<T, K> = K extends keyof T ? T[K] : never
+>Prop : Symbol(Prop, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 8, 1))
+>T : Symbol(T, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 10))
+>K : Symbol(K, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 12))
+>K : Symbol(K, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 12))
+>T : Symbol(T, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 10))
+>T : Symbol(T, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 10))
+>K : Symbol(K, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 12))
+
+type TypegenConstraint = TypegenMeta | TypegenDisabled;
+>TypegenConstraint : Symbol(TypegenConstraint, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 50))
+>TypegenMeta : Symbol(TypegenMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 5, 1))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 0))
+
+interface EventObject {
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+  type: string;
+>type : Symbol(EventObject.type, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 14, 23))
+}
+
+interface MachineConfig<TTypesMeta = TypegenDisabled> {
+>MachineConfig : Symbol(MachineConfig, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 16, 1))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 18, 24))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 0))
+
+  types?: TTypesMeta;
+>types : Symbol(MachineConfig.types, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 18, 55))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 18, 24))
+}
+
+type ActionFunction<
+>ActionFunction : Symbol(ActionFunction, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 20, 1))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 22, 20))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+> = (
+  event: TEvent,
+>event : Symbol(event, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 24, 5))
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 22, 20))
+
+) => void;
+
+interface MachineOptions {
+>MachineOptions : Symbol(MachineOptions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 26, 10))
+
+  actions?: Record<string, ActionFunction<EventObject>>
+>actions : Symbol(MachineOptions.actions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 28, 26))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>ActionFunction : Symbol(ActionFunction, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 20, 1))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+}
+
+type TypegenMachineOptionsActions<
+>TypegenMachineOptionsActions : Symbol(TypegenMachineOptionsActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 30, 1))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 32, 34))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+  TTypesMeta,
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 33, 29))
+
+  TEventsCausingActions = Prop<TTypesMeta, "eventsCausingActions">
+>TEventsCausingActions : Symbol(TEventsCausingActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 34, 13))
+>Prop : Symbol(Prop, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 8, 1))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 33, 29))
+
+> = {
+  [K in keyof TEventsCausingActions]?: ActionFunction<
+>K : Symbol(K, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 37, 3))
+>TEventsCausingActions : Symbol(TEventsCausingActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 34, 13))
+>ActionFunction : Symbol(ActionFunction, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 20, 1))
+
+    Extract<TEvent, { type: TEventsCausingActions[K] } >
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 32, 34))
+>type : Symbol(type, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 38, 21))
+>TEventsCausingActions : Symbol(TEventsCausingActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 34, 13))
+>K : Symbol(K, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 37, 3))
+
+  >;
+};
+
+type GenerateActionsConfigPart<
+>GenerateActionsConfigPart : Symbol(GenerateActionsConfigPart, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 40, 2))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 42, 31))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+  TTypesMeta,
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 43, 29))
+
+> = {
+  actions?: TypegenMachineOptionsActions<TEvent, TTypesMeta>;
+>actions : Symbol(actions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 45, 5))
+>TypegenMachineOptionsActions : Symbol(TypegenMachineOptionsActions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 30, 1))
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 42, 31))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 43, 29))
+
+};
+
+type MaybeTypegenMachineOptions<
+>MaybeTypegenMachineOptions : Symbol(MaybeTypegenMachineOptions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 47, 2))
+
+  TEvent extends EventObject,
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 49, 32))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+  TTypesMeta = TypegenDisabled
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 50, 29))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 0))
+
+> = TTypesMeta extends TypegenEnabled
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 50, 29))
+>TypegenEnabled : Symbol(TypegenEnabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 2, 1))
+
+  ? GenerateActionsConfigPart<TEvent, TTypesMeta>
+>GenerateActionsConfigPart : Symbol(GenerateActionsConfigPart, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 40, 2))
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 49, 32))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 50, 29))
+
+  : MachineOptions;
+>MachineOptions : Symbol(MachineOptions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 26, 10))
+
+interface Model<TEvent extends EventObject> {
+>Model : Symbol(Model, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 54, 19))
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 56, 16))
+>EventObject : Symbol(EventObject, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 12, 55))
+
+  createMachine: {
+>createMachine : Symbol(Model.createMachine, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 56, 45))
+
+    <TTypesMeta extends TypegenConstraint = TypegenDisabled>(
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 58, 5))
+>TypegenConstraint : Symbol(TypegenConstraint, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 10, 50))
+>TypegenDisabled : Symbol(TypegenDisabled, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 0, 0))
+
+      config: MachineConfig<TTypesMeta>,
+>config : Symbol(config, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 58, 61))
+>MachineConfig : Symbol(MachineConfig, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 16, 1))
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 58, 5))
+
+      implementations?: MaybeTypegenMachineOptions<
+>implementations : Symbol(implementations, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 59, 40))
+>MaybeTypegenMachineOptions : Symbol(MaybeTypegenMachineOptions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 47, 2))
+
+        TEvent,
+>TEvent : Symbol(TEvent, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 56, 16))
+
+        TTypesMeta
+>TTypesMeta : Symbol(TTypesMeta, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 58, 5))
+
+      >
+    ): void;
+  };
+}
+
+const model = {} as Model<
+>model : Symbol(model, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 68, 5))
+>Model : Symbol(Model, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 54, 19))
+  {
+    type: "SAMPLE";
+>type : Symbol(type, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 69, 3))
+  }
+>;
+
+model.createMachine(
+>model.createMachine : Symbol(Model.createMachine, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 56, 45))
+>model : Symbol(model, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 68, 5))
+>createMachine : Symbol(Model.createMachine, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 56, 45))
+
+  {},
+  {
+    actions: {
+>actions : Symbol(actions, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 76, 3))
+
+      custom: (ev) => {
+>custom : Symbol(custom, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 77, 14))
+>ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
+
+        ev.type // string
+>ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
+
+        ev.unknown // Error
+>ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
+
+      },
+    },
+  }
+);
+
