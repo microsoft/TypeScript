@@ -149,6 +149,7 @@ namespace ts.Completions {
         FunctionLikeBodyKeywords,       // Keywords at function like body
         TypeAssertionKeywords,
         TypeKeywords,
+        TypeKeyword,                    // Literally just `type`
         Last = TypeKeywords
     }
 
@@ -1776,6 +1777,9 @@ namespace ts.Completions {
         function tryGetImportCompletionSymbols(): GlobalsSearch {
             if (!importCompletionNode) return GlobalsSearch.Continue;
             isNewIdentifierLocation = true;
+            if (isTypeKeywordTokenOrIdentifier(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.TypeKeyword;
+            }
             collectAutoImports();
             return GlobalsSearch.Success;
         }
@@ -2252,10 +2256,19 @@ namespace ts.Completions {
          * Relevant symbols are stored in the captured 'symbols' variable.
          */
         function tryGetImportOrExportClauseCompletionSymbols(): GlobalsSearch {
-            // `import { |` or `import { a as 0, | }`
-            const namedImportsOrExports = contextToken && (contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken)
-                ? tryCast(contextToken.parent, isNamedImportsOrExports) : undefined;
+            if (!contextToken) return GlobalsSearch.Continue;
+
+            // `import { |` or `import { a as 0, | }` or `import { type | }`
+            const namedImportsOrExports =
+                contextToken.kind === SyntaxKind.OpenBraceToken || contextToken.kind === SyntaxKind.CommaToken ? tryCast(contextToken.parent, isNamedImportsOrExports) :
+                isTypeKeywordTokenOrIdentifier(contextToken) ? tryCast(contextToken.parent.parent, isNamedImportsOrExports) : undefined;
+
             if (!namedImportsOrExports) return GlobalsSearch.Continue;
+
+            // We can at least offer `type` at `import { |`
+            if (!isTypeKeywordTokenOrIdentifier(contextToken)) {
+                keywordFilters = KeywordCompletionFilters.TypeKeyword;
+            }
 
             // try to show exported member for imported/re-exported module
             const { moduleSpecifier } = namedImportsOrExports.kind === SyntaxKind.NamedImports ? namedImportsOrExports.parent.parent : namedImportsOrExports.parent;
@@ -2267,7 +2280,12 @@ namespace ts.Completions {
             isNewIdentifierLocation = false;
             const exports = typeChecker.getExportsAndPropertiesOfModule(moduleSpecifierSymbol);
             const existing = new Set((namedImportsOrExports.elements as NodeArray<ImportOrExportSpecifier>).filter(n => !isCurrentlyEditingNode(n)).map(n => (n.propertyName || n.name).escapedText));
-            symbols = concatenate(symbols, exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName)));
+            const uniques = exports.filter(e => e.escapedName !== InternalSymbolName.Default && !existing.has(e.escapedName));
+            symbols = concatenate(symbols, uniques);
+            if (!uniques.length) {
+                // If there's nothing else to import, don't offer `type` either
+                keywordFilters = KeywordCompletionFilters.None;
+            }
             return GlobalsSearch.Success;
         }
 
@@ -2556,6 +2574,16 @@ namespace ts.Completions {
                 case SyntaxKind.GetKeyword:
                 case SyntaxKind.SetKeyword:
                     return !isFromObjectTypeDeclaration(contextToken);
+
+                case SyntaxKind.Identifier:
+                    if (containingNodeKind === SyntaxKind.ImportSpecifier &&
+                        contextToken === (parent as ImportSpecifier).name &&
+                        (contextToken as Identifier).text === "type"
+                    ) {
+                        // import { type | }
+                        return false;
+                    }
+                    break;
 
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
@@ -2974,6 +3002,8 @@ namespace ts.Completions {
                     return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword;
                 case KeywordCompletionFilters.TypeKeywords:
                     return isTypeKeyword(kind);
+                case KeywordCompletionFilters.TypeKeyword:
+                    return kind === SyntaxKind.TypeKeyword;
                 default:
                     return Debug.assertNever(keywordFilter);
             }
