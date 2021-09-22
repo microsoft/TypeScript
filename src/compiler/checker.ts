@@ -32076,7 +32076,7 @@ namespace ts {
                 }
                 leftType = checkNonNullType(leftType, left);
                 // TypeScript 1.0 spec (April 2014): 4.15.5
-                // Require the left operand to be of type Any, the String primite type, or the Number primite type.
+                // Require the left operand to be of type Any, the String primitive type, or the Number primitive type.
                 if (!(allTypesAssignableToKind(leftType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike) ||
                     isTypeAssignableToKind(leftType, TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.TypeParameter))) {
                     error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);

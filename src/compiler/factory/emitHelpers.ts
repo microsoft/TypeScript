@@ -977,7 +977,7 @@ namespace ts {
      *
      * Usage:
      * This helper is used to transform `#field in expression` to
-     *      `__classPrivateFieldIn(expression, <weakMap/weakSet/constructor>)`
+     *      `__classPrivateFieldIn(<weakMap/weakSet/constructor>, expression)`
      */
     export const classPrivateFieldInHelper: UnscopedEmitHelper = {
         name: "typescript:classPrivateFieldIn",
