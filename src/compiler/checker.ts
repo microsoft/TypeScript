@@ -32083,9 +32083,6 @@ namespace ts {
                 return silentNeverType;
             }
             if (!privIdOnLeft) {
-                if (leftType === silentNeverType || rightType === silentNeverType) {
-                    return silentNeverType;
-                }
                 leftType = checkNonNullType(leftType, left);
                 // TypeScript 1.0 spec (April 2014): 4.15.5
                 // Require the left operand to be of type Any, the String primitive type, or the Number primitive type.
@@ -40288,7 +40285,7 @@ namespace ts {
                 if (links.resolvedSymbol) {
                     return links.resolvedSymbol;
                 }
-                checkBinaryExpression(name.parent, CheckMode.Normal);
+                checkPrivateIdentifierExpression(name);
                 return links.resolvedSymbol;
             }
 
