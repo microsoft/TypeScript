@@ -1,4 +1,4 @@
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts(79,16): error TS7006: Parameter 'ev' implicitly has an 'any' type.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts(81,12): error TS2339: Property 'unknown' does not exist on type 'EventObject'.
 
 
 ==== tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts (1 errors) ====
@@ -81,10 +81,10 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
       {
         actions: {
           custom: (ev) => {
-                   ~~
-!!! error TS7006: Parameter 'ev' implicitly has an 'any' type.
             ev.type // string
             ev.unknown // Error
+               ~~~~~~~
+!!! error TS2339: Property 'unknown' does not exist on type 'EventObject'.
           },
         },
       }

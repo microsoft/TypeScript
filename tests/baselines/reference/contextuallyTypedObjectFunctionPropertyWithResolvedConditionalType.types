@@ -116,25 +116,25 @@ model.createMachine(
   {},
 >{} : {}
   {
->{    actions: {      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    },  } : { actions: { custom: (ev: any) => void; }; }
+>{    actions: {      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    },  } : { actions: { custom: (ev: EventObject) => void; }; }
 
     actions: {
->actions : { custom: (ev: any) => void; }
->{      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    } : { custom: (ev: any) => void; }
+>actions : { custom: (ev: EventObject) => void; }
+>{      custom: (ev) => {        ev.type // string        ev.unknown // Error      },    } : { custom: (ev: EventObject) => void; }
 
       custom: (ev) => {
->custom : (ev: any) => void
->(ev) => {        ev.type // string        ev.unknown // Error      } : (ev: any) => void
->ev : any
+>custom : (ev: EventObject) => void
+>(ev) => {        ev.type // string        ev.unknown // Error      } : (ev: EventObject) => void
+>ev : EventObject
 
         ev.type // string
->ev.type : any
->ev : any
->type : any
+>ev.type : string
+>ev : EventObject
+>type : string
 
         ev.unknown // Error
 >ev.unknown : any
->ev : any
+>ev : EventObject
 >unknown : any
 
       },

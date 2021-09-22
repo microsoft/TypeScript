@@ -205,7 +205,9 @@ model.createMachine(
 >ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
 
         ev.type // string
+>ev.type : Symbol(EventObject.type, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 14, 23))
 >ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
+>type : Symbol(EventObject.type, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 14, 23))
 
         ev.unknown // Error
 >ev : Symbol(ev, Decl(contextuallyTypedObjectFunctionPropertyWithResolvedConditionalType.ts, 78, 15))
