@@ -4602,15 +4602,8 @@ namespace ts {
         }
 
         function parseBinaryExpressionOrHigher(precedence: OperatorPrecedence): Expression {
-            // parse a BinaryExpression the LHS is either:
-            // 1) a PrivateIdentifier when 'in' flag allowed and lookahead matches 'PrivateIdentifier in'
-            // 2) a UnaryExpression
-
             const pos = getNodePos();
-            const lookaheadMatchesPrivateIdentifierIn = token() === SyntaxKind.PrivateIdentifier && !inDisallowInContext() && lookAhead(nextTokenIsInKeyword);
-            const leftOperand = lookaheadMatchesPrivateIdentifierIn
-                ? parsePrivateIdentifier()
-                : parseUnaryExpressionOrHigher();
+            const leftOperand = parseUnaryExpressionOrHigher();
             return parseBinaryExpressionRest(precedence, leftOperand, pos);
         }
 
@@ -4647,11 +4640,9 @@ namespace ts {
                 //            ^^token; leftOperand = b. Return b ** c to the caller as a rightOperand
                 //      a ** b - c
                 //             ^token; leftOperand = b. Return b to the caller as a rightOperand
-                const isPrivateIdentifierInInExpression = token() === SyntaxKind.InKeyword && isPrivateIdentifier(leftOperand);
-                const consumeCurrentOperator = isPrivateIdentifierInInExpression ||
-                    (token() === SyntaxKind.AsteriskAsteriskToken ?
+                const consumeCurrentOperator = token() === SyntaxKind.AsteriskAsteriskToken ?
                         newPrecedence >= precedence :
-                        newPrecedence > precedence);
+                        newPrecedence > precedence;
 
                 if (!consumeCurrentOperator) {
                     break;
@@ -4746,6 +4737,14 @@ namespace ts {
          *
          */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
+            /**
+             * If we have a PrivateIdentifier, parse this unconditionally.
+             * A privateIdentifier is only valid on its own in the RelationalExpression: `#field in expr`.
+             * Subsequent steps will emit the error if this is not the case.
+             */
+            if (token() === SyntaxKind.PrivateIdentifier) {
+                return parsePrivateIdentifier();
+            }
             /**
              * ES7 UpdateExpression:
              *      1) LeftHandSideExpression[?Yield]
@@ -6138,11 +6137,6 @@ namespace ts {
         function nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() {
             nextToken();
             return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.BigIntLiteral || token() === SyntaxKind.StringLiteral) && !scanner.hasPrecedingLineBreak();
-        }
-
-        function nextTokenIsInKeyword() {
-            nextToken();
-            return token() === SyntaxKind.InKeyword;
         }
 
         function isDeclaration(): boolean {

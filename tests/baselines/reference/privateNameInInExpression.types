@@ -81,11 +81,9 @@ class Foo {
 >c : boolean
 >(#field) in v : boolean
 >(#field) : any
->#field : any
 >v : any
 
         for (#field in v) { /**/ } // Bad - 'in' not allowed
->#field : any
 >v : any
 
         for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any

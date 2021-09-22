@@ -40,43 +40,43 @@ class Foo {
 >precedence : (v: any) => void
 >v : any
 
-        // '==' has lower precedence than 'in'
-        // '<'  has same precedence than 'in'
+        // '==' and '||' have lower precedence than 'in'
+        // 'in'  has same precedence than 'in'
         // '<<' has higher precedence than 'in'
 
-        v == #field in v == v; // Good precedence: ((v == (#field in v)) == v)
->v == #field in v == v : boolean
+        v == #field in v || v; // Good precedence: (v == (#field in v)) || v
+>v == #field in v || v : any
 >v == #field in v : boolean
 >v : any
 >#field in v : boolean
 >v : any
 >v : any
 
-        v << #field in v << v; // Good precedence: (v << (#field in (v << v)))
->v << #field in v << v : number
+        v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
+>v << #field in v << v : boolean
+>v << #field : number
 >v : any
->#field in v << v : boolean
 >v << v : number
 >v : any
 >v : any
 
-        v << #field in v == v; // Good precedence: ((v << (#field in v)) == v)
+        v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
 >v << #field in v == v : boolean
->v << #field in v : number
+>v << #field in v : boolean
+>v << #field : number
 >v : any
+>v : any
+>v : any
+
+        v == #field in v in v; // Good precedence: v == ((#field in v) in v)
+>v == #field in v in v : boolean
+>v : any
+>#field in v in v : boolean
 >#field in v : boolean
 >v : any
 >v : any
 
-        v == #field in v < v; // Good precedence: (v == ((#field in v) < v))
->v == #field in v < v : boolean
->v : any
->#field in v < v : boolean
->#field in v : boolean
->v : any
->v : any
-
-        #field in v && #field in v; // Good precedence: ((#field in v) && (#field in v))
+        #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
 >#field in v && #field in v : boolean
 >#field in v : boolean
 >v : any

@@ -1,15 +1,12 @@
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2304: Cannot find name '#fiel'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS2304: Cannot find name '#field'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS18016: Private identifiers are not allowed outside class bodies.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS2304: Cannot find name '#field'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(43,27): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (9 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (6 errors) ====
     class Foo {
         #field = 1;
         static #staticField = 2;
@@ -39,16 +36,10 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
 !!! error TS2304: Cannot find name '#fiel'.
     
             const c = (#field) in v; // Bad - privateID is not an expression on its own
-                       ~~~~~~
-!!! error TS2304: Cannot find name '#field'.
-                       ~~~~~~
-!!! error TS18016: Private identifiers are not allowed outside class bodies.
     
             for (#field in v) { /**/ } // Bad - 'in' not allowed
                  ~~~~~~
-!!! error TS2304: Cannot find name '#field'.
-                 ~~~~~~
-!!! error TS18016: Private identifiers are not allowed outside class bodies.
+!!! error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
     
             for (let d in #field in v) { /**/ } // Bad - rhs of in should be a object/any
                           ~~~~~~~~~~~

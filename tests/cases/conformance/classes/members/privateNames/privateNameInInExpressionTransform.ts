@@ -13,19 +13,19 @@ class Foo {
         #staticMethod in v; // expect Foo's constructor
     }
     precedence(v: any) {
-        // '==' has lower precedence than 'in'
-        // '<'  has same precedence than 'in'
+        // '==' and '||' have lower precedence than 'in'
+        // 'in'  has same precedence than 'in'
         // '<<' has higher precedence than 'in'
 
-        v == #field in v == v; // Good precedence: ((v == (#field in v)) == v)
+        v == #field in v || v; // Good precedence: (v == (#field in v)) || v
 
-        v << #field in v << v; // Good precedence: (v << (#field in (v << v)))
+        v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
 
-        v << #field in v == v; // Good precedence: ((v << (#field in v)) == v)
+        v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
 
-        v == #field in v < v; // Good precedence: (v == ((#field in v) < v))
+        v == #field in v in v; // Good precedence: v == ((#field in v) in v)
 
-        #field in v && #field in v; // Good precedence: ((#field in v) && (#field in v))
+        #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
     }
     invalidLHS(v: any) {
         'prop' in v = 10;

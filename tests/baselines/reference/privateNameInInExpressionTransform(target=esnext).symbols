@@ -34,31 +34,31 @@ class Foo {
 >precedence : Symbol(Foo.precedence, Decl(privateNameInInExpressionTransform.ts, 11, 5))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
-        // '==' has lower precedence than 'in'
-        // '<'  has same precedence than 'in'
+        // '==' and '||' have lower precedence than 'in'
+        // 'in'  has same precedence than 'in'
         // '<<' has higher precedence than 'in'
 
-        v == #field in v == v; // Good precedence: ((v == (#field in v)) == v)
+        v == #field in v || v; // Good precedence: (v == (#field in v)) || v
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
-        v << #field in v << v; // Good precedence: (v << (#field in (v << v)))
+        v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
-        v << #field in v == v; // Good precedence: ((v << (#field in v)) == v)
+        v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
-        v == #field in v < v; // Good precedence: (v == ((#field in v) < v))
+        v == #field in v in v; // Good precedence: v == ((#field in v) in v)
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
-        #field in v && #field in v; // Good precedence: ((#field in v) && (#field in v))
+        #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
     }
