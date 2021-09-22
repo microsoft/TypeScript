@@ -5,14 +5,14 @@
 // @module: es2015
 
 // @Filename: /exports.ts
-//// export interface SomeType {}
+//// export interface SomeInterface {}
 //// export class SomePig {}
 
 // @Filename: /a.ts
-//// import type { SomeType } from "./exports.js";
+//// import type { SomeInterface } from "./exports.js";
 //// new SomePig/**/
 
 goTo.marker("");
 verify.importFixAtPosition([
-`import { SomePig, type SomeType } from "./exports.js";
+`import { SomePig, type SomeInterface } from "./exports.js";
 new SomePig`]);

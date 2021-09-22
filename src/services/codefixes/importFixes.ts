@@ -915,6 +915,13 @@ namespace ts.codefix {
 
         const promoteFromTypeOnly = clause.isTypeOnly && some([defaultImport, ...namedImports], i => i?.addAsTypeOnly === AddAsTypeOnly.NotAllowed);
         const existingSpecifiers = clause.namedBindings && tryCast(clause.namedBindings, isNamedImports)?.elements;
+        // If we are promoting from a type-only import and `--isolatedModules` and `--preserveValueImports`
+        // are enabled, we need to make every existing import specifier type-only. It may be possible that
+        // some of them don't strictly need to be marked type-only (if they have a value meaning and are
+        // never used in an emitting position). These are allowed to be imported without being type-only,
+        // but the user has clearly already signified that they don't need them to be present at runtime
+        // by placing them in a type-only import. So, just mark each specifier as type-only.
+        const convertExistingToTypeOnly = promoteFromTypeOnly && compilerOptions.preserveValueImports && compilerOptions.isolatedModules;
 
         if (defaultImport) {
             Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");
@@ -924,14 +931,19 @@ namespace ts.codefix {
         if (namedImports.length) {
             const newSpecifiers = stableSort(
                 namedImports.map(namedImport => factory.createImportSpecifier(
-                    !clause.isTypeOnly && needsTypeOnly(namedImport),
+                    (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
                     /*propertyName*/ undefined,
                     factory.createIdentifier(namedImport.name))),
                 OrganizeImports.compareImportOrExportSpecifiers);
 
             if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
                 for (const spec of newSpecifiers) {
-                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
+                    // Organize imports puts type-only import specifiers last, so if we're
+                    // adding a non-type-only specifier and converting all the other ones to
+                    // type-only, there's no need to ask for the insertion index - it's 0.
+                    const insertionIndex = convertExistingToTypeOnly && !spec.isTypeOnly
+                        ? 0
+                        : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
                     const prevSpecifier = (clause.namedBindings as NamedImports).elements[insertionIndex - 1];
                     if (prevSpecifier) {
                         changes.insertNodeInListAfter(sourceFile, prevSpecifier, spec);
@@ -965,13 +977,7 @@ namespace ts.codefix {
 
         if (promoteFromTypeOnly) {
             changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
-            // If we are promoting from a type-only import and `--isolatedModules` and `--preserveValueImports`
-            // are enabled, we need to make every existing import specifier type-only. It may be possible that
-            // some of them don't strictly need to be marked type-only (if they have a value meaning and are
-            // never used in an emitting position). These are allowed to be imported without being type-only,
-            // but the user has clearly already signified that they don't need them to be present at runtime
-            // by placing them in a type-only import. So, just mark each specifier as type-only.
-            if (compilerOptions.preserveValueImports && compilerOptions.isolatedModules) {
+            if (convertExistingToTypeOnly) {
                 existingSpecifiers?.forEach(specifier => {
                     changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, specifier);
                 });
