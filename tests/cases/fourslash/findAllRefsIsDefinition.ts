@@ -19,7 +19,11 @@
 ////     foo/*4*/(): void;
 //// }
 //// class Foo implements IFoo {
-////     foo/*5*/(): void { }
+////     constructor(n: number)
+////     constructor()
+////     /*5*/constructor(n: number?) { }
+////     foo/*6*/(): void { }
+////     static init() { return new this() }
 //// }
 
-verify.baselineFindAllReferences('1', '2', '3', '4', '5')
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6')

@@ -18,7 +18,11 @@
 //     foo(): void;
 // }
 // class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
 //     foo(): void { }
+//     static init() { return new this() }
 // }
 
 [
@@ -189,7 +193,11 @@
 //     foo(): void;
 // }
 // class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
 //     foo(): void { }
+//     static init() { return new this() }
 // }
 
 [
@@ -360,7 +368,11 @@
 //     foo(): void;
 // }
 // class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
 //     foo(): void { }
+//     static init() { return new this() }
 // }
 
 [
@@ -453,7 +465,11 @@
 //     [|foo|]/*FIND ALL REFS*/(): void;
 // }
 // class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
 //     [|foo|](): void { }
+//     static init() { return new this() }
 // }
 
 [
@@ -547,7 +563,7 @@
       "kind": "method",
       "name": "(method) Foo.foo(): void",
       "textSpan": {
-        "start": 406,
+        "start": 483,
         "length": 3
       },
       "displayParts": [
@@ -601,19 +617,19 @@
         }
       ],
       "contextSpan": {
-        "start": 406,
+        "start": 483,
         "length": 15
       }
     },
     "references": [
       {
         "textSpan": {
-          "start": 406,
+          "start": 483,
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
         "contextSpan": {
-          "start": 406,
+          "start": 483,
           "length": 15
         },
         "isWriteAccess": true,
@@ -640,10 +656,125 @@
 // console.log({ bar });
 // 
 // interface IFoo {
+//     foo(): void;
+// }
+// class Foo implements IFoo {
+//     [|constructor|](n: number)
+//     [|constructor|]()
+//     /*FIND ALL REFS*/[|constructor|](n: number?) { }
+//     foo(): void { }
+//     static init() { return new [|this|]() }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
+      "kind": "class",
+      "name": "class Foo",
+      "textSpan": {
+        "start": 380,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "class",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        }
+      ],
+      "contextSpan": {
+        "start": 374,
+        "length": 166
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 406,
+          "length": 11
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
+        "contextSpan": {
+          "start": 406,
+          "length": 22
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 433,
+          "length": 11
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
+        "contextSpan": {
+          "start": 433,
+          "length": 13
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 451,
+          "length": 11
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
+        "contextSpan": {
+          "start": 451,
+          "length": 27
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 530,
+          "length": 4
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsIsDefinition.ts ===
+// declare function foo(a: number): number;
+// declare function foo(a: string): string;
+// declare function foo(a: string | number): string | number;
+// 
+// function foon(a: number): number;
+// function foon(a: string): string;
+// function foon(a: string | number): string | number {
+//     return a
+// }
+// 
+// foo; foon;
+// 
+// export const bar = 123;
+// console.log({ bar });
+// 
+// interface IFoo {
 //     [|foo|](): void;
 // }
 // class Foo implements IFoo {
+//     constructor(n: number)
+//     constructor()
+//     constructor(n: number?) { }
 //     [|foo|]/*FIND ALL REFS*/(): void { }
+//     static init() { return new this() }
 // }
 
 [
@@ -737,7 +868,7 @@
       "kind": "method",
       "name": "(method) Foo.foo(): void",
       "textSpan": {
-        "start": 406,
+        "start": 483,
         "length": 3
       },
       "displayParts": [
@@ -791,19 +922,19 @@
         }
       ],
       "contextSpan": {
-        "start": 406,
+        "start": 483,
         "length": 15
       }
     },
     "references": [
       {
         "textSpan": {
-          "start": 406,
+          "start": 483,
           "length": 3
         },
         "fileName": "/tests/cases/fourslash/findAllRefsIsDefinition.ts",
         "contextSpan": {
-          "start": 406,
+          "start": 483,
           "length": 15
         },
         "isWriteAccess": true,

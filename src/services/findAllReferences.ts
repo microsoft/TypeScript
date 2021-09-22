@@ -551,7 +551,7 @@ namespace ts.FindAllReferences {
         const source = getDeclarationFromName(node) ||
             (node.kind === SyntaxKind.DefaultKeyword ? node
             : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
-            : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent
+            : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
             : undefined);
         return !!(source && target.declarations?.some(d => d === source));
     }
