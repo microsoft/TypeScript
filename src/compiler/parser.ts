@@ -4641,8 +4641,8 @@ namespace ts {
                 //      a ** b - c
                 //             ^token; leftOperand = b. Return b to the caller as a rightOperand
                 const consumeCurrentOperator = token() === SyntaxKind.AsteriskAsteriskToken ?
-                        newPrecedence >= precedence :
-                        newPrecedence > precedence;
+                    newPrecedence >= precedence :
+                    newPrecedence > precedence;
 
                 if (!consumeCurrentOperator) {
                     break;
@@ -4740,7 +4740,7 @@ namespace ts {
             /**
              * If we have a PrivateIdentifier, parse this unconditionally.
              * A privateIdentifier is only valid on its own in the RelationalExpression: `#field in expr`.
-             * Subsequent steps will emit the error if this is not the case.
+             * The checker will emit an error if this is not the case.
              */
             if (token() === SyntaxKind.PrivateIdentifier) {
                 return parsePrivateIdentifier();
