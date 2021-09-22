@@ -110,7 +110,7 @@
           "length": 11
         },
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
@@ -119,7 +119,7 @@
         },
         "fileName": "/tests/cases/fourslash/file.tsx",
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }

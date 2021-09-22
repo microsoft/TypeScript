@@ -151,7 +151,7 @@
         },
         "fileName": "/tests/cases/fourslash/findAllRefsWithShorthandPropertyAssignment2.ts",
         "isWriteAccess": true,
-        "isDefinition": true
+        "isDefinition": false
       }
     ]
   }
@@ -230,7 +230,7 @@
           "length": 14
         },
         "isWriteAccess": false,
-        "isDefinition": true
+        "isDefinition": false
       },
       {
         "textSpan": {
