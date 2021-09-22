@@ -34,7 +34,7 @@ class Foo {
             /*2*/in/*3*/
                 /*4*/v/*5*/
     }
-    flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar) {
+    flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
 
         if (typeof u === 'object') {
             if (#field in n) {
@@ -92,6 +92,12 @@ class Foo {
             fsb; // good fsb is Bar
         }
 
+        if (#field in fsfb) {
+            fsfb; // good fsfb is 'Foo | FooSub'
+        } else {
+            fsfb; // good fsfb is Bar
+        }
+
         class Nested {
             m(v: any) {
                 if (#field in v) {
@@ -137,7 +143,7 @@ class Foo {
             /*2*/ in /*3*/
                 /*4*/ v; /*5*/
     }
-    flow(u, n, fb, fs, b, fsb) {
+    flow(u, n, fb, fs, b, fsb, fsfb) {
         if (typeof u === 'object') {
             if (#field in n) {
                 n; // good n is never
@@ -189,6 +195,12 @@ class Foo {
         }
         else {
             fsb; // good fsb is Bar
+        }
+        if (#field in fsfb) {
+            fsfb; // good fsfb is 'Foo | FooSub'
+        }
+        else {
+            fsfb; // good fsfb is Bar
         }
         class Nested {
             m(v) {

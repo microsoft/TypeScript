@@ -6,7 +6,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(29,23): error TS2407: The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'boolean'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(43,27): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(108,12): error TS18016: Private identifiers are not allowed outside class bodies.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (9 errors) ====
@@ -59,7 +59,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
                 /*2*/in/*3*/
                     /*4*/v/*5*/
         }
-        flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar) {
+        flow(u: unknown, n: never, fb: Foo | Bar, fs: FooSub, b: Bar, fsb: FooSub | Bar, fsfb: Foo | FooSub | Bar) {
     
             if (typeof u === 'object') {
                 if (#field in n) {
@@ -117,6 +117,12 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
                 fsb; // good fsb is FooSub
             } else {
                 fsb; // good fsb is Bar
+            }
+    
+            if (#field in fsfb) {
+                fsfb; // good fsfb is 'Foo | FooSub'
+            } else {
+                fsfb; // good fsfb is Bar
             }
     
             class Nested {
