@@ -32046,6 +32046,9 @@ namespace ts {
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
             if (isPrivateIdentifier(left)) {
+                if (languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(left, ExternalEmitHelpers.ClassPrivateFieldIn);
+                }
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(left.escapedText, left);
                 if (lexicallyScopedSymbol === undefined) {
                     if (!getContainingClass(left)) {
@@ -41664,6 +41667,7 @@ namespace ts {
                 case ExternalEmitHelpers.MakeTemplateObject: return "__makeTemplateObject";
                 case ExternalEmitHelpers.ClassPrivateFieldGet: return "__classPrivateFieldGet";
                 case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";
+                case ExternalEmitHelpers.ClassPrivateFieldIn: return "__classPrivateFieldIn";
                 case ExternalEmitHelpers.CreateBinding: return "__createBinding";
                 default: return Debug.fail("Unrecognized helper");
             }
