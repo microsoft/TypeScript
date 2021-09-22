@@ -50,6 +50,37 @@
 ////    f/*d*/
 ////}
 
+// @Filename: e.ts
+// Case: Class implements interface
+////interface EBase {
+////    foo(a: string): string;
+////}
+////
+////class ESub implements EBase {
+////    f/*e*/
+////}
+
+// @Filename: f.ts
+// Case: Abstract class implements interface
+////interface FBase {
+////    foo(a: string): string;
+////}
+////
+////abstract class FSub implements FBase {
+////    f/*f*/
+////}
+
+// @Filename: g.ts
+// Case: Method has overloads
+////interface GBase {
+////    foo(a: string): string;
+////    foo(a: undefined, b: number): string;
+////}
+////
+////class GSub implements GBase {
+////    f/*g*/
+////}
+
 // format.setFormatOptions({
 //     newLineCharacter: "\n",
 // });
@@ -73,7 +104,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"foo(param1: string, param2: boolean): Promise<void> {\r\n}",
+"foo(param1: string, param2: boolean): Promise<void> {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
@@ -96,7 +127,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"foo(a: string, b: string): string {\r\n}",
+"foo(a: string, b: string): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
@@ -119,7 +150,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"foo(a: string): string {\r\n}",
+"foo(a: string): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
@@ -142,7 +173,78 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"abstract foo(a: string): string;", // Currently fails because no trailing semicolon
+"abstract foo(a: string): string;\r\n",
+        }
+    ],
+});
+
+verify.completions({
+    marker: "e",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            isSnippet: true,
+            insertText:
+"foo(a: string): string {\r\n    $1;\r\n}\r\n",
+        }
+    ],
+});
+
+verify.completions({
+    marker: "f",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            isSnippet: true,
+            insertText:
+"abstract foo(a: string): string;\r\n",
+        }
+    ],
+});
+
+verify.completions({
+    marker: "g",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            isSnippet: true,
+            insertText:
+"foo(a: string): string;\r\n\
+foo(a: undefined, b: number): string;\r\n\
+foo(a: any, b?: any): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });

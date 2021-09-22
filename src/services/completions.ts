@@ -678,7 +678,7 @@ namespace ts.Completions {
             }
         }
 
-        if (isMethodOverrideCompletion(symbol, location)) {
+        if (isClassLikeMemberCompletion(symbol, location)) {
             ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location));
             kindModifiers = SymbolDisplay.getSymbolModifiers(typeChecker, symbol); // >> TODO: remove `abstract` modifier from symbol?
         }
@@ -720,11 +720,15 @@ namespace ts.Completions {
     }
 
     // >> TODO: Find better location for code
-    // >> TODO: update this to `isMemberCompletion`... ?
-    function isMethodOverrideCompletion(symbol: Symbol, location: Node): boolean {
-        return !!(symbol.flags & SymbolFlags.Method) && isPropertyDeclaration(location.parent);
-        // >> TODO: add more checks. e.g. the method suggestion could come from an interface the class implements,
-        // or some other possibilities?
+    function isClassLikeMemberCompletion(symbol: Symbol, location: Node): boolean {
+        const memberFlags =
+            // SymbolFlags.Method
+            // | SymbolFlags.Accessor
+            // | SymbolFlags.Property
+            SymbolFlags.ClassMember
+            & SymbolFlags.EnumMemberExcludes;
+        // >> TODO: Flags: Constructor? Signature?
+        return !!findAncestor(location, isClassLike) && !!(symbol.flags & memberFlags);
     }
 
     function getEntryForMemberCompletion(
@@ -753,11 +757,14 @@ namespace ts.Completions {
         let body;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
-            body = factory.createBlock([], /* multiline */ true); // TODO: add tabstop
+            const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier("$1"));
+            body = factory.createBlock([tabStopStatement], /* multiline */ true);
         }
         else {
             body = factory.createBlock([], /* multiline */ true);
         }
+
+        const completionNodes: Node[] = [];
         codefix.addNewNodeForMemberSymbol(
             symbol,
             classLikeDeclaration,
@@ -766,15 +773,23 @@ namespace ts.Completions {
             preferences,
             importAdder,
             node => {
+                // `addNewNodeForMemberSymbol` calls this callback function for each new member node
+                // it adds for the given member symbol.
+                // We store these member nodes in the `completionNodes` array.
+                // Note that there might be:
+                //  - No nodes if `addNewNodeForMemberSymbol` cannot figure out a node for the member;
+                //  - One node;
+                //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
                 if (isClassDeclaration(classLikeDeclaration) && hasAbstractModifier(classLikeDeclaration)) {
                     // Add `abstract` modifier
                     node = factory.updateModifiers(
                         node,
                         concatenate([factory.createModifier(SyntaxKind.AbstractKeyword)], node.modifiers),
                     );
+                    // >> TODO: we want to remove the body in more cases I think
+                    // >> e.g. interfaces?
                     if (isMethodDeclaration(node)) {
                         // Remove method body
-                        // >> TODO: maybe move this up, when creating the body above?
                         node = factory.updateMethodDeclaration(
                             node,
                             node.decorators,
@@ -789,10 +804,13 @@ namespace ts.Completions {
                         );
                     }
                 }
-                insertText = printer.printNode(EmitHint.Unspecified, node, sourceFile);
+                completionNodes.push(node);
             },
             body);
 
+        if (completionNodes.length) {
+            insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
+        }
         return { insertText, isSnippet };
     }
 
