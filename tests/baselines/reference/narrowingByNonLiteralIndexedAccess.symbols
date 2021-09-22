@@ -1,0 +1,67 @@
+=== tests/cases/compiler/narrowingByNonLiteralIndexedAccess.ts ===
+interface IEye {
+>IEye : Symbol(IEye, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 0))
+
+    visibility: number | undefined
+>visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+}
+
+interface IPirate {
+>IPirate : Symbol(IPirate, Decl(narrowingByNonLiteralIndexedAccess.ts, 2, 1))
+
+    hands: number | undefined,
+>hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+
+    eyes: IEye[]
+>eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>IEye : Symbol(IEye, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 0))
+}
+
+const pirates: IPirate[] = [];
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>IPirate : Symbol(IPirate, Decl(narrowingByNonLiteralIndexedAccess.ts, 2, 1))
+
+const index: number = 1;
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+
+pirates[index].hands++;
+>pirates[index].hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+
+if (pirates[index].hands) pirates[index].hands++;
+>pirates[index].hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+>pirates[index].hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>hands : Symbol(IPirate.hands, Decl(narrowingByNonLiteralIndexedAccess.ts, 4, 19))
+
+pirates[index].eyes[index].visibility++;
+>pirates[index].eyes[index].visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+>pirates[index].eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+
+if (pirates[index].eyes[index].visibility) pirates[index].eyes[index].visibility++;
+>pirates[index].eyes[index].visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+>pirates[index].eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+>pirates[index].eyes[index].visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+>pirates[index].eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>pirates : Symbol(pirates, Decl(narrowingByNonLiteralIndexedAccess.ts, 9, 5))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>eyes : Symbol(IPirate.eyes, Decl(narrowingByNonLiteralIndexedAccess.ts, 5, 30))
+>index : Symbol(index, Decl(narrowingByNonLiteralIndexedAccess.ts, 11, 5))
+>visibility : Symbol(IEye.visibility, Decl(narrowingByNonLiteralIndexedAccess.ts, 0, 16))
+

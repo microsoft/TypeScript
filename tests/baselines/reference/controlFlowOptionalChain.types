@@ -2057,11 +2057,11 @@ while (arr[i]?.tag === "left") {
 
     if (arr[i]?.tag === "right") {
 >arr[i]?.tag === "right" : boolean
->arr[i]?.tag : "left" | "right"
+>arr[i]?.tag : "left"
 >arr[i] : { tag: "left" | "right"; }
 >arr : { tag: "left" | "right"; }[]
 >i : number
->tag : "left" | "right"
+>tag : "left"
 >"right" : "right"
 
         console.log("I should ALSO be reachable");

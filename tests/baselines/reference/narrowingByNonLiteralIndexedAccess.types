@@ -1,0 +1,76 @@
+=== tests/cases/compiler/narrowingByNonLiteralIndexedAccess.ts ===
+interface IEye {
+    visibility: number | undefined
+>visibility : number | undefined
+}
+
+interface IPirate {
+    hands: number | undefined,
+>hands : number | undefined
+
+    eyes: IEye[]
+>eyes : IEye[]
+}
+
+const pirates: IPirate[] = [];
+>pirates : IPirate[]
+>[] : never[]
+
+const index: number = 1;
+>index : number
+>1 : 1
+
+pirates[index].hands++;
+>pirates[index].hands++ : number
+>pirates[index].hands : number | undefined
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>hands : number | undefined
+
+if (pirates[index].hands) pirates[index].hands++;
+>pirates[index].hands : number | undefined
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>hands : number | undefined
+>pirates[index].hands++ : number
+>pirates[index].hands : number
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>hands : number
+
+pirates[index].eyes[index].visibility++;
+>pirates[index].eyes[index].visibility++ : number
+>pirates[index].eyes[index].visibility : number | undefined
+>pirates[index].eyes[index] : IEye
+>pirates[index].eyes : IEye[]
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>eyes : IEye[]
+>index : number
+>visibility : number | undefined
+
+if (pirates[index].eyes[index].visibility) pirates[index].eyes[index].visibility++;
+>pirates[index].eyes[index].visibility : number | undefined
+>pirates[index].eyes[index] : IEye
+>pirates[index].eyes : IEye[]
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>eyes : IEye[]
+>index : number
+>visibility : number | undefined
+>pirates[index].eyes[index].visibility++ : number
+>pirates[index].eyes[index].visibility : number
+>pirates[index].eyes[index] : IEye
+>pirates[index].eyes : IEye[]
+>pirates[index] : IPirate
+>pirates : IPirate[]
+>index : number
+>eyes : IEye[]
+>index : number
+>visibility : number
+

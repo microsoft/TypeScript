@@ -32621,6 +32621,11 @@ namespace ts {
                 case SyntaxKind.ExclamationEqualsToken:
                 case SyntaxKind.EqualsEqualsEqualsToken:
                 case SyntaxKind.ExclamationEqualsEqualsToken:
+                    if (isPropertyAccessExpression(left) &&
+                        isElementAccessExpression(left.expression) &&
+                        isIdentifier(left.expression.expression)) {
+                            return booleanType;
+                    }
                     reportOperatorErrorUnless((left, right) => isTypeEqualityComparableTo(left, right) || isTypeEqualityComparableTo(right, left));
                     return booleanType;
 
