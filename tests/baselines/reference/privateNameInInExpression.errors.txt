@@ -1,5 +1,6 @@
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(21,29): error TS2571: Object is of type 'unknown'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS2339: Property '#fiel' does not exist on type 'any'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(23,19): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(25,20): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS2406: The left-hand side of a 'for...in' statement must be a variable or a property access.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(27,14): error TS18016: Private identifiers are not allowed outside class bodies.
@@ -9,7 +10,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts(114,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (9 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.ts (10 errors) ====
     class Foo {
         #field = 1;
         static #staticField = 2;
@@ -37,6 +38,8 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpression.t
             const b = #fiel in v; // Bad - typo in privateID
                       ~~~~~
 !!! error TS2339: Property '#fiel' does not exist on type 'any'.
+                      ~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
     
             const c = (#field) in v; // Bad - privateID is not an expression on its own
                        ~~~~~~

@@ -27743,19 +27743,16 @@ namespace ts {
             const isPrivateFieldInInExpression = isBinaryExpression(privId.parent)
                 && privId.parent.left === privId
                 && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
+            let symbolResolved = false;
             if (isPrivateFieldInInExpression) {
                 const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
-                if (lexicallyScopedSymbol === undefined) {
-                    if (!getContainingClass(privId)) {
-                        error(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
-                    }
-                }
-                else {
+                if (lexicallyScopedSymbol) {
+                    symbolResolved = true;
                     markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
                     getNodeLinks(privId.parent).resolvedSymbol = lexicallyScopedSymbol;
                 }
             }
-            else {
+            if (!symbolResolved) {
                 error(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
             return anyType;
