@@ -356,18 +356,6 @@ namespace FourSlashInterface {
             this.state.verifyBaselineGetFileReferences(fileName);
         }
 
-        public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(starts, parts);
-        }
-
-        public noReferences(markerNameOrRange?: string | FourSlash.Range) {
-            this.state.verifyNoReferences(markerNameOrRange);
-        }
-
-        public getReferencesForServerTest(expected: readonly ts.ReferenceEntry[]) {
-            this.state.verifyGetReferencesForServerTest(expected);
-        }
-
         public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }

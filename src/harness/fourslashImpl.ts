@@ -1244,20 +1244,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyNoReferences(markerNameOrRange?: string | Range) {
-            if (markerNameOrRange !== undefined) this.goToMarkerOrRange(markerNameOrRange);
-            const refs = this.getReferencesAtCaret();
-            if (refs && refs.length) {
-                this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
-            }
-        }
-
-        /** @deprecated - use `verify.baselineFindAllReferences()` instead. */
-        public verifyGetReferencesForServerTest(expected: readonly ts.ReferenceEntry[]): void {
-            const refs = this.getReferencesAtCaret();
-            assert.deepEqual<readonly ts.ReferenceEntry[] | undefined>(refs, expected);
-        }
-
         public verifySingleReferenceGroup(definition: FourSlashInterface.ReferenceGroupDefinition, ranges?: Range[] | string) {
             ranges = ts.isString(ranges) ? this.rangesByText().get(ranges)! : ranges || this.getRanges();
             this.verifyReferenceGroups(ranges, [{ definition, ranges }]);
@@ -1336,10 +1322,6 @@ namespace FourSlash {
                 this.configure(preferences);
             }
             return this.languageService.getCompletionEntryDetails(this.activeFile.fileName, this.currentCaretPosition, entryName, this.formatCodeSettings, source, preferences, data);
-        }
-
-        private getReferencesAtCaret() {
-            return this.languageService.getReferencesAtPosition(this.activeFile.fileName, this.currentCaretPosition);
         }
 
         private findReferencesAtCaret() {
