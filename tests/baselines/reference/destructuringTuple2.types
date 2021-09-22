@@ -1,0 +1,17 @@
+=== tests/cases/compiler/destructuringTuple2.ts ===
+declare const f: <T>(cb: () => T) => T;
+>f : <T>(cb: () => T) => T
+>cb : () => T
+
+const [a, b, c] = f(() => [1, "hi", true]);
+>a : number
+>b : string
+>c : boolean
+>f(() => [1, "hi", true]) : [number, string, boolean]
+>f : <T>(cb: () => T) => T
+>() => [1, "hi", true] : () => [number, string, boolean]
+>[1, "hi", true] : [number, string, true]
+>1 : 1
+>"hi" : "hi"
+>true : true
+

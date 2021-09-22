@@ -1,0 +1,14 @@
+=== tests/cases/compiler/destructuringTuple2.ts ===
+declare const f: <T>(cb: () => T) => T;
+>f : Symbol(f, Decl(destructuringTuple2.ts, 0, 13))
+>T : Symbol(T, Decl(destructuringTuple2.ts, 0, 18))
+>cb : Symbol(cb, Decl(destructuringTuple2.ts, 0, 21))
+>T : Symbol(T, Decl(destructuringTuple2.ts, 0, 18))
+>T : Symbol(T, Decl(destructuringTuple2.ts, 0, 18))
+
+const [a, b, c] = f(() => [1, "hi", true]);
+>a : Symbol(a, Decl(destructuringTuple2.ts, 1, 7))
+>b : Symbol(b, Decl(destructuringTuple2.ts, 1, 9))
+>c : Symbol(c, Decl(destructuringTuple2.ts, 1, 12))
+>f : Symbol(f, Decl(destructuringTuple2.ts, 0, 13))
+
