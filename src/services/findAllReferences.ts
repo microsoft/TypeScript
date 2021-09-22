@@ -549,11 +549,12 @@ namespace ts.FindAllReferences {
     function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
         if (!target) return false;
         const source = getDeclarationFromName(node) ||
-            (node.kind === SyntaxKind.DefaultKeyword ? node
+            (node.kind === SyntaxKind.DefaultKeyword ? node.parent
             : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
             : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
             : undefined);
-        return !!(source && target.declarations?.some(d => d === source));
+        const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
+        return !!(source && target.declarations?.some(d => d === source || d === commonjsSource));
     }
 
     /**
