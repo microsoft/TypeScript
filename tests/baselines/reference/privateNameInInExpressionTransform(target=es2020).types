@@ -118,11 +118,11 @@ class Bar {
 }
 
 function syntaxError(v: Foo) {
->syntaxError : (v: Foo) => any
+>syntaxError : (v: Foo) => boolean
 >v : Foo
 
     return #field in v; // expect `return in v` so runtime will have a syntax error
->#field in v : any
+>#field in v : boolean
 >v : Foo
 }
 

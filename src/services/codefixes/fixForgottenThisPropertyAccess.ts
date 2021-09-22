@@ -32,7 +32,7 @@ namespace ts.codefix {
 
     function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
-        if (isIdentifier(node)) {
+        if (isIdentifier(node) || isPrivateIdentifier(node)) {
             return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };
         }
     }

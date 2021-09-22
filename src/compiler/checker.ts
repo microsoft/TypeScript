@@ -23887,7 +23887,7 @@ namespace ts {
 
                 const privateId = expr.left;
                 Debug.assertNode(privateId, isPrivateIdentifier);
-                const symbol = lookupSymbolForPrivateIdentifierDeclaration(privateId.escapedText, privateId);
+                const symbol = getNodeLinks(privateId.parent).resolvedSymbol;
                 if (symbol === undefined) {
                     return type;
                 }
@@ -27735,6 +27735,30 @@ namespace ts {
                     return prop;
                 }
             }
+        }
+
+        function checkPrivateIdentifierExpression(privId: PrivateIdentifier): Type {
+            // The only valid position for a PrivateIdentifier to appear as an expression is on the left side of
+            // the `#field in expr` BinaryExpression
+            const isPrivateFieldInInExpression = isBinaryExpression(privId.parent)
+                && privId.parent.left === privId
+                && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
+            if (isPrivateFieldInInExpression) {
+                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
+                if (lexicallyScopedSymbol === undefined) {
+                    if (!getContainingClass(privId)) {
+                        error(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+                    }
+                }
+                else {
+                    markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
+                    getNodeLinks(privId.parent).resolvedSymbol = lexicallyScopedSymbol;
+                }
+            }
+            else {
+                error(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+            }
+            return anyType;
         }
 
         function getPrivateIdentifierPropertyOfType(leftType: Type, lexicallyScopedIdentifier: Symbol): Symbol | undefined {
@@ -32045,35 +32069,23 @@ namespace ts {
         }
 
         function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
-            if (isPrivateIdentifier(left)) {
+            const privIdOnLeft = isPrivateIdentifier(left);
+            if (privIdOnLeft) {
                 if (languageVersion < ScriptTarget.ESNext) {
                     checkExternalEmitHelpers(left, ExternalEmitHelpers.ClassPrivateFieldIn);
                 }
-                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(left.escapedText, left);
-                if (lexicallyScopedSymbol === undefined) {
-                    if (!getContainingClass(left)) {
-                        error(left, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
-                    }
-                    else {
-                        const suggestion = getSuggestedSymbolForNonexistentProperty(left, rightType);
-                        if (suggestion) {
-                            const suggestedName = symbolName(suggestion);
-                            error(left, Diagnostics.Cannot_find_name_0_Did_you_mean_1, diagnosticName(left), suggestedName);
-                        }
-                        else {
-                            error(left, Diagnostics.Cannot_find_name_0, diagnosticName(left));
-                        }
-                    }
-                    return anyType;
-                }
-
-                markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-                getNodeLinks(left.parent).resolvedSymbol = lexicallyScopedSymbol;
-                if (rightType === silentNeverType) {
-                    return silentNeverType;
+                // Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
+                // which provides us with the oppotunity to emit more detailed errors
+                const symbol = getNodeLinks(left.parent).resolvedSymbol;
+                if (!symbol) {
+                    const isUncheckedJS = isUncheckedJSSuggestion(left, rightType.symbol, /*excludeClasses*/ true);
+                    reportNonexistentProperty(left, rightType, isUncheckedJS);
                 }
             }
-            else {
+            if (leftType === silentNeverType || rightType === silentNeverType) {
+                return silentNeverType;
+            }
+            if (!privIdOnLeft) {
                 if (leftType === silentNeverType || rightType === silentNeverType) {
                     return silentNeverType;
                 }
@@ -33486,6 +33498,8 @@ namespace ts {
             switch (kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(node as Identifier, checkMode);
+                case SyntaxKind.PrivateIdentifier:
+                    return checkPrivateIdentifierExpression(node as PrivateIdentifier);
                 case SyntaxKind.ThisKeyword:
                     return checkThisExpression(node);
                 case SyntaxKind.SuperKeyword:

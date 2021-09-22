@@ -1,12 +1,15 @@
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(4,26): error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,14): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,24): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(22,14): error TS18016: Private identifiers are not allowed outside class bodies.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(42,12): error TS2339: Property '#field' does not exist on type 'Foo'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(42,12): error TS18016: Private identifiers are not allowed outside class bodies.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (6 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (9 errors) ====
     class Foo {
         #field = 1;
         #method() {}
@@ -29,10 +32,14 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTr
             v == #field in v || v; // Good precedence: (v == (#field in v)) || v
     
             v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
+                 ~~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
                            ~~~~~~
 !!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
     
             v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
+                 ~~~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
     
             v == #field in v in v; // Good precedence: v == ((#field in v) in v)
                  ~~~~~~~~~~~
@@ -59,6 +66,8 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTr
     
     function syntaxError(v: Foo) {
         return #field in v; // expect `return in v` so runtime will have a syntax error
+               ~~~~~~
+!!! error TS2339: Property '#field' does not exist on type 'Foo'.
                ~~~~~~
 !!! error TS18016: Private identifiers are not allowed outside class bodies.
     }

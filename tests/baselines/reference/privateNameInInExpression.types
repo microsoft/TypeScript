@@ -73,8 +73,8 @@ class Foo {
 >v : any
 
         const b = #fiel in v; // Bad - typo in privateID
->b : any
->#fiel in v : any
+>b : boolean
+>#fiel in v : boolean
 >v : any
 
         const c = (#field) in v; // Bad - privateID is not an expression on its own
@@ -275,11 +275,11 @@ class Bar { notFoo = true }
 >true : true
 
 function badSyntax(v: Foo) {
->badSyntax : (v: Foo) => any
+>badSyntax : (v: Foo) => boolean
 >v : Foo
 
     return #field in v; // Bad - outside of class
->#field in v : any
+>#field in v : boolean
 >v : Foo
 }
 
