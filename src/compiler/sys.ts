@@ -1900,6 +1900,11 @@ namespace ts {
         return sys!;
     })();
 
+    /*@internal*/
+    export function setSys(s: System) {
+        sys = s;
+    }
+
     if (sys && sys.getEnvironmentVariable) {
         setCustomPollingValues(sys);
         Debug.setAssertionLevel(/^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))

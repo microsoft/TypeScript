@@ -1,25 +1,5 @@
 /* @internal */
 namespace ts {
-    type GetIteratorCallback = <I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I) => Iterator<
-        I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
-        I extends ReadonlySet<infer T> ? T :
-        I extends readonly (infer T)[] ? T :
-        I extends undefined ? undefined :
-        never>;
-
-    function getCollectionImplementation<
-        K1 extends MatchingKeys<typeof NativeCollections, () => any>,
-        K2 extends MatchingKeys<typeof ShimCollections, (getIterator?: GetIteratorCallback) => ReturnType<(typeof NativeCollections)[K1]>>
-    >(name: string, nativeFactory: K1, shimFactory: K2): NonNullable<ReturnType<(typeof NativeCollections)[K1]>> {
-        // NOTE: ts.ShimCollections will be defined for typescriptServices.js but not for tsc.js, so we must test for it.
-        const constructor = NativeCollections[nativeFactory]() ?? ShimCollections?.[shimFactory](getIterator);
-        if (constructor) return constructor as NonNullable<ReturnType<(typeof NativeCollections)[K1]>>;
-        throw new Error(`TypeScript requires an environment that provides a compatible native ${name} implementation.`);
-    }
-
-    export const Map = getCollectionImplementation("Map", "tryGetNativeMap", "createMapShim");
-    export const Set = getCollectionImplementation("Set", "tryGetNativeSet", "createSetShim");
-
     export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
         I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
         I extends ReadonlySet<infer T> ? T :
