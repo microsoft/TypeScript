@@ -944,7 +944,7 @@ interface RegExp {
     lastIndex: number;
 
     // Non-standard extensions
-    compile(): this;
+    compile(pattern: string, flags?: string): this;
 }
 
 interface RegExpConstructor {
