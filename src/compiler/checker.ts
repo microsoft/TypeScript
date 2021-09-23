@@ -15914,11 +15914,23 @@ namespace ts {
                         node = (node as TupleTypeNode).elements[0];
                         if (node.kind === SyntaxKind.RestType || node.kind === SyntaxKind.NamedTupleMember && (node as NamedTupleMember).dotDotDotToken) {
                             return getArrayElementTypeNode((node as RestTypeNode | NamedTupleMember).type);
+                        } else {
+                            return node;
                         }
                     }
                     break;
                 case SyntaxKind.ArrayType:
                     return (node as ArrayTypeNode).elementType;
+                case SyntaxKind.TypeReference:
+                    const typeName = (node as TypeReferenceNode).typeName;
+                    if (isIdentifier(typeName)) {
+                        const s = getResolvedSymbol(typeName);
+                        
+                        // @TODO: figure out why `isArrayLikeType(getTypeOfSymbol(s))` does not work
+                        if (s === globalArrayType.symbol || s === globalReadonlyArrayType.symbol) {
+                            return (node as TypeReferenceNode).typeArguments![0];
+                        }
+                    }
             }
             return undefined;
         }
