@@ -772,37 +772,42 @@ namespace ts.Completions {
             { program, host },
             preferences,
             importAdder,
+            // `addNewNodeForMemberSymbol` calls this callback function for each new member node
+            // it adds for the given member symbol.
+            // We store these member nodes in the `completionNodes` array.
+            // Note that there might be:
+            //  - No nodes if `addNewNodeForMemberSymbol` cannot figure out a node for the member;
+            //  - One node;
+            //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
             node => {
-                // `addNewNodeForMemberSymbol` calls this callback function for each new member node
-                // it adds for the given member symbol.
-                // We store these member nodes in the `completionNodes` array.
-                // Note that there might be:
-                //  - No nodes if `addNewNodeForMemberSymbol` cannot figure out a node for the member;
-                //  - One node;
-                //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
-                if (isClassDeclaration(classLikeDeclaration) && hasAbstractModifier(classLikeDeclaration)) {
+                // >> TODO: making it abstract. might not need it after all.
+                // if (hasAbstractModifier(classLikeDeclaration)) {
                     // Add `abstract` modifier
+                    // node = factory.updateModifiers(
+                    //     node,
+                    //     concatenate([factory.createModifier(SyntaxKind.AbstractKeyword)], node.modifiers),
+                    // );
+                    // if (isMethodDeclaration(node)) {
+                    //     // Remove method body
+                    //     node = factory.updateMethodDeclaration(
+                    //         node,
+                    //         node.decorators,
+                    //         node.modifiers,
+                    //         node.asteriskToken,
+                    //         node.name,
+                    //         node.questionToken,
+                    //         node.typeParameters,
+                    //         node.parameters,
+                    //         node.type,
+                    //         /* body */ undefined,
+                    //     );
+                    // }
+                // }
+                if (options.noImplicitOverride && /* TODO: isOverride(node) */ undefined) {
                     node = factory.updateModifiers(
                         node,
-                        concatenate([factory.createModifier(SyntaxKind.AbstractKeyword)], node.modifiers),
+                        concatenate([factory.createModifier(SyntaxKind.OverrideKeyword)], node.modifiers),
                     );
-                    // >> TODO: we want to remove the body in more cases I think
-                    // >> e.g. interfaces?
-                    if (isMethodDeclaration(node)) {
-                        // Remove method body
-                        node = factory.updateMethodDeclaration(
-                            node,
-                            node.decorators,
-                            node.modifiers,
-                            node.asteriskToken,
-                            node.name,
-                            node.questionToken,
-                            node.typeParameters,
-                            node.parameters,
-                            node.type,
-                            /* body */ undefined,
-                        );
-                    }
                 }
                 completionNodes.push(node);
             },

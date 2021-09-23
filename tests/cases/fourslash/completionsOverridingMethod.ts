@@ -173,7 +173,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"abstract foo(a: string): string;\r\n",
+"foo(a: string): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
@@ -219,7 +219,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"abstract foo(a: string): string;\r\n",
+"foo(a: string): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
@@ -248,3 +248,4 @@ foo(a: any, b?: any): string {\r\n    $1;\r\n}\r\n",
         }
     ],
 });
+
