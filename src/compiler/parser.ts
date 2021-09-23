@@ -5618,14 +5618,7 @@ namespace ts {
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
                 case SyntaxKind.PrivateIdentifier:
-                    /**
-                     * If we have a PrivateIdentifier, parse this unconditionally. Even though a privateIdentifier is
-                     * only syntactically valid here when it in in the BinaryExpression: `#field in expr`.
-                     * The checker will emit an error for invalid cases.
-                     */
-                    if (token() === SyntaxKind.PrivateIdentifier) {
-                        return parsePrivateIdentifier();
-                    }
+                    return parsePrivateIdentifier();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
