@@ -1388,9 +1388,13 @@
         "category": "Message",
         "code": 1449
     },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
+    },
     "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
         "category": "Error",
-        "code": 1450
+        "code": 1451
     },
 
     "The types of '{0}' are incompatible between these types.": {
