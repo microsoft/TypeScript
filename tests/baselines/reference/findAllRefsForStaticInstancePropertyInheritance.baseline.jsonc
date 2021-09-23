@@ -1,0 +1,1440 @@
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	/*FIND ALL REFS*/[|foo|]:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	[|foo|]:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|];
+// y.[|foo|];
+// z.[|foo|];
+// Y.foo;
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) X.foo: any",
+      "textSpan": {
+        "start": 10,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 10,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 172,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 95,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 95,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 95,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 179,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	foo:any
+// }
+// 
+// class Y extends X{
+// 	static /*FIND ALL REFS*/[|foo|]:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	foo:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.foo;
+// y.foo;
+// z.foo;
+// Y.[|foo|];
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Y.foo: any",
+      "textSpan": {
+        "start": 48,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Y",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 41,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 48,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 41,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 186,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	foo:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static /*FIND ALL REFS*/[|foo|]:any
+// 	foo:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.foo;
+// y.foo;
+// z.foo;
+// Y.foo;
+// Z.[|foo|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 86,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 79,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 79,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 193,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	[|foo|]:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	/*FIND ALL REFS*/[|foo|]:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|];
+// y.[|foo|];
+// z.[|foo|];
+// Y.foo;
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) X.foo: any",
+      "textSpan": {
+        "start": 10,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 10,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 172,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 95,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 95,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 95,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 179,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	[|foo|]:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	[|foo|]:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x./*FIND ALL REFS*/[|foo|];
+// y.[|foo|];
+// z.[|foo|];
+// Y.foo;
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) X.foo: any",
+      "textSpan": {
+        "start": 10,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 10,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 172,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 95,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 95,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 95,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 179,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	[|foo|]:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	[|foo|]:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|];
+// y./*FIND ALL REFS*/[|foo|];
+// z.[|foo|];
+// Y.foo;
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) X.foo: any",
+      "textSpan": {
+        "start": 10,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 10,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 172,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 95,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 95,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 95,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 179,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	[|foo|]:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	[|foo|]:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.[|foo|];
+// y.[|foo|];
+// z./*FIND ALL REFS*/[|foo|];
+// Y.foo;
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) X.foo: any",
+      "textSpan": {
+        "start": 10,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "X",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 10,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 10,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 10,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 165,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 172,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 95,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 95,
+        "length": 7
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 95,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 95,
+          "length": 7
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 179,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	foo:any
+// }
+// 
+// class Y extends X{
+// 	static [|foo|]:any
+// }
+// 
+// class Z extends Y{
+// 	static foo:any
+// 	foo:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.foo;
+// y.foo;
+// z.foo;
+// Y./*FIND ALL REFS*/[|foo|];
+// Z.foo;
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Y.foo: any",
+      "textSpan": {
+        "start": 48,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Y",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 41,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 48,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 41,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 186,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts ===
+// class X{
+// 	foo:any
+// }
+// 
+// class Y extends X{
+// 	static foo:any
+// }
+// 
+// class Z extends Y{
+// 	static [|foo|]:any
+// 	foo:any
+// }
+// 
+// const x = new X();
+// const y = new Y();
+// const z = new Z();
+// x.foo;
+// y.foo;
+// z.foo;
+// Y.foo;
+// Z./*FIND ALL REFS*/[|foo|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+      "kind": "property",
+      "name": "(property) Z.foo: any",
+      "textSpan": {
+        "start": 86,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Z",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "foo",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 79,
+        "length": 14
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 86,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "contextSpan": {
+          "start": 79,
+          "length": 14
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 193,
+          "length": 3
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsForStaticInstancePropertyInheritance.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

@@ -2,25 +2,25 @@
 // @noImplicitReferences: true
 
 // @Filename: /node_modules/a/index.d.ts
-////[|import [|{| "name": "useAX", "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}X|] from "x";|]
-////export function a(x: [|X|]): void;
+////import [|X/*useAX*/|] from "x";
+////export function a(x: X): void;
 
 // @Filename: /node_modules/a/node_modules/x/index.d.ts
-////[|export default class /*defAX*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 3 |}X|] {
+////export default class /*defAX*/X {
 ////    private x: number;
-////}|]
+////}
 
 // @Filename: /node_modules/a/node_modules/x/package.json
 ////{ "name": "x", "version": "1.2.3" }
 
 // @Filename: /node_modules/b/index.d.ts
-////[|import [|{| "name": "useBX", "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 5 |}X|] from "x";|]
-////export const b: [|X|];
+////import [|X/*useBX*/|] from "x";
+////export const b: X;
 
 // @Filename: /node_modules/b/node_modules/x/index.d.ts
-////[|export default class /*defBX*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 8 |}X|] {
+////export default class /*defBX*/X {
 ////    private x: number;
-////}|]
+////}
 
 // @Filename: /node_modules/b/node_modules/x/package.json
 ////{ "name": "x", "version": "1.2.3" }
@@ -35,10 +35,4 @@ verify.numberOfErrorsInCurrentFile(0);
 verify.goToDefinition("useAX", "defAX");
 verify.goToDefinition("useBX", "defAX");
 
-const [r0Def, r0, r1, r2Def, r2, r3Def, r3, r4, r5Def, r5] = test.ranges();
-const aImport = { definition: "(alias) class X\nimport X", ranges: [r0, r1] };
-const def = { definition: "class X", ranges: [r2] };
-const bImport = { definition: "(alias) class X\nimport X", ranges: [r3, r4] };
-verify.referenceGroups([r0, r1], [aImport, def, bImport]);
-verify.referenceGroups([r2, r5], [def, aImport, bImport]);
-verify.referenceGroups([r3, r4], [bImport, def, aImport]);
+verify.baselineFindAllReferences('useAX', 'defAX', 'useBX')
