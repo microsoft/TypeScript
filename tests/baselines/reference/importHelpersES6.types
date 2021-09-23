@@ -23,6 +23,7 @@ declare var dec: any;
 >g : (u: any) => boolean
 >u : any
 >#x in u : boolean
+>#x : any
 >u : any
 }
 

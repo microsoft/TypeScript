@@ -19,6 +19,7 @@ declare var dec: any;
     g(u) { return #x in u; }
 >g : Symbol(A.g, Decl(a.ts, 3, 42))
 >u : Symbol(u, Decl(a.ts, 4, 6))
+>#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 >u : Symbol(u, Decl(a.ts, 4, 6))
 }
 
