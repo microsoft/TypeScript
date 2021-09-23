@@ -144,7 +144,7 @@ module TypeScriptAllInOne {
             var local5 = <fs.File>null;
 >local5 : Symbol(local5, Decl(constructorWithIncompleteTypeAnnotation.ts, 74, 15))
 >fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
->File : Symbol(fs)
+>File : Symbol(fs.File)
 
             var local6 = local5 instanceof fs.File;
 >local6 : Symbol(local6, Decl(constructorWithIncompleteTypeAnnotation.ts, 75, 15))

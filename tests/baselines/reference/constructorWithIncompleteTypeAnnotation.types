@@ -200,15 +200,15 @@ module TypeScriptAllInOne {
 >local : number
 
             var local5 = <fs.File>null;
->local5 : any
-><fs.File>null : any
+>local5 : fs.File
+><fs.File>null : fs.File
 >fs : any
 >null : null
 
             var local6 = local5 instanceof fs.File;
 >local6 : boolean
 >local5 instanceof fs.File : boolean
->local5 : any
+>local5 : fs.File
 >fs.File : any
 >fs : any
 >File : any
