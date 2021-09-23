@@ -1,0 +1,12 @@
+=== tests/cases/compiler/parseInvalidNames.ts ===
+namespace 100 {}
+No type information for this code.interface 100 {}
+No type information for this code.module 100 {}
+No type information for this code.type 100 {}
+No type information for this code.
+No type information for this code.export namespace 100 {}
+No type information for this code.export interface 100 {}
+No type information for this code.export module 100 {}
+No type information for this code.export type 100 {}
+No type information for this code.
+No type information for this code.

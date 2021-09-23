@@ -522,7 +522,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     nodeFactory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, namedBindings),
-                    nodeFactory.createStringLiteral(externalHelpersModuleNameText)
+                    nodeFactory.createStringLiteral(externalHelpersModuleNameText),
+                     /*assertClause*/ undefined
                 );
                 addEmitFlags(externalHelpersImportDeclaration, EmitFlags.NeverApplyImportHelper);
                 return externalHelpersImportDeclaration;

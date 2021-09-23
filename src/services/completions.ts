@@ -675,6 +675,37 @@ namespace ts.Completions {
             hasAction = !importCompletionNode;
         }
 
+        const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
+        if (kind === ScriptElementKind.jsxAttribute && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+            let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
+            const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
+
+            // If is boolean like or undefined, don't return a snippet we want just to return the completion.
+            if (preferences.jsxAttributeCompletionStyle === "auto"
+                && !(type.flags & TypeFlags.BooleanLike)
+                && !(type.flags & TypeFlags.Union && find((type as UnionType).types, type => !!(type.flags & TypeFlags.BooleanLike)))
+            ) {
+                if (type.flags & TypeFlags.StringLike || (type.flags & TypeFlags.Union && every((type as UnionType).types, type => !!(type.flags & (TypeFlags.StringLike | TypeFlags.Undefined))))) {
+                    // If is string like or undefined use quotes
+                    insertText = `${escapeSnippetText(name)}=${quote(sourceFile, preferences, "$1")}`;
+                    isSnippet = true;
+                }
+                else {
+                    // Use braces for everything else
+                    useBraces = true;
+                }
+            }
+
+            if (useBraces) {
+                insertText = `${escapeSnippetText(name)}={$1}`;
+                isSnippet = true;
+            }
+
+            if (isSnippet) {
+                replacementSpan = createTextSpanFromNode(location, sourceFile);
+            }
+        }
+
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
         // 'getSymbolKind' which is permissible given that it is backwards compatible; but
         // really we should consider passing the meaning for the node so that we don't report
@@ -685,7 +716,7 @@ namespace ts.Completions {
         // entries (like JavaScript identifier entries).
         return {
             name,
-            kind: SymbolDisplay.getSymbolKind(typeChecker, symbol, location), // TODO: GH#18217
+            kind,
             kindModifiers: SymbolDisplay.getSymbolModifiers(typeChecker, symbol),
             sortText,
             source: getSourceFromOrigin(origin),
@@ -699,6 +730,10 @@ namespace ts.Completions {
             isImportStatementCompletion: !!importCompletionNode || undefined,
             data,
         };
+    }
+
+    function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, "\\$");
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {
@@ -723,10 +758,10 @@ namespace ts.Completions {
         const importKind = codefix.getImportKind(sourceFile, exportKind, options, /*forceImportKeyword*/ true);
         const suffix = useSemicolons ? ";" : "";
         switch (importKind) {
-            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${name}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
-            case ImportKind.Default: return { replacementSpan, insertText: `import ${name}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${name} from ${quotedModuleSpecifier}${suffix}` };
-            case ImportKind.Named: return { replacementSpan, insertText: `import { ${name}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.CommonJS: return { replacementSpan, insertText: `import ${escapeSnippetText(name)}${tabStop} = require(${quotedModuleSpecifier})${suffix}` };
+            case ImportKind.Default: return { replacementSpan, insertText: `import ${escapeSnippetText(name)}${tabStop} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Namespace: return { replacementSpan, insertText: `import * as ${escapeSnippetText(name)} from ${quotedModuleSpecifier}${suffix}` };
+            case ImportKind.Named: return { replacementSpan, insertText: `import { ${escapeSnippetText(name)}${tabStop} } from ${quotedModuleSpecifier}${suffix}` };
         }
     }
 

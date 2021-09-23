@@ -277,7 +277,7 @@ namespace ts {
                             const exports = [{ name: "x" }];
                             const exportSpecifiers = exports.map(e => factory.createExportSpecifier(e.name, e.name));
                             const exportClause = factory.createNamedExports(exportSpecifiers);
-                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier);
+                            const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 
                             return newEd as Node as T;
                         }
@@ -314,7 +314,8 @@ namespace ts {
                             /*name*/ undefined,
                             factory.createNamespaceImport(factory.createIdentifier("i0"))
                         ),
-                        /*moduleSpecifier*/ factory.createStringLiteral("./comp1"));
+                        /*moduleSpecifier*/ factory.createStringLiteral("./comp1"),
+                        /*assertClause*/ undefined);
                     return factory.updateSourceFile(sf, [importStar]);
                 }
             }
