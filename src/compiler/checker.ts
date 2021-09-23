@@ -23895,17 +23895,13 @@ namespace ts {
                     return type;
                 }
 
-                const privateId = expr.left;
-                Debug.assertNode(privateId, isPrivateIdentifier);
-                const links = getNodeLinks(privateId);
-                if (links.resolvedSymbol === undefined) {
-                    checkPrivateIdentifierExpression(privateId);
-                }
-                if (links.resolvedSymbol === undefined) {
+                Debug.assertNode(expr.left, isPrivateIdentifier);
+                const symbol = getSymbolForPrivateIdentifierExpression(expr.left);
+                if (symbol === undefined) {
                     return type;
                 }
-                const classSymbol = links.resolvedSymbol.parent!;
-                const targetType = hasStaticModifier(Debug.checkDefined(links.resolvedSymbol.valueDeclaration, "should always have a declaration"))
+                const classSymbol = symbol.parent!;
+                const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
                 return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
@@ -27755,26 +27751,38 @@ namespace ts {
             }
         }
 
-        function checkPrivateIdentifierExpression(privId: PrivateIdentifier): Type {
-            if (getContainingClass(privId)) {
-                if (isExpressionNode(privId)) {
-                    const lexicallyScopedSymbol = getNodeLinks(privId).resolvedSymbol || lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
-                    if (lexicallyScopedSymbol) {
-                        markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-                        getNodeLinks(privId).resolvedSymbol = lexicallyScopedSymbol;
-                    }
-                    else {
-                        grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
-                    }
-                }
-                else {
-                    grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
-                }
+        function checkGrammarPrivateIdentifierExpression(privId: PrivateIdentifier): boolean {
+            if (!getContainingClass(privId)) {
+                return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
-            else {
-                grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+            if (!isExpressionNode(privId)) {
+                return grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
+            }
+            if (!getSymbolForPrivateIdentifierExpression(privId)) {
+                return grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+            }
+            return false;
+        }
+
+        function checkPrivateIdentifierExpression(privId: PrivateIdentifier): Type {
+            checkGrammarPrivateIdentifierExpression(privId);
+            const symbol = getSymbolForPrivateIdentifierExpression(privId);
+            if (symbol) {
+                markPropertyAsReferenced(symbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
             }
             return anyType;
+        }
+
+        function getSymbolForPrivateIdentifierExpression(privId: PrivateIdentifier): Symbol | undefined {
+            if (!isExpressionNode(privId)) {
+                return undefined;
+            }
+
+            const links = getNodeLinks(privId);
+            if (links.resolvedSymbol === undefined) {
+                links.resolvedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
+            }
+            return links.resolvedSymbol;
         }
 
         function getPrivateIdentifierPropertyOfType(leftType: Type, lexicallyScopedIdentifier: Symbol): Symbol | undefined {
@@ -40300,12 +40308,7 @@ namespace ts {
                     return result;
                 }
                 else if (isPrivateIdentifier(name)) {
-                    const links = getNodeLinks(name);
-                    if (links.resolvedSymbol) {
-                        return links.resolvedSymbol;
-                    }
-                    checkPrivateIdentifierExpression(name);
-                    return links.resolvedSymbol;
+                    return getSymbolForPrivateIdentifierExpression(name);
                 }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
