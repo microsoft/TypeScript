@@ -19,15 +19,19 @@ class Foo {
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
         #field in v; // expect Foo's 'field' WeakMap
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
         #method in v; // expect Foo's 'instances' WeakSet
+>#method : Symbol(Foo.#method, Decl(privateNameInInExpressionTransform.ts, 1, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
         #staticField in v; // expect Foo's constructor
+>#staticField : Symbol(Foo.#staticField, Decl(privateNameInInExpressionTransform.ts, 2, 16))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
 
         #staticMethod in v; // expect Foo's constructor
+>#staticMethod : Symbol(Foo.#staticMethod, Decl(privateNameInInExpressionTransform.ts, 3, 27))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 6, 10))
     }
     precedence(v: any) {
@@ -40,6 +44,7 @@ class Foo {
 
         v == #field in v || v; // Good precedence: (v == (#field in v)) || v
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
@@ -55,11 +60,14 @@ class Foo {
 
         v == #field in v in v; // Good precedence: v == ((#field in v) in v)
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
         #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
     }
     invalidLHS(v: any) {
@@ -70,6 +78,7 @@ class Foo {
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 27, 15))
 
         #field in v = 10;
+>#field : Symbol(Foo.#field, Decl(privateNameInInExpressionTransform.ts, 0, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 27, 15))
     }
 }
@@ -85,6 +94,7 @@ class Bar {
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 35, 10))
 
         #field in v; // expect Bar's 'field' WeakMap
+>#field : Symbol(Bar.#field, Decl(privateNameInInExpressionTransform.ts, 33, 11))
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 35, 10))
     }
 }

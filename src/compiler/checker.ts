@@ -23887,7 +23887,7 @@ namespace ts {
 
                 const privateId = expr.left;
                 Debug.assertNode(privateId, isPrivateIdentifier);
-                const symbol = getNodeLinks(privateId.parent).resolvedSymbol;
+                const symbol = getNodeLinks(privateId).resolvedSymbol;
                 if (symbol === undefined) {
                     return type;
                 }
@@ -27738,18 +27738,13 @@ namespace ts {
         }
 
         function checkPrivateIdentifierExpression(privId: PrivateIdentifier): Type {
-            // The only valid position for a PrivateIdentifier to appear as an expression is on the left side of
-            // the `#field in expr` BinaryExpression
-            const isPrivateFieldInInExpression = isBinaryExpression(privId.parent)
-                && privId.parent.left === privId
-                && privId.parent.operatorToken.kind === SyntaxKind.InKeyword;
             let symbolResolved = false;
-            if (isPrivateFieldInInExpression) {
-                const lexicallyScopedSymbol = lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
+            if (isExpressionNode(privId)) {
+                const lexicallyScopedSymbol = getNodeLinks(privId).resolvedSymbol || lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
                 if (lexicallyScopedSymbol) {
                     symbolResolved = true;
                     markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-                    getNodeLinks(privId.parent).resolvedSymbol = lexicallyScopedSymbol;
+                    getNodeLinks(privId).resolvedSymbol = lexicallyScopedSymbol;
                 }
             }
             if (!symbolResolved) {
@@ -32072,9 +32067,8 @@ namespace ts {
                     checkExternalEmitHelpers(left, ExternalEmitHelpers.ClassPrivateFieldIn);
                 }
                 // Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
-                // which provides us with the oppotunity to emit more detailed errors
-                const symbol = getNodeLinks(left.parent).resolvedSymbol;
-                if (!symbol) {
+                // which provides us with the opportunity to emit more detailed errors
+                if (!getNodeLinks(left).resolvedSymbol) {
                     const isUncheckedJS = isUncheckedJSSuggestion(left, rightType.symbol, /*excludeClasses*/ true);
                     reportNonexistentProperty(left, rightType, isUncheckedJS);
                 }
@@ -40251,6 +40245,14 @@ namespace ts {
                     }
                     return result;
                 }
+                else if (isPrivateIdentifier(name)) {
+                    const links = getNodeLinks(name);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
+                    }
+                    checkPrivateIdentifierExpression(name);
+                    return links.resolvedSymbol;
+                }
                 else if (name.kind === SyntaxKind.PropertyAccessExpression || name.kind === SyntaxKind.QualifiedName) {
                     const links = getNodeLinks(name);
                     if (links.resolvedSymbol) {
@@ -40278,15 +40280,6 @@ namespace ts {
             }
             if (name.parent.kind === SyntaxKind.TypePredicate) {
                 return resolveEntityName(name as Identifier, /*meaning*/ SymbolFlags.FunctionScopedVariable);
-            }
-
-            if (isPrivateIdentifier(name) && isBinaryExpression(name.parent)) {
-                const links = getNodeLinks(name.parent);
-                if (links.resolvedSymbol) {
-                    return links.resolvedSymbol;
-                }
-                checkPrivateIdentifierExpression(name);
-                return links.resolvedSymbol;
             }
 
             return undefined;

@@ -15,6 +15,7 @@ class Foo {
         // This should count as using/reading '#brand'
         return #brand in v;
 >#brand in v : boolean
+>#brand : any
 >v : any
     }
 }

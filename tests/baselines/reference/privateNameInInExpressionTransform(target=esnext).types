@@ -22,18 +22,22 @@ class Foo {
 
         #field in v; // expect Foo's 'field' WeakMap
 >#field in v : boolean
+>#field : any
 >v : any
 
         #method in v; // expect Foo's 'instances' WeakSet
 >#method in v : boolean
+>#method : any
 >v : any
 
         #staticField in v; // expect Foo's constructor
 >#staticField in v : boolean
+>#staticField : any
 >v : any
 
         #staticMethod in v; // expect Foo's constructor
 >#staticMethod in v : boolean
+>#staticMethod : any
 >v : any
     }
     precedence(v: any) {
@@ -49,6 +53,7 @@ class Foo {
 >v == #field in v : boolean
 >v : any
 >#field in v : boolean
+>#field : any
 >v : any
 >v : any
 
@@ -73,14 +78,17 @@ class Foo {
 >v : any
 >#field in v in v : boolean
 >#field in v : boolean
+>#field : any
 >v : any
 >v : any
 
         #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
 >#field in v && #field in v : boolean
 >#field in v : boolean
+>#field : any
 >v : any
 >#field in v : boolean
+>#field : any
 >v : Foo
     }
     invalidLHS(v: any) {
@@ -95,6 +103,7 @@ class Foo {
 
         #field in v = 10;
 >#field in v : boolean
+>#field : any
 >v : any
 >10 : 10
     }
@@ -113,6 +122,7 @@ class Bar {
 
         #field in v; // expect Bar's 'field' WeakMap
 >#field in v : boolean
+>#field : any
 >v : any
     }
 }
@@ -123,6 +133,7 @@ function syntaxError(v: Foo) {
 
     return #field in v; // expect `return in v` so runtime will have a syntax error
 >#field in v : boolean
+>#field : any
 >v : Foo
 }
 
