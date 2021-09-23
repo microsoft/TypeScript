@@ -1,5 +1,5 @@
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,24): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
-tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2360: The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
 tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
 
@@ -32,7 +32,7 @@ tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTr
     
             v == #field in v in v; // Good precedence: v == ((#field in v) in v)
                  ~~~~~~~~~~~
-!!! error TS2360: The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.
+!!! error TS2360: The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.
     
             #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
         }
