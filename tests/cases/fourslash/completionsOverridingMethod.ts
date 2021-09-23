@@ -81,6 +81,17 @@
 ////    f/*g*/
 ////}
 
+// @Filename: h.ts
+// @noImplicitOverride: true // >> TODO: move this to a new test file, because this option is global
+// Case: Suggested method needs `override` modifier
+////class HBase {
+////    foo(a: string): void {}
+////}
+////
+////class HSub extends HBase {
+////    f/*h*/
+////}
+
 // format.setFormatOptions({
 //     newLineCharacter: "\n",
 // });
@@ -249,3 +260,25 @@ foo(a: any, b?: any): string {\r\n    $1;\r\n}\r\n",
     ],
 });
 
+verify.completions({
+    marker: "h",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: true,
+    },
+    includes: [
+        {
+            name: "foo",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            isSnippet: true,
+            insertText:
+"override foo(): void {\r\n    $1;\r\n}\r\n",
+        }
+    ],
+});

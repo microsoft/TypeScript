@@ -746,6 +746,8 @@ namespace ts.Completions {
 
         let isSnippet: true | undefined;
         let insertText: string = name;
+
+        const checker = program.getTypeChecker();
         const sourceFile = location.getSourceFile();
         const printer = createPrinter({
             removeComments: true,
@@ -754,6 +756,7 @@ namespace ts.Completions {
             omitTrailingSemicolon: true,
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
+
         let body;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
@@ -803,7 +806,8 @@ namespace ts.Completions {
                     //     );
                     // }
                 // }
-                if (options.noImplicitOverride && /* TODO: isOverride(node) */ undefined) {
+                if (isClassElement(node)
+                    && checker.getMemberOverrideModifierDiagnostic(classLikeDeclaration, node) === MemberOverrideDiagnostic.NeedsOverride) {
                     node = factory.updateModifiers(
                         node,
                         concatenate([factory.createModifier(SyntaxKind.OverrideKeyword)], node.modifiers),
