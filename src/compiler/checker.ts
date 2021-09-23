@@ -23887,12 +23887,15 @@ namespace ts {
 
                 const privateId = expr.left;
                 Debug.assertNode(privateId, isPrivateIdentifier);
-                const symbol = getNodeLinks(privateId).resolvedSymbol;
-                if (symbol === undefined) {
+                const links = getNodeLinks(privateId);
+                if (links.resolvedSymbol === undefined) {
+                    checkPrivateIdentifierExpression(privateId);
+                }
+                if (links.resolvedSymbol === undefined) {
                     return type;
                 }
-                const classSymbol = symbol.parent!;
-                const targetType = hasStaticModifier(Debug.checkDefined(symbol.valueDeclaration, "should always have a declaration"))
+                const classSymbol = links.resolvedSymbol.parent!;
+                const targetType = hasStaticModifier(Debug.checkDefined(links.resolvedSymbol.valueDeclaration, "should always have a declaration"))
                     ? getTypeOfSymbol(classSymbol) as InterfaceType
                     : getDeclaredTypeOfSymbol(classSymbol);
                 return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
@@ -27738,17 +27741,23 @@ namespace ts {
         }
 
         function checkPrivateIdentifierExpression(privId: PrivateIdentifier): Type {
-            let symbolResolved = false;
-            if (isExpressionNode(privId)) {
-                const lexicallyScopedSymbol = getNodeLinks(privId).resolvedSymbol || lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
-                if (lexicallyScopedSymbol) {
-                    symbolResolved = true;
-                    markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
-                    getNodeLinks(privId).resolvedSymbol = lexicallyScopedSymbol;
+            if (getContainingClass(privId)) {
+                if (isExpressionNode(privId)) {
+                    const lexicallyScopedSymbol = getNodeLinks(privId).resolvedSymbol || lookupSymbolForPrivateIdentifierDeclaration(privId.escapedText, privId);
+                    if (lexicallyScopedSymbol) {
+                        markPropertyAsReferenced(lexicallyScopedSymbol, /* nodeForCheckWriteOnly: */ undefined, /* isThisAccess: */ false);
+                        getNodeLinks(privId).resolvedSymbol = lexicallyScopedSymbol;
+                    }
+                    else {
+                        grammarErrorOnNode(privId, Diagnostics.Cannot_find_name_0, idText(privId));
+                    }
+                }
+                else {
+                    grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member_declaration_property_access_or_on_the_left_hand_side_of_an_in_expression);
                 }
             }
-            if (!symbolResolved) {
-                error(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
+            else {
+                grammarErrorOnNode(privId, Diagnostics.Private_identifiers_are_not_allowed_outside_class_bodies);
             }
             return anyType;
         }
@@ -32070,7 +32079,7 @@ namespace ts {
                 }
                 // Unlike in 'checkPrivateIdentifierExpression' we now have access to the RHS type
                 // which provides us with the opportunity to emit more detailed errors
-                if (!getNodeLinks(left).resolvedSymbol) {
+                if (!getNodeLinks(left).resolvedSymbol && getContainingClass(left)) {
                     const isUncheckedJS = isUncheckedJSSuggestion(left, rightType.symbol, /*excludeClasses*/ true);
                     reportNonexistentProperty(left, rightType, isUncheckedJS);
                 }

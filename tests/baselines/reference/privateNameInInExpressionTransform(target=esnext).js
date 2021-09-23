@@ -13,7 +13,7 @@ class Foo {
     }
     precedence(v: any) {
         // '==' and '||' have lower precedence than 'in'
-        // 'in'  has same precedence than 'in'
+        // 'in'  naturally has same precedence as 'in'
         // '<<' has higher precedence than 'in'
 
         v == #field in v || v; // Good precedence: (v == (#field in v)) || v
@@ -60,7 +60,7 @@ class Foo {
     }
     precedence(v) {
         // '==' and '||' have lower precedence than 'in'
-        // 'in'  has same precedence than 'in'
+        // 'in'  naturally has same precedence as 'in'
         // '<<' has higher precedence than 'in'
         v == #field in v || v; // Good precedence: (v == (#field in v)) || v
         v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)

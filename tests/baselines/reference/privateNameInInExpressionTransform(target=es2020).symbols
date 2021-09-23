@@ -39,7 +39,7 @@ class Foo {
 >v : Symbol(v, Decl(privateNameInInExpressionTransform.ts, 12, 15))
 
         // '==' and '||' have lower precedence than 'in'
-        // 'in'  has same precedence than 'in'
+        // 'in'  naturally has same precedence as 'in'
         // '<<' has higher precedence than 'in'
 
         v == #field in v || v; // Good precedence: (v == (#field in v)) || v
