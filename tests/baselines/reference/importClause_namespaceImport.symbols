@@ -30,6 +30,7 @@ types.Value;
 let v: types.Value;
 >v : Symbol(v, Decl(b.ts, 3, 3))
 >types : Symbol(types, Decl(b.ts, 0, 11))
+>Value : Symbol(types.Value)
 
 const a: types.A = {};
 >a : Symbol(a, Decl(b.ts, 4, 5))

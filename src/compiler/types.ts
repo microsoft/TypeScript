@@ -4957,6 +4957,7 @@ namespace ts {
         HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
         Mapped            = 1 << 18,        // Property of mapped type
         StripOptional     = 1 << 19,        // Strip optionality in mapped property
+        Unresolved        = 1 << 20,        // Unresolved type alias symbol
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial

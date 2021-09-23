@@ -508,6 +508,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 136, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 136, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 136, 34))
+>const : Symbol(const)
 
 let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : Symbol(p2, Decl(templateLiteralTypes1.ts, 137, 3))
@@ -516,6 +517,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 137, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 137, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 137, 34))
+>const : Symbol(const)
 
 let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >p3 : Symbol(p3, Decl(templateLiteralTypes1.ts, 138, 3))
@@ -524,6 +526,7 @@ let p3 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b.d');
 >b : Symbol(b, Decl(templateLiteralTypes1.ts, 138, 23))
 >c : Symbol(c, Decl(templateLiteralTypes1.ts, 138, 28))
 >d : Symbol(d, Decl(templateLiteralTypes1.ts, 138, 34))
+>const : Symbol(const)
 
 type PropType<T, Path extends string> =
 >PropType : Symbol(PropType, Decl(templateLiteralTypes1.ts, 138, 69))
@@ -942,6 +945,7 @@ const obj2 = {
 
     ]
 } as const;
+>const : Symbol(const)
 
 let make = getProp2(obj2, 'cars.1.make');  // 'Trabant'
 >make : Symbol(make, Decl(templateLiteralTypes1.ts, 235, 3))
