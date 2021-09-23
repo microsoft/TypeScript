@@ -208,11 +208,12 @@ namespace ts.FindAllReferences {
         const node = getTouchingPropertyName(sourceFile, position);
         const referencedSymbols = Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, { use: FindReferencesUse.References });
         const checker = program.getTypeChecker();
+        const symbol = checker.getSymbolAtLocation(node);
         return !referencedSymbols || !referencedSymbols.length ? undefined : mapDefined<SymbolAndEntries, ReferencedSymbol>(referencedSymbols, ({ definition, references }) =>
             // Only include referenced symbols that have a valid definition.
             definition && {
                 definition: checker.runWithCancellationToken(cancellationToken, checker => definitionToReferencedSymbolDefinitionInfo(definition, checker, node)),
-                references: references.map(toReferenceEntry)
+                references: references.map(r => toReferenceEntry(r, symbol))
             });
     }
 
@@ -387,7 +388,7 @@ namespace ts.FindAllReferences {
         return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker)) };
     }
 
-    export function toReferenceEntry(entry: Entry): ReferenceEntry {
+    export function toReferenceEntry(entry: Entry, symbol: Symbol | undefined): ReferenceEntry {
         const documentSpan = entryToDocumentSpan(entry);
         if (entry.kind === EntryKind.Span) {
             return { ...documentSpan, isWriteAccess: false, isDefinition: false };
@@ -396,7 +397,7 @@ namespace ts.FindAllReferences {
         return {
             ...documentSpan,
             isWriteAccess: isWriteAccessForReference(node),
-            isDefinition: isDefinitionForReference(node),
+            isDefinition: isDeclarationOfSymbol(node, symbol),
             isInString: kind === EntryKind.StringLiteral ? true : undefined,
         };
     }
@@ -544,11 +545,16 @@ namespace ts.FindAllReferences {
         return !!decl && declarationIsWriteAccess(decl) || node.kind === SyntaxKind.DefaultKeyword || isWriteAccess(node);
     }
 
-    function isDefinitionForReference(node: Node): boolean {
-        return node.kind === SyntaxKind.DefaultKeyword
-            || !!getDeclarationFromName(node)
-            || isLiteralComputedPropertyDeclarationName(node)
-            || (node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent));
+    /** Whether a reference, `node`, is a definition of the `target` symbol */
+    function isDeclarationOfSymbol(node: Node, target: Symbol | undefined): boolean {
+        if (!target) return false;
+        const source = getDeclarationFromName(node) ||
+            (node.kind === SyntaxKind.DefaultKeyword ? node.parent
+            : isLiteralComputedPropertyDeclarationName(node) ? node.parent.parent
+            : node.kind === SyntaxKind.ConstructorKeyword && isConstructorDeclaration(node.parent) ? node.parent.parent
+            : undefined);
+        const commonjsSource = source && isBinaryExpression(source) ? source.left as unknown as Declaration : undefined;
+        return !!(source && target.declarations?.some(d => d === source || d === commonjsSource));
     }
 
     /**
