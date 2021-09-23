@@ -15,6 +15,7 @@ export class Foo {
 >this : Symbol(Foo, Decl(main.ts, 0, 0))
 
         #field in this;
+>#field : Symbol(Foo.#field, Decl(main.ts, 0, 18))
 >this : Symbol(Foo, Decl(main.ts, 0, 0))
     }
 }

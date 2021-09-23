@@ -18,6 +18,7 @@ export class Foo {
 
         #field in this;
 >#field in this : boolean
+>#field : any
 >this : this
     }
 }

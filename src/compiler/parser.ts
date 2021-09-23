@@ -4738,14 +4738,6 @@ namespace ts {
          */
         function parseUnaryExpressionOrHigher(): UnaryExpression | BinaryExpression {
             /**
-             * If we have a PrivateIdentifier, parse this unconditionally.
-             * A privateIdentifier is only valid on its own in the RelationalExpression: `#field in expr`.
-             * The checker will emit an error if this is not the case.
-             */
-            if (token() === SyntaxKind.PrivateIdentifier) {
-                return parsePrivateIdentifier();
-            }
-            /**
              * ES7 UpdateExpression:
              *      1) LeftHandSideExpression[?Yield]
              *      2) LeftHandSideExpression[?Yield][no LineTerminator here]++
@@ -5611,6 +5603,15 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
+                case SyntaxKind.PrivateIdentifier:
+                    /**
+                     * If we have a PrivateIdentifier, parse this unconditionally. Even though a privateIdentifier is
+                     * only syntactically valid here when it in in the BinaryExpression: `#field in expr`.
+                     * The checker will emit an error for invalid cases.
+                     */
+                    if (token() === SyntaxKind.PrivateIdentifier) {
+                        return parsePrivateIdentifier();
+                    }
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
