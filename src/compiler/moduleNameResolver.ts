@@ -1189,7 +1189,9 @@ namespace ts {
         EsmMode = 1 << 5,
     }
 
-    function node12ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    function node12ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
+            host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+            resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         return nodeNextModuleNameResolverWorker(
             NodeResolutionFeatures.Imports | NodeResolutionFeatures.SelfName | NodeResolutionFeatures.Exports,
             moduleName,
@@ -1202,7 +1204,9 @@ namespace ts {
         );
     }
 
-    function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
+            host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+            resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
         return nodeNextModuleNameResolverWorker(
             NodeResolutionFeatures.AllFeatures,
             moduleName,
@@ -1241,8 +1245,17 @@ namespace ts {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
-        // conditions are only used by the node12/nodenext resolver - there's no priority order in the list, it's essentially a set (priority is determined by object insertion order in the object we look at).
-        const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations, packageJsonInfoCache: cache, features, conditions: features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"] };
+        // conditions are only used by the node12/nodenext resolver - there's no priority order in the list,
+        //it's essentially a set (priority is determined by object insertion order in the object we look at).
+        const state: ModuleResolutionState = {
+            compilerOptions,
+            host,
+            traceEnabled,
+            failedLookupLocations,
+            packageJsonInfoCache: cache,
+            features,
+            conditions: features & NodeResolutionFeatures.EsmMode ? ["node", "import", "types"] : ["node", "require", "types"]
+        };
 
         const result = forEach(extensions, ext => tryResolve(ext));
         return createResolvedModuleWithFailedLookupLocations(result?.value?.resolved, result?.value?.isExternalLibraryImport, failedLookupLocations, state.resultFromCache);

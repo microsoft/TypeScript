@@ -3379,10 +3379,10 @@ namespace ts {
             const currentSourceFile = getSourceFileOfNode(location);
             const contextSpecifier = isStringLiteralLike(location)
                 ? location
-                :   (isImportCall(location) ? location : findAncestor(location, isImportCall))?.arguments[0] ||
-                    (isImportDeclaration(location) ? location : findAncestor(location, isImportDeclaration))?.moduleSpecifier ||
-                    (isExternalModuleImportEqualsDeclaration(location) ? location : findAncestor(location, isExternalModuleImportEqualsDeclaration))?.moduleReference.expression ||
-                    (isExportDeclaration(location) ? location : findAncestor(location, isExportDeclaration))?.moduleSpecifier ||
+                :   findAncestor(location, isImportCall)?.arguments[0] ||
+                    findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
+                    findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
+                    findAncestor(location, isExportDeclaration)?.moduleSpecifier ||
                     (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
             const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : undefined)!; // TODO: GH#18217
