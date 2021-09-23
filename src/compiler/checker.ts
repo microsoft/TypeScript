@@ -4523,6 +4523,8 @@ namespace ts {
             const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);
             if (typeNode === undefined) return Debug.fail("should always get typenode");
+            // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
+            // Otherwise, we always strip comments out.
             const options = { removeComments: type !== unresolvedType };
             const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
@@ -8270,6 +8272,8 @@ namespace ts {
         }
 
         function isErrorType(type: Type) {
+            // The only 'any' types that have alias symbols are those manufactured by getTypeFromTypeAliasReference for
+            // a reference to an unresolved symbol. We want those to behave like the errorType.
             return type === errorType || !!(type.flags & TypeFlags.Any && type.aliasSymbol);
         }
 
