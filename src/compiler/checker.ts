@@ -14551,7 +14551,7 @@ namespace ts {
             if (!nameType && !noIndexSignatures) {
                 // no mapping and no filtering required, just quickly bail to returning the constraint in the common case
                 return constraintType;
-            } 
+            }
             const keyTypes: Type[] = [];
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
