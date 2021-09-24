@@ -47,7 +47,7 @@ var foo2 = foo;
 var foo3 = function () {
     return foo3;
 };
-var x = function x() {
+var x = function x_1() {
     return x;
 };
 function foo5(x) {

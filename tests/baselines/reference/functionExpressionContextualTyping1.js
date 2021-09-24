@@ -76,7 +76,7 @@ var Class = /** @class */ (function () {
     Class.prototype.foo = function () { };
     return Class;
 }());
-var a1 = function a1(a1) {
+var a1 = function a1_1(a1) {
     a1.foo();
     return 1;
 };
@@ -112,7 +112,7 @@ b6 = function (i) {
 b7 = function (j, m) { }; // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
 var C = /** @class */ (function () {
     function C() {
-        var k = function k(j, k) {
+        var k = function k_1(j, k) {
             return [j, k];
         }; // Per spec, no contextual signature can be extracted in this case.
     }

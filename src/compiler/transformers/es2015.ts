@@ -424,7 +424,7 @@ namespace ts {
                     return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.ArrowFunction:
-                    let name: string | undefined = undefined;
+                    let name: string | undefined;
                     if (node.parent && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
                         name = `${node.parent.name.escapedText}`;
                     }
@@ -1786,7 +1786,7 @@ namespace ts {
             const func = factory.createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                /*name*/ name,
+                /*name*/ name ? createNonCollidingName(name, node) : undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -4356,5 +4356,41 @@ namespace ts {
             const expression = (callArgument as SpreadElement).expression;
             return isIdentifier(expression) && expression.escapedText === "arguments";
         }
+    }
+
+    function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
+        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+        forEachChild(node, child => forEachFreeIdentifier(child, cb));
+    }
+
+    function isFreeIdentifier(node: Identifier): boolean {
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name !== node;
+            case SyntaxKind.BindingElement:
+                return (parent as BindingElement).propertyName !== node;
+            case SyntaxKind.ImportSpecifier:
+                return (parent as ImportSpecifier).propertyName !== node;
+            default:
+                return true;
+        }
+    }
+
+    function createNonCollidingName(name: string, node: Node): string {
+        const identifiers = new Set<string>()
+        forEachFreeIdentifier(node, (identifier) => {
+            identifiers.add(`${identifier.escapedText}`)
+        })
+
+        return createUniqueName(name, 0, identifiers)
+    }
+
+    function createUniqueName(name: string, counter: number, existingNames: Set<string>): string {
+        const fullName = counter === 0 ? name : `${name}_${counter}`
+        if (!existingNames.has(fullName)) {
+            return fullName
+        }
+        return createUniqueName(name, counter + 1, existingNames)
     }
 }

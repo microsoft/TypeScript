@@ -65,7 +65,7 @@ var f1 = function () {
     return f1();
 };
 // Error expected
-var f2 = function f2() { return f2(); };
+var f2 = function f2_1() { return f2(); };
 // Error expected
 function h() {
     return foo();
