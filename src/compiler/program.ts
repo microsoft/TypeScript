@@ -2884,9 +2884,9 @@ namespace ts {
         }
 
         function pathForLibFile(libFileName: string): string {
-            // Support resolving to lib.dom.d.ts -> @typescript/dom, and
-            //                      lib.dom.iterable.d.ts -> @typescript/dom/iterable
-            //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/es2015/symbol-wellknown
+            // Support resolving to lib.dom.d.ts -> @typescript/lib-dom, and
+            //                      lib.dom.iterable.d.ts -> @typescript/lib-dom/iterable
+            //                      lib.es2015.symbol.wellknown.d.ts -> @typescript/lib-es2015/symbol-wellknown
             const components = libFileName.split(".");
             let path = components[1];
             let i = 2;
@@ -2895,7 +2895,7 @@ namespace ts {
                 i++;
             }
             const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-            const localOverrideModuleResult = resolveModuleName("@typescript/" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
+            const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
             if (localOverrideModuleResult?.resolvedModule) {
                 return localOverrideModuleResult.resolvedModule.resolvedFileName;
             }
