@@ -144,7 +144,7 @@ module TypeScriptAllInOne {
             var local5 = <fs.File>null;
 >local5 : Symbol(local5, Decl(constructorWithIncompleteTypeAnnotation.ts, 74, 15))
 >fs : Symbol(fs, Decl(constructorWithIncompleteTypeAnnotation.ts, 8, 1))
->File : Symbol(fs)
+>File : Symbol(fs.File)
 
             var local6 = local5 instanceof fs.File;
 >local6 : Symbol(local6, Decl(constructorWithIncompleteTypeAnnotation.ts, 75, 15))
@@ -537,6 +537,7 @@ module TypeScriptAllInOne {
 
         Foo(): bool;
 >Foo : Symbol(IF.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 211, 18))
+>bool : Symbol(bool)
     }
 
     class CLASS implements IF {
@@ -556,6 +557,7 @@ module TypeScriptAllInOne {
         }
         public Foo(): bool {
 >Foo : Symbol(CLASS.Foo, Decl(constructorWithIncompleteTypeAnnotation.ts, 221, 9))
+>bool : Symbol(bool)
 
             var myEvent = () => { return 1; };
 >myEvent : Symbol(myEvent, Decl(constructorWithIncompleteTypeAnnotation.ts, 223, 15))
@@ -604,6 +606,7 @@ module TypeScriptAllInOne {
         constructor(private value: number, public name: string)  :  }
 >value : Symbol(Overloading.value, Decl(constructorWithIncompleteTypeAnnotation.ts, 253, 20))
 >name : Symbol(Overloading.name, Decl(constructorWithIncompleteTypeAnnotation.ts, 253, 42))
+> : Symbol(fs)
        
         public Overloads(value: string);
         public Overloads( while : string, ...rest: string[]) {  & 

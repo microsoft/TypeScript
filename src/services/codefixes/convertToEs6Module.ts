@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, preferences } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!, getQuotePreference(sourceFile, preferences));
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
                         fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
@@ -19,7 +19,7 @@ namespace ts.codefix {
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
         for (const moduleSpecifier of importingFile.imports) {
-            const imported = getResolvedModule(importingFile, moduleSpecifier.text);
+            const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }

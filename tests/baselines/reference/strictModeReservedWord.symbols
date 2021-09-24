@@ -52,21 +52,35 @@ function foo() {
 
     var b: public.bar;
 >b : Symbol(b, Decl(strictModeReservedWord.ts, 16, 7))
+>public : Symbol(public)
+>bar : Symbol(public.bar)
 
     function foo(x: private.x) { }
 >foo : Symbol(foo, Decl(strictModeReservedWord.ts, 16, 22))
 >x : Symbol(x, Decl(strictModeReservedWord.ts, 18, 17))
+>private : Symbol(private)
+>x : Symbol(private.x)
 
     function foo1(x: private.package.x) { }
 >foo1 : Symbol(foo1, Decl(strictModeReservedWord.ts, 18, 34))
 >x : Symbol(x, Decl(strictModeReservedWord.ts, 19, 18))
+>private : Symbol(private)
+>package : Symbol(private.package)
+>x : Symbol(private.package.x)
 
     function foo2(x: private.package.protected) { }
 >foo2 : Symbol(foo2, Decl(strictModeReservedWord.ts, 19, 43))
 >x : Symbol(x, Decl(strictModeReservedWord.ts, 20, 18))
+>private : Symbol(private)
+>package : Symbol(private.package)
+>protected : Symbol(private.package.protected)
 
     let b: interface.package.implements.B;
 >b : Symbol(b, Decl(strictModeReservedWord.ts, 21, 7))
+>interface : Symbol(interface)
+>package : Symbol(interface.package)
+>implements : Symbol(interface.package.implements)
+>B : Symbol(interface.package.implements.B)
 
     ublic();
     static();

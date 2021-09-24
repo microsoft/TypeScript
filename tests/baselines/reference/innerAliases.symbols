@@ -40,6 +40,8 @@ module D {
 var c: D.inner.Class1;
 >c : Symbol(c, Decl(innerAliases.ts, 18, 3))
 >D : Symbol(D, Decl(innerAliases.ts, 6, 1))
+>inner : Symbol(D.inner)
+>Class1 : Symbol(D.inner.Class1)
 
 c = new D.inner.Class1();
 >c : Symbol(c, Decl(innerAliases.ts, 18, 3))

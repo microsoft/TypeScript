@@ -1,0 +1,467 @@
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected /*FIND ALL REFS*/[|protectedParam|]: number) {
+//         let localProtected = [|protectedParam|];
+//         this.[|protectedParam|] += 10;
+//     }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "property",
+      "name": "(property) Foo.protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "contextSpan": {
+          "start": 28,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "parameter",
+      "name": "(parameter) protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected [|protectedParam|]: number) {
+//         let localProtected = /*FIND ALL REFS*/[|protectedParam|];
+//         this.[|protectedParam|] += 10;
+//     }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "property",
+      "name": "(property) Foo.protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "contextSpan": {
+          "start": 28,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "parameter",
+      "name": "(parameter) protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts ===
+// class Foo {
+//     constructor(protected [|protectedParam|]: number) {
+//         let localProtected = [|protectedParam|];
+//         this./*FIND ALL REFS*/[|protectedParam|] += 10;
+//     }
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "property",
+      "name": "(property) Foo.protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 38,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "contextSpan": {
+          "start": 28,
+          "length": 32
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 122,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+      "kind": "parameter",
+      "name": "(parameter) protectedParam: number",
+      "textSpan": {
+        "start": 38,
+        "length": 14
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "protectedParam",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 28,
+        "length": 32
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 93,
+          "length": 14
+        },
+        "fileName": "/tests/cases/fourslash/findAllRefsParameterPropertyDeclaration3.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]

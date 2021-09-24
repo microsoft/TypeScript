@@ -341,7 +341,7 @@ namespace ts.codefix {
             }
 
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol && isImportable(program, moduleFile, isFromPackageJson)) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions)) === symbolName) && skipAlias(defaultInfo.symbol, checker) === exportedSymbol && isImportable(program, moduleFile, isFromPackageJson)) {
                 result.push({ symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: moduleFile?.fileName, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(defaultInfo.symbol, checker).flags, isFromPackageJson });
             }
 
@@ -742,6 +742,9 @@ namespace ts.codefix {
             case ModuleKind.None:
                 // Fall back to the `import * as ns` style import.
                 return ImportKind.Namespace;
+            case ModuleKind.Node12:
+            case ModuleKind.NodeNext:
+                return importingFile.impliedNodeFormat === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
             default:
                 return Debug.assertNever(moduleKind, `Unexpected moduleKind ${moduleKind}`);
         }
@@ -807,7 +810,7 @@ namespace ts.codefix {
 
             const compilerOptions = program.getCompilerOptions();
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, compilerOptions.target) === symbolName) && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
+            if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions)) === symbolName) && symbolHasMeaning(defaultInfo.symbolForMeaning, currentTokenMeaning)) {
                 addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
             }
 
@@ -1063,7 +1066,8 @@ namespace ts.codefix {
                         needsTypeOnly(namespaceLikeImport),
                         /*name*/ undefined,
                         factory.createNamespaceImport(factory.createIdentifier(namespaceLikeImport.name))),
-                    quotedModuleSpecifier);
+                    quotedModuleSpecifier,
+                    /*assertClause*/ undefined);
             statements = combine(statements, declaration);
         }
         return Debug.checkDefined(statements);

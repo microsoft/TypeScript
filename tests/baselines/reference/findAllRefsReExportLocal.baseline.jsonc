@@ -1,0 +1,2522 @@
+// === /a.ts ===
+// var /*FIND ALL REFS*/[|x|];
+// export { [|x|] };
+// export { [|x|] as [|y|] };
+
+// === /b.ts ===
+// import { [|x|], [|y|] } from "./a";
+// [|x|]; [|y|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var x: any",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 7,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var x: any\nimport x",
+      "textSpan": {
+        "start": 9,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// var [|x|];
+// export { /*FIND ALL REFS*/[|x|] };
+// export { [|x|] as [|y|] };
+
+// === /b.ts ===
+// import { [|x|], [|y|] } from "./a";
+// [|x|]; [|y|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var x: any",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 7,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var x: any\nimport x",
+      "textSpan": {
+        "start": 9,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// var [|x|];
+// export { [|x|] };
+// export { /*FIND ALL REFS*/[|x|] as [|y|] };
+
+// === /b.ts ===
+// import { [|x|], [|y|] } from "./a";
+// [|x|]; [|y|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var x: any",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 7,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var x: any\nimport x",
+      "textSpan": {
+        "start": 9,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// var [|x|];
+// export { [|x|] };
+// export { [|x|] as [|y|] };
+
+// === /b.ts ===
+// import { /*FIND ALL REFS*/[|x|], [|y|] } from "./a";
+// [|x|]; [|y|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var x: any\nimport x",
+      "textSpan": {
+        "start": 9,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var x: any",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 7,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /a.ts ===
+// var [|x|];
+// export { [|x|] };
+// export { [|x|] as [|y|] };
+
+// === /b.ts ===
+// import { [|x|], [|y|] } from "./a";
+// /*FIND ALL REFS*/[|x|]; [|y|];
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var x: any\nimport x",
+      "textSpan": {
+        "start": 9,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 28,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "var",
+      "name": "var x: any",
+      "textSpan": {
+        "start": 4,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 6
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 4,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 6
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 16,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 7,
+          "length": 13
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 30,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// import { x, [|y|] } from "./a";
+// x; [|y|];
+
+// === /a.ts ===
+// var x;
+// export { x };
+// export { x as /*FIND ALL REFS*/[|y|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// import { x, /*FIND ALL REFS*/[|y|] } from "./a";
+// x; [|y|];
+
+// === /a.ts ===
+// var x;
+// export { x };
+// export { x as [|y|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /b.ts ===
+// import { x, [|y|] } from "./a";
+// x; /*FIND ALL REFS*/[|y|];
+
+// === /a.ts ===
+// var x;
+// export { x };
+// export { x as [|y|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/b.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nimport y",
+      "textSpan": {
+        "start": 12,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 27
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 27
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 31,
+          "length": 1
+        },
+        "fileName": "/b.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/a.ts",
+      "kind": "alias",
+      "name": "(alias) var y: any\nexport y",
+      "textSpan": {
+        "start": 35,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "alias",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
+          "text": "export",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "y",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 21,
+        "length": 18
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 35,
+          "length": 1
+        },
+        "fileName": "/a.ts",
+        "contextSpan": {
+          "start": 21,
+          "length": 18
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

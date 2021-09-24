@@ -146,7 +146,8 @@ namespace ts.OrganizeImports {
                         importDecl.decorators,
                         importDecl.modifiers,
                         /*importClause*/ undefined,
-                        moduleSpecifier));
+                        moduleSpecifier,
+                        /*assertClause*/ undefined));
                 }
                 // If we’re not in a declaration file, we can’t remove the import clause even though
                 // the imported symbols are unused, because removing them makes it look like the import
@@ -358,7 +359,8 @@ namespace ts.OrganizeImports {
                             factory.updateNamedExports(exportDecl.exportClause, sortedExportSpecifiers) :
                             factory.updateNamespaceExport(exportDecl.exportClause, exportDecl.exportClause.name)
                     ),
-                    exportDecl.moduleSpecifier));
+                    exportDecl.moduleSpecifier,
+                    exportDecl.assertClause));
         }
 
         return coalescedExports;
@@ -405,7 +407,8 @@ namespace ts.OrganizeImports {
             importDeclaration.decorators,
             importDeclaration.modifiers,
             factory.updateImportClause(importDeclaration.importClause!, importDeclaration.importClause!.isTypeOnly, name, namedBindings), // TODO: GH#18217
-            importDeclaration.moduleSpecifier);
+            importDeclaration.moduleSpecifier,
+            importDeclaration.assertClause);
     }
 
     function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[]) {

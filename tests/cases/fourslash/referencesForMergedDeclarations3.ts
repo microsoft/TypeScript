@@ -2,12 +2,12 @@
 
 // class and uninstantiated module
 
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}testClass|] {
+////[|class /*class*/[|testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
 ////}|]
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}testClass|] {
+////[|module /*module*/[|testClass|] {
 ////    export interface Bar {
 ////
 ////    }
@@ -20,7 +20,4 @@
 ////[|testClass|].bind(this);
 ////new [|testClass|]();
 
-const [class0Def, class0, module0Def, module0, class1, module1, class2, class3, class4, class5] = test.ranges();
-verify.singleReferenceGroup("class testClass\nnamespace testClass", [module0, module1]);
-const classes = [class0, class1, class2, class3, class4, class5];
-verify.referenceGroups(classes, [{ definition: "class testClass\nnamespace testClass", ranges: classes }]);
+verify.baselineFindAllReferences('module', 'class')
