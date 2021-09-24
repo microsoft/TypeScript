@@ -27,6 +27,7 @@ namespace ts.Completions.StringCompletions {
                     completion.symbols,
                     entries,
                     contextToken,
+                    contextToken,
                     sourceFile,
                     sourceFile,
                     checker,
