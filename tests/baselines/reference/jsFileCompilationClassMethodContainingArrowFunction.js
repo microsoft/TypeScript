@@ -11,7 +11,7 @@ var c = /** @class */ (function () {
     }
     c.prototype.method = function (a) {
         var _this = this;
-        var x = function (a) { return _this.method(a); };
+        var x = function x(a) { return _this.method(a); };
     };
     return c;
 }());

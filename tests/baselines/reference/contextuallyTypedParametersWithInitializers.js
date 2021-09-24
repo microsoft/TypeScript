@@ -124,32 +124,32 @@ var f25 = id5(function (foo) {
     if (foo === void 0) { foo = 42; }
     return foo;
 });
-var f1 = function (x) {
+var f1 = function f1(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // number
-var f2 = function (x) {
+var f2 = function f2(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // number
-var f3 = function (x) {
+var f3 = function f3(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // number
-var f4 = function (x) {
+var f4 = function f4(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // number
-var f5 = function (x) {
+var f5 = function f5(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // any
-var f6 = function (x) {
+var f6 = function f6(x) {
     if (x === void 0) { x = 1; }
     return 0;
 }; // number
 var f7 = function (x) { return 0; }; // Implicit any error
-var f8 = function () {
+var f8 = function f8() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         x[_i] = arguments[_i];
@@ -222,11 +222,11 @@ function executeSomething() {
     });
 }
 exports.executeSomething = executeSomething;
-var fz1 = function (debug) {
+var fz1 = function fz1(debug) {
     if (debug === void 0) { debug = true; }
     return false;
 };
-var fz2 = function (debug) {
+var fz2 = function fz2(debug) {
     if (debug === void 0) { debug = true; }
     return false;
 };

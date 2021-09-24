@@ -8,7 +8,7 @@ foo(() => true);
 foo(() => { return false; });
 
 //// [emitArrowFunction.js]
-var f1 = function () { };
+var f1 = function f1() { };
 var f2 = function (x, y) { };
 var f3 = function (x, y) {
     var rest = [];

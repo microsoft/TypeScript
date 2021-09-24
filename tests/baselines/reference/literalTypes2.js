@@ -316,13 +316,13 @@ var C2 = /** @class */ (function () {
     return C2;
 }());
 function f20() {
-    var f1 = function () { return 0; };
-    var f2 = function () { return "hello"; };
-    var f3 = function () { return true; };
-    var f4 = function () { return E.C; };
+    var f1 = function f1() { return 0; };
+    var f2 = function f2() { return "hello"; };
+    var f3 = function f3() { return true; };
+    var f4 = function f4() { return E.C; };
     var f5 = function () { return "foo"; };
-    var f6 = function () { return "bar"; };
-    var f7 = function () { return "bar"; };
+    var f6 = function f6() { return "bar"; };
+    var f7 = function f7() { return "bar"; };
 }
 var a = [1, 2];
 var x1 = g1(1); // Type 1

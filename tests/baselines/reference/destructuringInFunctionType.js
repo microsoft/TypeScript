@@ -22,7 +22,7 @@ var v2: ([a, b, c]) => string;
 
 
 //// [destructuringInFunctionType.js]
-var v1 = function (_a) {
+var v1 = function v1(_a) {
     var a = _a[0], b = _a[1], c = _a[2];
     return "hello";
 };

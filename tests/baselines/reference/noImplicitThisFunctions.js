@@ -37,8 +37,8 @@ function f3(z) {
     return this.a + z;
 }
 // error: `this` is `window`, but is still of type `any`
-var f4 = function (b) { return _this.c + b; };
-var f5 = function () { return function () { return _this; }; };
+var f4 = function f4(b) { return _this.c + b; };
+var f5 = function f5() { return function () { return _this; }; };
 var f6 = function () {
     var _this = this;
     return function () { return _this; };

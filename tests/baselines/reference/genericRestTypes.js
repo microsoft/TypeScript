@@ -31,7 +31,7 @@ function assignmentWithComplexRest3<T extends any[]>() {
 "use strict";
 // Repro from #25793
 function assignmentWithComplexRest() {
-    var fn1 = function (x) {
+    var fn1 = function fn1(x) {
         var _ = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             _[_i - 1] = arguments[_i];
@@ -41,11 +41,11 @@ function assignmentWithComplexRest() {
     var fn2 = fn1;
 }
 function assignmentWithComplexRest2() {
-    var fn1 = function (cb) { };
+    var fn1 = function fn1(cb) { };
     var fn2 = fn1;
 }
 function assignmentWithComplexRest3() {
-    var fn1 = function (x) {
+    var fn1 = function fn1(x) {
         var _ = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             _[_i - 1] = arguments[_i];

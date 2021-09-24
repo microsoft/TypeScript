@@ -44,7 +44,7 @@ var one = foo_1.arr[1], _b = foo_1.arr[3], bee = _b[1], _c = _b[3], sec = _c[1].
 exports.one = one;
 exports.bee = bee;
 exports.sec = sec;
-var getFoo = function () { return ({
+var getFoo = function getFoo() { return ({
     foo: 'foo'
 }); };
 var foo2 = getFoo().foo;

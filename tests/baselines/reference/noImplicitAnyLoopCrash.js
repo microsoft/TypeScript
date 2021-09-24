@@ -7,7 +7,7 @@ while (1) {
 
 
 //// [noImplicitAnyLoopCrash.js]
-var foo = function () { };
+var foo = function foo() { };
 var bar;
 while (1) {
     bar = ~foo.apply(void 0, bar);

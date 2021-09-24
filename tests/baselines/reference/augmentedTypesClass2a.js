@@ -13,4 +13,4 @@ var c2 = /** @class */ (function () {
     return c2;
 }()); // error
 function c2() { } // error
-var c2 = function () { };
+var c2 = function c2() { };

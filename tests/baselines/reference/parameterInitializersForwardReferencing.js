@@ -93,7 +93,7 @@ var C = /** @class */ (function () {
     return C;
 }());
 // Function expressions
-var x = function (a, b, c) {
+var x = function x(a, b, c) {
     if (a === void 0) { a = b; }
     if (b === void 0) { b = c; }
     if (c === void 0) { c = d; }

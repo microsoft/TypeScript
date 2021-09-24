@@ -74,15 +74,15 @@ var M;
     }
     function m_f8(x3, y3) { }
     // No implicit-'any' errors.
-    var m_f9 = function () { return ""; };
+    var m_f9 = function m_f9() { return ""; };
     // Implicit-'any' error for x.
-    var m_f10 = function (x) { return ""; };
+    var m_f10 = function m_f10(x) { return ""; };
     // Implicit-'any' errors for x, y, and z.
-    var m_f11 = function (x, y, z) { return ""; };
+    var m_f11 = function m_f11(x, y, z) { return ""; };
     // Implicit-'any' errors for x and z.
     var m_f12 = function (x, y, z) { return ""; };
     // Implicit-'any[]' errors for r.
-    var m_f13 = function () {
+    var m_f13 = function m_f13() {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             r[_i] = arguments[_i];
@@ -90,7 +90,7 @@ var M;
         return "";
     };
     // Implicit-'any'/'any[]' errors for x and r.
-    var m_f14 = function (x) {
+    var m_f14 = function m_f14(x) {
         var r = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             r[_i - 1] = arguments[_i];

@@ -6,7 +6,7 @@ function f({} = a, [] = a, { p: {} = a} = a) {
 }
 
 //// [declarationEmitBindingPatterns.js]
-var k = function (_a) {
+var k = function k(_a) {
     var _b = _a.x, z = _b === void 0 ? 'y' : _b;
 };
 var a;

@@ -27,7 +27,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var f = function (_) { return function () {
+var f = function f(_) { return function () {
     var _ = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         _[_i] = arguments[_i];

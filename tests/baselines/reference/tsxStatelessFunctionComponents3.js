@@ -25,10 +25,10 @@ define(["require", "exports", "react"], function (require, exports, React) {
     // Should be OK
     var foo = <Foo />;
     // Should be OK
-    var MainMenu = function (props) { return (<div>
+    var MainMenu = function MainMenu(props) { return (<div>
     <h3>Main Menu</h3>
     </div>); };
-    var App = function (_a) {
+    var App = function App(_a) {
         var children = _a.children;
         return (<div>
         <MainMenu />

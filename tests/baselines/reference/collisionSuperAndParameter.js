@@ -89,7 +89,7 @@ var Foo = /** @class */ (function () {
     };
     Foo.prototype.b = function (_super) {
         var _this = this;
-        var lambda = function () {
+        var lambda = function lambda() {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
@@ -119,7 +119,7 @@ var Foo2 = /** @class */ (function (_super_1) {
     };
     Foo2.prototype.y = function (_super) {
         var _this = this;
-        var lambda = function () {
+        var lambda = function lambda() {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
@@ -138,7 +138,7 @@ var Foo4 = /** @class */ (function (_super_1) {
     }
     Foo4.prototype.y = function (_super) {
         var _this = this;
-        var lambda = function () {
+        var lambda = function lambda() {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };

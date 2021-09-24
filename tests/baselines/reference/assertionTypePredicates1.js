@@ -213,7 +213,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var assert = function (value) { };
+var assert = function assert(value) { };
 function f01(x) {
     if (!!true) {
         assert(typeof x === "string");

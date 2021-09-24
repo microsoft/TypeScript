@@ -66,7 +66,7 @@ var E;
 })(E || (E = {}));
 // A contextual signature S is extracted from a function type T as follows:
 //      If T is a function type with exactly one call signature, and if that call signature is non- generic, S is that signature.
-var a0 = function (num, str) {
+var a0 = function a0(num, str) {
     num.toExponential();
     return 0;
 };
@@ -76,7 +76,7 @@ var Class = /** @class */ (function () {
     Class.prototype.foo = function () { };
     return Class;
 }());
-var a1 = function (a1) {
+var a1 = function a1(a1) {
     a1.foo();
     return 1;
 };
@@ -92,11 +92,11 @@ b2 = function (foo, bar) { return foo + 1; };
 b2 = function (foo, bar) { return "hello"; };
 var b3;
 b3 = function (name, number) { };
-var b4 = function (number) {
+var b4 = function b4(number) {
     if (number === void 0) { number = 1; }
     return "hello";
 };
-var b5 = function (number) {
+var b5 = function b5(number) {
     if (number === void 0) { number = "string"; }
     return "hello";
 };
@@ -112,7 +112,7 @@ b6 = function (i) {
 b7 = function (j, m) { }; // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
 var C = /** @class */ (function () {
     function C() {
-        var k = function (j, k) {
+        var k = function k(j, k) {
             return [j, k];
         }; // Per spec, no contextual signature can be extracted in this case.
     }

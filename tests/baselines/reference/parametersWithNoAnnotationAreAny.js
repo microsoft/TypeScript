@@ -32,7 +32,7 @@ var b = {
 //// [parametersWithNoAnnotationAreAny.js]
 function foo(x) { return x; }
 var f = function foo(x) { return x; };
-var f2 = function (x) { return x; };
+var f2 = function f2(x) { return x; };
 var f3 = function (x) { return x; };
 var C = /** @class */ (function () {
     function C() {

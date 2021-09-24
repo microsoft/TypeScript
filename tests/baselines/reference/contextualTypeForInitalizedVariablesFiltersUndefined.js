@@ -11,12 +11,12 @@ function fst({ s } = t) { }
 
 //// [contextualTypeForInitalizedVariablesFiltersUndefined.js]
 "use strict";
-var fInferred = function (_a) {
+var fInferred = function fInferred(_a) {
     var _b = _a === void 0 ? {} : _a, _c = _b.a, a = _c === void 0 ? 0 : _c;
     return a;
 };
 // const fInferred: ({ a }?: { a?: number; }) => number
-var fAnnotated = function (_a) {
+var fAnnotated = function fAnnotated(_a) {
     var _b = _a === void 0 ? {} : _a, _c = _b.a, a = _c === void 0 ? 0 : _c;
     return a;
 };

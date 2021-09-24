@@ -11,5 +11,5 @@ var a;
 (function (a) {
     a.b = 10;
 })(a || (a = {}));
-var f = function () { return _this_1; };
+var f = function f() { return _this_1; };
 var _this = a; // Error

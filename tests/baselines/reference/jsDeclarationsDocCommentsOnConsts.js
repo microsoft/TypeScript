@@ -19,7 +19,7 @@ module.exports = {x, b}
 /**
  * const doc comment
  */
-var x = function (a) {
+var x = function x(a) {
     return '';
 };
 /**

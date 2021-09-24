@@ -39,7 +39,7 @@ function hof2(f) {
 }
 var whatevs = 1001;
 var ques = 'what';
-var g = function (n, m) { return n + m; };
+var g = function g(n, m) { return n + m; };
 var most = 'definite';
 var postfixdef = 101;
 var postfixopt = undefined;

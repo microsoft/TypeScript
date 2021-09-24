@@ -164,7 +164,7 @@ var C = /** @class */ (function () {
         }
         this.inMultiple = "string";
         this.inMultipleMethods = "string";
-        var action = function () {
+        var action = function action() {
             if (Math.random()) {
                 _this.inNestedArrowFunction = 0;
             }
@@ -199,7 +199,7 @@ var C = /** @class */ (function () {
         else {
             this.inStaticMethod = "string";
         }
-        var action = function () {
+        var action = function action() {
             if (Math.random()) {
                 _this.inStaticNestedArrowFunction = 0;
             }

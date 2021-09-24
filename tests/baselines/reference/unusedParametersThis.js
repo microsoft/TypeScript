@@ -45,12 +45,12 @@ var A = /** @class */ (function () {
     };
     A.prototype.method3 = function () {
         var _this = this;
-        var fn = function () { return _this.a; };
+        var fn = function fn() { return _this.a; };
         return fn();
     };
     A.prototype.method4 = function () {
         var _this = this;
-        var fn = function () { return _this.a; };
+        var fn = function fn() { return _this.a; };
         return fn();
     };
     A.staticMethod = function () {

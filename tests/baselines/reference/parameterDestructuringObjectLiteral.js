@@ -12,7 +12,7 @@ fn2({ headers: { foo: 1 } });
 // Repro from #22644
 var fn1 = function (options) { };
 fn1({ headers: { foo: 1 } });
-var fn2 = function (_a) {
+var fn2 = function fn2(_a) {
     var _b = _a.headers, headers = _b === void 0 ? {} : _b;
 };
 fn2({ headers: { foo: 1 } });

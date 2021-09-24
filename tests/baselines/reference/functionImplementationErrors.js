@@ -98,7 +98,7 @@ var f2 = function x() {
     return '';
     return 3;
 };
-var f3 = function () {
+var f3 = function f3() {
     return '';
     return 3;
 };
@@ -162,7 +162,7 @@ var f9 = function () {
     return new Derived1();
     return new Derived2();
 };
-var f10 = function () {
+var f10 = function f10() {
     return new Derived1();
     return new Derived2();
 };
@@ -174,7 +174,7 @@ var f12 = function () {
     return new Base();
     return new AnotherClass();
 };
-var f13 = function () {
+var f13 = function f13() {
     return new Base();
     return new AnotherClass();
 };

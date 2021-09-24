@@ -75,7 +75,7 @@ module m {
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
-var f1 = function () { };
+var f1 = function f1() { };
 var f2 = function (x, y) { };
 var f3 = function (x, y) {
     var rest = [];
@@ -89,13 +89,13 @@ var f4 = function (x, y) {
         rest[_i - 2] = arguments[_i];
     }
 };
-var f5 = function () {
+var f5 = function f5() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 };
-var f6 = function () {
+var f6 = function f6() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
@@ -118,7 +118,7 @@ var f12 = function (a) { return a; };
 // Should be valid.
 var f13 = function (a) { return a; };
 // Should be valid.
-var f14 = function () { };
+var f14 = function f14() { };
 // Should be valid.
 var f15 = function (a) { return a; };
 // Should be valid.
@@ -142,5 +142,5 @@ var m;
     (function (Enum) {
         Enum[Enum["claw"] = (function () { return 10; })()] = "claw";
     })(Enum = m.Enum || (m.Enum = {}));
-    m.v = function (x) { return new City(Enum.claw); };
+    m.v = function v(x) { return new City(Enum.claw); };
 })(m || (m = {}));

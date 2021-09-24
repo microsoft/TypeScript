@@ -121,7 +121,7 @@ var AbstractClass = /** @class */ (function () {
         }
         this.cb(str);
         // OK, reference is inside function
-        var innerFunction = function () {
+        var innerFunction = function innerFunction() {
             return _this.prop;
         };
         // OK, references are to another instance

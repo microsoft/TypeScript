@@ -20,7 +20,7 @@ var res = x('a', 'b')
 exports.__esModule = true;
 exports.x = void 0;
 /** @type {Foo} */
-var x = function () { return 1; };
+var x = function x() { return 1; };
 exports.x = x;
 var res = (0, exports.x)('a', 'b');
 

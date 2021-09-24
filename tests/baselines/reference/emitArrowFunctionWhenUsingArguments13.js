@@ -7,5 +7,5 @@ function f() {
 //// [emitArrowFunctionWhenUsingArguments13.js]
 function f() {
     var _arguments = 10;
-    var a = function (arguments) { return function () { return _arguments; }; };
+    var a = function a(arguments) { return function () { return _arguments; }; };
 }

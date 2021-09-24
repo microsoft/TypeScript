@@ -107,9 +107,9 @@ var B = /** @class */ (function () {
     }
     B.prototype.foo = function () {
         var _this = this;
-        var a = function () {
+        var a = function a() {
             var _loop_6 = function (x) {
-                var f = function () { return x; };
+                var f = function f() { return x; };
                 _this.bar(f());
             };
             for (var _i = 0, _a = [0]; _i < _a.length; _i++) {

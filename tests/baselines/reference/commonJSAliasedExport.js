@@ -18,7 +18,7 @@ var diddy = funky(1)
 
 
 //// [commonJSAliasedExport.js]
-var donkey = function (ast) { return ast; };
+var donkey = function donkey(ast) { return ast; };
 function funky(declaration) {
     return false;
 }

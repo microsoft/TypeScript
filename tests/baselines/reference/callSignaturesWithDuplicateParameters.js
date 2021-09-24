@@ -43,7 +43,7 @@ var b = {
 function foo(x, x) { }
 var f = function foo(x, x) { };
 var f2 = function (x, x) { };
-var f3 = function (x, x) { };
+var f3 = function f3(x, x) { };
 var f4 = function (x, x) { };
 function foo2(x, x) { }
 var f5 = function foo(x, x) { };

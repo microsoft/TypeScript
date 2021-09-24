@@ -71,7 +71,7 @@ var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         var _this = this;
-        var r2 = function () { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
+        var r2 = function r2() { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
         return _this;
     }
     return Derived2;

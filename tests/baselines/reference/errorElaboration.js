@@ -34,7 +34,7 @@ function test() {
 }
 // Repro for #32358
 var foo = { bar: 'a' };
-var x = function (_a) {
+var x = function x(_a) {
     var _b = foo.bar, c = _a[_b];
     return undefined;
 };

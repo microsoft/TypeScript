@@ -12,7 +12,7 @@ if (isNumber((otherValue(), value))) {
 }
 
 //// [controlFlowCommaExpressionFunctionCall.js]
-var otherValue = function () { return true; };
+var otherValue = function otherValue() { return true; };
 var value = null;
 function isNumber(obj) {
     return true; // method implementation irrelevant

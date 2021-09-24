@@ -262,7 +262,7 @@ function notNotEquals(u: unknown)  {
 
 //// [unknownType2.js]
 "use strict";
-var validate = function (x) { return (x === 'yes' || x === 'no') ? x : 'idk'; }; // No error
+var validate = function validate(x) { return (x === 'yes' || x === 'no') ? x : 'idk'; }; // No error
 var u = undefined;
 if (u === 5) {
     var y = u.toString(10);

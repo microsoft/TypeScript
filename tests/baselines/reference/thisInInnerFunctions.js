@@ -26,14 +26,14 @@ var Foo = /** @class */ (function () {
         function inner() {
             var _this = this;
             this.y = "hi"; // 'this' should be not type to 'Foo' either
-            var f = function () { return _this.y; }; // 'this' should be not type to 'Foo' either
+            var f = function f() { return _this.y; }; // 'this' should be not type to 'Foo' either
         }
     };
     return Foo;
 }());
 function test() {
     var _this = this;
-    var x = function () {
+    var x = function x() {
         (function () { return _this; })();
         _this;
     };

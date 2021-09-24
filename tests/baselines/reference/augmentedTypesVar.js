@@ -44,7 +44,7 @@ var x1 = 2;
 var x2 = 1; // error
 function x2() { } // error
 var x3 = 1;
-var x3 = function () { }; // error
+var x3 = function x3() { }; // error
 // var then class
 var x4 = 1; // error
 var x4 = /** @class */ (function () {

@@ -96,7 +96,7 @@ const t2 = testSet.transform(
 
 
 //// [inferFromGenericFunctionReturnTypes2.js]
-var f1 = function (s) { return s.length; };
+var f1 = function f1(s) { return s.length; };
 var f2 = wrap(function (s) { return s.length; });
 var f3 = arrayize(wrap(function (s) { return s.length; }));
 var f4 = combine(wrap(function (s) { return s.length; }), wrap(function (n) { return n >= 10; }));

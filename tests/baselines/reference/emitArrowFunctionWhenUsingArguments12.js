@@ -10,7 +10,7 @@ var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function (arguments) {
-        var a = function () { return arguments; };
+        var a = function a() { return arguments; };
     };
     return C;
 }());

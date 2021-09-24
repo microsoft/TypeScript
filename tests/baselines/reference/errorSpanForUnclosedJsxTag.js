@@ -15,7 +15,7 @@ let y = <   Baz >Hello
 var Foo = {
     Bar: function () { }
 };
-var Baz = function () { };
+var Baz = function Baz() { };
 var x = React.createElement(Foo.Bar, null,
     "Hello let y = ",
     React.createElement(Baz, null, "Hello"));

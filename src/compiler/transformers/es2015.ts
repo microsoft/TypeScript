@@ -424,7 +424,11 @@ namespace ts {
                     return visitFunctionDeclaration(node as FunctionDeclaration);
 
                 case SyntaxKind.ArrowFunction:
-                    return visitArrowFunction(node as ArrowFunction);
+                    let name: string | undefined = undefined;
+                    if (node.parent && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name)) {
+                        name = `${node.parent.name.escapedText}`;
+                    }
+                    return visitArrowFunction(node as ArrowFunction, name);
 
                 case SyntaxKind.FunctionExpression:
                     return visitFunctionExpression(node as FunctionExpression);
@@ -1771,7 +1775,7 @@ namespace ts {
          *
          * @param node An ArrowFunction node.
          */
-        function visitArrowFunction(node: ArrowFunction) {
+        function visitArrowFunction(node: ArrowFunction, name?: string) {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis && !(hierarchyFacts & HierarchyFacts.StaticInitializer)) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
@@ -1782,7 +1786,7 @@ namespace ts {
             const func = factory.createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                /*name*/ undefined,
+                /*name*/ name,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,

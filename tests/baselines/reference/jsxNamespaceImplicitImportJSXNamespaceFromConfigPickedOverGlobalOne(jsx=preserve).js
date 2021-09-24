@@ -68,5 +68,5 @@ export const Comp = () => <div css="color: hotpink;"></div>;
 "use strict";
 exports.__esModule = true;
 exports.Comp = void 0;
-var Comp = function () { return <div css="color: hotpink;"></div>; };
+var Comp = function Comp() { return <div css="color: hotpink;"></div>; };
 exports.Comp = Comp;

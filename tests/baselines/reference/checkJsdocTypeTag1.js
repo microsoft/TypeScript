@@ -54,16 +54,16 @@ anyT = "hello";
 var anyT1 = 2;
 anyT1 = "hi";
 /** @type {Function} */
-var x = function (a) { return a + 1; };
+var x = function x(a) { return a + 1; };
 x(1);
 /** @type {function} */
-var y = function (a) { return a + 1; };
+var y = function y(a) { return a + 1; };
 y(1);
 /** @type {function (number)} */
-var x1 = function (a) { return a + 1; };
+var x1 = function x1(a) { return a + 1; };
 x1(0);
 /** @type {function (number): number} */
-var x2 = function (a) { return a + 1; };
+var x2 = function x2(a) { return a + 1; };
 x2(0);
 /**
  * @type {object}

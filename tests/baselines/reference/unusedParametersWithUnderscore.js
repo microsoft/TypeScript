@@ -45,5 +45,5 @@ function f5() {
 }
 function f6(arg, _arg) {
 }
-var f7 = function (_) { return undefined; };
+var f7 = function f7(_) { return undefined; };
 var f8 = function (_) { };

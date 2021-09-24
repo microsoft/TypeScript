@@ -98,7 +98,7 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     return cooked;
 };
 // es2015
-var noOp = function () { };
+var noOp = function noOp() { };
 var testReflectApply = Reflect.apply(noOp, this, []);
 var testReflectConstruct = Reflect.construct(noOp, []);
 var testReflectDefineProperty = Reflect.defineProperty({}, "", {});

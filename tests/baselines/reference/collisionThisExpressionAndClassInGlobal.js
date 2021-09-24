@@ -10,4 +10,4 @@ var _this = /** @class */ (function () {
     }
     return _this;
 }());
-var f = function () { return _this_1; };
+var f = function f() { return _this_1; };

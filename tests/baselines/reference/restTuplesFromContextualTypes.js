@@ -327,10 +327,10 @@ take(function () {
         rest[_i] = arguments[_i];
     }
 });
-var funcUnionTupleNoRest = function (num, strOrErr) {
+var funcUnionTupleNoRest = function funcUnionTupleNoRest(num, strOrErr) {
     return num;
 };
-var funcUnionTupleRest = function () {
+var funcUnionTupleRest = function funcUnionTupleRest() {
     var params = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         params[_i] = arguments[_i];

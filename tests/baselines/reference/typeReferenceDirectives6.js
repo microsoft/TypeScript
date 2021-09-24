@@ -22,7 +22,7 @@ let y = () => x
 /// <reference path="./ref.d.ts"/>
 /// <reference types="lib"/>
 var x;
-var y = function () { return x; };
+var y = function y() { return x; };
 
 
 //// [app.d.ts]

@@ -26,7 +26,7 @@ var Foo = /** @class */ (function () {
     Foo.prototype.bar = function () {
         var _this = this;
         this.x; // 'this' is type 'Foo'
-        var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well
+        var f = function f() { return _this.x; }; // 'this' should be type 'Foo' as well
     };
     return Foo;
 }());

@@ -70,8 +70,8 @@ var __extends = (this && this.__extends) || (function () {
 function foo() {
     // super in a non class context
     var x = _super.;
-    var y = function () { return _super.; };
-    var z = function () { return function () { return function () { return _super.; }; }; };
+    var y = function y() { return _super.; };
+    var z = function z() { return function () { return function () { return _super.; }; }; };
 }
 var User = /** @class */ (function () {
     function User() {
@@ -94,7 +94,7 @@ var RegisteredUser = /** @class */ (function (_super) {
         // super call in a lambda in an inner function in a constructor 
         function inner2() {
             var _this = this;
-            var x = function () { return _super.sayHello.call(_this); };
+            var x = function x() { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
@@ -106,7 +106,7 @@ var RegisteredUser = /** @class */ (function (_super) {
         // super call in a lambda in an inner function in a method
         function inner() {
             var _this = this;
-            var x = function () { return _super.sayHello.call(_this); };
+            var x = function x() { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
@@ -114,8 +114,8 @@ var RegisteredUser = /** @class */ (function (_super) {
     RegisteredUser.staticFunction = function () {
         // super in static functions
         var s = _super.;
-        var x = function () { return _super.; };
-        var y = function () { return function () { return function () { return _super.; }; }; };
+        var x = function x() { return _super.; };
+        var y = function y() { return function () { return function () { return _super.; }; }; };
     };
     return RegisteredUser;
 }(User));

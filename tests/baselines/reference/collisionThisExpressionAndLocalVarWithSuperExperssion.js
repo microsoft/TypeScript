@@ -49,7 +49,7 @@ var b = /** @class */ (function (_super) {
     b.prototype.foo = function () {
         var _this_1 = this;
         var _this = 10;
-        var f = function () { return _super.prototype.foo.call(_this_1); };
+        var f = function f() { return _super.prototype.foo.call(_this_1); };
     };
     return b;
 }(a));
@@ -60,7 +60,7 @@ var b2 = /** @class */ (function (_super) {
     }
     b2.prototype.foo = function () {
         var _this_1 = this;
-        var f = function () {
+        var f = function f() {
             var _this = 10;
             return _super.prototype.foo.call(_this_1);
         };

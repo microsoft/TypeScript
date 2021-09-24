@@ -27,7 +27,7 @@ const O = {
 //// [invalidNewTarget.es5.js]
 var _a;
 var a = _newTarget;
-var b = function () { return _newTarget; };
+var b = function b() { return _newTarget; };
 var C = /** @class */ (function () {
     function C() {
         var _newTarget = this.constructor;

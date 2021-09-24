@@ -93,13 +93,13 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
 //// [blockScopedBindingsReassignedInLoop3.js]
 var _loop_1 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_1 = x, out_y_1 = y, "break";
     }
     else {
         var _loop_5 = function (a_1) {
-            var f = function () { return a_1; };
+            var f = function f() { return a_1; };
             if (a_1) {
                 a_1 = x;
                 return out_a_1 = a_1, "break";
@@ -130,13 +130,13 @@ for (var x = 1, y = 2; x < y; ++x, --y) {
         break;
 }
 var _loop_2 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_2 = x, out_y_2 = y, "continue";
     }
     else {
         var _loop_6 = function (a_2) {
-            var f = function () { return a_2; };
+            var f = function f() { return a_2; };
             if (a_2) {
                 a_2 = x;
                 return out_a_2 = a_2, "continue";
@@ -163,13 +163,13 @@ for (var x = 1, y = 2; x < y; ++x, --y) {
     y = out_y_2;
 }
 var _loop_3 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_3 = x, out_y_3 = y, "break-loop2";
     }
     else {
         var _loop_7 = function (a_3) {
-            var f = function () { return a_3; };
+            var f = function f() { return a_3; };
             if (a_3) {
                 a_3 = x;
                 return out_a_3 = a_3, "break-loop1";
@@ -204,13 +204,13 @@ loop2: for (var x = 1, y = 2; x < y; ++x, --y) {
     }
 }
 var _loop_4 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_4 = x, out_y_4 = y, "continue-loop2";
     }
     else {
         var _loop_8 = function (a_4) {
-            var f = function () { return a_4; };
+            var f = function f() { return a_4; };
             if (a_4) {
                 a_4 = x;
                 return out_a_4 = a_4, "continue-loop1";

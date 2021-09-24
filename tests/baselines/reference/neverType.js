@@ -164,7 +164,7 @@ function test(cb) {
     var s = cb();
     return s;
 }
-var errorCallback = function () { return error("Error callback"); };
+var errorCallback = function errorCallback() { return error("Error callback"); };
 test(function () { return "hello"; });
 test(function () { return fail(); });
 test(function () { throw new Error(); });

@@ -298,11 +298,11 @@ reconstructed.explicitProperty(11);
 var explicitVoid = reconstructed.explicitVoid;
 explicitVoid(12);
 // assignment checking
-var unboundToSpecified = function (x) { return x + _this.y; }; // ok, this:any
+var unboundToSpecified = function unboundToSpecified(x) { return x + _this.y; }; // ok, this:any
 var specifiedToSpecified = explicitStructural;
 var anyToSpecified = function (x) { return x + 12; };
-var unspecifiedLambda = function (x) { return x + 12; };
-var specifiedLambda = function (x) { return x + 12; };
+var unspecifiedLambda = function unspecifiedLambda(x) { return x + 12; };
+var specifiedLambda = function specifiedLambda(x) { return x + 12; };
 var unspecifiedLambdaToSpecified = unspecifiedLambda;
 var specifiedLambdaToSpecified = specifiedLambda;
 var explicitCFunction;

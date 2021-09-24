@@ -43,7 +43,7 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
 //// [blockScopedBindingsReassignedInLoop2.js]
 var _loop_1 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_1 = x, out_y_1 = y, "break";
     }
@@ -62,7 +62,7 @@ for (var x = 1, y = 2; x < y; ++x, --y) {
         break;
 }
 var _loop_2 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_2 = x, out_y_2 = y, "continue";
     }
@@ -79,7 +79,7 @@ for (var x = 1, y = 2; x < y; ++x, --y) {
     y = out_y_2;
 }
 var _loop_3 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_3 = x, out_y_3 = y, "break-loop";
     }
@@ -99,7 +99,7 @@ loop: for (var x = 1, y = 2; x < y; ++x, --y) {
     }
 }
 var _loop_4 = function (x, y) {
-    var a = function () { return x++ + y++; };
+    var a = function a() { return x++ + y++; };
     if (x == 1) {
         return out_x_4 = x, out_y_4 = y, "continue-loop";
     }

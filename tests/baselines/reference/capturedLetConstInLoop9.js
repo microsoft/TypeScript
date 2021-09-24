@@ -278,7 +278,7 @@ var C = /** @class */ (function () {
     C.prototype.foo = function () {
         var _this = this;
         var _loop_5 = function (i) {
-            var f = function () { return _this.N * i; };
+            var f = function f() { return _this.N * i; };
         };
         for (var i = 0; i < 100; i++) {
             _loop_5(i);

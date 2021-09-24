@@ -17,7 +17,7 @@ var TestFile = /** @class */ (function () {
         /// <summary>Test summary</summary>
         /// <param name="message" type="String" />
         var _this = this;
-        var getMessage = function () { return message + _this.name; };
+        var getMessage = function getMessage() { return message + _this.name; };
         this.message = getMessage();
     }
     return TestFile;

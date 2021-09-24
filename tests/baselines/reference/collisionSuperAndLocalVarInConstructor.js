@@ -56,7 +56,7 @@ var c = /** @class */ (function (_super_1) {
     __extends(c, _super_1);
     function c() {
         var _this = _super_1.call(this) || this;
-        var x = function () {
+        var x = function x() {
             var _super = 10; // Should be error
         };
         return _this;

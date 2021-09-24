@@ -92,7 +92,7 @@ var B = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var f, a, b;
             return __generator(this, function (_a) {
-                f = function () { };
+                f = function f() { };
                 // call with property access
                 _super.prototype.x.call(this);
                 // call with element access

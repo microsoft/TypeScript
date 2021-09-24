@@ -98,7 +98,7 @@ var fexp = function (a) {
 };
 fexp(0);
 // arrow function paramter
-var farrow = function (a) {
+var farrow = function farrow(a) {
 };
 var C = /** @class */ (function () {
     function C() {

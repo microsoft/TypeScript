@@ -53,7 +53,7 @@ var o = {
         var _this = this;
         window.onmousemove = function () {
             _this.counter++;
-            var f = function () { return _this.counter; };
+            var f = function f() { return _this.counter; };
         };
     }
 };
@@ -63,9 +63,9 @@ var X = /** @class */ (function () {
     }
     X.prototype.foo = function () {
         var _this = this;
-        var outer = function () {
+        var outer = function outer() {
             var x = _this.value;
-            var inner = function () {
+            var inner = function inner() {
                 var y = _this.value;
             };
             inner();

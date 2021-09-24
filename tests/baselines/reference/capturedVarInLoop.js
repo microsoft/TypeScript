@@ -8,8 +8,8 @@ for (var i = 0; i < 10; i++) {
 //// [capturedVarInLoop.js]
 var _loop_1 = function () {
     str = 'x', len = str.length;
-    var lambda1 = function (y) { };
-    var lambda2 = function () { return lambda1(len); };
+    var lambda1 = function lambda1(y) { };
+    var lambda2 = function lambda2() { return lambda1(len); };
 };
 var str, len;
 for (var i = 0; i < 10; i++) {

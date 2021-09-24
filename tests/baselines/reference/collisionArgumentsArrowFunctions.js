@@ -34,13 +34,13 @@ var f12 = function (arguments) {
 var f1NoError = function (arguments) {
     var arguments = 10; // no error
 };
-var f2 = function () {
+var f2 = function f2() {
     var restParameters = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         restParameters[_i] = arguments[_i];
     }
     var arguments = 10; // No Error
 };
-var f2NoError = function () {
+var f2NoError = function f2NoError() {
     var arguments = 10; // no error
 };

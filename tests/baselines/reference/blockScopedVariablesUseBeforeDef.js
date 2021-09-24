@@ -110,7 +110,7 @@ function foo0() {
     var x;
 }
 function foo1() {
-    var a = function () { return x; };
+    var a = function a() { return x; };
     var x;
 }
 function foo2() {
@@ -136,8 +136,8 @@ function foo4() {
     var x;
 }
 function foo5() {
-    var x = function () { return y; };
-    var y = function () { return x; };
+    var x = function x() { return y; };
+    var y = function y() { return x; };
 }
 function foo6() {
     function f() {

@@ -43,7 +43,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
 var foo = "bar";
 var _o = { bar: "bar" }, _p = foo, bar = _o[_p];
 var bar2 = { bar: "bar" }["bar"];
-var foo2 = function () { return "bar"; };
+var foo2 = function foo2() { return "bar"; };
 var _q = { bar: "bar" }, _r = foo2(), bar3 = _q[_r];
 var _s = [{ bar: "bar" }], _t = foo, bar4 = _s[0][_t];
 var _u = [{ bar: "bar" }], _v = foo2(), bar5 = _u[0][_v];

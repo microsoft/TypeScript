@@ -59,7 +59,7 @@ var c = /** @class */ (function (_super_1) {
         return _super_1 !== null && _super_1.apply(this, arguments) || this;
     }
     c.prototype.foo = function () {
-        var x = function () {
+        var x = function x() {
             var _super = 10; // Should be error
         };
     };

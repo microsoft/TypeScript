@@ -14,7 +14,7 @@ function f1() {
 //// [blockScopedBindingsReassignedInLoop4.js]
 function f1() {
     var _loop_1 = function (x, y) {
-        var a = function () { return x++ + y++; };
+        var a = function a() { return x++ + y++; };
         if (x == 1) {
             return { value: 1 };
         }

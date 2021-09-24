@@ -390,10 +390,10 @@ var Derived2 = /** @class */ (function (_super) {
     return Derived2;
 }(Base));
 var b = new Base(), d1 = new Derived1(), d2 = new Derived2();
-var x1 = function () { return [d1, d2]; };
+var x1 = function x1() { return [d1, d2]; };
 var x2 = function () { return [d1, d2]; };
 var x3 = function named() { return [d1, d2]; };
-var x4 = function () { return [d1, d2]; };
+var x4 = function x4() { return [d1, d2]; };
 var x5 = function () { return [d1, d2]; };
 var x6 = function named() { return [d1, d2]; };
 var x7 = [d1, d2];
@@ -1134,18 +1134,18 @@ function x153() { return [d1, d2]; return [d1, d2]; }
 function x154() { return { n: [d1, d2] }; return { n: [d1, d2] }; }
 function x155() { return function (n) { var n; return null; }; return function (n) { var n; return null; }; }
 function x156() { return { func: function (n) { return [d1, d2]; } }; return { func: function (n) { return [d1, d2]; } }; }
-var x157 = function () { return function () { return [d1, d2]; }; };
-var x158 = function () { return function () { return [d1, d2]; }; };
-var x159 = function () { return function named() { return [d1, d2]; }; };
-var x160 = function () { return function () { return [d1, d2]; }; };
-var x161 = function () { return function () { return [d1, d2]; }; };
-var x162 = function () { return function named() { return [d1, d2]; }; };
-var x163 = function () { return [d1, d2]; };
-var x164 = function () { return [d1, d2]; };
-var x165 = function () { return [d1, d2]; };
-var x166 = function () { return { n: [d1, d2] }; };
+var x157 = function x157() { return function () { return [d1, d2]; }; };
+var x158 = function x158() { return function () { return [d1, d2]; }; };
+var x159 = function x159() { return function named() { return [d1, d2]; }; };
+var x160 = function x160() { return function () { return [d1, d2]; }; };
+var x161 = function x161() { return function () { return [d1, d2]; }; };
+var x162 = function x162() { return function named() { return [d1, d2]; }; };
+var x163 = function x163() { return [d1, d2]; };
+var x164 = function x164() { return [d1, d2]; };
+var x165 = function x165() { return [d1, d2]; };
+var x166 = function x166() { return { n: [d1, d2] }; };
 var x167 = function () { return function (n) { var n; return null; }; };
-var x168 = function () { return { func: function (n) { return [d1, d2]; } }; };
+var x168 = function x168() { return { func: function (n) { return [d1, d2]; } }; };
 var x169 = function () { return function () { return [d1, d2]; }; };
 var x170 = function () { return function () { return [d1, d2]; }; };
 var x171 = function () { return function named() { return [d1, d2]; }; };
@@ -1160,7 +1160,7 @@ var x179 = function () { return function (n) { var n; return null; }; };
 var x180 = function () { return { func: function (n) { return [d1, d2]; } }; };
 var x181;
 (function (x181) {
-    var t = function () { return [d1, d2]; };
+    var t = function t() { return [d1, d2]; };
 })(x181 || (x181 = {}));
 var x182;
 (function (x182) {
@@ -1172,7 +1172,7 @@ var x183;
 })(x183 || (x183 = {}));
 var x184;
 (function (x184) {
-    var t = function () { return [d1, d2]; };
+    var t = function t() { return [d1, d2]; };
 })(x184 || (x184 = {}));
 var x185;
 (function (x185) {
@@ -1208,7 +1208,7 @@ var x192;
 })(x192 || (x192 = {}));
 var x193;
 (function (x193) {
-    x193.t = function () { return [d1, d2]; };
+    x193.t = function t() { return [d1, d2]; };
 })(x193 || (x193 = {}));
 var x194;
 (function (x194) {
@@ -1220,7 +1220,7 @@ var x195;
 })(x195 || (x195 = {}));
 var x196;
 (function (x196) {
-    x196.t = function () { return [d1, d2]; };
+    x196.t = function t() { return [d1, d2]; };
 })(x196 || (x196 = {}));
 var x197;
 (function (x197) {

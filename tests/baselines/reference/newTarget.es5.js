@@ -56,7 +56,7 @@ var A = /** @class */ (function () {
             return _newTarget;
         };
         var a = _newTarget;
-        var b = function () { return _newTarget; };
+        var b = function b() { return _newTarget; };
     }
     A.c = function _a() {
         var _newTarget = this && this instanceof _a ? this.constructor : void 0;
@@ -70,7 +70,7 @@ var B = /** @class */ (function (_super) {
         var _newTarget = this.constructor;
         var _this = _super.call(this) || this;
         var e = _newTarget;
-        var f = function () { return _newTarget; };
+        var f = function f() { return _newTarget; };
         return _this;
     }
     return B;
@@ -78,12 +78,12 @@ var B = /** @class */ (function (_super) {
 function f1() {
     var _newTarget = this && this instanceof f1 ? this.constructor : void 0;
     var g = _newTarget;
-    var h = function () { return _newTarget; };
+    var h = function h() { return _newTarget; };
 }
 var f2 = function f2() {
     var _newTarget = this && this instanceof f2 ? this.constructor : void 0;
     var i = _newTarget;
-    var j = function () { return _newTarget; };
+    var j = function j() { return _newTarget; };
 };
 var O = {
     k: function k() {

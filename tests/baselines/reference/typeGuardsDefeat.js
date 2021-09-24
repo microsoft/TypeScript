@@ -69,7 +69,7 @@ function foo3(x) {
         return x.length; // string
     }
     else {
-        var f = function () { return x * x; };
+        var f = function f() { return x * x; };
     }
     x = "hello";
     f();

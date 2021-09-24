@@ -12,7 +12,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 //// [reverseMappedTypeContextualTypeNotCircular.js]
-var editable = function () { return ({}); };
+var editable = function editable() { return ({}); };
 var mapStateToProps = createStructuredSelector({
     editable: function (state, props) { return editable(); }
 });

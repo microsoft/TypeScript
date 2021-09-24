@@ -129,7 +129,7 @@ function f2() {
 }
 function f3() {
     var x;
-    var g = function () {
+    var g = function g() {
         x = 1;
     };
     g();

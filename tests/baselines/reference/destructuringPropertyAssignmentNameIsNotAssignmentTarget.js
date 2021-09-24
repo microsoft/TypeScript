@@ -13,5 +13,5 @@ function qux(bar: { value: number }) {
 function qux(bar) {
     var foo;
     (foo = bar.value);
-    var x = function () { return bar; };
+    var x = function x() { return bar; };
 }

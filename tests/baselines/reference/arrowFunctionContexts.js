@@ -114,7 +114,7 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 // Arrow function used in with statement
 with (window) {
-    var p = function () { return _this; };
+    var p = function p() { return _this; };
 }
 // Arrow function as argument to super call
 var Base = /** @class */ (function () {
@@ -147,8 +147,8 @@ var E;
 // Arrow function as module variable initializer
 var M;
 (function (M) {
-    M.a = function (s) { return ''; };
-    var b = function (s) { return s; };
+    M.a = function a(s) { return ''; };
+    var b = function b(s) { return s; };
 })(M || (M = {}));
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
@@ -156,7 +156,7 @@ var M2;
     var _this = this;
     // Arrow function used in with statement
     with (window) {
-        var p = function () { return _this; };
+        var p = function p() { return _this; };
     }
     // Arrow function as argument to super call
     var Base = /** @class */ (function () {
@@ -189,8 +189,8 @@ var M2;
     // Arrow function as module variable initializer
     var M;
     (function (M) {
-        M.a = function (s) { return ''; };
-        var b = function (s) { return s; };
+        M.a = function a(s) { return ''; };
+        var b = function b(s) { return s; };
     })(M || (M = {}));
 })(M2 || (M2 = {}));
 // <Identifier>(ParamList) => { ... } is a generic arrow function
