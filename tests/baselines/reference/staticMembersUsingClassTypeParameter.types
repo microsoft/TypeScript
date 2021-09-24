@@ -4,31 +4,31 @@ class C<T> {
 >C : C<T>
 
     static x: T;
->x : any
+>x : T
 
     static f(x: T) {}
->f : (x: any) => void
->x : any
+>f : (x: T) => void
+>x : T
 }
 
 class C2<T, U> {
 >C2 : C2<T, U>
 
     static x: U;
->x : any
+>x : U
 
     static f(x: U) { }
->f : (x: any) => void
->x : any
+>f : (x: U) => void
+>x : U
 }
 
 class C3<T extends Date> {
 >C3 : C3<T>
 
     static x: T;
->x : any
+>x : T
 
     static f(x: T) { }
->f : (x: any) => void
->x : any
+>f : (x: T) => void
+>x : T
 }

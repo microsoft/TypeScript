@@ -356,18 +356,6 @@ namespace FourSlashInterface {
             this.state.verifyBaselineGetFileReferences(fileName);
         }
 
-        public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(starts, parts);
-        }
-
-        public noReferences(markerNameOrRange?: string | FourSlash.Range) {
-            this.state.verifyNoReferences(markerNameOrRange);
-        }
-
-        public getReferencesForServerTest(expected: readonly ts.ReferenceEntry[]) {
-            this.state.verifyGetReferencesForServerTest(expected);
-        }
-
         public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
             this.state.verifySingleReferenceGroup(definition, ranges);
         }
@@ -1061,6 +1049,8 @@ namespace FourSlashInterface {
             interfaceEntry("NumberConstructor"),
             interfaceEntry("TemplateStringsArray"),
             interfaceEntry("ImportMeta"),
+            interfaceEntry("ImportCallOptions"),
+            interfaceEntry("ImportAssertions"),
             varEntry("Math"),
             varEntry("Date"),
             interfaceEntry("DateConstructor"),
@@ -1095,6 +1085,7 @@ namespace FourSlashInterface {
             typeEntry("PromiseConstructorLike"),
             interfaceEntry("PromiseLike"),
             interfaceEntry("Promise"),
+            typeEntry("Awaited"),
             interfaceEntry("ArrayLike"),
             typeEntry("Partial"),
             typeEntry("Required"),
@@ -1292,6 +1283,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",
@@ -1495,6 +1487,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",

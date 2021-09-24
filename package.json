@@ -84,7 +84,7 @@
         "mkdirp": "latest",
         "mocha": "latest",
         "mocha-fivemat-progress-reporter": "latest",
-        "ms": "latest",
+        "ms": "^2.1.3",
         "node-fetch": "^2.6.1",
         "plugin-error": "latest",
         "pretty-hrtime": "^1.0.3",

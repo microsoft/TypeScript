@@ -924,11 +924,11 @@
         "category": "Error",
         "code": 1323
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Dynamic imports only support a second argument when the '--module' option is set to 'esnext'.": {
         "category": "Error",
         "code": 1324
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Argument of dynamic import cannot be spread element.": {
         "category": "Error",
         "code": 1325
     },
@@ -1371,6 +1371,26 @@
     "Module declaration names may only use ' or \" quoted strings.": {
         "category": "Error",
         "code": 1443
+    },
+    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1444
+    },
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
+        "category": "Error",
+        "code": 1446
+    },
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 1448
+    },
+    "Preserve unused imported values in the JavaScript output that would otherwise be removed.": {
+        "category": "Message",
+        "code": 1449
+    },
+    "Dynamic imports can only accept a module specifier and an optional assertion as arguments": {
+        "category": "Message",
+        "code": 1450
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3284,6 +3304,18 @@
         "category": "Error",
         "code": 2819
     },
+    "Type '{0}' is not assignable to type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2820
+    },
+    "Import assertions are only supported when the '--module' option is set to 'esnext'.": {
+        "category": "Error",
+        "code": 2821
+    },
+    "Import assertions cannot be used with type-only imports or exports.": {
+        "category": "Error",
+        "code": 2822
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3689,7 +3721,26 @@
         "category": "Error",
         "code": 4118
     },
-
+    "This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4119
+    },
+    "This parameter property must have a JSDoc comment with an '@override' tag because it overrides a member in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4120
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because its containing class '{0}' does not extend another class.": {
+        "category": "Error",
+        "code": 4121
+    },
+    "This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class '{0}'.": {
+        "category": "Error",
+        "code": 4122
+    },
+    "This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 4123
+    },
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3910,6 +3961,10 @@
         "category": "Error",
         "code": 5094
     },
+    "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
+        "category": "Error",
+        "code": 5095
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3922,10 +3977,6 @@
     "Generates corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6002
-    },
-    "Specify the location where debugger should locate map files instead of generated locations.": {
-        "category": "Message",
-        "code": 6003
     },
     "Specify the location where debugger should locate TypeScript files instead of source locations.": {
         "category": "Message",
@@ -4493,10 +4544,6 @@
         "category": "Message",
         "code": 6163
     },
-    "Emit a UTF-8 Byte Order Mark (BOM) in the beginning of output files.": {
-        "category": "Message",
-        "code": 6164
-    },
     "Do not truncate error messages.": {
         "category": "Message",
         "code": 6165
@@ -4833,6 +4880,10 @@
     "Completeness": {
         "category": "Message",
         "code": 6257
+    },
+    "'{0}' should be set inside the 'compilerOptions' object of the config json file": {
+        "category": "Error",
+        "code": 6258
     },
 
     "Enable project compilation": {

@@ -22,6 +22,7 @@
 declare var assert: Harness.Assert;
 >assert : Symbol(assert, Decl(parserharness.ts, 20, 11))
 >Harness : Symbol(Harness, Decl(parserharness.ts, 52, 1))
+>Assert : Symbol(Harness.Assert)
 
 declare var it;
 >it : Symbol(it, Decl(parserharness.ts, 21, 11))
@@ -34,6 +35,7 @@ declare var run;
 
 declare var IO: IIO;
 >IO : Symbol(IO, Decl(parserharness.ts, 24, 11))
+>IIO : Symbol(IIO)
 
 declare var __dirname; // Node-specific
 >__dirname : Symbol(__dirname, Decl(parserharness.ts, 25, 11))
@@ -2105,6 +2107,7 @@ module Harness {
 >createFile : Symbol(EmitterIOHost.createFile, Decl(parserharness.ts, 717, 40))
 >s : Symbol(s, Decl(parserharness.ts, 720, 30))
 >useUTF8 : Symbol(useUTF8, Decl(parserharness.ts, 720, 40))
+>ITextWriter : Symbol(ITextWriter)
 
                 if (this.fileCollection[s]) {
 >this.fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
@@ -2113,6 +2116,7 @@ module Harness {
 >s : Symbol(s, Decl(parserharness.ts, 720, 30))
 
                     return <ITextWriter>this.fileCollection[s];
+>ITextWriter : Symbol(ITextWriter)
 >this.fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
 >this : Symbol(EmitterIOHost, Decl(parserharness.ts, 712, 9))
 >fileCollection : Symbol(EmitterIOHost.fileCollection, Decl(parserharness.ts, 715, 72))
@@ -2265,6 +2269,8 @@ module Harness {
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
 >makeDefaultCompilerForTest : Symbol(makeDefaultCompilerForTest, Decl(parserharness.ts, 761, 9))
 >c : Symbol(c, Decl(parserharness.ts, 763, 51))
+>TypeScript : Symbol(TypeScript)
+>TypeScriptCompiler : Symbol(TypeScript.TypeScriptCompiler)
 
             var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
 >compiler : Symbol(compiler, Decl(parserharness.ts, 764, 15))
@@ -2314,6 +2320,8 @@ module Harness {
 
         var compiler: TypeScript.TypeScriptCompiler;
 >compiler : Symbol(compiler, Decl(parserharness.ts, 780, 11))
+>TypeScript : Symbol(TypeScript)
+>TypeScriptCompiler : Symbol(TypeScript.TypeScriptCompiler)
 
         recreate();
 >recreate : Symbol(recreate, Decl(parserharness.ts, 1218, 9))
@@ -2869,6 +2877,8 @@ module Harness {
 
                         var enclosingScopeContext = TypeScript.findEnclosingScopeAt(new TypeScript.NullLogger(), <TypeScript.Script>script, new TypeScript.StringSourceText(code), 0, false);
 >enclosingScopeContext : Symbol(enclosingScopeContext, Decl(parserharness.ts, 986, 27))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 >script : Symbol(script, Decl(parserharness.ts, 985, 27))
 >code : Symbol(code, Decl(parserharness.ts, 957, 24))
 
@@ -2910,6 +2920,8 @@ module Harness {
 
                         var script2 = <TypeScript.Script>compiler.scripts.members[m];
 >script2 : Symbol(script2, Decl(parserharness.ts, 998, 27))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 >compiler : Symbol(compiler, Decl(parserharness.ts, 780, 11))
 >m : Symbol(m, Decl(parserharness.ts, 984, 28), Decl(parserharness.ts, 997, 28))
 
@@ -3076,6 +3088,8 @@ module Harness {
             private getTypeInfoName(ast : TypeScript.AST) {
 >getTypeInfoName : Symbol(TypeFactory.getTypeInfoName, Decl(parserharness.ts, 1038, 13))
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
+>TypeScript : Symbol(TypeScript)
+>AST : Symbol(TypeScript.AST)
 
                 var name = '';
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
@@ -3103,6 +3117,8 @@ module Harness {
                     case TypeScript.NodeType.Regex:
                         name = (<TypeScript.RegexLiteral>ast).text;
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>RegexLiteral : Symbol(TypeScript.RegexLiteral)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
@@ -3115,6 +3131,8 @@ module Harness {
                     case TypeScript.NodeType.NumberLit:
                         name = (<TypeScript.NumberLiteral>ast).text;
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>NumberLiteral : Symbol(TypeScript.NumberLiteral)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
@@ -3124,25 +3142,35 @@ module Harness {
                     case TypeScript.NodeType.InterfaceDeclaration:
                         name = (<TypeScript.InterfaceDeclaration>ast).name.actualText;
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>InterfaceDeclaration : Symbol(TypeScript.InterfaceDeclaration)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
                     case TypeScript.NodeType.ModuleDeclaration:
                         name = (<TypeScript.ModuleDeclaration>ast).name.actualText;
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>ModuleDeclaration : Symbol(TypeScript.ModuleDeclaration)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
                     case TypeScript.NodeType.ClassDeclaration:
                         name = (<TypeScript.ClassDeclaration>ast).name.actualText;
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>ClassDeclaration : Symbol(TypeScript.ClassDeclaration)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
                     case TypeScript.NodeType.FuncDecl:
                         name = !(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText; // name == null for lambdas
 >name : Symbol(name, Decl(parserharness.ts, 1041, 19))
+>TypeScript : Symbol(TypeScript)
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
+>TypeScript : Symbol(TypeScript)
+>FuncDecl : Symbol(TypeScript.FuncDecl)
 >ast : Symbol(ast, Decl(parserharness.ts, 1040, 36))
 
                         break;
@@ -3212,6 +3240,8 @@ module Harness {
 >Compiler : Symbol(Compiler, Decl(parserharness.ts, 683, 5))
 >CompilationContext : Symbol(CompilationContext, Decl(parserharness.ts, 1245, 9))
 >references : Symbol(references, Decl(parserharness.ts, 1106, 158))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             reset();
 >reset : Symbol(reset, Decl(parserharness.ts, 1229, 9))
@@ -3405,6 +3435,8 @@ module Harness {
 >WriterAggregator : Symbol(WriterAggregator, Decl(parserharness.ts, 686, 28))
 >errorLines : Symbol(errorLines, Decl(parserharness.ts, 1175, 92))
 >scripts : Symbol(CompilerResult.scripts, Decl(parserharness.ts, 1175, 114))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 
                 var lines = [];
 >lines : Symbol(lines, Decl(parserharness.ts, 1176, 19))
@@ -3665,9 +3697,13 @@ module Harness {
 >isResident : Symbol(isResident, Decl(parserharness.ts, 1255, 64))
 >isDeclareFile : Symbol(isDeclareFile, Decl(parserharness.ts, 1255, 86))
 >references : Symbol(references, Decl(parserharness.ts, 1255, 111))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             var script: TypeScript.Script = null;
 >script : Symbol(script, Decl(parserharness.ts, 1256, 15))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 
             var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
 >uName : Symbol(uName, Decl(parserharness.ts, 1257, 15))
@@ -3692,6 +3728,8 @@ module Harness {
 
                     script = <TypeScript.Script>compiler.scripts.members[i];
 >script : Symbol(script, Decl(parserharness.ts, 1256, 15))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 >compiler : Symbol(compiler, Decl(parserharness.ts, 780, 11))
 >i : Symbol(i, Decl(parserharness.ts, 1259, 20))
                 }
@@ -3753,9 +3791,13 @@ module Harness {
 >CompilerResult : Symbol(CompilerResult, Decl(parserharness.ts, 1167, 9))
 >settingsCallback : Symbol(settingsCallback, Decl(parserharness.ts, 1285, 91))
 >settings : Symbol(settings, Decl(parserharness.ts, 1285, 112))
+>TypeScript : Symbol(TypeScript)
+>CompilationSettings : Symbol(TypeScript.CompilationSettings)
 >context : Symbol(context, Decl(parserharness.ts, 1285, 164))
 >CompilationContext : Symbol(CompilationContext, Decl(parserharness.ts, 1245, 9))
 >references : Symbol(references, Decl(parserharness.ts, 1285, 194))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             path = switchToForwardSlashes(path);
 >path : Symbol(path, Decl(parserharness.ts, 1285, 36))
@@ -3792,9 +3834,13 @@ module Harness {
 >CompilerResult : Symbol(CompilerResult, Decl(parserharness.ts, 1167, 9))
 >settingsCallback : Symbol(settingsCallback, Decl(parserharness.ts, 1293, 109))
 >settings : Symbol(settings, Decl(parserharness.ts, 1293, 130))
+>TypeScript : Symbol(TypeScript)
+>CompilationSettings : Symbol(TypeScript.CompilationSettings)
 >context : Symbol(context, Decl(parserharness.ts, 1293, 182))
 >CompilationContext : Symbol(CompilationContext, Decl(parserharness.ts, 1245, 9))
 >references : Symbol(references, Decl(parserharness.ts, 1293, 212))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             // not recursive
             function clone/* <T> */(source: any, target: any) {
@@ -3947,6 +3993,8 @@ module Harness {
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
 >emit : Symbol(emit, Decl(parserharness.ts, 1337, 9))
 >ioHost : Symbol(ioHost, Decl(parserharness.ts, 1339, 29))
+>TypeScript : Symbol(TypeScript)
+>EmitterIOHost : Symbol(TypeScript.EmitterIOHost)
 >usePullEmitter : Symbol(usePullEmitter, Decl(parserharness.ts, 1339, 62))
 
             compiler.emit(ioHost, usePullEmitter);
@@ -3966,9 +4014,13 @@ module Harness {
 >context : Symbol(context, Decl(parserharness.ts, 1343, 120))
 >CompilationContext : Symbol(CompilationContext, Decl(parserharness.ts, 1245, 9))
 >references : Symbol(references, Decl(parserharness.ts, 1343, 150))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             var scripts: TypeScript.Script[] = [];
 >scripts : Symbol(scripts, Decl(parserharness.ts, 1344, 15))
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 
             reset();
 >reset : Symbol(reset, Decl(parserharness.ts, 1229, 9))
@@ -4193,6 +4245,8 @@ module Harness {
 
             references: TypeScript.IFileReference[];
 >references : Symbol(TestUnitData.references, Decl(parserharness.ts, 1424, 37))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
         }
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
@@ -4268,6 +4322,8 @@ module Harness {
 
             var refs: TypeScript.IFileReference[] = [];
 >refs : Symbol(refs, Decl(parserharness.ts, 1460, 15))
+>TypeScript : Symbol(TypeScript)
+>IFileReference : Symbol(TypeScript.IFileReference)
 
             for (var i = 0; i < lines.length; i++) {
 >i : Symbol(i, Decl(parserharness.ts, 1462, 20))
@@ -4503,6 +4559,8 @@ module Harness {
 >editRanges : Symbol(ScriptInfo.editRanges, Decl(parserharness.ts, 1546, 31))
 >length : Symbol(length, Decl(parserharness.ts, 1547, 28))
 >editRange : Symbol(editRange, Decl(parserharness.ts, 1547, 44))
+>TypeScript : Symbol(TypeScript)
+>ScriptEditRange : Symbol(TypeScript.ScriptEditRange)
 
         constructor(public name: string, public content: string, public isResident: boolean, public maxScriptVersions: number) {
 >name : Symbol(ScriptInfo.name, Decl(parserharness.ts, 1549, 20))
@@ -4645,6 +4703,8 @@ module Harness {
         public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
 >getEditRangeSinceVersion : Symbol(ScriptInfo.getEditRangeSinceVersion, Decl(parserharness.ts, 1579, 9))
 >version : Symbol(version, Decl(parserharness.ts, 1581, 40))
+>TypeScript : Symbol(TypeScript)
+>ScriptEditRange : Symbol(TypeScript.ScriptEditRange)
 
             if (this.version == version) {
 >this.version : Symbol(ScriptInfo.version, Decl(parserharness.ts, 1545, 29))
@@ -4762,6 +4822,8 @@ module Harness {
 
         private ls: Services.ILanguageServiceShim = null;
 >ls : Symbol(TypeScriptLS.ls, Decl(parserharness.ts, 1603, 76))
+>Services : Symbol(Services)
+>ILanguageServiceShim : Symbol(Services.ILanguageServiceShim)
 
         public scripts: ScriptInfo[] = [];
 >scripts : Symbol(TypeScriptLS.scripts, Decl(parserharness.ts, 1604, 57))
@@ -5085,6 +5147,8 @@ module Harness {
          */
         public getLanguageService(): Services.ILanguageServiceShim {
 >getLanguageService : Symbol(TypeScriptLS.getLanguageService, Decl(parserharness.ts, 1699, 9))
+>Services : Symbol(Services)
+>ILanguageServiceShim : Symbol(Services.ILanguageServiceShim)
 
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
 >ls : Symbol(ls, Decl(parserharness.ts, 1705, 15))
@@ -5108,6 +5172,10 @@ module Harness {
 >parseSourceText : Symbol(TypeScriptLS.parseSourceText, Decl(parserharness.ts, 1709, 9))
 >fileName : Symbol(fileName, Decl(parserharness.ts, 1712, 31))
 >sourceText : Symbol(sourceText, Decl(parserharness.ts, 1712, 48))
+>TypeScript : Symbol(TypeScript)
+>ISourceText : Symbol(TypeScript.ISourceText)
+>TypeScript : Symbol(TypeScript)
+>Script : Symbol(TypeScript.Script)
 
             var parser = new TypeScript.Parser();
 >parser : Symbol(parser, Decl(parserharness.ts, 1713, 15))
@@ -5198,6 +5266,8 @@ module Harness {
 >positionToZeroBasedLineCol : Symbol(TypeScriptLS.positionToZeroBasedLineCol, Decl(parserharness.ts, 1739, 9))
 >fileName : Symbol(fileName, Decl(parserharness.ts, 1745, 42))
 >position : Symbol(position, Decl(parserharness.ts, 1745, 59))
+>TypeScript : Symbol(TypeScript)
+>ILineCol : Symbol(TypeScript.ILineCol)
 
             var script = this.ls.languageService.getScriptAST(fileName);
 >script : Symbol(script, Decl(parserharness.ts, 1746, 15))
@@ -5233,6 +5303,8 @@ module Harness {
 >sourceFileName : Symbol(sourceFileName, Decl(parserharness.ts, 1757, 26))
 >baselineFileName : Symbol(baselineFileName, Decl(parserharness.ts, 1757, 49))
 >edits : Symbol(edits, Decl(parserharness.ts, 1757, 75))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 
             var script = readFile(sourceFileName);
 >script : Symbol(script, Decl(parserharness.ts, 1758, 15))
@@ -5269,6 +5341,8 @@ module Harness {
 >applyEdits : Symbol(TypeScriptLS.applyEdits, Decl(parserharness.ts, 1764, 9))
 >content : Symbol(content, Decl(parserharness.ts, 1768, 26))
 >edits : Symbol(edits, Decl(parserharness.ts, 1768, 42))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 
             var result = content;
 >result : Symbol(result, Decl(parserharness.ts, 1769, 15))
@@ -5326,14 +5400,24 @@ module Harness {
         private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
 >normalizeEdits : Symbol(TypeScriptLS.normalizeEdits, Decl(parserharness.ts, 1780, 9))
 >edits : Symbol(edits, Decl(parserharness.ts, 1783, 31))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 
             var result: Services.TextEdit[] = [];
 >result : Symbol(result, Decl(parserharness.ts, 1784, 15))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 >mapEdits : Symbol(mapEdits, Decl(parserharness.ts, 1784, 49))
 >edits : Symbol(edits, Decl(parserharness.ts, 1786, 30))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 >edit : Symbol(edit, Decl(parserharness.ts, 1786, 60))
+>Services : Symbol(Services)
+>TextEdit : Symbol(Services.TextEdit)
 >index : Symbol(index, Decl(parserharness.ts, 1786, 85))
 
                 var result = [];

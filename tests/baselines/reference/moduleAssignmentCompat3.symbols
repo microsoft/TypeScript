@@ -14,9 +14,11 @@ module B {
 
 var a: A;
 >a : Symbol(a, Decl(moduleAssignmentCompat3.ts, 7, 3))
+>A : Symbol(A)
 
 var b: B;
 >b : Symbol(b, Decl(moduleAssignmentCompat3.ts, 8, 3))
+>B : Symbol(B)
 
 // both errors
 a = b;

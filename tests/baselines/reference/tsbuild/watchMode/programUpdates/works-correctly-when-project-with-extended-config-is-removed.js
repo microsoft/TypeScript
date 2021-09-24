@@ -16,7 +16,7 @@ interface Array<T> { length: number; [n: number]: T; }
 {"references":[{"path":"./project1.tsconfig.json"},{"path":"./project2.tsconfig.json"}],"files":[]}
 
 //// [/a/b/alpha.tsconfig.json]
-{"strict":true}
+{"compilerOptions":{"strict":true}}
 
 //// [/a/b/project1.tsconfig.json]
 {"extends":"./alpha.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]}
@@ -28,7 +28,7 @@ let x = 1
 let y = 1
 
 //// [/a/b/bravo.tsconfig.json]
-{"strict":true}
+{"compilerOptions":{"strict":true}}
 
 //// [/a/b/project2.tsconfig.json]
 {"extends":"./bravo.tsconfig.json","compilerOptions":{"composite":true},"files":["/a/b/other.ts"]}
@@ -60,7 +60,7 @@ Output::
 
 
 Program root files: ["/a/b/commonFile1.ts","/a/b/commonFile2.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project1.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -78,7 +78,7 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (used version)
 
 Program root files: ["/a/b/other.ts"]
-Program options: {"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
+Program options: {"strict":true,"composite":true,"watch":true,"configFilePath":"/a/b/project2.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -117,6 +117,7 @@ FsWatchesRecursive::
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/commonFile1.js]
+"use strict";
 var x = 1;
 
 
@@ -125,6 +126,7 @@ declare let x: number;
 
 
 //// [/a/b/commonFile2.js]
+"use strict";
 var y = 1;
 
 
@@ -133,7 +135,7 @@ declare let y: number;
 
 
 //// [/a/b/project1.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./commonfile1.ts","./commonfile2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2167136208-let x = 1","affectsGlobalScope":true},{"version":"2168322129-let y = 1","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,3,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project1.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -161,7 +163,8 @@ declare let y: number;
       }
     },
     "options": {
-      "composite": true
+      "composite": true,
+      "strict": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -172,10 +175,11 @@ declare let y: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 753
+  "size": 767
 }
 
 //// [/a/b/other.js]
+"use strict";
 var z = 0;
 
 
@@ -184,7 +188,7 @@ declare let z: number;
 
 
 //// [/a/b/project2.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../lib/lib.d.ts","./other.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2874288940-let z = 0;","affectsGlobalScope":true}],"options":{"composite":true,"strict":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1]},"version":"FakeTSVersion"}
 
 //// [/a/b/project2.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -206,7 +210,8 @@ declare let z: number;
       }
     },
     "options": {
-      "composite": true
+      "composite": true,
+      "strict": true
     },
     "referencedMap": {},
     "exportedModulesMap": {},
@@ -216,7 +221,7 @@ declare let z: number;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 666
+  "size": 680
 }
 
 

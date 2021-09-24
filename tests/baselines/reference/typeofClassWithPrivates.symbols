@@ -15,6 +15,7 @@ class C<T> {
 
     static y: T;
 >y : Symbol(C.y, Decl(typeofClassWithPrivates.ts, 3, 9))
+>T : Symbol(T)
 }
 
 var c: C<string>;

@@ -663,7 +663,36 @@ namespace ts {
             });
         });
 
-        it("Don't crash when root expression is not objecty at all", () => {
+        it("raises an error if you've set a compiler flag in the root without including 'compilerOptions'", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "module": "esnext",
+            }`, "tsconfig.json", {
+                compilerOptions: {},
+                errors: [{
+                    ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
+                    messageText: "'module' should be set inside the 'compilerOptions' object of the config json file.",
+                    file: undefined,
+                    start: 0,
+                    length: 0
+                }]
+            });
+        });
+
+        it("does not raise an error if you've set a compiler flag in the root when you have included 'compilerOptions'", () => {
+            assertCompilerOptionsWithJsonText(`{
+                "target": "esnext",
+                "compilerOptions": {
+                    "module": "esnext"
+                }
+            }`, "tsconfig.json", {
+                compilerOptions: {
+                    module: ModuleKind.ESNext
+                },
+                errors: []
+            });
+        });
+
+        it("Don't crash when root expression is not object at all", () => {
             assertCompilerOptionsWithJsonText(`42`, "tsconfig.json", {
                 compilerOptions: {},
                 errors: [{

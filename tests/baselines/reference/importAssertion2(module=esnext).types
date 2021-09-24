@@ -1,0 +1,39 @@
+=== tests/cases/conformance/importAssertion/0.ts ===
+export const a = 1;
+>a : 1
+>1 : 1
+
+export const b = 2;
+>b : 2
+>2 : 2
+
+=== tests/cases/conformance/importAssertion/1.ts ===
+export {} from './0' assert { type: "json" }
+>type : error
+
+export { a, b } from './0' assert { type: "json" }
+>a : 1
+>b : 2
+>type : error
+
+export * from './0' assert { type: "json" }
+>type : error
+
+export * as ns from './0' assert { type: "json" }
+>ns : typeof import("tests/cases/conformance/importAssertion/0")
+>type : error
+
+=== tests/cases/conformance/importAssertion/2.ts ===
+export { a, b } from './0' assert {}
+>a : 1
+>b : 2
+
+export { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+>a : 1
+>c : 1
+>b : 2
+>d : 2
+>a : error
+>b : error
+>c : error
+

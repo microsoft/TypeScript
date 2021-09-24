@@ -2723,6 +2723,18 @@ namespace ts {
         return parameter && parameter.symbol;
     }
 
+    export function getEffectiveContainerForJSDocTemplateTag(node: JSDocTemplateTag) {
+        if (isJSDoc(node.parent) && node.parent.tags) {
+            // A @template tag belongs to any @typedef, @callback, or @enum tags in the same comment block, if they exist.
+            const typeAlias = find(node.parent.tags, isJSDocTypeAlias);
+            if (typeAlias) {
+                return typeAlias;
+            }
+        }
+        // otherwise it belongs to the host it annotates
+        return getHostSignatureFromJSDoc(node);
+    }
+
     export function getHostSignatureFromJSDoc(node: Node): SignatureDeclaration | undefined {
         const host = getEffectiveJSDocHost(node);
         return host && isFunctionLike(host) ? host : undefined;
@@ -7396,5 +7408,14 @@ namespace ts {
     /* @internal */
     export function isInfinityOrNaNString(name: string | __String): boolean {
         return name === "Infinity" || name === "-Infinity" || name === "NaN";
+    }
+
+    export function isCatchClauseVariableDeclaration(node: Node) {
+        return node.kind === SyntaxKind.VariableDeclaration && node.parent.kind === SyntaxKind.CatchClause;
+    }
+
+    export function isParameterOrCatchClauseVariable(symbol: Symbol) {
+        const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
+        return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
     }
 }

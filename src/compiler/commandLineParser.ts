@@ -71,6 +71,7 @@ namespace ts {
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
+        ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -570,7 +571,7 @@ namespace ts {
             type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -1168,6 +1169,14 @@ namespace ts {
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
             defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Emit,
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",
@@ -2852,6 +2861,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2894,6 +2904,9 @@ namespace ts {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         };
         const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
@@ -2911,6 +2924,10 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
