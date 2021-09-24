@@ -213,3 +213,26 @@ a = b;
 a = c;
 a = d;  // Error
 a = e;  // Error
+
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+
+export type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+
+export interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+type UB = { x?: never }['x'];  // undefined from missing property
+
+type UC = UA & UB;  // never, but should be undefined
