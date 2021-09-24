@@ -7356,10 +7356,10 @@ namespace ts {
             let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
             let checkIdentifierStart = scanner.getTokenPos();
             let checkIdentifierEnd = scanner.getTextPos();
-            let name = parseIdentifierName();
+            let isTypeOnly = false;
             let propertyName: Identifier | undefined;
             let canParseAsKeyword = true;
-            let isTypeOnly = false;
+            let name = parseIdentifierName();
             if (name.escapedText === "type") {
                 // If the first token of an import specifier is 'type', there are a lot of possibilities,
                 // especially if we see 'as' afterwards:
@@ -7378,8 +7378,8 @@ namespace ts {
                             // { type as as something }
                             isTypeOnly = true;
                             propertyName = firstAs;
+                            name = parseNameWithKeywordCheck();
                             canParseAsKeyword = false;
-                            parseNameWithKeywordCheck();
                         }
                         else {
                             // { type as as }
@@ -7392,7 +7392,7 @@ namespace ts {
                         // { type as something }
                         propertyName = name;
                         canParseAsKeyword = false;
-                        parseNameWithKeywordCheck();
+                        name = parseNameWithKeywordCheck();
                     }
                     else {
                         // { type as }
@@ -7403,14 +7403,14 @@ namespace ts {
                 else if (tokenIsIdentifierOrKeyword(token())) {
                     // { type something ...? }
                     isTypeOnly = true;
-                    parseNameWithKeywordCheck();
+                    name = parseNameWithKeywordCheck();
                 }
             }
 
             if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
                 propertyName = name;
                 parseExpected(SyntaxKind.AsKeyword);
-                parseNameWithKeywordCheck();
+                name = parseNameWithKeywordCheck();
             }
             if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
                 parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
@@ -7424,7 +7424,7 @@ namespace ts {
                 checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
                 checkIdentifierStart = scanner.getTokenPos();
                 checkIdentifierEnd = scanner.getTextPos();
-                name = parseIdentifierName();
+                return parseIdentifierName();
             }
         }
 
