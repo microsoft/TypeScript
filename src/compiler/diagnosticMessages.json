@@ -1397,7 +1397,7 @@
         "category": "Error",
         "code": 1470
     },
-    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.": {
+    "Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.": {
         "category": "Error",
         "code": 1471
     },

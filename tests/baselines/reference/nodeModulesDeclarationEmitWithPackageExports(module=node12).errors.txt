@@ -1,10 +1,10 @@
-tests/cases/conformance/node/index.cts(3,22): error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(4,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/index.cts(9,23): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
-tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(3,22): error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(4,23): error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/index.cts(9,23): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.cts(3,22): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/node_modules/inner/index.d.cts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 tests/cases/conformance/node/node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in ambient contexts.
-tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/node_modules/inner/index.d.ts(3,22): error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
 
 
@@ -41,17 +41,17 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
                          ~~~~~~~~~~~~~
-!!! error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'package/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "package";
                           ~~~~~~~~~
-!!! error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'package' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     export const a = cjs;
     export const b = mjs;
     export const c = type;
     import * as cjsi from "inner/cjs";
     import * as mjsi from "inner/mjs";
                           ~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import * as typei from "inner";
     export const d = cjsi;
     export const e = mjsi;
@@ -61,7 +61,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
                          ~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "inner";
     cjs;
     ~~~
@@ -85,7 +85,7 @@ tests/cases/conformance/node/node_modules/inner/index.d.ts(5,1): error TS1036: S
     import * as cjs from "inner/cjs";
     import * as mjs from "inner/mjs";
                          ~~~~~~~~~~~
-!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an es module, which cannot be imported synchronously. Use dynamic import instead.
+!!! error TS1471: Module 'inner/mjs' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import * as type from "inner";
     cjs;
     ~~~

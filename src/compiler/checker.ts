@@ -3396,7 +3396,7 @@ namespace ts {
                     if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
                         const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                         if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
-                            error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_es_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
+                            error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
                         }
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
