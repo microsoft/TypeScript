@@ -465,7 +465,7 @@ namespace ts.codefix {
             // Can't use a type-only import if the usage is an emitting position
             return AddAsTypeOnly.NotAllowed;
         }
-        if (isValidTypeOnlyUseSite && isForNewImportDeclaration && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error) {
+        if (isForNewImportDeclaration && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error) {
             // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
             return AddAsTypeOnly.Required;
         }
