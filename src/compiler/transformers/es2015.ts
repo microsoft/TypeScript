@@ -4378,19 +4378,19 @@ namespace ts {
     }
 
     function createNonCollidingName(name: string, node: Node): string {
-        const identifiers = new Set<string>()
+        const identifiers = new Set<string>();
         forEachFreeIdentifier(node, (identifier) => {
-            identifiers.add(`${identifier.escapedText}`)
-        })
+            identifiers.add(`${identifier.escapedText}`);
+        });
 
-        return createUniqueName(name, 0, identifiers)
+        return createUniqueName(name, 0, identifiers);
     }
 
     function createUniqueName(name: string, counter: number, existingNames: Set<string>): string {
-        const fullName = counter === 0 ? name : `${name}_${counter}`
+        const fullName = counter === 0 ? name : `${name}_${counter}`;
         if (!existingNames.has(fullName)) {
-            return fullName
+            return fullName;
         }
-        return createUniqueName(name, counter + 1, existingNames)
+        return createUniqueName(name, counter + 1, existingNames);
     }
 }
