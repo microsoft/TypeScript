@@ -594,9 +594,11 @@ const obj10 = {
     ['x']: 0 as const,
 >['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
 >'x' : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
+>const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 204, 22))
+>const : Symbol(const)
 
 };
 
@@ -606,9 +608,11 @@ const obj11 = {
     [1]: 2 as const,
 >[1] : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
 >1 : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
+>const : Symbol(const)
 
     [1 + 2]: 3 as const,
 >[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 209, 20))
+>const : Symbol(const)
 
 };
 
@@ -618,10 +622,12 @@ const obj12 = {
     [sym]: 4 as const,
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 213, 15))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 214, 22))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
 
 };
 
@@ -631,24 +637,30 @@ const obj13 = {
     ['x']: 0 as const,
 >['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
 >'x' : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
+>const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 219, 22))
+>const : Symbol(const)
 
     [1]: 2 as const,
 >[1] : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
 >1 : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
+>const : Symbol(const)
 
     [1 + 2]: 3 as const,
 >[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 221, 20))
+>const : Symbol(const)
 
     [sym]: 4 as const,
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 222, 24))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 223, 22))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
 
 };
 

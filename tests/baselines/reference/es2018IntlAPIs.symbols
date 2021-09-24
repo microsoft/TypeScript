@@ -7,6 +7,7 @@ const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options = { localeMatcher: 'lookup' } as const;
 >options : Symbol(options, Decl(es2018IntlAPIs.ts, 3, 5))
 >localeMatcher : Symbol(localeMatcher, Decl(es2018IntlAPIs.ts, 3, 17))
+>const : Symbol(const)
 
 console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

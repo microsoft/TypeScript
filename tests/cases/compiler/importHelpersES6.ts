@@ -6,6 +6,7 @@ declare var dec: any;
 @dec export class A {
     #x: number = 1;
     async f() { this.#x = await this.#x; }
+    g(u) { return #x in u; }
 }
 
 const o = { a: 1 };
@@ -19,3 +20,4 @@ export declare function __metadata(metadataKey: any, metadataValue: any): Functi
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
 export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
+export declare function __classPrivateFieldIn(a: any, b: any): boolean;

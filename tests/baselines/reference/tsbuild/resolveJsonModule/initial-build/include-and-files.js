@@ -65,7 +65,7 @@ Output::
 [[90m12:00:00 AM[0m] Building project '/src/tsconfig_withIncludeAndFiles.json'...
 
 lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 src/src/hello.json
   Part of 'files' list in tsconfig.json
   Imported via "./hello.json" from file 'src/src/index.ts'

@@ -32,7 +32,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/file.tsx",
       "kind": "method",
-      "name": "(method) ButtonProps.onClick(event?: any): void",
+      "name": "(method) ButtonProps.onClick(event?: React.MouseEvent<HTMLButtonElement>): void",
       "textSpan": {
         "start": 267,
         "length": 7
@@ -87,8 +87,28 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "React",
+          "kind": "text"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "MouseEvent",
+          "kind": "text"
+        },
+        {
+          "text": "<",
+          "kind": "punctuation"
+        },
+        {
+          "text": "HTMLButtonElement",
+          "kind": "text"
+        },
+        {
+          "text": ">",
+          "kind": "punctuation"
         },
         {
           "text": ")",

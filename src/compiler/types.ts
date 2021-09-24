@@ -1214,7 +1214,8 @@ namespace ts {
         readonly expression: Expression;
     }
 
-    export interface PrivateIdentifier extends Node {
+    // Typed as a PrimaryExpression due to its presence in BinaryExpressions (#field in expr)
+    export interface PrivateIdentifier extends PrimaryExpression {
         readonly kind: SyntaxKind.PrivateIdentifier;
         // escaping not strictly necessary
         // avoids gotchas in transforms and utils
@@ -3583,6 +3584,20 @@ namespace ts {
         hasNoDefaultLib: boolean;
 
         languageVersion: ScriptTarget;
+
+        /**
+         * When `module` is `Node12` or `NodeNext`, this field controls whether the
+         * source file in question is an ESNext-output-format file, or a CommonJS-output-format
+         * module. This is derived by the module resolver as it looks up the file, since
+         * it is derived from either the file extension of the module, or the containing
+         * `package.json` context, and affects both checking and emit.
+         *
+         * It is _public_ so that (pre)transformers can set this field,
+         * since it switches the builtin `node` module transform. Generally speaking, if unset,
+         * the field is treated as though it is `ModuleKind.CommonJS`.
+         */
+        impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+
         /* @internal */ scriptKind: ScriptKind;
 
         /**
@@ -3624,8 +3639,8 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules?: ESMap<string, ResolvedModuleFull | undefined>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: ESMap<string, ResolvedTypeReferenceDirective | undefined>;
+        /* @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleFull | undefined>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: readonly StringLiteralLike[];
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -4007,7 +4022,7 @@ namespace ts {
         /* @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
         /* @internal */ useCaseSensitiveFileNames(): boolean;
 
-        /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
+        /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, mode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
 
         getProjectReferences(): readonly ProjectReference[] | undefined;
         getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -4957,6 +4972,7 @@ namespace ts {
         HasNeverType      = 1 << 17,        // Synthetic property with at least one never type in constituents
         Mapped            = 1 << 18,        // Property of mapped type
         StripOptional     = 1 << 19,        // Strip optionality in mapped property
+        Unresolved        = 1 << 20,        // Unresolved type alias symbol
         Synthetic = SyntheticProperty | SyntheticMethod,
         Discriminant = HasNonUniformType | HasLiteralType,
         Partial = ReadPartial | WritePartial
@@ -5961,7 +5977,13 @@ namespace ts {
 
     export enum ModuleResolutionKind {
         Classic  = 1,
-        NodeJs   = 2
+        NodeJs   = 2,
+        // Starting with node12, node's module resolver has significant departures from tranditional cjs resolution
+        // to better support ecmascript modules and their use within node - more features are still being added, so
+        // we can expect it to change over time, and as such, offer both a `NodeNext` moving resolution target, and a `Node12`
+        // version-anchored resolution target
+        Node12   = 3,
+        NodeNext = 99, // Not simply `Node12` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
     }
 
     export interface PluginImport {
@@ -6115,7 +6137,7 @@ namespace ts {
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
-        target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
+        target?: ScriptTarget;
         traceResolution?: boolean;
         useUnknownInCatchVariables?: boolean;
         resolveJsonModule?: boolean;
@@ -6167,7 +6189,11 @@ namespace ts {
         //       module kind).
         ES2015 = 5,
         ES2020 = 6,
-        ESNext = 99
+        ESNext = 99,
+
+        // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext
+        Node12 = 100,
+        NodeNext = 199,
     }
 
     export const enum JsxEmit {
@@ -6563,7 +6589,13 @@ namespace ts {
         Js = ".js",
         Jsx = ".jsx",
         Json = ".json",
-        TsBuildInfo = ".tsbuildinfo"
+        TsBuildInfo = ".tsbuildinfo",
+        Mjs = ".mjs",
+        Mts = ".mts",
+        Dmts = ".d.mts",
+        Cjs = ".cjs",
+        Cts = ".cts",
+        Dcts = ".d.cts",
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -6618,7 +6650,11 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        /**
+         * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
+         */
+        getModuleResolutionCache?(): ModuleResolutionCache | undefined;
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
@@ -6853,7 +6889,8 @@ namespace ts {
         MakeTemplateObject = 1 << 18,   // __makeTemplateObject (used for constructing template string array objects)
         ClassPrivateFieldGet = 1 << 19, // __classPrivateFieldGet (used by the class private field transformation)
         ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 21,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        ClassPrivateFieldIn = 1 << 21,  // __classPrivateFieldIn (used by the class private field transformation)
+        CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
         LastEmitHelper = CreateBinding,
 
