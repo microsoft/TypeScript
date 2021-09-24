@@ -977,10 +977,10 @@ namespace ts.codefix {
 
         if (promoteFromTypeOnly) {
             changes.delete(sourceFile, getTypeKeywordOfTypeOnlyImport(clause, sourceFile));
-            if (convertExistingToTypeOnly) {
-                existingSpecifiers?.forEach(specifier => {
+            if (convertExistingToTypeOnly && existingSpecifiers) {
+                for (const specifier of existingSpecifiers) {
                     changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, specifier);
-                });
+                }
             }
         }
 
