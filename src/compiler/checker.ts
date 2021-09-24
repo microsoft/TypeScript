@@ -13595,7 +13595,30 @@ namespace ts {
         }
 
         function getRestTypeElementFlags(node: RestTypeNode | NamedTupleMember) {
-            return getArrayElementTypeNode(node.type) ? ElementFlags.Rest : ElementFlags.Variadic;
+            const typeNode = node.type;
+
+            switch (typeNode.kind) {
+                case SyntaxKind.TypeReference:
+                    const typeName = (typeNode as TypeReferenceNode).typeName;
+                    if (isIdentifier(typeName)) {
+                        const s = resolveName(typeName, typeName.escapedText, SymbolFlags.Type, undefined, typeName.escapedText, /*isUse*/ false);
+                        // @TODO: figure out why `isArrayLikeType(getTypeOfSymbol(s))` does not work
+                        if (s && (s === globalArrayType.symbol || s === globalReadonlyArrayType.symbol)) {
+                            return ElementFlags.Rest;
+                        }
+                    }
+                    break;
+                case SyntaxKind.TupleType:
+                    if ((typeNode as TupleTypeNode).elements.length === 1) {
+                        const elementNode = (typeNode as TupleTypeNode).elements[0];
+                        if (elementNode.kind !== SyntaxKind.RestType) {
+                            return ElementFlags.Rest;
+                        }
+                    }
+                    break;
+            }
+
+            return getArrayElementTypeNode(typeNode) ? ElementFlags.Rest : ElementFlags.Variadic;
         }
 
         function getArrayOrTupleTargetType(node: ArrayTypeNode | TupleTypeNode): GenericType {
