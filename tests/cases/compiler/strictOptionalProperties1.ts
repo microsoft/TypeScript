@@ -235,4 +235,4 @@ export interface NavBottomListItem extends TheTypeFromMaterialUI {
 type UA = undefined;  // Explicit undefined type
 type UB = { x?: never }['x'];  // undefined from missing property
 
-type UC = UA & UB;  // never, but should be undefined
+type UC = UA & UB;  // undefined
