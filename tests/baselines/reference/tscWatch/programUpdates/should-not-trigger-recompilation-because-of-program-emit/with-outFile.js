@@ -32,7 +32,7 @@ interface Array<T> { length: number; [n: number]: T; }
     // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
 
     /* Language and Environment */
-    "target": "es5",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     // "lib": [],                                        /* Specify a set of bundled library declaration files that describe the target runtime environment. */
     // "jsx": "preserve",                                /* Specify what JSX code is generated. */
     // "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
@@ -128,15 +128,43 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:31 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
+
+[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2016.full.d.ts' not found.
+  The file is in the program because:
+    Default library for target 'es2016'
+
+  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
+    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [7m  [0m [96m              ~~~~~~~~[0m
+    File is default library for target specified here.
+
+[[90m12:00:31 AM[0m] Found 11 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts"]
-Program options: {"target":1,"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":3,"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 
@@ -151,8 +179,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -195,8 +223,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 
 FsWatches::
 
@@ -222,15 +250,43 @@ Output::
 >> Screen clear
 [[90m12:00:34 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:38 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2318: [0mCannot find global type 'Array'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'Object'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'RegExp'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'String'.
+
+[91merror[0m[90m TS6053: [0mFile '/a/lib/lib.es2016.full.d.ts' not found.
+  The file is in the program because:
+    Default library for target 'es2016'
+
+  [96mtsconfig.json[0m:[93m14[0m:[93m15[0m
+    [7m14[0m     "target": "es2016",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    [7m  [0m [96m              ~~~~~~~~[0m
+    File is default library for target specified here.
+
+[[90m12:00:38 AM[0m] Found 11 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/myproject/file1.ts","/user/username/projects/myproject/src/file2.ts","/user/username/projects/myproject/src/file3.ts"]
-Program options: {"target":1,"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"target":3,"module":2,"outFile":"/user/username/projects/myproject/build/outFile.js","esModuleInterop":true,"forceConsistentCasingInFileNames":true,"strict":true,"skipLibCheck":true,"watch":true,"project":"/user/username/projects/myproject/tsconfig.json","configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
 /user/username/projects/myproject/file1.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file3.ts
@@ -246,8 +302,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file3.ts:
   {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
 
@@ -298,8 +354,8 @@ WatchedFiles::
   {"fileName":"/user/username/projects/myproject/file1.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file2.ts:
   {"fileName":"/user/username/projects/myproject/src/file2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+/a/lib/lib.es2016.full.d.ts:
+  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
 /user/username/projects/myproject/src/file3.ts:
   {"fileName":"/user/username/projects/myproject/src/file3.ts","pollingInterval":250}
 
