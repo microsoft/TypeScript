@@ -7362,10 +7362,10 @@ namespace ts {
             let isTypeOnly = false;
             if (name.escapedText === "type") {
                 // If the first token of an import specifier is 'type', there are a lot of possibilities,
-                // especially we see 'as' afterwards:
+                // especially if we see 'as' afterwards:
                 //
                 // import { type } from "mod";          - isTypeOnly: false,   name: type
-                // import { type as } from "mod";       - isTypeOnly: true,    name: type
+                // import { type as } from "mod";       - isTypeOnly: true,    name: as
                 // import { type as as } from "mod";    - isTypeOnly: false,   name: as,    propertyName: type
                 // import { type as as as } from "mod"; - isTypeOnly: true,    name: as,    propertyName: as
                 if (token() === SyntaxKind.AsKeyword) {
