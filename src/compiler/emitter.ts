@@ -1684,6 +1684,8 @@ namespace ts {
                     // Identifiers
                     case SyntaxKind.Identifier:
                         return emitIdentifier(node as Identifier);
+                    case SyntaxKind.PrivateIdentifier:
+                        return emitPrivateIdentifier(node as PrivateIdentifier);
 
                     // Expressions
                     case SyntaxKind.ArrayLiteralExpression:

@@ -5617,6 +5617,8 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
+                case SyntaxKind.PrivateIdentifier:
+                    return parsePrivateIdentifier();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);

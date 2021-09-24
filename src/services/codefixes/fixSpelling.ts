@@ -57,6 +57,10 @@ namespace ts.codefix {
             }
             suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, containingType);
         }
+        else if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.InKeyword && parent.left === node && isPrivateIdentifier(node)) {
+            const receiverType = checker.getTypeAtLocation(parent.right);
+            suggestedSymbol = checker.getSuggestedSymbolForNonexistentProperty(node, receiverType);
+        }
         else if (isQualifiedName(parent) && parent.right === node) {
             const symbol = checker.getSymbolAtLocation(parent.left);
             if (symbol && symbol.flags & SymbolFlags.Module) {

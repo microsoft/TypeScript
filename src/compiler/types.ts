@@ -1214,7 +1214,8 @@ namespace ts {
         readonly expression: Expression;
     }
 
-    export interface PrivateIdentifier extends Node {
+    // Typed as a PrimaryExpression due to its presence in BinaryExpressions (#field in expr)
+    export interface PrivateIdentifier extends PrimaryExpression {
         readonly kind: SyntaxKind.PrivateIdentifier;
         // escaping not strictly necessary
         // avoids gotchas in transforms and utils
@@ -6854,7 +6855,8 @@ namespace ts {
         MakeTemplateObject = 1 << 18,   // __makeTemplateObject (used for constructing template string array objects)
         ClassPrivateFieldGet = 1 << 19, // __classPrivateFieldGet (used by the class private field transformation)
         ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
-        CreateBinding = 1 << 21,        // __createBinding (use by the module transform for (re)exports and namespace imports)
+        ClassPrivateFieldIn = 1 << 21,  // __classPrivateFieldIn (used by the class private field transformation)
+        CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
         FirstEmitHelper = Extends,
         LastEmitHelper = CreateBinding,
 

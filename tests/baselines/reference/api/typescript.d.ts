@@ -670,7 +670,7 @@ declare namespace ts {
         readonly parent: Declaration;
         readonly expression: Expression;
     }
-    export interface PrivateIdentifier extends Node {
+    export interface PrivateIdentifier extends PrimaryExpression {
         readonly kind: SyntaxKind.PrivateIdentifier;
         readonly escapedText: __String;
     }

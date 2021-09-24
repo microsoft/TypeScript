@@ -1392,6 +1392,10 @@
         "category": "Message",
         "code": 1450
     },
+    "Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression": {
+        "category": "Error",
+        "code": 1451
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -1654,7 +1658,7 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.": {
+    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
         "category": "Error",
         "code": 2360
     },

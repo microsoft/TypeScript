@@ -1949,6 +1949,8 @@ namespace ts {
                     node = node.parent;
                 }
                 return node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node);
+            case SyntaxKind.PrivateIdentifier:
+                return isBinaryExpression(node.parent) && node.parent.left === node && node.parent.operatorToken.kind === SyntaxKind.InKeyword;
             case SyntaxKind.Identifier:
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSDocLinkLike(node.parent) || isJSDocNameReference(node.parent) || isJSDocMemberName(node.parent) || isJSXTagName(node)) {
                     return true;
@@ -3706,6 +3708,7 @@ namespace ts {
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.Identifier:
+            case SyntaxKind.PrivateIdentifier:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
