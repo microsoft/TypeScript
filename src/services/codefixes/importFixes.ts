@@ -508,12 +508,11 @@ namespace ts.codefix {
             if (importKind === ImportKind.Default && (
                 name ||                                                   // Cannot add a default import to a declaration that already has one
                 addAsTypeOnly === AddAsTypeOnly.Required && namedBindings // Cannot add a default import as type-only if the import already has named bindings
-            ) || (
+            )) return undefined;
+            if (
                 importKind === ImportKind.Named &&
                 namedBindings?.kind === SyntaxKind.NamespaceImport        // Cannot add a named import to a declaration that has a namespace import
-            )) {
-                return undefined;
-            }
+            ) return undefined;
 
             return {
                 kind: ImportFixKind.AddToExisting,
