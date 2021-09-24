@@ -138,7 +138,7 @@ namespace ts {
         // ES2018 Helpers
 
         function createAssignHelper(attributesSegments: Expression[]) {
-            if (context.getCompilerOptions().target! >= ScriptTarget.ES2015) {
+            if (getEmitScriptTarget(context.getCompilerOptions()) >= ScriptTarget.ES2015) {
                 return factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "assign"),
                                   /*typeArguments*/ undefined,
                                   attributesSegments);

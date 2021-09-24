@@ -32,7 +32,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts
@@ -120,7 +120,7 @@ Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts

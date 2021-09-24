@@ -1,0 +1,43 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+import fs = require("fs");
+>fs : Symbol(fs, Decl(index.ts, 0, 0))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(index.ts, 0, 0))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(index.ts, 2, 12))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import fs = require("fs");
+>fs : Symbol(fs, Decl(index.ts, 0, 0))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(index.ts, 0, 0))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(index.ts, 2, 12))
+
+=== tests/cases/conformance/node/file.ts ===
+// esm format file
+const __require = null;
+>__require : Symbol(__require, Decl(file.ts, 1, 5))
+
+const _createRequire = null;
+>_createRequire : Symbol(_createRequire, Decl(file.ts, 2, 5))
+
+import fs = require("fs");
+>fs : Symbol(fs, Decl(file.ts, 2, 28))
+
+fs.readFile;
+>fs : Symbol(fs, Decl(file.ts, 2, 28))
+
+export import fs2 = require("fs");
+>fs2 : Symbol(fs2, Decl(file.ts, 4, 12))
+
+=== tests/cases/conformance/node/types.d.ts ===
+declare module "fs";
+>"fs" : Symbol("fs", Decl(types.d.ts, 0, 0))
+

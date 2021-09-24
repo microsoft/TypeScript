@@ -172,7 +172,7 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             const options = context.getCompilerOptions();
             if (node.isDeclarationFile
-                || useDefineForClassFields && options.target === ScriptTarget.ESNext) {
+                || useDefineForClassFields && getEmitScriptTarget(options) === ScriptTarget.ESNext) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);

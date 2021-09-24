@@ -303,7 +303,7 @@ namespace ts {
             host.getSourceFiles().forEach(sf => {
                 if (!sf.resolvedModules) return;
 
-                forEachEntry(sf.resolvedModules, r => {
+                sf.resolvedModules.forEach(r => {
                     if (r && r.packageId) map.set(r.packageId.name, r.extension === Extension.Dts || !!map.get(r.packageId.name));
                 });
             });
@@ -1526,7 +1526,7 @@ namespace ts {
                 }
                 else if (isParameterPropertyDeclaration(declaration, declaration.parent)) {
                     // foo = this.bar is illegal in esnext+useDefineForClassFields when bar is a parameter property
-                    return !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
+                    return !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields
                              && getContainingClass(declaration) === getContainingClass(usage)
                              && isUsedInFunctionOrInstanceProperty(usage, declaration));
                 }
@@ -1557,7 +1557,7 @@ namespace ts {
                 return true;
             }
             if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
-                if (compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields
+                if (getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields
                     && getContainingClass(declaration)
                     && (isPropertyDeclaration(declaration) || isParameterPropertyDeclaration(declaration, declaration.parent))) {
                     return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage, /*stopAtAnyPropertyDeclaration*/ true);
@@ -1835,7 +1835,7 @@ namespace ts {
                         isInExternalModule = true;
                         // falls through
                     case SyntaxKind.ModuleDeclaration:
-                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration).exports || emptySymbols;
+                        const moduleExports = getSymbolOfNode(location as SourceFile | ModuleDeclaration)?.exports || emptySymbols;
                         if (location.kind === SyntaxKind.SourceFile || (isModuleDeclaration(location) && location.flags & NodeFlags.Ambient && !isGlobalScopeAugmentation(location))) {
 
                             // It's an external module. First see if the module has an export default and if the local
@@ -1878,7 +1878,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
-                        if (result = lookup(getSymbolOfNode(location)!.exports!, name, meaning & SymbolFlags.EnumMember)) {
+                        if (result = lookup(getSymbolOfNode(location)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
                             break loop;
                         }
                         break;
@@ -1961,7 +1961,7 @@ namespace ts {
                     case SyntaxKind.ArrowFunction:
                         // when targeting ES6 or higher there is no 'arguments' in an arrow function
                         // for lower compile targets the resolved symbol is used to emit an error
-                        if (compilerOptions.target! >= ScriptTarget.ES2015) {
+                        if (getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015) {
                             break;
                         }
                         // falls through
@@ -2141,7 +2141,7 @@ namespace ts {
 
             // Perform extra checks only if error reporting was requested
             if (nameNotFoundMessage) {
-                if (propertyWithInvalidInitializer && !(compilerOptions.target === ScriptTarget.ESNext && useDefineForClassFields)) {
+                if (propertyWithInvalidInitializer && !(getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && useDefineForClassFields)) {
                     // We have a match, but the reference occurred within a property initializer and the identifier also binds
                     // to a local variable in the constructor where the code will be emitted. Note that this is actually allowed
                     // with ESNext+useDefineForClassFields because the scope semantics are different.
@@ -2790,7 +2790,7 @@ namespace ts {
             if (!isIdentifier(name)) {
                 return undefined;
             }
-            const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || compilerOptions.esModuleInterop);
+            const suppressInteropError = name.escapedText === InternalSymbolName.Default && !!(compilerOptions.allowSyntheticDefaultImports || getESModuleInterop(compilerOptions));
             const targetSymbol = resolveESModuleSymbol(moduleSymbol, moduleSpecifier, /*dontResolveAlias*/ false, suppressInteropError);
             if (targetSymbol) {
                 if (name.escapedText) {
@@ -2879,18 +2879,18 @@ namespace ts {
 
         function reportInvalidImportEqualsExportMember(node: ImportDeclaration | ExportDeclaration | VariableDeclaration, name: Identifier, declarationName: string, moduleName: string) {
             if (moduleKind >= ModuleKind.ES2015) {
-                const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
+                const message = getESModuleInterop(compilerOptions) ? Diagnostics._0_can_only_be_imported_by_using_a_default_import :
                     Diagnostics._0_can_only_be_imported_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
                 error(name, message, declarationName);
             }
             else {
                 if (isInJSFile(node)) {
-                    const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_a_require_call_or_by_using_a_default_import :
+                    const message = getESModuleInterop(compilerOptions) ? Diagnostics._0_can_only_be_imported_by_using_a_require_call_or_by_using_a_default_import :
                         Diagnostics._0_can_only_be_imported_by_using_a_require_call_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
                     error(name, message, declarationName);
                 }
                 else {
-                    const message = compilerOptions.esModuleInterop ? Diagnostics._0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import :
+                    const message = getESModuleInterop(compilerOptions) ? Diagnostics._0_can_only_be_imported_by_using_import_1_require_2_or_a_default_import :
                         Diagnostics._0_can_only_be_imported_by_using_import_1_require_2_or_by_turning_on_the_esModuleInterop_flag_and_using_a_default_import;
                     error(name, message, declarationName, declarationName, moduleName);
                 }
@@ -3380,13 +3380,27 @@ namespace ts {
                 return ambientModule;
             }
             const currentSourceFile = getSourceFileOfNode(location);
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference)!; // TODO: GH#18217
+            const contextSpecifier = isStringLiteralLike(location)
+                ? location
+                :   findAncestor(location, isImportCall)?.arguments[0] ||
+                    findAncestor(location, isImportDeclaration)?.moduleSpecifier ||
+                    findAncestor(location, isExternalModuleImportEqualsDeclaration)?.moduleReference.expression ||
+                    findAncestor(location, isExportDeclaration)?.moduleSpecifier ||
+                    (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
+                    (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : undefined)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
                 if (sourceFile.symbol) {
                     if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                         errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
+                    }
+                    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node12 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
+                        const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
+                        if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+                            error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_synchronously_Use_dynamic_import_instead, moduleReference);
+                        }
                     }
                     // merged symbol is module declaration symbol combined with all augmentations
                     return getMergedSymbol(sourceFile.symbol);
@@ -3449,15 +3463,14 @@ namespace ts {
                          * Direct users to import source with .js extension if outputting an ES module.
                          * @see https://github.com/microsoft/TypeScript/issues/42151
                          */
-                        const moduleKind = getEmitModuleKind(compilerOptions);
                         if (moduleKind >= ModuleKind.ES2015) {
-                            replacedImportSource += ".js";
+                            replacedImportSource += tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js";
                         }
                         error(errorNode, diag, tsExtension, replacedImportSource);
                     }
                     else if (!compilerOptions.resolveJsonModule &&
                         fileExtensionIs(moduleReference, Extension.Json) &&
-                        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs &&
+                        getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic &&
                         hasJsonModuleEmitEnabled(compilerOptions)) {
                         error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                     }
@@ -3550,7 +3563,7 @@ namespace ts {
                     return symbol;
                 }
 
-                if (compilerOptions.esModuleInterop) {
+                if (getESModuleInterop(compilerOptions)) {
                     const referenceParent = referencingLocation.parent;
                     if (
                         (isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent)) ||
@@ -4603,6 +4616,7 @@ namespace ts {
                         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
                         fileExists: fileName => host.fileExists(fileName),
                         getFileIncludeReasons: () => host.getFileIncludeReasons(),
+                        readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
                     } : undefined },
                     encounteredError: false,
                     reportedDiagnostic: false,
@@ -5881,7 +5895,7 @@ namespace ts {
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
                     const specifier = getSpecifierForModuleSymbol(chain[0], context);
-                    if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs && specifier.indexOf("/node_modules/") >= 0) {
+                    if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic && specifier.indexOf("/node_modules/") >= 0) {
                         // If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
                         // since declaration files with these kinds of references are liable to fail when published :(
                         context.encounteredError = true;
@@ -6130,7 +6144,7 @@ namespace ts {
                 if (nameType) {
                     if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                         const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                        if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
+                        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && !isNumericLiteralName(name)) {
                             return factory.createStringLiteral(name, !!singleQuote);
                         }
                         if (isNumericLiteralName(name) && startsWith(name, "-")) {
@@ -6145,7 +6159,7 @@ namespace ts {
             }
 
             function createPropertyNameNodeForIdentifierOrLiteral(name: string, stringNamed?: boolean, singleQuote?: boolean) {
-                return isIdentifierText(name, compilerOptions.target) ? factory.createIdentifier(name) :
+                return isIdentifierText(name, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(name) :
                     !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
                     factory.createStringLiteral(name, !!singleQuote);
             }
@@ -7248,6 +7262,28 @@ namespace ts {
                     ), symbol.declarations && filter(symbol.declarations, d => isClassDeclaration(d) || isClassExpression(d))[0]), modifierFlags);
                 }
 
+                function getSomeTargetNameFromDeclarations(declarations: Declaration[] | undefined) {
+                    return firstDefined(declarations, d => {
+                        if (isImportSpecifier(d) || isExportSpecifier(d)) {
+                            return idText(d.propertyName || d.name);
+                        }
+                        if (isBinaryExpression(d) || isExportAssignment(d)) {
+                            const expression = isExportAssignment(d) ? d.expression : d.right;
+                            if (isPropertyAccessExpression(expression)) {
+                                return idText(expression.name);
+                            }
+                        }
+                        if (isAliasSymbolDeclaration(d)) {
+                            // This is... heuristic, at best. But it's probably better than always printing the name of the shorthand ambient module.
+                            const name = getNameOfDeclaration(d);
+                            if (name && isIdentifier(name)) {
+                                return idText(name);
+                            }
+                        }
+                        return undefined;
+                    });
+                }
+
                 function serializeAsAlias(symbol: Symbol, localName: string, modifierFlags: ModifierFlags) {
                     // synthesize an alias, eg `export { symbolName as Name }`
                     // need to mark the alias `symbol` points at
@@ -7258,8 +7294,10 @@ namespace ts {
                     if (!target) {
                         return;
                     }
-                    let verbatimTargetName = unescapeLeadingUnderscores(target.escapedName);
-                    if (verbatimTargetName === InternalSymbolName.ExportEquals && (compilerOptions.esModuleInterop || compilerOptions.allowSyntheticDefaultImports)) {
+                    // If `target` refers to a shorthand module symbol, the name we're trying to pull out isn;t recoverable from the target symbol
+                    // In such a scenario, we must fall back to looking for an alias declaration on `symbol` and pulling the target name from that
+                    let verbatimTargetName = isShorthandAmbientModuleSymbol(target) && getSomeTargetNameFromDeclarations(symbol.declarations) || unescapeLeadingUnderscores(target.escapedName);
+                    if (verbatimTargetName === InternalSymbolName.ExportEquals && (getESModuleInterop(compilerOptions) || compilerOptions.allowSyntheticDefaultImports)) {
                         // target refers to an `export=` symbol that was hoisted into a synthetic default - rename here to match
                         verbatimTargetName = InternalSymbolName.Default;
                     }
@@ -7948,7 +7986,7 @@ namespace ts {
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                     const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                    if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
+                    if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && !isNumericLiteralName(name)) {
                         return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
@@ -17764,7 +17802,7 @@ namespace ts {
                                 path = `${str}`;
                             }
                             // Otherwise write a dotted name if possible
-                            else if (isIdentifierText(str, compilerOptions.target)) {
+                            else if (isIdentifierText(str, getEmitScriptTarget(compilerOptions))) {
                                 path = `${path}.${str}`;
                             }
                             // Failing that, check if the name is already a computed name
@@ -27936,7 +27974,7 @@ namespace ts {
                     grammarErrorOnNode(right, Diagnostics.Cannot_assign_to_private_method_0_Private_methods_are_not_writable, idText(right));
                 }
 
-                if (lexicallyScopedSymbol?.valueDeclaration && (compilerOptions.target === ScriptTarget.ESNext && !useDefineForClassFields)) {
+                if (lexicallyScopedSymbol?.valueDeclaration && (getEmitScriptTarget(compilerOptions) === ScriptTarget.ESNext && !useDefineForClassFields)) {
                     const lexicalClass = getContainingClass(lexicallyScopedSymbol.valueDeclaration);
                     const parentStaticFieldInitializer = findAncestor(node, (n) => {
                         if (n === lexicalClass) return "quit";
@@ -30834,6 +30872,12 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
+            if (node.kind === SyntaxKind.TypeAssertionExpression) {
+                const file = getSourceFileOfNode(node);
+                if (file && fileExtensionIsOneOf(file.fileName, [Extension.Cts, Extension.Mts])) {
+                    grammarErrorOnNode(node, Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead);
+                }
+            }
             return checkAssertionWorker(node, node.type, node.expression);
         }
 
@@ -30944,7 +30988,14 @@ namespace ts {
 
         function checkImportMetaProperty(node: MetaProperty) {
             if (moduleKind !== ModuleKind.ES2020 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) {
-                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system);
+                if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+                    if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
+                        error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
+                    }
+                }
+                else {
+                    error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12_or_nodenext);
+                }
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
@@ -31967,10 +32018,10 @@ namespace ts {
                                     Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
                                 diagnostics.add(diagnostic);
                             }
-                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
+                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
                                 span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                                 const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher);
+                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher);
                                 diagnostics.add(diagnostic);
                             }
                         }
@@ -34234,7 +34285,7 @@ namespace ts {
                     // - The constructor declares parameter properties
                     //   or the containing class declares instance member variables with initializers.
                     const superCallShouldBeFirst =
-                        (compilerOptions.target !== ScriptTarget.ESNext || !useDefineForClassFields) &&
+                        (getEmitScriptTarget(compilerOptions) !== ScriptTarget.ESNext || !useDefineForClassFields) &&
                         (some((node.parent as ClassDeclaration).members, isInstancePropertyWithInitializerOrPrivateIdentifierProperty) ||
                          some(node.parameters, p => hasSyntacticModifier(p, ModifierFlags.ParameterPropertyModifier)));
 
@@ -36185,7 +36236,7 @@ namespace ts {
 
         function checkCollisionWithRequireExportsInGeneratedCode(node: Node, name: Identifier | undefined) {
             // No need to check for require or exports for ES6 modules and later
-            if (moduleKind >= ModuleKind.ES2015) {
+            if (moduleKind >= ModuleKind.ES2015 && !(moduleKind >= ModuleKind.Node12 && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
                 return;
             }
 
@@ -37929,8 +37980,8 @@ namespace ts {
          * The name cannot be used as 'Object' of user defined types with special target.
          */
         function checkClassNameCollisionWithObject(name: Identifier): void {
-            if (languageVersion === ScriptTarget.ES5 && name.escapedText === "Object"
-                && moduleKind < ModuleKind.ES2015) {
+            if (languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
+                && (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(name).impliedNodeFormat === ModuleKind.CommonJS)) {
                 error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
             }
         }
@@ -39197,8 +39248,8 @@ namespace ts {
             checkAliasSymbol(node);
             if (node.kind === SyntaxKind.ImportSpecifier &&
                 idText(node.propertyName || node.name) === "default" &&
-                compilerOptions.esModuleInterop &&
-                moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015) {
+                getESModuleInterop(compilerOptions) &&
+                moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
             }
         }
@@ -39232,7 +39283,7 @@ namespace ts {
                     if (importClause.namedBindings) {
                         if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                             checkImportBinding(importClause.namedBindings);
-                            if (moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015 && compilerOptions.esModuleInterop) {
+                            if (moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS) && getESModuleInterop(compilerOptions)) {
                                 // import * as ns from "foo";
                                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
                             }
@@ -39280,7 +39331,7 @@ namespace ts {
                     }
                 }
                 else {
-                    if (moduleKind >= ModuleKind.ES2015 && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
+                    if (moduleKind >= ModuleKind.ES2015 && getSourceFileOfNode(node).impliedNodeFormat === undefined && !node.isTypeOnly && !(node.flags & NodeFlags.Ambient)) {
                         // Import equals declaration is deprecated in es6 or above
                         grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                     }
@@ -39325,12 +39376,12 @@ namespace ts {
                     else if (node.exportClause) {
                         checkAliasSymbol(node.exportClause);
                     }
-                    if (moduleKind !== ModuleKind.System && moduleKind < ModuleKind.ES2015) {
+                    if (moduleKind !== ModuleKind.System && (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)) {
                         if (node.exportClause) {
                             // export * as ns from "foo";
                             // For ES2015 modules, we emit it as a pair of `import * as a_1 ...; export { a_1 as ns }` and don't need the helper.
                             // We only use the helper here when in esModuleInterop
-                            if (compilerOptions.esModuleInterop) {
+                            if (getESModuleInterop(compilerOptions)) {
                                 checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportStar);
                             }
                         }
@@ -39422,9 +39473,9 @@ namespace ts {
                 }
             }
             else {
-                if (compilerOptions.esModuleInterop &&
+                if (getESModuleInterop(compilerOptions) &&
                     moduleKind !== ModuleKind.System &&
-                    moduleKind < ModuleKind.ES2015 &&
+                    (moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS) &&
                     idText(node.propertyName || node.name) === "default") {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ImportDefault);
                 }
@@ -39492,7 +39543,7 @@ namespace ts {
             }
 
             if (node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
-                if (moduleKind >= ModuleKind.ES2015) {
+                if (moduleKind >= ModuleKind.ES2015 && getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.CommonJS) {
                     // export assignment is not supported in es6 modules
                     grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
                 }
@@ -42253,6 +42304,12 @@ namespace ts {
                 return false;
             }
 
+            if (node.typeParameters && !(length(node.typeParameters) > 1 || node.typeParameters.hasTrailingComma || node.typeParameters[0].constraint)) {
+                if (file && fileExtensionIsOneOf(file.fileName, [Extension.Mts, Extension.Cts])) {
+                    grammarErrorOnNode(node.typeParameters[0], Diagnostics.This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_constraint);
+                }
+            }
+
             const { equalsGreaterThanToken } = node;
             const startLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.pos).line;
             const endLine = getLineAndCharacterOfPosition(file, equalsGreaterThanToken.end).line;
@@ -42623,9 +42680,9 @@ namespace ts {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
                                     Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                             }
-                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) || languageVersion < ScriptTarget.ES2017) {
+                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_target_option_is_set_to_es2017_or_higher));
+                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher));
                             }
                         }
                     }
@@ -43004,8 +43061,7 @@ namespace ts {
                 return grammarErrorOnNode(node.exclamationToken, message);
             }
 
-            const moduleKind = getEmitModuleKind(compilerOptions);
-            if (moduleKind < ModuleKind.ES2015 && moduleKind !== ModuleKind.System &&
+            if ((moduleKind < ModuleKind.ES2015 || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS) && moduleKind !== ModuleKind.System &&
                 !(node.parent.parent.flags & NodeFlags.Ambient) && hasSyntacticModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }
@@ -43375,7 +43431,7 @@ namespace ts {
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system_or_umd);
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system_umd_node12_or_nodenext);
             }
 
             if (node.typeArguments) {

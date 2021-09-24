@@ -426,7 +426,7 @@ namespace ts.Completions {
                 location,
                 sourceFile,
                 typeChecker,
-                compilerOptions.target!,
+                getEmitScriptTarget(compilerOptions),
                 log,
                 completionKind,
                 preferences,
@@ -440,7 +440,7 @@ namespace ts.Completions {
                 symbolToOriginInfoMap,
                 symbolToSortTextIdMap
             );
-            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
+            getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries); // TODO: GH#18217
         }
         else {
             if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
@@ -454,7 +454,7 @@ namespace ts.Completions {
                 location,
                 sourceFile,
                 typeChecker,
-                compilerOptions.target!,
+                getEmitScriptTarget(compilerOptions),
                 log,
                 completionKind,
                 preferences,
@@ -1004,7 +1004,7 @@ namespace ts.Completions {
         // completion entry.
         return firstDefined(symbols, (symbol, index): SymbolCompletion | undefined => {
             const origin = symbolToOriginInfoMap[index];
-            const info = getCompletionEntryDisplayNameForSymbol(symbol, compilerOptions.target!, origin, completionKind, completionData.isJsxIdentifierExpected);
+            const info = getCompletionEntryDisplayNameForSymbol(symbol, getEmitScriptTarget(compilerOptions), origin, completionKind, completionData.isJsxIdentifierExpected);
             return info && info.name === entryId.name && getSourceFromOrigin(origin) === entryId.source
                 ? { type: "symbol" as const, symbol, location, origin, previousToken, isJsxInitializer, isTypeOnlyLocation }
                 : undefined;
@@ -1124,7 +1124,7 @@ namespace ts.Completions {
             exportedSymbol,
             moduleSymbol,
             sourceFile,
-            getNameForExportedSymbol(symbol, compilerOptions.target),
+            getNameForExportedSymbol(symbol, getEmitScriptTarget(compilerOptions)),
             host,
             program,
             formatContext,

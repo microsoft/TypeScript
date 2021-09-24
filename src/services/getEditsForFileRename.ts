@@ -189,9 +189,10 @@ namespace ts {
             return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
         }
         else {
+            const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
             const resolved = host.resolveModuleNames
-                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
-                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
+                ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
+                : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
             return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
         }
     }

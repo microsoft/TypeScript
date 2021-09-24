@@ -23,15 +23,15 @@ namespace ts.codefix {
             const info = getInfo(sourceFile, context.span.start, context, errorCode);
             if (!info) return undefined;
             const { node, suggestedSymbol } = info;
-            const { target } = context.host.getCompilationSettings();
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target!));
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
             return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
             const info = getInfo(diag.file, diag.start, context, diag.code);
-            const { target } = context.host.getCompilationSettings();
-            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target!);
+            const target = getEmitScriptTarget(context.host.getCompilationSettings());
+            if (info) doChange(changes, context.sourceFile, info.node, info.suggestedSymbol, target);
         }),
     });
 
@@ -132,7 +132,7 @@ namespace ts.codefix {
     function getResolvedSourceFileFromImportDeclaration(sourceFile: SourceFile, context: CodeFixContextBase, importDeclaration: ImportDeclaration): SourceFile | undefined {
         if (!importDeclaration || !isStringLiteralLike(importDeclaration.moduleSpecifier)) return undefined;
 
-        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text);
+        const resolvedModule = getResolvedModule(sourceFile, importDeclaration.moduleSpecifier.text, getModeForUsageLocation(sourceFile, importDeclaration.moduleSpecifier));
         if (!resolvedModule) return undefined;
 
         return context.program.getSourceFile(resolvedModule.resolvedFileName);

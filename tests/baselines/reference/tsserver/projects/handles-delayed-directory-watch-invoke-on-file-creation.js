@@ -32,7 +32,7 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	b.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	sub/a.ts
@@ -101,7 +101,7 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	b.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	a.ts
@@ -167,7 +167,7 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	b.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 
@@ -273,7 +273,7 @@ Project '/users/username/projects/project/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	b.ts
 	  Matched by include pattern '**/*' in 'tsconfig.json'
 	sub/a.ts

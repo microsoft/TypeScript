@@ -481,7 +481,7 @@ namespace ts {
         if (compilerOptions.importHelpers && isEffectiveExternalModule(sourceFile, compilerOptions)) {
             let namedBindings: NamedImportBindings | undefined;
             const moduleKind = getEmitModuleKind(compilerOptions);
-            if (moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) {
+            if ((moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext) || sourceFile.impliedNodeFormat === ModuleKind.ESNext) {
                 // use named imports
                 const helpers = getEmitHelpers(sourceFile);
                 if (helpers) {
@@ -539,9 +539,9 @@ namespace ts {
             }
 
             const moduleKind = getEmitModuleKind(compilerOptions);
-            let create = (hasExportStarsToExportValues || (compilerOptions.esModuleInterop && hasImportStarOrImportDefault))
+            let create = (hasExportStarsToExportValues || (getESModuleInterop(compilerOptions) && hasImportStarOrImportDefault))
                 && moduleKind !== ModuleKind.System
-                && moduleKind < ModuleKind.ES2015;
+                && (moduleKind < ModuleKind.ES2015 || node.impliedNodeFormat === ModuleKind.CommonJS);
             if (!create) {
                 const helpers = getEmitHelpers(node);
                 if (helpers) {
