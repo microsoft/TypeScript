@@ -945,7 +945,7 @@ interface RegExp {
 
     // Non-standard extensions
     /** @deprecated A legacy feature for browser compatibility */
-    compile(): this;
+    compile(pattern: string, flags?: string): this;
 }
 
 interface RegExpConstructor {
