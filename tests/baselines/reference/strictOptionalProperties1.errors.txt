@@ -340,9 +340,9 @@ tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'st
         onClick?: (() => void) | undefined;
     }
     
-    export type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+    type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
     
-    export interface NavBottomListItem extends TheTypeFromMaterialUI {
+    interface NavBottomListItem extends TheTypeFromMaterialUI {
         value: string;
     }
     

@@ -221,9 +221,9 @@ interface PropsFromMaterialUI {
     onClick?: (() => void) | undefined;
 }
 
-export type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
 
-export interface NavBottomListItem extends TheTypeFromMaterialUI {
+interface NavBottomListItem extends TheTypeFromMaterialUI {
     value: string;
 }
 
@@ -248,7 +248,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
 function f1(obj) {
     var a = obj.a; // string | undefined
     var b = obj.b; // string | undefined
@@ -377,14 +376,118 @@ a = e; // Error
 
 
 //// [strictOptionalProperties1.d.ts]
+declare function f1(obj: {
+    a?: string;
+    b?: string | undefined;
+}): void;
+declare function f2(obj: {
+    a?: string;
+    b?: string | undefined;
+}): void;
+declare function f3(obj: Partial<{
+    a: string;
+    b: string | undefined;
+}>): void;
+declare function f4(t: [string?]): void;
+declare function f4a(t1: [number, string?], t2: [number, string?, string?]): void;
+declare function f5(t: [number, string?, boolean?]): void;
+declare function f6(): void;
+declare type Props = {
+    foo: string;
+    bar: string;
+};
+declare type InputProps = {
+    foo?: string;
+    bar: string;
+};
+declare const defaultProps: Pick<Props, 'foo'>;
+declare const inputProps: InputProps;
+declare const completeProps: Props;
+declare const t1: [number, string?, boolean?];
+declare const t2: [number, string?, boolean?];
+declare const t3: [number, string?, boolean?];
+declare const t4: [number, string?, boolean?];
+declare const x: {
+    foo?: number;
+};
+declare const y: {
+    foo: number;
+};
+interface Test {
+    [key: string]: string;
+    foo?: string;
+    bar?: string | undefined;
+}
+declare let ox1: {
+    p: string;
+};
+declare let ox2: {
+    p: string | undefined;
+};
+declare let ox3: {
+    p?: string;
+};
+declare let ox4: {
+    p?: string | undefined;
+};
+declare let tx1: [string];
+declare let tx2: [string | undefined];
+declare let tx3: [string?];
+declare let tx4: [(string | undefined)?];
+declare function f11<T>(x: {
+    p?: T;
+}): T;
+declare function f12<T>(x: [T?]): T;
+declare function f13<T>(x: Partial<T>): T;
+declare type Undefinable<T> = T | undefined;
+declare function expectNotUndefined<T>(value: Undefinable<T>): T;
+interface Bar {
+    bar?: number;
+}
+declare function aa(input: Bar): void;
+declare function bb(input: number): void;
+interface U1 {
+    name: string;
+    email?: string | number | undefined;
+}
+interface U2 {
+    name: string;
+    email?: string | number;
+}
+declare const e: string | boolean | undefined;
+declare const u1: U1;
+declare let u2: U2;
+declare var a: {
+    [x: string]: number | string;
+};
+declare var b: {
+    a: number;
+    b: string;
+};
+declare var c: {
+    a: number;
+    b?: string;
+};
+declare var d: {
+    a: number;
+    b: string | undefined;
+};
+declare var e: {
+    a: number;
+    b?: string | undefined;
+};
 interface PropsFromReact {
     onClick?: () => void;
 }
 interface PropsFromMaterialUI {
     onClick?: (() => void) | undefined;
 }
-export declare type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
-export interface NavBottomListItem extends TheTypeFromMaterialUI {
+declare type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+interface NavBottomListItem extends TheTypeFromMaterialUI {
     value: string;
 }
-export {};
+declare type UA = undefined;
+declare type UB = {
+    x?: never;
+}['x'];
+declare type UC = UA & UB;

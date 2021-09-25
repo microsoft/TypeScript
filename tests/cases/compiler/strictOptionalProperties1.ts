@@ -224,9 +224,9 @@ interface PropsFromMaterialUI {
     onClick?: (() => void) | undefined;
 }
 
-export type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
 
-export interface NavBottomListItem extends TheTypeFromMaterialUI {
+interface NavBottomListItem extends TheTypeFromMaterialUI {
     value: string;
 }
 
