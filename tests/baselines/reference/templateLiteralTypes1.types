@@ -419,7 +419,7 @@ type Foo<T> = T extends `*${infer S}*` ? S : never;
 >Foo : Foo<T>
 
 type TF1 = Foo<any>;      // never
->TF1 : never
+>TF1 : string
 
 type TF2 = Foo<string>;   // never
 >TF2 : never

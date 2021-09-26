@@ -49,8 +49,8 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >t : T
 
     let x1 = foo1('hello');  // Error
->x1 : never
->foo1('hello') : never
+>x1 : string
+>foo1('hello') : string
 >foo1 : <V extends string>(arg: `*${V}*`) => V
 >'hello' : "hello"
 
