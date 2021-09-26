@@ -53,6 +53,7 @@
         "es2021.weakref",
         "es2021.intl",
         "esnext.intl",
+        "esnext.regexp",
         // Default libraries
         "es5.full",
         "es2015.full",
