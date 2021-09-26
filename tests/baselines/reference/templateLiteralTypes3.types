@@ -379,3 +379,20 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 >blah : string
 }
 
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+>Schema : Schema
+>a : { b: {    c: number;}; }
+>b : { c: number; }
+>c : number
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>field : F | `${F}.${F}`
+
+chain("a");
+>chain("a") : void
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>"a" : "a"
+

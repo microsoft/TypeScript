@@ -139,3 +139,11 @@ tests/cases/conformance/types/literal/templateLiteralTypes3.ts(74,5): error TS23
         blah: string;
     }
     
+    // Repro from #45906
+    
+    type Schema = { a: { b: { c: number } } };
+    
+    declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+    
+    chain("a");
+    
