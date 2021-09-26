@@ -5181,7 +5181,7 @@ namespace ts {
         IncludesMask = Any | Unknown | Primitive | Never | Object | Union | Intersection | NonPrimitive | TemplateLiteral,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
-        IncludesStructuredOrInstantiable = TypeParameter,
+        IncludesMissingType = TypeParameter,
         /* @internal */
         IncludesNonWideningType = Index,
         /* @internal */
