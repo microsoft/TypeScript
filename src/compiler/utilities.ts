@@ -6634,8 +6634,9 @@ namespace ts {
         const visited = new Map<string, true>();
         const toCanonical = createGetCanonicalFileName(useCaseSensitiveFileNames);
         for (const basePath of patterns.basePaths) {
-            if (directoryExists(basePath)) {
-                visitDirectory(basePath, combinePaths(currentDirectory, basePath), depth);
+            const absoluteBasePath = combinePaths(currentDirectory, basePath);
+            if (directoryExists(absoluteBasePath)) {
+                visitDirectory(basePath, absoluteBasePath, depth);
             }
         }
 
