@@ -6381,7 +6381,8 @@ namespace ts {
         const aParts = getPathComponents(getNormalizedAbsolutePath(a, cwd));
         const bParts = getPathComponents(getNormalizedAbsolutePath(b, cwd));
         let isDirectory = false;
-        while (aParts.length && bParts.length &&
+        while (
+            aParts.length >= 2 && bParts.length >= 2 &&
             !isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
             getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])
