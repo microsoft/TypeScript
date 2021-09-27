@@ -9720,6 +9720,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[专用标识符仅允许在类主体中使用，并且只能用作类成员声明的一部分、属性访问或用在 "in" 表达式的左侧]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Private_identifiers_are_only_available_when_targeting_ECMAScript_2015_and_higher_18028" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Private identifiers are only available when targeting ECMAScript 2015 and higher.]]></Val>
@@ -12675,11 +12684,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol_2360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.]]></Val>
+          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["in" 表达式左侧的类型必须为 "any"、"string"、"number" 或 "symbol"。]]></Val>
+            <Val><![CDATA["in" 表达式的左侧必须是专用标识符或其类型必须为 "any"、"string"、"number" 或 "symbol"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
