@@ -14030,7 +14030,6 @@ namespace ts {
             // We ignore 'never' types in unions
             if (!(flags & TypeFlags.Never)) {
                 includes |= flags & TypeFlags.IncludesMask;
-                if (flags & TypeFlags.StructuredOrInstantiable) includes |= TypeFlags.IncludesStructuredOrInstantiable;
                 if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(getObjectFlags(type) & ObjectFlags.ContainsWideningType)) includes |= TypeFlags.IncludesNonWideningType;
@@ -14337,13 +14336,19 @@ namespace ts {
                 if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.IncludesWildcard;
                 }
-                else if ((strictNullChecks || !(flags & TypeFlags.Nullable)) && !typeSet.has(type.id.toString())) {
-                    if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
-                        // We have seen two distinct unit types which means we should reduce to an
-                        // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
-                        includes |= TypeFlags.NonPrimitive;
+                else if (strictNullChecks || !(flags & TypeFlags.Nullable)) {
+                    if (exactOptionalPropertyTypes && type === missingType) {
+                        includes |= TypeFlags.IncludesMissingType;
+                        type = undefinedType;
                     }
-                    typeSet.set(type.id.toString(), type);
+                    if (!typeSet.has(type.id.toString())) {
+                        if (type.flags & TypeFlags.Unit && includes & TypeFlags.Unit) {
+                            // We have seen two distinct unit types which means we should reduce to an
+                            // empty intersection. Adding TypeFlags.NonPrimitive causes that to happen.
+                            includes |= TypeFlags.NonPrimitive;
+                        }
+                        typeSet.set(type.id.toString(), type);
+                    }
                 }
                 includes |= flags & TypeFlags.IncludesMask;
             }
@@ -14418,14 +14423,14 @@ namespace ts {
             return false;
         }
 
-        function extractIrreducible(types: Type[], flag: TypeFlags) {
-            if (every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)))) {
-                for (let i = 0; i < types.length; i++) {
-                    types[i] = filterType(types[i], t => !(t.flags & flag));
-                }
-                return true;
+        function eachIsUnionContaining(types: Type[], flag: TypeFlags) {
+            return every(types, t => !!(t.flags & TypeFlags.Union) && some((t as UnionType).types, tt => !!(tt.flags & flag)));
+        }
+
+        function removeFromEach(types: Type[], flag: TypeFlags) {
+            for (let i = 0; i < types.length; i++) {
+                types[i] = filterType(types[i], t => !(t.flags & flag));
             }
-            return false;
         }
 
         // If the given list of types contains more than one union of primitive types, replace the
@@ -14535,6 +14540,9 @@ namespace ts {
             if (includes & TypeFlags.IncludesEmptyObject && includes & TypeFlags.Object) {
                 orderedRemoveItemAt(typeSet, findIndex(typeSet, isEmptyAnonymousObjectType));
             }
+            if (includes & TypeFlags.IncludesMissingType) {
+                typeSet[typeSet.indexOf(undefinedType)] = missingType;
+            }
             if (typeSet.length === 0) {
                 return unknownType;
             }
@@ -14551,10 +14559,13 @@ namespace ts {
                         // reduced we'll never reduce again, so this occurs at most once.
                         result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                     }
-                    else if (extractIrreducible(typeSet, TypeFlags.Undefined)) {
-                        result = getUnionType([getIntersectionType(typeSet), undefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
+                    else if (eachIsUnionContaining(typeSet, TypeFlags.Undefined)) {
+                        const undefinedOrMissingType = exactOptionalPropertyTypes && some(typeSet, t => containsType((t as UnionType).types, missingType)) ? missingType : undefinedType;
+                        removeFromEach(typeSet, TypeFlags.Undefined);
+                        result = getUnionType([getIntersectionType(typeSet), undefinedOrMissingType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
-                    else if (extractIrreducible(typeSet, TypeFlags.Null)) {
+                    else if (eachIsUnionContaining(typeSet, TypeFlags.Null)) {
+                        removeFromEach(typeSet, TypeFlags.Null);
                         result = getUnionType([getIntersectionType(typeSet), nullType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                     }
                     else {

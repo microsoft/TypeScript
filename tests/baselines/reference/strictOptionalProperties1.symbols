@@ -670,3 +670,46 @@ a = e;  // Error
 >a : Symbol(a, Decl(strictOptionalProperties1.ts, 201, 11))
 >e : Symbol(e, Decl(strictOptionalProperties1.ts, 189, 13))
 
+// Repro from #46004
+
+interface PropsFromReact {
+>PropsFromReact : Symbol(PropsFromReact, Decl(strictOptionalProperties1.ts, 210, 6))
+
+    onClick?: () => void;
+>onClick : Symbol(PropsFromReact.onClick, Decl(strictOptionalProperties1.ts, 214, 26))
+}
+
+interface PropsFromMaterialUI {
+>PropsFromMaterialUI : Symbol(PropsFromMaterialUI, Decl(strictOptionalProperties1.ts, 216, 1))
+
+    onClick?: (() => void) | undefined;
+>onClick : Symbol(PropsFromMaterialUI.onClick, Decl(strictOptionalProperties1.ts, 218, 31))
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+>TheTypeFromMaterialUI : Symbol(TheTypeFromMaterialUI, Decl(strictOptionalProperties1.ts, 220, 1))
+>PropsFromReact : Symbol(PropsFromReact, Decl(strictOptionalProperties1.ts, 210, 6))
+>PropsFromMaterialUI : Symbol(PropsFromMaterialUI, Decl(strictOptionalProperties1.ts, 216, 1))
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+>NavBottomListItem : Symbol(NavBottomListItem, Decl(strictOptionalProperties1.ts, 222, 66))
+>TheTypeFromMaterialUI : Symbol(TheTypeFromMaterialUI, Decl(strictOptionalProperties1.ts, 220, 1))
+
+    value: string;
+>value : Symbol(NavBottomListItem.value, Decl(strictOptionalProperties1.ts, 224, 59))
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+>UA : Symbol(UA, Decl(strictOptionalProperties1.ts, 226, 1))
+
+type UB = { x?: never }['x'];  // undefined from missing property
+>UB : Symbol(UB, Decl(strictOptionalProperties1.ts, 230, 20))
+>x : Symbol(x, Decl(strictOptionalProperties1.ts, 231, 11))
+
+type UC = UA & UB;  // undefined
+>UC : Symbol(UC, Decl(strictOptionalProperties1.ts, 231, 29))
+>UA : Symbol(UA, Decl(strictOptionalProperties1.ts, 226, 1))
+>UB : Symbol(UB, Decl(strictOptionalProperties1.ts, 230, 20))
+
