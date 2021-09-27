@@ -385,3 +385,23 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
 >blah : Symbol(ITest.blah, Decl(templateLiteralTypes3.ts, 114, 78))
 }
 
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+>Schema : Symbol(Schema, Decl(templateLiteralTypes3.ts, 116, 1))
+>a : Symbol(a, Decl(templateLiteralTypes3.ts, 120, 15))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 120, 20))
+>c : Symbol(c, Decl(templateLiteralTypes3.ts, 120, 25))
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+>chain : Symbol(chain, Decl(templateLiteralTypes3.ts, 120, 42))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>Schema : Symbol(Schema, Decl(templateLiteralTypes3.ts, 116, 1))
+>field : Symbol(field, Decl(templateLiteralTypes3.ts, 122, 47))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+
+chain("a");
+>chain : Symbol(chain, Decl(templateLiteralTypes3.ts, 120, 42))
+

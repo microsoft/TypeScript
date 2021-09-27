@@ -21939,8 +21939,16 @@ namespace ts {
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
                 const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
-                for (let i = 0; i < types.length; i++) {
-                    inferFromTypes(matches ? matches[i] : neverType, types[i]);
+                // When the target template literal contains only placeholders (meaning that inference is intended to extract
+                // single characters and remainder strings) and inference fails to produce matches, we want to infer 'never' for
+                // each placeholder such that instantiation with the inferred value(s) produces 'never', a type for which an
+                // assignment check will fail. If we make no inferences, we'll likely end up with the constraint 'string' which,
+                // upon instantiation, would collapse all the placeholders to just 'string', and an assignment check might
+                // succeed. That would be a pointless and confusing outcome.
+                if (matches || every(target.texts, s => s.length === 0)) {
+                    for (let i = 0; i < types.length; i++) {
+                        inferFromTypes(matches ? matches[i] : neverType, types[i]);
+                    }
                 }
             }
 
