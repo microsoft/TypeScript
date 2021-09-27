@@ -16,7 +16,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/index.tsx",
       "kind": "alias",
-      "name": "(alias) const SubmissionComp: (submission: any) => any\nimport SubmissionComp",
+      "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
       "textSpan": {
         "start": 9,
         "length": 14
@@ -75,8 +75,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "SubmissionProps",
+          "kind": "text"
         },
         {
           "text": ")",
@@ -95,8 +95,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "div",
+          "kind": "text"
         },
         {
           "text": "\n",
@@ -155,7 +155,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
       "kind": "const",
-      "name": "const SubmissionComp: (submission: any) => any",
+      "name": "const SubmissionComp: (submission: SubmissionProps) => div",
       "textSpan": {
         "start": 13,
         "length": 14
@@ -198,8 +198,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "SubmissionProps",
+          "kind": "text"
         },
         {
           "text": ")",
@@ -218,8 +218,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "div",
+          "kind": "text"
         }
       ],
       "contextSpan": {
@@ -263,7 +263,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/RedditSubmission.ts",
       "kind": "const",
-      "name": "const SubmissionComp: (submission: any) => any",
+      "name": "const SubmissionComp: (submission: SubmissionProps) => div",
       "textSpan": {
         "start": 13,
         "length": 14
@@ -306,8 +306,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "SubmissionProps",
+          "kind": "text"
         },
         {
           "text": ")",
@@ -326,8 +326,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "div",
+          "kind": "text"
         }
       ],
       "contextSpan": {
@@ -357,7 +357,7 @@
       "containerName": "",
       "fileName": "/tests/cases/fourslash/index.tsx",
       "kind": "alias",
-      "name": "(alias) const SubmissionComp: (submission: any) => any\nimport SubmissionComp",
+      "name": "(alias) const SubmissionComp: (submission: SubmissionProps) => div\nimport SubmissionComp",
       "textSpan": {
         "start": 9,
         "length": 14
@@ -416,8 +416,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "SubmissionProps",
+          "kind": "text"
         },
         {
           "text": ")",
@@ -436,8 +436,8 @@
           "kind": "space"
         },
         {
-          "text": "any",
-          "kind": "keyword"
+          "text": "div",
+          "kind": "text"
         },
         {
           "text": "\n",

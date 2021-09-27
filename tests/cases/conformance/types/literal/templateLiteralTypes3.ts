@@ -118,3 +118,11 @@ type PrefixData<P extends Prefixes> = `${P}:baz`;
 interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
+
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+
+chain("a");

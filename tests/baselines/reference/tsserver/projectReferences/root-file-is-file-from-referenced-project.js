@@ -39,7 +39,7 @@ Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -115,7 +115,7 @@ Project '/user/username/projects/project/src/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	common/input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Imported via 'common/input/keyboard' from file 'common/input/keyboard.test.ts'

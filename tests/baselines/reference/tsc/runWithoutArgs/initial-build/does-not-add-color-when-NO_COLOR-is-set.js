@@ -73,7 +73,7 @@ default: ES3
 
 --module, -m
 Specify what module code is generated.
-one of: none, commonjs, amd, system, umd, es6, es2015, es2020, esnext
+one of: none, commonjs, amd, system, umd, es6, es2015, es2020, esnext, node12, nodenext
 
 --lib
 Specify a set of bundled library declaration files that describe the target runtime environment.

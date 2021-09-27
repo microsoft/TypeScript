@@ -401,6 +401,12 @@ namespace ts {
         public kind!: SyntaxKind.PrivateIdentifier;
         public escapedText!: __String;
         public symbol!: Symbol;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _updateExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
         constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
             super(pos, end);
         }
@@ -642,8 +648,8 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: ESMap<string, Declaration[]> | undefined;

@@ -21,6 +21,7 @@ let { a: a3 = 2 } = x;
 let { a: a4 = 2 as const } = x;
 >a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
 >a4 : Symbol(a4, Decl(literalTypesAndDestructuring.ts, 5, 5))
+>const : Symbol(const)
 >x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
 
 let b1 = x.a;
@@ -46,6 +47,7 @@ let b4 = x.a ?? 2 as const;
 >x.a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
 >x : Symbol(x, Decl(literalTypesAndDestructuring.ts, 0, 11))
 >a : Symbol(a, Decl(literalTypesAndDestructuring.ts, 0, 16))
+>const : Symbol(const)
 
 // Repro from #35693
 

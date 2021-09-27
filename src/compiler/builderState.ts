@@ -82,6 +82,7 @@ namespace ts {
             readonly version: string;
             signature: string | undefined;
             affectsGlobalScope: boolean | undefined;
+            impliedFormat: number | undefined;
         }
 
         export interface ReadonlyManyToManyPathMap {
@@ -332,7 +333,7 @@ namespace ts {
                         }
                     }
                 }
-                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined });
+                fileInfos.set(sourceFile.resolvedPath, { version, signature: oldInfo && oldInfo.signature, affectsGlobalScope: isFileAffectingGlobalScope(sourceFile) || undefined, impliedFormat: sourceFile.impliedNodeFormat });
             }
 
             return {
@@ -433,7 +434,7 @@ namespace ts {
                 );
                 const firstDts = firstOrUndefined(emitOutput.outputFiles);
                 if (firstDts) {
-                    Debug.assert(fileExtensionIs(firstDts.name, Extension.Dts), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
+                    Debug.assert(fileExtensionIsOneOf(firstDts.name, [Extension.Dts, Extension.Dmts, Extension.Dcts]), "File extension for signature expected to be dts", () => `Found: ${getAnyExtensionFromPath(firstDts.name)} for ${firstDts.name}:: All output files: ${JSON.stringify(emitOutput.outputFiles.map(f => f.name))}`);
                     latestSignature = (computeHash || generateDjb2Hash)(firstDts.text);
                     if (exportedModulesMapCache && latestSignature !== prevSignature) {
                         updateExportedModules(sourceFile, emitOutput.exportedModulesFromDeclarationEmit, exportedModulesMapCache);

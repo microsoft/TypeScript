@@ -5617,6 +5617,8 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
+                case SyntaxKind.PrivateIdentifier:
+                    return parsePrivateIdentifier();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
@@ -8675,6 +8677,7 @@ namespace ts {
                 newText,
                 aggressiveChecks
             );
+            result.impliedNodeFormat = sourceFile.impliedNodeFormat;
             return result;
         }
 
@@ -9215,7 +9218,7 @@ namespace ts {
 
     /** @internal */
     export function isDeclarationFileName(fileName: string): boolean {
-        return fileExtensionIs(fileName, Extension.Dts);
+        return fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Dmts, Extension.Dcts]);
     }
 
     /*@internal*/

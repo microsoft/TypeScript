@@ -59,7 +59,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -174,7 +174,7 @@ Output::
     File is included via import here.
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'

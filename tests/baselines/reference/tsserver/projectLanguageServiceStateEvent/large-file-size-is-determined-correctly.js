@@ -33,7 +33,7 @@ Project '/a/jsconfig.json' (Configured)
 
 
 	lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	app.js
 	  Matched by include pattern '**/*' in 'jsconfig.json'
 

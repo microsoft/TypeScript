@@ -21,8 +21,8 @@ function runTests() {
 >WriterAggregator : any
 
       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
->compiler : any
-><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : any
+>compiler : TypeScript.TypeScriptCompiler
+><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : TypeScript.TypeScriptCompiler
 >TypeScript : any
 >new TypeScript.TypeScriptCompiler(outerr) : any
 >TypeScript.TypeScriptCompiler : any

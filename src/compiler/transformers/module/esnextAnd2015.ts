@@ -5,7 +5,10 @@ namespace ts {
             factory,
             getEmitHelperFactory: emitHelpers,
         } = context;
+        const host = context.getEmitHost();
+        const resolver = context.getEmitResolver();
         const compilerOptions = context.getCompilerOptions();
+        const languageVersion = getEmitScriptTarget(compilerOptions);
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
         context.onEmitNode = onEmitNode;
@@ -14,6 +17,8 @@ namespace ts {
         context.enableSubstitution(SyntaxKind.Identifier);
 
         let helperNameSubstitutions: ESMap<string, Identifier> | undefined;
+        let currentSourceFile: SourceFile | undefined;
+        let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
         return chainBundle(context, transformSourceFile);
 
         function transformSourceFile(node: SourceFile) {
@@ -22,7 +27,16 @@ namespace ts {
             }
 
             if (isExternalModule(node) || compilerOptions.isolatedModules) {
-                const result = updateExternalModule(node);
+                currentSourceFile = node;
+                importRequireStatements = undefined;
+                let result = updateExternalModule(node);
+                currentSourceFile = undefined;
+                if (importRequireStatements) {
+                    result = factory.updateSourceFile(
+                        result,
+                        setTextRange(factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)), result.statements),
+                    );
+                }
                 if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
                     return result;
                 }
@@ -55,8 +69,10 @@ namespace ts {
         function visitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    // Elide `import=` as it is not legal with --module ES6
-                    return undefined;
+                    // Though an error in es2020 modules, in node-flavor es2020 modules, we can helpfully transform this to a synthetic `require` call
+                    // To give easy access to a synchronous `require` in node-flavor esm. We do the transform even in scenarios where we error, but `import.meta.url`
+                    // is available, just because the output is reasonable for a node-like runtime.
+                    return getEmitScriptTarget(compilerOptions) >= ModuleKind.ES2020 ? visitImportEqualsDeclaration(node as ImportEqualsDeclaration) : undefined;
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(node as ExportAssignment);
                 case SyntaxKind.ExportDeclaration:
@@ -65,6 +81,106 @@ namespace ts {
             }
 
             return node;
+        }
+
+        /**
+         * Creates a `require()` call to import an external module.
+         *
+         * @param importNode The declaration to import.
+         */
+         function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+            const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);
+            const args: Expression[] = [];
+            if (moduleName) {
+                args.push(moduleName);
+            }
+
+            if (!importRequireStatements) {
+                const createRequireName = factory.createUniqueName("_createRequire", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                const importStatement = factory.createImportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    factory.createImportClause(
+                        /*isTypeOnly*/ false,
+                        /*name*/ undefined,
+                        factory.createNamedImports([
+                            factory.createImportSpecifier(factory.createIdentifier("createRequire"), createRequireName)
+                        ])
+                    ),
+                    factory.createStringLiteral("module")
+                );
+                const requireHelperName = factory.createUniqueName("__require", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
+                const requireStatement = factory.createVariableStatement(
+                    /*modifiers*/ undefined,
+                    factory.createVariableDeclarationList(
+                        [
+                            factory.createVariableDeclaration(
+                                requireHelperName,
+                                /*exclamationToken*/ undefined,
+                                /*type*/ undefined,
+                                factory.createCallExpression(factory.cloneNode(createRequireName), /*typeArguments*/ undefined, [
+                                    factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url"))
+                                ])
+                            )
+                        ],
+                        /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                    )
+                );
+                importRequireStatements = [importStatement, requireStatement];
+
+            }
+
+            const name = importRequireStatements[1].declarationList.declarations[0].name;
+            Debug.assertNode(name, isIdentifier);
+            return factory.createCallExpression(factory.cloneNode(name), /*typeArguments*/ undefined, args);
+        }
+
+        /**
+         * Visits an ImportEqualsDeclaration node.
+         *
+         * @param node The node to visit.
+         */
+        function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
+            Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
+
+            let statements: Statement[] | undefined;
+            statements = append(statements,
+                setOriginalNode(
+                    setTextRange(
+                        factory.createVariableStatement(
+                            /*modifiers*/ undefined,
+                            factory.createVariableDeclarationList(
+                                [
+                                    factory.createVariableDeclaration(
+                                        factory.cloneNode(node.name),
+                                        /*exclamationToken*/ undefined,
+                                        /*type*/ undefined,
+                                        createRequireCall(node)
+                                    )
+                                ],
+                                /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                            )
+                        ),
+                        node),
+                    node
+                )
+            );
+
+            statements = appendExportsOfImportEqualsDeclaration(statements, node);
+
+            return singleOrMany(statements);
+        }
+
+        function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, node: ImportEqualsDeclaration) {
+            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                statements = append(statements, factory.createExportDeclaration(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    node.isTypeOnly,
+                    factory.createNamedExports([factory.createExportSpecifier(/*propertyName*/ undefined, idText(node.name))])
+                ));
+            }
+            return statements;
         }
 
         function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {

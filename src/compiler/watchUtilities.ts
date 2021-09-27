@@ -499,7 +499,7 @@ namespace ts {
             // If its declaration directory: its not ignored if not excluded by config
             if (options.declarationDir) return false;
         }
-        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensions)) {
+        else if (!fileExtensionIsOneOf(fileOrDirectoryPath, supportedJSExtensionsFlat)) {
             return false;
         }
 

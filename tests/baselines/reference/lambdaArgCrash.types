@@ -45,16 +45,16 @@ class ItemSetEvent extends Event {
 >Event : Event
 
 	 add(listener: (items: ItemSet) => void ) {
->add : (listener: (items: any) => void) => void
->listener : (items: any) => void
->items : any
+>add : (listener: (items: ItemSet) => void) => void
+>listener : (items: ItemSet) => void
+>items : ItemSet
 
 	 	super.add(listener);
 >super.add(listener) : void
 >super.add : (listener: () => any) => void
 >super : Event
 >add : (listener: () => any) => void
->listener : (items: any) => void
+>listener : (items: ItemSet) => void
 
 	}
 

@@ -91,6 +91,12 @@ namespace ts.Completions.StringCompletions {
             case Extension.Jsx: return ScriptElementKindModifier.jsxModifier;
             case Extension.Ts: return ScriptElementKindModifier.tsModifier;
             case Extension.Tsx: return ScriptElementKindModifier.tsxModifier;
+            case Extension.Dmts: return ScriptElementKindModifier.dmtsModifier;
+            case Extension.Mjs: return ScriptElementKindModifier.mjsModifier;
+            case Extension.Mts: return ScriptElementKindModifier.mtsModifier;
+            case Extension.Dcts: return ScriptElementKindModifier.dctsModifier;
+            case Extension.Cjs: return ScriptElementKindModifier.cjsModifier;
+            case Extension.Cts: return ScriptElementKindModifier.ctsModifier;
             case Extension.TsBuildInfo: return Debug.fail(`Extension ${Extension.TsBuildInfo} is unsupported.`);
             case undefined: return ScriptElementKindModifier.none;
             default:
@@ -315,8 +321,13 @@ namespace ts.Completions.StringCompletions {
         const scriptDirectory = getDirectoryPath(scriptPath);
 
         return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
-            ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, preferences)
+            ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath, getIncludeExtensionOption())
             : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
+
+        function getIncludeExtensionOption() {
+            const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
+            return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext ? IncludeExtensionsOption.ModuleSpecifierCompletion : IncludeExtensionsOption.Exclude;
+        }
     }
 
     interface ExtensionOptions {
@@ -324,10 +335,9 @@ namespace ts.Completions.StringCompletions {
         readonly includeExtensionsOption: IncludeExtensionsOption;
     }
     function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensionsOption = IncludeExtensionsOption.Exclude): ExtensionOptions {
-        return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensionsOption };
+        return { extensions: flatten(getSupportedExtensionsForModuleResolution(compilerOptions)), includeExtensionsOption };
     }
-    function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, preferences: UserPreferences) {
-        const includeExtensions = preferences.importModuleSpecifierEnding === "js" ? IncludeExtensionsOption.ModuleSpecifierCompletion : IncludeExtensionsOption.Exclude;
+    function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path, includeExtensions: IncludeExtensionsOption) {
         const extensionOptions = getExtensionOptions(compilerOptions, includeExtensions);
         if (compilerOptions.rootDirs) {
             return getCompletionEntriesForDirectoryFragmentWithRootDirs(
@@ -338,10 +348,10 @@ namespace ts.Completions.StringCompletions {
         }
     }
 
-    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[] {
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): readonly Extension[][] {
         const extensions = getSupportedExtensions(compilerOptions);
-        return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
-            extensions.concat(Extension.Json) :
+        return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
+            getSupportedExtensionsWithJsonIfResolveJsonModule(compilerOptions, extensions) :
             extensions;
     }
 
@@ -426,11 +436,11 @@ namespace ts.Completions.StringCompletions {
 
                 let foundFileName: string;
                 const outputExtension = moduleSpecifiers.tryGetJSExtensionForFile(filePath, host.getCompilationSettings());
-                if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIs(filePath, Extension.Json)) {
+                if (includeExtensionsOption === IncludeExtensionsOption.Exclude && !fileExtensionIsOneOf(filePath, [Extension.Json, Extension.Mts, Extension.Cts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Cjs])) {
                     foundFileName = removeFileExtension(getBaseFileName(filePath));
                     foundFiles.set(foundFileName, tryGetExtensionFromPath(filePath));
                 }
-                else if (includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion && outputExtension) {
+                else if ((fileExtensionIsOneOf(filePath, [Extension.Mts, Extension.Cts, Extension.Dmts, Extension.Dcts, Extension.Mjs, Extension.Cjs]) || includeExtensionsOption === IncludeExtensionsOption.ModuleSpecifierCompletion) && outputExtension) {
                     foundFileName = changeExtension(getBaseFileName(filePath), outputExtension);
                     foundFiles.set(foundFileName, outputExtension);
                 }
