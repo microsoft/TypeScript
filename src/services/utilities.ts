@@ -1795,6 +1795,10 @@ namespace ts {
         return node.kind === SyntaxKind.TypeKeyword;
     }
 
+    export function isTypeKeywordTokenOrIdentifier(node: Node) {
+        return isTypeKeywordToken(node) || isIdentifier(node) && node.text === "type";
+    }
+
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
