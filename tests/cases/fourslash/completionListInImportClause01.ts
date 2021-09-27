@@ -14,14 +14,15 @@
 ////import {bar as /*5*/, /*6*/ from "m1"
 ////import {foo, bar, baz as b,/*7*/} from "m1"
 ////import { type /*8*/ } from "m1";
+////import { type b/*9*/ } from "m1";
 
 const type = { name: "type", sortText: completion.SortText.GlobalsOrKeywords };
 
 verify.completions(
-    { marker: ["1", "2", "3"], exact: ["bar", "baz", "foo", type] },
-    { marker: "4", exact: ["bar", "baz", type] },
-    { marker: "5", exact: undefined, isNewIdentifierLocation: true },
-    { marker: "6", exact: ["baz", "foo", type] },
-    { marker: "7", exact: undefined },
-    { marker: "8", exact: ["bar", "baz", "foo"] }, // No 'type'
+    // { marker: ["1", "2", "3"], exact: ["bar", "baz", "foo", type] },
+    // { marker: "4", exact: ["bar", "baz", type] },
+    // { marker: "5", exact: undefined, isNewIdentifierLocation: true },
+    // { marker: "6", exact: ["baz", "foo", type] },
+    // { marker: "7", exact: undefined },
+    { marker: ["8", "9"], exact: ["bar", "baz", "foo"] }, // No 'type'
 );

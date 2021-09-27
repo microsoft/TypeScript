@@ -2686,8 +2686,11 @@ namespace ts.Completions {
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.InferKeyword:
-                case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
+
+                case SyntaxKind.TypeKeyword:
+                    // import { type foo| }
+                    return containingNodeKind !== SyntaxKind.ImportSpecifier;
 
                 case SyntaxKind.AsteriskToken:
                     return isFunctionLike(contextToken.parent) && !isMethodDeclaration(contextToken.parent);
