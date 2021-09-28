@@ -4710,6 +4710,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Directory_0_has_no_containing_package_json_scope_Imports_will_not_resolve_6270" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Directory '{0}' has no containing package.json scope. Imports will not resolve.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[目录 '{0}' 不包含 package.json 作用域。导入将无法解析。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Disable_adding_use_strict_directives_in_emitted_JavaScript_files_6669" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable adding 'use strict' directives in emitted JavaScript files.]]></Val>
@@ -5198,10 +5207,13 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 "--module" 标志设置为 "es2020"、"esnext"、"commonjs"、"amd"、"system" 或 "umd" 时，才支持动态导入。]]></Val>
+            <Val><![CDATA[仅当 '--module' 标志设置为 'es2020'、'esnext'、 'commonjs'、'amd'、'system'、'umd'、'node12' 或 'nodenext' 时，才支持动态导入。]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5912,6 +5924,15 @@
           <Val><![CDATA[Export declarations are not permitted in a namespace.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[命名空间中不允许有导出声明。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Export_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6276" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[路径 '{1}' 处的 package.json 作用域中不存在导出说明符 '{0}'。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7137,6 +7158,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Import_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6271" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[路径 '{1}' 处的 package.json 作用域中不存在导入说明符 '{0}'。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Imported_via_0_from_file_1_1393" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}']]></Val>
@@ -7517,6 +7547,15 @@
           <Val><![CDATA[Invalid character.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[无效的字符。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Invalid_import_specifier_0_has_no_possible_resolutions_6272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid import specifier '{0}' has no possible resolutions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[无效的导入说明符 '{0}' 没有可行的解决方法。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8168,6 +8207,15 @@
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[模块 "{0}" 只能在使用 "{1}" 标志时进行默认导入]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[无法使用此构造导入模块 '{0}'。说明符仅解析为无法同步导入的 ES 模块。请改用动态导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12477,11 +12525,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 "--module" 选项为 "es2020"、"esnext" 或 "system" 时，才允许使用 "import. meta" 元属性。]]></Val>
+            <Val><![CDATA[将生成到 CommonJS 输出的文件中不允许 'import.meta' 元属性。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12__1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[仅当 '--module' 选项为 'es2020'、'esnext'、 'system'、'node12' 或 'nodenext' 时，才允许 'import.meta' 元属性。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12975,6 +13032,18 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.]]></Val>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";The_type_of_a_function_declaration_must_match_the_function_s_signature_8030" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[The type of a function declaration must match the function's signature.]]></Val>
@@ -13317,6 +13386,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此语法保留在扩展名为 .mts 或 .cts 的文件中。请添加尾随逗号或显式约束。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead_7059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[此语法保留在扩展名为 .mts 或 .cts 的文件中。请改用 `as` 表达式。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -13344,11 +13431,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_t_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_noden_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当 "module" 选项设置为 "esnext" 或 "system"，并且 "target" 选项设置为 "es2017" 或更高版本时，才允许使用顶级 "await" 表达式。]]></Val>
+            <Val><![CDATA[仅当 'module' 选项设置为 'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'await' 表达式。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13362,11 +13449,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenex_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[仅当“模块”选项设置为“esnext”或“system”，并且“目标”选项设置为“es2017”或更高时，才允许使用顶层“for await”循环。]]></Val>
+            <Val><![CDATA[仅当 'module' 选项设置为 'esnext'、'system' 或 'nodenext'，且 'target' 选项设置为 'es2017' 或更高版本时，才允许顶级 'for await' 循环。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15971,6 +16058,33 @@
           <Val><![CDATA['package.json' has a 'typesVersions' field with version-specific path mappings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["package. json" 具有 "typesVersions" 字段，它具有特定于版本的路径映射。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_explicitly_maps_specifier_1_to_null_6274" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' explicitly maps specifier '{1}' to null.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json 作用域 '{0}' 将说明符 '{1}' 显式映射到 NULL。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_invalid_type_for_target_of_specifier_1_6275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has invalid type for target of specifier '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json 作用域 '{0}' 的说明符 '{1}' 的目标类型无效]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_no_imports_defined_6273" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has no imports defined.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[package.json 作用域 '{0}' 未定义导入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
