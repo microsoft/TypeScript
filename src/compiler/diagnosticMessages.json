@@ -1434,6 +1434,14 @@
         "code": 2205,
         "elidedInCompatabilityPyramid": true
     },
+    "The 'type' modifier cannot be used on a named import when 'import type' is used on its import statement.": {
+        "category": "Error",
+        "code": 2206
+    },
+    "The 'type' modifier cannot be used on a named export when 'export type' is used on its export statement.": {
+        "category": "Error",
+        "code": 2207
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

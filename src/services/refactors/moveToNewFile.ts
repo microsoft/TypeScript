@@ -319,7 +319,7 @@ namespace ts.refactor {
     function makeImportOrRequire(defaultImport: Identifier | undefined, imports: readonly string[], path: string, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
         path = ensurePathIsNonModuleName(path);
         if (useEs6Imports) {
-            const specifiers = imports.map(i => factory.createImportSpecifier(/*propertyName*/ undefined, factory.createIdentifier(i)));
+            const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
             return makeImportIfNecessary(defaultImport, specifiers, path, quotePreference);
         }
         else {

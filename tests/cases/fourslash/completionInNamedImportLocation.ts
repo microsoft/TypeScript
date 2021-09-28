@@ -13,6 +13,18 @@
 
 goTo.file("a.ts");
 verify.completions(
-    { marker: "1", exact: [{ name: "x", text: "var x: number" }, { name: "y", text: "var y: number" }] },
-    { marker: "2", exact: [{ name: "y", text: "var y: number" }] },
+    {
+        marker: "1",
+        exact: [
+            { name: "x", text: "var x: number" },
+            { name: "y", text: "var y: number" },
+            { name: "type", sortText: completion.SortText.GlobalsOrKeywords }
+        ]
+    },
+    {
+        marker: "2",
+        exact: [
+            { name: "y", text: "var y: number" },
+            { name: "type", sortText: completion.SortText.GlobalsOrKeywords }
+        ] },
 );

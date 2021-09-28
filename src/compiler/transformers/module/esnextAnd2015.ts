@@ -104,7 +104,7 @@ namespace ts {
                         /*isTypeOnly*/ false,
                         /*name*/ undefined,
                         factory.createNamedImports([
-                            factory.createImportSpecifier(factory.createIdentifier("createRequire"), createRequireName)
+                            factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName)
                         ])
                     ),
                     factory.createStringLiteral("module")
@@ -177,7 +177,7 @@ namespace ts {
                     /*decorators*/ undefined,
                     /*modifiers*/ undefined,
                     node.isTypeOnly,
-                    factory.createNamedExports([factory.createExportSpecifier(/*propertyName*/ undefined, idText(node.name))])
+                    factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))])
                 ));
             }
             return statements;
@@ -220,7 +220,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
-                factory.createNamedExports([factory.createExportSpecifier(synthName, oldIdentifier)]),
+                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, synthName, oldIdentifier)]),
             );
             setOriginalNode(exportDecl, node);
 

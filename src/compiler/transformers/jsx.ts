@@ -56,7 +56,7 @@ namespace ts {
                 currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
-            const specifier = factory.createImportSpecifier(factory.createIdentifier(name), generatedName);
+            const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
             generatedName.generatedImportReference = specifier;
             specifierSourceImports.set(name, specifier);
             return generatedName;
