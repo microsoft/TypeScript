@@ -19,6 +19,9 @@ verify.completions({
         source: "./foo",
         insertText: "import * as Foo from \"./foo\";",
         replacementSpan: test.ranges()[0]
+    }, {
+        name: "type",
+        sortText: completion.SortText.GlobalsOrKeywords,
     }],
     isNewIdentifierLocation: true,
     preferences: {

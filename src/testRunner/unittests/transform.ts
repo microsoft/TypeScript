@@ -275,7 +275,7 @@ namespace ts {
                         if (node.kind === SyntaxKind.ExportDeclaration) {
                             const ed = node as Node as ExportDeclaration;
                             const exports = [{ name: "x" }];
-                            const exportSpecifiers = exports.map(e => factory.createExportSpecifier(e.name, e.name));
+                            const exportSpecifiers = exports.map(e => factory.createExportSpecifier(/*isTypeOnly*/ false, e.name, e.name));
                             const exportClause = factory.createNamedExports(exportSpecifiers);
                             const newEd = factory.updateExportDeclaration(ed, ed.decorators, ed.modifiers, ed.isTypeOnly, exportClause, ed.moduleSpecifier, ed.assertClause);
 

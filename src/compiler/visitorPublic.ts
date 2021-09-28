@@ -1116,6 +1116,7 @@ namespace ts {
             case SyntaxKind.ImportSpecifier:
                 Debug.type<ImportSpecifier>(node);
                 return factory.updateImportSpecifier(node,
+                    node.isTypeOnly,
                     nodeVisitor(node.propertyName, visitor, isIdentifier),
                     nodeVisitor(node.name, visitor, isIdentifier));
 
@@ -1144,6 +1145,7 @@ namespace ts {
             case SyntaxKind.ExportSpecifier:
                 Debug.type<ExportSpecifier>(node);
                 return factory.updateExportSpecifier(node,
+                    node.isTypeOnly,
                     nodeVisitor(node.propertyName, visitor, isIdentifier),
                     nodeVisitor(node.name, visitor, isIdentifier));
 

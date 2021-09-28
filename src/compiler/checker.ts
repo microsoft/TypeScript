@@ -721,6 +721,7 @@ namespace ts {
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
             isDeclarationVisible,
             isPropertyAccessible,
+            getTypeOnlyAliasDeclaration,
         };
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
@@ -2203,8 +2204,7 @@ namespace ts {
             if (!isValidTypeOnlyAliasUseSite(useSite)) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(symbol);
                 if (typeOnlyDeclaration) {
-                    const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
-                    const message = isExport
+                    const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
                         ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                         : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
                     const unescapedName = unescapeLeadingUnderscores(name);
@@ -2222,7 +2222,7 @@ namespace ts {
                 diagnostic,
                 createDiagnosticForNode(
                     typeOnlyDeclaration,
-                    typeOnlyDeclarationIsExport(typeOnlyDeclaration) ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
+                    typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
                     unescapedName));
         }
 
@@ -2590,7 +2590,7 @@ namespace ts {
         function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
             if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false) && !node.isTypeOnly) {
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfNode(node))!;
-                const isExport = typeOnlyDeclarationIsExport(typeOnlyDeclaration);
+                const isExport = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
                 const message = isExport
                     ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                     : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
@@ -2598,9 +2598,7 @@ namespace ts {
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here;
 
-                // Non-null assertion is safe because the optionality comes from ImportClause,
-                // but if an ImportClause was the typeOnlyDeclaration, it had to have a `name`.
-                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name!.escapedText);
+                const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name.escapedText);
                 addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
             }
         }
@@ -3054,13 +3052,13 @@ namespace ts {
          * and issue an error if so.
          *
          * @param aliasDeclaration The alias declaration not marked as type-only
+         * @param immediateTarget The symbol to which the alias declaration immediately resolves
+         * @param finalTarget The symbol to which the alias declaration ultimately resolves
+         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
          * has already been marked as not resolving to a type-only alias. Used when recursively resolving qualified
          * names of import aliases, e.g. `import C = a.b.C`. If namespace `a` is not found to be type-only, the
          * import declaration will initially be marked as not resolving to a type-only symbol. But, namespace `b`
          * must still be checked for a type-only marker, overwriting the previous negative result if found.
-         * @param immediateTarget The symbol to which the alias declaration immediately resolves
-         * @param finalTarget The symbol to which the alias declaration ultimately resolves
-         * @param overwriteEmpty Checks `resolvesToSymbol` for type-only declarations even if `aliasDeclaration`
          */
         function markSymbolOfAliasDeclarationIfTypeOnly(
             aliasDeclaration: Declaration | undefined,
@@ -3094,7 +3092,7 @@ namespace ts {
         }
 
         /** Indicates that a symbol directly or indirectly resolves to a type-only import or export. */
-        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyCompatibleAliasDeclaration | undefined {
+        function getTypeOnlyAliasDeclaration(symbol: Symbol): TypeOnlyAliasDeclaration | undefined {
             if (!(symbol.flags & SymbolFlags.Alias)) {
                 return undefined;
             }
@@ -6536,7 +6534,7 @@ namespace ts {
                                         /*decorators*/ undefined,
                                         /*modifiers*/ undefined,
                                         /*isTypeOnly*/ false,
-                                        factory.createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => factory.createExportSpecifier(/*alias*/ undefined, id))),
+                                        factory.createNamedExports(map(flatMap(excessExports, e => getNamesOfDeclaration(e)), id => factory.createExportSpecifier(/*isTypeOnly*/ false, /*alias*/ undefined, id))),
                                         /*moduleSpecifier*/ undefined
                                     )])
                                 )
@@ -6794,7 +6792,7 @@ namespace ts {
                                             /*decorators*/ undefined,
                                             /*modifiers*/ undefined,
                                             /*isTypeOnly*/ false,
-                                            factory.createNamedExports([factory.createExportSpecifier(alias, localName)])
+                                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, alias, localName)])
                                         ),
                                         ModifierFlags.None
                                     );
@@ -6832,7 +6830,7 @@ namespace ts {
                                                 /*decorators*/ undefined,
                                                 /*modifiers*/ undefined,
                                                 /*isTypeOnly*/ false,
-                                                factory.createNamedExports([factory.createExportSpecifier(name, localName)])
+                                                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, name, localName)])
                                             ),
                                             ModifierFlags.None
                                         );
@@ -6892,7 +6890,7 @@ namespace ts {
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*isTypeOnly*/ false,
-                            factory.createNamedExports([factory.createExportSpecifier(getInternalSymbolName(symbol, symbolName), symbolName)])
+                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, getInternalSymbolName(symbol, symbolName), symbolName)])
                         ), ModifierFlags.None);
                     }
                 }
@@ -7031,7 +7029,7 @@ namespace ts {
                                 const target = aliasDecl && getTargetOfAliasDeclaration(aliasDecl, /*dontRecursivelyResolve*/ true);
                                 includePrivateSymbol(target || s);
                                 const targetName = target ? getInternalSymbolName(target, unescapeLeadingUnderscores(target.escapedName)) : localName;
-                                return factory.createExportSpecifier(name === targetName ? undefined : targetName, name);
+                                return factory.createExportSpecifier(/*isTypeOnly*/ false, name === targetName ? undefined : targetName, name);
                             }))
                         )]);
                         addResult(factory.createModuleDeclaration(
@@ -7137,7 +7135,7 @@ namespace ts {
                             /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*isTypeOnly*/ false,
-                            factory.createNamedExports([factory.createExportSpecifier(d.expression, factory.createIdentifier(InternalSymbolName.Default))])
+                            factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, d.expression, factory.createIdentifier(InternalSymbolName.Default))])
                         ) : d);
                         const exportModifierStripped = every(defaultReplaced, d => hasSyntacticModifier(d, ModifierFlags.Export)) ? map(defaultReplaced, removeExportModifier) : defaultReplaced;
                         fakespace = factory.updateModuleDeclaration(
@@ -7313,6 +7311,7 @@ namespace ts {
                                     /*decorators*/ undefined,
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports([factory.createImportSpecifier(
+                                        /*isTypeOnly*/ false,
                                         propertyName && isIdentifier(propertyName) ? factory.createIdentifier(idText(propertyName)) : undefined,
                                         factory.createIdentifier(localName)
                                     )])),
@@ -7424,6 +7423,7 @@ namespace ts {
                                     /*importClause*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
+                                            /*isTypeOnly*/ false,
                                             localName !== verbatimTargetName ? factory.createIdentifier(verbatimTargetName) : undefined,
                                             factory.createIdentifier(localName)
                                         )
@@ -7470,7 +7470,7 @@ namespace ts {
                         /*decorators*/ undefined,
                         /*modifiers*/ undefined,
                         /*isTypeOnly*/ false,
-                        factory.createNamedExports([factory.createExportSpecifier(localName !== targetName ? targetName : undefined, localName)]),
+                        factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, localName !== targetName ? targetName : undefined, localName)]),
                         specifier
                     ), ModifierFlags.None);
                 }
@@ -11265,6 +11265,22 @@ namespace ts {
             return getCheckFlags(s) & CheckFlags.Late;
         }
 
+        function forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(type: Type, include: TypeFlags, stringsOnly: boolean, cb: (keyType: Type) => void) {
+            for (const prop of getPropertiesOfType(type)) {
+                cb(getLiteralTypeFromProperty(prop, include));
+            }
+            if (type.flags & TypeFlags.Any) {
+                cb(stringType);
+            }
+            else {
+                for (const info of getIndexInfosOfType(type)) {
+                    if (!stringsOnly || info.keyType.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
+                        cb(info.keyType);
+                    }
+                }
+            }
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -11282,19 +11298,7 @@ namespace ts {
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
-                for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
-                }
-                if (modifiersType.flags & TypeFlags.Any) {
-                    addMemberForKeyType(stringType);
-                }
-                else {
-                    for (const info of getIndexInfosOfType(modifiersType)) {
-                        if (!keyofStringsOnly || info.keyType.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
-                            addMemberForKeyType(info.keyType);
-                        }
-                    }
-                }
+                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
             }
             else {
                 forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
@@ -14653,19 +14657,58 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
-        function instantiateTypeAsMappedNameType(nameType: Type, type: MappedType, t: Type) {
-            return instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t));
-        }
+        /**
+         * This roughly mirrors `resolveMappedTypeMembers` in the nongeneric case, except only reports a union of the keys calculated,
+         * rather than manufacturing the properties. We can't just fetch the `constraintType` since that would ignore mappings
+         * and mapping the `constraintType` directly ignores how mapped types map _properties_ and not keys (thus ignoring subtype
+         * reduction in the constraintType) when possible.
+         * @param noIndexSignatures Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
+         */
+        function getIndexTypeForMappedType(type: MappedType, stringsOnly: boolean, noIndexSignatures: boolean | undefined) {
+            const typeParameter = getTypeParameterFromMappedType(type);
+            const constraintType = getConstraintTypeFromMappedType(type);
+            const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
+            if (!nameType && !noIndexSignatures) {
+                // no mapping and no filtering required, just quickly bail to returning the constraint in the common case
+                return constraintType;
+            }
+            const keyTypes: Type[] = [];
+            if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                // We have a { [P in keyof T]: X }
 
-        function getIndexTypeForMappedType(type: MappedType, noIndexSignatures: boolean | undefined) {
-            const constraint = filterType(getConstraintTypeFromMappedType(type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
-            const nameType = type.declaration.nameType && getTypeFromTypeNode(type.declaration.nameType);
-            // If the constraint is exclusively string/number/never type(s), we need to pull the property names from the modified type and run them through the `nameType` mapper as well
-            // since they won't appear in the constraint, due to subtype reducing with the string/number index types
-            const properties = nameType && everyType(constraint, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Never))) && getPropertiesOfType(getApparentType(getModifiersTypeFromMappedType(type)));
-            return nameType ?
-                getUnionType([mapType(constraint, t => instantiateTypeAsMappedNameType(nameType, type, t)), mapType(getUnionType(map(properties || emptyArray, p => getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique))), t => instantiateTypeAsMappedNameType(nameType, type, t))]):
-                constraint;
+                // `getApparentType` on the T in a generic mapped type can trigger a circularity
+                // (conditionals and `infer` types create a circular dependency in the constraint resolution)
+                // so we only eagerly manifest the keys if the constraint is nongeneric
+                if (!isGenericIndexType(constraintType)) {
+                    const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
+                    forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, stringsOnly, addMemberForKeyType);
+                }
+                else {
+                    // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later
+                    // since it's not safe to resolve the shape of modifier type
+                    return getIndexTypeForGenericType(type, stringsOnly);
+                }
+            }
+            else {
+                forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
+            }
+            if (isGenericIndexType(constraintType)) { // include the generic component in the resulting type
+                forEachType(constraintType, addMemberForKeyType);
+            }
+            // we had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the original constraintType,
+            // so we can return the union that preserves aliases/origin data if possible
+            const result = noIndexSignatures ? filterType(getUnionType(keyTypes), t => !(t.flags & (TypeFlags.Any | TypeFlags.String))) : getUnionType(keyTypes);
+            if (result.flags & TypeFlags.Union && constraintType.flags & TypeFlags.Union && getTypeListId((result as UnionType).types) === getTypeListId((constraintType as UnionType).types)){
+                return constraintType;
+            }
+            return result;
+
+            function addMemberForKeyType(keyType: Type) {
+                const propNameType = nameType ? instantiateType(nameType, appendTypeMapping(type.mapper, typeParameter, keyType)) : keyType;
+                // `keyof` currently always returns `string | number` for concrete `string` index signatures - the below ternary keeps that behavior for mapped types
+                // See `getLiteralTypeFromProperties` where there's a similar ternary to cause the same behavior.
+                keyTypes.push(propNameType === stringType ? stringOrNumberType : propNameType);
+            }
         }
 
         // Ordinarily we reduce a keyof M, where M is a mapped type { [P in K as N<P>]: X }, to simply N<K>. This however presumes
@@ -14728,7 +14771,7 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
-                getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, noIndexSignatures) :
+                getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
@@ -18793,6 +18836,35 @@ namespace ts {
                                 return Ternary.True;
                             }
                         }
+                        else if (isGenericMappedType(targetType)) {
+                            // generic mapped types that don't simplify or have a constraint still have a very simple set of keys we can compare against
+                            // - their nameType or constraintType.
+                            // In many ways, this comparison is a deferred version of what `getIndexTypeForMappedType` does to actually resolve the keys for _non_-generic types
+
+                            const nameType = getNameTypeFromMappedType(targetType);
+                            const constraintType = getConstraintTypeFromMappedType(targetType);
+                            let targetKeys;
+                            if (nameType && isMappedTypeWithKeyofConstraintDeclaration(targetType)) {
+                                // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
+                                // missing from the `constraintType` which will otherwise be mapped in the object
+                                const modifiersType = getApparentType(getModifiersTypeFromMappedType(targetType));
+                                const mappedKeys: Type[] = [];
+                                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
+                                    modifiersType,
+                                    TypeFlags.StringOrNumberLiteralOrUnique,
+                                    /*stringsOnly*/ false,
+                                    t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t)))
+                                );
+                                // We still need to include the non-apparent (and thus still generic) keys in the target side of the comparison (in case they're in the source side)
+                                targetKeys = getUnionType([...mappedKeys, nameType]);
+                            }
+                            else {
+                                targetKeys = nameType || constraintType;
+                            }
+                            if (isRelatedTo(source, targetKeys, reportErrors) === Ternary.True) {
+                                return Ternary.True;
+                            }
+                        }
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
@@ -21939,8 +22011,16 @@ namespace ts {
             function inferToTemplateLiteralType(source: Type, target: TemplateLiteralType) {
                 const matches = inferTypesFromTemplateLiteralType(source, target);
                 const types = target.types;
-                for (let i = 0; i < types.length; i++) {
-                    inferFromTypes(matches ? matches[i] : neverType, types[i]);
+                // When the target template literal contains only placeholders (meaning that inference is intended to extract
+                // single characters and remainder strings) and inference fails to produce matches, we want to infer 'never' for
+                // each placeholder such that instantiation with the inferred value(s) produces 'never', a type for which an
+                // assignment check will fail. If we make no inferences, we'll likely end up with the constraint 'string' which,
+                // upon instantiation, would collapse all the placeholders to just 'string', and an assignment check might
+                // succeed. That would be a pointless and confusing outcome.
+                if (matches || every(target.texts, s => s.length === 0)) {
+                    for (let i = 0; i < types.length; i++) {
+                        inferFromTypes(matches ? matches[i] : neverType, types[i]);
+                    }
                 }
             }
 
@@ -39407,11 +39487,15 @@ namespace ts {
         }
 
         function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
-            const isTypeOnlyExportStar = node.isTypeOnly && node.exportClause?.kind !== SyntaxKind.NamedExports;
-            if (isTypeOnlyExportStar) {
-                grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+            if (node.isTypeOnly) {
+                if (node.exportClause?.kind === SyntaxKind.NamedExports) {
+                    return checkGrammarNamedImportsOrExports(node.exportClause);
+                }
+                else {
+                    return grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
+                }
             }
-            return !isTypeOnlyExportStar;
+            return false;
         }
 
         function checkGrammarModuleElementContext(node: Statement, errorMessage: DiagnosticMessage): boolean {
@@ -43437,7 +43521,22 @@ namespace ts {
             if (node.isTypeOnly && node.name && node.namedBindings) {
                 return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
             }
+            if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return checkGrammarNamedImportsOrExports(node.namedBindings);
+            }
             return false;
+        }
+
+        function checkGrammarNamedImportsOrExports(namedBindings: NamedImportsOrExports): boolean {
+            return !!forEach<ImportSpecifier | ExportSpecifier, boolean>(namedBindings.elements, specifier => {
+                if (specifier.isTypeOnly) {
+                    return grammarErrorOnFirstToken(
+                        specifier,
+                        specifier.kind === SyntaxKind.ImportSpecifier
+                            ? Diagnostics.The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement
+                            : Diagnostics.The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement);
+                }
+            });
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {

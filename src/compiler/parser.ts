@@ -7404,27 +7404,76 @@ namespace ts {
             let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
             let checkIdentifierStart = scanner.getTokenPos();
             let checkIdentifierEnd = scanner.getTextPos();
-            const identifierName = parseIdentifierName();
+            let isTypeOnly = false;
             let propertyName: Identifier | undefined;
-            let name: Identifier;
-            if (token() === SyntaxKind.AsKeyword) {
-                propertyName = identifierName;
-                parseExpected(SyntaxKind.AsKeyword);
-                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-                checkIdentifierStart = scanner.getTokenPos();
-                checkIdentifierEnd = scanner.getTextPos();
-                name = parseIdentifierName();
+            let canParseAsKeyword = true;
+            let name = parseIdentifierName();
+            if (name.escapedText === "type") {
+                // If the first token of an import specifier is 'type', there are a lot of possibilities,
+                // especially if we see 'as' afterwards:
+                //
+                // import { type } from "mod";          - isTypeOnly: false,   name: type
+                // import { type as } from "mod";       - isTypeOnly: true,    name: as
+                // import { type as as } from "mod";    - isTypeOnly: false,   name: as,    propertyName: type
+                // import { type as as as } from "mod"; - isTypeOnly: true,    name: as,    propertyName: as
+                if (token() === SyntaxKind.AsKeyword) {
+                    // { type as ...? }
+                    const firstAs = parseIdentifierName();
+                    if (token() === SyntaxKind.AsKeyword) {
+                        // { type as as ...? }
+                        const secondAs = parseIdentifierName();
+                        if (tokenIsIdentifierOrKeyword(token())) {
+                            // { type as as something }
+                            isTypeOnly = true;
+                            propertyName = firstAs;
+                            name = parseNameWithKeywordCheck();
+                            canParseAsKeyword = false;
+                        }
+                        else {
+                            // { type as as }
+                            propertyName = name;
+                            name = secondAs;
+                            canParseAsKeyword = false;
+                        }
+                    }
+                    else if (tokenIsIdentifierOrKeyword(token())) {
+                        // { type as something }
+                        propertyName = name;
+                        canParseAsKeyword = false;
+                        name = parseNameWithKeywordCheck();
+                    }
+                    else {
+                        // { type as }
+                        isTypeOnly = true;
+                        name = firstAs;
+                    }
+                }
+                else if (tokenIsIdentifierOrKeyword(token())) {
+                    // { type something ...? }
+                    isTypeOnly = true;
+                    name = parseNameWithKeywordCheck();
+                }
             }
-            else {
-                name = identifierName;
+
+            if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
+                propertyName = name;
+                parseExpected(SyntaxKind.AsKeyword);
+                name = parseNameWithKeywordCheck();
             }
             if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
                 parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
             }
             const node = kind === SyntaxKind.ImportSpecifier
-                ? factory.createImportSpecifier(propertyName, name)
-                : factory.createExportSpecifier(propertyName, name);
+                ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
+                : factory.createExportSpecifier(isTypeOnly, propertyName, name);
             return finishNode(node, pos);
+
+            function parseNameWithKeywordCheck() {
+                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
+                checkIdentifierStart = scanner.getTokenPos();
+                checkIdentifierEnd = scanner.getTextPos();
+                return parseIdentifierName();
+            }
         }
 
         function parseNamespaceExport(pos: number): NamespaceExport {

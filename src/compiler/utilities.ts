@@ -6381,9 +6381,12 @@ namespace ts {
         const aParts = getPathComponents(getNormalizedAbsolutePath(a, cwd));
         const bParts = getPathComponents(getNormalizedAbsolutePath(b, cwd));
         let isDirectory = false;
-        while (!isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
+        while (
+            aParts.length >= 2 && bParts.length >= 2 &&
+            !isNodeModulesOrScopedPackageDirectory(aParts[aParts.length - 2], getCanonicalFileName) &&
             !isNodeModulesOrScopedPackageDirectory(bParts[bParts.length - 2], getCanonicalFileName) &&
-            getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])) {
+            getCanonicalFileName(aParts[aParts.length - 1]) === getCanonicalFileName(bParts[bParts.length - 1])
+        ) {
             aParts.pop();
             bParts.pop();
             isDirectory = true;
@@ -6393,8 +6396,8 @@ namespace ts {
 
     // KLUDGE: Don't assume one 'node_modules' links to another. More likely a single directory inside the node_modules is the symlink.
     // ALso, don't assume that an `@foo` directory is linked. More likely the contents of that are linked.
-    function isNodeModulesOrScopedPackageDirectory(s: string, getCanonicalFileName: GetCanonicalFileName): boolean {
-        return getCanonicalFileName(s) === "node_modules" || startsWith(s, "@");
+    function isNodeModulesOrScopedPackageDirectory(s: string | undefined, getCanonicalFileName: GetCanonicalFileName): boolean {
+        return s !== undefined && (getCanonicalFileName(s) === "node_modules" || startsWith(s, "@"));
     }
 
     function stripLeadingDirectorySeparator(s: string): string | undefined {
@@ -7093,10 +7096,6 @@ namespace ts {
             || isIdentifierInNonEmittingHeritageClause(useSite)
             || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
             || !(isExpressionNode(useSite) || isShorthandPropertyNameUseSite(useSite));
-    }
-
-    export function typeOnlyDeclarationIsExport(typeOnlyDeclaration: Node) {
-        return typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
     }
 
     function isShorthandPropertyNameUseSite(useSite: Node) {

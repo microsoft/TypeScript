@@ -1,4 +1,4 @@
-tests/cases/conformance/types/literal/templateLiteralTypes3.ts(20,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+tests/cases/conformance/types/literal/templateLiteralTypes3.ts(20,19): error TS2345: Argument of type '"hello"' is not assignable to parameter of type '`*${string}*`'.
 tests/cases/conformance/types/literal/templateLiteralTypes3.ts(57,5): error TS2322: Type '"hello"' is not assignable to type '`*${string}*`'.
 tests/cases/conformance/types/literal/templateLiteralTypes3.ts(69,5): error TS2322: Type '"123"' is not assignable to type '`*${number}*`'.
 tests/cases/conformance/types/literal/templateLiteralTypes3.ts(71,5): error TS2322: Type '"**123**"' is not assignable to type '`*${number}*`'.
@@ -29,7 +29,7 @@ tests/cases/conformance/types/literal/templateLiteralTypes3.ts(74,5): error TS23
     function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
         let x1 = foo1('hello');  // Error
                       ~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type '`*${string}*`'.
         let x2 = foo1('*hello*');
         let x3 = foo1('**hello**');
         let x4 = foo1(`*${s}*` as const);
@@ -138,4 +138,12 @@ tests/cases/conformance/types/literal/templateLiteralTypes3.ts(74,5): error TS23
     interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
         blah: string;
     }
+    
+    // Repro from #45906
+    
+    type Schema = { a: { b: { c: number } } };
+    
+    declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+    
+    chain("a");
     

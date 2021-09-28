@@ -4707,6 +4707,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Directory_0_has_no_containing_package_json_scope_Imports_will_not_resolve_6270" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Directory '{0}' has no containing package.json scope. Imports will not resolve.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Verzeichnis "{0}" enthält keinen package.json-Bereich. Importe werden nicht aufgelöst.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Disable_adding_use_strict_directives_in_emitted_JavaScript_files_6669" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Disable adding 'use strict' directives in emitted JavaScript files.]]></Val>
@@ -5195,10 +5204,13 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Dynamische Importe werden nur unterstützt, wenn das Flag "--module" auf "es2020", "esnext", "commonjs", "amd", "system" oder "umd" festgelegt ist.]]></Val>
+            <Val><![CDATA[Dynamische Importe werden nur unterstützt, wenn das Kennzeichen "--module" auf "es2020", "esnext", "commonjs", "amd", "system", "umd", "node12" oder "nodenext" festgelegt ist.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -5909,6 +5921,15 @@
           <Val><![CDATA[Export declarations are not permitted in a namespace.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Exportdeklarationen sind in einem Namespace unzulässig.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Export_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6276" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der Exportspezifizierer "{0}" ist im package.json-Bereich beim Pfad "{1}" nicht vorhanden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -7134,6 +7155,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Import_specifier_0_does_not_exist_in_package_json_scope_at_path_1_6271" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import specifier '{0}' does not exist in package.json scope at path '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der Importspezifizierer "{0}" ist im package.json-Bereich beim Pfad "{1}" nicht vorhanden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Imported_via_0_from_file_1_1393" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Imported via {0} from file '{1}']]></Val>
@@ -7514,6 +7544,15 @@
           <Val><![CDATA[Invalid character.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Ungültiges Zeichen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Invalid_import_specifier_0_has_no_possible_resolutions_6272" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Invalid import specifier '{0}' has no possible resolutions.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der ungültige Importbezeichner "{0}" weist keine möglichen Auflösungen auf.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8165,6 +8204,15 @@
           <Val><![CDATA[Module '{0}' can only be default-imported using the '{1}' flag]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Das Modul "{0}" kann nur mit dem Flag "{1}" als Standard importiert werden.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_c_1471" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Module '{0}' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Das Modul "{0}" kann nicht mithilfe dieses Konstrukts importiert werden. Der Spezifizierer wird nur in ein ES-Modul aufgelöst, das nicht synchron importiert werden kann. Verwenden Sie stattdessen den dynamischen Import.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9710,6 +9758,15 @@
           <Val><![CDATA[Private identifiers are not allowed outside class bodies.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Private Bezeichner sind außerhalb des Textes von Klassen nicht zulässig.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Private_identifiers_are_only_allowed_in_class_bodies_and_may_only_be_used_as_part_of_a_class_member__1451" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Private identifiers are only allowed in class bodies and may only be used as part of a class member declaration, property access, or on the left-hand-side of an 'in' expression]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Private Bezeichner sind nur in Klassentexten zulässig und dürfen nur als Teil einer Klassenmitgliedsdeklaration, eines Eigenschaftszugriffs oder auf der linken Seite eines in-Ausdrucks verwendet werden.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12462,11 +12519,20 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_or_system_1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output_1470" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', or 'system'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is not allowed in files which will build into CommonJS output.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die Metaeigenschaft "import.meta" ist nur zulässig, wenn die Option "--module" den Wert "es2020", "esnext" oder "system" aufweist.]]></Val>
+            <Val><![CDATA[Die Meta-Eigenschaft „import.meta“ ist in Dateien, die in der CommonJS-Ausgabe erstellt werden, nicht zulässig.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12__1343" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die Metaeigenschaft „import.meta“ ist nur zulässig, wenn die Option „--module“ den Wert „es2020“, „esnext“, „system“, „node12“, oder „nodenext“ aufweist.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12669,11 +12735,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol_2360" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_left_hand_side_of_an_in_expression_must_be_a_private_identifier_or_of_type_any_string_number_or__2360" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The left-hand side of an 'in' expression must be of type 'any', 'string', 'number', or 'symbol'.]]></Val>
+          <Val><![CDATA[The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Die linke Seite eines in-Ausdrucks muss vom Typ "any", "string", "number" oder "symbol" sein.]]></Val>
+            <Val><![CDATA[Die linke Seite eines in-Ausdrucks muss ein privater Bezeichner sein oder zum Typ "any", "string", "number" oder "symbol" gehören.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13302,6 +13368,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Add_a_trailing_comma_or_explicit_cons_7060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Add a trailing comma or explicit constraint.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Diese Syntax ist in Dateien mit der Erweiterung .mts oder .cts reserviert. Fügen Sie ein nachfolgendes Komma oder eine explizite Einschränkung hinzu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_reserved_in_files_with_the_mts_or_cts_extension_Use_an_as_expression_instead_7059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is reserved in files with the .mts or .cts extension. Use an `as` expression instead.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Diese Syntax ist in Dateien mit der Erweiterung ".mts" oder ".cts" reserviert. Verwenden Sie stattdessen einen „as“-Ausdruck.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_syntax_requires_an_imported_helper_but_module_0_cannot_be_found_2354" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This syntax requires an imported helper but module '{0}' cannot be found.]]></Val>
@@ -13329,11 +13413,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_t_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_noden_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[await-Ausdrücke der obersten Ebene sind nur zulässig, wenn die Option "module" auf "esnext" oder "system" festgelegt ist und die Option "target" den Wert "es2017" oder höher aufweist.]]></Val>
+            <Val><![CDATA[„Await“-Schleifen der obersten Ebene sind nur zulässig, wenn die Option "module" auf "esnext", "system" oder "nodenext", und die Option "target" auf "es2017" oder höher festgelegt ist.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13347,11 +13431,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_or_system_and_the_1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenex_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext' or 'system', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA["for await"-Schleifen der obersten Ebene sind nur zulässig, wenn die Option "module" auf "esnext" oder "system" festgelegt ist und die Option "target" den Wert "es2017" oder höher aufweist.]]></Val>
+            <Val><![CDATA[„For Await“-Schleifen der obersten Ebene sind nur zulässig, wenn die Option "module" auf "esnext", "system" oder "nodenext" und die Option "target" auf "es2017" oder höher festgelegt ist.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15956,6 +16040,33 @@
           <Val><![CDATA['package.json' has a 'typesVersions' field with version-specific path mappings.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA["package.json" weist ein Feld "typesVersions" mit versionsspezifischen Pfadzuordnungen auf.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_explicitly_maps_specifier_1_to_null_6274" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' explicitly maps specifier '{1}' to null.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der package.json-Bereich "{0}" ordnet den Bezeichner "{1}" explizit NULL zu.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_invalid_type_for_target_of_specifier_1_6275" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has invalid type for target of specifier '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Der package.json-Bereich "{0}" weist einen ungültigen Typ für das Ziel des Spezifizierers "{1}" auf.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";package_json_scope_0_has_no_imports_defined_6273" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[package.json scope '{0}' has no imports defined.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Für package.jsim, Bereich "{0}" wurden keine Importe definiert.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

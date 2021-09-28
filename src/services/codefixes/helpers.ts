@@ -532,6 +532,6 @@ namespace ts.codefix {
     }
 
     export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
-        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*usageIsTypeOnly*/ true));
+        symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
     }
 }
