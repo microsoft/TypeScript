@@ -11265,6 +11265,22 @@ namespace ts {
             return getCheckFlags(s) & CheckFlags.Late;
         }
 
+        function forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(type: Type, include: TypeFlags, stringsOnly: boolean, cb: (keyType: Type) => void) {
+            for (const prop of getPropertiesOfType(type)) {
+                cb(getLiteralTypeFromProperty(prop, include));
+            }
+            if (type.flags & TypeFlags.Any) {
+                cb(stringType);
+            }
+            else {
+                for (const info of getIndexInfosOfType(type)) {
+                    if (!stringsOnly || info.keyType.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
+                        cb(info.keyType);
+                    }
+                }
+            }
+        }
+
         /** Resolve the members of a mapped type { [P in K]: T } */
         function resolveMappedTypeMembers(type: MappedType) {
             const members: SymbolTable = createSymbolTable();
@@ -11282,19 +11298,7 @@ namespace ts {
             const include = keyofStringsOnly ? TypeFlags.StringLiteral : TypeFlags.StringOrNumberLiteralOrUnique;
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
-                for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
-                }
-                if (modifiersType.flags & TypeFlags.Any) {
-                    addMemberForKeyType(stringType);
-                }
-                else {
-                    for (const info of getIndexInfosOfType(modifiersType)) {
-                        if (!keyofStringsOnly || info.keyType.flags & (TypeFlags.String | TypeFlags.TemplateLiteral)) {
-                            addMemberForKeyType(info.keyType);
-                        }
-                    }
-                }
+                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, include, keyofStringsOnly, addMemberForKeyType);
             }
             else {
                 forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
@@ -14653,19 +14657,58 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
-        function instantiateTypeAsMappedNameType(nameType: Type, type: MappedType, t: Type) {
-            return instantiateType(nameType, appendTypeMapping(type.mapper, getTypeParameterFromMappedType(type), t));
-        }
+        /**
+         * This roughly mirrors `resolveMappedTypeMembers` in the nongeneric case, except only reports a union of the keys calculated,
+         * rather than manufacturing the properties. We can't just fetch the `constraintType` since that would ignore mappings
+         * and mapping the `constraintType` directly ignores how mapped types map _properties_ and not keys (thus ignoring subtype
+         * reduction in the constraintType) when possible.
+         * @param noIndexSignatures Indicates if _string_ index signatures should be elided. (other index signatures are always reported)
+         */
+        function getIndexTypeForMappedType(type: MappedType, stringsOnly: boolean, noIndexSignatures: boolean | undefined) {
+            const typeParameter = getTypeParameterFromMappedType(type);
+            const constraintType = getConstraintTypeFromMappedType(type);
+            const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
+            if (!nameType && !noIndexSignatures) {
+                // no mapping and no filtering required, just quickly bail to returning the constraint in the common case
+                return constraintType;
+            }
+            const keyTypes: Type[] = [];
+            if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
+                // We have a { [P in keyof T]: X }
 
-        function getIndexTypeForMappedType(type: MappedType, noIndexSignatures: boolean | undefined) {
-            const constraint = filterType(getConstraintTypeFromMappedType(type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String)));
-            const nameType = type.declaration.nameType && getTypeFromTypeNode(type.declaration.nameType);
-            // If the constraint is exclusively string/number/never type(s), we need to pull the property names from the modified type and run them through the `nameType` mapper as well
-            // since they won't appear in the constraint, due to subtype reducing with the string/number index types
-            const properties = nameType && everyType(constraint, t => !!(t.flags & (TypeFlags.String | TypeFlags.Number | TypeFlags.Never))) && getPropertiesOfType(getApparentType(getModifiersTypeFromMappedType(type)));
-            return nameType ?
-                getUnionType([mapType(constraint, t => instantiateTypeAsMappedNameType(nameType, type, t)), mapType(getUnionType(map(properties || emptyArray, p => getLiteralTypeFromProperty(p, TypeFlags.StringOrNumberLiteralOrUnique))), t => instantiateTypeAsMappedNameType(nameType, type, t))]):
-                constraint;
+                // `getApparentType` on the T in a generic mapped type can trigger a circularity
+                // (conditionals and `infer` types create a circular dependency in the constraint resolution)
+                // so we only eagerly manifest the keys if the constraint is nongeneric
+                if (!isGenericIndexType(constraintType)) {
+                    const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
+                    forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(modifiersType, TypeFlags.StringOrNumberLiteralOrUnique, stringsOnly, addMemberForKeyType);
+                }
+                else {
+                    // we have a generic index and a homomorphic mapping (but a distributive key remapping) - we need to defer the whole `keyof whatever` for later
+                    // since it's not safe to resolve the shape of modifier type
+                    return getIndexTypeForGenericType(type, stringsOnly);
+                }
+            }
+            else {
+                forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
+            }
+            if (isGenericIndexType(constraintType)) { // include the generic component in the resulting type
+                forEachType(constraintType, addMemberForKeyType);
+            }
+            // we had to pick apart the constraintType to potentially map/filter it - compare the final resulting list with the original constraintType,
+            // so we can return the union that preserves aliases/origin data if possible
+            const result = noIndexSignatures ? filterType(getUnionType(keyTypes), t => !(t.flags & (TypeFlags.Any | TypeFlags.String))) : getUnionType(keyTypes);
+            if (result.flags & TypeFlags.Union && constraintType.flags & TypeFlags.Union && getTypeListId((result as UnionType).types) === getTypeListId((constraintType as UnionType).types)){
+                return constraintType;
+            }
+            return result;
+
+            function addMemberForKeyType(keyType: Type) {
+                const propNameType = nameType ? instantiateType(nameType, appendTypeMapping(type.mapper, typeParameter, keyType)) : keyType;
+                // `keyof` currently always returns `string | number` for concrete `string` index signatures - the below ternary keeps that behavior for mapped types
+                // See `getLiteralTypeFromProperties` where there's a similar ternary to cause the same behavior.
+                keyTypes.push(propNameType === stringType ? stringOrNumberType : propNameType);
+            }
         }
 
         // Ordinarily we reduce a keyof M, where M is a mapped type { [P in K as N<P>]: X }, to simply N<K>. This however presumes
@@ -14728,7 +14771,7 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.InstantiableNonPrimitive || isGenericTupleType(type) || isGenericMappedType(type) && !hasDistributiveNameType(type) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, stringsOnly) :
-                getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, noIndexSignatures) :
+                getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, stringsOnly, noIndexSignatures) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Unknown ? neverType :
                 type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
@@ -18790,6 +18833,35 @@ namespace ts {
                             // 'keyof T' has itself as its constraint and produces a Ternary.Maybe when
                             // related to other types.
                             if (isRelatedTo(source, getIndexType(constraint, (target as IndexType).stringsOnly), reportErrors) === Ternary.True) {
+                                return Ternary.True;
+                            }
+                        }
+                        else if (isGenericMappedType(targetType)) {
+                            // generic mapped types that don't simplify or have a constraint still have a very simple set of keys we can compare against
+                            // - their nameType or constraintType.
+                            // In many ways, this comparison is a deferred version of what `getIndexTypeForMappedType` does to actually resolve the keys for _non_-generic types
+
+                            const nameType = getNameTypeFromMappedType(targetType);
+                            const constraintType = getConstraintTypeFromMappedType(targetType);
+                            let targetKeys;
+                            if (nameType && isMappedTypeWithKeyofConstraintDeclaration(targetType)) {
+                                // we need to get the apparent mappings and union them with the generic mappings, since some properties may be
+                                // missing from the `constraintType` which will otherwise be mapped in the object
+                                const modifiersType = getApparentType(getModifiersTypeFromMappedType(targetType));
+                                const mappedKeys: Type[] = [];
+                                forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(
+                                    modifiersType,
+                                    TypeFlags.StringOrNumberLiteralOrUnique,
+                                    /*stringsOnly*/ false,
+                                    t => void mappedKeys.push(instantiateType(nameType, appendTypeMapping(targetType.mapper, getTypeParameterFromMappedType(targetType), t)))
+                                );
+                                // We still need to include the non-apparent (and thus still generic) keys in the target side of the comparison (in case they're in the source side)
+                                targetKeys = getUnionType([...mappedKeys, nameType]);
+                            }
+                            else {
+                                targetKeys = nameType || constraintType;
+                            }
+                            if (isRelatedTo(source, targetKeys, reportErrors) === Ternary.True) {
                                 return Ternary.True;
                             }
                         }
