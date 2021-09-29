@@ -129,7 +129,7 @@ chain("a");
 
 // Repro from #46125
 
-function ff1<T extends string>(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
     if (x === y) {
         x;  // `foo-${string}`
     }
@@ -137,13 +137,21 @@ function ff1<T extends string>(x: `foo-${string}`, y: `${string}-bar`, z: `baz-$
     }
 }
 
-function ff2(x: string, y: `foo-${string}` | 'bar') {
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+    if (x === y) {
+        x;  // `foo-${T}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
     if (x === y) {
         x;  // `foo-${string}` | 'bar'
     }
 }
 
-function ff3(x: string, y: `foo-${string}`) {
+function ff4(x: string, y: `foo-${string}`) {
     if (x === 'foo-test') {
         x;  // 'foo-test'
     }
@@ -154,11 +162,11 @@ function ff3(x: string, y: `foo-${string}`) {
 
 // Repro from #46045
 
-export type Action =
+type Action =
     | { type: `${string}_REQUEST` }
     | { type: `${string}_SUCCESS`, response: string };
 
-export function reducer(action: Action) {
+function reducer(action: Action) {
     if (action.type === 'FOO_SUCCESS') {
         action.type;
         action.response;
