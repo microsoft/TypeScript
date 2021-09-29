@@ -1036,17 +1036,9 @@ namespace ts {
                         }
                     }
                     else {
-                        if (file.localJsxNamespace) {
-                            return file.localJsxNamespace;
-                        }
-                        const jsxPragma = file.pragmas.get("jsx");
-                        if (jsxPragma) {
-                            const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
-                            file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
-                            visitNode(file.localJsxFactory, markAsSynthetic);
-                            if (file.localJsxFactory) {
-                                return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
-                            }
+                        const localJsxNamespace = getLocalJsxNamespace(file);
+                        if (localJsxNamespace) {
+                            return file.localJsxNamespace = localJsxNamespace;
                         }
                     }
                 }
@@ -1068,11 +1060,26 @@ namespace ts {
                 _jsxFactoryEntity = factory.createQualifiedName(factory.createIdentifier(unescapeLeadingUnderscores(_jsxNamespace)), "createElement");
             }
             return _jsxNamespace;
+        }
 
-            function markAsSynthetic(node: Node): VisitResult<Node> {
-                setTextRangePosEnd(node, -1, -1);
-                return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+        function getLocalJsxNamespace(file: SourceFile): __String | undefined {
+            if (file.localJsxNamespace) {
+                return file.localJsxNamespace;
             }
+            const jsxPragma = file.pragmas.get("jsx");
+            if (jsxPragma) {
+                const chosenPragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
+                file.localJsxFactory = parseIsolatedEntityName(chosenPragma.arguments.factory, languageVersion);
+                visitNode(file.localJsxFactory, markAsSynthetic);
+                if (file.localJsxFactory) {
+                    return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
+                }
+            }
+        }
+
+        function markAsSynthetic(node: Node): VisitResult<Node> {
+            setTextRangePosEnd(node, -1, -1);
+            return visitEachChild(node, markAsSynthetic, nullTransformationContext);
         }
 
         function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -27596,6 +27603,15 @@ namespace ts {
                     // If react/jsxFactory symbol is alias, mark it as refereced
                     if (jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
                         markAliasSymbolAsReferenced(jsxFactorySym);
+                    }
+                }
+
+                // For JsxFragment, mark jsx pragma as referenced via resolveName
+                if (isJsxOpeningFragment(node)) {
+                    const file = getSourceFileOfNode(node);
+                    const localJsxNamespace = getLocalJsxNamespace(file);
+                    if (localJsxNamespace) {
+                        resolveName(jsxFactoryLocation, localJsxNamespace, SymbolFlags.Value, jsxFactoryRefErr, localJsxNamespace, /*isUse*/ true);
                     }
                 }
             }
