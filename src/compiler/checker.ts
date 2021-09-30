@@ -2115,16 +2115,23 @@ namespace ts {
                                 suggestion = undefined;
                             }
                             if (suggestion) {
-                                const suggestionName = symbolToString(suggestion);
+                                let suggestionName = symbolToString(suggestion);
+                                let elaborate = !!suggestion.valueDeclaration
+                                if ((suggestionName === "String" || suggestionName === "Object" || suggestionName === "Number" || suggestionName === "BigInt" || suggestionName === "Symbol")
+                                    && name !== suggestionName.toLowerCase()
+                                    && name === (name as string).toLowerCase()) {
+                                    suggestionName = suggestionName.toLowerCase()
+                                    elaborate = false
+                                }
                                 const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
                                 const message = isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1 : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
                                 addErrorOrSuggestion(!isUncheckedJS, diagnostic);
 
-                                if (suggestion.valueDeclaration) {
+                                if (elaborate) {
                                     addRelatedInfo(
                                         diagnostic,
-                                        createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                                        createDiagnosticForNode(suggestion.valueDeclaration!, Diagnostics._0_is_declared_here, suggestionName)
                                     );
                                 }
                             }
