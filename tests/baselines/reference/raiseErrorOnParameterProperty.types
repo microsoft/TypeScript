@@ -3,7 +3,7 @@ class C1 {
 >C1 : C1
 
   constructor(public x: X) {
->x : any
+>x : X
   }
 }
 var c1 = new C1(0);

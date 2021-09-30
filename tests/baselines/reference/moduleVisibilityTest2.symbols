@@ -123,7 +123,9 @@ module M {
 var cprime : M.I = <M.I>null;
 >cprime : Symbol(cprime, Decl(moduleVisibilityTest2.ts, 58, 3))
 >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+>I : Symbol(M.I)
 >M : Symbol(M, Decl(moduleVisibilityTest2.ts, 8, 48), Decl(moduleVisibilityTest2.ts, 51, 1))
+>I : Symbol(M.I)
 
 var c = new M.C();
 >c : Symbol(c, Decl(moduleVisibilityTest2.ts, 60, 3))

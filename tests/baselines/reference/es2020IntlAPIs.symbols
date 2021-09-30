@@ -131,6 +131,7 @@ const locales1 = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options1 = { localeMatcher: 'lookup' } as const;
 >options1 : Symbol(options1, Decl(es2020IntlAPIs.ts, 41, 5))
 >localeMatcher : Symbol(localeMatcher, Decl(es2020IntlAPIs.ts, 41, 18))
+>const : Symbol(const)
 
 console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

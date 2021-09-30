@@ -4,5 +4,6 @@ export interface Test {
 
     [index: TypeNotFound]: any;
 >index : Symbol(index, Decl(declarationEmitIndexTypeNotFound.ts, 1, 5))
+>TypeNotFound : Symbol(TypeNotFound)
 }
 

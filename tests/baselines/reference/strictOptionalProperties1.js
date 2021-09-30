@@ -211,6 +211,29 @@ a = c;
 a = d;  // Error
 a = e;  // Error
 
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+type UB = { x?: never }['x'];  // undefined from missing property
+
+type UC = UA & UB;  // undefined
+
 
 //// [strictOptionalProperties1.js]
 "use strict";
@@ -453,3 +476,18 @@ declare var e: {
     a: number;
     b?: string | undefined;
 };
+interface PropsFromReact {
+    onClick?: () => void;
+}
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+declare type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+declare type UA = undefined;
+declare type UB = {
+    x?: never;
+}['x'];
+declare type UC = UA & UB;

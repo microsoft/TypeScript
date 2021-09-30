@@ -56,7 +56,7 @@ namespace ts {
                 currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
-            const specifier = factory.createImportSpecifier(factory.createIdentifier(name), generatedName);
+            const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
             generatedName.generatedImportReference = specifier;
             specifierSourceImports.set(name, specifier);
             return generatedName;
@@ -85,7 +85,7 @@ namespace ts {
                 for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                     if (isExternalModule(node)) {
                         // Add `import` statement
-                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource));
+                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                         setParentRecursive(importStatement, /*incremental*/ false);
                         statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                     }
@@ -292,7 +292,7 @@ namespace ts {
                 // When there are no attributes, React wants "null"
             }
             else {
-                const target = compilerOptions.target;
+                const target = getEmitScriptTarget(compilerOptions);
                 if (target && target >= ScriptTarget.ES2018) {
                     objectProperties = factory.createObjectLiteralExpression(
                         flatten<SpreadAssignment | PropertyAssignment>(
@@ -547,7 +547,8 @@ namespace ts {
         }
 
         function visitJsxExpression(node: JsxExpression) {
-            return visitNode(node.expression, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return node.dotDotDotToken ? factory.createSpreadElement(expression!) : expression;
         }
     }
 

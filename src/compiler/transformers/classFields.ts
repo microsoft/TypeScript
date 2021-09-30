@@ -172,7 +172,7 @@ namespace ts {
         function transformSourceFile(node: SourceFile) {
             const options = context.getCompilerOptions();
             if (node.isDeclarationFile
-                || useDefineForClassFields && options.target === ScriptTarget.ESNext) {
+                || useDefineForClassFields && getEmitScriptTarget(options) === ScriptTarget.ESNext) {
                 return node;
             }
             const visited = visitEachChild(node, visitor, context);
@@ -266,13 +266,42 @@ namespace ts {
 
         /**
          * If we visit a private name, this means it is an undeclared private name.
-         * Replace it with an empty identifier to indicate a problem with the code.
+         * Replace it with an empty identifier to indicate a problem with the code,
+         * unless we are in a statement position - otherwise this will not trigger
+         * a SyntaxError.
          */
         function visitPrivateIdentifier(node: PrivateIdentifier) {
             if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
                 return node;
             }
+            if (isStatement(node.parent)) {
+                return node;
+            }
             return setOriginalNode(factory.createIdentifier(""), node);
+        }
+
+        /**
+         * Visits `#id in expr`
+         */
+        function visitPrivateIdentifierInInExpression(node: BinaryExpression) {
+            if (!shouldTransformPrivateElementsOrClassStaticBlocks) {
+                return node;
+            }
+            const privId = node.left;
+            Debug.assertNode(privId, isPrivateIdentifier);
+            Debug.assert(node.operatorToken.kind === SyntaxKind.InKeyword);
+            const info = accessPrivateIdentifier(privId);
+            if (info) {
+                const receiver = visitNode(node.right, visitor, isExpression);
+
+                return setOriginalNode(
+                    context.getEmitHelperFactory().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
+                    node
+                );
+            }
+
+            // Private name has not been declared. Subsequent transformers will handle this error
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -826,6 +855,9 @@ namespace ts {
                         }
                     }
                 }
+            }
+            if (node.operatorToken.kind === SyntaxKind.InKeyword && isPrivateIdentifier(node.left)) {
+                return visitPrivateIdentifierInInExpression(node);
             }
             return visitEachChild(node, visitor, context);
         }

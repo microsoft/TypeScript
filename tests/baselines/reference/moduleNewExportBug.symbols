@@ -21,6 +21,7 @@ module mod1 {
 var c : mod1.C; // ERROR: C should not be visible
 >c : Symbol(c, Decl(moduleNewExportBug.ts, 9, 3))
 >mod1 : Symbol(mod1, Decl(moduleNewExportBug.ts, 0, 0))
+>C : Symbol(mod1.C)
 
 
 

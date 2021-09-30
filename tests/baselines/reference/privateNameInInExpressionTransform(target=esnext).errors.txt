@@ -1,0 +1,64 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(4,26): error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(20,24): error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(24,14): error TS2360: The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(29,21): error TS1005: ';' expected.
+tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts(30,21): error TS1005: ';' expected.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameInInExpressionTransform.ts (5 errors) ====
+    class Foo {
+        #field = 1;
+        #method() {}
+        static #staticField= 2;
+                             ~
+!!! error TS2805: Static fields with private names can't have initializers when the '--useDefineForClassFields' flag is not specified with a '--target' of 'esnext'. Consider adding the '--useDefineForClassFields' flag.
+        static #staticMethod() {}
+    
+        check(v: any) {
+            #field in v; // expect Foo's 'field' WeakMap
+            #method in v; // expect Foo's 'instances' WeakSet
+            #staticField in v; // expect Foo's constructor
+            #staticMethod in v; // expect Foo's constructor
+        }
+        precedence(v: any) {
+            // '==' and '||' have lower precedence than 'in'
+            // 'in'  naturally has same precedence as 'in'
+            // '<<' has higher precedence than 'in'
+    
+            v == #field in v || v; // Good precedence: (v == (#field in v)) || v
+    
+            v << #field in v << v; // Good precedence (SyntaxError): (v << #field) in (v << v)
+                           ~~~~~~
+!!! error TS2361: The right-hand side of an 'in' expression must not be a primitive.
+    
+            v << #field in v == v; // Good precedence (SyntaxError): ((v << #field) in v) == v
+    
+            v == #field in v in v; // Good precedence: v == ((#field in v) in v)
+                 ~~~~~~~~~~~
+!!! error TS2360: The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.
+    
+            #field in v && #field in v; // Good precedence: (#field in v) && (#field in v)
+        }
+        invalidLHS(v: any) {
+            'prop' in v = 10;
+                        ~
+!!! error TS1005: ';' expected.
+            #field in v = 10;
+                        ~
+!!! error TS1005: ';' expected.
+        }
+    }
+    
+    class Bar {
+        #field = 1;
+        check(v: any) {
+            #field in v; // expect Bar's 'field' WeakMap
+        }
+    }
+    
+    function syntaxError(v: Foo) {
+        return #field in v; // expect `return in v` so runtime will have a syntax error
+    }
+    
+    export { }
+    

@@ -15,12 +15,16 @@ import test from "./test";
 export type test
 >test : Symbol(test, Decl(types1.ts, 0, 26))
 
+> : Symbol(unknown)
+
 === tests/cases/compiler/types2.ts ===
 import test from "./test";
 >test : Symbol(test, Decl(types2.ts, 0, 6), Decl(types2.ts, 0, 26))
 
 export type test = 
 >test : Symbol(test, Decl(types2.ts, 0, 26))
+
+> : Symbol(unknown)
 
 === tests/cases/compiler/types3.ts ===
 import test from "./test";

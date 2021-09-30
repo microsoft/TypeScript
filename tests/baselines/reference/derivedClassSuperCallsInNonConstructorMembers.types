@@ -13,7 +13,7 @@ class Derived extends Base {
 >Base : Base
 
     a: super();
->a : any
+>a : super
 
     b() {
 >b : () => void
@@ -42,7 +42,7 @@ class Derived extends Base {
     }
 
     static a: super();
->a : any
+>a : super
 
     static b() {
 >b : () => void

@@ -35,7 +35,7 @@ Project '/users/username/projects/myproject/tsconfig.json' (Configured)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	node_modules/@custom/plugin/proposed.d.ts
 	  Imported via './proposed' from file 'node_modules/@custom/plugin/index.d.ts'
 	node_modules/@custom/plugin/index.d.ts

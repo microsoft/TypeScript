@@ -114,4 +114,5 @@ pli(...[reads, writes, writes] as const)
 >reads : Symbol(reads, Decl(callWithSpread4.ts, 10, 11))
 >writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
 >writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
+>const : Symbol(const)
 

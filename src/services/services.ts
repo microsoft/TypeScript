@@ -401,6 +401,12 @@ namespace ts {
         public kind!: SyntaxKind.PrivateIdentifier;
         public escapedText!: __String;
         public symbol!: Symbol;
+        _primaryExpressionBrand: any;
+        _memberExpressionBrand: any;
+        _leftHandSideExpressionBrand: any;
+        _updateExpressionBrand: any;
+        _unaryExpressionBrand: any;
+        _expressionBrand: any;
         constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
             super(pos, end);
         }
@@ -642,8 +648,8 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: ESMap<string, string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: ESMap<string, ResolvedModuleFull> | undefined;
-        public resolvedTypeReferenceDirectiveNames!: ESMap<string, ResolvedTypeReferenceDirective>;
+        public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
+        public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
         public imports!: readonly StringLiteralLike[];
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: ESMap<string, Declaration[]> | undefined;
@@ -1763,7 +1769,7 @@ namespace ts {
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
             synchronizeHostData();
-            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, FindAllReferences.toReferenceEntry);
+            return getReferencesWorker(getTouchingPropertyName(getValidSourceFile(fileName), position), position, { use: FindAllReferences.FindReferencesUse.References }, (entry, node, checker) => FindAllReferences.toReferenceEntry(entry, checker.getSymbolAtLocation(node)));
         }
 
         function getReferencesWorker<T>(node: Node, position: number, options: FindAllReferences.Options, cb: FindAllReferences.ToReferenceOrRenameEntry<T>): T[] | undefined {
@@ -1784,7 +1790,8 @@ namespace ts {
 
         function getFileReferences(fileName: string): ReferenceEntry[] {
             synchronizeHostData();
-            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(FindAllReferences.toReferenceEntry);
+            const moduleSymbol = program.getSourceFile(fileName)?.symbol;
+            return FindAllReferences.Core.getReferencesForFileName(fileName, program, program.getSourceFiles()).map(r => FindAllReferences.toReferenceEntry(r, moduleSymbol));
         }
 
         function getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles = false): NavigateToItem[] {

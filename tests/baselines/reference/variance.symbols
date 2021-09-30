@@ -15,6 +15,7 @@ interface Foo<T> {
 const foo = { prop: true } as const;
 >foo : Symbol(foo, Decl(variance.ts, 8, 5))
 >prop : Symbol(prop, Decl(variance.ts, 8, 13))
+>const : Symbol(const)
 
 const x: Foo<1> = foo;
 >x : Symbol(x, Decl(variance.ts, 9, 5))

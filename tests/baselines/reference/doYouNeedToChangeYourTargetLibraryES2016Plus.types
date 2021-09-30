@@ -128,22 +128,22 @@ const testIntlPluralRules = new Intl.PluralRules("ar-EG").select(0);
 >0 : 0
 
 const testAsyncGenerator: AsyncGenerator<any> = null as any;
->testAsyncGenerator : any
+>testAsyncGenerator : AsyncGenerator<any>
 >null as any : any
 >null : null
 
 const testAsyncGeneratorFunction: AsyncGeneratorFunction = null as any;
->testAsyncGeneratorFunction : any
+>testAsyncGeneratorFunction : AsyncGeneratorFunction
 >null as any : any
 >null : null
 
 const testAsyncIterable: AsyncIterable<any> = null as any;
->testAsyncIterable : any
+>testAsyncIterable : AsyncIterable<any>
 >null as any : any
 >null : null
 
 const testAsyncIterableIterator: AsyncIterableIterator<any> = null as any;
->testAsyncIterableIterator : any
+>testAsyncIterableIterator : AsyncIterableIterator<any>
 >null as any : any
 >null : null
 

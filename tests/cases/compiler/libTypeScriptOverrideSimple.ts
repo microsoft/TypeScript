@@ -1,4 +1,4 @@
-// @Filename: /node_modules/@typescript/dom/index.d.ts
+// @Filename: /node_modules/@typescript/lib-dom/index.d.ts
 interface ABC { abc: string }
 // @Filename: index.ts
 /// <reference lib="dom" />
