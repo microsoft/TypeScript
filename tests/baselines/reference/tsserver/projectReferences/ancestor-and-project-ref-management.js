@@ -51,7 +51,7 @@ Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configu
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -134,7 +134,7 @@ Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -196,7 +196,7 @@ Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -353,7 +353,7 @@ Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configu
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts
@@ -383,7 +383,7 @@ Project '/user/username/projects/container/lib/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -401,7 +401,7 @@ Project '/user/username/projects/container/exec/tsconfig.json' (Configured)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../lib/index.ts
 	  Source from referenced project '../lib/tsconfig.json' included because '--outFile' specified
 	index.ts

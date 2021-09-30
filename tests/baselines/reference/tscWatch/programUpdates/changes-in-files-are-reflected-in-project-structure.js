@@ -28,7 +28,7 @@ Output::
 [[90m12:00:19 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/b/f2.ts
   Imported via "./f2" from file 'a/b/f1.ts'
 a/b/f1.ts
@@ -105,7 +105,7 @@ Output::
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 a/c/f3.ts
   Imported via "../c/f3" from file 'a/b/f2.ts'
 a/b/f2.ts

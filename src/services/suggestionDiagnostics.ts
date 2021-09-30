@@ -23,7 +23,7 @@ namespace ts {
                 const importNode = importFromModuleSpecifier(moduleSpecifier);
                 const name = importNameForConvertToDefaultImport(importNode);
                 if (!name) continue;
-                const module = getResolvedModule(sourceFile, moduleSpecifier.text);
+                const module = getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
                 const resolvedFile = module && program.getSourceFile(module.resolvedFileName);
                 if (resolvedFile && resolvedFile.externalModuleIndicator && isExportAssignment(resolvedFile.externalModuleIndicator) && resolvedFile.externalModuleIndicator.isExportEquals) {
                     diags.push(createDiagnosticForNode(name, Diagnostics.Import_may_be_converted_to_a_default_import));
@@ -139,33 +139,40 @@ namespace ts {
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
     export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+        if (!isPromiseHandler(node) || !hasSupportedNumberOfArguments(node) || !node.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
             return false;
         }
 
         // ensure all chained calls are valid
-        let currentNode = node.expression;
+        let currentNode = node.expression.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
-                return false;
+            if (isCallExpression(currentNode)) {
+                if (!hasSupportedNumberOfArguments(currentNode) || !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+                    return false;
+                }
+                currentNode = currentNode.expression.expression;
             }
-            currentNode = currentNode.expression;
+            else {
+                currentNode = currentNode.expression;
+            }
         }
         return true;
     }
 
-    function isPromiseHandler(node: Node): node is CallExpression {
+    function isPromiseHandler(node: Node): node is CallExpression & { readonly expression: PropertyAccessExpression } {
         return isCallExpression(node) && (
-            hasPropertyAccessExpressionWithName(node, "then") && hasSupportedNumberOfArguments(node) ||
-            hasPropertyAccessExpressionWithName(node, "catch"));
+            hasPropertyAccessExpressionWithName(node, "then") ||
+            hasPropertyAccessExpressionWithName(node, "catch") ||
+            hasPropertyAccessExpressionWithName(node, "finally"));
     }
 
-    function hasSupportedNumberOfArguments(node: CallExpression) {
-        if (node.arguments.length > 2) return false;
-        if (node.arguments.length < 2) return true;
-        return some(node.arguments, arg => {
-            return arg.kind === SyntaxKind.NullKeyword ||
-                isIdentifier(arg) && arg.text === "undefined";
+    function hasSupportedNumberOfArguments(node: CallExpression & { readonly expression: PropertyAccessExpression }) {
+        const name = node.expression.name.text;
+        const maxArguments = name === "then" ? 2 : name === "catch" ? 1 : name === "finally" ? 1 : 0;
+        if (node.arguments.length > maxArguments) return false;
+        if (node.arguments.length < maxArguments) return true;
+        return maxArguments === 1 || some(node.arguments, arg => {
+            return arg.kind === SyntaxKind.NullKeyword || isIdentifier(arg) && arg.text === "undefined";
         });
     }
 

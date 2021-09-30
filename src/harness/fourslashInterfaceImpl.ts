@@ -48,12 +48,16 @@ namespace FourSlashInterface {
         }
     }
 
-    export class Plugins {
+    export class Config {
         constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
             this.state.configurePlugin(pluginName, configuration);
+        }
+
+        public setCompilerOptionsForInferredProjects(options: ts.server.protocol.CompilerOptions): void {
+            this.state.setCompilerOptionsForInferredProjects(options);
         }
     }
 
@@ -350,18 +354,6 @@ namespace FourSlashInterface {
 
         public baselineGetFileReferences(fileName: string) {
             this.state.verifyBaselineGetFileReferences(fileName);
-        }
-
-        public referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<FourSlash.Range>, parts: ReferenceGroup[]) {
-            this.state.verifyReferenceGroups(starts, parts);
-        }
-
-        public noReferences(markerNameOrRange?: string | FourSlash.Range) {
-            this.state.verifyNoReferences(markerNameOrRange);
-        }
-
-        public getReferencesForServerTest(expected: readonly ts.ReferenceEntry[]) {
-            this.state.verifyGetReferencesForServerTest(expected);
         }
 
         public singleReferenceGroup(definition: ReferenceGroupDefinition, ranges?: FourSlash.Range[] | string) {
@@ -967,6 +959,12 @@ namespace FourSlashInterface {
             kindModifiers: "declare",
             sortText: SortText.GlobalsOrKeywords
         });
+        const deprecatedFunctionEntry = (name: string): ExpectedCompletionEntryObject => ({
+            name,
+            kind: "function",
+            kindModifiers: "deprecated,declare",
+            sortText: SortText.DeprecatedGlobalsOrKeywords
+        });
         const varEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
             kind: "var",
@@ -989,6 +987,12 @@ namespace FourSlashInterface {
             kind: "method",
             kindModifiers: "declare",
             sortText: SortText.LocationPriority
+        });
+        const deprecatedMethodEntry = (name: string): ExpectedCompletionEntryObject => ({
+            name,
+            kind: "method",
+            kindModifiers: "deprecated,declare",
+            sortText: SortText.DeprecatedLocationPriority
         });
         const propertyEntry = (name: string): ExpectedCompletionEntryObject => ({
             name,
@@ -1045,6 +1049,8 @@ namespace FourSlashInterface {
             interfaceEntry("NumberConstructor"),
             interfaceEntry("TemplateStringsArray"),
             interfaceEntry("ImportMeta"),
+            interfaceEntry("ImportCallOptions"),
+            interfaceEntry("ImportAssertions"),
             varEntry("Math"),
             varEntry("Date"),
             interfaceEntry("DateConstructor"),
@@ -1079,6 +1085,7 @@ namespace FourSlashInterface {
             typeEntry("PromiseConstructorLike"),
             interfaceEntry("PromiseLike"),
             interfaceEntry("Promise"),
+            typeEntry("Awaited"),
             interfaceEntry("ArrayLike"),
             typeEntry("Partial"),
             typeEntry("Required"),
@@ -1223,7 +1230,7 @@ namespace FourSlashInterface {
             methodEntry("toLocaleUpperCase"),
             methodEntry("trim"),
             propertyEntry("length"),
-            methodEntry("substr"),
+            deprecatedMethodEntry("substr"),
             methodEntry("valueOf"),
         ];
 
@@ -1276,6 +1283,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",
@@ -1327,8 +1335,8 @@ namespace FourSlashInterface {
             functionEntry("decodeURIComponent"),
             functionEntry("encodeURI"),
             functionEntry("encodeURIComponent"),
-            functionEntry("escape"),
-            functionEntry("unescape"),
+            deprecatedFunctionEntry("escape"),
+            deprecatedFunctionEntry("unescape"),
             varEntry("NaN"),
             varEntry("Infinity"),
             varEntry("Object"),
@@ -1479,6 +1487,7 @@ namespace FourSlashInterface {
             "let",
             "package",
             "yield",
+            "abstract",
             "as",
             "asserts",
             "any",

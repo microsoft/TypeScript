@@ -71,6 +71,7 @@ namespace ts {
         ["es2021.promise", "lib.es2021.promise.d.ts"],
         ["es2021.string", "lib.es2021.string.d.ts"],
         ["es2021.weakref", "lib.es2021.weakref.d.ts"],
+        ["es2021.intl", "lib.es2021.intl.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -393,7 +394,9 @@ namespace ts {
                 es6: ModuleKind.ES2015,
                 es2015: ModuleKind.ES2015,
                 es2020: ModuleKind.ES2020,
-                esnext: ModuleKind.ESNext
+                esnext: ModuleKind.ESNext,
+                node12: ModuleKind.Node12,
+                nodenext: ModuleKind.NodeNext,
             })),
             affectsModuleResolution: true,
             affectsEmit: true,
@@ -570,7 +573,7 @@ namespace ts {
             type: new Map(getEntries({
                 remove: ImportsNotUsedAsValues.Remove,
                 preserve: ImportsNotUsedAsValues.Preserve,
-                error: ImportsNotUsedAsValues.Error
+                error: ImportsNotUsedAsValues.Error,
             })),
             affectsEmit: true,
             affectsSemanticDiagnostics: true,
@@ -1166,8 +1169,16 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Language_and_Environment,
             description: Diagnostics.Emit_ECMAScript_standard_compliant_class_fields,
-            defaultValueDescription: "false"
+            defaultValueDescription: Diagnostics.true_for_ES2022_and_above_including_ESNext
         },
+        {
+            name: "preserveValueImports",
+            type: "boolean",
+            affectsEmit: true,
+            category: Diagnostics.Emit,
+            description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
+        },
+
         {
             name: "keyofStringsOnly",
             type: "boolean",
@@ -1328,7 +1339,7 @@ namespace ts {
     /* @internal */
     export const defaultInitCompilerOptions: CompilerOptions = {
         module: ModuleKind.CommonJS,
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.ES2016,
         strict: true,
         esModuleInterop: true,
         forceConsistentCasingInFileNames: true,
@@ -2852,6 +2863,7 @@ namespace ts {
         let typeAcquisition: TypeAcquisition | undefined, typingOptionstypeAcquisition: TypeAcquisition | undefined;
         let watchOptions: WatchOptions | undefined;
         let extendedConfigPath: string | undefined;
+        let rootCompilerOptions: PropertyName[] | undefined;
 
         const optionsIterator: JsonConversionNotifier = {
             onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
@@ -2894,6 +2906,9 @@ namespace ts {
                 if (key === "excludes") {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
+                if (find(commandOptionsWithoutBuild, (opt) => opt.name === key)) {
+                    rootCompilerOptions = append(rootCompilerOptions, keyNode);
+                }
             }
         };
         const json = convertConfigFileToObject(sourceFile, errors, /*reportOptionsErrors*/ true, optionsIterator);
@@ -2911,6 +2926,10 @@ namespace ts {
             else {
                 typeAcquisition = getDefaultTypeAcquisition(configFileName);
             }
+        }
+
+        if (rootCompilerOptions && json && json.compilerOptions === undefined) {
+            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, rootCompilerOptions[0], Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file, getTextOfPropertyName(rootCompilerOptions[0]) as string));
         }
 
         return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
@@ -3199,7 +3218,7 @@ namespace ts {
         // Rather than re-query this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
-        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -3212,7 +3231,7 @@ namespace ts {
 
         let jsonOnlyIncludeRegexes: readonly RegExp[] | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, flatten(supportedExtensionsWithJsonIfResolveJsonModule), validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
                 if (fileExtensionIs(file, Extension.Json)) {
                     // Valid only if *.json specified
                     if (!jsonOnlyIncludeRegexes) {
@@ -3437,16 +3456,24 @@ namespace ts {
      * extension priority.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const adjustedExtensionPriority = adjustExtensionPriority(extensionPriority, extensions);
-        for (let i = ExtensionPriority.Highest; i < adjustedExtensionPriority; i++) {
-            const higherPriorityExtension = extensions[i];
-            const higherPriorityPath = keyMapper(changeExtension(file, higherPriorityExtension));
+    function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return false;
+        }
+        for (const ext of extensionGroup) {
+            if (fileExtensionIs(file, ext)) {
+                return false;
+            }
+            const higherPriorityPath = keyMapper(changeExtension(file, ext));
             if (literalFiles.has(higherPriorityPath) || wildcardFiles.has(higherPriorityPath)) {
+                if (ext === Extension.Dts && (fileExtensionIs(file, Extension.Js) || fileExtensionIs(file, Extension.Jsx))) {
+                    // LEGACY BEHAVIOR: An off-by-one bug somewhere in the extension priority system for wildcard module loading allowed declaration
+                    // files to be loaded alongside their js(x) counterparts. We regard this as generally undesirable, but retain the behavior to
+                    // prevent breakage.
+                    continue;
+                }
                 return true;
             }
         }
@@ -3459,15 +3486,18 @@ namespace ts {
      * already been included.
      *
      * @param file The path to the file.
-     * @param extensionPriority The priority of the extension.
-     * @param context The expansion context.
      */
-    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[], keyMapper: (value: string) => string) {
-        const extensionPriority = getExtensionPriority(file, extensions);
-        const nextExtensionPriority = getNextLowestExtensionPriority(extensionPriority, extensions);
-        for (let i = nextExtensionPriority; i < extensions.length; i++) {
-            const lowerPriorityExtension = extensions[i];
-            const lowerPriorityPath = keyMapper(changeExtension(file, lowerPriorityExtension));
+    function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+        const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
+        if (!extensionGroup) {
+            return;
+        }
+        for (let i = extensionGroup.length - 1; i >= 0; i--) {
+            const ext = extensionGroup[i];
+            if (fileExtensionIs(file, ext)) {
+                return;
+            }
+            const lowerPriorityPath = keyMapper(changeExtension(file, ext));
             wildcardFiles.delete(lowerPriorityPath);
         }
     }

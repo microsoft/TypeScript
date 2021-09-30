@@ -4134,7 +4134,7 @@ namespace ts.server {
                     },
                     PollingInterval.Low,
                     this.hostConfiguration.watchOptions,
-                    WatchType.PackageJsonFile,
+                    WatchType.PackageJson,
                 ));
             }
         }

@@ -1,23 +1,23 @@
 === tests/cases/compiler/recursiveConditionalTypes.ts ===
 // Awaiting promises
 
-type Awaited<T> =
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 13))
+type __Awaited<T> =
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
 
     T extends null | undefined ? T :
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 13))
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
 
-    T extends PromiseLike<infer U> ? Awaited<U> :
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 13))
+    T extends PromiseLike<infer U> ? __Awaited<U> :
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
 >PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 4, 31))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 4, 31))
 
     T;
->T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveConditionalTypes.ts, 2, 15))
 
 type MyPromise<T> = {
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
@@ -43,44 +43,44 @@ type InfinitePromise<T> = Promise<InfinitePromise<T>>;
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 11, 21))
 
-type P0 = Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
+type P0 = __Awaited<Promise<string | Promise<MyPromise<number> | null> | undefined>>;
 >P0 : Symbol(P0, Decl(recursiveConditionalTypes.ts, 11, 54))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >MyPromise : Symbol(MyPromise, Decl(recursiveConditionalTypes.ts, 5, 6))
 
-type P1 = Awaited<any>;
->P1 : Symbol(P1, Decl(recursiveConditionalTypes.ts, 13, 83))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+type P1 = __Awaited<any>;
+>P1 : Symbol(P1, Decl(recursiveConditionalTypes.ts, 13, 85))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 
-type P2 = Awaited<InfinitePromise<number>>;  // Error
->P2 : Symbol(P2, Decl(recursiveConditionalTypes.ts, 14, 23))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+type P2 = __Awaited<InfinitePromise<number>>;  // Error
+>P2 : Symbol(P2, Decl(recursiveConditionalTypes.ts, 14, 25))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >InfinitePromise : Symbol(InfinitePromise, Decl(recursiveConditionalTypes.ts, 9, 1))
 
-function f11<T, U extends T>(tx: T, ta: Awaited<T>, ux: U, ua: Awaited<U>) {
->f11 : Symbol(f11, Decl(recursiveConditionalTypes.ts, 15, 43))
+function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
+>f11 : Symbol(f11, Decl(recursiveConditionalTypes.ts, 15, 45))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 17, 13))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 17, 15))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 17, 13))
 >tx : Symbol(tx, Decl(recursiveConditionalTypes.ts, 17, 29))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 17, 13))
 >ta : Symbol(ta, Decl(recursiveConditionalTypes.ts, 17, 35))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >T : Symbol(T, Decl(recursiveConditionalTypes.ts, 17, 13))
->ux : Symbol(ux, Decl(recursiveConditionalTypes.ts, 17, 51))
+>ux : Symbol(ux, Decl(recursiveConditionalTypes.ts, 17, 53))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 17, 15))
->ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 58))
->Awaited : Symbol(Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
+>ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 60))
+>__Awaited : Symbol(__Awaited, Decl(recursiveConditionalTypes.ts, 0, 0))
 >U : Symbol(U, Decl(recursiveConditionalTypes.ts, 17, 15))
 
     ta = ua;
 >ta : Symbol(ta, Decl(recursiveConditionalTypes.ts, 17, 35))
->ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 58))
+>ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 60))
 
     ua = ta;  // Error
->ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 58))
+>ua : Symbol(ua, Decl(recursiveConditionalTypes.ts, 17, 60))
 >ta : Symbol(ta, Decl(recursiveConditionalTypes.ts, 17, 35))
 
     ta = tx;  // Error

@@ -117,6 +117,14 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
 
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+
+chain("a");
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -168,6 +176,7 @@ var templated1 = value1 + " abc";
 // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
 var value2 = "abc";
 var templated2 = value2 + " abc";
+chain("a");
 
 
 //// [templateLiteralTypes3.d.ts]
@@ -216,3 +225,11 @@ declare type PrefixData<P extends Prefixes> = `${P}:baz`;
 interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 }
+declare type Schema = {
+    a: {
+        b: {
+            c: number;
+        };
+    };
+};
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;

@@ -780,3 +780,35 @@ a = e;  // Error
 >a : { [x: string]: string | number; }
 >e : string | boolean | undefined
 
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+>onClick : (() => void) | undefined
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+>onClick : (() => void) | undefined
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+>TheTypeFromMaterialUI : TheTypeFromMaterialUI
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+>value : string
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+>UA : undefined
+
+type UB = { x?: never }['x'];  // undefined from missing property
+>UB : undefined
+>x : undefined
+
+type UC = UA & UB;  // undefined
+>UC : undefined
+

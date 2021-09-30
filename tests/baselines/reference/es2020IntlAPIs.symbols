@@ -1,0 +1,149 @@
+=== tests/cases/conformance/es2020/es2020IntlAPIs.ts ===
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#Locale_identification_and_negotiation
+const count = 26254.39;
+>count : Symbol(count, Decl(es2020IntlAPIs.ts, 1, 5))
+
+const date = new Date("2012-05-24");
+>date : Symbol(date, Decl(es2020IntlAPIs.ts, 2, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+function log(locale: string) {
+>log : Symbol(log, Decl(es2020IntlAPIs.ts, 2, 36))
+>locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+
+  console.log(
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`
+>new Intl.DateTimeFormat(locale).format : Symbol(Intl.DateTimeFormat.format, Decl(lib.es5.d.ts, --, --))
+>Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+>format : Symbol(Intl.DateTimeFormat.format, Decl(lib.es5.d.ts, --, --))
+>date : Symbol(date, Decl(es2020IntlAPIs.ts, 2, 5))
+>new Intl.NumberFormat(locale).format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 4, 13))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>count : Symbol(count, Decl(es2020IntlAPIs.ts, 1, 5))
+
+  );
+}
+
+log("en-US");
+>log : Symbol(log, Decl(es2020IntlAPIs.ts, 2, 36))
+
+// expected output: 5/24/2012 26,254.39
+
+log("de-DE");
+>log : Symbol(log, Decl(es2020IntlAPIs.ts, 2, 36))
+
+// expected output: 24.5.2012 26.254,39
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
+const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
+>rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+>Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>style : Symbol(style, Decl(es2020IntlAPIs.ts, 17, 48))
+
+console.log(rtf1.format(3, 'quarter'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>rtf1.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+>rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+>format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+
+//expected output: "in 3 qtrs."
+
+console.log(rtf1.format(-1, 'day'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>rtf1.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+>rtf1 : Symbol(rtf1, Decl(es2020IntlAPIs.ts, 17, 5))
+>format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+
+//expected output: "1 day ago"
+
+const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
+>rtf2 : Symbol(rtf2, Decl(es2020IntlAPIs.ts, 25, 5))
+>Intl.RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>RelativeTimeFormat : Symbol(Intl.RelativeTimeFormat, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>numeric : Symbol(numeric, Decl(es2020IntlAPIs.ts, 25, 48))
+
+console.log(rtf2.format(2, 'day'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>rtf2.format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+>rtf2 : Symbol(rtf2, Decl(es2020IntlAPIs.ts, 25, 5))
+>format : Symbol(Intl.RelativeTimeFormat.format, Decl(lib.es2020.intl.d.ts, --, --))
+
+//expected output: "pasado mañana"
+
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
+const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
+>regionNamesInEnglish : Symbol(regionNamesInEnglish, Decl(es2020IntlAPIs.ts, 31, 5))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2020IntlAPIs.ts, 31, 60))
+
+const regionNamesInTraditionalChinese = new Intl.DisplayNames(['zh-Hant'], { type: 'region' });
+>regionNamesInTraditionalChinese : Symbol(regionNamesInTraditionalChinese, Decl(es2020IntlAPIs.ts, 32, 5))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>type : Symbol(type, Decl(es2020IntlAPIs.ts, 32, 76))
+
+console.log(regionNamesInEnglish.of('US'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>regionNamesInEnglish.of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
+>regionNamesInEnglish : Symbol(regionNamesInEnglish, Decl(es2020IntlAPIs.ts, 31, 5))
+>of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
+
+// expected output: "United States"
+
+console.log(regionNamesInTraditionalChinese.of('US'));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>regionNamesInTraditionalChinese.of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
+>regionNamesInTraditionalChinese : Symbol(regionNamesInTraditionalChinese, Decl(es2020IntlAPIs.ts, 32, 5))
+>of : Symbol(Intl.DisplayNames.of, Decl(lib.es2020.intl.d.ts, --, --))
+
+// expected output: "美國"
+
+const locales1 = ['ban', 'id-u-co-pinyin', 'de-ID'];
+>locales1 : Symbol(locales1, Decl(es2020IntlAPIs.ts, 40, 5))
+
+const options1 = { localeMatcher: 'lookup' } as const;
+>options1 : Symbol(options1, Decl(es2020IntlAPIs.ts, 41, 5))
+>localeMatcher : Symbol(localeMatcher, Decl(es2020IntlAPIs.ts, 41, 18))
+>const : Symbol(const)
+
+console.log(Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', '));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Intl.DisplayNames.supportedLocalesOf(locales1, options1).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Intl.DisplayNames.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>Intl.DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>DisplayNames : Symbol(Intl.DisplayNames, Decl(lib.es2020.intl.d.ts, --, --), Decl(lib.es2020.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2020.intl.d.ts, --, --))
+>locales1 : Symbol(locales1, Decl(es2020IntlAPIs.ts, 40, 5))
+>options1 : Symbol(options1, Decl(es2020IntlAPIs.ts, 41, 5))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+

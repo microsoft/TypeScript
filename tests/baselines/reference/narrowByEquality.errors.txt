@@ -1,6 +1,6 @@
-tests/cases/compiler/narrowByEquality.ts(53,15): error TS2322: Type 'string | number' is not assignable to type 'number'.
+tests/cases/compiler/narrowByEquality.ts(54,15): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/narrowByEquality.ts(54,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+tests/cases/compiler/narrowByEquality.ts(55,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 
 
@@ -9,6 +9,7 @@ tests/cases/compiler/narrowByEquality.ts(54,9): error TS2322: Type 'string | num
     declare let n: number;
     declare let s: string;
     declare let b: boolean;
+    declare let xUnknown: unknown;
     
     if (x == n) {
         x;
@@ -68,4 +69,18 @@ tests/cases/compiler/narrowByEquality.ts(54,9): error TS2322: Type 'string | num
         }
         return 0;
     }
+    
+    // From issue #32798
+    if (xUnknown == null) {
+        xUnknown;
+    } else {
+        xUnknown
+    }
+    
+    if (xUnknown != null) {
+        xUnknown;
+    } else {
+        xUnknown;
+    }
+    
     

@@ -398,13 +398,18 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (node as ImportDeclaration).importClause) ||
-                    visitNode(cbNode, (node as ImportDeclaration).moduleSpecifier);
+                    visitNode(cbNode, (node as ImportDeclaration).moduleSpecifier) ||
+                    visitNode(cbNode, (node as ImportDeclaration).assertClause);
             case SyntaxKind.ImportClause:
                 return visitNode(cbNode, (node as ImportClause).name) ||
                     visitNode(cbNode, (node as ImportClause).namedBindings);
+            case SyntaxKind.AssertClause:
+                return visitNodes(cbNode, cbNodes, (node as AssertClause).elements);
+            case SyntaxKind.AssertEntry:
+                return visitNode(cbNode, (node as AssertEntry).name) ||
+                    visitNode(cbNode, (node as AssertEntry).value);
             case SyntaxKind.NamespaceExportDeclaration:
                 return visitNode(cbNode, (node as NamespaceExportDeclaration).name);
-
             case SyntaxKind.NamespaceImport:
                 return visitNode(cbNode, (node as NamespaceImport).name);
             case SyntaxKind.NamespaceExport:
@@ -416,7 +421,8 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, node.decorators) ||
                     visitNodes(cbNode, cbNodes, node.modifiers) ||
                     visitNode(cbNode, (node as ExportDeclaration).exportClause) ||
-                    visitNode(cbNode, (node as ExportDeclaration).moduleSpecifier);
+                    visitNode(cbNode, (node as ExportDeclaration).moduleSpecifier) ||
+                    visitNode(cbNode, (node as ExportDeclaration).assertClause);
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
                 return visitNode(cbNode, (node as ImportOrExportSpecifier).propertyName) ||
@@ -1633,7 +1639,7 @@ namespace ts {
                 parseErrorAtCurrentToken(blankDiagnostic);
             }
             else {
-                parseErrorAtCurrentToken(nameDiagnostic, tokenToString(token()));
+                parseErrorAtCurrentToken(nameDiagnostic, scanner.getTokenValue());
             }
         }
 
@@ -1886,6 +1892,11 @@ namespace ts {
                 token() === SyntaxKind.NumericLiteral;
         }
 
+        function isAssertionKey(): boolean {
+            return tokenIsIdentifierOrKeyword(token()) ||
+                token() === SyntaxKind.StringLiteral;
+        }
+
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
                 const node = parseLiteralNode() as StringLiteral | NumericLiteral;
@@ -2051,6 +2062,8 @@ namespace ts {
                     return isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
                     return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                case ParsingContext.AssertEntries:
+                    return isAssertionKey();
                 case ParsingContext.HeritageClauseElement:
                     // If we see `{ ... }` then only consume it as an expression if it is followed by `,` or `{`
                     // That way we won't consume the body of a class in its heritage clause.
@@ -2171,6 +2184,7 @@ namespace ts {
                 case ParsingContext.ObjectLiteralMembers:
                 case ParsingContext.ObjectBindingElements:
                 case ParsingContext.ImportOrExportSpecifiers:
+                case ParsingContext.AssertEntries:
                     return token() === SyntaxKind.CloseBraceToken;
                 case ParsingContext.SwitchClauseStatements:
                     return token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.CaseKeyword || token() === SyntaxKind.DefaultKeyword;
@@ -5042,12 +5056,12 @@ namespace ts {
                     && !tagNamesAreEquivalent(lastChild.openingElement.tagName, lastChild.closingElement.tagName)
                     && tagNamesAreEquivalent(opening.tagName, lastChild.closingElement.tagName)) {
                     // when an unclosed JsxOpeningElement incorrectly parses its parent's JsxClosingElement,
-                    // restructure (<div>(...<span></div>)) --> (<div>(...<span></span>)</div>)
+                    // restructure (<div>(...<span>...</div>)) --> (<div>(...<span>...</>)</div>)
                     // (no need to error; the parent will error)
-                    const end = lastChild.openingElement.end; // newly-created children and closing are both zero-width end/end
+                    const end = lastChild.children.end;
                     const newLast = finishNode(factory.createJsxElement(
                         lastChild.openingElement,
-                        createNodeArray([], end, end),
+                        lastChild.children,
                         finishNode(factory.createJsxClosingElement(finishNode(factory.createIdentifier(""), end, end)), end, end)),
                     lastChild.openingElement.pos,
                     end);
@@ -5603,6 +5617,8 @@ namespace ts {
                     break;
                 case SyntaxKind.TemplateHead:
                     return parseTemplateExpression(/* isTaggedTemplate */ false);
+                case SyntaxKind.PrivateIdentifier:
+                    return parsePrivateIdentifier();
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);
@@ -7234,11 +7250,43 @@ namespace ts {
                 importClause = parseImportClause(identifier, afterImportPos, isTypeOnly);
                 parseExpected(SyntaxKind.FromKeyword);
             }
-
             const moduleSpecifier = parseModuleSpecifier();
+
+            let assertClause: AssertClause | undefined;
+            if (token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
+                assertClause = parseAssertClause();
+            }
+
             parseSemicolon();
-            const node = factory.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier);
+            const node = factory.createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier, assertClause);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
+        }
+
+        function parseAssertEntry() {
+            const pos = getNodePos();
+            const name = tokenIsIdentifierOrKeyword(token()) ? parseIdentifierName() : parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
+            parseExpected(SyntaxKind.ColonToken);
+            const value = parseLiteralLikeNode(SyntaxKind.StringLiteral) as StringLiteral;
+            return finishNode(factory.createAssertEntry(name, value), pos);
+        }
+
+        function parseAssertClause() {
+            const pos = getNodePos();
+            parseExpected(SyntaxKind.AssertKeyword);
+            const openBracePosition = scanner.getTokenPos();
+            parseExpected(SyntaxKind.OpenBraceToken);
+            const multiLine = scanner.hasPrecedingLineBreak();
+            const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
+            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                const lastError = lastOrUndefined(parseDiagnostics);
+                if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                    addRelatedInfo(
+                        lastError,
+                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                    );
+                }
+            }
+            return finishNode(factory.createAssertClause(elements, multiLine), pos);
         }
 
         function tokenAfterImportDefinitelyProducesImportDeclaration() {
@@ -7356,27 +7404,76 @@ namespace ts {
             let checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
             let checkIdentifierStart = scanner.getTokenPos();
             let checkIdentifierEnd = scanner.getTextPos();
-            const identifierName = parseIdentifierName();
+            let isTypeOnly = false;
             let propertyName: Identifier | undefined;
-            let name: Identifier;
-            if (token() === SyntaxKind.AsKeyword) {
-                propertyName = identifierName;
-                parseExpected(SyntaxKind.AsKeyword);
-                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
-                checkIdentifierStart = scanner.getTokenPos();
-                checkIdentifierEnd = scanner.getTextPos();
-                name = parseIdentifierName();
+            let canParseAsKeyword = true;
+            let name = parseIdentifierName();
+            if (name.escapedText === "type") {
+                // If the first token of an import specifier is 'type', there are a lot of possibilities,
+                // especially if we see 'as' afterwards:
+                //
+                // import { type } from "mod";          - isTypeOnly: false,   name: type
+                // import { type as } from "mod";       - isTypeOnly: true,    name: as
+                // import { type as as } from "mod";    - isTypeOnly: false,   name: as,    propertyName: type
+                // import { type as as as } from "mod"; - isTypeOnly: true,    name: as,    propertyName: as
+                if (token() === SyntaxKind.AsKeyword) {
+                    // { type as ...? }
+                    const firstAs = parseIdentifierName();
+                    if (token() === SyntaxKind.AsKeyword) {
+                        // { type as as ...? }
+                        const secondAs = parseIdentifierName();
+                        if (tokenIsIdentifierOrKeyword(token())) {
+                            // { type as as something }
+                            isTypeOnly = true;
+                            propertyName = firstAs;
+                            name = parseNameWithKeywordCheck();
+                            canParseAsKeyword = false;
+                        }
+                        else {
+                            // { type as as }
+                            propertyName = name;
+                            name = secondAs;
+                            canParseAsKeyword = false;
+                        }
+                    }
+                    else if (tokenIsIdentifierOrKeyword(token())) {
+                        // { type as something }
+                        propertyName = name;
+                        canParseAsKeyword = false;
+                        name = parseNameWithKeywordCheck();
+                    }
+                    else {
+                        // { type as }
+                        isTypeOnly = true;
+                        name = firstAs;
+                    }
+                }
+                else if (tokenIsIdentifierOrKeyword(token())) {
+                    // { type something ...? }
+                    isTypeOnly = true;
+                    name = parseNameWithKeywordCheck();
+                }
             }
-            else {
-                name = identifierName;
+
+            if (canParseAsKeyword && token() === SyntaxKind.AsKeyword) {
+                propertyName = name;
+                parseExpected(SyntaxKind.AsKeyword);
+                name = parseNameWithKeywordCheck();
             }
             if (kind === SyntaxKind.ImportSpecifier && checkIdentifierIsKeyword) {
                 parseErrorAt(checkIdentifierStart, checkIdentifierEnd, Diagnostics.Identifier_expected);
             }
             const node = kind === SyntaxKind.ImportSpecifier
-                ? factory.createImportSpecifier(propertyName, name)
-                : factory.createExportSpecifier(propertyName, name);
+                ? factory.createImportSpecifier(isTypeOnly, propertyName, name)
+                : factory.createExportSpecifier(isTypeOnly, propertyName, name);
             return finishNode(node, pos);
+
+            function parseNameWithKeywordCheck() {
+                checkIdentifierIsKeyword = isKeyword(token()) && !isIdentifier();
+                checkIdentifierStart = scanner.getTokenPos();
+                checkIdentifierEnd = scanner.getTextPos();
+                return parseIdentifierName();
+            }
         }
 
         function parseNamespaceExport(pos: number): NamespaceExport {
@@ -7388,6 +7485,7 @@ namespace ts {
             setAwaitContext(/*value*/ true);
             let exportClause: NamedExportBindings | undefined;
             let moduleSpecifier: Expression | undefined;
+            let assertClause: AssertClause | undefined;
             const isTypeOnly = parseOptional(SyntaxKind.TypeKeyword);
             const namespaceExportPos = getNodePos();
             if (parseOptional(SyntaxKind.AsteriskToken)) {
@@ -7407,9 +7505,12 @@ namespace ts {
                     moduleSpecifier = parseModuleSpecifier();
                 }
             }
+            if (moduleSpecifier && token() === SyntaxKind.AssertKeyword && !scanner.hasPrecedingLineBreak()) {
+                assertClause = parseAssertClause();
+            }
             parseSemicolon();
             setAwaitContext(savedAwaitContext);
-            const node = factory.createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier);
+            const node = factory.createExportDeclaration(decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause);
             return withJSDoc(finishNode(node, pos), hasJSDoc);
         }
 
@@ -7489,7 +7590,8 @@ namespace ts {
             TypeArguments,             // Type arguments in type argument list
             TupleElementTypes,         // Element types in tuple element type list
             HeritageClauses,           // Heritage clauses for a class or interface declaration.
-            ImportOrExportSpecifiers,  // Named import clause's import specifier list
+            ImportOrExportSpecifiers,  // Named import clause's import specifier list,
+            AssertEntries,               // Import entries list.
             Count                      // Number of parsing contexts
         }
 
@@ -8441,11 +8543,24 @@ namespace ts {
 
                 function parseTemplateTagTypeParameter() {
                     const typeParameterPos = getNodePos();
+                    const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
+                    if (isBracketed) {
+                        skipWhitespace();
+                    }
                     const name = parseJSDocIdentifierName(Diagnostics.Unexpected_token_A_type_parameter_name_was_expected_without_curly_braces);
+
+                    let defaultType: TypeNode | undefined;
+                    if (isBracketed) {
+                        skipWhitespace();
+                        parseExpected(SyntaxKind.EqualsToken);
+                        defaultType = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
+                        parseExpected(SyntaxKind.CloseBracketToken);
+                    }
+
                     if (nodeIsMissing(name)) {
                         return undefined;
                     }
-                    return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined), typeParameterPos);
+                    return finishNode(factory.createTypeParameterDeclaration(name, /*constraint*/ undefined, defaultType), typeParameterPos);
                 }
 
                 function parseTemplateTagTypeParameters() {
@@ -8611,6 +8726,7 @@ namespace ts {
                 newText,
                 aggressiveChecks
             );
+            result.impliedNodeFormat = sourceFile.impliedNodeFormat;
             return result;
         }
 
@@ -9151,7 +9267,7 @@ namespace ts {
 
     /** @internal */
     export function isDeclarationFileName(fileName: string): boolean {
-        return fileExtensionIs(fileName, Extension.Dts);
+        return fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Dmts, Extension.Dcts]);
     }
 
     /*@internal*/

@@ -86,7 +86,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >reason : any
 
     static defer<R>(dit: typeof Promise): Promise.Resolver<R>;
->defer : <R>(dit: typeof Promise) => any
+>defer : <R>(dit: typeof Promise) => Promise.Resolver<R>
 >dit : typeof Promise
 >Promise : typeof Promise
 >Promise : any
@@ -221,7 +221,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >object : Object
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<any[]>; <R>(dit: typeof Promise, values: R[]): Promise<any[]>; }
+>settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
 >dit : typeof Promise
 >Promise : typeof Promise
 >values : Promise.Thenable<Promise.Thenable<R>[]>
@@ -230,7 +230,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >Promise : any
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<any[]>; <R>(dit: typeof Promise, values: R[]): Promise<any[]>; }
+>settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
 >dit : typeof Promise
 >Promise : typeof Promise
 >values : Promise.Thenable<R[]>
@@ -238,7 +238,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >Promise : any
 
     static settle<R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<any[]>; }
+>settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
 >dit : typeof Promise
 >Promise : typeof Promise
 >values : Promise.Thenable<R>[]
@@ -246,7 +246,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 >Promise : any
 
     static settle<R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>;
->settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<any[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<any[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
+>settle : { <R>(dit: typeof Promise, values: Promise.Thenable<Promise.Thenable<R>[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R[]>): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: Promise.Thenable<R>[]): Promise<Promise.Inspection<R>[]>; <R>(dit: typeof Promise, values: R[]): Promise<Promise.Inspection<R>[]>; }
 >dit : typeof Promise
 >Promise : typeof Promise
 >values : R[]

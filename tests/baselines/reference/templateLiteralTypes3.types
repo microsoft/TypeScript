@@ -49,8 +49,8 @@ function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
 >t : T
 
     let x1 = foo1('hello');  // Error
->x1 : never
->foo1('hello') : never
+>x1 : string
+>foo1('hello') : string
 >foo1 : <V extends string>(arg: `*${V}*`) => V
 >'hello' : "hello"
 
@@ -378,4 +378,21 @@ interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
     blah: string;
 >blah : string
 }
+
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+>Schema : Schema
+>a : { b: {    c: number;}; }
+>b : { c: number; }
+>c : number
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>field : F | `${F}.${F}`
+
+chain("a");
+>chain("a") : void
+>chain : <F extends "a">(field: F | `${F}.${F}`) => void
+>"a" : "a"
 

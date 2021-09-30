@@ -68,7 +68,7 @@ Project '/user/username/projects/myproject/app/src/program/tsconfig.json' (Confi
 
 
 	../../../../../../../a/lib/lib.d.ts
-	  Default library
+	  Default library for target 'es3'
 	../../../shared/bld/library/index.d.ts
 	  Imported via "shared" from file 'bar.ts' with packageId 'shared/bld/library/index.d.ts@1.0.0'
 	bar.ts
