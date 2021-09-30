@@ -35861,6 +35861,13 @@ namespace ts {
             }
         }
 
+        function checkJSDocAccessibilityModifiers(node: JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag): void {
+            const host = getJSDocHost(node);
+            if (host && isPrivateIdentifierClassElementDeclaration(host)) {
+                error(node, Diagnostics.An_accessibility_modifier_cannot_be_used_with_a_private_identifier);
+            }
+        }
+
         function getIdentifierFromEntityNameExpression(node: Identifier | PropertyAccessExpression): Identifier | PrivateIdentifier;
         function getIdentifierFromEntityNameExpression(node: Expression): Identifier | PrivateIdentifier | undefined;
         function getIdentifierFromEntityNameExpression(node: Expression): Identifier | PrivateIdentifier | undefined {
@@ -39854,6 +39861,10 @@ namespace ts {
                     return;
                 case SyntaxKind.JSDocTypeExpression:
                     return checkSourceElement((node as JSDocTypeExpression).type);
+                case SyntaxKind.JSDocPublicTag:
+                case SyntaxKind.JSDocProtectedTag:
+                case SyntaxKind.JSDocPrivateTag:
+                    return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
                 case SyntaxKind.IndexedAccessType:
                     return checkIndexedAccessType(node as IndexedAccessTypeNode);
                 case SyntaxKind.MappedType:
