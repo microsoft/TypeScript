@@ -1757,9 +1757,8 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
-            excludeGlobals = false,
-            issueSuggestions?: boolean): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, issueSuggestions);
+            excludeGlobals = false): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol);
         }
 
         function resolveNameHelper(
@@ -1770,8 +1769,7 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
-            lookup: typeof getSymbol,
-            issueSuggestions?: boolean): Symbol | undefined {
+            lookup: typeof getSymbol): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2110,7 +2108,7 @@ namespace ts {
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                         let suggestion: Symbol | undefined;
-                        if (issueSuggestions && suggestionCount < maximumSuggestionCount) {
+                        if (suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                             const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                             if (isGlobalScopeAugmentationDeclaration) {
@@ -22398,8 +22396,7 @@ namespace ts {
                         getCannotFindNameDiagnosticForName(node),
                         node,
                         !isWriteOnlyAccess(node),
-                        /*excludeGlobals*/ false,
-                        /*issueSuggestions*/ true) || unknownSymbol;
+                        /*excludeGlobals*/ false) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
