@@ -1537,6 +1537,11 @@ namespace ts.server {
             const position = this.getPositionInFile(args, file);
             const projects = this.getProjects(args);
 
+            const renameInfo = this.mapRenameInfo(
+                this.getRenameInfo(args), Debug.checkDefined(this.projectService.getScriptInfo(file)));
+
+            if (!renameInfo.canRename) return { info: renameInfo, locs: [] };
+
             const locations = combineProjectOutputForRenameLocations(
                 projects,
                 this.getDefaultProject(args),
@@ -1546,9 +1551,6 @@ namespace ts.server {
                 this.getPreferences(file)
             );
             if (!simplifiedResult) return locations;
-
-            const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.checkDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
