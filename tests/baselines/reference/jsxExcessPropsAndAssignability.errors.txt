@@ -1,5 +1,15 @@
-tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,6): error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
-  Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
+tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,6): error TS2322: Type:
+ComposedComponentProps & { myProp: number; }
+
+is not assignable to type:
+IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>
+
+  Type:
+ComposedComponentProps & { myProp: number; }
+
+is not assignable to type:
+Readonly<WrapperComponentProps>
+
 
 
 ==== tests/cases/compiler/jsxExcessPropsAndAssignability.tsx (1 errors) ====
@@ -20,7 +30,13 @@ tests/cases/compiler/jsxExcessPropsAndAssignability.tsx(16,6): error TS2322: Typ
         // Expected error, but got none - bad!
         <WrapperComponent {...props} myProp={1000000} />;
          ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>'.
-!!! error TS2322:   Type 'ComposedComponentProps & { myProp: number; }' is not assignable to type 'Readonly<WrapperComponentProps>'.
+!!! error TS2322: Type:
+!!! error TS2322: ComposedComponentProps & { myProp: number; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: IntrinsicAttributes & IntrinsicClassAttributes<Component<WrapperComponentProps, any, any>> & Readonly<{ children?: ReactNode; }> & Readonly<WrapperComponentProps>
+!!! error TS2322:   Type:
+!!! error TS2322: ComposedComponentProps & { myProp: number; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: Readonly<WrapperComponentProps>
     };
     

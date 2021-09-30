@@ -4,13 +4,33 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(19,31): erro
 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(22,19): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(23,31): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'A'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A'.
-tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(34,5): error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(34,5): error TS2322: Type:
+{ id: number; url: string; xyz: number; }
+
+is not assignable to type:
+{ id: number; } & { url: string; }
+
   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
-tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(43,9): error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(43,9): error TS2322: Type:
+{ id: number; url: string; xyz: number; }
+
+is not assignable to type:
+{ id: number; } & { url: string; }
+
   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
-tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(68,32): error TS2322: Type '{ foo: true; bar: true; boo: boolean; }' is not assignable to type 'View<TypeA>'.
+tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(68,32): error TS2322: Type:
+{ foo: true; bar: true; boo: boolean; }
+
+is not assignable to type:
+View<TypeA>
+
   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeA>'.
-tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): error TS2322: Type '{ foo: true; bar: true; boo: true; }' is not assignable to type 'boolean | View<TypeB>'.
+tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): error TS2322: Type:
+{ foo: true; bar: true; boo: true; }
+
+is not assignable to type:
+boolean | View<TypeB>
+
   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeB>'.
 
 
@@ -64,7 +84,10 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
         url: '',
         xyz: 1 // Great! This causes an error!
         ~~~~~~
-!!! error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+!!! error TS2322: Type:
+!!! error TS2322: { id: number; url: string; xyz: number; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { id: number; } & { url: string; }
 !!! error TS2322:   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
     };
     
@@ -76,7 +99,10 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
             url: '',
             xyz: 2 // This should also be an error
             ~~~~~~
-!!! error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+!!! error TS2322: Type:
+!!! error TS2322: { id: number; url: string; xyz: number; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { id: number; } & { url: string; }
 !!! error TS2322:   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:62: The expected type comes from property 'photo' which is declared here on type 'MyType'
         }
@@ -105,12 +131,18 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
     
     test = { foo: true, bar: true, boo: true }
                                    ~~~~~~~~~
-!!! error TS2322: Type '{ foo: true; bar: true; boo: boolean; }' is not assignable to type 'View<TypeA>'.
+!!! error TS2322: Type:
+!!! error TS2322: { foo: true; bar: true; boo: boolean; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: View<TypeA>
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeA>'.
     
     test = { foo: true, bar: { foo: true, bar: true, boo: true } }
                                                      ~~~~~~~~~
-!!! error TS2322: Type '{ foo: true; bar: true; boo: true; }' is not assignable to type 'boolean | View<TypeB>'.
+!!! error TS2322: Type:
+!!! error TS2322: { foo: true; bar: true; boo: true; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: boolean | View<TypeB>
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeB>'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:63:5: The expected type comes from property 'bar' which is declared here on type 'View<TypeA>'
     

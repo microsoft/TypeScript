@@ -1,8 +1,18 @@
-tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(13,35): error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'number | IProps'.
+tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(13,35): error TS2322: Type:
+{ INVALID_PROP_NAME: string; iconProp: string; }
+
+is not assignable to type:
+number | IProps
+
   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(16,49): error TS2322: Type '{ asdfasdf: string; }' is not assignable to type '{ testBool?: boolean; }'.
   Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean; }'.
-tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'IProps'.
+tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS2322: Type:
+{ INVALID_PROP_NAME: string; iconProp: string; }
+
+is not assignable to type:
+IProps
+
   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
 
 
@@ -21,7 +31,10 @@ tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS
     // These are the types of errors we want:
     const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'number | IProps'.
+!!! error TS2322: Type:
+!!! error TS2322: { INVALID_PROP_NAME: string; iconProp: string; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: number | IProps
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
     
     // Nested typing works here and we also get an expected error:
@@ -33,6 +46,9 @@ tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS
     // Want an error generated here but there isn't one.
     const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'IProps'.
+!!! error TS2322: Type:
+!!! error TS2322: { INVALID_PROP_NAME: string; iconProp: string; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: IProps
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
     

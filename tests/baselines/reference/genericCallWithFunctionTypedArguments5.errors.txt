@@ -1,5 +1,10 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts(10,16): error TS2322: Type '<T>(x: T, y: T) => string' is not assignable to type '(t: unknown) => string'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts(11,16): error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts(11,16): error TS2322: Type:
+(x: string, y: number) => string
+
+is not assignable to type:
+(t: string) => string
+
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts (2 errors) ====
@@ -18,7 +23,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:3:27: The expected type comes from property 'cb' which is declared here on type '{ cb: (t: unknown) => string; }'
     var r3 = foo({ cb: (x: string, y: number) => '' }); // error
                    ~~
-!!! error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.
+!!! error TS2322: Type:
+!!! error TS2322: (x: string, y: number) => string
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (t: string) => string
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:3:27: The expected type comes from property 'cb' which is declared here on type '{ cb: (t: string) => string; }'
     
     function foo2<T, U>(arg: { cb: (t: T, t2: T) => U }) {

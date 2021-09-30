@@ -1,4 +1,9 @@
-tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
+tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: Type:
+{}
+
+is not assignable to type:
+LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
+
 
 
 ==== tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx (1 errors) ====
@@ -13,7 +18,10 @@ tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx(10,29): error TS2322: T
     ): React.SFC => {
        const Component = () => <TagElement />;
                                 ~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>'.
+!!! error TS2322: Type:
+!!! error TS2322: {}
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: LibraryManagedAttributes<Tag, DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
        return Component;
     };
     

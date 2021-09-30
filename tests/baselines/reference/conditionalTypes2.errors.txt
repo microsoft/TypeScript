@@ -13,10 +13,30 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(24,5): error TS23
             Type 'keyof B' is not assignable to type 'keyof A'.
               Type 'string | number | symbol' is not assignable to type 'keyof A'.
                 Type 'string' is not assignable to type 'keyof A'.
-                  Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                    Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                      Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-                        Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+                  Type:
+string
+
+is not assignable to type:
+number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+
+                    Type:
+keyof B
+
+is not assignable to type:
+number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+
+                      Type:
+string | number | symbol
+
+is not assignable to type:
+number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+
+                        Type:
+string
+
+is not assignable to type:
+number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+
                           Type 'keyof B' is not assignable to type 'number'.
                             Type 'string | number | symbol' is not assignable to type 'number'.
                               Type 'string' is not assignable to type 'number'.
@@ -81,10 +101,22 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
 !!! error TS2322:             Type 'keyof B' is not assignable to type 'keyof A'.
 !!! error TS2322:               Type 'string | number | symbol' is not assignable to type 'keyof A'.
 !!! error TS2322:                 Type 'string' is not assignable to type 'keyof A'.
-!!! error TS2322:                   Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                     Type 'keyof B' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                       Type 'string | number | symbol' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
-!!! error TS2322:                         Type 'string' is not assignable to type 'number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"'.
+!!! error TS2322:                   Type:
+!!! error TS2322: string
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+!!! error TS2322:                     Type:
+!!! error TS2322: keyof B
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+!!! error TS2322:                       Type:
+!!! error TS2322: string | number | symbol
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
+!!! error TS2322:                         Type:
+!!! error TS2322: string
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: number | "toString" | "charAt" | "charCodeAt" | "concat" | "indexOf" | "lastIndexOf" | "localeCompare" | "match" | "replace" | "search" | "slice" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "length" | "substr" | "valueOf"
 !!! error TS2322:                           Type 'keyof B' is not assignable to type 'number'.
 !!! error TS2322:                             Type 'string | number | symbol' is not assignable to type 'number'.
 !!! error TS2322:                               Type 'string' is not assignable to type 'number'.

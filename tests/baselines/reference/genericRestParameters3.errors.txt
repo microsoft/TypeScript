@@ -4,18 +4,38 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(17,11): error TS234
 tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[string] | [number, boolean]'.
   Type '[]' is not assignable to type '[number, boolean]'.
     Source has 0 element(s) but target requires 2.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(22,1): error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(22,1): error TS2322: Type:
+(x: string, ...args: [string] | [number, boolean]) => void
+
+is not assignable to type:
+(...args: [string, string] | [string, number, boolean]) => void
+
+tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type:
+(x: string, y: string) => void
+
+is not assignable to type:
+(x: string, ...args: [string] | [number, boolean]) => void
+
   Types of parameters 'y' and 'args' are incompatible.
     Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.
       Type '[number, boolean]' is not assignable to type '[y: string]'.
         Source has 2 element(s) but target allows only 1.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(24,1): error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(24,1): error TS2322: Type:
+(x: string, y: number, z: boolean) => void
+
+is not assignable to type:
+(x: string, ...args: [string] | [number, boolean]) => void
+
   Types of parameters 'y' and 'args' are incompatible.
     Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
       Type '[string]' is not assignable to type '[y: number, z: boolean]'.
         Source has 1 element(s) but target requires 2.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(25,1): error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(25,1): error TS2322: Type:
+(...args: [string, string] | [string, number, boolean]) => void
+
+is not assignable to type:
+(x: string, ...args: [string] | [number, boolean]) => void
+
 tests/cases/conformance/types/rest/genericRestParameters3.ts(35,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(36,21): error TS2345: Argument of type 'number' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(37,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
@@ -68,24 +88,36 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
     f3 = f1;
     f4 = f1;  // Error, misaligned complex rest types
     ~~
-!!! error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
+!!! error TS2322: Type:
+!!! error TS2322: (x: string, ...args: [string] | [number, boolean]) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (...args: [string, string] | [string, number, boolean]) => void
     f1 = f2;  // Error
     ~~
-!!! error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+!!! error TS2322: Type:
+!!! error TS2322: (x: string, y: string) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (x: string, ...args: [string] | [number, boolean]) => void
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.
 !!! error TS2322:       Type '[number, boolean]' is not assignable to type '[y: string]'.
 !!! error TS2322:         Source has 2 element(s) but target allows only 1.
     f1 = f3;  // Error
     ~~
-!!! error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+!!! error TS2322: Type:
+!!! error TS2322: (x: string, y: number, z: boolean) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (x: string, ...args: [string] | [number, boolean]) => void
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:       Type '[string]' is not assignable to type '[y: number, z: boolean]'.
 !!! error TS2322:         Source has 1 element(s) but target requires 2.
     f1 = f4;  // Error, misaligned complex rest types
     ~~
-!!! error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+!!! error TS2322: Type:
+!!! error TS2322: (...args: [string, string] | [string, number, boolean]) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (x: string, ...args: [string] | [number, boolean]) => void
     
     // Repro from #26110
     

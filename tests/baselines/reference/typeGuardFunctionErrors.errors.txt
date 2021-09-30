@@ -26,7 +26,12 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(78,1):
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
     Parameter 'p2' is not in the same position as parameter 'p1'.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(90,1): error TS2322: Type:
+(p1: any, p2: any, p3: any) => p1 is A
+
+is not assignable to type:
+(p1: any, p2: any) => p1 is A
+
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,9): error TS2749: 'b' refers to a value, but is being used as a type here. Did you mean 'typeof b'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,11): error TS1005: ',' expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(95,14): error TS1005: ',' expected.
@@ -210,7 +215,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     var assign3: (p1, p2) => p1 is A;
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
-!!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322: Type:
+!!! error TS2322: (p1: any, p2: any, p3: any) => p1 is A
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (p1: any, p2: any) => p1 is A
         return true;
     };
     

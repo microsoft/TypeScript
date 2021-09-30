@@ -19,7 +19,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(47,13): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(56,8): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
-  Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+  Type:
+({ x, y, c }: { x: any; y: any; c: any; }) => void
+
+is not assignable to type:
+({ x, y, z }?: { x: any; y: any; z: any; }) => any
+
     Types of parameters '__0' and '__0' are incompatible.
       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
@@ -129,7 +134,10 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
         d4({x, y, c}) { }
         ~~
 !!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
-!!! error TS2416:   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+!!! error TS2416:   Type:
+!!! error TS2416: ({ x, y, c }: { x: any; y: any; c: any; }) => void
+!!! error TS2416: is not assignable to type:
+!!! error TS2416: ({ x, y, z }?: { x: any; y: any; z: any; }) => any
 !!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
 !!! error TS2416:       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
         e0([a, b, q]) { }

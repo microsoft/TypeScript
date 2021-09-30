@@ -7,7 +7,12 @@ tests/cases/compiler/strictOptionalProperties1.ts(53,5): error TS2412: Type 'und
 tests/cases/compiler/strictOptionalProperties1.ts(60,5): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tests/cases/compiler/strictOptionalProperties1.ts(64,5): error TS2322: Type '[number, string?, string?]' is not assignable to type '[number, string?]'.
   Target allows only 2 element(s) but source may have more.
-tests/cases/compiler/strictOptionalProperties1.ts(73,5): error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
+tests/cases/compiler/strictOptionalProperties1.ts(73,5): error TS2322: Type:
+[number, never?, never?, never?]
+
+is not assignable to type:
+[number, string?, boolean?]
+
   Target allows only 3 element(s) but source may have more.
 tests/cases/compiler/strictOptionalProperties1.ts(74,5): error TS2322: Type '[never?, never?, true?]' is not assignable to type '[number, string?, boolean?]'.
   Source provides no match for required element at position 0 in target.
@@ -39,12 +44,27 @@ tests/cases/compiler/strictOptionalProperties1.ts(195,1): error TS2375: Type '{ 
   Types of property 'email' are incompatible.
     Type 'undefined' is not assignable to type 'string | number'.
 tests/cases/compiler/strictOptionalProperties1.ts(206,13): error TS2451: Cannot redeclare block-scoped variable 'e'.
-tests/cases/compiler/strictOptionalProperties1.ts(210,1): error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+tests/cases/compiler/strictOptionalProperties1.ts(210,1): error TS2322: Type:
+{ a: number; b: string | undefined; }
+
+is not assignable to type:
+{ [x: string]: string | number; }
+
   Property 'b' is incompatible with index signature.
     Type 'string | undefined' is not assignable to type 'string | number'.
       Type 'undefined' is not assignable to type 'string | number'.
-tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
-  Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
+tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type:
+string | boolean | undefined
+
+is not assignable to type:
+{ [x: string]: string | number; }
+
+  Type:
+undefined
+
+is not assignable to type:
+{ [x: string]: string | number; }
+
 
 
 ==== tests/cases/compiler/strictOptionalProperties1.ts (23 errors) ====
@@ -138,7 +158,10 @@ tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'st
         t = [42, , ,];
         t = [42, , , ,];  // Error
         ~
-!!! error TS2322: Type '[number, never?, never?, never?]' is not assignable to type '[number, string?, boolean?]'.
+!!! error TS2322: Type:
+!!! error TS2322: [number, never?, never?, never?]
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: [number, string?, boolean?]
 !!! error TS2322:   Target allows only 3 element(s) but source may have more.
         t = [, , true];  // Error
         ~
@@ -321,14 +344,23 @@ tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'st
     a = c;
     a = d;  // Error
     ~
-!!! error TS2322: Type '{ a: number; b: string | undefined; }' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322: Type:
+!!! error TS2322: { a: number; b: string | undefined; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { [x: string]: string | number; }
 !!! error TS2322:   Property 'b' is incompatible with index signature.
 !!! error TS2322:     Type 'string | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
     a = e;  // Error
     ~
-!!! error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
-!!! error TS2322:   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
+!!! error TS2322: Type:
+!!! error TS2322: string | boolean | undefined
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { [x: string]: string | number; }
+!!! error TS2322:   Type:
+!!! error TS2322: undefined
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { [x: string]: string | number; }
     
     // Repro from #46004
     

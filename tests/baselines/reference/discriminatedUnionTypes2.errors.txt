@@ -1,4 +1,9 @@
-tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(27,30): error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
+tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(27,30): error TS2322: Type:
+{ a: null; b: string; c: number; }
+
+is not assignable to type:
+{ a: null; b: string; } | { a: string; c: number; }
+
   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS2339: Property 'b' does not exist on type '{ a: 0; b: string; } | { a: T; c: number; }'.
   Property 'b' does not exist on type '{ a: T; c: number; }'.
@@ -33,7 +38,10 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
     function f13(x: { a: null; b: string } | { a: string, c: number }) {
         x = { a: null, b: "foo", c: 4};  // Error
                                  ~~~~
-!!! error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
+!!! error TS2322: Type:
+!!! error TS2322: { a: null; b: string; c: number; }
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: { a: null; b: string; } | { a: string; c: number; }
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
     }
     

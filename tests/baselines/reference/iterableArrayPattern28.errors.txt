@@ -2,10 +2,30 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
   Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-          Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-            Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
-              Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
+        Type:
+IteratorResult<[string, number] | [string, boolean], any>
+
+is not assignable to type:
+IteratorResult<readonly [string, number], any>
+
+          Type:
+IteratorYieldResult<[string, number] | [string, boolean]>
+
+is not assignable to type:
+IteratorResult<readonly [string, number], any>
+
+            Type:
+IteratorYieldResult<[string, number] | [string, boolean]>
+
+is not assignable to type:
+IteratorYieldResult<readonly [string, number]>
+
+              Type:
+[string, number] | [string, boolean]
+
+is not assignable to type:
+readonly [string, number]
+
                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
                   Type at position 1 in source is not compatible with type at position 1 in target.
                     Type 'boolean' is not assignable to type 'number'.
@@ -21,10 +41,22 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
 !!! error TS2769:   Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
 !!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-!!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-!!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-!!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
-!!! error TS2769:               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
+!!! error TS2769:         Type:
+!!! error TS2769: IteratorResult<[string, number] | [string, boolean], any>
+!!! error TS2769: is not assignable to type:
+!!! error TS2769: IteratorResult<readonly [string, number], any>
+!!! error TS2769:           Type:
+!!! error TS2769: IteratorYieldResult<[string, number] | [string, boolean]>
+!!! error TS2769: is not assignable to type:
+!!! error TS2769: IteratorResult<readonly [string, number], any>
+!!! error TS2769:             Type:
+!!! error TS2769: IteratorYieldResult<[string, number] | [string, boolean]>
+!!! error TS2769: is not assignable to type:
+!!! error TS2769: IteratorYieldResult<readonly [string, number]>
+!!! error TS2769:               Type:
+!!! error TS2769: [string, number] | [string, boolean]
+!!! error TS2769: is not assignable to type:
+!!! error TS2769: readonly [string, number]
 !!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2769:                     Type 'boolean' is not assignable to type 'number'.

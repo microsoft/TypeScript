@@ -263,6 +263,8 @@ namespace ts {
         Uncapitalize: IntrinsicTypeKind.Uncapitalize
     }));
 
+    const DEFAULT_TYPE_CHARS_LENGTH_TO_ADD_NEW_LINES = 30;
+
     function SymbolLinks(this: SymbolLinks) {
     }
 
@@ -18009,6 +18011,10 @@ namespace ts {
                             }
                         }
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                        if (shouldInsertNewLines([sourceType, targetType])) {
+                            reportError(transformMessageToSupportNewLines(message), sourceType, targetType);
+                            return;
+                        }
                     }
                 }
                 else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
@@ -18018,6 +18024,20 @@ namespace ts {
                 }
 
                 reportError(message, generalizedSourceType, targetType);
+            }
+
+            function shouldInsertNewLines(types: string[], charsLength = DEFAULT_TYPE_CHARS_LENGTH_TO_ADD_NEW_LINES) {
+                return types.filter(type => type.length > charsLength).length > 0;
+            }
+
+            function transformMessageToSupportNewLines(message: DiagnosticMessage): DiagnosticMessage {
+                return {
+                    ...message,
+                    message: message.message
+                        .replace(" '{0}' ", ":\n{0}\n\n")
+                        .replace(" '{1}'", ":\n{1}\n")
+                        .replace(".", ""),
+                };
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {

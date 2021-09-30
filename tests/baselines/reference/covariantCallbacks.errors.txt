@@ -4,7 +4,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
   Type 'A' is not assignable to type 'B'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(30,5): error TS2322: Type 'AList1' is not assignable to type 'BList1'.
   Types of property 'forEach' are incompatible.
-    Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
+    Type:
+(cb: (item: A) => void) => void
+
+is not assignable to type:
+(cb: (item: B) => void) => void
+
       Types of parameters 'cb' and 'cb' are incompatible.
         Types of parameters 'item' and 'item' are incompatible.
           Type 'A' is not assignable to type 'B'.
@@ -14,7 +19,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
       Type 'void' is not assignable to type 'boolean'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(56,5): error TS2322: Type 'AList3' is not assignable to type 'BList3'.
   Types of property 'forEach' are incompatible.
-    Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
+    Type:
+(cb: (item: A) => void) => void
+
+is not assignable to type:
+(cb: (item: A, context: any) => void) => void
+
       Types of parameters 'cb' and 'cb' are incompatible.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to type 'BList4'.
   Types of property 'forEach' are incompatible.
@@ -65,7 +75,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         ~
 !!! error TS2322: Type 'AList1' is not assignable to type 'BList1'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
+!!! error TS2322:     Type:
+!!! error TS2322: (cb: (item: A) => void) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (cb: (item: B) => void) => void
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
 !!! error TS2322:           Type 'A' is not assignable to type 'B'.
@@ -103,7 +116,10 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         ~
 !!! error TS2322: Type 'AList3' is not assignable to type 'BList3'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
+!!! error TS2322:     Type:
+!!! error TS2322: (cb: (item: A) => void) => void
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: (cb: (item: A, context: any) => void) => void
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
     }
     

@@ -1,10 +1,30 @@
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(6,5): error TS2322: Type '[number, number, number, number]' is not assignable to type '[number, number, number]'.
+tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(6,5): error TS2322: Type:
+[number, number, number, number]
+
+is not assignable to type:
+[number, number, number]
+
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(7,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[string | number, string | number, string | number]'.
+tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(7,5): error TS2322: Type:
+[number, number, number, string]
+
+is not assignable to type:
+[string | number, string | number, string | number]
+
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
+tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type:
+[number, number, number, string]
+
+is not assignable to type:
+[number, number, number]
+
   Source has 4 element(s) but target allows only 3.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type '[number, number, number, number, number, number]' is not assignable to type '[number, number, number]'.
+tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type:
+[number, number, number, number, number, number]
+
+is not assignable to type:
+[number, number, number]
+
   Source has 6 element(s) but target allows only 3.
 
 
@@ -16,15 +36,24 @@ tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionConte
     var array1 = [true, 2, 3];  // Contextual type by the numeric index type of the contextual type
     var tup: [number, number, number] = [1, 2, 3, 4];
         ~~~
-!!! error TS2322: Type '[number, number, number, number]' is not assignable to type '[number, number, number]'.
+!!! error TS2322: Type:
+!!! error TS2322: [number, number, number, number]
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: [number, number, number]
 !!! error TS2322:   Source has 4 element(s) but target allows only 3.
     var tup1: [number|string, number|string, number|string] = [1, 2, 3, "string"];
         ~~~~
-!!! error TS2322: Type '[number, number, number, string]' is not assignable to type '[string | number, string | number, string | number]'.
+!!! error TS2322: Type:
+!!! error TS2322: [number, number, number, string]
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: [string | number, string | number, string | number]
 !!! error TS2322:   Source has 4 element(s) but target allows only 3.
     var tup2: [number, number, number] = [1, 2, 3, "string"];  // Error
         ~~~~
-!!! error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
+!!! error TS2322: Type:
+!!! error TS2322: [number, number, number, string]
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: [number, number, number]
 !!! error TS2322:   Source has 4 element(s) but target allows only 3.
     
     // In a contextually typed array literal expression containing one or more spread elements,
@@ -33,6 +62,9 @@ tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionConte
     var spr1 = [1, 2, 3, ...tup];
     var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
         ~~~~
-!!! error TS2322: Type '[number, number, number, number, number, number]' is not assignable to type '[number, number, number]'.
+!!! error TS2322: Type:
+!!! error TS2322: [number, number, number, number, number, number]
+!!! error TS2322: is not assignable to type:
+!!! error TS2322: [number, number, number]
 !!! error TS2322:   Source has 6 element(s) but target allows only 3.
     
