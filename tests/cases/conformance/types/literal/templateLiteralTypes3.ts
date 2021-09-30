@@ -126,3 +126,49 @@ type Schema = { a: { b: { c: number } } };
 declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 
 chain("a");
+
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+    if (x === y) {
+        x;  // `foo-${string}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+    if (x === y) {
+        x;  // `foo-${T}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+    if (x === y) {
+        x;  // `foo-${string}` | 'bar'
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+    if (x === 'foo-test') {
+        x;  // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y;  // 'foo-test'
+    }
+}
+
+// Repro from #46045
+
+type Action =
+    | { type: `${string}_REQUEST` }
+    | { type: `${string}_SUCCESS`, response: string };
+
+function reducer(action: Action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}

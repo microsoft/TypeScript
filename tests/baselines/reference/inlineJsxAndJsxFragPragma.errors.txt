@@ -1,0 +1,87 @@
+tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx(5,12): error TS6133: 'Fragment' is declared but its value is never read.
+tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx(6,1): error TS2304: Cannot find name 'h'.
+tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx(4,1): error TS2304: Cannot find name 'jsx'.
+
+
+==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
+    declare global {
+        namespace JSX {
+            interface IntrinsicElements {
+                [e: string]: any;
+            }
+        }
+    }
+    export function h(): void;
+    export function jsx(): void;
+    export function Fragment(): void;
+    
+==== tests/cases/conformance/jsx/inline/preacty.tsx (0 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+    <><div></div></>
+    
+==== tests/cases/conformance/jsx/inline/snabbdomy.tsx (0 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    <><span></span></>
+    
+==== tests/cases/conformance/jsx/inline/preacty-only-fragment.tsx (0 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+    <></>
+    
+==== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment.tsx (0 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    <></>
+    
+==== tests/cases/conformance/jsx/inline/preacty-only-fragment-no-jsx.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {Fragment} from "./renderer";
+    <></>
+    ~~
+!!! error TS2304: Cannot find name 'h'.
+    
+==== tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx (1 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {} from "./renderer";
+    <></>
+    ~~
+!!! error TS2304: Cannot find name 'jsx'.
+    
+==== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx (1 errors) ====
+    /**
+     * @jsx h
+     * @jsxFrag Fragment
+     */
+    import {h, Fragment} from "./renderer";
+               ~~~~~~~~
+!!! error TS6133: 'Fragment' is declared but its value is never read.
+    <div></div>
+    
+==== tests/cases/conformance/jsx/inline/snabbdomy-no-fragment.tsx (0 errors) ====
+    /* @jsx jsx */
+    /* @jsxfrag null */
+    import {jsx} from "./renderer";
+    <div></div>
+    
+==== tests/cases/conformance/jsx/inline/preacty-only-component.tsx (0 errors) ====
+    /**
+     * @jsx h
+     */
+    import {h} from "./renderer";
+    function Component() { return null; }
+    <Component />
+    
