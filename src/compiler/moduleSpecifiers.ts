@@ -619,7 +619,7 @@ namespace ts.moduleSpecifiers {
         const nodeModulesDirectoryName = moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1);
         const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
         // For classic resolution, only allow importing from node_modules/@types, not other node_modules
-        return getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs && packageName === nodeModulesDirectoryName ? undefined : packageName;
+        return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
         function tryDirectoryWithPackageJson(packageRootIndex: number) {
             const packageRootPath = path.substring(0, packageRootIndex);
