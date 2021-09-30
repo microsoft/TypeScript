@@ -8,6 +8,7 @@ import * as await from "./other";
 declare const _await: any;
 export { _await as await };
 
+
 //// [other.js]
 export { _await as await };
 //// [index.js]

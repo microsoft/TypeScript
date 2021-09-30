@@ -396,3 +396,120 @@ chain("a");
 >chain : <F extends "a">(field: F | `${F}.${F}`) => void
 >"a" : "a"
 
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+>ff1 : (x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) => void
+>x : `foo-${string}`
+>y : `${string}-bar`
+>z : `baz-${string}`
+
+    if (x === y) {
+>x === y : boolean
+>x : `foo-${string}`
+>y : `${string}-bar`
+
+        x;  // `foo-${string}`
+>x : `foo-${string}`
+    }
+    if (x === z) {  // Error
+>x === z : boolean
+>x : `foo-${string}`
+>z : `baz-${string}`
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+>ff2 : <T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) => void
+>x : `foo-${T}`
+>y : `${T}-bar`
+>z : `baz-${T}`
+
+    if (x === y) {
+>x === y : boolean
+>x : `foo-${T}`
+>y : `${T}-bar`
+
+        x;  // `foo-${T}`
+>x : `foo-${T}`
+    }
+    if (x === z) {  // Error
+>x === z : boolean
+>x : `foo-${T}`
+>z : `baz-${T}`
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+>ff3 : (x: string, y: `foo-${string}` | 'bar') => void
+>x : string
+>y : "bar" | `foo-${string}`
+
+    if (x === y) {
+>x === y : boolean
+>x : string
+>y : "bar" | `foo-${string}`
+
+        x;  // `foo-${string}` | 'bar'
+>x : "bar" | `foo-${string}`
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+>ff4 : (x: string, y: `foo-${string}`) => void
+>x : string
+>y : `foo-${string}`
+
+    if (x === 'foo-test') {
+>x === 'foo-test' : boolean
+>x : string
+>'foo-test' : "foo-test"
+
+        x;  // 'foo-test'
+>x : "foo-test"
+    }
+    if (y === 'foo-test') {
+>y === 'foo-test' : boolean
+>y : `foo-${string}`
+>'foo-test' : "foo-test"
+
+        y;  // 'foo-test'
+>y : "foo-test"
+    }
+}
+
+// Repro from #46045
+
+type Action =
+>Action : Action
+
+    | { type: `${string}_REQUEST` }
+>type : `${string}_REQUEST`
+
+    | { type: `${string}_SUCCESS`, response: string };
+>type : `${string}_SUCCESS`
+>response : string
+
+function reducer(action: Action) {
+>reducer : (action: Action) => void
+>action : Action
+
+    if (action.type === 'FOO_SUCCESS') {
+>action.type === 'FOO_SUCCESS' : boolean
+>action.type : `${string}_REQUEST` | `${string}_SUCCESS`
+>action : Action
+>type : `${string}_REQUEST` | `${string}_SUCCESS`
+>'FOO_SUCCESS' : "FOO_SUCCESS"
+
+        action.type;
+>action.type : "FOO_SUCCESS"
+>action : { type: `${string}_SUCCESS`; response: string; }
+>type : "FOO_SUCCESS"
+
+        action.response;
+>action.response : string
+>action : { type: `${string}_SUCCESS`; response: string; }
+>response : string
+    }
+}
+

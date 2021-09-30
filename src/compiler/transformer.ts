@@ -3,6 +3,7 @@ namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
         switch (moduleKind) {
             case ModuleKind.ESNext:
+            case ModuleKind.ES2022:
             case ModuleKind.ES2020:
             case ModuleKind.ES2015:
                 return transformECMAScriptModule;
