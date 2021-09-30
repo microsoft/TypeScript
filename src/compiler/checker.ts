@@ -1770,7 +1770,8 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
-            lookup: typeof getSymbol, issueSuggestions?: boolean): Symbol | undefined {
+            lookup: typeof getSymbol,
+            issueSuggestions?: boolean): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -3187,7 +3188,7 @@ namespace ts {
 
         function tryGetQualifiedNameAsValue(node: QualifiedName) {
             let left: Identifier | QualifiedName = getFirstIdentifier(node);
-            let symbol = resolveName(left, left.escapedText, SymbolFlags.Value, undefined, left, /*isUse*/ true);
+            let symbol = resolveName(left, left.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, left, /*isUse*/ true);
             if (!symbol) {
                 return undefined;
             }
@@ -5995,7 +5996,7 @@ namespace ts {
             }
 
             function typeParameterShadowsNameInScope(escapedName: __String, context: NodeBuilderContext, type: TypeParameter) {
-                const result = resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundArg*/ undefined, escapedName, /*isUse*/ false);
+                const result = resolveName(context.enclosingDeclaration, escapedName, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, escapedName, /*isUse*/ false);
                 if (result) {
                     if (result.flags & SymbolFlags.TypeParameter && result === type.symbol) {
                         return false;
@@ -8201,7 +8202,7 @@ namespace ts {
                         const internalModuleReference = declaration.moduleReference as Identifier | QualifiedName;
                         const firstIdentifier = getFirstIdentifier(internalModuleReference);
                         const importSymbol = resolveName(declaration, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace,
-                            undefined, undefined, /*isUse*/ false);
+                            /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
                         if (importSymbol && visited) {
                             if (tryAddToSet(visited, getSymbolId(importSymbol))) {
                                 buildVisibleNodeList(importSymbol.declarations);
@@ -12450,7 +12451,7 @@ namespace ts {
                     const type = isJSDocParameterTag(param) ? (param.typeExpression && param.typeExpression.type) : param.type;
                     // Include parameter symbol instead of property symbol in the signature
                     if (paramSymbol && !!(paramSymbol.flags & SymbolFlags.Property) && !isBindingPattern(param.name)) {
-                        const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, undefined, undefined, /*isUse*/ false);
+                        const resolvedSymbol = resolveName(param, paramSymbol.escapedName, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ false);
                         paramSymbol = resolvedSymbol!;
                     }
                     if (i === 0 && paramSymbol.escapedName === InternalSymbolName.This) {
@@ -21070,7 +21071,7 @@ namespace ts {
                     if (isIdentifier(param.name) &&
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         param.parent.parameters.indexOf(param) > -1 &&
-                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
+                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, param.name.escapedText, /*isUse*/ true) ||
                          param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
                         const newName = "arg" + param.parent.parameters.indexOf(param);
                         errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, declarationNameToString(param.name));
@@ -25895,7 +25896,7 @@ namespace ts {
                         }
                         else if (isIdentifier(lhs.expression)) {
                             const id = lhs.expression;
-                            const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, undefined, id.escapedText, /*isUse*/ true);
+                            const parentSymbol = resolveName(id, id.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, id.escapedText, /*isUse*/ true);
                             if (parentSymbol) {
                                 const annotated = parentSymbol.valueDeclaration && getEffectiveTypeAnnotationNode(parentSymbol.valueDeclaration);
                                 if (annotated) {
@@ -25935,7 +25936,7 @@ namespace ts {
                 return false;
             }
             const name = ((declaration.left as AccessExpression).expression as Identifier).escapedText;
-            const symbol = resolveName(declaration.left, name, SymbolFlags.Value, undefined, undefined, /*isUse*/ true, /*excludeGlobals*/ true);
+            const symbol = resolveName(declaration.left, name, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true, /*excludeGlobals*/ true);
             return isThisInitializedDeclaration(symbol?.valueDeclaration);
         }
 
@@ -29513,7 +29514,7 @@ namespace ts {
         function isPromiseResolveArityError(node: CallLikeExpression) {
             if (!isCallExpression(node) || !isIdentifier(node.expression)) return false;
 
-            const symbol = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, undefined, undefined, false);
+            const symbol = resolveName(node.expression, node.expression.escapedText, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined, false);
             const decl = symbol?.valueDeclaration;
             if (!decl || !isParameter(decl) || !isFunctionExpressionOrArrowFunction(decl.parent) || !isNewExpression(decl.parent.parent) || !isIdentifier(decl.parent.parent.expression)) {
                 return false;
@@ -33015,7 +33016,7 @@ namespace ts {
                         const propType = getTypeOfSymbol(prop);
                         if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
                             const name = prop.escapedName;
-                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, undefined, name, /*isUse*/ false);
+                            const symbol = resolveName(prop.valueDeclaration, name, SymbolFlags.Type, /*nameNotFoundMessage*/ undefined, name, /*isUse*/ false);
                             if (symbol?.declarations && symbol.declarations.some(isJSDocTypedefTag)) {
                                 addDuplicateDeclarationErrorsForSymbols(symbol, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name), prop);
                                 addDuplicateDeclarationErrorsForSymbols(prop, Diagnostics.Duplicate_identifier_0, unescapeLeadingUnderscores(name), symbol);
