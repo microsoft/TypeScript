@@ -6166,6 +6166,7 @@ namespace ts {
             case ModuleKind.AMD:
             case ModuleKind.ES2015:
             case ModuleKind.ES2020:
+            case ModuleKind.ES2022:
             case ModuleKind.ESNext:
                 return true;
             default:

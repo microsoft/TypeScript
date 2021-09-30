@@ -6192,6 +6192,7 @@ namespace ts {
         //       module kind).
         ES2015 = 5,
         ES2020 = 6,
+        ES2022 = 7,
         ESNext = 99,
 
         // Node12+ is an amalgam of commonjs (albeit updated) and es2020+, and represents a distinct module system from es2020/esnext

@@ -10,3 +10,4 @@ tests/cases/conformance/externalModules/index.ts(2,13): error TS1262: Identifier
 ==== tests/cases/conformance/externalModules/other.ts (0 errors) ====
     declare const _await: any;
     export { _await as await };
+    
