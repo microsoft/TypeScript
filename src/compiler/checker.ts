@@ -12040,7 +12040,7 @@ namespace ts {
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
                 }
-                if (isLiteralType(type)) {
+                if (isLiteralType(type) || isPatternLiteralType(type)) {
                     checkFlags |= CheckFlags.HasLiteralType;
                 }
                 if (type.flags & TypeFlags.Never) {
@@ -19014,6 +19014,9 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral) {
                     if (source.flags & TypeFlags.TemplateLiteral) {
+                        if (relation === comparableRelation) {
+                            return templateLiteralTypesDefinitelyUnrelated(source as TemplateLiteralType, target as TemplateLiteralType) ? Ternary.False : Ternary.True;
+                        }
                         // Report unreliable variance for type variables referenced in template literal type placeholders.
                         // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
                         instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
@@ -19053,11 +19056,10 @@ namespace ts {
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
+                else if (source.flags & TypeFlags.TemplateLiteral && !(target.flags & TypeFlags.Object)) {
                     if (!(target.flags & TypeFlags.TemplateLiteral)) {
-                        const baseConstraint = getBaseConstraintOfType(source);
-                        const constraint = baseConstraint && baseConstraint !== source ? baseConstraint : stringType;
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                        const constraint = getBaseConstraintOfType(source);
+                        if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -21428,6 +21430,18 @@ namespace ts {
             return !!(type.symbol && some(type.symbol.declarations, hasSkipDirectInferenceFlag));
         }
 
+        function templateLiteralTypesDefinitelyUnrelated(source: TemplateLiteralType, target: TemplateLiteralType) {
+            // Two template literal types with diffences in their starting or ending text spans are definitely unrelated.
+            const sourceStart = source.texts[0];
+            const targetStart = target.texts[0];
+            const sourceEnd = source.texts[source.texts.length - 1];
+            const targetEnd = target.texts[target.texts.length - 1];
+            const startLen = Math.min(sourceStart.length, targetStart.length);
+            const endLen = Math.min(sourceEnd.length, targetEnd.length);
+            return sourceStart.slice(0, startLen) !== targetStart.slice(0, startLen) ||
+                sourceEnd.slice(sourceEnd.length - endLen) !== targetEnd.slice(targetEnd.length - endLen);
+        }
+
         function isValidBigIntString(s: string): boolean {
             const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
             let success = true;
@@ -22528,7 +22542,7 @@ namespace ts {
                     if ((prop as TransientSymbol).isDiscriminantProperty === undefined) {
                         (prop as TransientSymbol).isDiscriminantProperty =
                             ((prop as TransientSymbol).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
-                            !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Instantiable & ~TypeFlags.TemplateLiteral);
+                            !isGenericType(getTypeOfSymbol(prop));
                     }
                     return !!(prop as TransientSymbol).isDiscriminantProperty;
                 }
@@ -23087,15 +23101,17 @@ namespace ts {
             return filterType(type, t => (t.flags & kind) !== 0);
         }
 
-        // Return a new type in which occurrences of the string and number primitive types in
-        // typeWithPrimitives have been replaced with occurrences of string literals and numeric
-        // literals in typeWithLiterals, respectively.
+        // Return a new type in which occurrences of the string, number and bigint primitives and placeholder template
+        // literal types in typeWithPrimitives have been replaced with occurrences of compatible and more specific types
+        // from typeWithLiterals. This is essentially a limited form of intersection between the two types. We avoid a
+        // true intersection because it is more costly and, when applied to union types, generates a large number of
+        // types we don't actually care about.
         function replacePrimitivesWithLiterals(typeWithPrimitives: Type, typeWithLiterals: Type) {
-            if (isTypeSubsetOf(stringType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral) ||
-                isTypeSubsetOf(numberType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.NumberLiteral) ||
-                isTypeSubsetOf(bigintType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.BigIntLiteral)) {
+            if (maybeTypeOfKind(typeWithPrimitives, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.Number | TypeFlags.BigInt) &&
+                maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
                 return mapType(typeWithPrimitives, t =>
-                    t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral) :
+                    t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) :
+                    isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
                     t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
                     t.flags & TypeFlags.BigInt ? extractTypesOfKind(typeWithLiterals, TypeFlags.BigInt | TypeFlags.BigIntLiteral) : t);
             }
@@ -23938,7 +23954,7 @@ namespace ts {
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
-                    return !(discriminantType.flags & TypeFlags.Never) && isTypeComparableTo(discriminantType, narrowedPropType);
+                    return !(narrowedPropType.flags & TypeFlags.Never) && isTypeComparableTo(narrowedPropType, discriminantType);
                 });
             }
 

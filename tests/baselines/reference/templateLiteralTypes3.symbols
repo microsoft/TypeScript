@@ -405,3 +405,114 @@ declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 chain("a");
 >chain : Symbol(chain, Decl(templateLiteralTypes3.ts, 120, 42))
 
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+>ff1 : Symbol(ff1, Decl(templateLiteralTypes3.ts, 124, 11))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 128, 32))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 128, 52))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 128, 32))
+
+        x;  // `foo-${string}`
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+    }
+    if (x === z) {  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 128, 52))
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+>ff2 : Symbol(ff2, Decl(templateLiteralTypes3.ts, 134, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 136, 45))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 136, 60))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 136, 45))
+
+        x;  // `foo-${T}`
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+    }
+    if (x === z) {  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 136, 60))
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+>ff3 : Symbol(ff3, Decl(templateLiteralTypes3.ts, 142, 1))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 144, 23))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 144, 23))
+
+        x;  // `foo-${string}` | 'bar'
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+>ff4 : Symbol(ff4, Decl(templateLiteralTypes3.ts, 148, 1))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+
+    if (x === 'foo-test') {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+
+        x;  // 'foo-test'
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+    }
+    if (y === 'foo-test') {
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+
+        y;  // 'foo-test'
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+    }
+}
+
+// Repro from #46045
+
+type Action =
+>Action : Symbol(Action, Decl(templateLiteralTypes3.ts, 157, 1))
+
+    | { type: `${string}_REQUEST` }
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7))
+
+    | { type: `${string}_SUCCESS`, response: string };
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+
+function reducer(action: Action) {
+>reducer : Symbol(reducer, Decl(templateLiteralTypes3.ts, 163, 54))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>Action : Symbol(Action, Decl(templateLiteralTypes3.ts, 157, 1))
+
+    if (action.type === 'FOO_SUCCESS') {
+>action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
+
+        action.type;
+>action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+
+        action.response;
+>action.response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+    }
+}
+
