@@ -1414,6 +1414,8 @@
   "The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1_2684": "類型 '{0}' 的 'this' 內容無法指派給方法之類型 '{1}' 的 'this'。",
   "The_this_types_of_each_signature_are_incompatible_2685": "各個簽章的 'this' 類型不相容。",
   "The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1_4104": "類型 '{0}' 為 'readonly'，因此無法指派給可變動的類型 '{1}'。",
+  "The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207": "[類型修飾元] 無法在 [匯出類型]5D; 於其匯出陳述式上使用時，在命名的匯出上使用。",
+  "The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206": "[類型修飾元] 無法在 [匯入類型]5D; 於其匯入陳述式上使用時，在命名的匯入上使用。",
   "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030": "函式宣告的類型必須與函式的簽章相符。",
   "The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118": "無法將此節點的類型序列化，因為無法將其屬性 '{0}' 序列化。",
   "The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547": "非同步迭代器 '{0}()' 方法所傳回的類型，對具有 'value' 屬性的類型必須為 Promise。",

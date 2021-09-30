@@ -1414,6 +1414,8 @@
   "The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1_2684": "'{0}' 형식의 'this' 컨텍스트를 메서드의 '{1}' 형식 'this'에 할당할 수 없습니다.",
   "The_this_types_of_each_signature_are_incompatible_2685": "각 시그니처의 'this' 형식이 호환되지 않습니다.",
   "The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1_4104": "'{0}' 형식은 'readonly'이며 변경 가능한 형식 '{1}'에 할당할 수 없습니다.",
+  "The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207": "export 문에 'export type'이 사용될 때 명명된 내보내기에서 'type' 한정자를 사용할 수 없습니다.",
+  "The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206": "import 문에 'import type'이 사용되는 경우 'type' 수정자는 명명된 가져오기에 사용할 수 없습니다.",
   "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030": "함수 선언의 형식은 함수의 시그니처와 일치해야 합니다.",
   "The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118": "속성 '{0}'을(를) 직렬화할 수 없기 때문에 이 노드의 유형을 직렬화할 수 없습니다.",
   "The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547": "비동기 반복기의 '{0}()' 메서드에서 반환하는 형식은 'value' 속성이 있는 형식에 대한 프라미스여야 합니다.",

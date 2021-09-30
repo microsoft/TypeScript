@@ -1414,6 +1414,8 @@
   "The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1_2684": "Der \"this\"-Kontext vom Typ \"{0}\" kann \"this\" vom Typ \"{1}\" der Methode nicht zugewiesen werden.",
   "The_this_types_of_each_signature_are_incompatible_2685": "Die \"this\"-Typen jeder Signatur sind nicht kompatibel.",
   "The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1_4104": "Der Typ \"{0}\" ist als \"readonly\" festgelegt und kann nicht dem änderbaren Typ \"{1}\" zugewiesen werden.",
+  "The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207": "Der \"Type\"-Modifizierer kann nicht für einen benannten Export verwendet werden, wenn \"Export-Typ\" auf seiner Export-Anweisung verwendet wird.",
+  "The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206": "Der \"Type\"-Modifizierer kann nicht für einen benannten Import verwendet werden, wenn der \"Import-Typ\" auf seiner Import-Anweisung verwendet wird.",
   "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030": "Der Typ einer Funktionsdeklaration muss mit der Signatur der Funktion übereinstimmen.",
   "The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118": "Der Typ dieses Knotens kann nicht serialisiert werden, da seine Eigenschaft \"{0}\" nicht serialisiert werden kann.",
   "The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547": "Der von der {0}()-Methode eines Async-Iterators zurückgegebene Typ muss eine Zusage für einen Typ mit einer value-Eigenschaft sein.",

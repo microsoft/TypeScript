@@ -1414,6 +1414,8 @@
   "The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1_2684": "Контекст this типа \"{0}\" не может быть назначен методу this типа \"{1}\".",
   "The_this_types_of_each_signature_are_incompatible_2685": "Типы this каждой подписи несовместимы.",
   "The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1_4104": "Тип \"{0}\" является \"readonly\" и не может быть назначен изменяемому типу \"{1}\".",
+  "The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207": "Невозможно использовать модификатор \"type\" в именованном экпорте, когда в инструкции экспорта используется \"export type\".",
+  "The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206": "Невозможно использовать модификатор \"type\" в именованном импорте, когда в инструкции импорта используется \"import type\".",
   "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030": "Тип объявления функции должен соответствовать сигнатуре этой функции.",
   "The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118": "Невозможно сериализовать тип этого узла, поскольку его свойство \"{0}\" не может быть сериализовано.",
   "The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547": "Возвращаемый тип метода \"{0}()\" асинхронного итератора должен быть обещанием для типа со свойством \"value\".",

@@ -1414,6 +1414,8 @@
   "The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1_2684": "Il contesto 'this' del tipo '{0}' non è assegnabile a quello 'this' di tipo '{1}' del metodo.",
   "The_this_types_of_each_signature_are_incompatible_2685": "I tipi 'this' delle singole firme non sono compatibili.",
   "The_type_0_is_readonly_and_cannot_be_assigned_to_the_mutable_type_1_4104": "Il tipo '{0}' è 'readonly' e non può essere assegnato al tipo modificabile '{1}'.",
+  "The_type_modifier_cannot_be_used_on_a_named_export_when_export_type_is_used_on_its_export_statement_2207": "Impossibile utilizzare il modificatore 'tipo' in un'esportazione denominata quando 'tipo di esportazione' viene usato nell'istruzione di esportazione.",
+  "The_type_modifier_cannot_be_used_on_a_named_import_when_import_type_is_used_on_its_import_statement_2206": "Impossibile utilizzare il modificatore 'tipo' in un'importazione denominata quando 'tipo di importazione' viene usato nella relativa istruzione di importazione.",
   "The_type_of_a_function_declaration_must_match_the_function_s_signature_8030": "Il tipo di una dichiarazione di funzione deve corrispondere alla firma della funzione.",
   "The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized_4118": "Impossibile serializzare questo tipo di nodo perché la sua proprietà '{0}' non può essere serializzata.",
   "The_type_returned_by_the_0_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_pro_2547": "Il tipo restituito dal metodo '{0}()' di un iteratore asincrono deve essere una promessa per un tipo con una proprietà 'value'.",
