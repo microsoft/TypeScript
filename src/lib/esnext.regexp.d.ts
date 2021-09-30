@@ -1,20 +1,14 @@
 interface RegExpMatchArray {
-    indices?: RegExpMatchIndicesArray;
-}
-
-interface RegExpMatchIndicesArray extends Array<number[]> {
-    groups?: {
-        [key: string]: string
-    }
+    indices?: RegExpIndicesArray;
 }
 
 interface RegExpExecArray {
-    indices?: RegExpExecIndicesArray;
+    indices?: RegExpIndicesArray;
 }
 
-interface RegExpExecIndicesArray extends Array<number[]> {
+interface RegExpIndicesArray extends Array<[number, number]> {
     groups?: {
-        [key: string]: string
+        [key: string]: [number, number]
     }
 }
 
