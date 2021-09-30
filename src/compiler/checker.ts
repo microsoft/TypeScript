@@ -12041,7 +12041,7 @@ namespace ts {
                 else if (type !== firstType) {
                     checkFlags |= CheckFlags.HasNonUniformType;
                 }
-                if (isLiteralType(type)) {
+                if (isLiteralType(type) || isPatternLiteralType(type)) {
                     checkFlags |= CheckFlags.HasLiteralType;
                 }
                 if (type.flags & TypeFlags.Never) {
@@ -19015,6 +19015,9 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.TemplateLiteral) {
                     if (source.flags & TypeFlags.TemplateLiteral) {
+                        if (relation === comparableRelation) {
+                            return templateLiteralTypesDefinitelyUnrelated(source as TemplateLiteralType, target as TemplateLiteralType) ? Ternary.False : Ternary.True;
+                        }
                         // Report unreliable variance for type variables referenced in template literal type placeholders.
                         // For example, `foo-${number}` is related to `foo-${string}` even though number isn't related to string.
                         instantiateType(source, makeFunctionTypeMapper(reportUnreliableMarkers));
@@ -19054,11 +19057,10 @@ namespace ts {
                         return result;
                     }
                 }
-                else if (source.flags & TypeFlags.TemplateLiteral) {
+                else if (source.flags & TypeFlags.TemplateLiteral && !(target.flags & TypeFlags.Object)) {
                     if (!(target.flags & TypeFlags.TemplateLiteral)) {
-                        const baseConstraint = getBaseConstraintOfType(source);
-                        const constraint = baseConstraint && baseConstraint !== source ? baseConstraint : stringType;
-                        if (result = isRelatedTo(constraint, target, reportErrors)) {
+                        const constraint = getBaseConstraintOfType(source);
+                        if (constraint && constraint !== source && (result = isRelatedTo(constraint, target, reportErrors))) {
                             resetErrorInfo(saveErrorInfo);
                             return result;
                         }
@@ -21429,6 +21431,18 @@ namespace ts {
             return !!(type.symbol && some(type.symbol.declarations, hasSkipDirectInferenceFlag));
         }
 
+        function templateLiteralTypesDefinitelyUnrelated(source: TemplateLiteralType, target: TemplateLiteralType) {
+            // Two template literal types with diffences in their starting or ending text spans are definitely unrelated.
+            const sourceStart = source.texts[0];
+            const targetStart = target.texts[0];
+            const sourceEnd = source.texts[source.texts.length - 1];
+            const targetEnd = target.texts[target.texts.length - 1];
+            const startLen = Math.min(sourceStart.length, targetStart.length);
+            const endLen = Math.min(sourceEnd.length, targetEnd.length);
+            return sourceStart.slice(0, startLen) !== targetStart.slice(0, startLen) ||
+                sourceEnd.slice(sourceEnd.length - endLen) !== targetEnd.slice(targetEnd.length - endLen);
+        }
+
         function isValidBigIntString(s: string): boolean {
             const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
             let success = true;
@@ -22529,7 +22543,7 @@ namespace ts {
                     if ((prop as TransientSymbol).isDiscriminantProperty === undefined) {
                         (prop as TransientSymbol).isDiscriminantProperty =
                             ((prop as TransientSymbol).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
-                            !maybeTypeOfKind(getTypeOfSymbol(prop), TypeFlags.Instantiable & ~TypeFlags.TemplateLiteral);
+                            !isGenericType(getTypeOfSymbol(prop));
                     }
                     return !!(prop as TransientSymbol).isDiscriminantProperty;
                 }
@@ -23088,15 +23102,17 @@ namespace ts {
             return filterType(type, t => (t.flags & kind) !== 0);
         }
 
-        // Return a new type in which occurrences of the string and number primitive types in
-        // typeWithPrimitives have been replaced with occurrences of string literals and numeric
-        // literals in typeWithLiterals, respectively.
+        // Return a new type in which occurrences of the string, number and bigint primitives and placeholder template
+        // literal types in typeWithPrimitives have been replaced with occurrences of compatible and more specific types
+        // from typeWithLiterals. This is essentially a limited form of intersection between the two types. We avoid a
+        // true intersection because it is more costly and, when applied to union types, generates a large number of
+        // types we don't actually care about.
         function replacePrimitivesWithLiterals(typeWithPrimitives: Type, typeWithLiterals: Type) {
-            if (isTypeSubsetOf(stringType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral) ||
-                isTypeSubsetOf(numberType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.NumberLiteral) ||
-                isTypeSubsetOf(bigintType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.BigIntLiteral)) {
+            if (maybeTypeOfKind(typeWithPrimitives, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.Number | TypeFlags.BigInt) &&
+                maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
                 return mapType(typeWithPrimitives, t =>
-                    t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral) :
+                    t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) :
+                    isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
                     t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
                     t.flags & TypeFlags.BigInt ? extractTypesOfKind(typeWithLiterals, TypeFlags.BigInt | TypeFlags.BigIntLiteral) : t);
             }
@@ -23939,7 +23955,7 @@ namespace ts {
                 const narrowedPropType = narrowType(propType);
                 return filterType(type, t => {
                     const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
-                    return !(discriminantType.flags & TypeFlags.Never) && isTypeComparableTo(discriminantType, narrowedPropType);
+                    return !(narrowedPropType.flags & TypeFlags.Never) && isTypeComparableTo(narrowedPropType, discriminantType);
                 });
             }
 
@@ -31095,15 +31111,13 @@ namespace ts {
         }
 
         function checkImportMetaProperty(node: MetaProperty) {
-            if (moduleKind !== ModuleKind.ES2020 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System) {
-                if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
-                    if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
-                        error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
-                    }
+            if (moduleKind === ModuleKind.Node12 || moduleKind === ModuleKind.NodeNext) {
+                if (getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.ESNext) {
+                    error(node, Diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output);
                 }
-                else {
-                    error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12_or_nodenext);
-                }
+            }
+            else if (moduleKind < ModuleKind.ES2020 && moduleKind !== ModuleKind.System) {
+                error(node, Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node12_or_nodenext);
             }
             const file = getSourceFileOfNode(node);
             Debug.assert(!!(file.flags & NodeFlags.PossiblyContainsImportMeta), "Containing file is missing import meta node flag.");
@@ -32126,10 +32140,10 @@ namespace ts {
                                     Diagnostics.await_expressions_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module);
                                 diagnostics.add(diagnostic);
                             }
-                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
+                            if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
                                 span = getSpanOfTokenAtPosition(sourceFile, node.pos);
                                 const diagnostic = createFileDiagnostic(sourceFile, span.start, span.length,
-                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher);
+                                    Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher);
                                 diagnostics.add(diagnostic);
                             }
                         }
@@ -33723,7 +33737,7 @@ namespace ts {
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-            if (isJSDocTypeAssertion(node)) {
+            if (hasJSDocNodes(node) && isJSDocTypeAssertion(node)) {
                 const type = getJSDocTypeAssertionType(node);
                 return checkAssertionWorker(type, type, node.expression, checkMode);
             }
@@ -42792,9 +42806,9 @@ namespace ts {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
                                     Diagnostics.for_await_loops_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_this_file_has_no_imports_or_exports_Consider_adding_an_empty_export_to_make_this_file_a_module));
                             }
-                            if ((moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
+                            if ((moduleKind !== ModuleKind.ES2022 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.System && !(moduleKind === ModuleKind.NodeNext && getSourceFileOfNode(forInOrOfStatement).impliedNodeFormat === ModuleKind.ESNext)) || languageVersion < ScriptTarget.ES2017) {
                                 diagnostics.add(createDiagnosticForNode(forInOrOfStatement.awaitModifier,
-                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher));
+                                    Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or_nodenext_and_the_target_option_is_set_to_es2017_or_higher));
                             }
                         }
                     }
@@ -43558,7 +43572,7 @@ namespace ts {
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
             if (moduleKind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system_umd_node12_or_nodenext);
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node12_or_nodenext);
             }
 
             if (node.typeArguments) {

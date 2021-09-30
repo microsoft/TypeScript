@@ -3025,6 +3025,7 @@ declare namespace ts {
         System = 4,
         ES2015 = 5,
         ES2020 = 6,
+        ES2022 = 7,
         ESNext = 99,
         Node12 = 100,
         NodeNext = 199
