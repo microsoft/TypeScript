@@ -125,6 +125,52 @@ declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 
 chain("a");
 
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+    if (x === y) {
+        x;  // `foo-${string}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+    if (x === y) {
+        x;  // `foo-${T}`
+    }
+    if (x === z) {  // Error
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+    if (x === y) {
+        x;  // `foo-${string}` | 'bar'
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+    if (x === 'foo-test') {
+        x;  // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y;  // 'foo-test'
+    }
+}
+
+// Repro from #46045
+
+type Action =
+    | { type: `${string}_REQUEST` }
+    | { type: `${string}_SUCCESS`, response: string };
+
+function reducer(action: Action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}
+
 
 //// [templateLiteralTypes3.js]
 "use strict";
@@ -177,6 +223,40 @@ var templated1 = value1 + " abc";
 var value2 = "abc";
 var templated2 = value2 + " abc";
 chain("a");
+// Repro from #46125
+function ff1(x, y, z) {
+    if (x === y) {
+        x; // `foo-${string}`
+    }
+    if (x === z) { // Error
+    }
+}
+function ff2(x, y, z) {
+    if (x === y) {
+        x; // `foo-${T}`
+    }
+    if (x === z) { // Error
+    }
+}
+function ff3(x, y) {
+    if (x === y) {
+        x; // `foo-${string}` | 'bar'
+    }
+}
+function ff4(x, y) {
+    if (x === 'foo-test') {
+        x; // 'foo-test'
+    }
+    if (y === 'foo-test') {
+        y; // 'foo-test'
+    }
+}
+function reducer(action) {
+    if (action.type === 'FOO_SUCCESS') {
+        action.type;
+        action.response;
+    }
+}
 
 
 //// [templateLiteralTypes3.d.ts]
@@ -233,3 +313,14 @@ declare type Schema = {
     };
 };
 declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+declare function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`): void;
+declare function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`): void;
+declare function ff3(x: string, y: `foo-${string}` | 'bar'): void;
+declare function ff4(x: string, y: `foo-${string}`): void;
+declare type Action = {
+    type: `${string}_REQUEST`;
+} | {
+    type: `${string}_SUCCESS`;
+    response: string;
+};
+declare function reducer(action: Action): void;

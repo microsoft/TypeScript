@@ -6166,6 +6166,7 @@ namespace ts {
             case ModuleKind.AMD:
             case ModuleKind.ES2015:
             case ModuleKind.ES2020:
+            case ModuleKind.ES2022:
             case ModuleKind.ESNext:
                 return true;
             default:
@@ -7413,5 +7414,9 @@ namespace ts {
     export function isParameterOrCatchClauseVariable(symbol: Symbol) {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
+    }
+
+    export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
+        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
     }
 }
