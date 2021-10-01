@@ -17348,7 +17348,7 @@ namespace ts {
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
-            if (isTypeRelatedTo(source, target, relation)) return true;
+            if (isTypeRelatedTo(source, target, relation, /*reportDeprecatedProperties*/ true)) return true;
             if (!errorNode || !elaborateError(expr, source, target, relation, headMessage, containingMessageChain, errorOutputContainer)) {
                 return checkTypeRelatedTo(source, target, relation, errorNode, headMessage, containingMessageChain, errorOutputContainer);
             }
@@ -18115,7 +18115,7 @@ namespace ts {
             return false;
         }
 
-        function isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>) {
+        function isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, reportDeprecatedProperties?: boolean) {
             if (isFreshLiteralType(source)) {
                 source = (source as FreshableType).regularType;
             }
@@ -18142,7 +18142,9 @@ namespace ts {
                 }
             }
             if (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable) {
-                return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
+                return checkTypeRelatedTo(source, target, relation,
+                    /*errorNode*/ undefined, /*headMessage*/ undefined, /*containingMessageChain*/ undefined, /*errorOutputContainer*/ undefined,
+                    reportDeprecatedProperties);
             }
             return false;
         }
@@ -18176,6 +18178,7 @@ namespace ts {
          * @param headMessage If the error chain should be prepended by a head message, then headMessage will be used.
          * @param containingMessageChain A chain of errors to prepend any new errors found.
          * @param errorOutputContainer Return the diagnostic. Do not log if 'skipLogging' is truthy.
+         * @param reportDeprecatedProperties Properties with deprecated annotation will be reported, if result is true.
          */
         function checkTypeRelatedTo(
             source: Type,
@@ -18185,6 +18188,7 @@ namespace ts {
             headMessage?: DiagnosticMessage,
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
             errorOutputContainer?: { errors?: Diagnostic[], skipLogging?: boolean },
+            reportDeprecatedProperties?: boolean
         ): boolean {
 
             let errorInfo: DiagnosticMessageChain | undefined;
@@ -18201,6 +18205,7 @@ namespace ts {
             let lastSkippedInfo: [Type, Type] | undefined;
             let incompatibleStack: [DiagnosticMessage, (string | number)?, (string | number)?, (string | number)?, (string | number)?][] | undefined;
             let inPropertyCheck = false;
+            const deprecatedSuggestions: Parameters<typeof addDeprecatedSuggestion>[] = [];
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -18252,8 +18257,15 @@ namespace ts {
                 Debug.assert(!!errorOutputContainer.errors, "missed opportunity to interact with error.");
             }
 
+            const isRelated = result !== Ternary.False;
 
-            return result !== Ternary.False;
+            if (isRelated) {
+                for (const args of deprecatedSuggestions) {
+                    addDeprecatedSuggestion(...args);
+                }
+            }
+
+            return isRelated;
 
             function resetErrorInfo(saved: ReturnType<typeof captureErrorCalculationState>) {
                 errorInfo = saved.errorInfo;
@@ -18587,6 +18599,9 @@ namespace ts {
                             }
                             return Ternary.False;
                         }
+                        if (reportDeprecatedProperties) {
+                            checkDeprecatedProperties(source as FreshObjectLiteralType, target);
+                        }
                     }
 
                     const isPerformingCommonPropertyChecks = relation !== comparableRelation && !(intersectionState & IntersectionState.Target) &&
@@ -18820,6 +18835,27 @@ namespace ts {
 
             function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
                 return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
+            }
+
+            function checkDeprecatedProperties(source: FreshObjectLiteralType, target: Type) {
+                if (!isExcessPropertyCheckTarget(target)) {
+                    return;
+                }
+
+                for (const prop of getPropertiesOfType(source)) {
+                    if (!shouldCheckAsExcessProperty(prop, source.symbol)) {
+                        continue;
+                    }
+
+                    const symbol = getPropertyOfObjectType(target, prop.escapedName);
+                    if (symbol?.declarations?.some(decl => decl.flags & NodeFlags.Deprecated)) {
+                        const node = prop.valueDeclaration!;
+                        const nameNode = isPropertyAssignment(node) || isShorthandPropertyAssignment(node) || isObjectLiteralMethod(node) || isJsxAttribute(node)
+                            ? node.name
+                            : prop.valueDeclaration!;
+                        deprecatedSuggestions.push([nameNode, symbol.declarations, prop.escapedName as string]);
+                    }
+                }
             }
 
             function unionOrIntersectionRelatedTo(source: Type, target: Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
