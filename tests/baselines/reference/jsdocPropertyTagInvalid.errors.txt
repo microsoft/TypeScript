@@ -1,4 +1,4 @@
-/a.js(3,15): error TS2552: Cannot find name 'sting'. Did you mean 'String'?
+/a.js(3,15): error TS2552: Cannot find name 'sting'. Did you mean 'string'?
 
 
 ==== /a.js (1 errors) ====
@@ -6,8 +6,7 @@
      * @typedef MyType
      * @property {sting} [x]
                   ~~~~~
-!!! error TS2552: Cannot find name 'sting'. Did you mean 'String'?
-!!! related TS2728 /.ts/lib.es5.d.ts:530:13: 'String' is declared here.
+!!! error TS2552: Cannot find name 'sting'. Did you mean 'string'?
      */
     
     /** @param {MyType} p  */

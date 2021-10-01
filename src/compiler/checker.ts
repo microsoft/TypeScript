@@ -2122,18 +2122,29 @@ namespace ts {
                                 suggestion = undefined;
                             }
                             if (suggestion) {
-                                const suggestionName = symbolToString(suggestion);
-                                // TODO: Might not need that cast at the end
+                                let suggestionName = symbolToString(suggestion);
+                                let elaborate = !!suggestion.valueDeclaration;
+                                if ((suggestionName === "String"
+                                    || suggestionName === "Number"
+                                    || suggestionName === "Boolean"
+                                    || suggestionName === "Object"
+                                    || suggestionName === "BigInt"
+                                    || suggestionName === "Symbol")
+                                    && name !== suggestionName.toLowerCase()
+                                    && name === (name as string).toLowerCase()) {
+                                    suggestionName = suggestionName.toLowerCase();
+                                    elaborate = false;
+                                }
                                 const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
-                                const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg as Identifier) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                                const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
                                     : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
                                     : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
                                 addErrorOrSuggestion(!isUncheckedJS, diagnostic);
-                                if (suggestion.valueDeclaration) {
+                                if (elaborate) {
                                     addRelatedInfo(
                                         diagnostic,
-                                        createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
+                                        createDiagnosticForNode(suggestion.valueDeclaration!, Diagnostics._0_is_declared_here, suggestionName)
                                     );
                                 }
                             }
