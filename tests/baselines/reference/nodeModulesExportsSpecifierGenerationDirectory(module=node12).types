@@ -7,9 +7,9 @@ export const a = (await import("inner/index.js")).x();
 >a : import("tests/cases/conformance/node/node_modules/inner/other").Thing
 >(await import("inner/index.js")).x() : import("tests/cases/conformance/node/node_modules/inner/other").Thing
 >(await import("inner/index.js")).x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
->(await import("inner/index.js")) : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }
->await import("inner/index.js") : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }
->import("inner/index.js") : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }>
+>(await import("inner/index.js")) : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>await import("inner/index.js") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>import("inner/index.js") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
 >"inner/index.js" : "inner/index.js"
 >x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
 

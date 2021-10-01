@@ -7,9 +7,9 @@ export const a = (await import("inner")).x();
 >a : import("tests/cases/conformance/node/node_modules/inner/other").Thing
 >(await import("inner")).x() : import("tests/cases/conformance/node/node_modules/inner/other").Thing
 >(await import("inner")).x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
->(await import("inner")) : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }
->await import("inner") : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }
->import("inner") : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); x: () => import("tests/cases/conformance/node/node_modules/inner/other").Thing; }>
+>(await import("inner")) : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>await import("inner") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>import("inner") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
 >"inner" : "inner"
 >x : () => import("tests/cases/conformance/node/node_modules/inner/other").Thing
 
