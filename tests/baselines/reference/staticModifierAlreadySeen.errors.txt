@@ -1,16 +1,16 @@
-tests/cases/compiler/staticModifierAlreadySeen.ts(2,19): error TS1005: ';' expected.
+tests/cases/compiler/staticModifierAlreadySeen.ts(2,12): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/staticModifierAlreadySeen.ts(3,19): error TS1434: Unexpected keyword or identifier.
 tests/cases/compiler/staticModifierAlreadySeen.ts(3,19): error TS2300: Duplicate identifier 'static'.
-tests/cases/compiler/staticModifierAlreadySeen.ts(3,26): error TS1005: ';' expected.
 
 
 ==== tests/cases/compiler/staticModifierAlreadySeen.ts (3 errors) ====
     class C {
         static static foo = 1;
-                      ~~~
-!!! error TS1005: ';' expected.
+               ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
         public static static bar() { }
                       ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
+                      ~~~~~~
 !!! error TS2300: Duplicate identifier 'static'.
-                             ~~~
-!!! error TS1005: ';' expected.
     }
