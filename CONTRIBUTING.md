@@ -54,14 +54,14 @@ In general, things we find useful when reviewing suggestions are:
 2. A copy of the TypeScript code. See the next steps for instructions.
 3. [Node](https://nodejs.org), which runs JavaScript locally. Current or LTS will both work.
 4. An editor. [VS Code](https://code.visualstudio.com) is the best place to start for TypeScript.
-5. The gulp command line tool, for building and testing changes. See the next steps for how to install it.
+5. The gulp command-line tool, for building and testing changes. See the next steps for how to install it.
 
 ## Get Started
 
 1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
 2. Open a terminal.
 3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
-4. Install the gulp command line tool: `npm install -g gulp-cli`
+4. Install the gulp command-line tool: `npm install -g gulp-cli`
 5. Change to the TypeScript folder you made: `cd TypeScript`
 6. Install dependencies: `npm ci`
 7. Make sure everything builds and tests pass: `gulp runtests-parallel`
@@ -118,7 +118,7 @@ There are three relevant locations to be aware of when it comes to TypeScript's 
 * `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
 * `built/local`: the build output location, including where `src/lib` files will be copied to.
 
-Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, except for any generated files (see below).
 
 Library files in `built/local/` are updated automatically by running the standard build task:
 
