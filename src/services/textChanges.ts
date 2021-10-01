@@ -538,23 +538,6 @@ namespace ts.textChanges {
             this.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
         }
 
-        public tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
-            if (oldTag.kind !== newTag.kind) {
-                return undefined;
-            }
-            switch (oldTag.kind) {
-                case SyntaxKind.JSDocParameterTag: {
-                    const oldParam = oldTag as JSDocParameterTag;
-                    const newParam = newTag as JSDocParameterTag;
-                    return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
-                        ? factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment)
-                        : undefined;
-                }
-                case SyntaxKind.JSDocReturnTag:
-                    return factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
-            }
-        }
-
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
