@@ -7415,4 +7415,8 @@ namespace ts {
         const declaration = symbol.valueDeclaration && getRootDeclaration(symbol.valueDeclaration);
         return !!declaration && (isParameter(declaration) || isCatchClauseVariableDeclaration(declaration));
     }
+
+    export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
+        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
+    }
 }
