@@ -20,22 +20,38 @@ namespace ts.codefix {
         Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code
     ];
 
-    const errorCodeFixIdMap: Record<number, [message: DiagnosticMessage, fixId: string | undefined, fixAllMessage: DiagnosticMessage | undefined]> = {
-        [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code]: [
-            Diagnostics.Add_override_modifier, fixAddOverrideId, Diagnostics.Add_all_missing_override_modifiers,
-        ],
-        [Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code]: [
-            Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_unnecessary_override_modifiers,
-        ],
-        [Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code]: [
-            Diagnostics.Add_override_modifier, fixAddOverrideId, Diagnostics.Add_all_missing_override_modifiers,
-        ],
-        [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0.code]: [
-            Diagnostics.Add_override_modifier, fixAddOverrideId, Diagnostics.Remove_all_unnecessary_override_modifiers,
-        ],
-        [Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code]: [
-            Diagnostics.Remove_override_modifier, fixRemoveOverrideId, Diagnostics.Remove_all_unnecessary_override_modifiers,
-        ]
+    interface ErrorCodeFixInfo {
+        descriptions: DiagnosticMessage;
+        fixId?: string | undefined;
+        fixAllDescriptions?: DiagnosticMessage | undefined;
+    }
+
+    const errorCodeFixIdMap: Record<number, ErrorCodeFixInfo> = {
+        [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_a_member_in_the_base_class_0.code]: {
+            descriptions: Diagnostics.Add_override_modifier,
+            fixId: fixAddOverrideId,
+            fixAllDescriptions: Diagnostics.Add_all_missing_override_modifiers,
+        },
+        [Diagnostics.This_member_cannot_have_an_override_modifier_because_its_containing_class_0_does_not_extend_another_class.code]: {
+            descriptions: Diagnostics.Remove_override_modifier,
+            fixId: fixRemoveOverrideId,
+            fixAllDescriptions: Diagnostics.Remove_all_unnecessary_override_modifiers,
+        },
+        [Diagnostics.This_parameter_property_must_have_an_override_modifier_because_it_overrides_a_member_in_base_class_0.code]: {
+            descriptions: Diagnostics.Add_override_modifier,
+            fixId: fixAddOverrideId,
+            fixAllDescriptions: Diagnostics.Add_all_missing_override_modifiers,
+        },
+        [Diagnostics.This_member_must_have_an_override_modifier_because_it_overrides_an_abstract_method_that_is_declared_in_the_base_class_0.code]: {
+            descriptions: Diagnostics.Add_override_modifier,
+            fixId: fixAddOverrideId,
+            fixAllDescriptions: Diagnostics.Remove_all_unnecessary_override_modifiers,
+        },
+        [Diagnostics.This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0.code]: {
+            descriptions: Diagnostics.Remove_override_modifier,
+            fixId: fixRemoveOverrideId,
+            fixAllDescriptions: Diagnostics.Remove_all_unnecessary_override_modifiers,
+        }
     };
 
     registerCodeFix({
@@ -46,7 +62,7 @@ namespace ts.codefix {
             const info = errorCodeFixIdMap[errorCode];
             if (!info) return emptyArray;
 
-            const [ descriptions, fixId, fixAllDescriptions ] = info;
+            const { descriptions, fixId, fixAllDescriptions } = info;
             const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
             return [
@@ -58,7 +74,7 @@ namespace ts.codefix {
             codeFixAll(context, errorCodes, (changes, diag) => {
                 const { code, start } = diag;
                 const info = errorCodeFixIdMap[code];
-                if (!info || info[1] !== context.fixId) {
+                if (!info || info.fixId !== context.fixId) {
                     return;
                 }
 

@@ -497,33 +497,45 @@ namespace ts.textChanges {
         public addJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, newTags: readonly JSDocTag[]): void {
             const comments = mapDefined(parent.jsDoc, j => j.comment);
             const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
-            const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
-                const merged = this.tryMergeJsdocTags(tag, newTag);
-                if (merged) oldTags[i] = merged;
-                return !!merged;
+            const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((oldTag, i) => {
+                if (oldTag.kind !== newTag.kind) {
+                    return false;
+                }
+                switch (oldTag.kind) {
+                    case SyntaxKind.JSDocParameterTag: {
+                        const oldParam = oldTag as JSDocParameterTag;
+                        const newParam = newTag as JSDocParameterTag;
+                        if (isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText) {
+                            oldTags[i] = factory.createJSDocParameterTag(/*tagName*/ undefined, newParam.name, /*isBracketed*/ false, newParam.typeExpression, newParam.isNameFirst, oldParam.comment);
+                            return true;
+                        }
+                        return false;
+                    }
+                    case SyntaxKind.JSDocReturnTag:
+                        oldTags[i] = factory.createJSDocReturnTag(/*tagName*/ undefined, (newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+                        return true;
+                }
             }));
             const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
-            const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? this.getJsDocNodeForArrowFunction(parent) : parent;
-            jsDocNode.jsDoc = parent.jsDoc;
-            jsDocNode.jsDocCache = parent.jsDocCache;
-            this.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
+            this.setJSDocTags(sourceFile, parent, tag);
         }
 
         public filterJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, predicate: (tag: JSDocTag) => boolean): void {
             const comments = mapDefined(parent.jsDoc, j => j.comment);
             const oldTags = filter(flatMapToMutable(parent.jsDoc, j => j.tags), predicate);
             const tag = factory.createJSDocComment(comments.join("\n"), factory.createNodeArray([...(oldTags || emptyArray)]));
-            const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? this.getJsDocNodeForArrowFunction(parent) : parent;
+            this.setJSDocTags(sourceFile, parent, tag);
+        }
+
+        public setJSDocTags(sourceFile: SourceFile, parent: HasJSDoc, tag: JSDoc): void {
+            const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ?
+                parent.parent.kind === SyntaxKind.PropertyDeclaration ?
+                    parent.parent as HasJSDoc :
+                    parent.parent.parent as HasJSDoc :
+                parent;
             jsDocNode.jsDoc = parent.jsDoc;
             jsDocNode.jsDocCache = parent.jsDocCache;
             this.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
-        }
-
-        public getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
-            if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
-                return signature.parent as HasJSDoc;
-            }
-            return signature.parent.parent as HasJSDoc;
         }
 
         public tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
