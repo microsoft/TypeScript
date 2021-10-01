@@ -1,7 +1,4 @@
-tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(21,1): error TS2322: Type:
-(this: C, m: number) => number
-
-is not assignable to type:
+tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(21,1): error TS2322: Type '(this: C, m: number) => number' is not assignable to type:
 (this: void, m: number) => number
 
   The 'this' types of each signature are incompatible.
@@ -35,9 +32,7 @@ tests/cases/conformance/types/thisType/looseThisTypeInFunctions.ts(46,20): error
     let c = new C();
     c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (this: C, m: number) => number
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(this: C, m: number) => number' is not assignable to type:
 !!! error TS2322: (this: void, m: number) => number
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type 'C'.

@@ -18,9 +18,7 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,26): error TS2
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS2322: Type:
 { foo: number | undefined; bar: string | undefined; }
 
-is not assignable to type:
-Fields
-
+is not assignable to type 'Fields'.
   Types of property 'foo' are incompatible.
     Type 'number | undefined' is not assignable to type 'number'.
       Type 'undefined' is not assignable to type 'number'.
@@ -92,8 +90,7 @@ Fields
         ~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { foo: number | undefined; bar: string | undefined; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: Fields
+!!! error TS2322: is not assignable to type 'Fields'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.

@@ -1,7 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(11,22): error TS2322: Type:
-{ bar: string; }
-
-is not assignable to type:
+tests/cases/conformance/jsx/file.tsx(11,22): error TS2322: Type '{ bar: string; }' is not assignable to type:
 IntrinsicAttributes & { ref?: string; }
 
   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
@@ -33,9 +30,7 @@ IntrinsicAttributes & { ref?: string; }
     // Should be an OK
     var x = <MyComponent bar='world' />;
                          ~~~
-!!! error TS2322: Type:
-!!! error TS2322: { bar: string; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ bar: string; }' is not assignable to type:
 !!! error TS2322: IntrinsicAttributes & { ref?: string; }
 !!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
     

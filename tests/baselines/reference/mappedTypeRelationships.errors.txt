@@ -18,9 +18,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(41,5): error TS2
   Type:
 T[string] | T[number] | T[symbol]
 
-is not assignable to type:
-U[keyof T] | undefined
-
+is not assignable to type 'U[keyof T] | undefined'.
     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
       Type 'T[string]' is not assignable to type 'U[keyof T]'.
         Type 'T' is not assignable to type 'U'.
@@ -32,9 +30,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(46,5): error TS2
     Type:
 T[string] | T[number] | T[symbol]
 
-is not assignable to type:
-U[K] | undefined
-
+is not assignable to type 'U[K] | undefined'.
       Type 'T[string]' is not assignable to type 'U[K] | undefined'.
         Type 'T[string]' is not assignable to type 'U[K]'.
           Type 'T' is not assignable to type 'U'.
@@ -160,8 +156,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322: Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'.
 !!! error TS2322:   Type:
 !!! error TS2322: T[string] | T[number] | T[symbol]
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: U[keyof T] | undefined
+!!! error TS2322: is not assignable to type 'U[keyof T] | undefined'.
 !!! error TS2322:     Type 'T[string]' is not assignable to type 'U[keyof T] | undefined'.
 !!! error TS2322:       Type 'T[string]' is not assignable to type 'U[keyof T]'.
 !!! error TS2322:         Type 'T' is not assignable to type 'U'.
@@ -179,8 +174,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
 !!! error TS2322:   Type 'T[keyof T]' is not assignable to type 'U[K] | undefined'.
 !!! error TS2322:     Type:
 !!! error TS2322: T[string] | T[number] | T[symbol]
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: U[K] | undefined
+!!! error TS2322: is not assignable to type 'U[K] | undefined'.
 !!! error TS2322:       Type 'T[string]' is not assignable to type 'U[K] | undefined'.
 !!! error TS2322:         Type 'T[string]' is not assignable to type 'U[K]'.
 !!! error TS2322:           Type 'T' is not assignable to type 'U'.

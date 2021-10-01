@@ -1,9 +1,7 @@
 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(2,5): error TS2322: Type:
 { a: string; b: number; c: number; }
 
-is not assignable to type:
-T
-
+is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: string; b: number; c: number; }'.
 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(6,5): error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: number; }'.
@@ -17,8 +15,7 @@ tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(10,5
         ~
 !!! error TS2322: Type:
 !!! error TS2322: { a: string; b: number; c: number; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: T
+!!! error TS2322: is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to '{ a: string; b: number; c: number; }'.
     }
     

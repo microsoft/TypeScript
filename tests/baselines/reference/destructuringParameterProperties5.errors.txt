@@ -10,9 +10,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(7
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,19): error TS2322: Type:
 { x1: number; x2: string; x3: true; }
 
-is not assignable to type:
-ObjType1
-
+is not assignable to type 'ObjType1'.
   Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,47): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(11,51): error TS2322: Type 'boolean' is not assignable to type 'string'.
@@ -56,8 +54,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterProperties5.ts(1
                       ~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { x1: number; x2: string; x3: true; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: ObjType1
+!!! error TS2322: is not assignable to type 'ObjType1'.
 !!! error TS2322:   Object literal may only specify known properties, and 'x1' does not exist in type 'ObjType1'.
                                                   ~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

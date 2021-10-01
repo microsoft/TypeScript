@@ -1,7 +1,4 @@
-tests/cases/conformance/jsdoc/forgot.js(23,1): error TS2322: Type:
-(keyframes: any[]) => void
-
-is not assignable to type:
+tests/cases/conformance/jsdoc/forgot.js(23,1): error TS2322: Type '(keyframes: any[]) => void' is not assignable to type:
 (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 
   Type 'void' is not assignable to type 'Animation'.
@@ -32,9 +29,7 @@ is not assignable to type:
      */
     Element.prototype.animate = function(keyframes) {};
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (keyframes: any[]) => void
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(keyframes: any[]) => void' is not assignable to type:
 !!! error TS2322: (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 !!! error TS2322:   Type 'void' is not assignable to type 'Animation'.
     

@@ -1,9 +1,7 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(12,1): error TS2322: Type:
 [string, number, boolean, boolean]
 
-is not assignable to type:
-[string, number]
-
+is not assignable to type '[string, number]'.
   Source has 4 element(s) but target allows only 2.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(13,20): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(14,1): error TS2322: Type '{ a: string; }' is not assignable to type 'undefined'.
@@ -33,8 +31,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
     ~~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: [string, number, boolean, boolean]
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: [string, number]
+!!! error TS2322: is not assignable to type '[string, number]'.
 !!! error TS2322:   Source has 4 element(s) but target allows only 2.
     var e3 = i1.tuple1[2];  // {}
                        ~

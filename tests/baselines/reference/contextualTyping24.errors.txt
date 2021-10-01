@@ -8,9 +8,7 @@ is not assignable to type:
     Type:
 { (): number; (i: number): number; }
 
-is not assignable to type:
-string
-
+is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/contextualTyping24.ts (1 errors) ====
@@ -23,5 +21,4 @@ string
 !!! error TS2322:   Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2322:     Type:
 !!! error TS2322: { (): number; (i: number): number; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: string
+!!! error TS2322: is not assignable to type 'string'.

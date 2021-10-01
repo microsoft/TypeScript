@@ -34,35 +34,23 @@ IntrinsicAttributes & LinkProps
       Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(29,43): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
-    Type:
-{ extra: true; goTo: string; }
-
-is not assignable to type:
+    Type '{ extra: true; goTo: string; }' is not assignable to type:
 IntrinsicAttributes & ButtonProps
 
       Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
-    Type:
-{ extra: true; goTo: "home"; }
-
-is not assignable to type:
+    Type '{ extra: true; goTo: "home"; }' is not assignable to type:
 IntrinsicAttributes & LinkProps
 
       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(30,12): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
-    Type:
-{ goTo: string; extra: true; }
-
-is not assignable to type:
+    Type '{ goTo: string; extra: true; }' is not assignable to type:
 IntrinsicAttributes & ButtonProps
 
       Property 'goTo' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
-    Type:
-{ goTo: "home"; extra: true; }
-
-is not assignable to type:
+    Type '{ goTo: "home"; extra: true; }' is not assignable to type:
 IntrinsicAttributes & LinkProps
 
       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
@@ -73,10 +61,7 @@ is not assignable to type:
 IntrinsicAttributes & ButtonProps
 
   Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
-tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,44): error TS2322: Type:
-{ extra: true; goTo: "home"; }
-
-is not assignable to type:
+tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type:
 IntrinsicAttributes & LinkProps
 
   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
@@ -143,30 +128,22 @@ IntrinsicAttributes & LinkProps
                                               ~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
-!!! error TS2769:     Type:
-!!! error TS2769: { extra: true; goTo: string; }
-!!! error TS2769: is not assignable to type:
+!!! error TS2769:     Type '{ extra: true; goTo: string; }' is not assignable to type:
 !!! error TS2769: IntrinsicAttributes & ButtonProps
 !!! error TS2769:       Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
 !!! error TS2769:   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
-!!! error TS2769:     Type:
-!!! error TS2769: { extra: true; goTo: "home"; }
-!!! error TS2769: is not assignable to type:
+!!! error TS2769:     Type '{ extra: true; goTo: "home"; }' is not assignable to type:
 !!! error TS2769: IntrinsicAttributes & LinkProps
 !!! error TS2769:       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
-!!! error TS2769:     Type:
-!!! error TS2769: { goTo: string; extra: true; }
-!!! error TS2769: is not assignable to type:
+!!! error TS2769:     Type '{ goTo: string; extra: true; }' is not assignable to type:
 !!! error TS2769: IntrinsicAttributes & ButtonProps
 !!! error TS2769:       Property 'goTo' does not exist on type 'IntrinsicAttributes & ButtonProps'.
 !!! error TS2769:   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
-!!! error TS2769:     Type:
-!!! error TS2769: { goTo: "home"; extra: true; }
-!!! error TS2769: is not assignable to type:
+!!! error TS2769:     Type '{ goTo: "home"; extra: true; }' is not assignable to type:
 !!! error TS2769: IntrinsicAttributes & LinkProps
 !!! error TS2769:       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     
@@ -182,9 +159,7 @@ IntrinsicAttributes & LinkProps
     export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
     const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
                                                ~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: { extra: true; goTo: "home"; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type:
 !!! error TS2322: IntrinsicAttributes & LinkProps
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     

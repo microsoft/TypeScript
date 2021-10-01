@@ -90,10 +90,7 @@ is not assignable to type:
         Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(130,11): error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
-    Type:
-(...args: number[]) => number
-
-is not assignable to type:
+    Type '(...args: number[]) => number' is not assignable to type:
 (x?: number, y?: string, ...z: number[]) => number
 
       Types of parameters 'args' and 'y' are incompatible.
@@ -318,9 +315,7 @@ is not assignable to type:
               ~~~
 !!! error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type:
-!!! error TS2430: (...args: number[]) => number
-!!! error TS2430: is not assignable to type:
+!!! error TS2430:     Type '(...args: number[]) => number' is not assignable to type:
 !!! error TS2430: (x?: number, y?: string, ...z: number[]) => number
 !!! error TS2430:       Types of parameters 'args' and 'y' are incompatible.
 !!! error TS2430:         Type 'string' is not assignable to type 'number'.

@@ -1,9 +1,7 @@
 tests/cases/compiler/errorMessagesIntersectionTypes02.ts(14,5): error TS2322: Type:
 { fooProp: "frizzlebizzle"; } & Bar
 
-is not assignable to type:
-FooBar
-
+is not assignable to type 'FooBar'.
   Types of property 'fooProp' are incompatible.
     Type '"frizzlebizzle"' is not assignable to type '"hello" | "world"'.
 
@@ -26,8 +24,7 @@ FooBar
         ~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { fooProp: "frizzlebizzle"; } & Bar
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: FooBar
+!!! error TS2322: is not assignable to type 'FooBar'.
 !!! error TS2322:   Types of property 'fooProp' are incompatible.
 !!! error TS2322:     Type '"frizzlebizzle"' is not assignable to type '"hello" | "world"'.
         fooProp: "frizzlebizzle"

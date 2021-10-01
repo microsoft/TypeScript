@@ -2,10 +2,7 @@ tests/cases/compiler/assignmentToObjectAndFunction.ts(1,24): error TS2322: Type 
 tests/cases/compiler/assignmentToObjectAndFunction.ts(8,5): error TS2740: Type '{}' is missing the following properties from type 'Function': apply, call, bind, prototype, and 3 more.
 tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not assignable to type 'Function'.
   Types of property 'apply' are incompatible.
-    Type:
-number
-
-is not assignable to type:
+    Type 'number' is not assignable to type:
 (this: Function, thisArg: any, argArray?: any) => any
 
 
@@ -47,7 +44,5 @@ is not assignable to type:
         ~~~~~~~~~~
 !!! error TS2322: Type 'typeof bad' is not assignable to type 'Function'.
 !!! error TS2322:   Types of property 'apply' are incompatible.
-!!! error TS2322:     Type:
-!!! error TS2322: number
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:     Type 'number' is not assignable to type:
 !!! error TS2322: (this: Function, thisArg: any, argArray?: any) => any

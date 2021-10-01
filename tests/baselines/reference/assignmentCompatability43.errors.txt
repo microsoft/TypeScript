@@ -1,9 +1,7 @@
 tests/cases/compiler/assignmentCompatability43.ts(9,1): error TS2322: Type:
 interfaceWithPublicAndOptional<number, string>
 
-is not assignable to type:
-interfaceTwo<number, string>
-
+is not assignable to type 'interfaceTwo<number, string>'.
   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'interfaceTwo<number, string>'.
 
 
@@ -20,6 +18,5 @@ interfaceTwo<number, string>
     ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: interfaceWithPublicAndOptional<number, string>
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: interfaceTwo<number, string>
+!!! error TS2322: is not assignable to type 'interfaceTwo<number, string>'.
 !!! error TS2322:   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'interfaceTwo<number, string>'.

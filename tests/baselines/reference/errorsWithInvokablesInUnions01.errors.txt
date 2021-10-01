@@ -1,16 +1,10 @@
-tests/cases/compiler/errorsWithInvokablesInUnions01.ts(14,12): error TS2322: Type:
-(x: string) => void
-
-is not assignable to type:
+tests/cases/compiler/errorsWithInvokablesInUnions01.ts(14,12): error TS2322: Type '(x: string) => void' is not assignable to type:
 ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 
   Type '(x: string) => void' is not assignable to type 'IDirectiveLinkFn<number>'.
     Types of parameters 'x' and 'scope' are incompatible.
       Type 'number' is not assignable to type 'string'.
-tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type:
-typeof ctor
-
-is not assignable to type:
+tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type 'typeof ctor' is not assignable to type:
 ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 
   Type 'typeof ctor' is not assignable to type 'ConstructableA'.
@@ -33,9 +27,7 @@ ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
     
     export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}
                ~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (x: string) => void
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(x: string) => void' is not assignable to type:
 !!! error TS2322: ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 !!! error TS2322:   Type '(x: string) => void' is not assignable to type 'IDirectiveLinkFn<number>'.
 !!! error TS2322:     Types of parameters 'x' and 'scope' are incompatible.
@@ -43,9 +35,7 @@ ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
     
     export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = class {
                ~~~~
-!!! error TS2322: Type:
-!!! error TS2322: typeof ctor
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type 'typeof ctor' is not assignable to type:
 !!! error TS2322: ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 !!! error TS2322:   Type 'typeof ctor' is not assignable to type 'ConstructableA'.
 !!! error TS2322:     Property 'somePropA' is missing in type 'ctor' but required in type '{ somePropA: any; }'.

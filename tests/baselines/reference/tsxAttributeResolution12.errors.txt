@@ -1,14 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type:
-{}
-
-is not assignable to type:
+tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{}' is not assignable to type:
 IntrinsicAttributes & { reqd: any; }
 
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
-tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type:
-{}
-
-is not assignable to type:
+tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assignable to type:
 IntrinsicAttributes & { reqd: any; }
 
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
@@ -54,9 +48,7 @@ IntrinsicAttributes & { reqd: any; }
     const T = TestMod.Test;
     var t1 = <T />;
               ~
-!!! error TS2322: Type:
-!!! error TS2322: {}
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{}' is not assignable to type:
 !!! error TS2322: IntrinsicAttributes & { reqd: any; }
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
@@ -64,9 +56,7 @@ IntrinsicAttributes & { reqd: any; }
     // Should error
     var t2 = <TestMod.Test />;
               ~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: {}
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{}' is not assignable to type:
 !!! error TS2322: IntrinsicAttributes & { reqd: any; }
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.

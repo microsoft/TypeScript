@@ -3,10 +3,7 @@ tests/cases/conformance/jsx/file.tsx(12,22): error TS2769: No overload matches t
     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-    Type:
-{ extraProp: true; }
-
-is not assignable to type:
+    Type '{ extraProp: true; }' is not assignable to type:
 IntrinsicAttributes & { yy: number; yy1: string; }
 
       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
@@ -27,9 +24,7 @@ tests/cases/conformance/jsx/file.tsx(16,31): error TS2769: No overload matches t
     Type:
 { y1: number; yy: number; yy1: string; }
 
-is not assignable to type:
-IntrinsicAttributes
-
+is not assignable to type 'IntrinsicAttributes'.
       Property 'y1' does not exist on type 'IntrinsicAttributes'.
   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
     Type:
@@ -137,9 +132,7 @@ IntrinsicAttributes & { y1?: string; y2?: number; }
 !!! error TS2769:     Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2769:       Property 'extraProp' does not exist on type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
-!!! error TS2769:     Type:
-!!! error TS2769: { extraProp: true; }
-!!! error TS2769: is not assignable to type:
+!!! error TS2769:     Type '{ extraProp: true; }' is not assignable to type:
 !!! error TS2769: IntrinsicAttributes & { yy: number; yy1: string; }
 !!! error TS2769:       Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c1 = <OneThing yy={10}/>;  // missing property;
@@ -167,8 +160,7 @@ IntrinsicAttributes & { y1?: string; y2?: number; }
 !!! error TS2769:   Overload 1 of 2, '(): Element', gave the following error.
 !!! error TS2769:     Type:
 !!! error TS2769: { y1: number; yy: number; yy1: string; }
-!!! error TS2769: is not assignable to type:
-!!! error TS2769: IntrinsicAttributes
+!!! error TS2769: is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2769:       Property 'y1' does not exist on type 'IntrinsicAttributes'.
 !!! error TS2769:   Overload 2 of 2, '(l: { yy: number; yy1: string; }): Element', gave the following error.
 !!! error TS2769:     Type:

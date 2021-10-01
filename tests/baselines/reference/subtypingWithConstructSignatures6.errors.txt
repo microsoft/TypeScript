@@ -18,10 +18,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(36,11): error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
   Types of property 'a4' are incompatible.
-    Type:
-new <U>(x: T, y: U) => string
-
-is not assignable to type:
+    Type 'new <U>(x: T, y: U) => string' is not assignable to type:
 new <T, U>(x: T, y: U) => string
 
       Types of parameters 'x' and 'x' are incompatible.
@@ -29,10 +26,7 @@ new <T, U>(x: T, y: U) => string
           'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignatures6.ts(40,11): error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
   Types of property 'a5' are incompatible.
-    Type:
-new <U>(x: (arg: T) => U) => T
-
-is not assignable to type:
+    Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type:
 new <T, U>(x: (arg: T) => U) => T
 
       Types of parameters 'x' and 'x' are incompatible.
@@ -128,9 +122,7 @@ new <T extends Base>(x: { a: T; b: T; }) => T[]
               ~~
 !!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type:
-!!! error TS2430: new <U>(x: T, y: U) => string
-!!! error TS2430: is not assignable to type:
+!!! error TS2430:     Type 'new <U>(x: T, y: U) => string' is not assignable to type:
 !!! error TS2430: new <T, U>(x: T, y: U) => string
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
@@ -142,9 +134,7 @@ new <T extends Base>(x: { a: T; b: T; }) => T[]
               ~~
 !!! error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type:
-!!! error TS2430: new <U>(x: (arg: T) => U) => T
-!!! error TS2430: is not assignable to type:
+!!! error TS2430:     Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type:
 !!! error TS2430: new <T, U>(x: (arg: T) => U) => T
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Types of parameters 'arg' and 'arg' are incompatible.

@@ -12,10 +12,7 @@ is not assignable to type:
       Types of property 'foo' are incompatible.
         Type 'U' is not assignable to type 'T'.
           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(55,1): error TS2322: Type:
-<T>(x: { a: T; b: T; }) => T[]
-
-is not assignable to type:
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts(55,1): error TS2322: Type '<T>(x: { a: T; b: T; }) => T[]' is not assignable to type:
 <U, V>(x: { a: U; b: V; }) => U[]
 
   Types of parameters 'x' and 'x' are incompatible.
@@ -106,9 +103,7 @@ is not assignable to type:
     a15 = b15; // ok, T = U, T = V
     b15 = a15; // ok
     ~~~
-!!! error TS2322: Type:
-!!! error TS2322: <T>(x: { a: T; b: T; }) => T[]
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '<T>(x: { a: T; b: T; }) => T[]' is not assignable to type:
 !!! error TS2322: <U, V>(x: { a: U; b: V; }) => U[]
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: U; b: U; }'.

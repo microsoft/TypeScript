@@ -10,10 +10,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(22,1): error TS2322
 is not assignable to type:
 (...args: [string, string] | [string, number, boolean]) => void
 
-tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type:
-(x: string, y: string) => void
-
-is not assignable to type:
+tests/cases/conformance/types/rest/genericRestParameters3.ts(23,1): error TS2322: Type '(x: string, y: string) => void' is not assignable to type:
 (x: string, ...args: [string] | [number, boolean]) => void
 
   Types of parameters 'y' and 'args' are incompatible.
@@ -94,9 +91,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(59,5): error TS2345
 !!! error TS2322: (...args: [string, string] | [string, number, boolean]) => void
     f1 = f2;  // Error
     ~~
-!!! error TS2322: Type:
-!!! error TS2322: (x: string, y: string) => void
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(x: string, y: string) => void' is not assignable to type:
 !!! error TS2322: (x: string, ...args: [string] | [number, boolean]) => void
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[y: string]'.

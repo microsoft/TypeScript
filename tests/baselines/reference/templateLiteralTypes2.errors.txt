@@ -1,14 +1,8 @@
 tests/cases/conformance/types/literal/templateLiteralTypes2.ts(23,11): error TS2322: Type 'string' is not assignable to type '`abc${string}`'.
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(29,11): error TS2322: Type:
-string
-
-is not assignable to type:
+tests/cases/conformance/types/literal/templateLiteralTypes2.ts(29,11): error TS2322: Type 'string' is not assignable to type:
 `foo${string}` | `bar${string}`
 
-tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2322: Type:
-string
-
-is not assignable to type:
+tests/cases/conformance/types/literal/templateLiteralTypes2.ts(32,11): error TS2322: Type 'string' is not assignable to type:
 `foo${string}` | `bar${string}` | `baz${string}`
 
 
@@ -46,17 +40,13 @@ is not assignable to type:
         const c1 = cond ? `foo${s}` : `bar${s}`;  // widening `foo${string}` | widening `bar${string}`
         const c2: `foo${string}` | `bar${string}` = c1;  // `foo${string}` | `bar${string}`
               ~~
-!!! error TS2322: Type:
-!!! error TS2322: string
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type 'string' is not assignable to type:
 !!! error TS2322: `foo${string}` | `bar${string}`
         const c3 = cond ? c1 : c2;  // `foo${string}` | `bar${string}`
         const c4 = cond ? c3 : `baz${s}`;  // `foo${string}` | `bar${string}` | widening `baz${string}`
         const c5: `foo${string}` | `bar${string}` | `baz${string}` = c4; // `foo${string}` | `bar${string}` | `baz${string}`
               ~~
-!!! error TS2322: Type:
-!!! error TS2322: string
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type 'string' is not assignable to type:
 !!! error TS2322: `foo${string}` | `bar${string}` | `baz${string}`
         let v1 = c1;  // string
         let v2 = c2;  // `foo${string}` | `bar${string}`

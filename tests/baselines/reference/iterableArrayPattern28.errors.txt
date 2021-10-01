@@ -23,9 +23,7 @@ IteratorYieldResult<readonly [string, number]>
               Type:
 [string, number] | [string, boolean]
 
-is not assignable to type:
-readonly [string, number]
-
+is not assignable to type 'readonly [string, number]'.
                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
                   Type at position 1 in source is not compatible with type at position 1 in target.
                     Type 'boolean' is not assignable to type 'number'.
@@ -55,8 +53,7 @@ readonly [string, number]
 !!! error TS2769: IteratorYieldResult<readonly [string, number]>
 !!! error TS2769:               Type:
 !!! error TS2769: [string, number] | [string, boolean]
-!!! error TS2769: is not assignable to type:
-!!! error TS2769: readonly [string, number]
+!!! error TS2769: is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2769:                     Type 'boolean' is not assignable to type 'number'.

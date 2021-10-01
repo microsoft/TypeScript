@@ -6,9 +6,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     Type:
 new (x: number, y: number) => number
 
-is not assignable to type:
-new (x: number) => number
-
+is not assignable to type 'new (x: number) => number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithConstructSignaturesWithOptionalParameters.ts (2 errors) ====
@@ -70,8 +68,7 @@ new (x: number) => number
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type:
 !!! error TS2430: new (x: number, y: number) => number
-!!! error TS2430: is not assignable to type:
-!!! error TS2430: new (x: number) => number
+!!! error TS2430: is not assignable to type 'new (x: number) => number'.
         a3: new (x: number, y: number) => number;  // error, too many required params
     }
     

@@ -1,9 +1,7 @@
 tests/cases/compiler/assignmentCompatability30.ts(9,1): error TS2322: Type:
 interfaceWithPublicAndOptional<number, string>
 
-is not assignable to type:
-{ one: number[]; }
-
+is not assignable to type '{ one: number[]; }'.
   Types of property 'one' are incompatible.
     Type 'number' is not assignable to type 'number[]'.
 
@@ -21,7 +19,6 @@ is not assignable to type:
     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: interfaceWithPublicAndOptional<number, string>
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: { one: number[]; }
+!!! error TS2322: is not assignable to type '{ one: number[]; }'.
 !!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'number[]'.

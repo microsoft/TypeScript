@@ -3,9 +3,7 @@ tests/cases/compiler/typeMatch2.ts(4,5): error TS2741: Property 'y' is missing i
 tests/cases/compiler/typeMatch2.ts(5,20): error TS2322: Type:
 { x: number; y: number; z: number; }
 
-is not assignable to type:
-{ x: number; y: number; }
-
+is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(6,17): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
@@ -17,9 +15,7 @@ tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: 
 tests/cases/compiler/typeMatch2.ts(34,26): error TS2322: Type:
 { x: number; y: any; z: number; }
 
-is not assignable to type:
-{ x: number; y: number; }
-
+is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing in type '{ x: number; }' but required in type '{ x: number; y: number; }'.
 
@@ -38,8 +34,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
     	                  ~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { x: number; y: number; z: number; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: { x: number; y: number; }
+!!! error TS2322: is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1, z: 3 };  // error
                     ~~~~
@@ -84,8 +79,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2741: Property 'y' is missing 
                              ~~~
 !!! error TS2322: Type:
 !!! error TS2322: { x: number; y: any; z: number; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: { x: number; y: number; }
+!!! error TS2322: is not assignable to type '{ x: number; y: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
         a = { x: 1 }; // error
         ~

@@ -3,16 +3,12 @@ tests/cases/conformance/jsx/file.tsx(10,17): error TS2322: Type '{ children: Ele
 tests/cases/conformance/jsx/file.tsx(11,13): error TS2322: Type:
 { children: Element; key: string; }
 
-is not assignable to type:
-IntrinsicAttributes
-
+is not assignable to type 'IntrinsicAttributes'.
   Property 'children' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(12,13): error TS2322: Type:
 { children: Element[]; key: string; }
 
-is not assignable to type:
-IntrinsicAttributes
-
+is not assignable to type 'IntrinsicAttributes'.
   Property 'children' does not exist on type 'IntrinsicAttributes'.
 
 
@@ -34,14 +30,12 @@ IntrinsicAttributes
                 ~~~
 !!! error TS2322: Type:
 !!! error TS2322: { children: Element; key: string; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: IntrinsicAttributes
+!!! error TS2322: is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
     const k5 = <Tag key="1"><div></div><div></div></Tag>;
                 ~~~
 !!! error TS2322: Type:
 !!! error TS2322: { children: Element[]; key: string; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: IntrinsicAttributes
+!!! error TS2322: is not assignable to type 'IntrinsicAttributes'.
 !!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes'.
     

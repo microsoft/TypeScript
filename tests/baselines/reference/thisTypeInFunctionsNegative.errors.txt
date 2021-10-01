@@ -76,27 +76,18 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(112,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(113,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'C' is not assignable to type 'D'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(114,1): error TS2322: Type:
-(this: D, m: number) => number
-
-is not assignable to type:
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(114,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 (this: { n: number; }, m: number) => number
 
   The 'this' types of each signature are incompatible.
     Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(115,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(116,1): error TS2322: Type:
-(this: D, m: number) => number
-
-is not assignable to type:
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(116,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 (this: void, m: number) => number
 
   The 'this' types of each signature are incompatible.
     Type 'void' is not assignable to type 'D'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(117,1): error TS2322: Type:
-(this: D, m: number) => number
-
-is not assignable to type:
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(117,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 (this: void, m: number) => number
 
   The 'this' types of each signature are incompatible.
@@ -358,9 +349,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS2322:     Type 'C' is not assignable to type 'D'.
     c.explicitProperty = d.explicitD;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (this: D, m: number) => number
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 !!! error TS2322: (this: { n: number; }, m: number) => number
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
@@ -369,17 +358,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
     c.explicitVoid = d.explicitD;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (this: D, m: number) => number
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 !!! error TS2322: (this: void, m: number) => number
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type 'D'.
     c.explicitVoid = d.explicitThis;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: (this: D, m: number) => number
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type:
 !!! error TS2322: (this: void, m: number) => number
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type 'D'.

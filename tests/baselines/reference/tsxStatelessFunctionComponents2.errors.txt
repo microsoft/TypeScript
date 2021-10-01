@@ -1,7 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type:
-{ ref: string; }
-
-is not assignable to type:
+tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ ref: string; }' is not assignable to type:
 IntrinsicAttributes & { name?: string; }
 
   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
@@ -31,9 +28,7 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
                    ~~~
-!!! error TS2322: Type:
-!!! error TS2322: { ref: string; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ ref: string; }' is not assignable to type:
 !!! error TS2322: IntrinsicAttributes & { name?: string; }
 !!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
     

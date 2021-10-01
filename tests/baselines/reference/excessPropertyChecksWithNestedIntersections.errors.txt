@@ -21,16 +21,12 @@ is not assignable to type:
 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(68,32): error TS2322: Type:
 { foo: true; bar: true; boo: boolean; }
 
-is not assignable to type:
-View<TypeA>
-
+is not assignable to type 'View<TypeA>'.
   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeA>'.
 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): error TS2322: Type:
 { foo: true; bar: true; boo: true; }
 
-is not assignable to type:
-boolean | View<TypeB>
-
+is not assignable to type 'boolean | View<TypeB>'.
   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeB>'.
 
 
@@ -133,16 +129,14 @@ boolean | View<TypeB>
                                    ~~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { foo: true; bar: true; boo: boolean; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: View<TypeA>
+!!! error TS2322: is not assignable to type 'View<TypeA>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeA>'.
     
     test = { foo: true, bar: { foo: true, bar: true, boo: true } }
                                                      ~~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { foo: true; bar: true; boo: true; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: boolean | View<TypeB>
+!!! error TS2322: is not assignable to type 'boolean | View<TypeB>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeB>'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:63:5: The expected type comes from property 'bar' which is declared here on type 'View<TypeA>'
     

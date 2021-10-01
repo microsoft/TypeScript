@@ -1,17 +1,11 @@
-tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(14,5): error TS2322: Type:
-{ prop: string | number; }
-
-is not assignable to type:
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(14,5): error TS2322: Type '{ prop: string | number; }' is not assignable to type:
 { prop: string; } | { prop: number; }
 
   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
     Types of property 'prop' are incompatible.
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(20,5): error TS2322: Type:
-{ prop: string | number; }
-
-is not assignable to type:
+tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(20,5): error TS2322: Type '{ prop: string | number; }' is not assignable to type:
 { prop: string; anotherP: string; } | { prop: number; }
 
   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
@@ -95,9 +89,7 @@ is not assignable to type:
     // Since T is union Type we only allow the assignment of either object with property of type string or object with property of type number but do not allow object with property of type string | number
     var objStrOrNum3: { prop: string } | { prop: number } = {
         ~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: { prop: string | number; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type:
 !!! error TS2322: { prop: string; } | { prop: number; }
 !!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
@@ -110,9 +102,7 @@ is not assignable to type:
     };
     var objStrOrNum5: { prop: string; anotherP: string; } | { prop: number } = { prop: strOrNumber };
         ~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: { prop: string | number; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type:
 !!! error TS2322: { prop: string; anotherP: string; } | { prop: number; }
 !!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.

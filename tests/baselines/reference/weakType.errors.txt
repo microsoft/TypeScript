@@ -8,9 +8,7 @@ tests/cases/compiler/weakType.ts(37,18): error TS2559: Type '{ error?: number; }
 tests/cases/compiler/weakType.ts(62,5): error TS2322: Type:
 { properties: { wrong: string; }; }
 
-is not assignable to type:
-Weak & Spoiler
-
+is not assignable to type 'Weak & Spoiler'.
   Types of property 'properties' are incompatible.
     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
 
@@ -98,8 +96,7 @@ Weak & Spoiler
         ~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { properties: { wrong: string; }; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: Weak & Spoiler
+!!! error TS2322: is not assignable to type 'Weak & Spoiler'.
 !!! error TS2322:   Types of property 'properties' are incompatible.
 !!! error TS2322:     Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
     

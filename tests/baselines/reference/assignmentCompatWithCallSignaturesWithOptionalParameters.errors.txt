@@ -3,33 +3,23 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(20,5): error TS2322: Type:
 (x: number, y?: number) => number
 
-is not assignable to type:
-() => number
-
+is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(22,5): error TS2322: Type:
 (x: number, y: number) => number
 
-is not assignable to type:
-() => number
-
+is not assignable to type '() => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(33,5): error TS2322: Type:
 (x: number, y: number) => number
 
-is not assignable to type:
-(x?: number) => number
-
+is not assignable to type '(x?: number) => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(39,5): error TS2322: Type:
 (x: number, y: number) => number
 
-is not assignable to type:
-(x: number) => number
-
+is not assignable to type '(x: number) => number'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts(45,5): error TS2322: Type:
 (x: number, y: number) => number
 
-is not assignable to type:
-(x: number) => number
-
+is not assignable to type '(x: number) => number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignaturesWithOptionalParameters.ts (7 errors) ====
@@ -60,15 +50,13 @@ is not assignable to type:
         ~
 !!! error TS2322: Type:
 !!! error TS2322: (x: number, y?: number) => number
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: () => number
+!!! error TS2322: is not assignable to type '() => number'.
         a = b.a5; // ok
         a = b.a6; // error
         ~
 !!! error TS2322: Type:
 !!! error TS2322: (x: number, y: number) => number
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: () => number
+!!! error TS2322: is not assignable to type '() => number'.
     
     var a2: (x?: number) => number; 
         a2 = () => 1; // ok, same number of required params
@@ -83,8 +71,7 @@ is not assignable to type:
         ~~
 !!! error TS2322: Type:
 !!! error TS2322: (x: number, y: number) => number
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (x?: number) => number
+!!! error TS2322: is not assignable to type '(x?: number) => number'.
     
     var a3: (x: number) => number; 
         a3 = () => 1; // ok, fewer required params
@@ -94,8 +81,7 @@ is not assignable to type:
         ~~
 !!! error TS2322: Type:
 !!! error TS2322: (x: number, y: number) => number
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (x: number) => number
+!!! error TS2322: is not assignable to type '(x: number) => number'.
         a3 = b.a; // ok
         a3 = b.a2; // ok
         a3 = b.a3; // ok
@@ -105,8 +91,7 @@ is not assignable to type:
         ~~
 !!! error TS2322: Type:
 !!! error TS2322: (x: number, y: number) => number
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (x: number) => number
+!!! error TS2322: is not assignable to type '(x: number) => number'.
     
     var a4: (x: number, y?: number) => number;
         a4 = () => 1; // ok, fewer required params

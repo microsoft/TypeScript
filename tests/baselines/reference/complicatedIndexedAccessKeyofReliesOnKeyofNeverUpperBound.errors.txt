@@ -11,46 +11,25 @@ is not assignable to type:
 Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">
 
     Types of property 'type' are incompatible.
-      Type:
-T
-
-is not assignable to type:
+      Type 'T' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
 
-        Type:
-"text" | "email"
-
-is not assignable to type:
+        Type '"text" | "email"' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
 
-          Type:
-"text"
-
-is not assignable to type:
+          Type '"text"' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
 
-            Type:
-"text"
-
-is not assignable to type:
+            Type '"text"' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"]
 
-              Type:
-T
-
-is not assignable to type:
+              Type 'T' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"]
 
-                Type:
-"text" | "email"
-
-is not assignable to type:
+                Type '"text" | "email"' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"]
 
-                  Type:
-"text"
-
-is not assignable to type:
+                  Type '"text"' is not assignable to type:
 ChannelOfType<T, TextChannel>["type"]
 
                     Type '"text"' is not assignable to type 'T & "text"'.
@@ -110,33 +89,19 @@ ChannelOfType<T, TextChannel>["type"]
 !!! error TS2322: is not assignable to type:
 !!! error TS2322: Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">
 !!! error TS2322:     Types of property 'type' are incompatible.
-!!! error TS2322:       Type:
-!!! error TS2322: T
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:       Type 'T' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
-!!! error TS2322:         Type:
-!!! error TS2322: "text" | "email"
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:         Type '"text" | "email"' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
-!!! error TS2322:           Type:
-!!! error TS2322: "text"
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:           Type '"text"' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]
-!!! error TS2322:             Type:
-!!! error TS2322: "text"
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:             Type '"text"' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"]
-!!! error TS2322:               Type:
-!!! error TS2322: T
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:               Type 'T' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"]
-!!! error TS2322:                 Type:
-!!! error TS2322: "text" | "email"
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:                 Type '"text" | "email"' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"]
-!!! error TS2322:                   Type:
-!!! error TS2322: "text"
-!!! error TS2322: is not assignable to type:
+!!! error TS2322:                   Type '"text"' is not assignable to type:
 !!! error TS2322: ChannelOfType<T, TextChannel>["type"]
 !!! error TS2322:                     Type '"text"' is not assignable to type 'T & "text"'.
 !!! error TS2322:                       Type '"text"' is not assignable to type 'T'.

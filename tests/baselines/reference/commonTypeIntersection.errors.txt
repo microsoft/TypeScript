@@ -7,9 +7,7 @@ is not assignable to type:
   Type:
 { __typename?: "TypeTwo"; } & { a: boolean; }
 
-is not assignable to type:
-{ __typename?: "TypeOne"; }
-
+is not assignable to type '{ __typename?: "TypeOne"; }'.
     Types of property '__typename' are incompatible.
       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
 tests/cases/conformance/types/intersection/commonTypeIntersection.ts(4,5): error TS2322: Type:
@@ -21,9 +19,7 @@ is not assignable to type:
   Type:
 { __typename?: "TypeTwo"; } & string
 
-is not assignable to type:
-{ __typename?: "TypeOne"; }
-
+is not assignable to type '{ __typename?: "TypeOne"; }'.
     Types of property '__typename' are incompatible.
       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
 
@@ -38,8 +34,7 @@ is not assignable to type:
 !!! error TS2322: { __typename?: "TypeOne"; } & { a: boolean; }
 !!! error TS2322:   Type:
 !!! error TS2322: { __typename?: "TypeTwo"; } & { a: boolean; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: { __typename?: "TypeOne"; }
+!!! error TS2322: is not assignable to type '{ __typename?: "TypeOne"; }'.
 !!! error TS2322:     Types of property '__typename' are incompatible.
 !!! error TS2322:       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
     declare let x2: { __typename?: 'TypeTwo' } & string;
@@ -51,8 +46,7 @@ is not assignable to type:
 !!! error TS2322: { __typename?: "TypeOne"; } & string
 !!! error TS2322:   Type:
 !!! error TS2322: { __typename?: "TypeTwo"; } & string
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: { __typename?: "TypeOne"; }
+!!! error TS2322: is not assignable to type '{ __typename?: "TypeOne"; }'.
 !!! error TS2322:     Types of property '__typename' are incompatible.
 !!! error TS2322:       Type '"TypeTwo"' is not assignable to type '"TypeOne"'.
     

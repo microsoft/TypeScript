@@ -144,9 +144,7 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(133,1): error TS2328: Types of
 tests/cases/compiler/strictFunctionTypesErrors.ts(134,1): error TS2322: Type:
 (f: (x: Animal) => Animal) => void
 
-is not assignable to type:
-(f: (x: Dog) => Dog) => void
-
+is not assignable to type '(f: (x: Dog) => Dog) => void'.
   Types of parameters 'f' and 'f' are incompatible.
     Types of parameters 'x' and 'x' are incompatible.
       Type 'Animal' is not assignable to type 'Dog'.
@@ -456,8 +454,7 @@ is not assignable to type:
     ~~~
 !!! error TS2322: Type:
 !!! error TS2322: (f: (x: Animal) => Animal) => void
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (f: (x: Dog) => Dog) => void
+!!! error TS2322: is not assignable to type '(f: (x: Dog) => Dog) => void'.
 !!! error TS2322:   Types of parameters 'f' and 'f' are incompatible.
 !!! error TS2322:     Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:       Type 'Animal' is not assignable to type 'Dog'.

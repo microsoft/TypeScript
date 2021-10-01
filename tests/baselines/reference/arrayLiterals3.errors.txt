@@ -6,9 +6,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): erro
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type:
 [number, number, string, boolean]
 
-is not assignable to type:
-[number, number]
-
+is not assignable to type '[number, number]'.
   Source has 4 element(s) but target allows only 2.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
   Target requires 3 element(s) but source may have fewer.
@@ -47,8 +45,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
         ~~~~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: [number, number, string, boolean]
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: [number, number]
+!!! error TS2322: is not assignable to type '[number, number]'.
 !!! error TS2322:   Source has 4 element(s) but target allows only 2.
     
     // The resulting type an array literal expression is determined as follows:

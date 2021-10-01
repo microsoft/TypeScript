@@ -263,8 +263,6 @@ namespace ts {
         Uncapitalize: IntrinsicTypeKind.Uncapitalize
     }));
 
-    const DEFAULT_TYPE_CHARS_LENGTH_TO_ADD_NEW_LINES = 30;
-
     function SymbolLinks(this: SymbolLinks) {
     }
 
@@ -18011,9 +18009,11 @@ namespace ts {
                             }
                         }
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
-                        if (shouldInsertNewLines([sourceType, targetType])) {
-                            reportError(transformMessageToSupportNewLines(message), sourceType, targetType);
-                            return;
+
+                        // Support moving errors to newlines if they are longer than 30 chars
+                        const typeLengthForNewline = 30;
+                        if (shouldInsertNewLines([sourceType, targetType], typeLengthForNewline)) {
+                            message = transformMessageToSupportNewLines(message, typeLengthForNewline, sourceType, targetType);
                         }
                     }
                 }
@@ -18026,18 +18026,16 @@ namespace ts {
                 reportError(message, generalizedSourceType, targetType);
             }
 
-            function shouldInsertNewLines(types: string[], charsLength = DEFAULT_TYPE_CHARS_LENGTH_TO_ADD_NEW_LINES) {
+            function shouldInsertNewLines(types: string[], charsLength: number) {
                 return types.filter(type => type.length > charsLength).length > 0;
             }
 
-            function transformMessageToSupportNewLines(message: DiagnosticMessage): DiagnosticMessage {
-                return {
-                    ...message,
-                    message: message.message
-                        .replace(" '{0}' ", ":\n{0}\n\n")
-                        .replace(" '{1}'", ":\n{1}\n")
-                        .replace(".", ""),
-                };
+            function transformMessageToSupportNewLines(message: DiagnosticMessage, charsLength: number, source: string, target: string): DiagnosticMessage {
+                let newMessage = message.message;
+                if (source.length > charsLength) newMessage = newMessage.replace(" '{0}' ", ":\n{0}\n\n");
+                if (target.length > charsLength) newMessage = newMessage.replace(" '{1}'", ":\n{1}\n").replace(".", "");
+
+                return { ...message, message: newMessage };
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {

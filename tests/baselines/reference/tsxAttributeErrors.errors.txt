@@ -1,9 +1,6 @@
 tests/cases/conformance/jsx/tsxAttributeErrors.tsx(14,6): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/tsxAttributeErrors.tsx(17,6): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/jsx/tsxAttributeErrors.tsx(21,2): error TS2322: Type:
-{ text: number; }
-
-is not assignable to type:
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(21,2): error TS2322: Type '{ text: number; }' is not assignable to type:
 { text?: string; width?: number; }
 
   Types of property 'text' are incompatible.
@@ -39,9 +36,7 @@ is not assignable to type:
     var attribs = { text: 100 };
     <div {...attribs} />;
      ~~~
-!!! error TS2322: Type:
-!!! error TS2322: { text: number; }
-!!! error TS2322: is not assignable to type:
+!!! error TS2322: Type '{ text: number; }' is not assignable to type:
 !!! error TS2322: { text?: string; width?: number; }
 !!! error TS2322:   Types of property 'text' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.

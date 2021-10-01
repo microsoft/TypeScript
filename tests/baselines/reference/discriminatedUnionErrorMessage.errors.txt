@@ -1,9 +1,7 @@
 tests/cases/compiler/discriminatedUnionErrorMessage.ts(10,5): error TS2322: Type:
 { kind: "sq"; x: number; y: number; }
 
-is not assignable to type:
-Shape
-
+is not assignable to type 'Shape'.
   Object literal may only specify known properties, and 'x' does not exist in type 'Square'.
 
 
@@ -21,8 +19,7 @@ Shape
         ~~~~~
 !!! error TS2322: Type:
 !!! error TS2322: { kind: "sq"; x: number; y: number; }
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: Shape
+!!! error TS2322: is not assignable to type 'Shape'.
 !!! error TS2322:   Object literal may only specify known properties, and 'x' does not exist in type 'Square'.
         y: 13,
     }

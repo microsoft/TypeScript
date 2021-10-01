@@ -6,9 +6,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     Type:
 (x: number, y: number) => number
 
-is not assignable to type:
-(x: number) => number
-
+is not assignable to type '(x: number) => number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts (2 errors) ====
@@ -70,8 +68,7 @@ is not assignable to type:
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type:
 !!! error TS2430: (x: number, y: number) => number
-!!! error TS2430: is not assignable to type:
-!!! error TS2430: (x: number) => number
+!!! error TS2430: is not assignable to type '(x: number) => number'.
         a3: (x: number, y: number) => number;  // error, too many required params
     }
     
