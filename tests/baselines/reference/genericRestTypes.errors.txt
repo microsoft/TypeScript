@@ -1,9 +1,4 @@
-tests/cases/compiler/genericRestTypes.ts(21,11): error TS2322: Type:
-(cb: (x: string, ...rest: T) => void) => void
-
-is not assignable to type:
-(cb: (...args: never) => void) => void
-
+tests/cases/compiler/genericRestTypes.ts(21,11): error TS2322: Type '(cb: (x: string, ...rest: T) => void) => void' is not assignable to type '(cb: (...args: never) => void) => void'.
   Types of parameters 'cb' and 'cb' are incompatible.
     Types of parameters 'args' and 'x' are incompatible.
       Type '[x: string, ...rest: T]' is not assignable to type 'never'.
@@ -32,10 +27,7 @@ is not assignable to type:
         const fn1: (cb: (x: string, ...rest: T) => void) => void = (cb) => {};
         const fn2: (cb: (...args: never) => void) => void = fn1;
               ~~~
-!!! error TS2322: Type:
-!!! error TS2322: (cb: (x: string, ...rest: T) => void) => void
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (cb: (...args: never) => void) => void
+!!! error TS2322: Type '(cb: (x: string, ...rest: T) => void) => void' is not assignable to type '(cb: (...args: never) => void) => void'.
 !!! error TS2322:   Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:     Types of parameters 'args' and 'x' are incompatible.
 !!! error TS2322:       Type '[x: string, ...rest: T]' is not assignable to type 'never'.

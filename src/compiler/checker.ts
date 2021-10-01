@@ -18018,10 +18018,9 @@ namespace ts {
                         }
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
 
-                        // Support moving errors to newlines if they are longer than 30 chars
-                        const typeLengthForNewline = 30;
-                        if (shouldInsertNewLines([sourceType, targetType], typeLengthForNewline)) {
-                            message = transformMessageToSupportNewLines(message, typeLengthForNewline, sourceType, targetType);
+                        const typeLengthLimit = 30;
+                        if (!errorInfo && (sourceType.length > typeLengthLimit || targetType.length > typeLengthLimit)) {
+                            message = formatMessageTypes(message, typeLengthLimit, sourceType, targetType);
                         }
                     }
                 }
@@ -18034,16 +18033,13 @@ namespace ts {
                 reportError(message, generalizedSourceType, targetType);
             }
 
-            function shouldInsertNewLines(types: string[], charsLength: number) {
-                return types.filter(type => type.length > charsLength).length > 0;
-            }
+            /** Move a printed type to be on its own line if it is longer than 30 characters */
+            function formatMessageTypes(diagnostic: DiagnosticMessage, typeLengthLimit: number, source: string, target: string): DiagnosticMessage {
+                let message = diagnostic.message;
+                if (source.length > typeLengthLimit) message = message.replace(" '{0}' ", ":\n{0}\n\n");
+                if (target.length > typeLengthLimit) message = message.replace(" '{1}'", ":\n{1}\n").replace(".", "");
 
-            function transformMessageToSupportNewLines(message: DiagnosticMessage, charsLength: number, source: string, target: string): DiagnosticMessage {
-                let newMessage = message.message;
-                if (source.length > charsLength) newMessage = newMessage.replace(" '{0}' ", ":\n{0}\n\n");
-                if (target.length > charsLength) newMessage = newMessage.replace(" '{1}'", ":\n{1}\n").replace(".", "");
-
-                return { ...message, message: newMessage };
+                return { ...diagnostic, message };
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {

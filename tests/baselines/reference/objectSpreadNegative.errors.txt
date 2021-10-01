@@ -1,8 +1,5 @@
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322: Type:
-{ sn?: string | number | undefined; }
-
-is not assignable to type '{ sn: string | number; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
   Types of property 'sn' are incompatible.
     Type 'string | number | undefined' is not assignable to type 'string | number'.
       Type 'undefined' is not assignable to type 'string | number'.
@@ -50,9 +47,7 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(74,11): error TS233
     declare let optionalNumber: { sn?: number };
     let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
         ~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: { sn?: string | number | undefined; }
-!!! error TS2322: is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322: Type '{ sn?: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
 !!! error TS2322:   Types of property 'sn' are incompatible.
 !!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.

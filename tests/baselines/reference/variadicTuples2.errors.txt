@@ -1,10 +1,7 @@
 tests/cases/conformance/types/tuple/variadicTuples2.ts(7,34): error TS1265: A rest element cannot follow another rest element.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(8,34): error TS1266: An optional element cannot follow a rest element.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(9,30): error TS1257: A required element cannot follow an optional element.
-tests/cases/conformance/types/tuple/variadicTuples2.ts(42,1): error TS2322: Type:
-[string, string, number, number]
-
-is not assignable to type '[...string[], number]'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(42,1): error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
     Type 'string | number' is not assignable to type 'string'.
       Type 'number' is not assignable to type 'string'.
@@ -17,18 +14,12 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(51,1): error TS2322: Type
 tests/cases/conformance/types/tuple/variadicTuples2.ts(53,1): error TS2322: Type '[number, number, number]' is not assignable to type '[number, ...string[], number]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/tuple/variadicTuples2.ts(56,1): error TS2322: Type:
-[number, string, number, string]
-
-is not assignable to type '[number, ...string[], number]'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(56,1): error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'string | number' is not assignable to type 'string'.
       Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(57,8): error TS2322: Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/variadicTuples2.ts(58,1): error TS2322: Type:
-[number, string, string, boolean]
-
-is not assignable to type '[number, ...string[], number]'.
+tests/cases/conformance/types/tuple/variadicTuples2.ts(58,1): error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
   Type at position 3 in source is not compatible with type at position 2 in target.
     Type 'boolean' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/variadicTuples2.ts(61,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[...strs: string[], n2: number]'.
@@ -125,9 +116,7 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(130,25): error TS2345: Ar
     tt1 = ['abc', 'def', 5];
     tt1 = ['abc', 'def', 5, 6];  // Error
     ~~~
-!!! error TS2322: Type:
-!!! error TS2322: [string, string, number, number]
-!!! error TS2322: is not assignable to type '[...string[], number]'.
+!!! error TS2322: Type '[string, string, number, number]' is not assignable to type '[...string[], number]'.
 !!! error TS2322:   Type at positions 0 through 2 in source is not compatible with type at position 0 in target.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
@@ -158,9 +147,7 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(130,25): error TS2345: Ar
     tt2 = [0, 'abc', 'def', 1];
     tt2 = [0, 'abc', 1, 'def'];  // Error
     ~~~
-!!! error TS2322: Type:
-!!! error TS2322: [number, string, number, string]
-!!! error TS2322: is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322: Type '[number, string, number, string]' is not assignable to type '[number, ...string[], number]'.
 !!! error TS2322:   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
@@ -169,9 +156,7 @@ tests/cases/conformance/types/tuple/variadicTuples2.ts(130,25): error TS2345: Ar
 !!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     tt2 = [0, 'abc', 'def', true];  // Error
     ~~~
-!!! error TS2322: Type:
-!!! error TS2322: [number, string, string, boolean]
-!!! error TS2322: is not assignable to type '[number, ...string[], number]'.
+!!! error TS2322: Type '[number, string, string, boolean]' is not assignable to type '[number, ...string[], number]'.
 !!! error TS2322:   Type at position 3 in source is not compatible with type at position 2 in target.
 !!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
     

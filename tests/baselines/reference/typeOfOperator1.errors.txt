@@ -1,7 +1,4 @@
-tests/cases/compiler/typeOfOperator1.ts(3,5): error TS2322: Type:
-string
-
-is not assignable to type 'number'.
+tests/cases/compiler/typeOfOperator1.ts(3,5): error TS2322: Type 'string' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
 
 
@@ -10,7 +7,5 @@ is not assignable to type 'number'.
     var y: string = typeof x;
     var z: number = typeof x;
         ~
-!!! error TS2322: Type:
-!!! error TS2322: string
-!!! error TS2322: is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.

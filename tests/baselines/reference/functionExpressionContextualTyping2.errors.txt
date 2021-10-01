@@ -1,15 +1,5 @@
-tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping2.ts(11,1): error TS2322: Type:
-(foo: number, bar: string) => boolean
-
-is not assignable to type:
-((n: number, s: string) => number) | ((n: number, s: string) => string)
-
-  Type:
-(foo: number, bar: string) => boolean
-
-is not assignable to type:
-(n: number, s: string) => number
-
+tests/cases/conformance/expressions/contextualTyping/functionExpressionContextualTyping2.ts(11,1): error TS2322: Type '(foo: number, bar: string) => boolean' is not assignable to type '((n: number, s: string) => number) | ((n: number, s: string) => string)'.
+  Type '(foo: number, bar: string) => boolean' is not assignable to type '(n: number, s: string) => number'.
     Type 'boolean' is not assignable to type 'number'.
 
 
@@ -26,12 +16,6 @@ is not assignable to type:
     var a1: typeof a0 | ((n: number, s: string) => string);
     a1 = (foo, bar) => { return true; }  // Error
     ~~
-!!! error TS2322: Type:
-!!! error TS2322: (foo: number, bar: string) => boolean
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: ((n: number, s: string) => number) | ((n: number, s: string) => string)
-!!! error TS2322:   Type:
-!!! error TS2322: (foo: number, bar: string) => boolean
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: (n: number, s: string) => number
+!!! error TS2322: Type '(foo: number, bar: string) => boolean' is not assignable to type '((n: number, s: string) => number) | ((n: number, s: string) => string)'.
+!!! error TS2322:   Type '(foo: number, bar: string) => boolean' is not assignable to type '(n: number, s: string) => number'.
 !!! error TS2322:     Type 'boolean' is not assignable to type 'number'.

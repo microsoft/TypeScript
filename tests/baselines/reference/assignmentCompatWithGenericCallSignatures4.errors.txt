@@ -1,9 +1,4 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts(12,1): error TS2322: Type:
-<T extends I2<T>>(z: T) => void
-
-is not assignable to type:
-<T extends I2<I2<T>>>(z: T) => void
-
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts(12,1): error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
   Types of parameters 'z' and 'z' are incompatible.
     Type 'T' is not assignable to type 'I2<T>'.
       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
@@ -25,10 +20,7 @@ is not assignable to type:
     x = y 
     y = x 
     ~
-!!! error TS2322: Type:
-!!! error TS2322: <T extends I2<T>>(z: T) => void
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: <T extends I2<I2<T>>>(z: T) => void
+!!! error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
 !!! error TS2322:   Types of parameters 'z' and 'z' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'I2<T>'.
 !!! error TS2322:       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.

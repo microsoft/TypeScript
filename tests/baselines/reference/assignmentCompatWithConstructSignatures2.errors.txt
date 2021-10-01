@@ -12,15 +12,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(36,1): error TS2741: Property 'f' is missing in type '(x: string) => number' but required in type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(37,1): error TS2741: Property 'f' is missing in type '(x: string) => string' but required in type 'T'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(38,1): error TS2322: Type 'S2' is not assignable to type:
-{ f: new (x: number) => void; }
-
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(38,1): error TS2322: Type 'S2' is not assignable to type '{ f: new (x: number) => void; }'.
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(39,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type:
-{ f: new (x: number) => void; }
-
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts(39,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f: new (x: number) => void; }'.
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
@@ -96,15 +92,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
     a = s2;
     ~
-!!! error TS2322: Type 'S2' is not assignable to type:
-!!! error TS2322: { f: new (x: number) => void; }
+!!! error TS2322: Type 'S2' is not assignable to type '{ f: new (x: number) => void; }'.
 !!! error TS2322:   Types of property 'f' are incompatible.
 !!! error TS2322:     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
     a = a3;
     ~
-!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type:
-!!! error TS2322: { f: new (x: number) => void; }
+!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f: new (x: number) => void; }'.
 !!! error TS2322:   Types of property 'f' are incompatible.
 !!! error TS2322:     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.

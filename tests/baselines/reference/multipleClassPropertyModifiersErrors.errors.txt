@@ -1,4 +1,4 @@
-tests/cases/compiler/multipleClassPropertyModifiersErrors.ts(4,16): error TS1005: ';' expected.
+tests/cases/compiler/multipleClassPropertyModifiersErrors.ts(4,9): error TS1434: Unexpected keyword or identifier.
 
 
 ==== tests/cases/compiler/multipleClassPropertyModifiersErrors.ts (1 errors) ====
@@ -6,8 +6,8 @@ tests/cases/compiler/multipleClassPropertyModifiersErrors.ts(4,16): error TS1005
     	public public p1;
     	private private p2;
     	static static p3;
-    	              ~~
-!!! error TS1005: ';' expected.
+    	       ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
     	public private p4;
     	private public p5;
     	public static p6;

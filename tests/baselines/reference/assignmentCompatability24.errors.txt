@@ -1,9 +1,4 @@
-tests/cases/compiler/assignmentCompatability24.ts(9,1): error TS2322: Type:
-interfaceWithPublicAndOptional<number, string>
-
-is not assignable to type:
-<Tstring>(a: Tstring) => Tstring
-
+tests/cases/compiler/assignmentCompatability24.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tstring>(a: Tstring) => Tstring'.
   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tstring>(a: Tstring): Tstring'.
 
 
@@ -18,8 +13,5 @@ is not assignable to type:
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: interfaceWithPublicAndOptional<number, string>
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: <Tstring>(a: Tstring) => Tstring
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '<Tstring>(a: Tstring) => Tstring'.
 !!! error TS2322:   Type 'interfaceWithPublicAndOptional<number, string>' provides no match for the signature '<Tstring>(a: Tstring): Tstring'.

@@ -1,9 +1,4 @@
-tests/cases/compiler/assignmentCompatability41.ts(9,1): error TS2322: Type:
-interfaceWithPublicAndOptional<number, string>
-
-is not assignable to type:
-classWithTwoPrivate<number, string>
-
+tests/cases/compiler/assignmentCompatability41.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPrivate<number, string>'.
   Property 'one' is private in type 'classWithTwoPrivate<number, string>' but not in type 'interfaceWithPublicAndOptional<number, string>'.
 
 
@@ -18,8 +13,5 @@ classWithTwoPrivate<number, string>
     }
     __test2__.__val__x6 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type:
-!!! error TS2322: interfaceWithPublicAndOptional<number, string>
-!!! error TS2322: is not assignable to type:
-!!! error TS2322: classWithTwoPrivate<number, string>
+!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPrivate<number, string>'.
 !!! error TS2322:   Property 'one' is private in type 'classWithTwoPrivate<number, string>' but not in type 'interfaceWithPublicAndOptional<number, string>'.
