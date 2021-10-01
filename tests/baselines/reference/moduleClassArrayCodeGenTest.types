@@ -17,7 +17,7 @@ var t: M.A[] = [];
 >[] : undefined[]
 
 var t2: M.B[] = [];
->t2 : any[]
+>t2 : M.B[]
 >M : any
 >[] : undefined[]
 

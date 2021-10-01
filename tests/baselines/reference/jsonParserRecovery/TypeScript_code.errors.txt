@@ -1,0 +1,20 @@
+TypeScript code(1,1): error TS1005: '{' expected.
+TypeScript code(1,11): error TS1005: ',' expected.
+TypeScript code(1,15): error TS1005: ',' expected.
+TypeScript code(1,18): error TS1012: Unexpected token.
+TypeScript code(1,22): error TS1005: '}' expected.
+
+
+==== TypeScript code (5 errors) ====
+    interface Foo {} blah
+    ~~~~~~~~~
+!!! error TS1005: '{' expected.
+              ~~~
+!!! error TS1005: ',' expected.
+                  ~
+!!! error TS1005: ',' expected.
+                     ~~~~
+!!! error TS1012: Unexpected token.
+                         
+!!! error TS1005: '}' expected.
+!!! related TS1007 TypeScript code:1:18: The parser expected to find a '}' to match the '{' token here.

@@ -52,6 +52,6 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 >input : string
 >from(input) : Observable<string>
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->input : Subscribable<never> | Subscribable<string>
+>input : ObservableInput<string>
 }
 

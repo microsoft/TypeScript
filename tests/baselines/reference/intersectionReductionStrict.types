@@ -159,14 +159,14 @@ type M1 = { a: 1, b: 2 } & { a: 2, c: 3 };  // never
 >c : 3
 
 type M2 = Merge1<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // {}
->M2 : Merge1<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M2 : M2
 >a : 1
 >b : 2
 >a : 2
 >c : 3
 
 type M3 = Merge2<{ a: 1, b: 2 }, { a: 2, c: 3 }>;  // { a: 1, b: 2, c: 3 }
->M3 : Merge2<{ a: 1; b: 2; }, { a: 2; c: 3; }>
+>M3 : M3
 >a : 1
 >b : 2
 >a : 2

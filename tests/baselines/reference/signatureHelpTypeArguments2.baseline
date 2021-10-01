@@ -1,0 +1,1126 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
+      "position": 205,
+      "name": "f0"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "T",
+              "documentation": [
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "U",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "V",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "W",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "W",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "some documentation",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "W",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "U, V",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "ok",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "not ok",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 203,
+        "length": 2
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
+      "position": 217,
+      "name": "f1"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "T",
+              "documentation": [
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "U",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "V",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "W",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "W",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "some documentation",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "W",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "U, V",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "ok",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "not ok",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 207,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
+      "position": 237,
+      "name": "f2"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "T",
+              "documentation": [
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "U",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "V",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "W",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "W",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "some documentation",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "W",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "U, V",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "ok",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "not ok",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 219,
+        "length": 17
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpTypeArguments2.ts",
+      "position": 266,
+      "name": "f3"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "a",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "b",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "string",
+              "kind": "keyword"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "c",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "boolean",
+              "kind": "keyword"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "T",
+              "documentation": [
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "U",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "U",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "V",
+              "documentation": [
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "V",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "W",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "W",
+                  "kind": "typeParameterName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "some documentation",
+              "kind": "text"
+            }
+          ],
+          "tags": [
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "T",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "some documentation 2",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "W",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "template",
+              "text": [
+                {
+                  "text": "U, V",
+                  "kind": "typeParameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "others",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "ok",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "b",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "not ok",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 239,
+        "length": 26
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 3,
+      "argumentCount": 4
+    }
+  }
+]

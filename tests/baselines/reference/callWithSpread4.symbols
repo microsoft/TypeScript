@@ -1,0 +1,118 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithSpread4.ts ===
+type R = { a: number }
+>R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
+>a : Symbol(a, Decl(callWithSpread4.ts, 0, 10))
+
+type W = { b: number }
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+>b : Symbol(b, Decl(callWithSpread4.ts, 1, 10))
+
+type RW = { a: number, b: number }
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>a : Symbol(a, Decl(callWithSpread4.ts, 2, 11))
+>b : Symbol(b, Decl(callWithSpread4.ts, 2, 22))
+
+declare const pli: {
+>pli : Symbol(pli, Decl(callWithSpread4.ts, 3, 13))
+
+    (s1: R, s2: RW, s3: RW, s4: RW, s5: W): Promise<void>;
+>s1 : Symbol(s1, Decl(callWithSpread4.ts, 4, 5))
+>R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
+>s2 : Symbol(s2, Decl(callWithSpread4.ts, 4, 11))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>s3 : Symbol(s3, Decl(callWithSpread4.ts, 4, 19))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>s4 : Symbol(s4, Decl(callWithSpread4.ts, 4, 27))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>s5 : Symbol(s5, Decl(callWithSpread4.ts, 4, 35))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    (streams: ReadonlyArray<R | W | RW>): Promise<void>;
+>streams : Symbol(streams, Decl(callWithSpread4.ts, 5, 5))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2016.array.include.d.ts, --, --), Decl(lib.es2019.array.d.ts, --, --))
+>R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    (s1: R, s2: RW | W, ...streams: Array<RW | W>): Promise<void>;
+>s1 : Symbol(s1, Decl(callWithSpread4.ts, 6, 5))
+>R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
+>s2 : Symbol(s2, Decl(callWithSpread4.ts, 6, 11))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+>streams : Symbol(streams, Decl(callWithSpread4.ts, 6, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+}
+
+declare var writes: W
+>writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+
+declare var reads: R
+>reads : Symbol(reads, Decl(callWithSpread4.ts, 10, 11))
+>R : Symbol(R, Decl(callWithSpread4.ts, 0, 0))
+
+declare var tr: W
+>tr : Symbol(tr, Decl(callWithSpread4.ts, 11, 11))
+>W : Symbol(W, Decl(callWithSpread4.ts, 0, 22))
+
+declare var gun: RW[]
+>gun : Symbol(gun, Decl(callWithSpread4.ts, 12, 11))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+
+declare var gz: RW[]
+>gz : Symbol(gz, Decl(callWithSpread4.ts, 13, 11))
+>RW : Symbol(RW, Decl(callWithSpread4.ts, 1, 22))
+
+declare var fun: (inp: any) => AsyncGenerator<string, void, unknown>
+>fun : Symbol(fun, Decl(callWithSpread4.ts, 14, 11))
+>inp : Symbol(inp, Decl(callWithSpread4.ts, 14, 18))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+
+pli(
+>pli : Symbol(pli, Decl(callWithSpread4.ts, 3, 13))
+
+    reads,
+>reads : Symbol(reads, Decl(callWithSpread4.ts, 10, 11))
+
+    ...gun,
+>gun : Symbol(gun, Decl(callWithSpread4.ts, 12, 11))
+
+    tr,
+>tr : Symbol(tr, Decl(callWithSpread4.ts, 11, 11))
+
+    fun,
+>fun : Symbol(fun, Decl(callWithSpread4.ts, 14, 11))
+
+    ...gz,
+>gz : Symbol(gz, Decl(callWithSpread4.ts, 13, 11))
+
+    writes
+>writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
+
+);
+
+declare function test(x: any, y: () => string): string | undefined;
+>test : Symbol(test, Decl(callWithSpread4.ts, 22, 2))
+>x : Symbol(x, Decl(callWithSpread4.ts, 24, 22))
+>y : Symbol(y, Decl(callWithSpread4.ts, 24, 29))
+
+declare var anys: any[]
+>anys : Symbol(anys, Decl(callWithSpread4.ts, 25, 11))
+
+test(...anys)
+>test : Symbol(test, Decl(callWithSpread4.ts, 22, 2))
+>anys : Symbol(anys, Decl(callWithSpread4.ts, 25, 11))
+
+pli(...[reads, writes, writes] as const)
+>pli : Symbol(pli, Decl(callWithSpread4.ts, 3, 13))
+>reads : Symbol(reads, Decl(callWithSpread4.ts, 10, 11))
+>writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
+>writes : Symbol(writes, Decl(callWithSpread4.ts, 9, 11))
+>const : Symbol(const)
+

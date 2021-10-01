@@ -79,7 +79,7 @@ type i09t04 = i09<1, 2, 3, 4>; // error
 >i09t04 : any
 
 interface i10 { x: T; } // error
->x : any
+>x : T
 
 interface i10<T = number> {}
 

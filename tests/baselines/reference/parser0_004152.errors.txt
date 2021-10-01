@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,28): error TS2304: Cannot find name 'DisplayPosition'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,45): error TS1137: Expression or comma expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,46): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,46): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,49): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,51): error TS2300: Duplicate identifier '3'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,52): error TS1005: ';' expected.
@@ -26,13 +26,14 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,82): error T
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,84): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,85): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,86): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
-tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,94): error TS1005: ';' expected.
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,88): error TS1434: Unexpected keyword or identifier.
+tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,94): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,96): error TS2300: Duplicate identifier '0'.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(2,97): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error TS2304: Cannot find name 'SeedCoords'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (32 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts (33 errors) ====
     export class Game {
         private position = new DisplayPosition([), 3, 3, 3, 3, 3, 0, 3, 3, 3, 3, 3, 3, 0], NoMove, 0);
                                ~~~~~~~~~~~~~~~
@@ -40,7 +41,7 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error T
                                                 ~
 !!! error TS1137: Expression or comma expected.
                                                  ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
                                                     ~
 !!! error TS1005: ';' expected.
                                                       ~
@@ -91,8 +92,10 @@ tests/cases/conformance/parser/ecmascript5/Fuzz/parser0_004152.ts(3,25): error T
 !!! error TS1005: ';' expected.
                                                                                          ~
 !!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                                                                                           ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
                                                                                                  ~
-!!! error TS1005: ';' expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
                                                                                                    ~
 !!! error TS2300: Duplicate identifier '0'.
                                                                                                     ~

@@ -26,8 +26,15 @@
 
 ////var y = 10; y=/*var12*/
 
+// first declaration
 verify.completions({
-    marker: test.markers(),
+    marker: ["var1"],
+    exact: completion.globalsPlus(["y", "C"]),
+    isNewIdentifierLocation: true
+});
+
+verify.completions({
+    marker: ["var2", "var3", "var4", "var5", "var6", "var7", "var8", "var9", "var10", "var11", "var12"],
     exact: completion.globalsPlus(["x", "y", "C"]),
     isNewIdentifierLocation: true
 });

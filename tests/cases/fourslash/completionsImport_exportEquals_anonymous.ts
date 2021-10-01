@@ -28,12 +28,20 @@ verify.completions(
         exact: [
             completion.globalThisEntry,
             completion.undefinedVarEntry,
-            exportEntry,
             ...completion.statementKeywordsWithTypes
         ],
         preferences
     },
-    { marker: "1", includes: exportEntry, preferences }
+    {
+        marker: "1",
+        exact: [
+            completion.globalThisEntry,
+            completion.undefinedVarEntry,
+            exportEntry,
+            ...completion.statementKeywordsWithTypes
+        ],
+        preferences
+    }
 );
 verify.applyCodeActionFromCompletion("0", {
     name: "fooBar",

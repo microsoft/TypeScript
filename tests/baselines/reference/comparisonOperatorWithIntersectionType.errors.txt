@@ -1,0 +1,15 @@
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts(2,1): error TS2365: Operator '>' cannot be applied to types '{ a: 1; }' and 'number'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts(5,1): error TS2365: Operator '>' cannot be applied to types '{ a: 1; } & { b: number; }' and 'number'.
+
+
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithIntersectionType.ts (2 errors) ====
+    declare let a: { a: 1 }
+    a > 1;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ a: 1; }' and 'number'.
+    
+    declare let b: { a: 1 } & { b: number }
+    b > 1;
+    ~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types '{ a: 1; } & { b: number; }' and 'number'.
+    

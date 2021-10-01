@@ -44,7 +44,7 @@
         "fileName": "/b.js",
         "contextSpan": {
           "start": 4,
-          "length": 21
+          "length": 22
         },
         "isWriteAccess": false,
         "isDefinition": false
@@ -57,7 +57,7 @@
         "fileName": "/b.js",
         "contextSpan": {
           "start": 46,
-          "length": 23
+          "length": 24
         },
         "isWriteAccess": false,
         "isDefinition": false

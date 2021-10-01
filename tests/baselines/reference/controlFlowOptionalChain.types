@@ -223,16 +223,16 @@ if (o3?.x === 1) {
 }
 else {
     o3;
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 
     o3?.x;
 >o3?.x : 2 | undefined
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 >x : 2 | undefined
 
     o3.x;
 >o3.x : 2
->o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
+>o3 : { x: 2; y: number; } | undefined
 >x : 2
 }
 o3;

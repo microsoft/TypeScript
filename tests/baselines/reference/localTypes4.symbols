@@ -22,6 +22,8 @@ function f2() {
     function f(x: T): T {
 >f : Symbol(f, Decl(localTypes4.ts, 7, 15))
 >x : Symbol(x, Decl(localTypes4.ts, 9, 15))
+>T : Symbol(T)
+>T : Symbol(T)
 
         interface T { }
 >T : Symbol(T, Decl(localTypes4.ts, 9, 25))

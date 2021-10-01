@@ -1,0 +1,15 @@
+=== tests/cases/compiler/mappedTypeWithAsClauseAndLateBoundProperty.ts ===
+declare let tgt2: number[];
+>tgt2 : Symbol(tgt2, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 0, 11))
+
+declare let src2: { [K in keyof number[] as Exclude<K, "length">]: (number[])[K] };
+>src2 : Symbol(src2, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 1, 11))
+>K : Symbol(K, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 1, 21))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 1, 21))
+>K : Symbol(K, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 1, 21))
+
+tgt2 = src2; // Should error
+>tgt2 : Symbol(tgt2, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 0, 11))
+>src2 : Symbol(src2, Decl(mappedTypeWithAsClauseAndLateBoundProperty.ts, 1, 11))
+

@@ -2,11 +2,11 @@ tests/cases/compiler/moduleElementsInWrongContext3.ts(3,9): error TS1235: A name
 tests/cases/compiler/moduleElementsInWrongContext3.ts(4,9): error TS1235: A namespace declaration is only allowed in a namespace or module.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(8,9): error TS1235: A namespace declaration is only allowed in a namespace or module.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(10,9): error TS1234: An ambient module declaration is only allowed at the top level in a file.
-tests/cases/compiler/moduleElementsInWrongContext3.ts(14,9): error TS1231: An export assignment can only be used in a module.
+tests/cases/compiler/moduleElementsInWrongContext3.ts(14,9): error TS1231: An export assignment must be at the top level of a file or module declaration.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(18,9): error TS1233: An export declaration can only be used in a module.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(19,9): error TS1233: An export declaration can only be used in a module.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(20,9): error TS1233: An export declaration can only be used in a module.
-tests/cases/compiler/moduleElementsInWrongContext3.ts(21,9): error TS1231: An export assignment can only be used in a module.
+tests/cases/compiler/moduleElementsInWrongContext3.ts(21,9): error TS1258: A default export must be at the top level of a file or module declaration.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(22,9): error TS1184: Modifiers cannot appear here.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(23,9): error TS1184: Modifiers cannot appear here.
 tests/cases/compiler/moduleElementsInWrongContext3.ts(24,9): error TS1232: An import declaration can only be used in a namespace or module.
@@ -41,7 +41,7 @@ tests/cases/compiler/moduleElementsInWrongContext3.ts(29,9): error TS1232: An im
     
             export = M;
             ~~~~~~
-!!! error TS1231: An export assignment can only be used in a module.
+!!! error TS1231: An export assignment must be at the top level of a file or module declaration.
     
             var v;
             function foo() { }
@@ -56,7 +56,7 @@ tests/cases/compiler/moduleElementsInWrongContext3.ts(29,9): error TS1232: An im
 !!! error TS1233: An export declaration can only be used in a module.
             export default v;
             ~~~~~~
-!!! error TS1231: An export assignment can only be used in a module.
+!!! error TS1258: A default export must be at the top level of a file or module declaration.
             export default class C { }
             ~~~~~~
 !!! error TS1184: Modifiers cannot appear here.

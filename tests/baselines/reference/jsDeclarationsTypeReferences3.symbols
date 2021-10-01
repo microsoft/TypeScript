@@ -12,15 +12,15 @@ module.exports.A = {}
 >module.exports.A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
 >module.exports : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
 >module : Symbol(module, Decl(index.js, 2, 42))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
 
 module.exports.A.B = {
 >module.exports.A.B : Symbol(A.B, Decl(index.js, 3, 21))
 >module.exports.A : Symbol(A.B, Decl(index.js, 3, 21))
->module.exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >module : Symbol(module, Decl(index.js, 2, 42))
->exports : Symbol("tests/cases/conformance/jsdoc/declarations/index", Decl(index.js, 0, 0))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
 >A : Symbol(A, Decl(index.js, 2, 42), Decl(index.js, 4, 15))
 >B : Symbol(A.B, Decl(index.js, 3, 21))
 

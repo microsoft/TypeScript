@@ -45,7 +45,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
   Imported via "./Xy" from file 'b.ts'
@@ -72,6 +72,12 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/XY.ts
 /user/username/projects/myproject/link.ts
 /user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/xy.ts (used version)
+/user/username/projects/myproject/link.ts (used version)
+/user/username/projects/myproject/b.ts (used version)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -145,7 +151,7 @@ Output::
 [7m [0m [91m                  ~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library
+  Default library for target 'es3'
 XY.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
   Imported via "./Xy" from file 'b.ts'
@@ -154,7 +160,7 @@ link.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
 b.ts
   Matched by include pattern '**/*' in 'tsconfig.json'
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:00:42 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -169,6 +175,11 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/XY.ts
+/user/username/projects/myproject/b.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/xy.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
 
 WatchedFiles::
 /user/username/projects/myproject/tsconfig.json:
@@ -201,3 +212,4 @@ exports.a = 1;
 exports.b = 2;
 
 
+//// [/user/username/projects/myproject/b.js] file written with same contents

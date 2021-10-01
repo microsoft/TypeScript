@@ -47,7 +47,7 @@ class DeclarationsWalker {
         }
         if (s.name === "Array" || s.name === "ReadOnlyArray") {
             // we should process type argument instead
-            return this.processType((<any>type).typeArguments[0]);
+            return this.processType((type as any).typeArguments[0]);
         }
         else {
             const declarations = s.getDeclarations();
@@ -84,12 +84,12 @@ class DeclarationsWalker {
                 case ts.SyntaxKind.PropertySignature:
                 case ts.SyntaxKind.Parameter:
                 case ts.SyntaxKind.IndexSignature:
-                    if (((<ts.VariableDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration | ts.ParameterDeclaration | ts.PropertySignature | ts.MethodSignature | ts.IndexSignatureDeclaration>node.parent).type) === node) {
+                    if (((node.parent as ts.VariableDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration | ts.ParameterDeclaration | ts.PropertySignature | ts.MethodSignature | ts.IndexSignatureDeclaration).type) === node) {
                         this.processTypeOfNode(node);
                     }
                     break;
                 case ts.SyntaxKind.InterfaceDeclaration:
-                    const heritageClauses = (<ts.InterfaceDeclaration>node.parent).heritageClauses;
+                    const heritageClauses = (node.parent as ts.InterfaceDeclaration).heritageClauses;
                     if (heritageClauses) {
                         if (heritageClauses[0].token !== ts.SyntaxKind.ExtendsKeyword) {
                             throw new Error(`Unexpected kind of heritage clause: ${ts.SyntaxKind[heritageClauses[0].kind]}`);
@@ -106,7 +106,7 @@ class DeclarationsWalker {
 
     private processTypeOfNode(node: ts.Node): void {
         if (node.kind === ts.SyntaxKind.UnionType) {
-            for (const t of (<ts.UnionTypeNode>node).types) {
+            for (const t of (node as ts.UnionTypeNode).types) {
                 this.processTypeOfNode(t);
             }
         }
@@ -120,7 +120,7 @@ class DeclarationsWalker {
 }
 
 function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
-    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: false, types: <string[]>[], stripInternal: true };
+    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: false, types: [] as string[], stripInternal: true };
 
     /**
      * 1st pass - generate a program from protocol.ts and typescriptservices.d.ts and emit core version of protocol.d.ts with all internal members stripped

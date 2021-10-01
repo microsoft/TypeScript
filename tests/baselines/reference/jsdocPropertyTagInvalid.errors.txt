@@ -7,7 +7,7 @@
      * @property {sting} [x]
                   ~~~~~
 !!! error TS2552: Cannot find name 'sting'. Did you mean 'String'?
-!!! related TS2728 /.ts/lib.es5.d.ts:527:13: 'String' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:530:13: 'String' is declared here.
      */
     
     /** @param {MyType} p  */

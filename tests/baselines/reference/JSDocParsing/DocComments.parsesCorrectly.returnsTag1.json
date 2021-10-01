@@ -9,7 +9,7 @@
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
-            "end": 25,
+            "end": 28,
             "modifierFlagsCache": 0,
             "transformFlags": 0,
             "tagName": {
@@ -37,7 +37,7 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 25,
+        "end": 28,
         "hasTrailingComma": false,
         "transformFlags": 0
     }

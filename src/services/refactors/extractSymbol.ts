@@ -70,7 +70,7 @@ namespace ts.refactor.extractSymbol {
         let i = 0;
         for (const { functionExtraction, constantExtraction } of extractions) {
             const description = functionExtraction.description;
-            if(refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)){
+            if (refactorKindBeginsWith(extractFunctionAction.kind, requestedRefactor)) {
                 if (functionExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
@@ -94,8 +94,7 @@ namespace ts.refactor.extractSymbol {
                 }
             }
 
-            // Skip these since we don't have a way to report errors yet
-            if(refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
+            if (refactorKindBeginsWith(extractConstantAction.kind, requestedRefactor)) {
                 if (constantExtraction.errors.length === 0) {
                     // Don't issue refactorings with duplicated names.
                     // Scopes come back in "innermost first" order, so extractions will
@@ -216,7 +215,6 @@ namespace ts.refactor.extractSymbol {
         export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
         export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
         export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
-        export const cannotExtractToOtherFunctionLike = createMessage("Cannot extract method to a function-like scope that is not a function");
         export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
         export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
     }
@@ -265,24 +263,30 @@ namespace ts.refactor.extractSymbol {
     /**
      * getRangeToExtract takes a span inside a text file and returns either an expression or an array
      * of statements representing the minimum set of nodes needed to extract the entire span. This
-     * process may fail, in which case a set of errors is returned instead (these are currently
-     * not shown to the user, but can be used by us diagnostically)
+     * process may fail, in which case a set of errors is returned instead. These errors are shown to
+     * users if they have the provideRefactorNotApplicableReason option set.
      */
     // exported only for tests
-    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, considerEmptySpans = true): RangeToExtract {
+    export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoked = true): RangeToExtract {
         const { length } = span;
-        if (length === 0 && !considerEmptySpans) {
+        if (length === 0 && !invoked) {
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractEmpty)] };
         }
-        const cursorRequest = length === 0 && considerEmptySpans;
+        const cursorRequest = length === 0 && invoked;
+
+        const startToken = findFirstNonJsxWhitespaceToken(sourceFile, span.start);
+        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
+        /* If the refactoring command is invoked through a keyboard action it's safe to assume that the user is actively looking for
+        refactoring actions at the span location. As they may not know the exact range that will trigger a refactoring, we expand the
+        searched span to cover a real node range making it more likely that something useful will show up. */
+        const adjustedSpan = startToken && endToken && invoked ? getAdjustedSpanFromNodes(startToken, endToken, sourceFile) : span;
 
         // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
         // This may fail (e.g. you select two statements in the root of a source file)
-        const startToken = getTokenAtPosition(sourceFile, span.start);
-        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, span);
+        const start = cursorRequest ? getExtractableParent(startToken): getParentNodeInSpan(startToken, sourceFile, adjustedSpan);
+
         // Do the same for the ending position
-        const endToken = findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span));
-        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, span);
+        const end = cursorRequest ? start : getParentNodeInSpan(endToken, sourceFile, adjustedSpan);
 
         const declarations: Symbol[] = [];
 
@@ -293,6 +297,10 @@ namespace ts.refactor.extractSymbol {
         if (!start || !end) {
             // cannot find either start or end node
             return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractRange)] };
+        }
+
+        if (isJSDoc(start)) {
+            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
         if (start.parent !== end.parent) {
@@ -330,10 +338,6 @@ namespace ts.refactor.extractSymbol {
             }
 
             return { targetRange: { range: statements, facts: rangeFacts, declarations } };
-        }
-
-        if (isJSDoc(start)) {
-            return { errors: [createFileDiagnostic(sourceFile, span.start, length, Messages.cannotExtractJSDoc)] };
         }
 
         if (isReturnStatement(start) && !start.expression) {
@@ -394,7 +398,7 @@ namespace ts.refactor.extractSymbol {
             let current: Node = nodeToCheck;
             while (current !== containingClass) {
                 if (current.kind === SyntaxKind.PropertyDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                     break;
@@ -407,7 +411,7 @@ namespace ts.refactor.extractSymbol {
                     break;
                 }
                 else if (current.kind === SyntaxKind.MethodDeclaration) {
-                    if (hasSyntacticModifier(current, ModifierFlags.Static)) {
+                    if (isStatic(current)) {
                         rangeFacts |= RangeFacts.InStaticRegion;
                     }
                 }
@@ -534,7 +538,7 @@ namespace ts.refactor.extractSymbol {
                         permittedJumps = PermittedJumps.None;
                         break;
                     case SyntaxKind.Block:
-                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (<TryStatement>node.parent).finallyBlock === node) {
+                        if (node.parent && node.parent.kind === SyntaxKind.TryStatement && (node.parent as TryStatement).finallyBlock === node) {
                             // allow unconditional returns from finally blocks
                             permittedJumps = PermittedJumps.Return;
                         }
@@ -558,7 +562,7 @@ namespace ts.refactor.extractSymbol {
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
                     case SyntaxKind.LabeledStatement: {
-                        const label = (<LabeledStatement>node).label;
+                        const label = (node as LabeledStatement).label;
                         (seenLabels || (seenLabels = [])).push(label.escapedText);
                         forEachChild(node, visit);
                         seenLabels.pop();
@@ -566,7 +570,7 @@ namespace ts.refactor.extractSymbol {
                     }
                     case SyntaxKind.BreakStatement:
                     case SyntaxKind.ContinueStatement: {
-                        const label = (<BreakStatement | ContinueStatement>node).label;
+                        const label = (node as BreakStatement | ContinueStatement).label;
                         if (label) {
                             if (!contains(seenLabels, label.escapedText)) {
                                 // attempts to jump to label that is not in range to be extracted
@@ -603,6 +607,19 @@ namespace ts.refactor.extractSymbol {
                 permittedJumps = savedPermittedJumps;
             }
         }
+    }
+
+    /**
+     * Includes the final semicolon so that the span covers statements in cases where it would otherwise
+     * only cover the declaration list.
+     */
+    function getAdjustedSpanFromNodes(startNode: Node, endNode: Node, sourceFile: SourceFile): TextSpan {
+        const start = startNode.getStart(sourceFile);
+        let end = endNode.getEnd();
+        if (sourceFile.text.charCodeAt(end) === CharacterCodes.semicolon) {
+            end++;
+        }
+        return { start, length: end - start };
     }
 
     function getStatementOrExpressionRange(node: Node): Statement[] | Expression | undefined {
@@ -1124,7 +1141,7 @@ namespace ts.refactor.extractSymbol {
             ? undefined
             : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
 
-        let initializer = transformConstantInitializer(node, substitutions);
+        let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
         ({ variableType, initializer } = transformFunctionInitializerAndType(variableType, initializer));
 
@@ -1358,7 +1375,7 @@ namespace ts.refactor.extractSymbol {
         }
         let returnValueProperty: string | undefined;
         let ignoreReturns = false;
-        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(<Expression>body)]);
+        const statements = factory.createNodeArray(isBlock(body) ? body.statements.slice(0) : [isStatement(body) ? body : factory.createReturnStatement(skipParentheses(body as Expression))]);
         // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
         if (hasWritesOrVariableDeclarations || substitutions.size) {
             const rewrittenStatements = visitNodes(statements, visitor).slice();
@@ -1587,7 +1604,7 @@ namespace ts.refactor.extractSymbol {
         const expression = !isReadonlyArray(targetRange.range)
             ? targetRange.range
             : targetRange.range.length === 1 && isExpressionStatement(targetRange.range[0])
-                ? (targetRange.range[0] as ExpressionStatement).expression
+                ? targetRange.range[0].expression
                 : undefined;
 
         let expressionDiagnostic: Diagnostic | undefined;
@@ -1606,10 +1623,7 @@ namespace ts.refactor.extractSymbol {
             usagesPerScope.push({ usages: new Map<string, UsageEntry>(), typeParameterUsages: new Map<string, TypeParameter>(), substitutions: new Map<string, Expression>() });
             substitutionsPerScope.push(new Map<string, Expression>());
 
-            functionErrorsPerScope.push(
-                isFunctionLikeDeclaration(scope) && scope.kind !== SyntaxKind.FunctionDeclaration
-                    ? [createDiagnosticForNode(scope, Messages.cannotExtractToOtherFunctionLike)]
-                    : []);
+            functionErrorsPerScope.push([]);
 
             const constantErrors = [];
             if (expressionDiagnostic) {
@@ -1930,8 +1944,8 @@ namespace ts.refactor.extractSymbol {
                 return undefined;
             }
             return isTypeNode
-                ? factory.createQualifiedName(<EntityName>prefix, factory.createIdentifier(symbol.name))
-                : factory.createPropertyAccessExpression(<Expression>prefix, symbol.name);
+                ? factory.createQualifiedName(prefix as EntityName, factory.createIdentifier(symbol.name))
+                : factory.createPropertyAccessExpression(prefix as Expression, symbol.name);
         }
     }
 
@@ -1984,6 +1998,6 @@ namespace ts.refactor.extractSymbol {
     }
 
     function isInJSXContent(node: Node) {
-        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && isJsxElement(node.parent);
+        return (isJsxElement(node) || isJsxSelfClosingElement(node) || isJsxFragment(node)) && (isJsxElement(node.parent) || isJsxFragment(node.parent));
     }
 }

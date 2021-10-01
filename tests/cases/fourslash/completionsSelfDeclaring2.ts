@@ -9,10 +9,12 @@
 
 verify.completions({
   marker: "1",
-  exact: completion.globalsPlus(["f1", "f2"])
+  exact: completion.globalsPlus(["f1", "f2"]),
+  isNewIdentifierLocation: true
 });
 
 verify.completions({
   marker: "2",
-  exact: ["xyz"]
+  exact: ["xyz"],
+  isNewIdentifierLocation: false
 });

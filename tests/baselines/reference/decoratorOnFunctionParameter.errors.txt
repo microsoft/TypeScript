@@ -1,0 +1,15 @@
+tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts(5,17): error TS1433: Decorators may not be applied to 'this' parameters.
+tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts(6,17): error TS1433: Decorators may not be applied to 'this' parameters.
+
+
+==== tests/cases/conformance/decorators/invalid/decoratorOnFunctionParameter.ts (2 errors) ====
+    declare const dec: any;
+    
+    class C { n = true; }
+    
+    function direct(@dec this: C) { return this.n; }
+                    ~~~~
+!!! error TS1433: Decorators may not be applied to 'this' parameters.
+    function called(@dec() this: C) { return this.n; }
+                    ~~~~~~
+!!! error TS1433: Decorators may not be applied to 'this' parameters.

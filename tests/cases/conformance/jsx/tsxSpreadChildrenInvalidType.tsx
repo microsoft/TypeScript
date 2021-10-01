@@ -1,4 +1,5 @@
 // @jsx: react
+// @target: es2015,es5
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {

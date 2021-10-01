@@ -32,9 +32,8 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(90,7): error TS2322
   Type 'undefined' is not assignable to type 'string'.
 tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(98,5): error TS2322: Type 'undefined' is not assignable to type '{ [key: string]: string; a: string; b: string; }[Key]'.
   Type 'undefined' is not assignable to type 'string'.
-tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS2322: Type '{ [key: string]: string; a: string; b: string; }[Key]' is not assignable to type 'string'.
-  Type 'string | undefined' is not assignable to type 'string'.
-    Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts (31 errors) ====
@@ -202,9 +201,8 @@ tests/cases/conformance/pedantic/noUncheckedIndexedAccess.ts(99,11): error TS232
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
         const v: string = myRecord2[key]; // Should error
               ~
-!!! error TS2322: Type '{ [key: string]: string; a: string; b: string; }[Key]' is not assignable to type 'string'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
     };
     
     

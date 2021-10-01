@@ -68,7 +68,7 @@ export namespace myTypes {
         /**
          * - Prop 1.
          */
-        prop1: typeA;
+        prop1: myTypes.typeA;
         /**
          * - Prop 2.
          */

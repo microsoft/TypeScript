@@ -56,7 +56,7 @@ namespace ts {
                 currentFileState.utilizedImplicitRuntimeImports.set(importSource, specifierSourceImports);
             }
             const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
-            const specifier = factory.createImportSpecifier(factory.createIdentifier(name), generatedName);
+            const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
             generatedName.generatedImportReference = specifier;
             specifierSourceImports.set(name, specifier);
             return generatedName;
@@ -85,7 +85,7 @@ namespace ts {
                 for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                     if (isExternalModule(node)) {
                         // Add `import` statement
-                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource));
+                        const importStatement = factory.createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                         setParentRecursive(importStatement, /*incremental*/ false);
                         statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                     }
@@ -126,16 +126,16 @@ namespace ts {
         function visitorWorker(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.JsxElement:
-                    return visitJsxElement(<JsxElement>node, /*isChild*/ false);
+                    return visitJsxElement(node as JsxElement, /*isChild*/ false);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ false);
+                    return visitJsxSelfClosingElement(node as JsxSelfClosingElement, /*isChild*/ false);
 
                 case SyntaxKind.JsxFragment:
-                    return visitJsxFragment(<JsxFragment>node, /*isChild*/ false);
+                    return visitJsxFragment(node as JsxFragment, /*isChild*/ false);
 
                 case SyntaxKind.JsxExpression:
-                    return visitJsxExpression(<JsxExpression>node);
+                    return visitJsxExpression(node as JsxExpression);
 
                 default:
                     return visitEachChild(node, visitor, context);
@@ -292,26 +292,38 @@ namespace ts {
                 // When there are no attributes, React wants "null"
             }
             else {
-                // Map spans of JsxAttribute nodes into object literals and spans
-                // of JsxSpreadAttribute nodes into expressions.
-                const segments = flatten<Expression | ObjectLiteralExpression>(
-                    spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                        ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                    )
-                );
-
-                if (isJsxSpreadAttribute(attrs[0])) {
-                    // We must always emit at least one object literal before a spread
-                    // argument.factory.createObjectLiteral
-                    segments.unshift(factory.createObjectLiteralExpression());
+                const target = getEmitScriptTarget(compilerOptions);
+                if (target && target >= ScriptTarget.ES2018) {
+                    objectProperties = factory.createObjectLiteralExpression(
+                        flatten<SpreadAssignment | PropertyAssignment>(
+                            spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
+                                isSpread ? map(attrs, transformJsxSpreadAttributeToSpreadAssignment) : map(attrs, transformJsxAttributeToObjectLiteralElement)
+                            )
+                        )
+                    );
                 }
+                else {
+                    // Map spans of JsxAttribute nodes into object literals and spans
+                    // of JsxSpreadAttribute nodes into expressions.
+                    const segments = flatten<Expression | ObjectLiteralExpression>(
+                        spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+                            ? map(attrs, transformJsxSpreadAttributeToExpression)
+                            : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                        )
+                    );
 
-                // Either emit one big object literal (no spread attribs), or
-                // a call to the __assign helper.
-                objectProperties = singleOrUndefined(segments);
-                if (!objectProperties) {
-                    objectProperties = emitHelpers().createAssignHelper(segments);
+                    if (isJsxSpreadAttribute(attrs[0])) {
+                        // We must always emit at least one object literal before a spread
+                        // argument.factory.createObjectLiteral
+                        segments.unshift(factory.createObjectLiteralExpression());
+                    }
+
+                    // Either emit one big object literal (no spread attribs), or
+                    // a call to the __assign helper.
+                    objectProperties = singleOrUndefined(segments);
+                    if (!objectProperties) {
+                        objectProperties = emitHelpers().createAssignHelper(segments);
+                    }
                 }
             }
 
@@ -374,6 +386,10 @@ namespace ts {
             }
 
             return element;
+        }
+
+        function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
+            return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
@@ -531,7 +547,8 @@ namespace ts {
         }
 
         function visitJsxExpression(node: JsxExpression) {
-            return visitNode(node.expression, visitor, isExpression);
+            const expression = visitNode(node.expression, visitor, isExpression);
+            return node.dotDotDotToken ? factory.createSpreadElement(expression!) : expression;
         }
     }
 

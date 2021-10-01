@@ -1,0 +1,518 @@
+=== tests/cases/conformance/types/literal/templateLiteralTypes3.ts ===
+// Inference from template literal type to template literal type
+
+type Foo1<T> = T extends `*${infer U}*` ? U : never;
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 2, 10))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 2, 10))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 2, 34))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 2, 34))
+
+type T01 = Foo1<'hello'>;
+>T01 : Symbol(T01, Decl(templateLiteralTypes3.ts, 2, 52))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T02 = Foo1<'*hello*'>;
+>T02 : Symbol(T02, Decl(templateLiteralTypes3.ts, 4, 25))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T03 = Foo1<'**hello**'>;
+>T03 : Symbol(T03, Decl(templateLiteralTypes3.ts, 5, 27))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T04 = Foo1<`*${string}*`>;
+>T04 : Symbol(T04, Decl(templateLiteralTypes3.ts, 6, 29))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T05 = Foo1<`*${number}*`>;
+>T05 : Symbol(T05, Decl(templateLiteralTypes3.ts, 7, 31))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T06 = Foo1<`*${bigint}*`>;
+>T06 : Symbol(T06, Decl(templateLiteralTypes3.ts, 8, 31))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T07 = Foo1<`*${any}*`>;
+>T07 : Symbol(T07, Decl(templateLiteralTypes3.ts, 9, 31))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T08 = Foo1<`**${string}**`>;
+>T08 : Symbol(T08, Decl(templateLiteralTypes3.ts, 10, 28))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T09 = Foo1<`**${string}**${string}**`>;
+>T09 : Symbol(T09, Decl(templateLiteralTypes3.ts, 11, 33))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T10 = Foo1<`**${'a' | 'b' | 'c'}**`>;
+>T10 : Symbol(T10, Decl(templateLiteralTypes3.ts, 12, 44))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+type T11 = Foo1<`**${boolean}**${boolean}**`>;
+>T11 : Symbol(T11, Decl(templateLiteralTypes3.ts, 13, 42))
+>Foo1 : Symbol(Foo1, Decl(templateLiteralTypes3.ts, 0, 0))
+
+declare function foo1<V extends string>(arg: `*${V}*`): V;
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 16, 22))
+>arg : Symbol(arg, Decl(templateLiteralTypes3.ts, 16, 40))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 16, 22))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 16, 22))
+
+function f1<T extends string>(s: string, n: number, b: boolean, t: T) {
+>f1 : Symbol(f1, Decl(templateLiteralTypes3.ts, 16, 58))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 18, 12))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 18, 30))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 18, 40))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 18, 51))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 18, 63))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 18, 12))
+
+    let x1 = foo1('hello');  // Error
+>x1 : Symbol(x1, Decl(templateLiteralTypes3.ts, 19, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+
+    let x2 = foo1('*hello*');
+>x2 : Symbol(x2, Decl(templateLiteralTypes3.ts, 20, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+
+    let x3 = foo1('**hello**');
+>x3 : Symbol(x3, Decl(templateLiteralTypes3.ts, 21, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+
+    let x4 = foo1(`*${s}*` as const);
+>x4 : Symbol(x4, Decl(templateLiteralTypes3.ts, 22, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 18, 30))
+>const : Symbol(const)
+
+    let x5 = foo1(`*${n}*` as const);
+>x5 : Symbol(x5, Decl(templateLiteralTypes3.ts, 23, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 18, 40))
+>const : Symbol(const)
+
+    let x6 = foo1(`*${b}*` as const);
+>x6 : Symbol(x6, Decl(templateLiteralTypes3.ts, 24, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 18, 51))
+>const : Symbol(const)
+
+    let x7 = foo1(`*${t}*` as const);
+>x7 : Symbol(x7, Decl(templateLiteralTypes3.ts, 25, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 18, 63))
+>const : Symbol(const)
+
+    let x8 = foo1(`**${s}**` as const);
+>x8 : Symbol(x8, Decl(templateLiteralTypes3.ts, 26, 7))
+>foo1 : Symbol(foo1, Decl(templateLiteralTypes3.ts, 14, 46))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 18, 30))
+>const : Symbol(const)
+}
+
+// Inference to a placeholder immediately followed by another placeholder infers a single
+// character or placeholder from the source.
+
+type Parts<T> =
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 32, 11))
+
+    T extends '' ? [] :
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 32, 11))
+
+    T extends `${infer Head}${infer Tail}` ? [Head, ...Parts<Tail>] :
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 32, 11))
+>Head : Symbol(Head, Decl(templateLiteralTypes3.ts, 34, 22))
+>Tail : Symbol(Tail, Decl(templateLiteralTypes3.ts, 34, 35))
+>Head : Symbol(Head, Decl(templateLiteralTypes3.ts, 34, 22))
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+>Tail : Symbol(Tail, Decl(templateLiteralTypes3.ts, 34, 35))
+
+    never;
+
+type T20 = Parts<`abc`>;
+>T20 : Symbol(T20, Decl(templateLiteralTypes3.ts, 35, 10))
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+
+type T21 = Parts<`*${string}*`>;
+>T21 : Symbol(T21, Decl(templateLiteralTypes3.ts, 37, 24))
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+
+type T22 = Parts<`*${number}*`>;
+>T22 : Symbol(T22, Decl(templateLiteralTypes3.ts, 38, 32))
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+
+type T23 = Parts<`*${number}*${string}*${bigint}*`>;
+>T23 : Symbol(T23, Decl(templateLiteralTypes3.ts, 39, 32))
+>Parts : Symbol(Parts, Decl(templateLiteralTypes3.ts, 27, 1))
+
+function f2() {
+>f2 : Symbol(f2, Decl(templateLiteralTypes3.ts, 40, 52))
+
+    let x: `${number}.${number}.${number}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1';
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `1.1.${number}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `1.${number}.1`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `1.${number}.${number}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `${number}.1.1`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `${number}.1.${number}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `${number}.${number}.1`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+
+    x = '1.1.1' as `${number}.${number}.${number}`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 43, 7))
+}
+
+function f3<T extends string>(s: string, n: number, b: boolean, t: T) {
+>f3 : Symbol(f3, Decl(templateLiteralTypes3.ts, 52, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 54, 12))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 54, 30))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 54, 40))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 54, 51))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 54, 63))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 54, 12))
+
+    let x: `*${string}*`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+
+    x = 'hello';  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+
+    x = '*hello*';
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+
+    x = '**hello**';
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+
+    x = `*${s}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 54, 30))
+>const : Symbol(const)
+
+    x = `*${n}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 54, 40))
+>const : Symbol(const)
+
+    x = `*${b}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 54, 51))
+>const : Symbol(const)
+
+    x = `*${t}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 54, 63))
+>const : Symbol(const)
+
+    x = `**${s}**` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 55, 7))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 54, 30))
+>const : Symbol(const)
+}
+
+function f4<T extends number>(s: string, n: number, b: boolean, t: T) {
+>f4 : Symbol(f4, Decl(templateLiteralTypes3.ts, 64, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 66, 12))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 66, 30))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 66, 40))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 66, 51))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 66, 63))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 66, 12))
+
+    let x: `*${number}*`;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+
+    x = '123';  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+
+    x = '*123*';
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+
+    x = '**123**';  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+
+    x = `*${s}*` as const;  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+>s : Symbol(s, Decl(templateLiteralTypes3.ts, 66, 30))
+>const : Symbol(const)
+
+    x = `*${n}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+>n : Symbol(n, Decl(templateLiteralTypes3.ts, 66, 40))
+>const : Symbol(const)
+
+    x = `*${b}*` as const;  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 66, 51))
+>const : Symbol(const)
+
+    x = `*${t}*` as const;
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 67, 7))
+>t : Symbol(t, Decl(templateLiteralTypes3.ts, 66, 63))
+>const : Symbol(const)
+}
+
+// Repro from #43060
+
+type A<T> = T extends `${infer U}.${infer V}` ? U | V : never
+>A : Symbol(A, Decl(templateLiteralTypes3.ts, 75, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 79, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 79, 7))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 79, 30))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 79, 41))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 79, 30))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 79, 41))
+
+type B = A<`test.1024`>;  // "test" | "1024"
+>B : Symbol(B, Decl(templateLiteralTypes3.ts, 79, 61))
+>A : Symbol(A, Decl(templateLiteralTypes3.ts, 75, 1))
+
+type C = A<`test.${number}`>;  // "test" | `${number}`
+>C : Symbol(C, Decl(templateLiteralTypes3.ts, 80, 24))
+>A : Symbol(A, Decl(templateLiteralTypes3.ts, 75, 1))
+
+type D<T> = T extends `${infer U}.${number}` ? U : never
+>D : Symbol(D, Decl(templateLiteralTypes3.ts, 81, 29))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 83, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 83, 7))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 83, 30))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 83, 30))
+
+type E = D<`test.1024`>;  // "test"
+>E : Symbol(E, Decl(templateLiteralTypes3.ts, 83, 56))
+>D : Symbol(D, Decl(templateLiteralTypes3.ts, 81, 29))
+
+type F = D<`test.${number}`>;  // "test"
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 84, 24))
+>D : Symbol(D, Decl(templateLiteralTypes3.ts, 81, 29))
+
+type G<T> = T extends `${infer U}.${infer V}` ? U | V : never
+>G : Symbol(G, Decl(templateLiteralTypes3.ts, 85, 29))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 87, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 87, 7))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 87, 30))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 87, 41))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 87, 30))
+>V : Symbol(V, Decl(templateLiteralTypes3.ts, 87, 41))
+
+type H = G<`test.hoge`>;  // "test" | "hoge"
+>H : Symbol(H, Decl(templateLiteralTypes3.ts, 87, 61))
+>G : Symbol(G, Decl(templateLiteralTypes3.ts, 85, 29))
+
+type I = G<`test.${string}`>;  // string ("test" | string reduces to string)
+>I : Symbol(I, Decl(templateLiteralTypes3.ts, 88, 24))
+>G : Symbol(G, Decl(templateLiteralTypes3.ts, 85, 29))
+
+type J<T> = T extends `${infer U}.${string}` ? U : never
+>J : Symbol(J, Decl(templateLiteralTypes3.ts, 89, 29))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 91, 7))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 91, 7))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 91, 30))
+>U : Symbol(U, Decl(templateLiteralTypes3.ts, 91, 30))
+
+type K = J<`test.hoge`>;  // "test"
+>K : Symbol(K, Decl(templateLiteralTypes3.ts, 91, 56))
+>J : Symbol(J, Decl(templateLiteralTypes3.ts, 89, 29))
+
+type L = J<`test.${string}`>;  // "test""
+>L : Symbol(L, Decl(templateLiteralTypes3.ts, 92, 24))
+>J : Symbol(J, Decl(templateLiteralTypes3.ts, 89, 29))
+
+// Repro from #43243
+
+type Templated = `${string} ${string}`;
+>Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
+
+const value1: string = "abc";
+>value1 : Symbol(value1, Decl(templateLiteralTypes3.ts, 99, 5))
+
+const templated1: Templated = `${value1} abc` as const;
+>templated1 : Symbol(templated1, Decl(templateLiteralTypes3.ts, 100, 5))
+>Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
+>value1 : Symbol(value1, Decl(templateLiteralTypes3.ts, 99, 5))
+>const : Symbol(const)
+
+// Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
+
+const value2 = "abc";
+>value2 : Symbol(value2, Decl(templateLiteralTypes3.ts, 103, 5))
+
+const templated2: Templated = `${value2} abc` as const;
+>templated2 : Symbol(templated2, Decl(templateLiteralTypes3.ts, 104, 5))
+>Templated : Symbol(Templated, Decl(templateLiteralTypes3.ts, 93, 29))
+>value2 : Symbol(value2, Decl(templateLiteralTypes3.ts, 103, 5))
+>const : Symbol(const)
+
+// Repro from #43620
+
+type Prefixes = "foo" | "bar";
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+
+type AllPrefixData = "foo:baz" | "bar:baz";
+>AllPrefixData : Symbol(AllPrefixData, Decl(templateLiteralTypes3.ts, 108, 30))
+
+type PrefixData<P extends Prefixes> = `${P}:baz`;
+>PrefixData : Symbol(PrefixData, Decl(templateLiteralTypes3.ts, 110, 43))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 112, 16))
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 112, 16))
+
+interface ITest<P extends Prefixes, E extends AllPrefixData = PrefixData<P>> {
+>ITest : Symbol(ITest, Decl(templateLiteralTypes3.ts, 112, 49))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 114, 16))
+>Prefixes : Symbol(Prefixes, Decl(templateLiteralTypes3.ts, 104, 55))
+>E : Symbol(E, Decl(templateLiteralTypes3.ts, 114, 35))
+>AllPrefixData : Symbol(AllPrefixData, Decl(templateLiteralTypes3.ts, 108, 30))
+>PrefixData : Symbol(PrefixData, Decl(templateLiteralTypes3.ts, 110, 43))
+>P : Symbol(P, Decl(templateLiteralTypes3.ts, 114, 16))
+
+    blah: string;
+>blah : Symbol(ITest.blah, Decl(templateLiteralTypes3.ts, 114, 78))
+}
+
+// Repro from #45906
+
+type Schema = { a: { b: { c: number } } };
+>Schema : Symbol(Schema, Decl(templateLiteralTypes3.ts, 116, 1))
+>a : Symbol(a, Decl(templateLiteralTypes3.ts, 120, 15))
+>b : Symbol(b, Decl(templateLiteralTypes3.ts, 120, 20))
+>c : Symbol(c, Decl(templateLiteralTypes3.ts, 120, 25))
+
+declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
+>chain : Symbol(chain, Decl(templateLiteralTypes3.ts, 120, 42))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>Schema : Symbol(Schema, Decl(templateLiteralTypes3.ts, 116, 1))
+>field : Symbol(field, Decl(templateLiteralTypes3.ts, 122, 47))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+>F : Symbol(F, Decl(templateLiteralTypes3.ts, 122, 23))
+
+chain("a");
+>chain : Symbol(chain, Decl(templateLiteralTypes3.ts, 120, 42))
+
+// Repro from #46125
+
+function ff1(x: `foo-${string}`, y: `${string}-bar`, z: `baz-${string}`) {
+>ff1 : Symbol(ff1, Decl(templateLiteralTypes3.ts, 124, 11))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 128, 32))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 128, 52))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 128, 32))
+
+        x;  // `foo-${string}`
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+    }
+    if (x === z) {  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 128, 13))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 128, 52))
+    }
+}
+
+function ff2<T extends string>(x: `foo-${T}`, y: `${T}-bar`, z: `baz-${T}`) {
+>ff2 : Symbol(ff2, Decl(templateLiteralTypes3.ts, 134, 1))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 136, 45))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 136, 60))
+>T : Symbol(T, Decl(templateLiteralTypes3.ts, 136, 13))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 136, 45))
+
+        x;  // `foo-${T}`
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+    }
+    if (x === z) {  // Error
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 136, 31))
+>z : Symbol(z, Decl(templateLiteralTypes3.ts, 136, 60))
+    }
+}
+
+function ff3(x: string, y: `foo-${string}` | 'bar') {
+>ff3 : Symbol(ff3, Decl(templateLiteralTypes3.ts, 142, 1))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 144, 23))
+
+    if (x === y) {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 144, 23))
+
+        x;  // `foo-${string}` | 'bar'
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 144, 13))
+    }
+}
+
+function ff4(x: string, y: `foo-${string}`) {
+>ff4 : Symbol(ff4, Decl(templateLiteralTypes3.ts, 148, 1))
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+
+    if (x === 'foo-test') {
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+
+        x;  // 'foo-test'
+>x : Symbol(x, Decl(templateLiteralTypes3.ts, 150, 13))
+    }
+    if (y === 'foo-test') {
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+
+        y;  // 'foo-test'
+>y : Symbol(y, Decl(templateLiteralTypes3.ts, 150, 23))
+    }
+}
+
+// Repro from #46045
+
+type Action =
+>Action : Symbol(Action, Decl(templateLiteralTypes3.ts, 157, 1))
+
+    | { type: `${string}_REQUEST` }
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7))
+
+    | { type: `${string}_SUCCESS`, response: string };
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+
+function reducer(action: Action) {
+>reducer : Symbol(reducer, Decl(templateLiteralTypes3.ts, 163, 54))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>Action : Symbol(Action, Decl(templateLiteralTypes3.ts, 157, 1))
+
+    if (action.type === 'FOO_SUCCESS') {
+>action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 162, 7), Decl(templateLiteralTypes3.ts, 163, 7))
+
+        action.type;
+>action.type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>type : Symbol(type, Decl(templateLiteralTypes3.ts, 163, 7))
+
+        action.response;
+>action.response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+>action : Symbol(action, Decl(templateLiteralTypes3.ts, 165, 17))
+>response : Symbol(response, Decl(templateLiteralTypes3.ts, 163, 34))
+    }
+}
+

@@ -25,27 +25,26 @@
 verify.completions({
     marker: "1",
     includes: [
-      { name: "Foo", kind: "interface", kindModifiers: "deprecated" }
+      { name: "Foo", kind: "interface", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
     ]
 }, {
     marker: "2",
     includes: [
-      { name: "bar", kind: "method", kindModifiers: "deprecated" }
+      { name: "bar", kind: "method", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
     ]
 }, {
     marker: "3",
     includes: [
-      { name: "prop", kind: "property", kindModifiers: "deprecated" }
+      { name: "prop", kind: "property", kindModifiers: "deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
     ]
 }, {
     marker: "4",
     includes: [
-      { name: "foobar", kind: "function", kindModifiers: "export,deprecated" }
+      { name: "foobar", kind: "function", kindModifiers: "export,deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
     ]
 }, {
     marker: "5",
     includes: [
-      { name: "foobar", kind: "alias", kindModifiers: "export,deprecated" }
+      { name: "foobar", kind: "alias", kindModifiers: "export,deprecated", sortText: completion.SortText.DeprecatedLocationPriority }
     ]
-}
-);
+});

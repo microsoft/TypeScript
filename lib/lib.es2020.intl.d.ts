@@ -21,13 +21,12 @@ and limitations under the License.
 declare namespace Intl {
 
     /**
-     * [BCP 47 language tag](http://tools.ietf.org/html/rfc5646) definition.
+     * [Unicode BCP 47 Locale Identifiers](https://unicode.org/reports/tr35/#Unicode_Language_and_Locale_Identifiers) definition.
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl#locales_argument).
      *
-     * [Wikipedia](https://en.wikipedia.org/wiki/IETF_language_tag).
      */
-    type BCP47LanguageTag = string;
+    type UnicodeBCP47LocaleIdentifier = string;
 
     /**
      * Unit to use in the relative time internationalized message.
@@ -98,7 +97,7 @@ declare namespace Intl {
      * [Specification](https://tc39.es/ecma402/#table-relativetimeformat-resolvedoptions-properties)
      */
     interface ResolvedRelativeTimeFormatOptions {
-        locale: BCP47LanguageTag;
+        locale: UnicodeBCP47LocaleIdentifier;
         style: RelativeTimeFormatStyle;
         numeric: RelativeTimeFormatNumeric;
         numberingSystem: string;
@@ -241,7 +240,7 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-intl-relativetimeformat-constructor).
          */
         new(
-            locales?: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
         ): RelativeTimeFormat;
 
@@ -277,20 +276,34 @@ declare namespace Intl {
          * [Specification](https://tc39.es/ecma402/#sec-Intl.RelativeTimeFormat.supportedLocalesOf).
          */
         supportedLocalesOf(
-            locales: BCP47LanguageTag | BCP47LanguageTag[],
+            locales?: UnicodeBCP47LocaleIdentifier | UnicodeBCP47LocaleIdentifier[],
             options?: RelativeTimeFormatOptions,
-        ): BCP47LanguageTag[];
+        ): UnicodeBCP47LocaleIdentifier[];
     };
 
     interface NumberFormatOptions {
+        compactDisplay?: string;
         notation?: string;
+        signDisplay?: string;
         unit?: string;
         unitDisplay?: string;
     }
 
     interface ResolvedNumberFormatOptions {
+        compactDisplay?: string;
         notation?: string;
+        signDisplay?: string;
         unit?: string;
         unitDisplay?: string;
+    }
+
+    interface DateTimeFormatOptions {
+        dateStyle?: "full" | "long" | "medium" | "short";
+        timeStyle?: "full" | "long" | "medium" | "short";
+        calendar?: string;
+        dayPeriod?: "narrow" | "short" | "long";
+        numberingSystem?: string;
+        hourCycle?: "h11" | "h12" | "h23" | "h24";
+        fractionalSecondDigits?: 0 | 1 | 2 | 3;
     }
 }

@@ -302,6 +302,15 @@ namespace ts.projectSystem {
             assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
             assert.isDefined(projectService.configuredProjects.get("/packages/a/tsconfig.json")!.getPackageJsonAutoImportProvider());
         });
+
+        it("Can use the same document registry bucket key as main program", () => {
+            for (const option of sourceFileAffectingCompilerOptions) {
+                assert(
+                    !hasProperty(server.AutoImportProviderProject.compilerOptionsOverrides, option.name),
+                    `'${option.name}' may cause AutoImportProviderProject not to share source files with main program`
+                );
+            }
+        });
     });
 
     function setup(files: File[]) {

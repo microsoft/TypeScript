@@ -21,7 +21,7 @@ namespace ts.codefix {
         const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword, "This token should be an ImportKeyword");
         Debug.assert(token.parent.kind === SyntaxKind.ImportType, "Token parent should be an ImportType");
-        return <ImportTypeNode>token.parent;
+        return token.parent as ImportTypeNode;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {

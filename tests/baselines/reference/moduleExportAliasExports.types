@@ -22,7 +22,7 @@ exports.everywhere = 2
 module.exports = exports
 >module.exports = exports : typeof import("tests/cases/conformance/salsa/Eloquent")
 >module.exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->module : { "\"tests/cases/conformance/salsa/Eloquent\"": typeof import("tests/cases/conformance/salsa/Eloquent"); }
+>module : { exports: typeof import("tests/cases/conformance/salsa/Eloquent"); }
 >exports : typeof import("tests/cases/conformance/salsa/Eloquent")
 >exports : typeof import("tests/cases/conformance/salsa/Eloquent")
 

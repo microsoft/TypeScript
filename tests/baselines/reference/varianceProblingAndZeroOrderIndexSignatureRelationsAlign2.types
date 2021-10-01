@@ -142,11 +142,11 @@ type NeededInfo<MyNamespaceSchema = {}> = {
 };
 
 export type MyInfo = NeededInfo<ToB<{ initialize: any }>>;
->MyInfo : NeededInfo<ToB<{ initialize: any; }>>
+>MyInfo : MyInfo
 >initialize : any
 
 const tmp1: MyInfo = null!;
->tmp1 : NeededInfo<ToB<{ initialize: any; }>>
+>tmp1 : MyInfo
 >null! : never
 >null : null
 
@@ -161,5 +161,5 @@ class Server<X extends NeededInfo> {}
 
 export class MyServer extends Server<MyInfo> {} // not assignable error at `MyInfo`
 >MyServer : MyServer
->Server : Server<NeededInfo<ToB<{ initialize: any; }>>>
+>Server : Server<MyInfo>
 

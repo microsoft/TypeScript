@@ -10,7 +10,7 @@ declare let x0: keyof any;
 >x0 : string | number | symbol
 
 declare let x1: { [P in any]: Item };
->x1 : { [x: string]: Item; [x: number]: Item; }
+>x1 : { [x: string]: Item; [x: number]: Item; [x: symbol]: Item; }
 
 declare let x2: { [P in string]: Item };
 >x2 : { [x: string]: Item; }

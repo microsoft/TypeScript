@@ -1,6 +1,5 @@
 namespace ts {
     const brackets = createBracketsMap();
-    const syntheticParent: TextRange = { pos: -1, end: -1 };
 
     /*@internal*/
     export function isBuildInfoFile(file: string) {
@@ -90,7 +89,7 @@ namespace ts {
             return getOutputPathsForBundle(options, forceDtsPaths);
         }
         else {
-            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile.fileName, options));
             const isJsonFile = isJsonSourceFile(sourceFile);
             // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
             const isJsonEmittedToSameLocation = isJsonFile &&
@@ -107,27 +106,13 @@ namespace ts {
         return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
 
-    // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
-    // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
-    // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
     /* @internal */
-    export function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
-        if (isJsonSourceFile(sourceFile)) {
-            return Extension.Json;
-        }
-
-        if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJS(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
-                    return Extension.Jsx;
-                }
-            }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                // TypeScript source file preserving JSX syntax
-                return Extension.Jsx;
-            }
-        }
-        return Extension.Js;
+    export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
+        return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
+        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+        fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
+        fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
+        Extension.Js;
     }
 
     function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
@@ -141,10 +126,9 @@ namespace ts {
 
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, getCommonSourceDirectory?: () => string) {
-        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && !fileExtensionIs(inputFileName, Extension.Json));
         return changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir, getCommonSourceDirectory),
-            Extension.Dts
+            getDeclarationEmitExtensionForPath(inputFileName)
         );
     }
 
@@ -153,11 +137,7 @@ namespace ts {
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(
             getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir, getCommonSourceDirectory),
-            isJsonFile ?
-                Extension.Json :
-                configFile.options.jsx === JsxEmit.Preserve && (fileExtensionIs(inputFileName, Extension.Tsx) || fileExtensionIs(inputFileName, Extension.Jsx)) ?
-                    Extension.Jsx :
-                    Extension.Js
+            getOutputExtension(inputFileName, configFile.options)
         );
         return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.checkDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
             outputFileName :
@@ -239,7 +219,7 @@ namespace ts {
     export function getCommonSourceDirectoryOfConfig({ options, fileNames }: ParsedCommandLine, ignoreCase: boolean): string {
         return getCommonSourceDirectory(
             options,
-            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensions)) && !fileExtensionIs(file, Extension.Dts)),
+            () => filter(fileNames, file => !(options.noEmitForJsFiles && fileExtensionIsOneOf(file, supportedJSExtensionsFlat)) && !fileExtensionIs(file, Extension.Dts)),
             getDirectoryPath(normalizeSlashes(Debug.checkDefined(options.configFilePath))),
             createGetCanonicalFileName(!ignoreCase)
         );
@@ -340,17 +320,17 @@ namespace ts {
                     sourceFiles: sourceFileOrBundle.sourceFiles.map(file => relativeToBuildInfo(getNormalizedAbsolutePath(file.fileName, host.getCurrentDirectory())))
                 };
             }
-            tracing.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
+            tracing?.push(tracing.Phase.Emit, "emitJsFileOrBundle", { jsFilePath });
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, relativeToBuildInfo);
-            tracing.pop();
+            tracing?.pop();
 
-            tracing.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
+            tracing?.push(tracing.Phase.Emit, "emitDeclarationFileOrBundle", { declarationFilePath });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, relativeToBuildInfo);
-            tracing.pop();
+            tracing?.pop();
 
-            tracing.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
+            tracing?.push(tracing.Phase.Emit, "emitBuildInfo", { buildInfoPath });
             emitBuildInfo(bundleBuildInfo, buildInfoPath);
-            tracing.pop();
+            tracing?.pop();
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -499,7 +479,7 @@ namespace ts {
                     declarationTransform.transformed[0],
                     declarationPrinter,
                     {
-                        sourceMap: compilerOptions.declarationMap,
+                        sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                         sourceRoot: compilerOptions.sourceRoot,
                         mapRoot: compilerOptions.mapRoot,
                         extendedDiagnostics: compilerOptions.extendedDiagnostics,
@@ -664,7 +644,7 @@ namespace ts {
 
     /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
-        return JSON.stringify(buildInfo, undefined, 2);
+        return JSON.stringify(buildInfo);
     }
 
     /*@internal*/
@@ -866,7 +846,7 @@ namespace ts {
         Substitution,
         Comments,
         SourceMaps,
-        Emit
+        Emit,
     }
 
     export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
@@ -875,6 +855,8 @@ namespace ts {
             onEmitNode = noEmitNotification,
             isEmitNotificationEnabled,
             substituteNode = noEmitSubstitution,
+            onBeforeEmitNode,
+            onAfterEmitNode,
             onBeforeEmitNodeArray,
             onAfterEmitNodeArray,
             onBeforeEmitToken,
@@ -920,12 +902,14 @@ namespace ts {
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
         let currentLineMap: readonly number[] | undefined;
-        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[] | undefined;
+        let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number }[] | undefined;
         let hasWrittenComment = false;
         let commentsDisabled = !!printerOptions.removeComments;
-        let lastNode: Node | undefined;
         let lastSubstitution: Node | undefined;
+        let currentParenthesizerRule: ((node: Node) => Node) | undefined;
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
+        const parenthesizer = factory.parenthesizer;
+        const emitBinaryExpression = createEmitBinaryExpression();
 
         reset();
         return {
@@ -956,9 +940,9 @@ namespace ts {
                     break;
             }
             switch (node.kind) {
-                case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
-                case SyntaxKind.Bundle: return printBundle(<Bundle>node);
-                case SyntaxKind.UnparsedSource: return printUnparsedSource(<UnparsedSource>node);
+                case SyntaxKind.SourceFile: return printFile(node as SourceFile);
+                case SyntaxKind.Bundle: return printBundle(node as Bundle);
+                case SyntaxKind.UnparsedSource: return printUnparsedSource(node as UnparsedSource);
             }
             writeNode(hint, node, sourceFile, beginPrint());
             return endPrint();
@@ -1003,7 +987,7 @@ namespace ts {
             if (sourceFile) {
                 setSourceFile(sourceFile);
             }
-            emitList(syntheticParent, nodes, format);
+            emitList(/*parentNode*/ undefined, nodes, format);
             reset();
             writer = previousWriter;
         }
@@ -1147,7 +1131,7 @@ namespace ts {
                 setSourceFile(sourceFile);
             }
 
-            pipelineEmit(hint, node);
+            pipelineEmit(hint, node, /*parenthesizerRule*/ undefined);
         }
 
         function setSourceFile(sourceFile: SourceFile | undefined) {
@@ -1176,11 +1160,9 @@ namespace ts {
             tempFlagsStack = [];
             tempFlags = TempFlags.Auto;
             reservedNamesStack = [];
-            currentSourceFile = undefined!;
-            currentLineMap = undefined!;
+            currentSourceFile = undefined;
+            currentLineMap = undefined;
             detachedCommentsInfo = undefined;
-            lastNode = undefined;
-            lastSubstitution = undefined;
             setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
         }
 
@@ -1188,56 +1170,60 @@ namespace ts {
             return currentLineMap || (currentLineMap = getLineStarts(currentSourceFile!));
         }
 
-        function emit(node: Node): Node;
-        function emit(node: Node | undefined): Node | undefined;
-        function emit(node: Node | undefined) {
+        function emit(node: Node, parenthesizerRule?: (node: Node) => Node): void;
+        function emit(node: Node | undefined, parenthesizerRule?: (node: Node) => Node): void;
+        function emit(node: Node | undefined, parenthesizerRule?: (node: Node) => Node) {
             if (node === undefined) return;
-
             const prevSourceFileTextKind = recordBundleFileInternalSectionStart(node);
-            const substitute = pipelineEmit(EmitHint.Unspecified, node);
+            pipelineEmit(EmitHint.Unspecified, node, parenthesizerRule);
             recordBundleFileInternalSectionEnd(prevSourceFileTextKind);
-            return substitute;
         }
 
-        function emitIdentifierName(node: Identifier): Node;
-        function emitIdentifierName(node: Identifier | undefined): Node | undefined;
-        function emitIdentifierName(node: Identifier | undefined): Node | undefined {
+        function emitIdentifierName(node: Identifier): void;
+        function emitIdentifierName(node: Identifier | undefined): void;
+        function emitIdentifierName(node: Identifier | undefined) {
             if (node === undefined) return;
-            return pipelineEmit(EmitHint.IdentifierName, node);
+            pipelineEmit(EmitHint.IdentifierName, node, /*parenthesizerRule*/ undefined);
         }
 
-        function emitExpression(node: Expression): Node;
-        function emitExpression(node: Expression | undefined): Node | undefined;
-        function emitExpression(node: Expression | undefined): Node | undefined {
+        function emitExpression(node: Expression, parenthesizerRule?: (node: Expression) => Expression): void;
+        function emitExpression(node: Expression | undefined, parenthesizerRule?: (node: Expression) => Expression): void;
+        function emitExpression(node: Expression | undefined, parenthesizerRule?: (node: Expression) => Expression) {
             if (node === undefined) return;
-            return pipelineEmit(EmitHint.Expression, node);
+            pipelineEmit(EmitHint.Expression, node, parenthesizerRule);
         }
 
-        function emitJsxAttributeValue(node: StringLiteral | JsxExpression): Node {
-            return pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
+        function emitJsxAttributeValue(node: StringLiteral | JsxExpression): void {
+            pipelineEmit(isStringLiteral(node) ? EmitHint.JsxAttributeValue : EmitHint.Unspecified, node);
         }
 
-        function pipelineEmit(emitHint: EmitHint, node: Node) {
-            const savedLastNode = lastNode;
-            const savedLastSubstitution = lastSubstitution;
-            const savedPreserveSourceNewlines = preserveSourceNewlines;
-            lastNode = node;
-            lastSubstitution = undefined;
-            if (preserveSourceNewlines && !!(getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
+        function beforeEmitNode(node: Node) {
+            if (preserveSourceNewlines && (getEmitFlags(node) & EmitFlags.IgnoreSourceNewlines)) {
                 preserveSourceNewlines = false;
             }
+        }
 
+        function afterEmitNode(savedPreserveSourceNewlines: boolean | undefined) {
+            preserveSourceNewlines = savedPreserveSourceNewlines;
+        }
+
+        function pipelineEmit(emitHint: EmitHint, node: Node, parenthesizerRule?: (node: Node) => Node) {
+            currentParenthesizerRule = parenthesizerRule;
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, emitHint, node);
             pipelinePhase(emitHint, node);
+            currentParenthesizerRule = undefined;
+        }
 
-            Debug.assert(lastNode === node);
+        function shouldEmitComments(node: Node) {
+            return !commentsDisabled && !isSourceFile(node);
+        }
 
-            const substitute = lastSubstitution;
-            lastNode = savedLastNode;
-            lastSubstitution = savedLastSubstitution;
-            preserveSourceNewlines = savedPreserveSourceNewlines;
-
-            return substitute || node;
+        function shouldEmitSourceMaps(node: Node) {
+            return !sourceMapsDisabled &&
+                !isSourceFile(node) &&
+                !isInJsonFile(node) &&
+                !isUnparsedSource(node) &&
+                !isUnparsedPrepend(node);
         }
 
         function getPipelinePhase(phase: PipelinePhase, emitHint: EmitHint, node: Node) {
@@ -1247,28 +1233,26 @@ namespace ts {
                         return pipelineEmitWithNotification;
                     }
                     // falls through
-
                 case PipelinePhase.Substitution:
-                    if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node)) !== node) {
+                    if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node) || node) !== node) {
+                        if (currentParenthesizerRule) {
+                            lastSubstitution = currentParenthesizerRule(lastSubstitution);
+                        }
                         return pipelineEmitWithSubstitution;
                     }
                     // falls through
-
                 case PipelinePhase.Comments:
-                    if (!commentsDisabled && node.kind !== SyntaxKind.SourceFile) {
+                    if (shouldEmitComments(node)) {
                         return pipelineEmitWithComments;
                     }
                     // falls through
-
                 case PipelinePhase.SourceMaps:
-                    if (!sourceMapsDisabled && node.kind !== SyntaxKind.SourceFile && !isInJsonFile(node)) {
-                        return pipelineEmitWithSourceMap;
+                    if (shouldEmitSourceMaps(node)) {
+                        return pipelineEmitWithSourceMaps;
                     }
                     // falls through
-
                 case PipelinePhase.Emit:
                     return pipelineEmitWithHint;
-
                 default:
                     return Debug.assertNever(phase);
             }
@@ -1279,14 +1263,27 @@ namespace ts {
         }
 
         function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
-            Debug.assert(lastNode === node);
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.Notification, hint, node);
             onEmitNode(hint, node, pipelinePhase);
-            Debug.assert(lastNode === node);
         }
 
         function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
-            Debug.assert(lastNode === node || lastSubstitution === node);
+            onBeforeEmitNode?.(node);
+            if (preserveSourceNewlines) {
+                const savedPreserveSourceNewlines = preserveSourceNewlines;
+                beforeEmitNode(node);
+                pipelineEmitWithHintWorker(hint, node);
+                afterEmitNode(savedPreserveSourceNewlines);
+            }
+            else {
+                pipelineEmitWithHintWorker(hint, node);
+            }
+            onAfterEmitNode?.(node);
+            // clear the parenthesizer rule as we ascend
+            currentParenthesizerRule = undefined;
+        }
+
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node): void {
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -1296,33 +1293,16 @@ namespace ts {
                 return emitEmptyStatement(/*isEmbeddedStatement*/ true);
             }
             if (hint === EmitHint.Unspecified) {
-                if (isKeyword(node.kind)) return writeTokenNode(node, writeKeyword);
-
                 switch (node.kind) {
                     // Pseudo-literals
                     case SyntaxKind.TemplateHead:
                     case SyntaxKind.TemplateMiddle:
                     case SyntaxKind.TemplateTail:
-                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
-
-                    case SyntaxKind.UnparsedSource:
-                    case SyntaxKind.UnparsedPrepend:
-                        return emitUnparsedSourceOrPrepend(<UnparsedSource>node);
-
-                    case SyntaxKind.UnparsedPrologue:
-                        return writeUnparsedNode(<UnparsedNode>node);
-
-                    case SyntaxKind.UnparsedText:
-                    case SyntaxKind.UnparsedInternalText:
-                        return emitUnparsedTextLike(<UnparsedTextLike>node);
-
-                    case SyntaxKind.UnparsedSyntheticReference:
-                        return emitUnparsedSyntheticReference(<UnparsedSyntheticReference>node);
-
+                        return emitLiteral(node as LiteralExpression, /*jsxAttributeEscape*/ false);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node);
+                        return emitIdentifier(node as Identifier);
 
                     // PrivateIdentifiers
                     case SyntaxKind.PrivateIdentifier:
@@ -1331,296 +1311,343 @@ namespace ts {
                     // Parse tree nodes
                     // Names
                     case SyntaxKind.QualifiedName:
-                        return emitQualifiedName(<QualifiedName>node);
+                        return emitQualifiedName(node as QualifiedName);
                     case SyntaxKind.ComputedPropertyName:
-                        return emitComputedPropertyName(<ComputedPropertyName>node);
+                        return emitComputedPropertyName(node as ComputedPropertyName);
 
                     // Signature elements
                     case SyntaxKind.TypeParameter:
-                        return emitTypeParameter(<TypeParameterDeclaration>node);
+                        return emitTypeParameter(node as TypeParameterDeclaration);
                     case SyntaxKind.Parameter:
-                        return emitParameter(<ParameterDeclaration>node);
+                        return emitParameter(node as ParameterDeclaration);
                     case SyntaxKind.Decorator:
-                        return emitDecorator(<Decorator>node);
+                        return emitDecorator(node as Decorator);
 
                     // Type members
                     case SyntaxKind.PropertySignature:
-                        return emitPropertySignature(<PropertySignature>node);
+                        return emitPropertySignature(node as PropertySignature);
                     case SyntaxKind.PropertyDeclaration:
-                        return emitPropertyDeclaration(<PropertyDeclaration>node);
+                        return emitPropertyDeclaration(node as PropertyDeclaration);
                     case SyntaxKind.MethodSignature:
-                        return emitMethodSignature(<MethodSignature>node);
+                        return emitMethodSignature(node as MethodSignature);
                     case SyntaxKind.MethodDeclaration:
-                        return emitMethodDeclaration(<MethodDeclaration>node);
+                        return emitMethodDeclaration(node as MethodDeclaration);
+                    case SyntaxKind.ClassStaticBlockDeclaration:
+                        return emitClassStaticBlockDeclaration(node as ClassStaticBlockDeclaration);
                     case SyntaxKind.Constructor:
-                        return emitConstructor(<ConstructorDeclaration>node);
+                        return emitConstructor(node as ConstructorDeclaration);
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        return emitAccessorDeclaration(<AccessorDeclaration>node);
+                        return emitAccessorDeclaration(node as AccessorDeclaration);
                     case SyntaxKind.CallSignature:
-                        return emitCallSignature(<CallSignatureDeclaration>node);
+                        return emitCallSignature(node as CallSignatureDeclaration);
                     case SyntaxKind.ConstructSignature:
-                        return emitConstructSignature(<ConstructSignatureDeclaration>node);
+                        return emitConstructSignature(node as ConstructSignatureDeclaration);
                     case SyntaxKind.IndexSignature:
-                        return emitIndexSignature(<IndexSignatureDeclaration>node);
-                    case SyntaxKind.TemplateLiteralTypeSpan:
-                        return emitTemplateTypeSpan(<TemplateLiteralTypeSpan>node);
+                        return emitIndexSignature(node as IndexSignatureDeclaration);
 
                     // Types
                     case SyntaxKind.TypePredicate:
-                        return emitTypePredicate(<TypePredicateNode>node);
+                        return emitTypePredicate(node as TypePredicateNode);
                     case SyntaxKind.TypeReference:
-                        return emitTypeReference(<TypeReferenceNode>node);
+                        return emitTypeReference(node as TypeReferenceNode);
                     case SyntaxKind.FunctionType:
-                        return emitFunctionType(<FunctionTypeNode>node);
-                    case SyntaxKind.JSDocFunctionType:
-                        return emitJSDocFunctionType(node as JSDocFunctionType);
+                        return emitFunctionType(node as FunctionTypeNode);
                     case SyntaxKind.ConstructorType:
-                        return emitConstructorType(<ConstructorTypeNode>node);
+                        return emitConstructorType(node as ConstructorTypeNode);
                     case SyntaxKind.TypeQuery:
-                        return emitTypeQuery(<TypeQueryNode>node);
+                        return emitTypeQuery(node as TypeQueryNode);
                     case SyntaxKind.TypeLiteral:
-                        return emitTypeLiteral(<TypeLiteralNode>node);
+                        return emitTypeLiteral(node as TypeLiteralNode);
                     case SyntaxKind.ArrayType:
-                        return emitArrayType(<ArrayTypeNode>node);
+                        return emitArrayType(node as ArrayTypeNode);
                     case SyntaxKind.TupleType:
-                        return emitTupleType(<TupleTypeNode>node);
+                        return emitTupleType(node as TupleTypeNode);
                     case SyntaxKind.OptionalType:
-                        return emitOptionalType(<OptionalTypeNode>node);
+                        return emitOptionalType(node as OptionalTypeNode);
+                    // SyntaxKind.RestType is handled below
                     case SyntaxKind.UnionType:
-                        return emitUnionType(<UnionTypeNode>node);
+                        return emitUnionType(node as UnionTypeNode);
                     case SyntaxKind.IntersectionType:
-                        return emitIntersectionType(<IntersectionTypeNode>node);
+                        return emitIntersectionType(node as IntersectionTypeNode);
                     case SyntaxKind.ConditionalType:
-                        return emitConditionalType(<ConditionalTypeNode>node);
+                        return emitConditionalType(node as ConditionalTypeNode);
                     case SyntaxKind.InferType:
-                        return emitInferType(<InferTypeNode>node);
+                        return emitInferType(node as InferTypeNode);
                     case SyntaxKind.ParenthesizedType:
-                        return emitParenthesizedType(<ParenthesizedTypeNode>node);
+                        return emitParenthesizedType(node as ParenthesizedTypeNode);
                     case SyntaxKind.ExpressionWithTypeArguments:
-                        return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
+                        return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
                     case SyntaxKind.ThisType:
                         return emitThisType();
                     case SyntaxKind.TypeOperator:
-                        return emitTypeOperator(<TypeOperatorNode>node);
+                        return emitTypeOperator(node as TypeOperatorNode);
                     case SyntaxKind.IndexedAccessType:
-                        return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                        return emitIndexedAccessType(node as IndexedAccessTypeNode);
                     case SyntaxKind.MappedType:
-                        return emitMappedType(<MappedTypeNode>node);
+                        return emitMappedType(node as MappedTypeNode);
                     case SyntaxKind.LiteralType:
-                        return emitLiteralType(<LiteralTypeNode>node);
+                        return emitLiteralType(node as LiteralTypeNode);
+                    case SyntaxKind.NamedTupleMember:
+                        return emitNamedTupleMember(node as NamedTupleMember);
                     case SyntaxKind.TemplateLiteralType:
-                        return emitTemplateType(<TemplateLiteralTypeNode>node);
+                        return emitTemplateType(node as TemplateLiteralTypeNode);
+                    case SyntaxKind.TemplateLiteralTypeSpan:
+                        return emitTemplateTypeSpan(node as TemplateLiteralTypeSpan);
                     case SyntaxKind.ImportType:
-                        return emitImportTypeNode(<ImportTypeNode>node);
+                        return emitImportTypeNode(node as ImportTypeNode);
+
+                    // Binding patterns
+                    case SyntaxKind.ObjectBindingPattern:
+                        return emitObjectBindingPattern(node as ObjectBindingPattern);
+                    case SyntaxKind.ArrayBindingPattern:
+                        return emitArrayBindingPattern(node as ArrayBindingPattern);
+                    case SyntaxKind.BindingElement:
+                        return emitBindingElement(node as BindingElement);
+
+                    // Misc
+                    case SyntaxKind.TemplateSpan:
+                        return emitTemplateSpan(node as TemplateSpan);
+                    case SyntaxKind.SemicolonClassElement:
+                        return emitSemicolonClassElement();
+
+                    // Statements
+                    case SyntaxKind.Block:
+                        return emitBlock(node as Block);
+                    case SyntaxKind.VariableStatement:
+                        return emitVariableStatement(node as VariableStatement);
+                    case SyntaxKind.EmptyStatement:
+                        return emitEmptyStatement(/*isEmbeddedStatement*/ false);
+                    case SyntaxKind.ExpressionStatement:
+                        return emitExpressionStatement(node as ExpressionStatement);
+                    case SyntaxKind.IfStatement:
+                        return emitIfStatement(node as IfStatement);
+                    case SyntaxKind.DoStatement:
+                        return emitDoStatement(node as DoStatement);
+                    case SyntaxKind.WhileStatement:
+                        return emitWhileStatement(node as WhileStatement);
+                    case SyntaxKind.ForStatement:
+                        return emitForStatement(node as ForStatement);
+                    case SyntaxKind.ForInStatement:
+                        return emitForInStatement(node as ForInStatement);
+                    case SyntaxKind.ForOfStatement:
+                        return emitForOfStatement(node as ForOfStatement);
+                    case SyntaxKind.ContinueStatement:
+                        return emitContinueStatement(node as ContinueStatement);
+                    case SyntaxKind.BreakStatement:
+                        return emitBreakStatement(node as BreakStatement);
+                    case SyntaxKind.ReturnStatement:
+                        return emitReturnStatement(node as ReturnStatement);
+                    case SyntaxKind.WithStatement:
+                        return emitWithStatement(node as WithStatement);
+                    case SyntaxKind.SwitchStatement:
+                        return emitSwitchStatement(node as SwitchStatement);
+                    case SyntaxKind.LabeledStatement:
+                        return emitLabeledStatement(node as LabeledStatement);
+                    case SyntaxKind.ThrowStatement:
+                        return emitThrowStatement(node as ThrowStatement);
+                    case SyntaxKind.TryStatement:
+                        return emitTryStatement(node as TryStatement);
+                    case SyntaxKind.DebuggerStatement:
+                        return emitDebuggerStatement(node as DebuggerStatement);
+
+                    // Declarations
+                    case SyntaxKind.VariableDeclaration:
+                        return emitVariableDeclaration(node as VariableDeclaration);
+                    case SyntaxKind.VariableDeclarationList:
+                        return emitVariableDeclarationList(node as VariableDeclarationList);
+                    case SyntaxKind.FunctionDeclaration:
+                        return emitFunctionDeclaration(node as FunctionDeclaration);
+                    case SyntaxKind.ClassDeclaration:
+                        return emitClassDeclaration(node as ClassDeclaration);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(node as InterfaceDeclaration);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return emitTypeAliasDeclaration(node as TypeAliasDeclaration);
+                    case SyntaxKind.EnumDeclaration:
+                        return emitEnumDeclaration(node as EnumDeclaration);
+                    case SyntaxKind.ModuleDeclaration:
+                        return emitModuleDeclaration(node as ModuleDeclaration);
+                    case SyntaxKind.ModuleBlock:
+                        return emitModuleBlock(node as ModuleBlock);
+                    case SyntaxKind.CaseBlock:
+                        return emitCaseBlock(node as CaseBlock);
+                    case SyntaxKind.NamespaceExportDeclaration:
+                        return emitNamespaceExportDeclaration(node as NamespaceExportDeclaration);
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return emitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                    case SyntaxKind.ImportDeclaration:
+                        return emitImportDeclaration(node as ImportDeclaration);
+                    case SyntaxKind.ImportClause:
+                        return emitImportClause(node as ImportClause);
+                    case SyntaxKind.NamespaceImport:
+                        return emitNamespaceImport(node as NamespaceImport);
+                    case SyntaxKind.NamespaceExport:
+                        return emitNamespaceExport(node as NamespaceExport);
+                    case SyntaxKind.NamedImports:
+                        return emitNamedImports(node as NamedImports);
+                    case SyntaxKind.ImportSpecifier:
+                        return emitImportSpecifier(node as ImportSpecifier);
+                    case SyntaxKind.ExportAssignment:
+                        return emitExportAssignment(node as ExportAssignment);
+                    case SyntaxKind.ExportDeclaration:
+                        return emitExportDeclaration(node as ExportDeclaration);
+                    case SyntaxKind.NamedExports:
+                        return emitNamedExports(node as NamedExports);
+                    case SyntaxKind.ExportSpecifier:
+                        return emitExportSpecifier(node as ExportSpecifier);
+                    case SyntaxKind.AssertClause:
+                        return emitAssertClause(node as AssertClause);
+                    case SyntaxKind.AssertEntry:
+                        return emitAssertEntry(node as AssertEntry);
+                    case SyntaxKind.MissingDeclaration:
+                        return;
+
+                    // Module references
+                    case SyntaxKind.ExternalModuleReference:
+                        return emitExternalModuleReference(node as ExternalModuleReference);
+
+                    // JSX (non-expression)
+                    case SyntaxKind.JsxText:
+                        return emitJsxText(node as JsxText);
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxOpeningFragment:
+                        return emitJsxOpeningElementOrFragment(node as JsxOpeningElement);
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxClosingFragment:
+                        return emitJsxClosingElementOrFragment(node as JsxClosingElement);
+                    case SyntaxKind.JsxAttribute:
+                        return emitJsxAttribute(node as JsxAttribute);
+                    case SyntaxKind.JsxAttributes:
+                        return emitJsxAttributes(node as JsxAttributes);
+                    case SyntaxKind.JsxSpreadAttribute:
+                        return emitJsxSpreadAttribute(node as JsxSpreadAttribute);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(node as JsxExpression);
+
+                    // Clauses
+                    case SyntaxKind.CaseClause:
+                        return emitCaseClause(node as CaseClause);
+                    case SyntaxKind.DefaultClause:
+                        return emitDefaultClause(node as DefaultClause);
+                    case SyntaxKind.HeritageClause:
+                        return emitHeritageClause(node as HeritageClause);
+                    case SyntaxKind.CatchClause:
+                        return emitCatchClause(node as CatchClause);
+
+                    // Property assignments
+                    case SyntaxKind.PropertyAssignment:
+                        return emitPropertyAssignment(node as PropertyAssignment);
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        return emitShorthandPropertyAssignment(node as ShorthandPropertyAssignment);
+                    case SyntaxKind.SpreadAssignment:
+                        return emitSpreadAssignment(node as SpreadAssignment);
+
+                    // Enum
+                    case SyntaxKind.EnumMember:
+                        return emitEnumMember(node as EnumMember);
+
+                    // Unparsed
+                    case SyntaxKind.UnparsedPrologue:
+                        return writeUnparsedNode(node as UnparsedNode);
+                    case SyntaxKind.UnparsedSource:
+                    case SyntaxKind.UnparsedPrepend:
+                        return emitUnparsedSourceOrPrepend(node as UnparsedSource);
+                    case SyntaxKind.UnparsedText:
+                    case SyntaxKind.UnparsedInternalText:
+                        return emitUnparsedTextLike(node as UnparsedTextLike);
+                    case SyntaxKind.UnparsedSyntheticReference:
+                        return emitUnparsedSyntheticReference(node as UnparsedSyntheticReference);
+
+                    // Top-level nodes
+                    case SyntaxKind.SourceFile:
+                        return emitSourceFile(node as SourceFile);
+                    case SyntaxKind.Bundle:
+                        return Debug.fail("Bundles should be printed using printBundle");
+                    // SyntaxKind.UnparsedSource (handled above)
+                    case SyntaxKind.InputFiles:
+                        return Debug.fail("InputFiles should not be printed");
+
+                    // JSDoc nodes (only used in codefixes currently)
+                    case SyntaxKind.JSDocTypeExpression:
+                        return emitJSDocTypeExpression(node as JSDocTypeExpression);
+                    case SyntaxKind.JSDocNameReference:
+                        return emitJSDocNameReference(node as JSDocNameReference);
                     case SyntaxKind.JSDocAllType:
-                        writePunctuation("*");
-                        return;
+                        return writePunctuation("*");
                     case SyntaxKind.JSDocUnknownType:
-                        writePunctuation("?");
-                        return;
+                        return writePunctuation("?");
                     case SyntaxKind.JSDocNullableType:
                         return emitJSDocNullableType(node as JSDocNullableType);
                     case SyntaxKind.JSDocNonNullableType:
                         return emitJSDocNonNullableType(node as JSDocNonNullableType);
                     case SyntaxKind.JSDocOptionalType:
                         return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.JSDocFunctionType:
+                        return emitJSDocFunctionType(node as JSDocFunctionType);
                     case SyntaxKind.RestType:
                     case SyntaxKind.JSDocVariadicType:
                         return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
-                    case SyntaxKind.NamedTupleMember:
-                        return emitNamedTupleMember(node as NamedTupleMember);
-
-                    // Binding patterns
-                    case SyntaxKind.ObjectBindingPattern:
-                        return emitObjectBindingPattern(<ObjectBindingPattern>node);
-                    case SyntaxKind.ArrayBindingPattern:
-                        return emitArrayBindingPattern(<ArrayBindingPattern>node);
-                    case SyntaxKind.BindingElement:
-                        return emitBindingElement(<BindingElement>node);
-
-                    // Misc
-                    case SyntaxKind.TemplateSpan:
-                        return emitTemplateSpan(<TemplateSpan>node);
-                    case SyntaxKind.SemicolonClassElement:
-                        return emitSemicolonClassElement();
-
-                    // Statements
-                    case SyntaxKind.Block:
-                        return emitBlock(<Block>node);
-                    case SyntaxKind.VariableStatement:
-                        return emitVariableStatement(<VariableStatement>node);
-                    case SyntaxKind.EmptyStatement:
-                        return emitEmptyStatement(/*isEmbeddedStatement*/ false);
-                    case SyntaxKind.ExpressionStatement:
-                        return emitExpressionStatement(<ExpressionStatement>node);
-                    case SyntaxKind.IfStatement:
-                        return emitIfStatement(<IfStatement>node);
-                    case SyntaxKind.DoStatement:
-                        return emitDoStatement(<DoStatement>node);
-                    case SyntaxKind.WhileStatement:
-                        return emitWhileStatement(<WhileStatement>node);
-                    case SyntaxKind.ForStatement:
-                        return emitForStatement(<ForStatement>node);
-                    case SyntaxKind.ForInStatement:
-                        return emitForInStatement(<ForInStatement>node);
-                    case SyntaxKind.ForOfStatement:
-                        return emitForOfStatement(<ForOfStatement>node);
-                    case SyntaxKind.ContinueStatement:
-                        return emitContinueStatement(<ContinueStatement>node);
-                    case SyntaxKind.BreakStatement:
-                        return emitBreakStatement(<BreakStatement>node);
-                    case SyntaxKind.ReturnStatement:
-                        return emitReturnStatement(<ReturnStatement>node);
-                    case SyntaxKind.WithStatement:
-                        return emitWithStatement(<WithStatement>node);
-                    case SyntaxKind.SwitchStatement:
-                        return emitSwitchStatement(<SwitchStatement>node);
-                    case SyntaxKind.LabeledStatement:
-                        return emitLabeledStatement(<LabeledStatement>node);
-                    case SyntaxKind.ThrowStatement:
-                        return emitThrowStatement(<ThrowStatement>node);
-                    case SyntaxKind.TryStatement:
-                        return emitTryStatement(<TryStatement>node);
-                    case SyntaxKind.DebuggerStatement:
-                        return emitDebuggerStatement(<DebuggerStatement>node);
-
-                    // Declarations
-                    case SyntaxKind.VariableDeclaration:
-                        return emitVariableDeclaration(<VariableDeclaration>node);
-                    case SyntaxKind.VariableDeclarationList:
-                        return emitVariableDeclarationList(<VariableDeclarationList>node);
-                    case SyntaxKind.FunctionDeclaration:
-                        return emitFunctionDeclaration(<FunctionDeclaration>node);
-                    case SyntaxKind.ClassDeclaration:
-                        return emitClassDeclaration(<ClassDeclaration>node);
-                    case SyntaxKind.InterfaceDeclaration:
-                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
-                    case SyntaxKind.TypeAliasDeclaration:
-                        return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
-                    case SyntaxKind.EnumDeclaration:
-                        return emitEnumDeclaration(<EnumDeclaration>node);
-                    case SyntaxKind.ModuleDeclaration:
-                        return emitModuleDeclaration(<ModuleDeclaration>node);
-                    case SyntaxKind.ModuleBlock:
-                        return emitModuleBlock(<ModuleBlock>node);
-                    case SyntaxKind.CaseBlock:
-                        return emitCaseBlock(<CaseBlock>node);
-                    case SyntaxKind.NamespaceExportDeclaration:
-                        return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
-                    case SyntaxKind.ImportEqualsDeclaration:
-                        return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
-                    case SyntaxKind.ImportDeclaration:
-                        return emitImportDeclaration(<ImportDeclaration>node);
-                    case SyntaxKind.ImportClause:
-                        return emitImportClause(<ImportClause>node);
-                    case SyntaxKind.NamespaceImport:
-                        return emitNamespaceImport(<NamespaceImport>node);
-                    case SyntaxKind.NamespaceExport:
-                        return emitNamespaceExport(<NamespaceExport>node);
-                    case SyntaxKind.NamedImports:
-                        return emitNamedImports(<NamedImports>node);
-                    case SyntaxKind.ImportSpecifier:
-                        return emitImportSpecifier(<ImportSpecifier>node);
-                    case SyntaxKind.ExportAssignment:
-                        return emitExportAssignment(<ExportAssignment>node);
-                    case SyntaxKind.ExportDeclaration:
-                        return emitExportDeclaration(<ExportDeclaration>node);
-                    case SyntaxKind.NamedExports:
-                        return emitNamedExports(<NamedExports>node);
-                    case SyntaxKind.ExportSpecifier:
-                        return emitExportSpecifier(<ExportSpecifier>node);
-                    case SyntaxKind.MissingDeclaration:
+                    case SyntaxKind.JSDocNamepathType:
                         return;
-
-                    // Module references
-                    case SyntaxKind.ExternalModuleReference:
-                        return emitExternalModuleReference(<ExternalModuleReference>node);
-
-                    // JSX (non-expression)
-                    case SyntaxKind.JsxText:
-                        return emitJsxText(<JsxText>node);
-                    case SyntaxKind.JsxOpeningElement:
-                    case SyntaxKind.JsxOpeningFragment:
-                        return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
-                    case SyntaxKind.JsxClosingElement:
-                    case SyntaxKind.JsxClosingFragment:
-                        return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
-                    case SyntaxKind.JsxAttribute:
-                        return emitJsxAttribute(<JsxAttribute>node);
-                    case SyntaxKind.JsxAttributes:
-                        return emitJsxAttributes(<JsxAttributes>node);
-                    case SyntaxKind.JsxSpreadAttribute:
-                        return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
-                    case SyntaxKind.JsxExpression:
-                        return emitJsxExpression(<JsxExpression>node);
-
-                    // Clauses
-                    case SyntaxKind.CaseClause:
-                        return emitCaseClause(<CaseClause>node);
-                    case SyntaxKind.DefaultClause:
-                        return emitDefaultClause(<DefaultClause>node);
-                    case SyntaxKind.HeritageClause:
-                        return emitHeritageClause(<HeritageClause>node);
-                    case SyntaxKind.CatchClause:
-                        return emitCatchClause(<CatchClause>node);
-
-                    // Property assignments
-                    case SyntaxKind.PropertyAssignment:
-                        return emitPropertyAssignment(<PropertyAssignment>node);
-                    case SyntaxKind.ShorthandPropertyAssignment:
-                        return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-                    case SyntaxKind.SpreadAssignment:
-                        return emitSpreadAssignment(node as SpreadAssignment);
-
-                    // Enum
-                    case SyntaxKind.EnumMember:
-                        return emitEnumMember(<EnumMember>node);
-
-                    // JSDoc nodes (only used in codefixes currently)
+                    case SyntaxKind.JSDocComment:
+                        return emitJSDoc(node as JSDoc);
+                    case SyntaxKind.JSDocTypeLiteral:
+                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
+                    case SyntaxKind.JSDocSignature:
+                        return emitJSDocSignature(node as JSDocSignature);
+                    case SyntaxKind.JSDocTag:
+                    case SyntaxKind.JSDocClassTag:
+                        return emitJSDocSimpleTag(node as JSDocTag);
+                    case SyntaxKind.JSDocAugmentsTag:
+                    case SyntaxKind.JSDocImplementsTag:
+                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
+                    case SyntaxKind.JSDocAuthorTag:
+                    case SyntaxKind.JSDocDeprecatedTag:
+                        return;
+                    // SyntaxKind.JSDocClassTag (see JSDocTag, above)
+                    case SyntaxKind.JSDocPublicTag:
+                    case SyntaxKind.JSDocPrivateTag:
+                    case SyntaxKind.JSDocProtectedTag:
+                    case SyntaxKind.JSDocReadonlyTag:
+                    case SyntaxKind.JSDocOverrideTag:
+                        return;
+                    case SyntaxKind.JSDocCallbackTag:
+                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                    // SyntaxKind.JSDocEnumTag (see below)
                     case SyntaxKind.JSDocParameterTag:
                     case SyntaxKind.JSDocPropertyTag:
                         return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
-                    case SyntaxKind.JSDocReturnTag:
-                    case SyntaxKind.JSDocTypeTag:
-                    case SyntaxKind.JSDocThisTag:
                     case SyntaxKind.JSDocEnumTag:
+                    case SyntaxKind.JSDocReturnTag:
+                    case SyntaxKind.JSDocThisTag:
+                    case SyntaxKind.JSDocTypeTag:
                         return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
-                    case SyntaxKind.JSDocImplementsTag:
-                    case SyntaxKind.JSDocAugmentsTag:
-                        return emitJSDocHeritageTag(node as JSDocImplementsTag | JSDocAugmentsTag);
                     case SyntaxKind.JSDocTemplateTag:
                         return emitJSDocTemplateTag(node as JSDocTemplateTag);
                     case SyntaxKind.JSDocTypedefTag:
                         return emitJSDocTypedefTag(node as JSDocTypedefTag);
-                    case SyntaxKind.JSDocCallbackTag:
-                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
-                    case SyntaxKind.JSDocSignature:
-                        return emitJSDocSignature(node as JSDocSignature);
-                    case SyntaxKind.JSDocTypeLiteral:
-                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
-                    case SyntaxKind.JSDocClassTag:
-                    case SyntaxKind.JSDocTag:
-                        return emitJSDocSimpleTag(node as JSDocTag);
                     case SyntaxKind.JSDocSeeTag:
                         return emitJSDocSeeTag(node as JSDocSeeTag);
-                    case SyntaxKind.JSDocNameReference:
-                        return emitJSDocNameReference(node as JSDocNameReference);
+                    // SyntaxKind.JSDocPropertyTag (see JSDocParameterTag, above)
 
-                    case SyntaxKind.JSDocComment:
-                        return emitJSDoc(node as JSDoc);
-
-                    // Transformation nodes (ignored)
+                    // Transformation nodes
+                    case SyntaxKind.NotEmittedStatement:
+                    case SyntaxKind.EndOfDeclarationMarker:
+                    case SyntaxKind.MergeDeclarationMarker:
+                        return;
                 }
-
                 if (isExpression(node)) {
                     hint = EmitHint.Expression;
                     if (substituteNode !== noEmitSubstitution) {
-                        lastSubstitution = node = substituteNode(hint, node);
+                        const substitute = substituteNode(hint, node) || node;
+                        if (substitute !== node) {
+                            node = substitute;
+                            if (currentParenthesizerRule) {
+                                node = currentParenthesizerRule(node);
+                            }
+                        }
                     }
-                }
-                else if (isToken(node)) {
-                    return writeTokenNode(node, writePunctuation);
                 }
             }
             if (hint === EmitHint.Expression) {
@@ -1628,99 +1655,106 @@ namespace ts {
                     // Literals
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.BigIntLiteral:
-                        return emitNumericOrBigIntLiteral(<NumericLiteral | BigIntLiteral>node);
+                        return emitNumericOrBigIntLiteral(node as NumericLiteral | BigIntLiteral);
 
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
                     case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        return emitLiteral(<LiteralExpression>node, /*jsxAttributeEscape*/ false);
+                        return emitLiteral(node as LiteralExpression, /*jsxAttributeEscape*/ false);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
-                        return emitIdentifier(<Identifier>node);
-
-                    // Reserved words
-                    case SyntaxKind.FalseKeyword:
-                    case SyntaxKind.NullKeyword:
-                    case SyntaxKind.SuperKeyword:
-                    case SyntaxKind.TrueKeyword:
-                    case SyntaxKind.ThisKeyword:
-                    case SyntaxKind.ImportKeyword:
-                        writeTokenNode(node, writeKeyword);
-                        return;
+                        return emitIdentifier(node as Identifier);
+                    case SyntaxKind.PrivateIdentifier:
+                        return emitPrivateIdentifier(node as PrivateIdentifier);
 
                     // Expressions
                     case SyntaxKind.ArrayLiteralExpression:
-                        return emitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                        return emitArrayLiteralExpression(node as ArrayLiteralExpression);
                     case SyntaxKind.ObjectLiteralExpression:
-                        return emitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                        return emitObjectLiteralExpression(node as ObjectLiteralExpression);
                     case SyntaxKind.PropertyAccessExpression:
-                        return emitPropertyAccessExpression(<PropertyAccessExpression>node);
+                        return emitPropertyAccessExpression(node as PropertyAccessExpression);
                     case SyntaxKind.ElementAccessExpression:
-                        return emitElementAccessExpression(<ElementAccessExpression>node);
+                        return emitElementAccessExpression(node as ElementAccessExpression);
                     case SyntaxKind.CallExpression:
-                        return emitCallExpression(<CallExpression>node);
+                        return emitCallExpression(node as CallExpression);
                     case SyntaxKind.NewExpression:
-                        return emitNewExpression(<NewExpression>node);
+                        return emitNewExpression(node as NewExpression);
                     case SyntaxKind.TaggedTemplateExpression:
-                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                        return emitTaggedTemplateExpression(node as TaggedTemplateExpression);
                     case SyntaxKind.TypeAssertionExpression:
-                        return emitTypeAssertionExpression(<TypeAssertion>node);
+                        return emitTypeAssertionExpression(node as TypeAssertion);
                     case SyntaxKind.ParenthesizedExpression:
-                        return emitParenthesizedExpression(<ParenthesizedExpression>node);
+                        return emitParenthesizedExpression(node as ParenthesizedExpression);
                     case SyntaxKind.FunctionExpression:
-                        return emitFunctionExpression(<FunctionExpression>node);
+                        return emitFunctionExpression(node as FunctionExpression);
                     case SyntaxKind.ArrowFunction:
-                        return emitArrowFunction(<ArrowFunction>node);
+                        return emitArrowFunction(node as ArrowFunction);
                     case SyntaxKind.DeleteExpression:
-                        return emitDeleteExpression(<DeleteExpression>node);
+                        return emitDeleteExpression(node as DeleteExpression);
                     case SyntaxKind.TypeOfExpression:
-                        return emitTypeOfExpression(<TypeOfExpression>node);
+                        return emitTypeOfExpression(node as TypeOfExpression);
                     case SyntaxKind.VoidExpression:
-                        return emitVoidExpression(<VoidExpression>node);
+                        return emitVoidExpression(node as VoidExpression);
                     case SyntaxKind.AwaitExpression:
-                        return emitAwaitExpression(<AwaitExpression>node);
+                        return emitAwaitExpression(node as AwaitExpression);
                     case SyntaxKind.PrefixUnaryExpression:
-                        return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                        return emitPrefixUnaryExpression(node as PrefixUnaryExpression);
                     case SyntaxKind.PostfixUnaryExpression:
-                        return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                        return emitPostfixUnaryExpression(node as PostfixUnaryExpression);
                     case SyntaxKind.BinaryExpression:
-                        return emitBinaryExpression(<BinaryExpression>node);
+                        return emitBinaryExpression(node as BinaryExpression);
                     case SyntaxKind.ConditionalExpression:
-                        return emitConditionalExpression(<ConditionalExpression>node);
+                        return emitConditionalExpression(node as ConditionalExpression);
                     case SyntaxKind.TemplateExpression:
-                        return emitTemplateExpression(<TemplateExpression>node);
+                        return emitTemplateExpression(node as TemplateExpression);
                     case SyntaxKind.YieldExpression:
-                        return emitYieldExpression(<YieldExpression>node);
+                        return emitYieldExpression(node as YieldExpression);
                     case SyntaxKind.SpreadElement:
-                        return emitSpreadExpression(<SpreadElement>node);
+                        return emitSpreadElement(node as SpreadElement);
                     case SyntaxKind.ClassExpression:
-                        return emitClassExpression(<ClassExpression>node);
+                        return emitClassExpression(node as ClassExpression);
                     case SyntaxKind.OmittedExpression:
                         return;
                     case SyntaxKind.AsExpression:
-                        return emitAsExpression(<AsExpression>node);
+                        return emitAsExpression(node as AsExpression);
                     case SyntaxKind.NonNullExpression:
-                        return emitNonNullExpression(<NonNullExpression>node);
+                        return emitNonNullExpression(node as NonNullExpression);
                     case SyntaxKind.MetaProperty:
-                        return emitMetaProperty(<MetaProperty>node);
+                        return emitMetaProperty(node as MetaProperty);
+                    case SyntaxKind.SyntheticExpression:
+                        return Debug.fail("SyntheticExpression should never be printed.");
 
                     // JSX
                     case SyntaxKind.JsxElement:
-                        return emitJsxElement(<JsxElement>node);
+                        return emitJsxElement(node as JsxElement);
                     case SyntaxKind.JsxSelfClosingElement:
-                        return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                        return emitJsxSelfClosingElement(node as JsxSelfClosingElement);
                     case SyntaxKind.JsxFragment:
-                        return emitJsxFragment(<JsxFragment>node);
+                        return emitJsxFragment(node as JsxFragment);
+
+                    // Synthesized list
+                    case SyntaxKind.SyntaxList:
+                        return Debug.fail("SyntaxList should not be printed");
 
                     // Transformation nodes
+                    case SyntaxKind.NotEmittedStatement:
+                        return;
                     case SyntaxKind.PartiallyEmittedExpression:
-                        return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
-
+                        return emitPartiallyEmittedExpression(node as PartiallyEmittedExpression);
                     case SyntaxKind.CommaListExpression:
-                        return emitCommaList(<CommaListExpression>node);
+                        return emitCommaList(node as CommaListExpression);
+                    case SyntaxKind.MergeDeclarationMarker:
+                    case SyntaxKind.EndOfDeclarationMarker:
+                        return;
+                    case SyntaxKind.SyntheticReferenceExpression:
+                        return Debug.fail("SyntheticReferenceExpression should not be printed");
                 }
             }
+            if (isKeyword(node.kind)) return writeTokenNode(node, writeKeyword);
+            if (isTokenKind(node.kind)) return writeTokenNode(node, writePunctuation);
+            Debug.fail(`Unhandled SyntaxKind: ${Debug.formatSyntaxKind(node.kind)}.`);
         }
 
         function emitMappedTypeParameter(node: TypeParameterDeclaration): void {
@@ -1732,10 +1766,11 @@ namespace ts {
         }
 
         function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
-            Debug.assert(lastNode === node || lastSubstitution === node);
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, hint, node);
-            pipelinePhase(hint, lastSubstitution!);
-            Debug.assert(lastNode === node || lastSubstitution === node);
+            Debug.assertIsDefined(lastSubstitution);
+            node = lastSubstitution;
+            lastSubstitution = undefined;
+            pipelinePhase(hint, node);
         }
 
         function getHelpersFromBundledSourceFiles(bundle: Bundle): string[] | undefined {
@@ -1761,7 +1796,7 @@ namespace ts {
 
         function emitHelpers(node: Node) {
             let helpersEmitted = false;
-            const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
+            const bundle = node.kind === SyntaxKind.Bundle ? node as Bundle : undefined;
             if (bundle && moduleKind === ModuleKind.None) {
                 return;
             }
@@ -1926,7 +1961,7 @@ namespace ts {
 
         function emitComputedPropertyName(node: ComputedPropertyName) {
             writePunctuation("[");
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfComputedPropertyName);
             writePunctuation("]");
         }
 
@@ -1963,12 +1998,12 @@ namespace ts {
                 emitTypeAnnotation(node.type);
             }
             // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
-            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos, node);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitDecorator(decorator: Decorator) {
             writePunctuation("@");
-            emitExpression(decorator.expression);
+            emitExpression(decorator.expression, parenthesizer.parenthesizeLeftSideOfAccess);
         }
 
         //
@@ -2015,6 +2050,13 @@ namespace ts {
             emit(node.name);
             emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
+        }
+
+        function emitClassStaticBlockDeclaration(node: ClassStaticBlockDeclaration) {
+            emitDecorators(node, node.decorators);
+            emitModifiers(node, node.modifiers);
+            writeKeyword("static");
+            emitBlockFunctionBody(node.body);
         }
 
         function emitConstructor(node: ConstructorDeclaration) {
@@ -2158,7 +2200,7 @@ namespace ts {
         }
 
         function emitArrayType(node: ArrayTypeNode) {
-            emit(node.elementType);
+            emit(node.elementType, parenthesizer.parenthesizeElementTypeOfArrayType);
             writePunctuation("[");
             writePunctuation("]");
         }
@@ -2185,24 +2227,24 @@ namespace ts {
         }
 
         function emitOptionalType(node: OptionalTypeNode) {
-            emit(node.type);
+            emit(node.type, parenthesizer.parenthesizeElementTypeOfArrayType);
             writePunctuation("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
-            emitList(node, node.types, ListFormat.UnionTypeConstituents);
+            emitList(node, node.types, ListFormat.UnionTypeConstituents, parenthesizer.parenthesizeMemberOfElementType);
         }
 
         function emitIntersectionType(node: IntersectionTypeNode) {
-            emitList(node, node.types, ListFormat.IntersectionTypeConstituents);
+            emitList(node, node.types, ListFormat.IntersectionTypeConstituents, parenthesizer.parenthesizeMemberOfElementType);
         }
 
         function emitConditionalType(node: ConditionalTypeNode) {
-            emit(node.checkType);
+            emit(node.checkType, parenthesizer.parenthesizeMemberOfConditionalType);
             writeSpace();
             writeKeyword("extends");
             writeSpace();
-            emit(node.extendsType);
+            emit(node.extendsType, parenthesizer.parenthesizeMemberOfConditionalType);
             writeSpace();
             writePunctuation("?");
             writeSpace();
@@ -2232,11 +2274,11 @@ namespace ts {
         function emitTypeOperator(node: TypeOperatorNode) {
             writeTokenText(node.operator, writeKeyword);
             writeSpace();
-            emit(node.type);
+            emit(node.type, parenthesizer.parenthesizeMemberOfElementType);
         }
 
         function emitIndexedAccessType(node: IndexedAccessTypeNode) {
-            emit(node.objectType);
+            emit(node.objectType, parenthesizer.parenthesizeMemberOfElementType);
             writePunctuation("[");
             emit(node.indexType);
             writePunctuation("]");
@@ -2339,7 +2381,7 @@ namespace ts {
                 writeSpace();
             }
             emit(node.name);
-            emitInitializer(node.initializer, node.name.end, node);
+            emitInitializer(node.initializer, node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         //
@@ -2349,7 +2391,7 @@ namespace ts {
         function emitArrayLiteralExpression(node: ArrayLiteralExpression) {
             const elements = node.elements;
             const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-            emitExpressionList(node, elements, ListFormat.ArrayLiteralExpressionElements | preferNewLine);
+            emitExpressionList(node, elements, ListFormat.ArrayLiteralExpressionElements | preferNewLine, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
@@ -2370,7 +2412,7 @@ namespace ts {
         }
 
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
-            const expression = cast(emitExpression(node.expression), isExpression);
+            emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
             const token = node.questionDotToken || setTextRangePosEnd(factory.createToken(SyntaxKind.DotToken) as DotToken, node.expression.end, node.name.pos);
             const linesBeforeDot = getLinesBetweenNodes(node, node.expression, token);
             const linesAfterDot = getLinesBetweenNodes(node, token, node.name);
@@ -2379,7 +2421,7 @@ namespace ts {
 
             const shouldEmitDotDot =
                 token.kind !== SyntaxKind.QuestionDotToken &&
-                mayNeedDotDotForPropertyAccess(expression) &&
+                mayNeedDotDotForPropertyAccess(node.expression) &&
                 !writer.hasTrailingComment() &&
                 !writer.hasTrailingWhitespace();
 
@@ -2404,7 +2446,7 @@ namespace ts {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
+                const text = getLiteralTextOfNode(expression as LiteralExpression, /*neverAsciiEscape*/ true, /*jsxAttributeEscape*/ false);
                 // If he number will be printed verbatim and it doesn't already contain a dot, add one
                 // if the expression doesn't have any comments that will be emitted.
                 return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
@@ -2419,7 +2461,7 @@ namespace ts {
         }
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
             emit(node.questionDotToken);
             emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
@@ -2427,22 +2469,42 @@ namespace ts {
         }
 
         function emitCallExpression(node: CallExpression) {
-            emitExpression(node.expression);
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
+            emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emit(node.questionDotToken);
             emitTypeArguments(node, node.typeArguments);
-            emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments);
+            emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitNewExpression(node: NewExpression) {
             emitTokenWithComment(SyntaxKind.NewKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfNew);
             emitTypeArguments(node, node.typeArguments);
-            emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
+            emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-            emitExpression(node.tag);
+            const indirectCall = getEmitFlags(node) & EmitFlags.IndirectCall;
+            if (indirectCall) {
+                writePunctuation("(");
+                writeLiteral("0");
+                writePunctuation(",");
+                writeSpace();
+            }
+            emitExpression(node.tag, parenthesizer.parenthesizeLeftSideOfAccess);
+            if (indirectCall) {
+                writePunctuation(")");
+            }
             emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emitExpression(node.template);
@@ -2452,13 +2514,13 @@ namespace ts {
             writePunctuation("<");
             emit(node.type);
             writePunctuation(">");
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
             const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
             const indented = writeLineSeparatorsAndIndentBefore(node.expression, node);
-            emitExpression(node.expression);
+            emitExpression(node.expression, /*parenthesizerRules*/ undefined);
             writeLineSeparatorsAfter(node.expression, node);
             decreaseIndentIf(indented);
             emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
@@ -2486,25 +2548,25 @@ namespace ts {
         function emitDeleteExpression(node: DeleteExpression) {
             emitTokenWithComment(SyntaxKind.DeleteKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function emitTypeOfExpression(node: TypeOfExpression) {
             emitTokenWithComment(SyntaxKind.TypeOfKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function emitVoidExpression(node: VoidExpression) {
             emitTokenWithComment(SyntaxKind.VoidKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function emitAwaitExpression(node: AwaitExpression) {
             emitTokenWithComment(SyntaxKind.AwaitKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
@@ -2512,7 +2574,7 @@ namespace ts {
             if (shouldEmitWhitespaceBeforeOperand(node)) {
                 writeSpace();
             }
-            emitExpression(node.operand);
+            emitExpression(node.operand, parenthesizer.parenthesizeOperandOfPrefixUnary);
         }
 
         function shouldEmitWhitespaceBeforeOperand(node: PrefixUnaryExpression) {
@@ -2530,92 +2592,117 @@ namespace ts {
             // The same is true of minus of course.
             const operand = node.operand;
             return operand.kind === SyntaxKind.PrefixUnaryExpression
-                && ((node.operator === SyntaxKind.PlusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusPlusToken))
-                    || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
+                && ((node.operator === SyntaxKind.PlusToken && ((operand as PrefixUnaryExpression).operator === SyntaxKind.PlusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.PlusPlusToken))
+                    || (node.operator === SyntaxKind.MinusToken && ((operand as PrefixUnaryExpression).operator === SyntaxKind.MinusToken || (operand as PrefixUnaryExpression).operator === SyntaxKind.MinusMinusToken)));
         }
 
         function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
-            emitExpression(node.operand);
+            emitExpression(node.operand, parenthesizer.parenthesizeOperandOfPostfixUnary);
             writeTokenText(node.operator, writeOperator);
         }
 
-        const enum EmitBinaryExpressionState {
-            EmitLeft,
-            EmitRight,
-            FinishEmit
-        }
+        function createEmitBinaryExpression() {
+            interface WorkArea {
+                stackIndex: number;
+                preserveSourceNewlinesStack: (boolean | undefined)[];
+                containerPosStack: number[];
+                containerEndStack: number[];
+                declarationListContainerEndStack: number[];
+                shouldEmitCommentsStack: boolean[];
+                shouldEmitSourceMapsStack: boolean[];
+            }
 
-        /**
-         * emitBinaryExpression includes an embedded work stack to attempt to handle as many nested binary expressions
-         * as possible without creating any additional stack frames. This can only be done when the emit pipeline does
-         * not require notification/substitution/comment/sourcemap decorations.
-         */
-        function emitBinaryExpression(node: BinaryExpression) {
-            const nodeStack = [node];
-            const stateStack = [EmitBinaryExpressionState.EmitLeft];
-            let stackIndex = 0;
-            while (stackIndex >= 0) {
-                node = nodeStack[stackIndex];
-                switch (stateStack[stackIndex]) {
-                    case EmitBinaryExpressionState.EmitLeft: {
-                        maybePipelineEmitExpression(node.left);
-                        break;
-                    }
-                    case EmitBinaryExpressionState.EmitRight: {
-                        const isCommaOperator = node.operatorToken.kind !== SyntaxKind.CommaToken;
-                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
-                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
-                        writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
-                        emitLeadingCommentsOfPosition(node.operatorToken.pos);
-                        writeTokenNode(node.operatorToken, node.operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
-                        emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
-                        writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
-                        maybePipelineEmitExpression(node.right);
-                        break;
-                    }
-                    case EmitBinaryExpressionState.FinishEmit: {
-                        const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
-                        const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
-                        decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
-                        stackIndex--;
-                        break;
-                    }
-                    default: return Debug.fail(`Invalid state ${stateStack[stackIndex]} for emitBinaryExpressionWorker`);
+            return createBinaryExpressionTrampoline(onEnter, onLeft, onOperator, onRight, onExit, /*foldState*/ undefined);
+
+            function onEnter(node: BinaryExpression, state: WorkArea | undefined) {
+                if (state) {
+                    state.stackIndex++;
+                    state.preserveSourceNewlinesStack[state.stackIndex] = preserveSourceNewlines;
+                    state.containerPosStack[state.stackIndex] = containerPos;
+                    state.containerEndStack[state.stackIndex] = containerEnd;
+                    state.declarationListContainerEndStack[state.stackIndex] = declarationListContainerEnd;
+                    const emitComments = state.shouldEmitCommentsStack[state.stackIndex] = shouldEmitComments(node);
+                    const emitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex] = shouldEmitSourceMaps(node);
+                    onBeforeEmitNode?.(node);
+                    if (emitComments) emitCommentsBeforeNode(node);
+                    if (emitSourceMaps) emitSourceMapsBeforeNode(node);
+                    beforeEmitNode(node);
+                }
+                else {
+                    state = {
+                        stackIndex: 0,
+                        preserveSourceNewlinesStack: [undefined],
+                        containerPosStack: [-1],
+                        containerEndStack: [-1],
+                        declarationListContainerEndStack: [-1],
+                        shouldEmitCommentsStack: [false],
+                        shouldEmitSourceMapsStack: [false],
+                    };
+                }
+                return state;
+            }
+
+            function onLeft(next: Expression, _workArea: WorkArea, parent: BinaryExpression) {
+                return maybeEmitExpression(next, parent, "left");
+            }
+
+            function onOperator(operatorToken: BinaryOperatorToken, _state: WorkArea, node: BinaryExpression) {
+                const isCommaOperator = operatorToken.kind !== SyntaxKind.CommaToken;
+                const linesBeforeOperator = getLinesBetweenNodes(node, node.left, operatorToken);
+                const linesAfterOperator = getLinesBetweenNodes(node, operatorToken, node.right);
+                writeLinesAndIndent(linesBeforeOperator, isCommaOperator);
+                emitLeadingCommentsOfPosition(operatorToken.pos);
+                writeTokenNode(operatorToken, operatorToken.kind === SyntaxKind.InKeyword ? writeKeyword : writeOperator);
+                emitTrailingCommentsOfPosition(operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
+                writeLinesAndIndent(linesAfterOperator, /*writeSpaceIfNotIndenting*/ true);
+            }
+
+            function onRight(next: Expression, _workArea: WorkArea, parent: BinaryExpression) {
+                return maybeEmitExpression(next, parent, "right");
+            }
+
+            function onExit(node: BinaryExpression, state: WorkArea) {
+                const linesBeforeOperator = getLinesBetweenNodes(node, node.left, node.operatorToken);
+                const linesAfterOperator = getLinesBetweenNodes(node, node.operatorToken, node.right);
+                decreaseIndentIf(linesBeforeOperator, linesAfterOperator);
+                if (state.stackIndex > 0) {
+                    const savedPreserveSourceNewlines = state.preserveSourceNewlinesStack[state.stackIndex];
+                    const savedContainerPos = state.containerPosStack[state.stackIndex];
+                    const savedContainerEnd = state.containerEndStack[state.stackIndex];
+                    const savedDeclarationListContainerEnd = state.declarationListContainerEndStack[state.stackIndex];
+                    const shouldEmitComments = state.shouldEmitCommentsStack[state.stackIndex];
+                    const shouldEmitSourceMaps = state.shouldEmitSourceMapsStack[state.stackIndex];
+                    afterEmitNode(savedPreserveSourceNewlines);
+                    if (shouldEmitSourceMaps) emitSourceMapsAfterNode(node);
+                    if (shouldEmitComments) emitCommentsAfterNode(node, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+                    onAfterEmitNode?.(node);
+                    state.stackIndex--;
                 }
             }
 
-            function maybePipelineEmitExpression(next: Expression) {
-                // Advance the state of this unit of work,
-                stateStack[stackIndex]++;
+            function maybeEmitExpression(next: Expression, parent: BinaryExpression, side: "left" | "right") {
+                const parenthesizerRule = side === "left" ?
+                    parenthesizer.getParenthesizeLeftSideOfBinaryForOperator(parent.operatorToken.kind) :
+                    parenthesizer.getParenthesizeRightSideOfBinaryForOperator(parent.operatorToken.kind);
 
-                // Then actually do the work of emitting the node `next` returned by the prior state
-
-                // The following section should be identical to `pipelineEmit` save it assumes EmitHint.Expression and offloads
-                // binary expression handling, where possible, to the contained work queue
-
-                // #region trampolinePipelineEmit
-                const savedLastNode = lastNode;
-                const savedLastSubstitution = lastSubstitution;
-                lastNode = next;
-                lastSubstitution = undefined;
-
-                const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
-                if (pipelinePhase === pipelineEmitWithHint && isBinaryExpression(next)) {
-                    // If the target pipeline phase is emit directly, and the next node's also a binary expression,
-                    // skip all the intermediate indirection and push the expression directly onto the work stack
-                    stackIndex++;
-                    stateStack[stackIndex] = EmitBinaryExpressionState.EmitLeft;
-                    nodeStack[stackIndex] = next;
-                }
-                else {
-                    pipelinePhase(EmitHint.Expression, next);
+                let pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression, next);
+                if (pipelinePhase === pipelineEmitWithSubstitution) {
+                    Debug.assertIsDefined(lastSubstitution);
+                    next = parenthesizerRule(cast(lastSubstitution, isExpression));
+                    pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, EmitHint.Expression, next);
+                    lastSubstitution = undefined;
                 }
 
-                Debug.assert(lastNode === next);
+                if (pipelinePhase === pipelineEmitWithComments ||
+                    pipelinePhase === pipelineEmitWithSourceMaps ||
+                    pipelinePhase === pipelineEmitWithHint) {
+                    if (isBinaryExpression(next)) {
+                        return next;
+                    }
+                }
 
-                lastNode = savedLastNode;
-                lastSubstitution = savedLastSubstitution;
-                // #endregion trampolinePipelineEmit
+                currentParenthesizerRule = parenthesizerRule;
+                pipelinePhase(EmitHint.Expression, next);
             }
         }
 
@@ -2625,17 +2712,17 @@ namespace ts {
             const linesBeforeColon = getLinesBetweenNodes(node, node.whenTrue, node.colonToken);
             const linesAfterColon = getLinesBetweenNodes(node, node.colonToken, node.whenFalse);
 
-            emitExpression(node.condition);
+            emitExpression(node.condition, parenthesizer.parenthesizeConditionOfConditionalExpression);
             writeLinesAndIndent(linesBeforeQuestion, /*writeSpaceIfNotIndenting*/ true);
             emit(node.questionToken);
             writeLinesAndIndent(linesAfterQuestion, /*writeSpaceIfNotIndenting*/ true);
-            emitExpression(node.whenTrue);
+            emitExpression(node.whenTrue, parenthesizer.parenthesizeBranchOfConditionalExpression);
             decreaseIndentIf(linesBeforeQuestion, linesAfterQuestion);
 
             writeLinesAndIndent(linesBeforeColon, /*writeSpaceIfNotIndenting*/ true);
             emit(node.colonToken);
             writeLinesAndIndent(linesAfterColon, /*writeSpaceIfNotIndenting*/ true);
-            emitExpression(node.whenFalse);
+            emitExpression(node.whenFalse, parenthesizer.parenthesizeBranchOfConditionalExpression);
             decreaseIndentIf(linesBeforeColon, linesAfterColon);
         }
 
@@ -2647,12 +2734,12 @@ namespace ts {
         function emitYieldExpression(node: YieldExpression) {
             emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
             emit(node.asteriskToken);
-            emitExpressionWithLeadingSpace(node.expression);
+            emitExpressionWithLeadingSpace(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
-        function emitSpreadExpression(node: SpreadElement) {
+        function emitSpreadElement(node: SpreadElement) {
             emitTokenWithComment(SyntaxKind.DotDotDotToken, node.pos, writePunctuation, node);
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitClassExpression(node: ClassExpression) {
@@ -2661,12 +2748,12 @@ namespace ts {
         }
 
         function emitExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
             emitTypeArguments(node, node.typeArguments);
         }
 
         function emitAsExpression(node: AsExpression) {
-            emitExpression(node.expression);
+            emitExpression(node.expression, /*parenthesizerRules*/ undefined);
             if (node.type) {
                 writeSpace();
                 writeKeyword("as");
@@ -2676,7 +2763,7 @@ namespace ts {
         }
 
         function emitNonNullExpression(node: NonNullExpression) {
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeLeftSideOfAccess);
             writeOperator("!");
         }
 
@@ -2727,9 +2814,8 @@ namespace ts {
             }
         }
 
-
         function emitExpressionStatement(node: ExpressionStatement) {
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfExpressionStatement);
             // Emit semicolon in non json files
             // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
             if (!isJsonSourceFile(currentSourceFile!) || nodeIsSynthesized(node.expression)) {
@@ -2939,7 +3025,7 @@ namespace ts {
             emit(node.name);
             emit(node.exclamationToken);
             emitTypeAnnotation(node.type);
-            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
@@ -2962,10 +3048,6 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
-        function emitBlockCallback(_hint: EmitHint, body: Node): void {
-            emitBlockFunctionBody(<Block>body);
-        }
-
         function emitSignatureAndBody(node: FunctionLikeDeclaration, emitSignatureHead: (node: SignatureDeclaration) => void) {
             const body = node.body;
             if (body) {
@@ -2980,12 +3062,7 @@ namespace ts {
                     generateNames(node.body);
 
                     emitSignatureHead(node);
-                    if (onEmitNode) {
-                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
-                    }
-                    else {
-                        emitBlockFunctionBody(body);
-                    }
+                    emitBlockFunctionBody(body);
                     popNameGenerationScope(node);
 
                     if (indentedFlag) {
@@ -2995,7 +3072,7 @@ namespace ts {
                 else {
                     emitSignatureHead(node);
                     writeSpace();
-                    emitExpression(body);
+                    emitExpression(body, parenthesizer.parenthesizeConciseBodyOfArrowFunction);
                 }
             }
             else {
@@ -3050,6 +3127,7 @@ namespace ts {
         }
 
         function emitBlockFunctionBody(body: Block) {
+            onBeforeEmitNode?.(body);
             writeSpace();
             writePunctuation("{");
             increaseIndent();
@@ -3067,6 +3145,7 @@ namespace ts {
 
             decreaseIndent();
             writeToken(SyntaxKind.CloseBraceToken, body.statements.end, writePunctuation, body);
+            onAfterEmitNode?.(body);
         }
 
         function emitBlockFunctionBodyOnSingleLine(body: Block) {
@@ -3084,7 +3163,7 @@ namespace ts {
                 increaseIndent();
             }
             else {
-                emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, statementOffset);
+                emitList(body, body.statements, ListFormat.MultiLineFunctionBodyStatements, /*parenthesizerRule*/ undefined, statementOffset);
             }
         }
 
@@ -3171,10 +3250,10 @@ namespace ts {
 
             let body = node.body;
             if (!body) return writeTrailingSemicolon();
-            while (body.kind === SyntaxKind.ModuleDeclaration) {
+            while (body && isModuleDeclaration(body)) {
                 writePunctuation(".");
-                emit((<ModuleDeclaration>body).name);
-                body = (<ModuleDeclaration>body).body!;
+                emit(body.name);
+                body = body.body;
             }
 
             writeSpace();
@@ -3230,6 +3309,9 @@ namespace ts {
                 writeSpace();
             }
             emitExpression(node.moduleSpecifier);
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
         }
 
@@ -3272,7 +3354,9 @@ namespace ts {
                 emitTokenWithComment(SyntaxKind.DefaultKeyword, nextPos, writeKeyword, node);
             }
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, node.isExportEquals ?
+                parenthesizer.getParenthesizeRightSideOfBinaryForOperator(SyntaxKind.EqualsToken) :
+                parenthesizer.parenthesizeExpressionOfExportDefault);
             writeTrailingSemicolon();
         }
 
@@ -3296,7 +3380,31 @@ namespace ts {
                 writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
+            if (node.assertClause) {
+                emitWithLeadingSpace(node.assertClause);
+            }
             writeTrailingSemicolon();
+        }
+
+        function emitAssertClause(node: AssertClause) {
+            emitTokenWithComment(SyntaxKind.AssertKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            const elements = node.elements;
+            emitList(node, elements, ListFormat.ImportClauseEntries);
+        }
+
+        function emitAssertEntry(node: AssertEntry) {
+            emit(node.name);
+            writePunctuation(":");
+            writeSpace();
+
+            const value = node.value;
+            /** @see {emitPropertyAssignment} */
+            if ((getEmitFlags(value) & EmitFlags.NoLeadingComments) === 0) {
+                const commentRange = getCommentRange(value);
+                emitTrailingCommentsOfPosition(commentRange.pos);
+            }
+            emit(value);
         }
 
         function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
@@ -3333,6 +3441,10 @@ namespace ts {
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
+            if (node.isTypeOnly) {
+                writeKeyword("type");
+                writeSpace();
+            }
             if (node.propertyName) {
                 emit(node.propertyName);
                 writeSpace();
@@ -3472,7 +3584,7 @@ namespace ts {
         function emitCaseClause(node: CaseClause) {
             emitTokenWithComment(SyntaxKind.CaseKeyword, node.pos, writeKeyword, node);
             writeSpace();
-            emitExpression(node.expression);
+            emitExpression(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
 
             emitCaseOrDefaultClauseRest(node, node.statements, node.expression.end);
         }
@@ -3543,7 +3655,7 @@ namespace ts {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
-            emitExpression(initializer);
+            emitExpression(initializer, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
@@ -3552,14 +3664,14 @@ namespace ts {
                 writeSpace();
                 writePunctuation("=");
                 writeSpace();
-                emitExpression(node.objectAssignmentInitializer);
+                emitExpression(node.objectAssignmentInitializer, parenthesizer.parenthesizeExpressionForDisallowedComma);
             }
         }
 
         function emitSpreadAssignment(node: SpreadAssignment) {
             if (node.expression) {
                 emitTokenWithComment(SyntaxKind.DotDotDotToken, node.pos, writePunctuation, node);
-                emitExpression(node.expression);
+                emitExpression(node.expression, parenthesizer.parenthesizeExpressionForDisallowedComma);
             }
         }
 
@@ -3569,7 +3681,7 @@ namespace ts {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitInitializer(node.initializer, node.name.end, node);
+            emitInitializer(node.initializer, node.name.end, node, parenthesizer.parenthesizeExpressionForDisallowedComma);
         }
 
         //
@@ -3578,13 +3690,16 @@ namespace ts {
         function emitJSDoc(node: JSDoc) {
             write("/**");
             if (node.comment) {
-                const lines = node.comment.split(/\r\n?|\n/g);
-                for (const line of lines) {
-                    writeLine();
-                    writeSpace();
-                    writePunctuation("*");
-                    writeSpace();
-                    write(line);
+                const text = getTextOfJSDocComment(node.comment);
+                if (text) {
+                    const lines = text.split(/\r\n?|\n/g);
+                    for (const line of lines) {
+                        writeLine();
+                        writeSpace();
+                        writePunctuation("*");
+                        writeSpace();
+                        write(line);
+                    }
                 }
             }
             if (node.tags) {
@@ -3717,10 +3832,11 @@ namespace ts {
             emit(tagName);
         }
 
-        function emitJSDocComment(comment: string | undefined) {
-            if (comment) {
+        function emitJSDocComment(comment: string | NodeArray<JSDocComment> | undefined) {
+            const text = getTextOfJSDocComment(comment);
+            if (text) {
                 writeSpace();
-                write(comment);
+                write(text);
             }
         }
 
@@ -3819,7 +3935,7 @@ namespace ts {
             emitHelpers(node);
             const index = findIndex(statements, statement => !isPrologueDirective(statement));
             emitTripleSlashDirectivesIfNeeded(node);
-            emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
+            emitList(node, statements, ListFormat.MultiLine, /*parenthesizerRule*/ undefined, index === -1 ? statements.length : index);
             popNameGenerationScope(node);
         }
 
@@ -3830,7 +3946,7 @@ namespace ts {
         }
 
         function emitCommaList(node: CommaListExpression) {
-            emitExpressionList(node, node.elements, ListFormat.CommaListElements);
+            emitExpressionList(node, node.elements, ListFormat.CommaListElements, /*parenthesizerRule*/ undefined);
         }
 
         /**
@@ -3975,12 +4091,12 @@ namespace ts {
             }
         }
 
-        function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node) {
+        function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node, parenthesizerRule?: (node: Expression) => Expression) {
             if (node) {
                 writeSpace();
                 emitTokenWithComment(SyntaxKind.EqualsToken, equalCommentStartPos, writeOperator, container);
                 writeSpace();
-                emitExpression(node);
+                emitExpression(node, parenthesizerRule);
             }
         }
 
@@ -3998,10 +4114,10 @@ namespace ts {
             }
         }
 
-        function emitExpressionWithLeadingSpace(node: Expression | undefined) {
+        function emitExpressionWithLeadingSpace(node: Expression | undefined, parenthesizerRule?: (node: Expression) => Expression) {
             if (node) {
                 writeSpace();
-                emitExpression(node);
+                emitExpression(node, parenthesizerRule);
             }
         }
 
@@ -4035,7 +4151,7 @@ namespace ts {
         }
 
         function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode> | undefined) {
-            emitList(parentNode, typeArguments, ListFormat.TypeArguments);
+            emitList(parentNode, typeArguments, ListFormat.TypeArguments, parenthesizer.parenthesizeMemberOfElementType);
         }
 
         function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
@@ -4080,14 +4196,6 @@ namespace ts {
             emitList(parentNode, parameters, ListFormat.IndexSignatureParameters);
         }
 
-        function emitList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
-            emitNodeList(emit, parentNode, children, format, start, count);
-        }
-
-        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
-            emitNodeList(emitExpression as (node: Node) => void, parentNode, children, format, start, count); // TODO: GH#18217
-        }
-
         function writeDelimiter(format: ListFormat) {
             switch (format & ListFormat.DelimitersMask) {
                 case ListFormat.None:
@@ -4111,7 +4219,15 @@ namespace ts {
             }
         }
 
-        function emitNodeList(emit: (node: Node) => void, parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
+        function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: (node: Node) => Node, start?: number, count?: number) {
+            emitNodeList(emit, parentNode, children, format, parenthesizerRule, start, count);
+        }
+
+        function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: (node: Expression) => Expression, start?: number, count?: number) {
+            emitNodeList(emitExpression, parentNode, children, format, parenthesizerRule, start, count);
+        }
+
+        function emitNodeList(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule: ((node: Node) => Node) | undefined, start = 0, count = children ? children.length - start : 0) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
@@ -4130,9 +4246,8 @@ namespace ts {
 
             if (format & ListFormat.BracketsMask) {
                 writePunctuation(getOpeningBracket(format));
-                if (isEmpty && !isUndefined) {
-                    // TODO: GH#18217
-                    emitTrailingCommentsOfPosition(children!.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
+                if (isEmpty && children) {
+                    emitTrailingCommentsOfPosition(children.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
                 }
             }
 
@@ -4142,7 +4257,7 @@ namespace ts {
 
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
-                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && rangeIsOnSingleLine(parentNode, currentSourceFile!))) {
+                if (format & ListFormat.MultiLine && !(preserveSourceNewlines && (!parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!)))) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
@@ -4150,10 +4265,11 @@ namespace ts {
                 }
             }
             else {
+                Debug.type<NodeArray<Node>>(children);
                 // Write the opening line terminator or leading whitespace.
                 const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
                 let shouldEmitInterveningComments = mayEmitInterveningComments;
-                const leadingLineTerminatorCount = getLeadingLineTerminatorCount(parentNode, children!, format); // TODO: GH#18217
+                const leadingLineTerminatorCount = getLeadingLineTerminatorCount(parentNode, children, format); // TODO: GH#18217
                 if (leadingLineTerminatorCount) {
                     writeLine(leadingLineTerminatorCount);
                     shouldEmitInterveningComments = false;
@@ -4172,7 +4288,7 @@ namespace ts {
                 let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
                 let shouldDecreaseIndentAfterEmit = false;
                 for (let i = 0; i < count; i++) {
-                    const child = children![start + i];
+                    const child = children[start + i];
 
                     // Write the delimiter if this is not the first node.
                     if (format & ListFormat.AsteriskDelimited) {
@@ -4187,7 +4303,7 @@ namespace ts {
                         //          a
                         //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                         //          ,
-                        if (format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end) {
+                        if (format & ListFormat.DelimitersMask && previousSibling.end !== (parentNode ? parentNode.end : -1)) {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
                         writeDelimiter(format);
@@ -4224,7 +4340,12 @@ namespace ts {
                     }
 
                     nextListElementPos = child.pos;
-                    emit(child);
+                    if (emit.length === 1) {
+                        emit(child);
+                    }
+                    else {
+                        emit(child, parenthesizerRule);
+                    }
 
                     if (shouldDecreaseIndentAfterEmit) {
                         decreaseIndent();
@@ -4253,7 +4374,7 @@ namespace ts {
                 //          2
                 //          /* end of element 2 */
                 //       ];
-                if (previousSibling && parentNode.end !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments) {
+                if (previousSibling && (parentNode ? parentNode.end : -1) !== previousSibling.end && (format & ListFormat.DelimitersMask) && !skipTrailingComments) {
                     emitLeadingCommentsOfPosition(hasTrailingComma && children?.end ? children.end : previousSibling.end);
                 }
 
@@ -4265,7 +4386,7 @@ namespace ts {
                 recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                 // Write the closing line terminator or closing whitespace.
-                const closingLineTerminatorCount = getClosingLineTerminatorCount(parentNode, children!, format);
+                const closingLineTerminatorCount = getClosingLineTerminatorCount(parentNode, children, format);
                 if (closingLineTerminatorCount) {
                     writeLine(closingLineTerminatorCount);
                 }
@@ -4279,9 +4400,8 @@ namespace ts {
             }
 
             if (format & ListFormat.BracketsMask) {
-                if (isEmpty && !isUndefined) {
-                    // TODO: GH#18217
-                    emitLeadingCommentsOfPosition(children!.end); // Emit leading comments within empty lists
+                if (isEmpty && children) {
+                    emitLeadingCommentsOfPosition(children.end); // Emit leading comments within empty lists
                 }
                 writePunctuation(getClosingBracket(format));
             }
@@ -4428,7 +4548,7 @@ namespace ts {
             }
         }
 
-        function getLeadingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
+        function getLeadingLineTerminatorCount(parentNode: Node | undefined, children: readonly Node[], format: ListFormat): number {
             if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
@@ -4436,7 +4556,7 @@ namespace ts {
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
+                    return !parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
                 if (firstChild.pos === nextListElementPos) {
                     // If this child starts at the beginning of a list item in a parent list, its leading
@@ -4460,9 +4580,10 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                if (!positionIsSynthesized(parentNode.pos) &&
+                if (parentNode &&
+                    !positionIsSynthesized(parentNode.pos) &&
                     !nodeIsSynthesized(firstChild) &&
-                    (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode as Node))
+                    (!firstChild.parent || getOriginalNode(firstChild.parent) === getOriginalNode(parentNode))
                 ) {
                     if (preserveSourceNewlines) {
                         return getEffectiveLines(
@@ -4490,8 +4611,8 @@ namespace ts {
                     // JsxText will be written with its leading whitespace, so don't add more manually.
                     return 0;
                 }
-                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode) && previousNode.parent === nextNode.parent) {
-                    if (preserveSourceNewlines) {
+                else if (!nodeIsSynthesized(previousNode) && !nodeIsSynthesized(nextNode)) {
+                    if (preserveSourceNewlines && siblingNodePositionsAreComparable(previousNode, nextNode)) {
                         return getEffectiveLines(
                             includeComments => getLinesBetweenRangeEndAndRangeStart(
                                 previousNode,
@@ -4499,7 +4620,17 @@ namespace ts {
                                 currentSourceFile!,
                                 includeComments));
                     }
-                    return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                    // If `preserveSourceNewlines` is `false` we do not intend to preserve the effective lines between the
+                    // previous and next node. Instead we naively check whether nodes are on separate lines within the
+                    // same node parent. If so, we intend to preserve a single line terminator. This is less precise and
+                    // expensive than checking with `preserveSourceNewlines` as above, but the goal is not to preserve the
+                    // effective source lines between two sibling nodes.
+                    else if (!preserveSourceNewlines && originalNodesHaveSameParent(previousNode, nextNode)) {
+                        return rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile!) ? 0 : 1;
+                    }
+                    // If the two nodes are not comparable, add a line terminator based on the format that can indicate
+                    // whether new lines are preferred or not.
+                    return format & ListFormat.PreferNewLine ? 1 : 0;
                 }
                 else if (synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format)) {
                     return 1;
@@ -4511,7 +4642,7 @@ namespace ts {
             return format & ListFormat.MultiLine ? 1 : 0;
         }
 
-        function getClosingLineTerminatorCount(parentNode: TextRange, children: readonly Node[], format: ListFormat): number {
+        function getClosingLineTerminatorCount(parentNode: Node | undefined, children: readonly Node[], format: ListFormat): number {
             if (format & ListFormat.PreserveLines || preserveSourceNewlines) {
                 if (format & ListFormat.PreferNewLine) {
                     return 1;
@@ -4519,9 +4650,9 @@ namespace ts {
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
+                    return !parentNode || rangeIsOnSingleLine(parentNode, currentSourceFile!) ? 0 : 1;
                 }
-                if (!positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
+                if (parentNode && !positionIsSynthesized(parentNode.pos) && !nodeIsSynthesized(lastChild) && (!lastChild.parent || lastChild.parent === parentNode)) {
                     if (preserveSourceNewlines) {
                         const end = isNodeArray(children) && !positionIsSynthesized(children.end) ? children.end : lastChild.end;
                         return getEffectiveLines(
@@ -4631,7 +4762,7 @@ namespace ts {
 
         function skipSynthesizedParentheses(node: Node) {
             while (node.kind === SyntaxKind.ParenthesizedExpression && nodeIsSynthesized(node)) {
-                node = (<ParenthesizedExpression>node).expression;
+                node = (node as ParenthesizedExpression).expression;
             }
 
             return node;
@@ -4644,8 +4775,8 @@ namespace ts {
             else if ((isIdentifier(node) || isPrivateIdentifier(node)) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
                 return idText(node);
             }
-            else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
-                return getTextOfNode((<StringLiteral>node).textSourceNode!, includeTrivia);
+            else if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
+                return getTextOfNode((node as StringLiteral).textSourceNode!, includeTrivia);
             }
             else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                 return node.text;
@@ -4655,8 +4786,8 @@ namespace ts {
         }
 
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
-            if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
-                const textSourceNode = (<StringLiteral>node).textSourceNode!;
+            if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
+                const textSourceNode = (node as StringLiteral).textSourceNode!;
                 if (isIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
                     const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                     return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
@@ -4710,84 +4841,84 @@ namespace ts {
             if (!node) return;
             switch (node.kind) {
                 case SyntaxKind.Block:
-                    forEach((<Block>node).statements, generateNames);
+                    forEach((node as Block).statements, generateNames);
                     break;
                 case SyntaxKind.LabeledStatement:
                 case SyntaxKind.WithStatement:
                 case SyntaxKind.DoStatement:
                 case SyntaxKind.WhileStatement:
-                    generateNames((<LabeledStatement | WithStatement | DoStatement | WhileStatement>node).statement);
+                    generateNames((node as LabeledStatement | WithStatement | DoStatement | WhileStatement).statement);
                     break;
                 case SyntaxKind.IfStatement:
-                    generateNames((<IfStatement>node).thenStatement);
-                    generateNames((<IfStatement>node).elseStatement);
+                    generateNames((node as IfStatement).thenStatement);
+                    generateNames((node as IfStatement).elseStatement);
                     break;
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.ForInStatement:
-                    generateNames((<ForStatement | ForInOrOfStatement>node).initializer);
-                    generateNames((<ForStatement | ForInOrOfStatement>node).statement);
+                    generateNames((node as ForStatement | ForInOrOfStatement).initializer);
+                    generateNames((node as ForStatement | ForInOrOfStatement).statement);
                     break;
                 case SyntaxKind.SwitchStatement:
-                    generateNames((<SwitchStatement>node).caseBlock);
+                    generateNames((node as SwitchStatement).caseBlock);
                     break;
                 case SyntaxKind.CaseBlock:
-                    forEach((<CaseBlock>node).clauses, generateNames);
+                    forEach((node as CaseBlock).clauses, generateNames);
                     break;
                 case SyntaxKind.CaseClause:
                 case SyntaxKind.DefaultClause:
-                    forEach((<CaseOrDefaultClause>node).statements, generateNames);
+                    forEach((node as CaseOrDefaultClause).statements, generateNames);
                     break;
                 case SyntaxKind.TryStatement:
-                    generateNames((<TryStatement>node).tryBlock);
-                    generateNames((<TryStatement>node).catchClause);
-                    generateNames((<TryStatement>node).finallyBlock);
+                    generateNames((node as TryStatement).tryBlock);
+                    generateNames((node as TryStatement).catchClause);
+                    generateNames((node as TryStatement).finallyBlock);
                     break;
                 case SyntaxKind.CatchClause:
-                    generateNames((<CatchClause>node).variableDeclaration);
-                    generateNames((<CatchClause>node).block);
+                    generateNames((node as CatchClause).variableDeclaration);
+                    generateNames((node as CatchClause).block);
                     break;
                 case SyntaxKind.VariableStatement:
-                    generateNames((<VariableStatement>node).declarationList);
+                    generateNames((node as VariableStatement).declarationList);
                     break;
                 case SyntaxKind.VariableDeclarationList:
-                    forEach((<VariableDeclarationList>node).declarations, generateNames);
+                    forEach((node as VariableDeclarationList).declarations, generateNames);
                     break;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.Parameter:
                 case SyntaxKind.BindingElement:
                 case SyntaxKind.ClassDeclaration:
-                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    generateNameIfNeeded((node as NamedDeclaration).name);
                     break;
                 case SyntaxKind.FunctionDeclaration:
-                    generateNameIfNeeded((<FunctionDeclaration>node).name);
+                    generateNameIfNeeded((node as FunctionDeclaration).name);
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
-                        forEach((<FunctionDeclaration>node).parameters, generateNames);
-                        generateNames((<FunctionDeclaration>node).body);
+                        forEach((node as FunctionDeclaration).parameters, generateNames);
+                        generateNames((node as FunctionDeclaration).body);
                     }
                     break;
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
-                    forEach((<BindingPattern>node).elements, generateNames);
+                    forEach((node as BindingPattern).elements, generateNames);
                     break;
                 case SyntaxKind.ImportDeclaration:
-                    generateNames((<ImportDeclaration>node).importClause);
+                    generateNames((node as ImportDeclaration).importClause);
                     break;
                 case SyntaxKind.ImportClause:
-                    generateNameIfNeeded((<ImportClause>node).name);
-                    generateNames((<ImportClause>node).namedBindings);
+                    generateNameIfNeeded((node as ImportClause).name);
+                    generateNames((node as ImportClause).namedBindings);
                     break;
                 case SyntaxKind.NamespaceImport:
-                    generateNameIfNeeded((<NamespaceImport>node).name);
+                    generateNameIfNeeded((node as NamespaceImport).name);
                     break;
                 case SyntaxKind.NamespaceExport:
-                    generateNameIfNeeded((<NamespaceExport>node).name);
+                    generateNameIfNeeded((node as NamespaceExport).name);
                     break;
                 case SyntaxKind.NamedImports:
-                    forEach((<NamedImports>node).elements, generateNames);
+                    forEach((node as NamedImports).elements, generateNames);
                     break;
                 case SyntaxKind.ImportSpecifier:
-                    generateNameIfNeeded((<ImportSpecifier>node).propertyName || (<ImportSpecifier>node).name);
+                    generateNameIfNeeded((node as ImportSpecifier).propertyName || (node as ImportSpecifier).name);
                     break;
             }
         }
@@ -4801,7 +4932,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    generateNameIfNeeded((node as NamedDeclaration).name);
                     break;
             }
         }
@@ -5003,10 +5134,10 @@ namespace ts {
                     );
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
-                    return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
+                    return generateNameForModuleOrEnum(node as ModuleDeclaration | EnumDeclaration);
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ExportDeclaration:
-                    return generateNameForImportOrExportDeclaration(<ImportDeclaration | ExportDeclaration>node);
+                    return generateNameForImportOrExportDeclaration(node as ImportDeclaration | ExportDeclaration);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ExportAssignment:
@@ -5016,7 +5147,7 @@ namespace ts {
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node);
+                    return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration);
                 case SyntaxKind.ComputedPropertyName:
                     return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true);
                 default:
@@ -5073,12 +5204,40 @@ namespace ts {
         // Comments
 
         function pipelineEmitWithComments(hint: EmitHint, node: Node) {
-            Debug.assert(lastNode === node || lastSubstitution === node);
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint, node);
+            const savedContainerPos = containerPos;
+            const savedContainerEnd = containerEnd;
+            const savedDeclarationListContainerEnd = declarationListContainerEnd;
+            emitCommentsBeforeNode(node);
+            pipelinePhase(hint, node);
+            emitCommentsAfterNode(node, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+        }
+
+        function emitCommentsBeforeNode(node: Node) {
+            const emitFlags = getEmitFlags(node);
+            const commentRange = getCommentRange(node);
+
+            // Emit leading comments
+            emitLeadingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end);
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                commentsDisabled = true;
+            }
+        }
+
+        function emitCommentsAfterNode(node: Node, savedContainerPos: number, savedContainerEnd: number, savedDeclarationListContainerEnd: number) {
+            const emitFlags = getEmitFlags(node);
+            const commentRange = getCommentRange(node);
+
+            // Emit trailing comments
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                commentsDisabled = false;
+            }
+            emitTrailingCommentsOfNode(node, emitFlags, commentRange.pos, commentRange.end, savedContainerPos, savedContainerEnd, savedDeclarationListContainerEnd);
+        }
+
+        function emitLeadingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number) {
             enterComment();
             hasWrittenComment = false;
-            const emitFlags = getEmitFlags(node);
-            const { pos, end } = getCommentRange(node);
-            const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
 
             // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
             // It is expensive to walk entire tree just to set one kind of node to have no comments.
@@ -5086,14 +5245,11 @@ namespace ts {
             const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
 
             // Save current container state on the stack.
-            const savedContainerPos = containerPos;
-            const savedContainerEnd = containerEnd;
-            const savedDeclarationListContainerEnd = declarationListContainerEnd;
             if ((pos > 0 || end > 0) && pos !== end) {
                 // Emit leading comments if the position is not synthesized and the node
                 // has not opted out from emitting leading comments.
                 if (!skipLeadingComments) {
-                    emitLeadingComments(pos, isEmittedNode);
+                    emitLeadingComments(pos, /*isEmittedNode*/ node.kind !== SyntaxKind.NotEmittedStatement);
                 }
 
                 if (!skipLeadingComments || (pos >= 0 && (emitFlags & EmitFlags.NoLeadingComments) !== 0)) {
@@ -5114,18 +5270,11 @@ namespace ts {
             }
             forEach(getSyntheticLeadingComments(node), emitLeadingSynthesizedComment);
             exitComment();
+        }
 
-            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint, node);
-            if (emitFlags & EmitFlags.NoNestedComments) {
-                commentsDisabled = true;
-                pipelinePhase(hint, node);
-                commentsDisabled = false;
-            }
-            else {
-                pipelinePhase(hint, node);
-            }
-
+        function emitTrailingCommentsOfNode(node: Node, emitFlags: EmitFlags, pos: number, end: number, savedContainerPos: number, savedContainerEnd: number, savedDeclarationListContainerEnd: number) {
             enterComment();
+            const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
             forEach(getSyntheticTrailingComments(node), emitTrailingSynthesizedComment);
             if ((pos > 0 || end > 0) && pos !== end) {
                 // Restore previous container state.
@@ -5135,12 +5284,11 @@ namespace ts {
 
                 // Emit trailing comments if the position is not synthesized and the node
                 // has not opted out from emitting leading comments and is an emitted node.
-                if (!skipTrailingComments && isEmittedNode) {
+                if (!skipTrailingComments && node.kind !== SyntaxKind.NotEmittedStatement) {
                     emitTrailingComments(end);
                 }
             }
             exitComment();
-            Debug.assert(lastNode === node || lastSubstitution === node);
         }
 
         function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
@@ -5207,6 +5355,30 @@ namespace ts {
             }
             exitComment();
 
+        }
+
+        function originalNodesHaveSameParent(nodeA: Node, nodeB: Node) {
+            nodeA = getOriginalNode(nodeA);
+            // For performance, do not call `getOriginalNode` for `nodeB` if `nodeA` doesn't even
+            // have a parent node.
+            return nodeA.parent && nodeA.parent === getOriginalNode(nodeB).parent;
+        }
+
+        function siblingNodePositionsAreComparable(previousNode: Node, nextNode: Node) {
+            if (nextNode.pos < previousNode.end) {
+                return false;
+            }
+
+            previousNode = getOriginalNode(previousNode);
+            nextNode = getOriginalNode(nextNode);
+            const parent = previousNode.parent;
+            if (!parent || parent !== nextNode.parent) {
+                return false;
+            }
+
+            const parentNodeArray = getContainingNodeArray(previousNode);
+            const prevNodeIndex = parentNodeArray?.indexOf(previousNode);
+            return prevNodeIndex !== undefined && prevNodeIndex > -1 && parentNodeArray!.indexOf(nextNode) === prevNodeIndex + 1;
         }
 
         function emitLeadingComments(pos: number, isEmittedNode: boolean) {
@@ -5409,13 +5581,20 @@ namespace ts {
             return node.parsedSourceMap || undefined;
         }
 
-        function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
-            Debug.assert(lastNode === node || lastSubstitution === node);
+        function pipelineEmitWithSourceMaps(hint: EmitHint, node: Node) {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, hint, node);
-            if (isUnparsedSource(node) || isUnparsedPrepend(node)) {
-                pipelinePhase(hint, node);
-            }
-            else if (isUnparsedNode(node)) {
+            emitSourceMapsBeforeNode(node);
+            pipelinePhase(hint, node);
+            emitSourceMapsAfterNode(node);
+        }
+
+        function emitSourceMapsBeforeNode(node: Node) {
+            const emitFlags = getEmitFlags(node);
+            const sourceMapRange = getSourceMapRange(node);
+
+            // Emit leading sourcemap
+            if (isUnparsedNode(node)) {
+                Debug.assertIsDefined(node.parent, "UnparsedNodes must have parent pointers");
                 const parsed = getParsedSourceMap(node.parent);
                 if (parsed && sourceMapGenerator) {
                     sourceMapGenerator.appendSourceMap(
@@ -5427,33 +5606,35 @@ namespace ts {
                         node.parent.getLineAndCharacterOfPosition(node.end)
                     );
                 }
-                pipelinePhase(hint, node);
             }
             else {
-                const { pos, end, source = sourceMapSource } = getSourceMapRange(node);
-                const emitFlags = getEmitFlags(node);
+                const source = sourceMapRange.source || sourceMapSource;
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
-                    && pos >= 0) {
-                    emitSourcePos(source, skipSourceTrivia(source, pos));
+                    && sourceMapRange.pos >= 0) {
+                    emitSourcePos(sourceMapRange.source || sourceMapSource, skipSourceTrivia(source, sourceMapRange.pos));
                 }
-
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     sourceMapsDisabled = true;
-                    pipelinePhase(hint, node);
-                    sourceMapsDisabled = false;
-                }
-                else {
-                    pipelinePhase(hint, node);
-                }
-
-                if (node.kind !== SyntaxKind.NotEmittedStatement
-                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
-                    && end >= 0) {
-                    emitSourcePos(source, end);
                 }
             }
-            Debug.assert(lastNode === node || lastSubstitution === node);
+        }
+
+        function emitSourceMapsAfterNode(node: Node) {
+            const emitFlags = getEmitFlags(node);
+            const sourceMapRange = getSourceMapRange(node);
+
+            // Emit trailing sourcemap
+            if (!isUnparsedNode(node)) {
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
+                    sourceMapsDisabled = false;
+                }
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                    && sourceMapRange.end >= 0) {
+                    emitSourcePos(sourceMapRange.source || sourceMapSource, sourceMapRange.end);
+                }
+            }
         }
 
         /**

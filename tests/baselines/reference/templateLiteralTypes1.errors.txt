@@ -2,8 +2,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(40,5): error TS23
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(45,5): error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
   Type 'A' is not assignable to type 'B'.
     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-      Type 'string' is not assignable to type 'B'.
-        'string' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(165,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(197,16): error TS2590: Expression produces a union type that is too complex to represent.
 tests/cases/conformance/types/literal/templateLiteralTypes1.ts(201,16): error TS2590: Expression produces a union type that is too complex to represent.
@@ -62,8 +60,6 @@ tests/cases/conformance/types/literal/templateLiteralTypes1.ts(205,16): error TS
 !!! error TS2322: Type '{ [P in B as `p_${P}`]: T; }' is not assignable to type '{ [Q in A as `p_${Q}`]: U; }'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
 !!! error TS2322:     'A' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:       Type 'string' is not assignable to type 'B'.
-!!! error TS2322:         'string' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'string'.
     }
     
     // String transformations using recursive conditional types

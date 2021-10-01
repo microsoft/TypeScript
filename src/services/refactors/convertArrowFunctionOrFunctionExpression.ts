@@ -141,7 +141,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const token = getTokenAtPosition(file, startPosition);
         const typeChecker = program.getTypeChecker();
         const func = tryGetFunctionFromVariableDeclaration(file, typeChecker, token.parent);
-        if (func && !containingThis(func.body)) {
+        if (func && !containingThis(func.body) && !typeChecker.containsArgumentsReference(func)) {
             return { selectedVariableDeclaration: true, func };
         }
 
@@ -150,7 +150,8 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             maybeFunc &&
             (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
             !rangeContainsRange(maybeFunc.body, token) &&
-            !containingThis(maybeFunc.body)
+            !containingThis(maybeFunc.body) &&
+            !typeChecker.containsArgumentsReference(maybeFunc)
         ) {
             if (isFunctionExpression(maybeFunc) && isFunctionReferencedInFile(file, typeChecker, maybeFunc)) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };
@@ -177,7 +178,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function convertToBlock(body: ConciseBody): Block {
         if (isExpression(body)) {
-            return factory.createBlock([factory.createReturnStatement(body)], /* multiLine */ true);
+            const returnStatement = factory.createReturnStatement(body);
+            const file = body.getSourceFile();
+            suppressLeadingAndTrailingTrivia(returnStatement);
+            copyTrailingAsLeadingComments(body, returnStatement, file, /* commentKind */ undefined, /* hasTrailingNewLine */ true);
+            return factory.createBlock([returnStatement], /* multiLine */ true);
         }
         else {
             return body;
@@ -208,7 +213,10 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
         suppressLeadingTrivia(statement);
-        const newNode = factory.createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
+
+        const modifiersFlags = (getCombinedModifierFlags(variableDeclaration) & ModifierFlags.Export) | getEffectiveModifierFlags(func);
+        const modifiers = factory.createModifiersFromModifierFlags(modifiersFlags);
+        const newNode = factory.createFunctionDeclaration(func.decorators, length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
         if (variableDeclarationList.declarations.length === 1) {
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));

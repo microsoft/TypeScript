@@ -306,7 +306,7 @@ class FileService {
 >response : XMLHttpRequest
 
                 var result: IUploadResult = { // This should be error
->result : any
+>result : IUploadResult
 >{ // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                } : { stat: any; isNew: boolean; }
 
                     stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
@@ -336,7 +336,7 @@ class FileService {
 >TPromise : typeof WinJS.TPromise
 >as : <ValueType>(value: ValueType) => WinJS.TPromise<ValueType>
 >Files : any
->result : any
+>result : IUploadResult
 
             }, (xhr: XMLHttpRequest) => {
 >(xhr: XMLHttpRequest) => {                return WinJS.Promise.wrapError(new Errors.ConnectionError(xhr));            } : (xhr: XMLHttpRequest) => WinJS.Promise

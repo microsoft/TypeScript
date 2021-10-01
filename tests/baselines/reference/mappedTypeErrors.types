@@ -38,28 +38,28 @@ type T02 = { [P in Date]: number };  // Error
 >T02 : T02
 
 type T03 = Record<Date, number>;  // Error
->T03 : Record<Date, number>
+>T03 : T03
 
 type T10 = Pick<Shape, "name">;
->T10 : Pick<Shape, "name">
+>T10 : T10
 
 type T11 = Pick<Shape, "foo">;  // Error
->T11 : Pick<Shape, "foo">
+>T11 : T11
 
 type T12 = Pick<Shape, "name" | "foo">;  // Error
->T12 : Pick<Shape, "name" | "foo">
+>T12 : T12
 
 type T13 = Pick<Shape, keyof Named>;
->T13 : Pick<Shape, "name">
+>T13 : T13
 
 type T14 = Pick<Shape, keyof Point>;  // Error
->T14 : Pick<Shape, keyof Point>
+>T14 : T14
 
 type T15 = Pick<Shape, never>;
->T15 : Pick<Shape, never>
+>T15 : T15
 
 type T16 = Pick<Shape, undefined>;  // Error
->T16 : Pick<Shape, undefined>
+>T16 : T16
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void

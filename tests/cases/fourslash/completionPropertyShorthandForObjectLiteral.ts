@@ -44,6 +44,8 @@
 //// f15({f/*15*/});
 //// f16({f/*16*/});
 
+//// f1({ f1, /*17*/ });
+
 const locals = [
     ...(() => {
         const symbols = [];
@@ -56,11 +58,13 @@ const locals = [
 ];
 verify.completions(
     // Non-contextual, any, unknown, object, Record<string, ..>, [key: string]: .., Type parameter, etc..
-    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], exact: completion.globalsPlus(locals)},
+    { marker: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"], exact: completion.globalsPlus(locals), isNewIdentifierLocation: true },
     // Has named property
-    { marker: ["12", "13"], exact: "typed"},
+    { marker: ["12", "13"], exact: "typed", isNewIdentifierLocation: false },
     // Has both StringIndexType and named property
-    { marker: ["14"], exact: "prop", isNewIdentifierLocation: true},
+    { marker: ["14"], exact: "prop", isNewIdentifierLocation: true },
     // NumberIndexType
-    { marker: ["15", "16"], exact: [], isNewIdentifierLocation: true},
+    { marker: ["15", "16"], exact: [], isNewIdentifierLocation: true },
+    // After comma
+    { marker: ["17"], exact: completion.globalsPlus(locals), isNewIdentifierLocation: true },
 );

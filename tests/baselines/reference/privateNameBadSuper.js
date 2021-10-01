@@ -9,7 +9,7 @@ class A extends B {
 }
 
 //// [privateNameBadSuper.js]
-var _x;
+var _A_x;
 class B {
 }
 ;
@@ -17,7 +17,7 @@ class A extends B {
     constructor() {
         void 0; // Error: 'super' call must  come first
         super();
-        _x.set(this, void 0);
+        _A_x.set(this, void 0);
     }
 }
-_x = new WeakMap();
+_A_x = new WeakMap();

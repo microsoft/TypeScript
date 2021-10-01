@@ -39,7 +39,7 @@ exports.Bar = class { }
 module.exports = {
 >module.exports = {    Baz: class { }} : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
+>module : { exports: { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
 >exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >{    Baz: class { }} : { Baz: typeof Baz; }
 
@@ -67,7 +67,7 @@ exports.Quid = 2;
 module.exports = {
 >module.exports = {    Quack: 2} : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >module.exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
->module : { "\"tests/cases/conformance/jsdoc/mod1\"": { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
+>module : { exports: { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }; }
 >exports : { Baz: typeof Baz; Bar: typeof Bar; Quid: number; } | { Quack: number; Bar: typeof Bar; Quid: number; }
 >{    Quack: 2} : { Quack: number; }
 

@@ -404,9 +404,9 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
 
         case 'number': return x.toString(2);
->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))
->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 2 more)
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 
         case 'string': return x;
 >x : Symbol(x, Decl(narrowingByTypeofInSwitch.ts, 146, 69))

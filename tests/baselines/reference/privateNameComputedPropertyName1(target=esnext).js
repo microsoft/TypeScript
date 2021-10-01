@@ -39,18 +39,15 @@ new A().test();
 
 //// [privateNameComputedPropertyName1.js]
 class A {
+    #a = 'a';
+    #b;
+    #c = 'c';
+    #d;
+    #e = '';
     constructor() {
-        this.#a = 'a';
-        this.#c = 'c';
-        this.#e = '';
         this.#b = 'b';
         this.#d = 'd';
     }
-    #a;
-    #b;
-    #c;
-    #d;
-    #e;
     test() {
         const data = { a: 'a', b: 'b', c: 'c', d: 'd', e: 'e' };
         const { [this.#a]: a, [this.#b]: b, [this.#c]: c, [this.#d]: d, [this.#e = 'e']: e, } = data;

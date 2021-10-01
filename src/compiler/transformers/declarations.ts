@@ -77,9 +77,11 @@ namespace ts {
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode,
-            reportNonlocalAugmentation
+            reportNonlocalAugmentation,
+            reportNonSerializableProperty
         };
         let errorNameNode: DeclarationName | undefined;
+        let errorFallbackNode: Declaration | undefined;
 
         let currentSourceFile: SourceFile;
         let refs: ESMap<NodeId, SourceFile>;
@@ -144,8 +146,10 @@ namespace ts {
                             symbolAccessibilityResult.errorSymbolName,
                             symbolAccessibilityResult.errorModuleName));
                     }
+                    return true;
                 }
             }
+            return false;
         }
 
         function trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol) {
@@ -155,74 +159,90 @@ namespace ts {
         }
 
         function trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags) {
-            if (symbol.flags & SymbolFlags.TypeParameter) return;
-            handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
+            if (symbol.flags & SymbolFlags.TypeParameter) return false;
+            const issuedDiagnostic = handleSymbolAccessibilityError(resolver.isSymbolAccessible(symbol, enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ true));
             recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForSymbol(symbol, meaning));
+            return issuedDiagnostic;
         }
 
         function reportPrivateInBaseOfClassExpression(propertyName: string) {
-            if (errorNameNode) {
+            if (errorNameNode || errorFallbackNode) {
                 context.addDiagnostic(
-                    createDiagnosticForNode(errorNameNode, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName));
+                    createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.Property_0_of_exported_class_expression_may_not_be_private_or_protected, propertyName));
             }
         }
 
+        function errorDeclarationNameWithFallback() {
+            return errorNameNode ? declarationNameToString(errorNameNode) :
+                errorFallbackNode && getNameOfDeclaration(errorFallbackNode) ? declarationNameToString(getNameOfDeclaration(errorFallbackNode)) :
+                errorFallbackNode && isExportAssignment(errorFallbackNode) ? errorFallbackNode.isExportEquals ? "export=" : "default" :
+                "(Missing)"; // same fallback declarationNameToString uses when node is zero-width (ie, nameless)
+        }
+
         function reportInaccessibleUniqueSymbolError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "unique symbol"));
             }
         }
 
         function reportCyclicStructureError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode)));
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_a_type_with_a_cyclic_structure_which_cannot_be_trivially_serialized_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback()));
             }
         }
 
         function reportInaccessibleThisError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     "this"));
             }
         }
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
-                    declarationNameToString(errorNameNode),
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    errorDeclarationNameWithFallback(),
                     specifier));
             }
         }
 
         function reportTruncationError() {
-            if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_inferred_type_of_this_node_exceeds_the_maximum_length_the_compiler_will_serialize_An_explicit_type_annotation_is_needed));
             }
         }
 
         function reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, symbol: Symbol) {
-            const primaryDeclaration = find(parentSymbol.declarations, d => getSourceFileOfNode(d) === containingFile)!;
+            const primaryDeclaration = parentSymbol.declarations?.find(d => getSourceFileOfNode(d) === containingFile)!;
             const augmentingDeclarations = filter(symbol.declarations, d => getSourceFileOfNode(d) !== containingFile);
-            for (const augmentations of augmentingDeclarations) {
-                context.addDiagnostic(addRelatedInfo(
-                    createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
-                    createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
-                ));
+            if (augmentingDeclarations) {
+                for (const augmentations of augmentingDeclarations) {
+                    context.addDiagnostic(addRelatedInfo(
+                        createDiagnosticForNode(augmentations, Diagnostics.Declaration_augments_declaration_in_another_file_This_cannot_be_serialized),
+                        createDiagnosticForNode(primaryDeclaration, Diagnostics.This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_file)
+                    ));
+                }
+            }
+        }
+
+        function reportNonSerializableProperty(propertyName: string) {
+            if (errorNameNode || errorFallbackNode) {
+                context.addDiagnostic(createDiagnosticForNode((errorNameNode || errorFallbackNode)!, Diagnostics.The_type_of_this_node_cannot_be_serialized_because_its_property_0_cannot_be_serialized, propertyName));
             }
         }
 
         function transformDeclarationsForJS(sourceFile: SourceFile, bundled?: boolean) {
             const oldDiag = getSymbolAccessibilityDiagnostic;
-            getSymbolAccessibilityDiagnostic = (s) => ({
+            getSymbolAccessibilityDiagnostic = (s) => (s.errorNode && canProduceDiagnostics(s.errorNode) ? createGetSymbolAccessibilityDiagnosticForNode(s.errorNode)(s) : ({
                 diagnosticMessage: s.errorModuleName
                     ? Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_from_module_1_An_explicit_type_annotation_may_unblock_declaration_emit
                     : Diagnostics.Declaration_emit_for_this_file_requires_using_private_name_0_An_explicit_type_annotation_may_unblock_declaration_emit,
                 errorNode: s.errorNode || sourceFile
-            });
+            }));
             const result = resolver.getDeclarationStatementsForSourceFile(sourceFile, declarationEmitNodeBuilderFlags, symbolTracker, bundled);
             getSymbolAccessibilityDiagnostic = oldDiag;
             return result;
@@ -369,14 +389,11 @@ namespace ts {
 
                     if (declFileName) {
                         const specifier = moduleSpecifiers.getModuleSpecifier(
-                            // We pathify the baseUrl since we pathify the other paths here, so we can still easily check if the other paths are within the baseUrl
-                            // TODO: Should we _always_ be pathifying the baseUrl as we read it in?
-                            { ...options, baseUrl: options.baseUrl && toPath(options.baseUrl, host.getCurrentDirectory(), host.getCanonicalFileName) },
+                            options,
                             currentSourceFile,
                             toPath(outputFilePath, host.getCurrentDirectory(), host.getCanonicalFileName),
                             toPath(declFileName, host.getCurrentDirectory(), host.getCanonicalFileName),
                             host,
-                            /*preferences*/ undefined,
                         );
                         if (!pathIsRelative(specifier)) {
                             // If some compiler option/symlink/whatever allows access to the file containing the ambient module declaration
@@ -566,8 +583,20 @@ namespace ts {
                 case SyntaxKind.ExportDeclaration:
                 case SyntaxKind.ExportAssignment:
                     return false;
+                case SyntaxKind.ClassStaticBlockDeclaration:
+                    return true;
             }
             return false;
+        }
+
+        // If the ExpandoFunctionDeclaration have multiple overloads, then we only need to emit properties for the last one.
+        function shouldEmitFunctionProperties(input: FunctionDeclaration) {
+            if (input.body) {
+                return true;
+            }
+
+            const overloadSignatures = input.symbol.declarations?.filter(decl => isFunctionDeclaration(decl) && !decl.body);
+            return !overloadSignatures || overloadSignatures.indexOf(input) === overloadSignatures.length - 1;
         }
 
         function getBindingNameVisible(elem: BindingElement | VariableDeclaration | OmittedExpression): boolean {
@@ -703,7 +732,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     decl.importClause,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // The `importClause` visibility corresponds to the default's visibility.
@@ -715,7 +745,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     /*namedBindings*/ undefined,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier));
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined);
             }
             if (decl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
                 // Namespace import (optionally with visible default)
@@ -725,7 +755,7 @@ namespace ts {
                     decl.importClause.isTypeOnly,
                     visibleDefaultBinding,
                     namedBindings,
-                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier)) : undefined;
+                ), rewriteModuleSpecifier(decl, decl.moduleSpecifier), /*assertClause*/ undefined) : undefined;
             }
             // Named imports (optionally with visible default)
             const bindingList = mapDefined(decl.importClause.namedBindings.elements, b => resolver.isDeclarationVisible(b) ? b : undefined);
@@ -740,7 +770,8 @@ namespace ts {
                         visibleDefaultBinding,
                         bindingList && bindingList.length ? factory.updateNamedImports(decl.importClause.namedBindings, bindingList) : undefined,
                     ),
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // Augmentation of export depends on import
@@ -750,7 +781,8 @@ namespace ts {
                     /*decorators*/ undefined,
                     decl.modifiers,
                     /*importClause*/ undefined,
-                    rewriteModuleSpecifier(decl, decl.moduleSpecifier)
+                    rewriteModuleSpecifier(decl, decl.moduleSpecifier),
+                    /*assertClause*/ undefined
                 );
             }
             // Nothing visible
@@ -1085,6 +1117,7 @@ namespace ts {
                         input.isTypeOnly,
                         input.exportClause,
                         rewriteModuleSpecifier(input, input.moduleSpecifier),
+                        /*assertClause*/ undefined
                     );
                 }
                 case SyntaxKind.ExportAssignment: {
@@ -1102,7 +1135,9 @@ namespace ts {
                             diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                             errorNode: input
                         });
+                        errorFallbackNode = input;
                         const varDecl = factory.createVariableDeclaration(newId, /*exclamationToken*/ undefined, resolver.createTypeOfExpression(input.expression, input, declarationEmitNodeBuilderFlags, symbolTracker), /*initializer*/ undefined);
+                        errorFallbackNode = undefined;
                         const statement = factory.createVariableStatement(needsDeclare ? [factory.createModifier(SyntaxKind.DeclareKeyword)] : [], factory.createVariableDeclarationList([varDecl], NodeFlags.Const));
                         return [statement, factory.updateExportAssignment(input, input.decorators, input.modifiers, newId)];
                     }
@@ -1188,7 +1223,7 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
-                    if (clean && resolver.isExpandoFunctionDeclaration(input)) {
+                    if (clean && resolver.isExpandoFunctionDeclaration(input) && shouldEmitFunctionProperties(input)) {
                         const props = resolver.getPropertiesOfContainerFunction(input);
                         // Use parseNodeFactory so it is usable as an enclosing declaration
                         const fakespace = parseNodeFactory.createModuleDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);
@@ -1197,7 +1232,7 @@ namespace ts {
                         fakespace.symbol = props[0].parent!;
                         const exportMappings: [Identifier, string][] = [];
                         let declarations: (VariableStatement | ExportDeclaration)[] = mapDefined(props, p => {
-                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
+                            if (!p.valueDeclaration || !isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined; // TODO GH#33569: Handle element access expressions that created late bound names (rather than silently omitting them)
                             }
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
@@ -1221,7 +1256,7 @@ namespace ts {
                                 /*modifiers*/ undefined,
                                 /*isTypeOnly*/ false,
                                 factory.createNamedExports(map(exportMappings, ([gen, exp]) => {
-                                    return factory.createExportSpecifier(gen, exp);
+                                    return factory.createExportSpecifier(/*isTypeOnly*/ false, gen, exp);
                                 }))
                             ));
                         }
@@ -1326,6 +1361,8 @@ namespace ts {
                     }
                 }
                 case SyntaxKind.ClassDeclaration: {
+                    errorNameNode = input.name;
+                    errorFallbackNode = input;
                     const modifiers = factory.createNodeArray(ensureModifiers(input));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
@@ -1462,6 +1499,8 @@ namespace ts {
                 if (node as Node === input) {
                     return node;
                 }
+                errorFallbackNode = undefined;
+                errorNameNode = undefined;
                 return node && setOriginalNode(preserveJsDoc(node, input), input);
             }
         }
@@ -1531,7 +1570,7 @@ namespace ts {
         }
 
         function ensureModifierFlags(node: Node): ModifierFlags {
-            let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async); // No async modifiers in declaration files
+            let mask = ModifierFlags.All ^ (ModifierFlags.Public | ModifierFlags.Async | ModifierFlags.Override); // No async and override modifiers in declaration files
             let additions = (needsDeclare && !isAlwaysType(node)) ? ModifierFlags.Ambient : ModifierFlags.None;
             const parentIsFile = node.parent.kind === SyntaxKind.SourceFile;
             if (!parentIsFile || (isBundledEmit && parentIsFile && isExternalModule(node.parent as SourceFile))) {

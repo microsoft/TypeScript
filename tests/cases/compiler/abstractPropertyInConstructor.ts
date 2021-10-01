@@ -68,3 +68,25 @@ class User {
         a.method2();
     }
 }
+
+abstract class C1 {
+    abstract x: string;
+    abstract y: string;
+
+    constructor() {
+        let self = this;                // ok
+        let { x, y: y1 } = this;        // error
+        ({ x, y: y1, "y": y1 } = this); // error
+    }
+}
+
+class C2 {
+    x: string;
+    y: string;
+
+    constructor() {
+        let self = this;                // ok
+        let { x, y: y1 } = this;        // ok
+        ({ x, y: y1, "y": y1 } = this); // ok
+    }
+}

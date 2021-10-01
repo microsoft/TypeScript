@@ -20,7 +20,9 @@ namespace ts {
 
             node.emitNode = {} as EmitNode;
         }
-
+        else {
+            Debug.assert(!(node.emitNode.flags & EmitFlags.Immutable), "Invalid attempt to mutate an immutable node.");
+        }
         return node.emitNode;
     }
 

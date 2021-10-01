@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, preferences } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, program.getCompilerOptions().target!, getQuotePreference(sourceFile, preferences));
+                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
                         fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
@@ -19,7 +19,7 @@ namespace ts.codefix {
 
     function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
         for (const moduleSpecifier of importingFile.imports) {
-            const imported = getResolvedModule(importingFile, moduleSpecifier.text);
+            const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
             if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
                 continue;
             }
@@ -294,7 +294,7 @@ namespace ts.codefix {
             */
             const newNodes = [
                 makeConst(/*modifiers*/ undefined, rename, assignment.right),
-                makeExportDeclaration([factory.createExportSpecifier(rename, text)]),
+                makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, rename, text)]),
             ];
             changes.replaceNodeWithNodes(sourceFile, assignment.parent, newNodes);
         }
@@ -317,7 +317,7 @@ namespace ts.codefix {
         return makeExportDeclaration(/*exportClause*/ undefined, moduleSpecifier);
     }
     function reExportDefault(moduleSpecifier: string): ExportDeclaration {
-        return makeExportDeclaration([factory.createExportSpecifier(/*propertyName*/ undefined, "default")], moduleSpecifier);
+        return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
     }
 
     function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
@@ -436,7 +436,9 @@ namespace ts.codefix {
 
     /**
      * Convert `import x = require("x").`
-     * Also converts uses like `x.y()` to `y()` and uses a named import.
+     * Also:
+     * - Convert `x.default()` to `x()` to handle ES6 default export
+     * - Converts uses like `x.y()` to `y()` and uses a named import.
      */
     function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: StringLiteralLike, checker: TypeChecker, identifiers: Identifiers, quotePreference: QuotePreference): ConvertedImports {
         const nameSymbol = checker.getSymbolAtLocation(name);
@@ -454,15 +456,23 @@ namespace ts.codefix {
 
             const { parent } = use;
             if (isPropertyAccessExpression(parent)) {
-                const { expression, name: { text: propertyName } } = parent;
-                Debug.assert(expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
-                let idName = namedBindingsNames.get(propertyName);
-                if (idName === undefined) {
-                    idName = makeUniqueName(propertyName, identifiers);
-                    namedBindingsNames.set(propertyName, idName);
-                }
+                const { name: { text: propertyName } } = parent;
+                if (propertyName === "default") {
+                    needDefaultImport = true;
 
-                (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(idName));
+                    const importDefaultName = use.getText();
+                    (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(importDefaultName));
+                }
+                else {
+                    Debug.assert(parent.expression === use, "Didn't expect expression === use"); // Else shouldn't have been in `collectIdentifiers`
+                    let idName = namedBindingsNames.get(propertyName);
+                    if (idName === undefined) {
+                        idName = makeUniqueName(propertyName, identifiers);
+                        namedBindingsNames.set(propertyName, idName);
+                    }
+
+                    (useSitesToUnqualify ??= new Map()).set(parent, factory.createIdentifier(idName));
+                }
             }
             else {
                 needDefaultImport = true;
@@ -470,7 +480,7 @@ namespace ts.codefix {
         }
 
         const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
-            factory.createImportSpecifier(propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
+            factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
         if (!namedBindings) {
             // If it was unused, ensure that we at least import *something*.
             needDefaultImport = true;
@@ -563,7 +573,7 @@ namespace ts.codefix {
     }
 
     function makeImportSpecifier(propertyName: string | undefined, name: string): ImportSpecifier {
-        return factory.createImportSpecifier(propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
+        return factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName !== undefined && propertyName !== name ? factory.createIdentifier(propertyName) : undefined, factory.createIdentifier(name));
     }
 
     function makeConst(modifiers: readonly Modifier[] | undefined, name: string | BindingName, init: Expression): VariableStatement {
