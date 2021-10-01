@@ -1,5 +1,5 @@
-tests/cases/compiler/staticAsIdentifier.ts(12,19): error TS1005: ';' expected.
-tests/cases/compiler/staticAsIdentifier.ts(16,19): error TS1005: ';' expected.
+tests/cases/compiler/staticAsIdentifier.ts(12,12): error TS1434: Unexpected keyword or identifier.
+tests/cases/compiler/staticAsIdentifier.ts(16,12): error TS1434: Unexpected keyword or identifier.
 
 
 ==== tests/cases/compiler/staticAsIdentifier.ts (2 errors) ====
@@ -15,14 +15,14 @@ tests/cases/compiler/staticAsIdentifier.ts(16,19): error TS1005: ';' expected.
     
     class C3 {
         static static p: string;
-                      ~
-!!! error TS1005: ';' expected.
+               ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
     }
     
     class C4 {
         static static foo() {}
-                      ~~~
-!!! error TS1005: ';' expected.
+               ~~~~~~
+!!! error TS1434: Unexpected keyword or identifier.
     }
     
     class C5 {
