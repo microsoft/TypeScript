@@ -1675,9 +1675,8 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
-            excludeGlobals = false,
-            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, suggestedNameNotFoundMessage);
+            excludeGlobals = false): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol);
         }
 
         function resolveNameHelper(
@@ -1688,8 +1687,7 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
-            lookup: typeof getSymbol,
-            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol | undefined {
+            lookup: typeof getSymbol): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2026,10 +2024,14 @@ namespace ts {
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                         let suggestion: Symbol | undefined;
-                        if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
+                        if (suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
+                                // TODO: Might not need that cast at the end
+                                const suggestedNameNotFoundMessage = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg as Identifier)
+                                    ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                                    : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg!), suggestionName);
                                 if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
@@ -3080,7 +3082,7 @@ namespace ts {
         /**
          * Resolves a qualified name and any involved aliases.
          */
-        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node, needSuggestedNameNotFoundMessage?: boolean): Symbol | undefined {
+        function resolveEntityName(name: EntityNameOrEntityNameExpression, meaning: SymbolFlags, ignoreErrors?: boolean, dontResolveAlias?: boolean, location?: Node): Symbol | undefined {
             if (nodeIsMissing(name)) {
                 return undefined;
             }
@@ -3090,16 +3092,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning || nodeIsSynthesized(name) ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
                 const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
-                let suggestedNameNotFoundMessage: DiagnosticMessage | undefined;
-                if (needSuggestedNameNotFoundMessage) {
-                    if (message === Diagnostics.Cannot_find_namespace_0) {
-                        suggestedNameNotFoundMessage = Diagnostics.Cannot_find_namespace_0_Did_you_mean_1;
-                    }
-                    else if (message === Diagnostics.Cannot_find_name_0) {
-                        suggestedNameNotFoundMessage = Diagnostics.Cannot_find_name_0_Did_you_mean_1;
-                    }
-                }
-                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true, false, suggestedNameNotFoundMessage));
+                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true, false));
                 if (!symbol) {
                     return getMergedSymbol(symbolFromJSPrototype);
                 }
@@ -3107,7 +3100,7 @@ namespace ts {
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
                 const left = name.kind === SyntaxKind.QualifiedName ? name.left : name.expression;
                 const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
-                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location, needSuggestedNameNotFoundMessage);
+                let namespace = resolveEntityName(left, namespaceMeaning, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
                 }
@@ -12515,7 +12508,7 @@ namespace ts {
                 return unknownSymbol;
             }
 
-            return resolveEntityName(typeReferenceName, meaning, ignoreErrors, /*dontResolveAlias*/ false, /*location*/ undefined, /*needSuggestedNameNotFoundMessage*/ true) || unknownSymbol;
+            return resolveEntityName(typeReferenceName, meaning, ignoreErrors, /*dontResolveAlias*/ false, /*location*/ undefined) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: NodeWithTypeArguments, symbol: Symbol): Type {
@@ -21140,8 +21133,7 @@ namespace ts {
                         getCannotFindNameDiagnosticForName(node),
                         node,
                         !isWriteOnlyAccess(node),
-                        /*excludeGlobals*/ false,
-                        Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
+                        /*excludeGlobals*/ false) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
