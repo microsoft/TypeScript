@@ -10,9 +10,9 @@ No type information for this code.export {};
 No type information for this code.=== tests/cases/conformance/node/other.ts ===
 // esm format file
 export const a = await import("package/cjs");
->a : typeof import("tests/cases/conformance/node/index")
->await import("package/cjs") : typeof import("tests/cases/conformance/node/index")
->import("package/cjs") : Promise<typeof import("tests/cases/conformance/node/index")>
+>a : { default: typeof import("tests/cases/conformance/node/index"); }
+>await import("package/cjs") : { default: typeof import("tests/cases/conformance/node/index"); }
+>import("package/cjs") : Promise<{ default: typeof import("tests/cases/conformance/node/index"); }>
 >"package/cjs" : "package/cjs"
 
 export const b = await import("package/mjs");
@@ -42,17 +42,17 @@ export const d = await import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = await import("inner/mjs");
->e : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }
->await import("inner/mjs") : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }
->import("inner/mjs") : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }>
+>e : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>await import("inner/mjs") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>import("inner/mjs") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
 >"inner/mjs" : "inner/mjs"
 
 === tests/cases/conformance/node/other.mts ===
 // esm format file
 export const a = await import("package/cjs");
->a : typeof import("tests/cases/conformance/node/index")
->await import("package/cjs") : typeof import("tests/cases/conformance/node/index")
->import("package/cjs") : Promise<typeof import("tests/cases/conformance/node/index")>
+>a : { default: typeof import("tests/cases/conformance/node/index"); }
+>await import("package/cjs") : { default: typeof import("tests/cases/conformance/node/index"); }
+>import("package/cjs") : Promise<{ default: typeof import("tests/cases/conformance/node/index"); }>
 >"package/cjs" : "package/cjs"
 
 export const b = await import("package/mjs");
@@ -82,16 +82,16 @@ export const d = await import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = await import("inner/mjs");
->e : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }
->await import("inner/mjs") : { default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }
->import("inner/mjs") : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }>
+>e : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>await import("inner/mjs") : typeof import("tests/cases/conformance/node/node_modules/inner/index")
+>import("inner/mjs") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
 >"inner/mjs" : "inner/mjs"
 
 === tests/cases/conformance/node/other.cts ===
 // cjs format file, no TLA
 export const a = import("package/cjs");
->a : Promise<typeof import("tests/cases/conformance/node/index")>
->import("package/cjs") : Promise<typeof import("tests/cases/conformance/node/index")>
+>a : Promise<{ default: typeof import("tests/cases/conformance/node/index"); }>
+>import("package/cjs") : Promise<{ default: typeof import("tests/cases/conformance/node/index"); }>
 >"package/cjs" : "package/cjs"
 
 export const b = import("package/mjs");
@@ -117,8 +117,8 @@ export const d = import("inner/cjs");
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");
->e : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }>
->import("inner/mjs") : Promise<{ default: typeof import("tests/cases/conformance/node/node_modules/inner/index"); esm: true; }>
+>e : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
+>import("inner/mjs") : Promise<typeof import("tests/cases/conformance/node/node_modules/inner/index")>
 >"inner/mjs" : "inner/mjs"
 
 === tests/cases/conformance/node/node_modules/inner/index.d.ts ===
