@@ -44,9 +44,7 @@ tests/cases/compiler/strictOptionalProperties1.ts(210,1): error TS2322: Type '{ 
     Type 'string | undefined' is not assignable to type 'string | number'.
       Type 'undefined' is not assignable to type 'string | number'.
 tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
-  Type 'undefined' is not assignable to type:
-{ [x: string]: string | number; }
-
+  Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
 
 
 ==== tests/cases/compiler/strictOptionalProperties1.ts (23 errors) ====
@@ -330,8 +328,7 @@ tests/cases/compiler/strictOptionalProperties1.ts(211,1): error TS2322: Type 'st
     a = e;  // Error
     ~
 !!! error TS2322: Type 'string | boolean | undefined' is not assignable to type '{ [x: string]: string | number; }'.
-!!! error TS2322:   Type 'undefined' is not assignable to type:
-!!! error TS2322: { [x: string]: string | number; }
+!!! error TS2322:   Type 'undefined' is not assignable to type '{ [x: string]: string | number; }'.
     
     // Repro from #46004
     

@@ -18019,8 +18019,8 @@ namespace ts {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
 
                         const typeLengthLimit = 30;
-                        if (!errorInfo && (sourceType.length > typeLengthLimit || targetType.length > typeLengthLimit)) {
-                            message = formatMessageTypes(message, typeLengthLimit, sourceType, targetType);
+                        if (!errorInfo && compilerOptions.pretty && (sourceType.length > typeLengthLimit || targetType.length > typeLengthLimit)) {
+                            message = formatMessageForTypes(message, typeLengthLimit, sourceType, targetType);
                         }
                     }
                 }
@@ -18034,7 +18034,7 @@ namespace ts {
             }
 
             /** Move a printed type to be on its own line if it is longer than 30 characters */
-            function formatMessageTypes(diagnostic: DiagnosticMessage, typeLengthLimit: number, source: string, target: string): DiagnosticMessage {
+            function formatMessageForTypes(diagnostic: DiagnosticMessage, typeLengthLimit: number, source: string, target: string): DiagnosticMessage {
                 let message = diagnostic.message;
                 if (source.length > typeLengthLimit) message = message.replace(" '{0}' ", ":\n{0}\n\n");
                 if (target.length > typeLengthLimit) message = message.replace(" '{1}'", ":\n{1}\n").replace(".", "");

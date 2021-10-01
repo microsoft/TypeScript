@@ -11,10 +11,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(17,26): error TS2322: Type
 tests/cases/compiler/objectLiteralExcessProperties.ts(19,57): error TS2322: Type '{ foreword: string; color: string; price: number; }' is not assignable to type 'Book & Cover'.
   Object literal may only specify known properties, and 'price' does not exist in type 'Book & Cover'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(21,5): error TS2322: Type '{ foreword: string; price: number; }' is not assignable to type 'Book & number'.
-  Type:
-{ foreword: string; price: number; }
-
-is not assignable to type 'number'.
+  Type '{ foreword: string; price: number; }' is not assignable to type 'number'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(23,29): error TS2322: Type '{ couleur: string; }' is not assignable to type 'Cover | Cover[]'.
   Object literal may only specify known properties, and 'couleur' does not exist in type 'Cover | Cover[]'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(25,27): error TS2322: Type '{ forewarned: string; }' is not assignable to type 'Book | Book[]'.
@@ -77,9 +74,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
     var b7: Book & number = { foreword: "hi", price: 10.99 };
         ~~
 !!! error TS2322: Type '{ foreword: string; price: number; }' is not assignable to type 'Book & number'.
-!!! error TS2322:   Type:
-!!! error TS2322: { foreword: string; price: number; }
-!!! error TS2322: is not assignable to type 'number'.
+!!! error TS2322:   Type '{ foreword: string; price: number; }' is not assignable to type 'number'.
     
     var b8: Cover | Cover[] = { couleur : "non" };
                                 ~~~~~~~~~~~~~~~

@@ -1,7 +1,4 @@
-tests/cases/compiler/errorWithTruncatedType.ts(10,5): error TS2322: Type:
-{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }
-
-is not assignable to type 'string'.
+tests/cases/compiler/errorWithTruncatedType.ts(10,5): error TS2322: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/errorWithTruncatedType.ts (1 errors) ====
@@ -16,7 +13,5 @@ is not assignable to type 'string'.
     // String representation of type of 'x' should be truncated in error message
     var s: string = x;
         ~
-!!! error TS2322: Type:
-!!! error TS2322: { propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }
-!!! error TS2322: is not assignable to type 'string'.
+!!! error TS2322: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }' is not assignable to type 'string'.
     

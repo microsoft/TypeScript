@@ -3,9 +3,7 @@ tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(4,1): error TS2322: 
     Type 'number | undefined' is not assignable to type 'string | null'.
       Type 'undefined' is not assignable to type 'string | null'.
 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(6,1): error TS2322: Type '{ foo: { bar: string | null; } | undefined; } | null | undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
-  Type 'undefined' is not assignable to type:
-{ foo: { bar: number | undefined; }; }
-
+  Type 'undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
 
 
 ==== tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts (2 errors) ====
@@ -22,6 +20,5 @@ tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(6,1): error TS2322: 
     y = x;
     ~
 !!! error TS2322: Type '{ foo: { bar: string | null; } | undefined; } | null | undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
-!!! error TS2322:   Type 'undefined' is not assignable to type:
-!!! error TS2322: { foo: { bar: number | undefined; }; }
+!!! error TS2322:   Type 'undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
     

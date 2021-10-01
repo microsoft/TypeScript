@@ -1,9 +1,6 @@
 tests/cases/compiler/contextualTyping24.ts(1,55): error TS2322: Type '(this: void, a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number'.
   Types of parameters 'a' and 'a' are incompatible.
-    Type:
-{ (): number; (i: number): number; }
-
-is not assignable to type 'string'.
+    Type '{ (): number; (i: number): number; }' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/contextualTyping24.ts (1 errors) ====
@@ -11,6 +8,4 @@ is not assignable to type 'string'.
                                                           ~~~
 !!! error TS2322: Type '(this: void, a: string) => number' is not assignable to type '(a: { (): number; (i: number): number; }) => number'.
 !!! error TS2322:   Types of parameters 'a' and 'a' are incompatible.
-!!! error TS2322:     Type:
-!!! error TS2322: { (): number; (i: number): number; }
-!!! error TS2322: is not assignable to type 'string'.
+!!! error TS2322:     Type '{ (): number; (i: number): number; }' is not assignable to type 'string'.

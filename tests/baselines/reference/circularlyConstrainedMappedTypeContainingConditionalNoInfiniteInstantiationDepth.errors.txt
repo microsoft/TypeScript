@@ -61,9 +61,7 @@ tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfin
                                                                                                                         Type 'GetProps<C>[Extract<string, keyof GetProps<C>>] | GetProps<C>[Extract<number, keyof GetProps<C>>] | GetProps<C>[Extract<symbol, keyof GetProps<C>>]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
                                                                                                                           Type 'GetProps<C>[Extract<string, keyof GetProps<C>>]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
                                                                                                                             Type 'GetProps<C>[keyof GetProps<C> & string]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
-                                                                                                                              Type 'GetProps<C>[string]' is not assignable to type:
-TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never
-
+                                                                                                                              Type 'GetProps<C>[string]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
 
 
 ==== tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts (1 errors) ====
@@ -194,6 +192,5 @@ TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never
 !!! error TS2344:                                                                                                                         Type 'GetProps<C>[Extract<string, keyof GetProps<C>>] | GetProps<C>[Extract<number, keyof GetProps<C>>] | GetProps<C>[Extract<symbol, keyof GetProps<C>>]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
 !!! error TS2344:                                                                                                                           Type 'GetProps<C>[Extract<string, keyof GetProps<C>>]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
 !!! error TS2344:                                                                                                                             Type 'GetProps<C>[keyof GetProps<C> & string]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
-!!! error TS2344:                                                                                                                               Type 'GetProps<C>[string]' is not assignable to type:
-!!! error TS2344: TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never
+!!! error TS2344:                                                                                                                               Type 'GetProps<C>[string]' is not assignable to type 'TInjectedProps[P] extends GetProps<C>[P] ? GetProps<C>[P] : never'.
     
