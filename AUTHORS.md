@@ -141,6 +141,7 @@ TypeScript is authored by:
  - Eli Barzilay
  - Elizabeth Dinella
  - Ely Alamillo
+ - Eric Cheng
  - Eric Grube
  - Eric Tsang
  - Erik Edrosa
