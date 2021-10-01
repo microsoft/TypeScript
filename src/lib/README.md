@@ -1,6 +1,6 @@
 # Read this!
 
-The files within this directory are copied and deployed with TypeScript as the set of APIs  available as a part of the JavaScript language.
+The files within this directory are copied and deployed with TypeScript as the set of APIs available as a part of the JavaScript language.
 
 There are three main domains of APIs in `src/lib`:
  
