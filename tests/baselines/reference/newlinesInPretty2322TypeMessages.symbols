@@ -1,0 +1,36 @@
+=== tests/cases/compiler/newlinesInPretty2322TypeMessages.ts ===
+// a is 31 chars long
+let a = { b: { c: { e: { f: 123 } } } };
+>a : Symbol(a, Decl(newlinesInPretty2322TypeMessages.ts, 1, 3))
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 1, 9))
+>c : Symbol(c, Decl(newlinesInPretty2322TypeMessages.ts, 1, 14))
+>e : Symbol(e, Decl(newlinesInPretty2322TypeMessages.ts, 1, 19))
+>f : Symbol(f, Decl(newlinesInPretty2322TypeMessages.ts, 1, 24))
+
+let b = "hello"
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 2, 3))
+
+// 'a' here is long enough to count in the source as a newline
+a = b
+>a : Symbol(a, Decl(newlinesInPretty2322TypeMessages.ts, 1, 3))
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 2, 3))
+
+// 'a' here is long enough to count in the target as a newline
+b = a
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 2, 3))
+>a : Symbol(a, Decl(newlinesInPretty2322TypeMessages.ts, 1, 3))
+
+// This won't trigger it because we only show the relation instead
+a = { b: { c: { e: { f: {} } } } }
+>a : Symbol(a, Decl(newlinesInPretty2322TypeMessages.ts, 1, 3))
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 10, 5))
+>c : Symbol(c, Decl(newlinesInPretty2322TypeMessages.ts, 10, 10))
+>e : Symbol(e, Decl(newlinesInPretty2322TypeMessages.ts, 10, 15))
+>f : Symbol(f, Decl(newlinesInPretty2322TypeMessages.ts, 10, 20))
+
+// No newlines here because they're both short
+b = 123123
+>b : Symbol(b, Decl(newlinesInPretty2322TypeMessages.ts, 2, 3))
+
+
+

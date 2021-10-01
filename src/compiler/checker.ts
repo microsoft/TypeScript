@@ -18053,7 +18053,7 @@ namespace ts {
             function formatMessageForTypes(diagnostic: DiagnosticMessage, typeLengthLimit: number, source: string, target: string): DiagnosticMessage {
                 let message = diagnostic.message;
                 if (source.length > typeLengthLimit) message = message.replace(" '{0}' ", ":\n{0}\n\n");
-                if (target.length > typeLengthLimit) message = message.replace(" '{1}'", ":\n{1}\n").replace(".", "");
+                if (target.length > typeLengthLimit) message = message.replace(" '{1}'", ":\n{1}").replace(".", "");
 
                 return { ...diagnostic, message };
             }
