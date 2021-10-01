@@ -158,20 +158,27 @@ namespace ts {
     }
 
     function createTabularErrorsDisplay(filesInError: (ReportFileInError | undefined)[]) {
-        const BASE_LEFT_PADDING = 6;
-        let tabularData = "";
-        const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file!.fileName === value!.fileName));
-        if(distinctFiles.length === 0) return tabularData;
+        const distinctFiles = filesInError.filter((value, index, self) => index === self.findIndex(file => file?.fileName === value?.fileName));
+        if (distinctFiles.length === 0) return "";
 
-        const headerRow = "Errors   Files\n";
-        tabularData += headerRow;
-        distinctFiles.forEach(file => {
-            const errorCountForFile = countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName);
-            const errorCountDigitsLength = Math.log(errorCountForFile) * Math.LOG10E + 1 | 0;
-            const leftPadding = errorCountDigitsLength < BASE_LEFT_PADDING ?
-                " ".repeat(BASE_LEFT_PADDING - errorCountDigitsLength)
+        const numberLength = (num: number) => Math.log(num) * Math.LOG10E + 1
+        const fileToErrorCount = distinctFiles.map(file => ([file, countWhere(filesInError, fileInError => fileInError!.fileName === file!.fileName)] as const));
+        const maxErrors = fileToErrorCount.reduce((acc, value) => Math.max(acc, value[1] || 0), 0);
+
+        const headerRow = Diagnostics.Errors_Files.message;
+        const leftColumnHeadingLength = headerRow.split(" ")[0].length;
+        const leftPaddingGoal = Math.max(leftColumnHeadingLength, numberLength(maxErrors));
+        const headerPadding = Math.max(numberLength(maxErrors) - leftColumnHeadingLength, 0);
+
+        let tabularData = "";
+        tabularData += " ".repeat(headerPadding) + headerRow + "\n";
+        fileToErrorCount.forEach((row) => {
+            const [file, errorCount] = row;
+            const errorCountDigitsLength = Math.log(errorCount) * Math.LOG10E + 1 | 0;
+            const leftPadding = errorCountDigitsLength < leftPaddingGoal ?
+                " ".repeat(leftPaddingGoal - errorCountDigitsLength)
                 : "";
-            tabularData += `${leftPadding}${errorCountForFile}   ${file!.fileName}:${file!.line}\n`;
+            tabularData += `${leftPadding}${errorCount}  ${file!.fileName}:${file!.line}\n`;
         });
 
         return tabularData;

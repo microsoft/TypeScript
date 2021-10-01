@@ -49,9 +49,9 @@ Output::
 
 Found 2 errors in 2 files.
 
-Errors   Files
-     1   /src/project/src/anotherFileWithSameReferenes.ts:2
-     1   /src/project/src/main.ts:2
+Errors  Files
+     1  /src/project/src/anotherFileWithSameReferenes.ts:2
+     1  /src/project/src/main.ts:2
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -201,9 +201,9 @@ Output::
 
 Found 2 errors in 2 files.
 
-Errors   Files
-     1   /src/project/src/anotherFileWithSameReferenes.ts:2
-     1   /src/project/src/main.ts:2
+Errors  Files
+     1  /src/project/src/anotherFileWithSameReferenes.ts:2
+     1  /src/project/src/main.ts:2
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -246,9 +246,9 @@ Output::
 
 Found 2 errors in 2 files.
 
-Errors   Files
-     1   /src/project/src/anotherFileWithSameReferenes.ts:2
-     1   /src/project/src/main.ts:2
+Errors  Files
+     1  /src/project/src/anotherFileWithSameReferenes.ts:2
+     1  /src/project/src/main.ts:2
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -376,9 +376,9 @@ Output::
 
 Found 2 errors in 2 files.
 
-Errors   Files
-     1   /src/project/src/anotherFileWithSameReferenes.ts:2
-     1   /src/project/src/main.ts:2
+Errors  Files
+     1  /src/project/src/anotherFileWithSameReferenes.ts:2
+     1  /src/project/src/main.ts:2
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}
@@ -502,9 +502,9 @@ Output::
 
 Found 2 errors in 2 files.
 
-Errors   Files
-     1   /src/project/src/anotherFileWithSameReferenes.ts:2
-     1   /src/project/src/main.ts:3
+Errors  Files
+     1  /src/project/src/anotherFileWithSameReferenes.ts:2
+     1  /src/project/src/main.ts:3
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: ["/src/project/src/anotherFileWithSameReferenes.ts","/src/project/src/filePresent.ts","/src/project/src/main.ts","/src/project/src/newFile.ts"]
 Program options: {"composite":true,"project":"/src/project","configFilePath":"/src/project/tsconfig.json"}

@@ -4055,6 +4055,12 @@
         "category": "Message",
         "code": 6040
     },
+    "Errors  Files": {
+        "_locale_notes": "There is a double space, and the order cannot be changed (they're table headings) ^",
+        "category": "Message",
+        "code": 6041
+    },
+    
     "Generates corresponding '.map' file.": {
         "category": "Message",
         "code": 6043

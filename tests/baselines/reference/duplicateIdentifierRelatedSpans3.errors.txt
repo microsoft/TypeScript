@@ -87,6 +87,6 @@
     
 Found 6 errors in 2 files.
 
-Errors   Files
-     3   tests/cases/compiler/file1.ts:2
-     3   tests/cases/compiler/file2.ts:2
+Errors  Files
+     3  tests/cases/compiler/file1.ts:2
+     3  tests/cases/compiler/file2.ts:2

@@ -28,5 +28,5 @@
     }
 Found 3 errors in 1 file.
 
-Errors   Files
-     3   tests/cases/compiler/prettyFileWithErrorsAndTabs.ts:3
+Errors  Files
+     3  tests/cases/compiler/prettyFileWithErrorsAndTabs.ts:3
