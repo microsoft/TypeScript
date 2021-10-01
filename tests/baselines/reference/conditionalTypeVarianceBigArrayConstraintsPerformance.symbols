@@ -1,0 +1,34 @@
+=== tests/cases/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.ts ===
+/// <reference path="react16.d.ts" />
+
+type Stuff<T> =
+>Stuff : Symbol(Stuff, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 2, 11))
+
+    T extends keyof JSX.IntrinsicElements
+>T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 2, 11))
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+
+        ? JSX.IntrinsicElements[T]
+>JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
+>IntrinsicElements : Symbol(JSX.IntrinsicElements, Decl(react16.d.ts, 2514, 86))
+>T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 2, 11))
+
+        : any;
+
+function F<T, U>(p1: Stuff<T>, p2: Stuff<U>) {
+>F : Symbol(F, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 5, 14))
+>T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 11))
+>U : Symbol(U, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 13))
+>p1 : Symbol(p1, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 17))
+>Stuff : Symbol(Stuff, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 0, 0))
+>T : Symbol(T, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 11))
+>p2 : Symbol(p2, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 30))
+>Stuff : Symbol(Stuff, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 0, 0))
+>U : Symbol(U, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 13))
+
+    p1 = p2; // Error
+>p1 : Symbol(p1, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 17))
+>p2 : Symbol(p2, Decl(conditionalTypeVarianceBigArrayConstraintsPerformance.ts, 7, 30))
+}
