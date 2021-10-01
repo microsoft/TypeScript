@@ -6737,6 +6737,29 @@ namespace ts {
         externalHelpers?: boolean;
         helpers?: EmitHelper[];                  // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
+        snippetElement?: SnippetElement;         // Snippet element of the node
+    }
+
+    export interface SnippetElement {
+        kind: SnippetKind;
+    }
+
+    export interface TabStop extends SnippetElement {
+        kind: SnippetKind.TabStop;
+        order: number;
+    }
+
+    export interface PlaceHolder extends SnippetElement {
+        kind: SnippetKind.Placeholder;
+        order: number;
+    }
+
+    // Reference: https://code.visualstudio.com/docs/editor/userdefinedsnippets#_snippet-syntax
+    export const enum SnippetKind {
+        TabStop,                                // `$1`, `$2`
+        Placeholder,                            // `${1:foo}`
+        Choice,                                 // `${1|one,two,three|}`
+        Variable,                               // `$name`, `${name:default}`
     }
 
     export const enum EmitFlags {
