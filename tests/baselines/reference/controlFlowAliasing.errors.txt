@@ -32,9 +32,11 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(267,13): error TS2322
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/controlFlow/controlFlowAliasing.ts(270,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2448: Block-scoped variable 'a' used before its declaration.
+tests/cases/conformance/controlFlow/controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being assigned.
 
 
-==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (17 errors) ====
+==== tests/cases/conformance/controlFlow/controlFlowAliasing.ts (19 errors) ====
     // Narrowing by aliased conditional expressions
     
     function f10(x: string | number) {
@@ -358,4 +360,19 @@ tests/cases/conformance/controlFlow/controlFlowAliasing.ts(270,13): error TS2322
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
         }
     }
+    
+    // Repro from #45830
+    
+    const obj = {
+        fn: () => true
+    };
+    
+    if (a) { }
+        ~
+!!! error TS2448: Block-scoped variable 'a' used before its declaration.
+!!! related TS2728 tests/cases/conformance/controlFlow/controlFlowAliasing.ts:282:7: 'a' is declared here.
+        ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    const a = obj.fn();
     

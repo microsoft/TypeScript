@@ -556,7 +556,7 @@ namespace ts {
                 case SyntaxKind.PartiallyEmittedExpression:
                     return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
                 case SyntaxKind.CallExpression:
-                    if (isImportCall(node)) {
+                    if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
                         return visitImportCallExpression(node);
                     }
                     break;
@@ -814,7 +814,7 @@ namespace ts {
             }
 
             const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
-            if (compilerOptions.esModuleInterop) {
+            if (getESModuleInterop(compilerOptions)) {
                 return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
             }
             return promise;
@@ -828,7 +828,7 @@ namespace ts {
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
             const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
-            if (compilerOptions.esModuleInterop) {
+            if (getESModuleInterop(compilerOptions)) {
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
 
@@ -864,7 +864,7 @@ namespace ts {
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getExportNeedsImportStarHelper(node)) {
@@ -874,7 +874,7 @@ namespace ts {
         }
 
         function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-            if (!compilerOptions.esModuleInterop || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+            if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
                 return innerExpr;
             }
             if (getImportNeedsImportStarHelper(node)) {
@@ -1134,7 +1134,7 @@ namespace ts {
                     }
                     else {
                         const exportNeedsImportDefault =
-                            !!compilerOptions.esModuleInterop &&
+                            !!getESModuleInterop(compilerOptions) &&
                             !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
                             idText(specifier.propertyName || specifier.name) === "default";
                         const exportedValue = factory.createPropertyAccessExpression(

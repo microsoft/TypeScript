@@ -120,6 +120,8 @@ var donkey = <div>
 
     <
     <diddy/>
+>diddy : Symbol(diddy)
+
 </div>;
 function noNameTrailingTag() { }
 >noNameTrailingTag : Symbol(noNameTrailingTag, Decl(jsxParserRecovery.tsx, 49, 7))
@@ -129,6 +131,8 @@ var donkey = <div>
 
     <diddy
     <diddy/>
+>diddy : Symbol(diddy)
+
 </div>;
 function noCloseTrailingTag() { }
 >noCloseTrailingTag : Symbol(noCloseTrailingTag, Decl(jsxParserRecovery.tsx, 54, 7))

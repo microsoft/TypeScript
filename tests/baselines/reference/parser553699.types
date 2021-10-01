@@ -4,8 +4,8 @@ class Foo {
 
   constructor() { }
   public banana (x: public) { }
->banana : (x: any) => void
->x : any
+>banana : (x: public) => void
+>x : public
 }
 
 class Bar {

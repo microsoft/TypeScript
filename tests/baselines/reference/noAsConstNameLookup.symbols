@@ -37,6 +37,8 @@ export class FeatureRunner<W extends Store> {
 >settings : Symbol(settings, Decl(noAsConstNameLookup.ts, 10, 22))
 
         } as const;
+>const : Symbol(const)
+
         return objectWhichShouldBeConst
 >objectWhichShouldBeConst : Symbol(objectWhichShouldBeConst, Decl(noAsConstNameLookup.ts, 9, 13))
     }
@@ -72,6 +74,7 @@ export class C<T> {
 
         let one = 1 as const;
 >one : Symbol(one, Decl(noAsConstNameLookup.ts, 25, 11))
+>const : Symbol(const)
     }
 }
 new C<string>().f();

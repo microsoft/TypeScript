@@ -1,0 +1,526 @@
+// === /leafModule.ts ===
+// export const /*FIND ALL REFS*/[|hello|] = () => 'Hello';
+
+// === /importing.ts ===
+// import { Leaf } from './exporting';
+// Leaf.[|hello|]()
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/leafModule.ts",
+      "kind": "const",
+      "name": "const hello: () => string",
+      "textSpan": {
+        "start": 13,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "hello",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 35
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 13,
+          "length": 5
+        },
+        "fileName": "/leafModule.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 35
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 41,
+          "length": 5
+        },
+        "fileName": "/importing.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /leafModule.ts ===
+// export const [|hello|] = () => 'Hello';
+
+// === /importing.ts ===
+// import { Leaf } from './exporting';
+// Leaf./*FIND ALL REFS*/[|hello|]()
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/leafModule.ts",
+      "kind": "const",
+      "name": "const hello: () => string",
+      "textSpan": {
+        "start": 13,
+        "length": 5
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "hello",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 35
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 13,
+          "length": 5
+        },
+        "fileName": "/leafModule.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 35
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 41,
+          "length": 5
+        },
+        "fileName": "/importing.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /importing.ts ===
+// import { [|Leaf|] } from './exporting';
+// [|Leaf|].hello()
+
+// === /exporting.ts ===
+// export * as /*FIND ALL REFS*/[|Leaf|] from './leafModule';
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/exporting.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 12,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 4
+        },
+        "fileName": "/exporting.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/importing.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 9,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 35
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 35
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /importing.ts ===
+// import { /*FIND ALL REFS*/[|Leaf|] } from './exporting';
+// [|Leaf|].hello()
+
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/importing.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 9,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 35
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 35
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/exporting.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 12,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 4
+        },
+        "fileName": "/exporting.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /importing.ts ===
+// import { [|Leaf|] } from './exporting';
+// /*FIND ALL REFS*/[|Leaf|].hello()
+
+// === /exporting.ts ===
+// export * as [|Leaf|] from './leafModule';
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/importing.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 9,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 35
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 9,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 35
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 4
+        },
+        "fileName": "/importing.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/exporting.ts",
+      "kind": "alias",
+      "name": "import Leaf",
+      "textSpan": {
+        "start": 12,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "import",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Leaf",
+          "kind": "aliasName"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 37
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 12,
+          "length": 4
+        },
+        "fileName": "/exporting.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 37
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
