@@ -5217,15 +5217,12 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_esnext_commonjs_amd_system__1323" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les importations dynamiques ne sont prises en charge que lorsque l’indicateur « --module » est défini sur « es2020 », « esnext », « commonjs », « amd », « system », « umd », « node12 » ou « nodenext ».]]></Val>
+            <Val><![CDATA[Les importations dynamiques sont prises en charge uniquement lorsque l’indicateur « --module » est défini sur « es2020 », « es2022 », « esnext », « commonjs », « amd », « system », « umd », « node12 » ou « nodenext ».]]></Val>
           </Tgt>
-          <Prev Cat="Text">
-            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'esnext', 'commonjs', 'amd', 'system', or 'umd'.]]></Val>
-          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -12546,11 +12543,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_esnext_system_node12__1343" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[La métapropriété « import.meta » n'est autorisée que lorsque l'option « --module » est « es2020 », « esnext », « system », « node12 » ou « nodenext ».]]></Val>
+            <Val><![CDATA[La méta-propriété « import.meta » est autorisée uniquement lorsque l’option « --module » est « es2020 », « es2022 », « esnext », « system », « node12 » ou « nodenext ».]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13449,11 +13446,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_noden_1378" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_o_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les expressions « await » de niveau supérieur ne sont autorisées que lorsque l’option « module » est définie sur « esnext », « system » ou « nodenext » et que l’option « target » est définie sur « es2017 » ou plus.]]></Val>
+            <Val><![CDATA[Les expressions « await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system » ou « nodenext », et que l’option « target » a la valeur « es2017 » ou une valeur supérieure.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13467,11 +13464,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_esnext_system_or_nodenex_1432" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_or__1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Les boucles « for await » de niveau supérieur ne sont autorisées que lorsque l'option « module » est définie sur « esnext », « system » ou « nodenext » et que l’option « target » est définie sur « es2017 » ou plus.]]></Val>
+            <Val><![CDATA[Les boucles « for await » de niveau supérieur sont autorisées uniquement lorsque l’option « module » a la valeur « es2022 », « esnext », « system » ou « nodenext », et que l’option « target » est définie sur « es2017 » ou une version ultérieure.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
