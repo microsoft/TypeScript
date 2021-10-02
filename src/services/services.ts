@@ -1750,6 +1750,7 @@ namespace ts {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getAdjustedRenameLocation(getTouchingPropertyName(sourceFile, position));
+            if (!Rename.nodeIsEligibleForRename(node)) return undefined;
             if (isIdentifier(node) && (isJsxOpeningElement(node.parent) || isJsxClosingElement(node.parent)) && isIntrinsicJsxName(node.escapedText)) {
                 const { openingElement, closingElement } = node.parent.parent;
                 return [openingElement, closingElement].map((node): RenameLocation => {

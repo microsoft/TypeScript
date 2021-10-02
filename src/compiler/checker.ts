@@ -2629,7 +2629,23 @@ namespace ts {
             return ((isExportAssignment(node) && !node.isExportEquals) || hasSyntacticModifier(node, ModifierFlags.Default) || isExportSpecifier(node));
         }
 
-        function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean) {
+        function getUsageModeForExpression(usage: Expression) {
+            return isStringLiteralLike(usage) ? getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
+        }
+
+        function isESMFormatImportImportingCommonjsFormatFile(usageMode: SourceFile["impliedNodeFormat"], targetMode: SourceFile["impliedNodeFormat"]) {
+            return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
+        }
+
+        function canHaveSyntheticDefault(file: SourceFile | undefined, moduleSymbol: Symbol, dontResolveAlias: boolean, usage: Expression) {
+            const usageMode = file && getUsageModeForExpression(usage);
+            if (file && usageMode !== undefined) {
+                const result = isESMFormatImportImportingCommonjsFormatFile(usageMode, file.impliedNodeFormat);
+                if (usageMode === ModuleKind.ESNext || result) {
+                    return result;
+                }
+                // fallthrough on cjs usages so we imply defaults for interop'd imports, too
+            }
             if (!allowSyntheticDefaultImports) {
                 return false;
             }
@@ -2672,7 +2688,7 @@ namespace ts {
                 }
 
                 const file = moduleSymbol.declarations?.find(isSourceFile);
-                const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias);
+                const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, node.parent.moduleSpecifier);
                 if (!exportDefaultSymbol && !hasSyntheticDefault) {
                     if (hasExportAssignmentSymbol(moduleSymbol)) {
                         const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
@@ -2824,7 +2840,7 @@ namespace ts {
                     let symbolFromModule = getExportOfModule(targetSymbol, name, specifier, dontResolveAlias);
                     if (symbolFromModule === undefined && name.escapedText === InternalSymbolName.Default) {
                         const file = moduleSymbol.declarations?.find(isSourceFile);
-                        if (canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias)) {
+                        if (canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, moduleSpecifier)) {
                             symbolFromModule = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias) || resolveSymbol(moduleSymbol, dontResolveAlias);
                         }
                     }
@@ -3587,7 +3603,7 @@ namespace ts {
                             sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
                         }
                         if (sigs && sigs.length) {
-                            const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!);
+                            const moduleType = getTypeWithSyntheticDefaultImportType(type, symbol, moduleSymbol!, isImportCall(referenceParent) ? referenceParent.arguments[0] : referenceParent.moduleSpecifier);
                             // Create a new symbol which has the module's type less the call and construct signatures
                             const result = createSymbol(symbol.flags, symbol.escapedName);
                             result.declarations = symbol.declarations ? symbol.declarations.slice() : [];
@@ -30945,18 +30961,18 @@ namespace ts {
             if (moduleSymbol) {
                 const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true, /*suppressUsageError*/ false);
                 if (esModuleSymbol) {
-                    return createPromiseReturnType(node, getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol));
+                    return createPromiseReturnType(node, getTypeWithSyntheticDefaultImportType(getTypeOfSymbol(esModuleSymbol), esModuleSymbol, moduleSymbol, specifier));
                 }
             }
             return createPromiseReturnType(node, anyType);
         }
 
-        function getTypeWithSyntheticDefaultImportType(type: Type, symbol: Symbol, originalSymbol: Symbol): Type {
+        function getTypeWithSyntheticDefaultImportType(type: Type, symbol: Symbol, originalSymbol: Symbol, moduleSpecifier: Expression): Type {
             if (allowSyntheticDefaultImports && type && !isErrorType(type)) {
                 const synthType = type as SyntheticDefaultModuleType;
                 if (!synthType.syntheticType) {
                     const file = originalSymbol.declarations?.find(isSourceFile);
-                    const hasSyntheticDefault = canHaveSyntheticDefault(file, originalSymbol, /*dontResolveAlias*/ false);
+                    const hasSyntheticDefault = canHaveSyntheticDefault(file, originalSymbol, /*dontResolveAlias*/ false, moduleSpecifier);
                     if (hasSyntheticDefault) {
                         const memberTable = createSymbolTable();
                         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);

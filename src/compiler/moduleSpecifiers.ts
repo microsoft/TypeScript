@@ -555,6 +555,77 @@ namespace ts.moduleSpecifiers {
         }
     }
 
+    const enum MatchingMode {
+        Exact,
+        Directory,
+        Pattern
+    }
+
+    function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[], mode = MatchingMode.Exact): { moduleFileToTry: string } | undefined {
+        if (typeof exports === "string") {
+            const pathOrPattern = getNormalizedAbsolutePath(combinePaths(packageDirectory, exports), /*currentDirectory*/ undefined);
+            const extensionSwappedTarget = hasTSFileExtension(targetFilePath) ? removeFileExtension(targetFilePath) + tryGetJSExtensionForFile(targetFilePath, options) : undefined;
+            switch (mode) {
+                case MatchingMode.Exact:
+                    if (comparePaths(targetFilePath, pathOrPattern) === Comparison.EqualTo || (extensionSwappedTarget && comparePaths(extensionSwappedTarget, pathOrPattern) === Comparison.EqualTo)) {
+                        return { moduleFileToTry: packageName };
+                    }
+                    break;
+                case MatchingMode.Directory:
+                    if (containsPath(pathOrPattern, targetFilePath)) {
+                        const fragment = getRelativePathFromDirectory(pathOrPattern, targetFilePath, /*ignoreCase*/ false);
+                        return { moduleFileToTry: getNormalizedAbsolutePath(combinePaths(combinePaths(packageName, exports), fragment), /*currentDirectory*/ undefined) };
+                    }
+                    break;
+                case MatchingMode.Pattern:
+                    const starPos = pathOrPattern.indexOf("*");
+                    const leadingSlice = pathOrPattern.slice(0, starPos);
+                    const trailingSlice = pathOrPattern.slice(starPos + 1);
+                    if (startsWith(targetFilePath, leadingSlice) && endsWith(targetFilePath, trailingSlice)) {
+                        const starReplacement = targetFilePath.slice(leadingSlice.length, targetFilePath.length - trailingSlice.length);
+                        return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    }
+                    if (extensionSwappedTarget && startsWith(extensionSwappedTarget, leadingSlice) && endsWith(extensionSwappedTarget, trailingSlice)) {
+                        const starReplacement = extensionSwappedTarget.slice(leadingSlice.length, extensionSwappedTarget.length - trailingSlice.length);
+                        return { moduleFileToTry: packageName.replace("*", starReplacement) };
+                    }
+                    break;
+            }
+        }
+        else if (Array.isArray(exports)) {
+            return forEach(exports, e => tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, e, conditions));
+        }
+        else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-null/no-null
+            if (allKeysStartWithDot(exports as MapLike<unknown>)) {
+                // sub-mappings
+                // 3 cases:
+                // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))
+                // * pattern mappings (contains a *)
+                // * exact mappings (no *, does not end with /)
+                return forEach(getOwnKeys(exports as MapLike<unknown>), k => {
+                    const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
+                    const mode = endsWith(k, "/") ? MatchingMode.Directory
+                        : stringContains(k, "*") ? MatchingMode.Pattern
+                        : MatchingMode.Exact;
+                    return tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
+                });
+            }
+            else {
+                // conditional mapping
+                for (const key of getOwnKeys(exports as MapLike<unknown>)) {
+                    if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
+                        const subTarget = (exports as MapLike<unknown>)[key];
+                        const result = tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, packageName, subTarget, conditions);
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+            }
+        }
+        return undefined;
+    }
+
     function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions): string | undefined {
         const normalizedTargetPath = getPathRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
         if (normalizedTargetPath === undefined) {
@@ -586,7 +657,15 @@ namespace ts.moduleSpecifiers {
             let moduleFileNameForExtensionless: string | undefined;
             while (true) {
                 // If the module could be imported by a directory name, use that directory's name
-                const { moduleFileToTry, packageRootPath } = tryDirectoryWithPackageJson(packageRootIndex);
+                const { moduleFileToTry, packageRootPath, blockedByExports, verbatimFromExports } = tryDirectoryWithPackageJson(packageRootIndex);
+                if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Classic) {
+                    if (blockedByExports) {
+                        return undefined; // File is under this package.json, but is not publicly exported - there's no way to name it via `node_modules` resolution
+                    }
+                    if (verbatimFromExports) {
+                        return moduleFileToTry;
+                    }
+                }
                 if (packageRootPath) {
                     moduleSpecifier = packageRootPath;
                     isPackageRootPath = true;
@@ -621,12 +700,21 @@ namespace ts.moduleSpecifiers {
         // For classic resolution, only allow importing from node_modules/@types, not other node_modules
         return getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
-        function tryDirectoryWithPackageJson(packageRootIndex: number) {
+        function tryDirectoryWithPackageJson(packageRootIndex: number): { moduleFileToTry: string, packageRootPath?: string, blockedByExports?: true, verbatimFromExports?: true } {
             const packageRootPath = path.substring(0, packageRootIndex);
             const packageJsonPath = combinePaths(packageRootPath, "package.json");
             let moduleFileToTry = path;
             if (host.fileExists(packageJsonPath)) {
                 const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
+                // TODO: Inject `require` or `import` condition based on the intended import mode
+                const fromExports = packageJsonContent.exports && typeof packageJsonContent.name === "string" ? tryGetModuleNameFromExports(options, path, packageRootPath, packageJsonContent.name, packageJsonContent.exports, ["node", "types"]) : undefined;
+                if (fromExports) {
+                    const withJsExtension = !hasTSFileExtension(fromExports.moduleFileToTry) ? fromExports : { moduleFileToTry: removeFileExtension(fromExports.moduleFileToTry) + tryGetJSExtensionForFile(fromExports.moduleFileToTry, options) };
+                    return { ...withJsExtension, verbatimFromExports: true };
+                }
+                if (packageJsonContent.exports) {
+                    return { moduleFileToTry: path, blockedByExports: true };
+                }
                 const versionPaths = packageJsonContent.typesVersions
                     ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
                     : undefined;
@@ -641,7 +729,6 @@ namespace ts.moduleSpecifiers {
                         moduleFileToTry = combinePaths(packageRootPath, fromPaths);
                     }
                 }
-
                 // If the file is the main module, it can be imported by the package name
                 const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
                 if (isString(mainFileRelative)) {

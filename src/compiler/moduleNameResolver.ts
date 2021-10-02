@@ -1708,7 +1708,8 @@ namespace ts {
         return idx === -1 ? { packageName: moduleName, rest: "" } : { packageName: moduleName.slice(0, idx), rest: moduleName.slice(idx + 1) };
     }
 
-    function allKeysStartWithDot(obj: MapLike<unknown>) {
+    /* @internal */
+    export function allKeysStartWithDot(obj: MapLike<unknown>) {
         return every(getOwnKeys(obj), k => startsWith(k, "."));
     }
 
@@ -1922,14 +1923,15 @@ namespace ts {
             }
             return toSearchResult(/*value*/ undefined);
         }
+    }
 
-        function isApplicableVersionedTypesKey(conditions: string[], key: string) {
-            if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
-            if (!startsWith(key, "types@")) return false;
-            const range = VersionRange.tryParse(key.substring("types@".length));
-            if (!range) return false;
-            return range.test(version);
-        }
+    /* @internal */
+    export function isApplicableVersionedTypesKey(conditions: string[], key: string) {
+        if (conditions.indexOf("types") === -1) return false; // only apply versioned types conditions if the types condition is applied
+        if (!startsWith(key, "types@")) return false;
+        const range = VersionRange.tryParse(key.substring("types@".length));
+        if (!range) return false;
+        return range.test(version);
     }
 
     function loadModuleFromNearestNodeModulesDirectory(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
