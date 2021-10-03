@@ -22471,8 +22471,11 @@ namespace ts {
         function getFlowCacheKey(node: Node, declaredType: Type, initialType: Type, flowContainer: Node | undefined): string | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    const symbol = getResolvedSymbol(node as Identifier);
-                    return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${getSymbolId(symbol)}` : undefined;
+                    if (!isThisInTypeQuery(node)) {
+                        const symbol = getResolvedSymbol(node as Identifier);
+                        return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${getSymbolId(symbol)}` : undefined;
+                    }
+                    // falls through
                 case SyntaxKind.ThisKeyword:
                     return `0|${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}`;
                 case SyntaxKind.NonNullExpression:
