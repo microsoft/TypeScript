@@ -1726,6 +1726,9 @@ namespace ts {
                     case SyntaxKind.SyntheticExpression:
                         return Debug.fail("SyntheticExpression should never be printed.");
 
+                    case SyntaxKind.PartialApplicationPlaceholderElement:
+                        return writeStringLiteral('?');
+
                     // JSX
                     case SyntaxKind.JsxElement:
                         return emitJsxElement(node as JsxElement);

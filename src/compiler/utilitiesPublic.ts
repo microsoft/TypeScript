@@ -1013,8 +1013,8 @@ namespace ts {
         return node.kind === SyntaxKind.PartialApplicationExpression;
     }
 
-    export function isPartialApplicationElement(node: Node): node is PartialApplicationElement {
-        return node.kind === SyntaxKind.PartialApplicationElement;
+    export function isPartialApplicationPlaceholderElement(node: Node): node is PartialApplicationPlaceholderElement {
+        return node.kind === SyntaxKind.PartialApplicationPlaceholderElement;
     }
 
     export function isConstTypeReference(node: Node) {

@@ -226,6 +226,7 @@ namespace ts.BreakpointResolver {
                         return spanInCloseBracketToken(node);
 
                     case SyntaxKind.OpenParenToken:
+                    case SyntaxKind.TildeOpenParenToken:
                         return spanInOpenParenToken(node);
 
                     case SyntaxKind.CloseParenToken:

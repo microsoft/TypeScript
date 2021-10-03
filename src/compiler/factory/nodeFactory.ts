@@ -209,8 +209,8 @@ namespace ts {
             updateYieldExpression,
             createSpreadElement,
             updateSpreadElement,
-            createPartialApplicationElement,
-            updatePartialApplicationElement,
+            createPartialApplicationPlaceholderElement,
+            updatePartialApplicationPlaceholderElement,
             createClassExpression,
             updateClassExpression,
             createOmittedExpression,
@@ -2408,7 +2408,7 @@ namespace ts {
             if (isImportKeyword(node.expression)) {
                 node.transformFlags |= TransformFlags.ContainsDynamicImport;
             }
-            if ((node.arguments).some(isPartialApplicationElement)) {
+            if ((node.arguments).some(isPartialApplicationPlaceholderElement)) {
                 node.transformFlags |= TransformFlags.ContainsPartialApplication;
             }
             else if (isSuperProperty(node.expression)) {
@@ -2996,18 +2996,15 @@ namespace ts {
         }
 
         // @api
-        function createPartialApplicationElement(questionToken: QuestionToken | undefined) {
-            const node = createBaseExpression<PartialApplicationElement>(SyntaxKind.PartialApplicationElement);
-            node.questionToken = questionToken ?? createToken(SyntaxKind.QuestionToken);
+        function createPartialApplicationPlaceholderElement() {
+            const node = createBaseExpression<PartialApplicationPlaceholderElement>(SyntaxKind.PartialApplicationPlaceholderElement);
             node.transformFlags |= TransformFlags.ContainsPartialApplication;
             return node;
         }
 
         // @api
-        function updatePartialApplicationElement(node: PartialApplicationElement, questionToken: QuestionToken | undefined) {
-            return node.questionToken !== questionToken
-                ? update(createPartialApplicationElement(questionToken), node)
-                : node;
+        function updatePartialApplicationPlaceholderElement(node: PartialApplicationPlaceholderElement) {
+            return node;
         }
 
         // @api

@@ -222,6 +222,7 @@ namespace ts {
         "||=": SyntaxKind.BarBarEqualsToken,
         "&&=": SyntaxKind.AmpersandAmpersandEqualsToken,
         "??=": SyntaxKind.QuestionQuestionEqualsToken,
+        "~(": SyntaxKind.TildeOpenParenToken,
         "@": SyntaxKind.AtToken,
         "#": SyntaxKind.HashToken,
         "`": SyntaxKind.BacktickToken,
@@ -2017,6 +2018,9 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.CloseBraceToken;
                     case CharacterCodes.tilde:
+                        if (text.charCodeAt(pos + 1) === CharacterCodes.openParen) {
+                            return pos += 2, token = SyntaxKind.TildeOpenParenToken;
+                        }
                         pos++;
                         return token = SyntaxKind.TildeToken;
                     case CharacterCodes.at:

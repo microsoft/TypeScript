@@ -86,6 +86,7 @@ namespace ts {
         ColonToken,
         AtToken,
         QuestionQuestionToken,
+        TildeOpenParenToken,
         /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
         BacktickToken,
         /** Only the JSDoc scanner produces HashToken. The normal scanner produces PrivateIdentifier. */
@@ -256,7 +257,7 @@ namespace ts {
         FunctionExpression,
         ArrowFunction,
         PartialApplicationExpression,
-        PartialApplicationElement,
+        PartialApplicationPlaceholderElement,
         DeleteExpression,
         TypeOfExpression,
         VoidExpression,
@@ -542,6 +543,7 @@ namespace ts {
         | SyntaxKind.AmpersandEqualsToken
         | SyntaxKind.BarEqualsToken
         | SyntaxKind.CaretEqualsToken
+        | SyntaxKind.TildeOpenParenToken
         ;
 
     export type KeywordSyntaxKind =
@@ -1039,6 +1041,7 @@ namespace ts {
     export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
     export type MinusToken = PunctuationToken<SyntaxKind.MinusToken>;
     export type QuestionDotToken = PunctuationToken<SyntaxKind.QuestionDotToken>;
+    export type TildeOpenParenToken = PunctuationToken<SyntaxKind.TildeOpenParenToken>;
 
     // Keywords
     export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKind> {
@@ -1779,6 +1782,7 @@ namespace ts {
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.TildeToken
+        | SyntaxKind.TildeOpenParenToken
         | SyntaxKind.ExclamationToken;
 
     export interface PrefixUnaryExpression extends UpdateExpression {
@@ -2117,16 +2121,13 @@ namespace ts {
         readonly body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
-    export interface PartialApplicationExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
-        readonly kind: SyntaxKind.FunctionExpression;
-        readonly questionToken: QuestionToken,
-        readonly name?: Identifier;
-        readonly body?: FunctionBody;  // Required?, whereas the member inherited from FunctionDeclaration is optional
+    export interface PartialApplicationExpression extends PrimaryExpression, NamedDeclaration, JSDocContainer {
+        readonly kind: SyntaxKind.PartialApplicationExpression;
+        readonly tildeOpenParenToken?: TildeOpenParenToken;
     }
 
-    export interface PartialApplicationElement extends Expression {
-        readonly kind: SyntaxKind.PartialApplicationElement;
-        readonly questionToken: QuestionToken,
+    export interface PartialApplicationPlaceholderElement extends Expression {
+        readonly kind: SyntaxKind.PartialApplicationPlaceholderElement;
         readonly argumentIndex: number;
     }
 
@@ -7312,8 +7313,8 @@ namespace ts {
         updateYieldExpression(node: YieldExpression, asteriskToken: AsteriskToken | undefined, expression: Expression | undefined): YieldExpression;
         createSpreadElement(expression: Expression): SpreadElement;
         updateSpreadElement(node: SpreadElement, expression: Expression): SpreadElement;
-        createPartialApplicationElement(questionToken: QuestionToken | undefined): PartialApplicationElement;
-        updatePartialApplicationElement(node: PartialApplicationElement, questionToken: QuestionToken | undefined): PartialApplicationElement;
+        createPartialApplicationPlaceholderElement(): PartialApplicationPlaceholderElement;
+        updatePartialApplicationPlaceholderElement(node: PartialApplicationPlaceholderElement): PartialApplicationPlaceholderElement;
         createClassExpression(decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         updateClassExpression(node: ClassExpression, decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassExpression;
         createOmittedExpression(): OmittedExpression;

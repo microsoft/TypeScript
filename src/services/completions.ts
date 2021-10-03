@@ -2172,6 +2172,10 @@ namespace ts.Completions {
                             || containingNodeKind === SyntaxKind.ParenthesizedExpression      // const x = (a|
                             || containingNodeKind === SyntaxKind.ParenthesizedType;           // function F(pred: (a| /* this can become an arrow function, where 'a' is the argument */
 
+                    case SyntaxKind.TildeOpenParenToken:
+                        return containingNodeKind === SyntaxKind.CallExpression               // func~( |
+                            || containingNodeKind === SyntaxKind.NewExpression                // new C~(a|
+
                     case SyntaxKind.OpenBracketToken:
                         return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |
                             || containingNodeKind === SyntaxKind.IndexSignature               // [ | : string ]
@@ -2633,6 +2637,7 @@ namespace ts.Completions {
                     return containingNodeKind === SyntaxKind.ArrayBindingPattern;                   // var [x|
 
                 case SyntaxKind.OpenParenToken:
+                case SyntaxKind.TildeOpenParenToken:
                     return containingNodeKind === SyntaxKind.CatchClause ||
                         isFunctionLikeButNotConstructor(containingNodeKind);
 

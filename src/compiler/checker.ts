@@ -29765,9 +29765,9 @@ namespace ts {
                 result = chooseOverload(candidates, assignableRelation, isSingleNonGenericCandidate, signatureHelpTrailingComma);
             }
             if (result) {
-                if (args.some(isPartialApplicationElement)) {
+                if (args.some(isPartialApplicationPlaceholderElement)) {
                     const callSignature = result;
-                    if (!callSignature.resolvedReturnType) {
+                    if (!getReturnTypeOfSignature(callSignature)) {
                         return result;
                     }
 
@@ -29776,7 +29776,7 @@ namespace ts {
                     const typeParams: Symbol[] = optionalParamsOmitted
                         .map((param, i) => ({
                             originalParam: param,
-                            isPartial: isPartialApplicationElement(args[i]),
+                            isPartial: isPartialApplicationPlaceholderElement(args[i]),
                         }))
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
@@ -29786,17 +29786,18 @@ namespace ts {
                         members: emptySymbols,
                         properties: [],
                         callSignatures: [createSignature(
-                        /*declaration*/ undefined,
-                        /*typeParameters*/ undefined,
-                        /*thisParameter*/ undefined,
-                        typeParams,
-                            callSignature.resolvedReturnType,
-                            callSignature.resolvedTypePredicate,
-                        args.filter(isPartialApplicationElement).length,
-                        (typeParams.length - args.filter(isPartialApplicationElement).length > 0)
-                            ? SignatureFlags.HasLiteralTypes
-                            : SignatureFlags.None
-                        )],
+                            /*declaration*/ undefined,
+                            /*typeParameters*/ undefined,
+                            /*thisParameter*/ undefined,
+                            typeParams,
+                            getReturnTypeOfSignature(callSignature),
+                            getTypePredicateOfSignature(callSignature),
+                            args.filter(isPartialApplicationPlaceholderElement).length,
+                            (typeParams.length - args.filter(isPartialApplicationPlaceholderElement).length > 0)
+                                ? SignatureFlags.HasLiteralTypes
+                                : SignatureFlags.None
+                            )
+                        ],
                         constructSignatures: [],
                     };
 
@@ -33392,7 +33393,7 @@ namespace ts {
                 context.contextualType = contextualType;
                 context.inferenceContext = inferenceContext;
                 // TODO: Check if this is correct place or should it be moved up.
-                if (node.kind === SyntaxKind.PartialApplicationElement) {
+                if (node.kind === SyntaxKind.PartialApplicationPlaceholderElement) {
                     return contextualType;
                 }
                 const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
@@ -33735,7 +33736,7 @@ namespace ts {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
             if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-                if (expr.arguments.some(isPartialApplicationElement)) {
+                if (expr.arguments.some(isPartialApplicationPlaceholderElement)) {
                     const funcType = checkNonNullExpression(expr.expression);
 
                     const callSignature = getSingleCallSignature(funcType);
@@ -33766,7 +33767,7 @@ namespace ts {
                     const typeParams: Symbol[] = optionalParamsOmitted
                         .map((param, i) => ({
                             originalParam: param,
-                            isPartial: isPartialApplicationElement(expr.arguments[i]),
+                            isPartial: isPartialApplicationPlaceholderElement(expr.arguments[i]),
                         }))
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
@@ -33781,8 +33782,8 @@ namespace ts {
                         typeParams,
                         getReturnTypeOfSingleNonGenericCallSignature(funcType),
                         callSignature.resolvedTypePredicate,
-                        expr.arguments.filter(isPartialApplicationElement).length,
-                        (typeParams.length - expr.arguments.filter(isPartialApplicationElement).length > 0)
+                        expr.arguments.filter(isPartialApplicationPlaceholderElement).length,
+                        (typeParams.length - expr.arguments.filter(isPartialApplicationPlaceholderElement).length > 0)
                             ? SignatureFlags.HasLiteralTypes
                             : SignatureFlags.None
                     )];
@@ -33948,7 +33949,7 @@ namespace ts {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return checkFunctionExpressionOrObjectLiteralMethod(node as FunctionExpression | ArrowFunction, checkMode);
-                case SyntaxKind.PartialApplicationElement:
+                case SyntaxKind.PartialApplicationPlaceholderElement:
                     // TODO: Explain why we error out here...
                     return errorType;
                     // return PartialApplicationExpression;
@@ -39054,7 +39055,8 @@ namespace ts {
                             switch ((expr as PrefixUnaryExpression).operator) {
                                 case SyntaxKind.PlusToken: return value;
                                 case SyntaxKind.MinusToken: return -value;
-                                case SyntaxKind.TildeToken: return ~value;
+                                case SyntaxKind.TildeToken:
+                                    return ~value;
                             }
                         }
                         break;

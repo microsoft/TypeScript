@@ -5,13 +5,20 @@ namespace ts {
             return sourceFile => {
                 const visitor = (node: Node): Node => {
                     if (node.transformFlags & TransformFlags.ContainsPartialApplication) {
-                        if (isCallExpression(node) && node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
+                        if (isCallExpression(node) && node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationPlaceholderElement)) {
                             const funcName = isIdentifier(node.expression)
                                 ? node.expression.escapedText as string
                                 : isPropertyAccessExpression(node.expression)
                                     ? node.expression.name.escapedText as string
                                     : "Wow, what do?";
+                            const receiverIdentifier = isPropertyAccessExpression(node.expression) && factory.createUniqueName(`_receiver`) || undefined;
+                            if (receiverIdentifier) {
+                                context.hoistVariableDeclaration(receiverIdentifier);
+                            }
+
                             const capturedFunctionIdentifier = factory.createUniqueName(`_${funcName}`);
+                            context.hoistVariableDeclaration(capturedFunctionIdentifier);
+
                             // TODO: Get the signature and use actual argument names of the original function.
                             // Unfortunately we don't seem to have access to them here.
                             // Some tranformers (not default typescript ones) seem to have access to checker. Need more investigation.
@@ -20,39 +27,74 @@ namespace ts {
                             // Could try to get the checker from a Symbol.
                             const getOrigfuncArgName = (index: number): string => {
                                 const valDecl = context.getEmitResolver().getReferencedValueDeclaration(node.expression as any) as Node;
-                                return ((isMethodSignature(valDecl) && valDecl.parameters[index]?.name as any).escapedText) ?? `_origFuncArg${index || ""}`;
+                                return (valDecl && (isFunctionLike(valDecl) && valDecl.parameters[index]?.name as any).escapedText) || `_origFuncArg${index || ""}`;
                             };
-                            const isCapturedArg = (arg: typeof args[0]): arg is { arg: Expression, identifier: Identifier } => arg.identifier !== undefined;
                             const args = node.arguments
                                 .map((arg, index) => ({
                                     arg,
-                                    // index,
-                                    identifier: (
-                                        isPartialApplicationElement(arg)
-                                            ? factory.createIdentifier(getOrigfuncArgName(index))
-                                            : !isLiteralKind(arg.kind) && factory.createUniqueName(getOrigfuncArgName(index))
-                                        ) || undefined
-                                }));
+                                    isPartiallyApplied: isPartialApplicationPlaceholderElement(arg),
+                                    isLiteral: isLiteralKind(arg.kind),
+                                    // isCaptured: !isPartialApplicationElement(arg) || !isLiteralKind(arg.kind),
+                                    argName: getOrigfuncArgName(index) === "this"
+                                        ? "_this" // FIXME: It's problematic if some other param has the name _this.
+                                        : getOrigfuncArgName(index),
+                                }))
+                                .map<{
+                                    arg: Expression,
+                                    argType: 'partiallyApplied',
+                                    usedName: string,
+                                } | {
+                                    arg: Expression,
+                                    argType: 'captured',
+                                    identifier: Identifier,
+                                } | {
+                                    arg: Expression,
+                                    argType: 'literal',
+                                }>((arg) => arg.isPartiallyApplied
+                                    ? ({
+                                        ...arg,
+                                        argType: 'partiallyApplied',
+                                        usedName: arg.argName
+                                    })
+                                    : arg.isLiteral
+                                        ? ({
+                                            ...arg,
+                                            argType: 'literal',
+                                        })
+                                        : ({
+                                            ...arg,
+                                            argType: 'captured',
+                                            identifier: factory.createIdentifier(arg.argName)
+                                        }),
+                                );
+                            const isPartiallyAppliedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'partiallyApplied', usedName: string } => arg.argType === 'partiallyApplied';
+                            const isCapturedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'captured', identifier: Identifier } => arg.argType === 'captured';
+                            // const isLiteralArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'literal' } => arg.argType === 'literal';
                             args
                                 .filter(isCapturedArg)
-                                .filter(({ arg }) => !isPartialApplicationElement(arg))
                                 .forEach(({ identifier }) => context.hoistVariableDeclaration(identifier));
 
-                            context.hoistVariableDeclaration(capturedFunctionIdentifier);
                             return factory.createParenthesizedExpression(
                                 factory.createCommaListExpression([ // For capturing vars
+                                    ...((isPropertyAccessExpression(node.expression) && receiverIdentifier &&
+                                        [factory.createBinaryExpression( // Capture the receiver
+                                            receiverIdentifier,
+                                            SyntaxKind.EqualsToken,
+                                            visitNode(node.expression.expression, visitor)
+                                        )]) || []),
                                     factory.createBinaryExpression( // Capture the function
                                         capturedFunctionIdentifier,
                                         SyntaxKind.EqualsToken,
-                                        node.expression
+                                        isPropertyAccessExpression(node.expression) && receiverIdentifier
+                                            ? factory.createPropertyAccessExpression(receiverIdentifier, node.expression.name)
+                                            : node.expression
                                     ),
-                                    ...args
+                                    ...args // For capturing the non-literal arguments
                                         .filter(isCapturedArg)
-                                        .filter(({ arg }) => !isPartialApplicationElement(arg))
                                         .map(({ arg, identifier }) => factory.createBinaryExpression(
                                             identifier,
                                             SyntaxKind.EqualsToken,
-                                            arg
+                                            visitNode(arg, visitor)
                                         )
                                     ),
                                     factory.createFunctionExpression(
@@ -60,14 +102,13 @@ namespace ts {
                                         /*asteriskToken*/ undefined,
                                         /*name*/ funcName,
                                         /*typeParameters*/ undefined,
-                                        node.arguments
-                                            .map<[Expression, number]>((arg, i) => [arg, i])
-                                            .filter(([arg]) => isPartialApplicationElement(arg))
-                                            .map(([_arg, i]) => factory.createParameterDeclaration(
+                                        args
+                                            .filter(isPartiallyAppliedArg)
+                                            .map(({ usedName }) => factory.createParameterDeclaration(
                                                 /*decorators*/ undefined,
                                                 /*modifiers*/ undefined,
                                                 /*dotDotDotToken*/ undefined,
-                                                getOrigfuncArgName(i),
+                                                usedName,
                                                 /*questionToken*/ undefined,
                                                 /*type*/ undefined,
                                                 /*initializer*/ undefined
@@ -76,13 +117,19 @@ namespace ts {
                                         factory.createBlock([
                                             factory.createReturnStatement(
                                                 factory.createCallExpression(
-                                                    capturedFunctionIdentifier,
+                                                    isPropertyAccessExpression(node.expression) && receiverIdentifier
+                                                        ? factory.createPropertyAccessExpression(capturedFunctionIdentifier, 'call')
+                                                        : capturedFunctionIdentifier,
                                                     /*typeArguments*/ undefined,
-                                                    args.map(arg =>
-                                                            isCapturedArg(arg)
+                                                    [
+                                                        ...receiverIdentifier && [receiverIdentifier] || [],
+                                                        ...args.map(arg =>
+                                                        isPartiallyAppliedArg(arg)
+                                                            ? factory.createIdentifier(arg.usedName)
+                                                            : isCapturedArg(arg)
                                                                 ? arg.identifier
                                                                 : arg.arg
-                                                    )
+                                                    )]
                                                 )
                                             )
                                         ])

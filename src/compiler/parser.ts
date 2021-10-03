@@ -3436,7 +3436,7 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                 return parseSignatureMember(SyntaxKind.CallSignature);
             }
-            if (token() === SyntaxKind.NewKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
+            if (token() === SyntaxKind.NewKeyword && lookAhead(nextTokenIsOpenParenOrTildeOpenParenOrLessThan)) {
                 return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
             const pos = getNodePos();
@@ -3459,6 +3459,11 @@ namespace ts {
         function nextTokenIsOpenParenOrLessThan() {
             nextToken();
             return token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken;
+        }
+
+        function nextTokenIsOpenParenOrTildeOpenParenOrLessThan() {
+            nextToken();
+            return token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.TildeOpenParenToken || token() === SyntaxKind.LessThanToken;
         }
 
         function nextTokenIsDot() {
@@ -4056,6 +4061,7 @@ namespace ts {
                 case SyntaxKind.OpenParenToken:
                 case SyntaxKind.OpenBracketToken:
                 case SyntaxKind.OpenBraceToken:
+                case SyntaxKind.TildeOpenParenToken:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.NewKeyword:
@@ -4706,6 +4712,14 @@ namespace ts {
 
         function parsePrefixUnaryExpression() {
             const pos = getNodePos();
+            if (SyntaxKind.TildeOpenParenToken === token()) {
+                const tildeOpenParamPos = scanner.getTokenPos();
+                nextToken();
+                const inner = allowInAnd(parseExpression);
+                parseExpected(SyntaxKind.CloseParenToken);
+                const parenthesized = finishNode(factory.createParenthesizedExpression(inner), tildeOpenParamPos + 1);
+                return finishNode(factory.createPrefixUnaryExpression(SyntaxKind.TildeToken as PrefixUnaryOperator, parenthesized), pos);
+            }
             return finishNode(factory.createPrefixUnaryExpression(token() as PrefixUnaryOperator, nextTokenAnd(parseSimpleUnaryExpression)), pos);
         }
 
@@ -4812,6 +4826,7 @@ namespace ts {
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
+                case SyntaxKind.TildeOpenParenToken:
                 case SyntaxKind.ExclamationToken:
                     return parsePrefixUnaryExpression();
                 case SyntaxKind.DeleteKeyword:
@@ -4857,6 +4872,7 @@ namespace ts {
                 case SyntaxKind.TypeOfKeyword:
                 case SyntaxKind.VoidKeyword:
                 case SyntaxKind.AwaitKeyword:
+                case SyntaxKind.TildeOpenParenToken: // In update expression this can only be a bitwise NOT operator. I can't be a partial function application.
                     return false;
                 case SyntaxKind.LessThanToken:
                     // If we are not in JSX context, we are parsing TypeAssertion which is an UnaryExpression
@@ -5030,6 +5046,11 @@ namespace ts {
                 if (typeArguments !== undefined) {
                     parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
                 }
+            }
+
+            if (token() === SyntaxKind.TildeOpenParenToken) {
+                const startPos = getNodePos();
+                parseErrorAt(startPos, getNodePos(), { code: 2813, category: DiagnosticCategory.Error, key: 'super_cannot_be_partially_applied', message: 'super_cannot_be_partially_applied', reportsUnnecessary: {}, elidedInCompatabilityPyramid: undefined, reportsDeprecated: {} });
             }
 
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
@@ -5483,7 +5504,7 @@ namespace ts {
                         continue;
                     }
                 }
-                else if (token() === SyntaxKind.OpenParenToken) {
+                else if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.TildeOpenParenToken) {
                     const argumentList = parseArgumentList();
                     const callExpr = questionDotToken || tryReparseOptionalChain(expression) ?
                         factory.createCallChain(expression, questionDotToken, /*typeArguments*/ undefined, argumentList) :
@@ -5502,7 +5523,9 @@ namespace ts {
         }
 
         function parseArgumentList() {
-            parseExpected(SyntaxKind.OpenParenToken);
+            if (!(parseOptionalToken(SyntaxKind.OpenParenToken) || parseOptionalToken(SyntaxKind.TildeOpenParenToken))) {
+                parseErrorAtCurrentToken(Diagnostics._0_expected, `${tokenToString(SyntaxKind.OpenParenToken)} or ${tokenToString(SyntaxKind.TildeOpenParenToken)}`);
+            }
             const result = parseDelimitedList(ParsingContext.ArgumentExpressions, parseArgumentExpression);
             parseExpected(SyntaxKind.CloseParenToken);
             return result;
@@ -5535,6 +5558,7 @@ namespace ts {
         function canFollowTypeArgumentsInExpression(): boolean {
             switch (token()) {
                 case SyntaxKind.OpenParenToken:                 // foo<x>(
+                case SyntaxKind.TildeOpenParenToken:            // foo<x>~(
                 case SyntaxKind.NoSubstitutionTemplateLiteral:  // foo<T> `...`
                 case SyntaxKind.TemplateHead:                   // foo<T> `...${100}...`
                 // these are the only tokens can legally follow a type argument
@@ -5640,14 +5664,14 @@ namespace ts {
             return finishNode(factory.createSpreadElement(expression), pos);
         }
 
-        function parsePartialApplicationElement(): Expression {
-            const questionToken = parseExpectedToken(SyntaxKind.QuestionToken);
-            return finishNode(factory.createPartialApplicationElement(questionToken), getNodePos());
+        function parsePartialApplicationPlaceholderElement(): Expression {
+            parseExpectedToken(SyntaxKind.QuestionToken);
+            return finishNode(factory.createPartialApplicationPlaceholderElement(), getNodePos());
         }
 
         function parseArgumentOrArrayLiteralElement(): Expression {
             return token() === SyntaxKind.DotDotDotToken ? parseSpreadElement() :
-                token() === SyntaxKind.QuestionToken ? parsePartialApplicationElement() :
+                token() === SyntaxKind.QuestionToken ? parsePartialApplicationPlaceholderElement() :
                 token() === SyntaxKind.CommaToken ? finishNode(factory.createOmittedExpression(), getNodePos()) :
                 parseAssignmentExpressionOrHigher();
         }
@@ -5802,7 +5826,7 @@ namespace ts {
             }
 
             let argumentsArray: NodeArray<Expression> | undefined;
-            if (token() === SyntaxKind.OpenParenToken) {
+            if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.TildeOpenParenToken) {
                 argumentsArray = parseArgumentList();
             }
             else if (typeArguments) {
