@@ -41,34 +41,34 @@ namespace ts {
                                 }))
                                 .map<{
                                     arg: Expression,
-                                    argType: 'partiallyApplied',
+                                    argType: "partiallyApplied",
                                     usedName: string,
                                 } | {
                                     arg: Expression,
-                                    argType: 'captured',
+                                    argType: "captured",
                                     identifier: Identifier,
                                 } | {
                                     arg: Expression,
-                                    argType: 'literal',
+                                    argType: "literal",
                                 }>((arg) => arg.isPartiallyApplied
                                     ? ({
                                         ...arg,
-                                        argType: 'partiallyApplied',
+                                        argType: "partiallyApplied",
                                         usedName: arg.argName
                                     })
                                     : arg.isLiteral
                                         ? ({
                                             ...arg,
-                                            argType: 'literal',
+                                            argType: "literal",
                                         })
                                         : ({
                                             ...arg,
-                                            argType: 'captured',
+                                            argType: "captured",
                                             identifier: factory.createIdentifier(arg.argName)
                                         }),
                                 );
-                            const isPartiallyAppliedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'partiallyApplied', usedName: string } => arg.argType === 'partiallyApplied';
-                            const isCapturedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'captured', identifier: Identifier } => arg.argType === 'captured';
+                            const isPartiallyAppliedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: "partiallyApplied", usedName: string } => arg.argType === "partiallyApplied";
+                            const isCapturedArg = (arg: typeof args[0]): arg is { arg: Expression, argType: "captured", identifier: Identifier } => arg.argType === "captured";
                             // const isLiteralArg = (arg: typeof args[0]): arg is { arg: Expression, argType: 'literal' } => arg.argType === 'literal';
                             args
                                 .filter(isCapturedArg)
@@ -118,7 +118,7 @@ namespace ts {
                                             factory.createReturnStatement(
                                                 factory.createCallExpression(
                                                     isPropertyAccessExpression(node.expression) && receiverIdentifier
-                                                        ? factory.createPropertyAccessExpression(capturedFunctionIdentifier, 'call')
+                                                        ? factory.createPropertyAccessExpression(capturedFunctionIdentifier, "call")
                                                         : capturedFunctionIdentifier,
                                                     /*typeArguments*/ undefined,
                                                     [

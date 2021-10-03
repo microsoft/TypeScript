@@ -2174,7 +2174,7 @@ namespace ts.Completions {
 
                     case SyntaxKind.TildeOpenParenToken:
                         return containingNodeKind === SyntaxKind.CallExpression               // func~( |
-                            || containingNodeKind === SyntaxKind.NewExpression                // new C~(a|
+                            || containingNodeKind === SyntaxKind.NewExpression;                // new C~(a|
 
                     case SyntaxKind.OpenBracketToken:
                         return containingNodeKind === SyntaxKind.ArrayLiteralExpression       // [ |

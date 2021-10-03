@@ -5050,7 +5050,7 @@ namespace ts {
 
             if (token() === SyntaxKind.TildeOpenParenToken) {
                 const startPos = getNodePos();
-                parseErrorAt(startPos, getNodePos(), { code: 2813, category: DiagnosticCategory.Error, key: 'super_cannot_be_partially_applied', message: 'super_cannot_be_partially_applied', reportsUnnecessary: {}, elidedInCompatabilityPyramid: undefined, reportsDeprecated: {} });
+                parseErrorAt(startPos, getNodePos(), { code: 2813, category: DiagnosticCategory.Error, key: "super_cannot_be_partially_applied", message: "super_cannot_be_partially_applied", reportsUnnecessary: {}, elidedInCompatabilityPyramid: undefined, reportsDeprecated: {} });
             }
 
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
