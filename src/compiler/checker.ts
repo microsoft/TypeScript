@@ -29784,7 +29784,7 @@ namespace ts {
                     const partiallyAppliedType = {
                         ...createObjectType(ObjectFlags.Anonymous),
                         members: emptySymbols,
-                        properties: [],
+                        properties: emptyArray,
                         callSignatures: [createSignature(
                             /*declaration*/ undefined,
                             /*typeParameters*/ undefined,
@@ -29798,7 +29798,8 @@ namespace ts {
                                 : SignatureFlags.None
                             )
                         ],
-                        constructSignatures: [],
+                        constructSignatures: emptyArray,
+                        indexInfos: emptyArray, // This might drop some info we might want, or might not.
                     };
 
                     const partiallyAppliedSignature = cloneSignature(callSignature);
@@ -33775,7 +33776,7 @@ namespace ts {
 
                     const partialApplicationType = createObjectType(ObjectFlags.Anonymous, funcType.symbol);
                     partialApplicationType.members = emptySymbols;
-                    partialApplicationType.properties = [];
+                    partialApplicationType.properties = emptyArray;
                     partialApplicationType.callSignatures = [createSignature(
                         /*declaration*/ undefined,
                         /*typeParameters*/ undefined,
@@ -33788,7 +33789,8 @@ namespace ts {
                             ? SignatureFlags.HasLiteralTypes
                             : SignatureFlags.None
                     )];
-                    partialApplicationType.constructSignatures = [];
+                    partialApplicationType.constructSignatures = emptyArray;
+                    partialApplicationType.indexInfos = emptyArray; // This might drop some info we might want, or might not.
                     return partialApplicationType;
                 }
                 const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
