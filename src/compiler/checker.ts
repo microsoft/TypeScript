@@ -33744,8 +33744,9 @@ namespace ts {
                         return undefined;
                     }
 
+                    const args = expr.arguments;
                     // Fix when partially applying a function that has rest params.
-                    const extraParams = expr.arguments.slice(callSignature.parameters.length);
+                    const extraParams = args.slice(callSignature.parameters.length);
                     // const extraParams = callSignature.hasRestParam
                     //     ? []
                     //     : expr.arguments.slice(callSignature.parameters.length);
@@ -33756,18 +33757,18 @@ namespace ts {
                         );
 
                     const omittedParams = callSignature.parameters
-                        .filter((_param, i) => expr.arguments[i] === undefined);
+                        .filter((_param, i) => args[i] === undefined);
                     const omittedParamsWithoutInitializer = omittedParams
                         .filter(param => !(param.valueDeclaration as any)?.initializer);
 
                     omittedParamsWithoutInitializer
                         .forEach(() => console.log("Partial application omits non-optional parameter"));
                     const optionalParamsOmitted = callSignature.parameters
-                        .filter((_param, i) => expr.arguments[i] !== undefined);
+                        .filter((_param, i) => args[i] !== undefined);
                     const typeParams: Symbol[] = optionalParamsOmitted
                         .map((param, i) => ({
                             originalParam: param,
-                            isPartial: isPartialApplicationPlaceholderElement(expr.arguments[i]),
+                            isPartial: isPartialApplicationPlaceholderElement(args[i]),
                         }))
                         .filter(({ isPartial }) => isPartial)
                         .map(({ originalParam }) => originalParam);
