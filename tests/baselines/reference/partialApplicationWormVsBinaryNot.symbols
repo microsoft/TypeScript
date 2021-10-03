@@ -1,0 +1,20 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationWormVsBinaryNot.ts ===
+// Verify that binary NOT still works all right for ~(*).
+
+const enum EnumWithNOT {
+>EnumWithNOT : Symbol(EnumWithNOT, Decl(partialApplicationWormVsBinaryNot.ts, 0, 0))
+
+    Notted = 5 & ~(1 | 4 | 2),
+>Notted : Symbol(EnumWithNOT.Notted, Decl(partialApplicationWormVsBinaryNot.ts, 2, 24))
+
+};
+
+var m = 5 & ~(1 | 4);
+>m : Symbol(m, Decl(partialApplicationWormVsBinaryNot.ts, 6, 3))
+
+var a = ~(1 | 4);
+>a : Symbol(a, Decl(partialApplicationWormVsBinaryNot.ts, 7, 3))
+
+var b = ~(1);
+>b : Symbol(b, Decl(partialApplicationWormVsBinaryNot.ts, 8, 3))
+
