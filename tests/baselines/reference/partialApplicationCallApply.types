@@ -1,0 +1,160 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationCallApply.ts ===
+const addC = (a, b) => a + b;
+>addC : (a: any, b: any) => any
+>(a, b) => a + b : (a: any, b: any) => any
+>a : any
+>b : any
+>a + b : any
+>a : any
+>b : any
+
+const addOne = addC~(1, ?);
+>addOne : (b: any) => any
+>addC~(1, ?) : (b: any) => any
+>addC : (a: any, b: any) => any
+>1 : 1
+
+[1, 2, 3].map(addOne).forEach(console.log);
+>[1, 2, 3].map(addOne).forEach(console.log) : void
+>[1, 2, 3].map(addOne).forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>[1, 2, 3].map(addOne) : any[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>addOne : (b: any) => any
+>forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+// prints:
+// 2 0 2,3,4
+// 3 1 2,3,4
+// 4 2 2,3,4
+
+[1, 2, 3].map(addOne).forEach(console.log~(?));
+>[1, 2, 3].map(addOne).forEach(console.log~(?)) : void
+>[1, 2, 3].map(addOne).forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>[1, 2, 3].map(addOne) : any[]
+>[1, 2, 3].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>addOne : (b: any) => any
+>forEach : (callbackfn: (value: any, index: number, array: any[]) => void, thisArg?: any) => void
+>console.log~(?) : (...data: any[]) => void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+
+// prints:
+// 2
+// 3
+// 4
+
+const f = (a, b, c) => [a, b, c];
+>f : (a: any, b: any, c: any) => any[]
+>(a, b, c) => [a, b, c] : (a: any, b: any, c: any) => any[]
+>a : any
+>b : any
+>c : any
+>[a, b, c] : any[]
+>a : any
+>b : any
+>c : any
+
+const fI = f~(?, 1, ?);
+>fI : (a: any, c: any) => any[]
+>f~(?, 1, ?) : (a: any, c: any) => any[]
+>f : (a: any, b: any, c: any) => any[]
+>1 : 1
+
+const g = f~(?, 1, ?).apply~(null, ?);
+>g : (argArray?: any) => any
+>f~(?, 1, ?).apply~(null, ?) : (argArray?: any) => any
+>f~(?, 1, ?).apply : (this: Function, thisArg: any, argArray?: any) => any
+>f~(?, 1, ?) : (a: any, c: any) => any[]
+>f : (a: any, b: any, c: any) => any[]
+>1 : 1
+>apply : (this: Function, thisArg: any, argArray?: any) => any
+>null : null
+
+console.log(g([4, 5, 6]));
+>console.log(g([4, 5, 6])) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>g([4, 5, 6]) : any
+>g : (argArray?: any) => any
+>[4, 5, 6] : number[]
+>4 : 4
+>5 : 5
+>6 : 6
+
+// prints:
+// 4,1,5
+
+function whoAmI() {
+>whoAmI : () => void
+
+    console.log(`I'm ${this.name}`);
+>console.log(`I'm ${this.name}`) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>`I'm ${this.name}` : string
+>this.name : any
+>this : any
+>name : any
+}
+
+const w = whoAmI.call~(?);
+>w : (thisArg: any) => any
+>whoAmI.call~(?) : (thisArg: any) => any
+>whoAmI.call : (this: Function, thisArg: any, ...argArray: any[]) => any
+>whoAmI : () => void
+>call : (this: Function, thisArg: any, ...argArray: any[]) => any
+
+w({ name: "Alice" }); // prints: I'm Alice
+>w({ name: "Alice" }) : any
+>w : (thisArg: any) => any
+>{ name: "Alice" } : { name: string; }
+>name : string
+>"Alice" : "Alice"
+
+w({ name: "Bob" }); // prints: I'm Bob
+>w({ name: "Bob" }) : any
+>w : (thisArg: any) => any
+>{ name: "Bob" } : { name: string; }
+>name : string
+>"Bob" : "Bob"
+
+var m = 5 & ~(1 | 4);
+>m : number
+>5 & ~(1 | 4) : number
+>5 : 5
+>~(1 | 4) : number
+>~(1 | 4) : number
+>1 | 4 : number
+>1 : 1
+>4 : 4
+
+var a = ~(1 | 4);
+>a : number
+>~(1 | 4) : number
+>~(1 | 4) : number
+>1 | 4 : number
+>1 : 1
+>4 : 4
+
+var b = ~(1);
+>b : number
+>~(1) : number
+>~(1) : 1
+>1 : 1
+

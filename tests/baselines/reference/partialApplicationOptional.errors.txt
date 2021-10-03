@@ -1,12 +1,12 @@
-tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts(2,14): error TS2339: Property 'fill' does not exist on type 'any[]'.
+tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts(2,38): error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
 tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts(7,23): error TS2554: Expected 1 arguments, but got 2.
 
 
 ==== tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts (2 errors) ====
     const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
-    Array(times).fill(text).join('').padStart(padToLength, ' ');
-                 ~~~~
-!!! error TS2339: Property 'fill' does not exist on type 'any[]'.
+        Array(times).fill(text).join('').padStart(padToLength, ' ');
+                                         ~~~~~~~~
+!!! error TS2550: Property 'padStart' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2017' or later.
     
     const twice = repeatAndPad(2, ?);
     

@@ -16,7 +16,7 @@ const j = a.b.c.d.e.foo(?, 1);
 
 
 //// [partialApplicationThisCall.js]
-var _foo_1;
+var _receiver_1, _foo_1;
 var a = {
     b: {
         c: {
@@ -29,4 +29,4 @@ var a = {
         }
     }
 };
-var j = (_foo_1 = a.b.c.d.e.foo, function foo(_origFuncArg) { return _foo_1(_origFuncArg, 1); });
+var j = (_receiver_1 = a.b.c.d.e, _foo_1 = _receiver_1.foo, function foo(x) { return _foo_1.call(_receiver_1, x, 1); });

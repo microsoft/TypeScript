@@ -5,10 +5,14 @@ const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
 >text : Symbol(text, Decl(partialApplicationOptional.ts, 0, 36))
 >padToLength : Symbol(padToLength, Decl(partialApplicationOptional.ts, 0, 50))
 
-Array(times).fill(text).join('').padStart(padToLength, ' ');
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    Array(times).fill(text).join('').padStart(padToLength, ' ');
+>Array(times).fill(text).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Array(times).fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >times : Symbol(times, Decl(partialApplicationOptional.ts, 0, 22))
+>fill : Symbol(Array.fill, Decl(lib.es2015.core.d.ts, --, --))
 >text : Symbol(text, Decl(partialApplicationOptional.ts, 0, 36))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 >padToLength : Symbol(padToLength, Decl(partialApplicationOptional.ts, 0, 50))
 
 const twice = repeatAndPad(2, ?);

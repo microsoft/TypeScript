@@ -1,0 +1,102 @@
+=== tests/cases/conformance/expressions/partialApplication/partialApplicationCallApply.ts ===
+const addC = (a, b) => a + b;
+>addC : Symbol(addC, Decl(partialApplicationCallApply.ts, 0, 5))
+>a : Symbol(a, Decl(partialApplicationCallApply.ts, 0, 14))
+>b : Symbol(b, Decl(partialApplicationCallApply.ts, 0, 16))
+>a : Symbol(a, Decl(partialApplicationCallApply.ts, 0, 14))
+>b : Symbol(b, Decl(partialApplicationCallApply.ts, 0, 16))
+
+const addOne = addC~(1, ?);
+>addOne : Symbol(addOne, Decl(partialApplicationCallApply.ts, 2, 5))
+>addC : Symbol(addC, Decl(partialApplicationCallApply.ts, 0, 5))
+
+[1, 2, 3].map(addOne).forEach(console.log);
+>[1, 2, 3].map(addOne).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>addOne : Symbol(addOne, Decl(partialApplicationCallApply.ts, 2, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+// prints:
+// 2 0 2,3,4
+// 3 1 2,3,4
+// 4 2 2,3,4
+
+[1, 2, 3].map(addOne).forEach(console.log~(?));
+>[1, 2, 3].map(addOne).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>[1, 2, 3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>addOne : Symbol(addOne, Decl(partialApplicationCallApply.ts, 2, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+// prints:
+// 2
+// 3
+// 4
+
+const f = (a, b, c) => [a, b, c];
+>f : Symbol(f, Decl(partialApplicationCallApply.ts, 16, 5))
+>a : Symbol(a, Decl(partialApplicationCallApply.ts, 16, 11))
+>b : Symbol(b, Decl(partialApplicationCallApply.ts, 16, 13))
+>c : Symbol(c, Decl(partialApplicationCallApply.ts, 16, 16))
+>a : Symbol(a, Decl(partialApplicationCallApply.ts, 16, 11))
+>b : Symbol(b, Decl(partialApplicationCallApply.ts, 16, 13))
+>c : Symbol(c, Decl(partialApplicationCallApply.ts, 16, 16))
+
+const fI = f~(?, 1, ?);
+>fI : Symbol(fI, Decl(partialApplicationCallApply.ts, 18, 5))
+>f : Symbol(f, Decl(partialApplicationCallApply.ts, 16, 5))
+
+const g = f~(?, 1, ?).apply~(null, ?);
+>g : Symbol(g, Decl(partialApplicationCallApply.ts, 20, 5))
+>f~(?, 1, ?).apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(partialApplicationCallApply.ts, 16, 5))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
+
+console.log(g([4, 5, 6]));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>g : Symbol(g, Decl(partialApplicationCallApply.ts, 20, 5))
+
+// prints:
+// 4,1,5
+
+function whoAmI() {
+>whoAmI : Symbol(whoAmI, Decl(partialApplicationCallApply.ts, 22, 26))
+
+    console.log(`I'm ${this.name}`);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+}
+
+const w = whoAmI.call~(?);
+>w : Symbol(w, Decl(partialApplicationCallApply.ts, 30, 5))
+>whoAmI.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>whoAmI : Symbol(whoAmI, Decl(partialApplicationCallApply.ts, 22, 26))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+
+w({ name: "Alice" }); // prints: I'm Alice
+>w : Symbol(w, Decl(partialApplicationCallApply.ts, 30, 5))
+>name : Symbol(name, Decl(partialApplicationCallApply.ts, 31, 3))
+
+w({ name: "Bob" }); // prints: I'm Bob
+>w : Symbol(w, Decl(partialApplicationCallApply.ts, 30, 5))
+>name : Symbol(name, Decl(partialApplicationCallApply.ts, 32, 3))
+
+var m = 5 & ~(1 | 4);
+>m : Symbol(m, Decl(partialApplicationCallApply.ts, 34, 3))
+
+var a = ~(1 | 4);
+>a : Symbol(a, Decl(partialApplicationCallApply.ts, 35, 3))
+
+var b = ~(1);
+>b : Symbol(b, Decl(partialApplicationCallApply.ts, 36, 3))
+

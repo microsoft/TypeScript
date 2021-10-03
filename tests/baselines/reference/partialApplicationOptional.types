@@ -1,25 +1,25 @@
 === tests/cases/conformance/expressions/partialApplication/partialApplicationOptional.ts ===
 const repeatAndPad = (times: number, text: string, padToLength: number = 0) =>
 >repeatAndPad : (times: number, text: string, padToLength?: number) => any
->(times: number, text: string, padToLength: number = 0) =>Array(times).fill(text).join('').padStart(padToLength, ' ') : (times: number, text: string, padToLength?: number) => any
+>(times: number, text: string, padToLength: number = 0) =>    Array(times).fill(text).join('').padStart(padToLength, ' ') : (times: number, text: string, padToLength?: number) => any
 >times : number
 >text : string
 >padToLength : number
 >0 : 0
 
-Array(times).fill(text).join('').padStart(padToLength, ' ');
+    Array(times).fill(text).join('').padStart(padToLength, ' ');
 >Array(times).fill(text).join('').padStart(padToLength, ' ') : any
 >Array(times).fill(text).join('').padStart : any
->Array(times).fill(text).join('') : any
->Array(times).fill(text).join : any
->Array(times).fill(text) : any
->Array(times).fill : any
+>Array(times).fill(text).join('') : string
+>Array(times).fill(text).join : (separator?: string) => string
+>Array(times).fill(text) : any[]
+>Array(times).fill : (value: any, start?: number, end?: number) => any[]
 >Array(times) : any[]
 >Array : ArrayConstructor
 >times : number
->fill : any
+>fill : (value: any, start?: number, end?: number) => any[]
 >text : string
->join : any
+>join : (separator?: string) => string
 >'' : ""
 >padStart : any
 >padToLength : number
