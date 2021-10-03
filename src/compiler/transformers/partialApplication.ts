@@ -2,15 +2,10 @@
 namespace ts {
     export const transformPartialApplication: TransformerFactory<SourceFile> =
         (context: TransformationContext) => {
-            const getPropertyAccessString = (node: PropertyAccessExpression): string =>
-                `${isPropertyAccessExpression(node.expression)
-                    ? getPropertyAccessString(node.expression)
-                    : node.name.escapedText
-                }.${node.name.escapedText}`;
             return sourceFile => {
                 const visitor = (node: Node): Node => {
-                    if (isCallExpression(node)) {
-                        if (node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
+                    if (node.transformFlags & TransformFlags.ContainsPartialApplication) {
+                        if (isCallExpression(node) && node.arguments.some(arg => arg.kind === SyntaxKind.PartialApplicationElement)) {
                             const capturedFunctionIdentifier = createUniqueName(`_${
                                 isIdentifier(node.expression)
                                     ? node.expression.escapedText
@@ -96,8 +91,11 @@ namespace ts {
                                 ])
                             );
                         }
+                        return visitEachChild(node, visitor, context);
                     }
-                    return visitEachChild(node, visitor, context);
+                    else {
+                        return node;
+                    }
                 };
 
                 return visitNode(sourceFile, visitor);

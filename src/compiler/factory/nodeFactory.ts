@@ -2408,6 +2408,9 @@ namespace ts {
             if (isImportKeyword(node.expression)) {
                 node.transformFlags |= TransformFlags.ContainsDynamicImport;
             }
+            if ((node.arguments).some(isPartialApplicationElement)) {
+                node.transformFlags |= TransformFlags.ContainsPartialApplication;
+            }
             else if (isSuperProperty(node.expression)) {
                 node.transformFlags |= TransformFlags.ContainsLexicalThis;
             }

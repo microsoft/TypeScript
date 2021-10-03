@@ -6741,6 +6741,7 @@ namespace ts {
         ContainsPossibleTopLevelAwait = 1 << 24,
         ContainsLexicalSuper = 1 << 25,
         ContainsUpdateExpressionForIdentifier = 1 << 26,
+        ContainsPartialApplication = 1 << 27,
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
         // It is a good reminder of how much room we have left
