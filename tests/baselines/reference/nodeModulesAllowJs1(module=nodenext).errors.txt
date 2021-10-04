@@ -9,10 +9,21 @@ tests/cases/conformance/node/allowJs/index.cjs(16,22): error TS1471: Module './i
 tests/cases/conformance/node/allowJs/index.cjs(23,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.cjs(24,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.cjs(25,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(51,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.cjs(51,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(52,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.cjs(52,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(53,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(54,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(55,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(56,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(57,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(58,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.cjs(59,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.cjs(59,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(60,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.cjs(60,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.cjs(61,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.cjs(61,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.cjs(75,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 tests/cases/conformance/node/allowJs/index.cjs(76,21): error TS2307: Cannot find module './index' or its corresponding type declarations.
@@ -74,10 +85,21 @@ tests/cases/conformance/node/allowJs/index.mjs(21,22): error TS2307: Cannot find
 tests/cases/conformance/node/allowJs/index.mjs(22,22): error TS2307: Cannot find module './subfolder2/another' or its corresponding type declarations.
 tests/cases/conformance/node/allowJs/index.mjs(23,22): error TS2307: Cannot find module './subfolder2/another/' or its corresponding type declarations.
 tests/cases/conformance/node/allowJs/index.mjs(24,22): error TS2307: Cannot find module './subfolder2/another/index' or its corresponding type declarations.
+tests/cases/conformance/node/allowJs/index.mjs(50,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.mjs(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.mjs(51,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.mjs(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.mjs(52,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(53,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(54,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(55,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(56,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(57,1): error TS8002: 'import ... =' can only be used in TypeScript files.
+tests/cases/conformance/node/allowJs/index.mjs(58,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.mjs(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.mjs(59,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.mjs(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
+tests/cases/conformance/node/allowJs/index.mjs(60,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 tests/cases/conformance/node/allowJs/index.mjs(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
 tests/cases/conformance/node/allowJs/index.mjs(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
 tests/cases/conformance/node/allowJs/index.mjs(75,21): error TS2307: Cannot find module './index' or its corresponding type declarations.
@@ -292,7 +314,7 @@ tests/cases/conformance/node/allowJs/index.mjs(84,21): error TS2307: Cannot find
     // esm format file
     const x = 1;
     export {x};
-==== tests/cases/conformance/node/allowJs/index.cjs (27 errors) ====
+==== tests/cases/conformance/node/allowJs/index.cjs (38 errors) ====
     // ESM-format imports below should issue errors
     import * as m1 from "./index.js";
                         ~~~~~~~~~~~~
@@ -366,24 +388,46 @@ tests/cases/conformance/node/allowJs/index.mjs(84,21): error TS2307: Cannot find
     
     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
     import m24 = require("./");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~
 !!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m25 = require("./index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~
 !!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m26 = require("./subfolder");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m27 = require("./subfolder/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m28 = require("./subfolder/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m29 = require("./subfolder2");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m30 = require("./subfolder2/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m31 = require("./subfolder2/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m32 = require("./subfolder2/another");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m33 = require("./subfolder2/another/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m34 = require("./subfolder2/another/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     void m24;
@@ -435,7 +479,7 @@ tests/cases/conformance/node/allowJs/index.mjs(84,21): error TS2307: Cannot find
     // cjs format file
     const x = 1;
     export {x};
-==== tests/cases/conformance/node/allowJs/index.mjs (27 errors) ====
+==== tests/cases/conformance/node/allowJs/index.mjs (38 errors) ====
     import * as m1 from "./index.js";
     import * as m2 from "./index.mjs";
     import * as m3 from "./index.cjs";
@@ -508,24 +552,46 @@ tests/cases/conformance/node/allowJs/index.mjs(84,21): error TS2307: Cannot find
     
     // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
     import m24 = require("./");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~
 !!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m25 = require("./index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~
 !!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m26 = require("./subfolder");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m27 = require("./subfolder/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m28 = require("./subfolder/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m29 = require("./subfolder2");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m30 = require("./subfolder2/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m31 = require("./subfolder2/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
     import m32 = require("./subfolder2/another");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m33 = require("./subfolder2/another/");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     import m34 = require("./subfolder2/another/index");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS8002: 'import ... =' can only be used in TypeScript files.
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported synchronously. Use dynamic import instead.
     void m24;
