@@ -2123,25 +2123,13 @@ namespace ts {
                             }
                             if (suggestion) {
                                 let suggestionName = symbolToString(suggestion);
-                                let elaborate = !!suggestion.valueDeclaration;
-                                if ((suggestionName === "String"
-                                    || suggestionName === "Number"
-                                    || suggestionName === "Boolean"
-                                    || suggestionName === "Object"
-                                    || suggestionName === "BigInt"
-                                    || suggestionName === "Symbol")
-                                    && name !== suggestionName.toLowerCase()
-                                    && name === (name as string).toLowerCase()) {
-                                    suggestionName = suggestionName.toLowerCase();
-                                    elaborate = false;
-                                }
                                 const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
                                 const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
                                     : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
                                     : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
                                 addErrorOrSuggestion(!isUncheckedJS, diagnostic);
-                                if (elaborate) {
+                                if (!!suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
                                         createDiagnosticForNode(suggestion.valueDeclaration!, Diagnostics._0_is_declared_here, suggestionName)
@@ -28546,7 +28534,20 @@ namespace ts {
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
                 // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
-                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
+                if (symbol) return symbol
+                let candidates: Symbol[];
+                if (symbols === globals) {
+                    const primitives = mapDefined(
+                        ["string", "number", "boolean", "object", "bigint", "symbol"],
+                        s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
+                            ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
+                            : undefined);
+                    candidates = primitives.concat(arrayFrom(symbols.values()))
+                }
+                else {
+                    candidates = arrayFrom(symbols.values());
+                }
+                return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
             });
             return result;
         }

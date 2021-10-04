@@ -14,9 +14,9 @@ verify.codeFixAll({
     fixId: "fixSpelling",
     fixAllDescription: "Fix all detected spelling errors",
     newFileContent:
-`declare let a: Number;
+`declare let a: number;
 declare let b: Number;
-declare let c: Object;
+declare let c: object;
 declare let d: Object;
 declare let e: RegExp;
 namespace yadda {
