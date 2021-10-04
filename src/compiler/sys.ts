@@ -780,6 +780,7 @@ namespace ts {
     export const enum FileSystemEntryKind {
         File,
         Directory,
+        Any,
     }
 
     /*@internal*/
@@ -1821,6 +1822,7 @@ namespace ts {
                     switch (entryKind) {
                         case FileSystemEntryKind.File: return stat.isFile();
                         case FileSystemEntryKind.Directory: return stat.isDirectory();
+                        case FileSystemEntryKind.Any: return true;
                         default: return false;
                     }
                 }
@@ -1845,6 +1847,9 @@ namespace ts {
             }
 
             function realpath(path: string): string {
+                // `realpathSync` is slow on non-existent files, since it throws an exception - guard against calls on paths that don't exist with the
+                // more optimized exists call (which attempts to avoid throwing an error if the runtime supports it)
+                if (!fileSystemEntryExists(path, FileSystemEntryKind.Any)) return path;
                 try {
                     return realpathSync(path);
                 }
