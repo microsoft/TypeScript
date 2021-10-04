@@ -2129,7 +2129,7 @@ namespace ts {
                                     : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
                                 addErrorOrSuggestion(!isUncheckedJS, diagnostic);
-                                if (!!suggestion.valueDeclaration) {
+                                if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
                                         createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestionName)
