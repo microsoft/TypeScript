@@ -4358,25 +4358,6 @@ namespace ts {
         }
     }
 
-    function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
-        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
-        forEachChild(node, child => forEachFreeIdentifier(child, cb));
-    }
-
-    function isFreeIdentifier(node: Identifier): boolean {
-        const { parent } = node;
-        switch (parent.kind) {
-            case SyntaxKind.PropertyAccessExpression:
-                return (parent as PropertyAccessExpression).name !== node;
-            case SyntaxKind.BindingElement:
-                return (parent as BindingElement).propertyName !== node;
-            case SyntaxKind.ImportSpecifier:
-                return (parent as ImportSpecifier).propertyName !== node;
-            default:
-                return true;
-        }
-    }
-
     function createNonCollidingName(name: string, node: Node): string {
         const identifiers = new Set<string>();
         forEachFreeIdentifier(node, (identifier) => {

@@ -7414,4 +7414,27 @@ namespace ts {
     export function escapeSnippetText(text: string): string {
         return text.replace(/\$/gm, "\\$");
     }
+    
+    /**
+     * A free identifier is an identifier that can be accessed through name lookup as a local variable.
+     * In the expression `x.y`, `x` is a free identifier, but `y` is not.
+     */
+    export function forEachFreeIdentifier(node: Node, cb: (id: Identifier) => void): void {
+        if (isIdentifier(node) && isFreeIdentifier(node)) cb(node);
+        forEachChild(node, child => forEachFreeIdentifier(child, cb));
+    }
+
+    export function isFreeIdentifier(node: Identifier): boolean {
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.PropertyAccessExpression:
+                return (parent as PropertyAccessExpression).name !== node;
+            case SyntaxKind.BindingElement:
+                return (parent as BindingElement).propertyName !== node;
+            case SyntaxKind.ImportSpecifier:
+                return (parent as ImportSpecifier).propertyName !== node;
+            default:
+                return true;
+        }
+    }
 }
