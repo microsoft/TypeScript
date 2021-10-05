@@ -1,8 +1,9 @@
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(36,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(42,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(43,5): error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (2 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (3 errors) ====
     type Item = { value: string };
     type ItemMap<T> = { [P in keyof T]: Item };
     
@@ -33,16 +34,25 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(36,5): error TS2740: T
     // Issue #46169.
     // We want mapped types whose constraint is `keyof T` to
     // map over `any` differently, depending on whether `T`
-    // is constrained to an array-like type.
+    // is constrained to array and tuple types.
     type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
     type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
     
-    function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
+    // When a mapped type whose constraint is `keyof T` is instantiated,
+    // `T` may be instantiated with a `U` which is constrained to
+    // array and tuple types. When `U` is later instantiated with `any`,
+    // the result should also be some sort of array.
+    type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+    
+    function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
         let arr: any[];
         arr = arrayish;
         arr = objectish;
         ~~~
 !!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
+        arr = indirectArrayish;
+        ~~~
+!!! error TS2322: Type 'Objectish<any>' is not assignable to type 'any[]'.
     }
     
     declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };

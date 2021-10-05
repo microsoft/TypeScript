@@ -27,14 +27,21 @@ for (let id in z) {
 // Issue #46169.
 // We want mapped types whose constraint is `keyof T` to
 // map over `any` differently, depending on whether `T`
-// is constrained to an array-like type.
+// is constrained to array and tuple types.
 type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
 type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 
-function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. When `U` is later instantiated with `any`,
+// the result should also be some sort of array.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
     let arr: any[];
     arr = arrayish;
     arr = objectish;
+    arr = indirectArrayish;
 }
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
@@ -46,10 +53,11 @@ for (var id in z) {
     var data = z[id];
     var x = data.notAValue; // Error
 }
-function bar(arrayish, objectish) {
+function bar(arrayish, objectish, indirectArrayish) {
     var arr;
     arr = arrayish;
     arr = objectish;
+    arr = indirectArrayish;
 }
 var abc = stringifyArray(void 0);
 
@@ -85,7 +93,8 @@ declare type Arrayish<T extends unknown[]> = {
 declare type Objectish<T extends unknown> = {
     [K in keyof T]: T[K];
 };
-declare function bar(arrayish: Arrayish<any>, objectish: Objectish<any>): void;
+declare type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+declare function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>): void;
 declare function stringifyArray<T extends readonly any[]>(arr: T): {
     -readonly [K in keyof T]: string;
 };

@@ -72,7 +72,7 @@ for (let id in z) {
 // Issue #46169.
 // We want mapped types whose constraint is `keyof T` to
 // map over `any` differently, depending on whether `T`
-// is constrained to an array-like type.
+// is constrained to array and tuple types.
 type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
 >Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
 >T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
@@ -89,34 +89,50 @@ type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 >T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
 >K : Symbol(K, Decl(mappedTypeWithAny.ts, 30, 39))
 
-function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
->bar : Symbol(bar, Decl(mappedTypeWithAny.ts, 30, 61))
->arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 32, 13))
->Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
->objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 32, 37))
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. When `U` is later instantiated with `any`,
+// the result should also be some sort of array.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+>IndirectArrayish : Symbol(IndirectArrayish, Decl(mappedTypeWithAny.ts, 30, 61))
+>U : Symbol(U, Decl(mappedTypeWithAny.ts, 36, 22))
 >Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>U : Symbol(U, Decl(mappedTypeWithAny.ts, 36, 22))
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
+>bar : Symbol(bar, Decl(mappedTypeWithAny.ts, 36, 58))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 38, 13))
+>Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 38, 37))
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>indirectArrayish : Symbol(indirectArrayish, Decl(mappedTypeWithAny.ts, 38, 64))
+>IndirectArrayish : Symbol(IndirectArrayish, Decl(mappedTypeWithAny.ts, 30, 61))
 
     let arr: any[];
->arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 39, 7))
 
     arr = arrayish;
->arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
->arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 32, 13))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 39, 7))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 38, 13))
 
     arr = objectish;
->arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
->objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 32, 37))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 39, 7))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 38, 37))
+
+    arr = indirectArrayish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 39, 7))
+>indirectArrayish : Symbol(indirectArrayish, Decl(mappedTypeWithAny.ts, 38, 64))
 }
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
->stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 36, 1))
->T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
->arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 38, 58))
->T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
->K : Symbol(K, Decl(mappedTypeWithAny.ts, 38, 80))
->T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 43, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 45, 32))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 45, 58))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 45, 32))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 45, 80))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 45, 32))
 
 let abc: any[] = stringifyArray(void 0 as any);
->abc : Symbol(abc, Decl(mappedTypeWithAny.ts, 39, 3))
->stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 36, 1))
+>abc : Symbol(abc, Decl(mappedTypeWithAny.ts, 46, 3))
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 43, 1))
 
