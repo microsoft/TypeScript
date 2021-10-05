@@ -4,9 +4,9 @@ async function foo(x: any) {
 >x : any
 
     let abc = await Promise.all(x);
->abc : { [x: string]: any; }
->await Promise.all(x) : { [x: string]: any; }
->Promise.all(x) : Promise<{ [x: string]: any; }>
+>abc : any[]
+>await Promise.all(x) : any[]
+>Promise.all(x) : Promise<any[]>
 >Promise.all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
 >Promise : PromiseConstructor
 >all : <T extends readonly unknown[] | []>(values: T) => Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>
@@ -14,7 +14,7 @@ async function foo(x: any) {
 
     let result: any[] = abc;
 >result : any[]
->abc : { [x: string]: any; }
+>abc : any[]
 
     return result;
 >result : any[]
