@@ -1724,11 +1724,15 @@ namespace ts {
         if (!scope || !scope.packageJsonContent.exports) {
             return undefined;
         }
-        const parts = getPathComponents(moduleName); // unrooted paths should have `""` as their 0th entry
-        if (scope.packageJsonContent.name !== parts[1]) {
+        if (typeof scope.packageJsonContent.name !== "string") {
             return undefined;
         }
-        const trailingParts = parts.slice(2);
+        const parts = getPathComponents(moduleName); // unrooted paths should have `""` as their 0th entry
+        const nameParts = getPathComponents(scope.packageJsonContent.name);
+        if (!every(nameParts, (p, i) => parts[i] === p)) {
+            return undefined;
+        }
+        const trailingParts = parts.slice(nameParts.length);
         return loadModuleFromExports(scope, extensions, !length(trailingParts) ? "." : `.${directorySeparator}${trailingParts.join(directorySeparator)}`, state, cache, redirectedReference);
     }
 
