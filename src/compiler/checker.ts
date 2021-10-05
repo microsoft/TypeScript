@@ -1764,9 +1764,8 @@ namespace ts {
             nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
-            excludeGlobals = false,
-            issueSuggestions?: boolean): Symbol | undefined {
-            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol, issueSuggestions);
+            excludeGlobals = false): Symbol | undefined {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, isUse, excludeGlobals, getSymbol);
         }
 
         function resolveNameHelper(
@@ -1777,7 +1776,7 @@ namespace ts {
             nameArg: __String | Identifier | undefined,
             isUse: boolean,
             excludeGlobals: boolean,
-            lookup: typeof getSymbol, issueSuggestions?: boolean): Symbol | undefined {
+            lookup: typeof getSymbol): Symbol | undefined {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol | undefined;
             let lastLocation: Node | undefined;
@@ -2116,7 +2115,7 @@ namespace ts {
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingValueAsType(errorLocation, name, meaning)) {
                         let suggestion: Symbol | undefined;
-                        if (issueSuggestions && suggestionCount < maximumSuggestionCount) {
+                        if (suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestedSymbolForNonexistentSymbol(originalLocation, name, meaning);
                             const isGlobalScopeAugmentationDeclaration = suggestion?.valueDeclaration && isAmbientModule(suggestion.valueDeclaration) && isGlobalScopeAugmentation(suggestion.valueDeclaration);
                             if (isGlobalScopeAugmentationDeclaration) {
@@ -2125,10 +2124,11 @@ namespace ts {
                             if (suggestion) {
                                 const suggestionName = symbolToString(suggestion);
                                 const isUncheckedJS = isUncheckedJSSuggestion(originalLocation, suggestion, /*excludeClasses*/ false);
-                                const message = isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1 : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
+                                const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                                    : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
+                                    : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                                 const diagnostic = createError(errorLocation, message, diagnosticName(nameArg!), suggestionName);
                                 addErrorOrSuggestion(!isUncheckedJS, diagnostic);
-
                                 if (suggestion.valueDeclaration) {
                                     addRelatedInfo(
                                         diagnostic,
@@ -3238,7 +3238,7 @@ namespace ts {
             if (name.kind === SyntaxKind.Identifier) {
                 const message = meaning === namespaceMeaning || nodeIsSynthesized(name) ? Diagnostics.Cannot_find_namespace_0 : getCannotFindNameDiagnosticForName(getFirstIdentifier(name));
                 const symbolFromJSPrototype = isInJSFile(name) && !nodeIsSynthesized(name) ? resolveEntityNameFromAssignmentDeclaration(name, meaning) : undefined;
-                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true));
+                symbol = getMergedSymbol(resolveName(location || name, name.escapedText, meaning, ignoreErrors || symbolFromJSPrototype ? undefined : message, name, /*isUse*/ true, false));
                 if (!symbol) {
                     return getMergedSymbol(symbolFromJSPrototype);
                 }
@@ -22449,8 +22449,7 @@ namespace ts {
                         getCannotFindNameDiagnosticForName(node),
                         node,
                         !isWriteOnlyAccess(node),
-                        /*excludeGlobals*/ false,
-                        /*issueSuggestions*/ true) || unknownSymbol;
+                        /*excludeGlobals*/ false) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -28535,7 +28534,20 @@ namespace ts {
                 // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
                 // So the table *contains* `x` but `x` isn't actually in scope.
                 // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
-                return symbol || getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
+                if (symbol) return symbol;
+                let candidates: Symbol[];
+                if (symbols === globals) {
+                    const primitives = mapDefined(
+                        ["string", "number", "boolean", "object", "bigint", "symbol"],
+                        s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
+                            ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
+                            : undefined);
+                    candidates = primitives.concat(arrayFrom(symbols.values()));
+                }
+                else {
+                    candidates = arrayFrom(symbols.values());
+                }
+                return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
             });
             return result;
         }
