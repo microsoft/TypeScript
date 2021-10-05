@@ -1,0 +1,11 @@
+tests/cases/compiler/promiseAllOnAny01.ts(2,21): error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+
+
+==== tests/cases/compiler/promiseAllOnAny01.ts (1 errors) ====
+    async function foo(x: any) {
+        let abc = await Promise.all(x);
+                        ~~~~~~~
+!!! error TS2585: 'Promise' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the 'lib' compiler option to es2015 or later.
+        let result: any[] = abc;
+        return result;
+    }

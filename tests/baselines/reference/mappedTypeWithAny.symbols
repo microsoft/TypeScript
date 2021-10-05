@@ -69,3 +69,54 @@ for (let id in z) {
 >data : Symbol(data, Decl(mappedTypeWithAny.ts, 21, 5))
 }
 
+// Issue #46169.
+// We want mapped types whose constraint is `keyof T` to
+// map over `any` differently, depending on whether `T`
+// is constrained to an array-like type.
+type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
+>Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 29, 40))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 29, 14))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 29, 40))
+
+type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 30, 39))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 30, 15))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 30, 39))
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
+>bar : Symbol(bar, Decl(mappedTypeWithAny.ts, 30, 61))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 32, 13))
+>Arrayish : Symbol(Arrayish, Decl(mappedTypeWithAny.ts, 23, 1))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 32, 37))
+>Objectish : Symbol(Objectish, Decl(mappedTypeWithAny.ts, 29, 62))
+
+    let arr: any[];
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
+
+    arr = arrayish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
+>arrayish : Symbol(arrayish, Decl(mappedTypeWithAny.ts, 32, 13))
+
+    arr = objectish;
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 33, 7))
+>objectish : Symbol(objectish, Decl(mappedTypeWithAny.ts, 32, 37))
+}
+
+declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 36, 1))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
+>arr : Symbol(arr, Decl(mappedTypeWithAny.ts, 38, 58))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
+>K : Symbol(K, Decl(mappedTypeWithAny.ts, 38, 80))
+>T : Symbol(T, Decl(mappedTypeWithAny.ts, 38, 32))
+
+let abc: any[] = stringifyArray(void 0 as any);
+>abc : Symbol(abc, Decl(mappedTypeWithAny.ts, 39, 3))
+>stringifyArray : Symbol(stringifyArray, Decl(mappedTypeWithAny.ts, 36, 1))
+

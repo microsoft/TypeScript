@@ -1,0 +1,21 @@
+=== tests/cases/compiler/promiseAllOnAny01.ts ===
+async function foo(x: any) {
+>foo : (x: any) => Promise<any[]>
+>x : any
+
+    let abc = await Promise.all(x);
+>abc : any
+>await Promise.all(x) : any
+>Promise.all(x) : any
+>Promise.all : any
+>Promise : any
+>all : any
+>x : any
+
+    let result: any[] = abc;
+>result : any[]
+>abc : any
+
+    return result;
+>result : any[]
+}
