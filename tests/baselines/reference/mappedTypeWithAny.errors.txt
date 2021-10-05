@@ -1,10 +1,8 @@
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(23,16): error TS2339: Property 'notAValue' does not exist on type 'Data'.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(35,5): error TS2740: Type 'Arrayish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
 tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(36,5): error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
-tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(40,5): error TS2740: Type '{ [x: string]: string; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (4 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts (2 errors) ====
     type Item = { value: string };
     type ItemMap<T> = { [P in keyof T]: Item };
     
@@ -42,8 +40,6 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(40,5): error TS2740: T
     function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
         let arr: any[];
         arr = arrayish;
-        ~~~
-!!! error TS2740: Type 'Arrayish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
         arr = objectish;
         ~~~
 !!! error TS2740: Type 'Objectish<any>' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
@@ -51,5 +47,3 @@ tests/cases/conformance/types/mapped/mappedTypeWithAny.ts(40,5): error TS2740: T
     
     declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
     let abc: any[] = stringifyArray(void 0 as any);
-        ~~~
-!!! error TS2740: Type '{ [x: string]: string; }' is missing the following properties from type 'any[]': length, pop, push, concat, and 16 more.
