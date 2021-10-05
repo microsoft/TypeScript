@@ -760,8 +760,8 @@ namespace ts.Completions {
         let body;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
-            // const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier("$1"));
-            // body = factory.createBlock([tabStopStatement], /* multiline */ true);
+            // We are adding a final tabstop (i.e. $0) in the body of the suggested member, if it has one.
+            // NOTE: this assumes we won't have more than one body in the completion nodes.
             const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
             setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
             body = factory.createBlock([emptyStatement], /* multiline */ true);
@@ -821,7 +821,9 @@ namespace ts.Completions {
             body);
 
         if (completionNodes.length) {
-            addSnippets(completionNodes);
+            if (preferences.includeCompletionsWithSnippetText) {
+                addSnippets(completionNodes);
+            }
             insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
         return { insertText, isSnippet };
