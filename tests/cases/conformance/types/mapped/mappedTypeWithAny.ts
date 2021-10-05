@@ -29,14 +29,21 @@ for (let id in z) {
 // Issue #46169.
 // We want mapped types whose constraint is `keyof T` to
 // map over `any` differently, depending on whether `T`
-// is constrained to an array-like type.
+// is constrained to array and tuple types.
 type Arrayish<T extends unknown[]> = { [K in keyof T]: T[K] };
 type Objectish<T extends unknown> = { [K in keyof T]: T[K] };
 
-function bar(arrayish: Arrayish<any>, objectish: Objectish<any>) {
+// When a mapped type whose constraint is `keyof T` is instantiated,
+// `T` may be instantiated with a `U` which is constrained to
+// array and tuple types. When `U` is later instantiated with `any`,
+// the result should also be some sort of array.
+type IndirectArrayish<U extends unknown[]> = Objectish<U>;
+
+function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
     let arr: any[];
     arr = arrayish;
     arr = objectish;
+    arr = indirectArrayish;
 }
 
 declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [K in keyof T]: string };
