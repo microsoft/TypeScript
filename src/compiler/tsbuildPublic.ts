@@ -874,7 +874,7 @@ namespace ts {
             );
             state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
                 state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
-                ([path, data]) => ([state.host.realpath ? toPath(state, state.host.realpath(path)) : path, data] as const)
+                ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const)
             ));
 
             if (state.watch) {
