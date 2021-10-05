@@ -3142,7 +3142,7 @@ namespace ts {
         return undefined;
     }
 
-    export function isKeyword(token: SyntaxKind): boolean {
+    export function isKeyword(token: SyntaxKind): token is KeywordSyntaxKind {
         return SyntaxKind.FirstKeyword <= token && token <= SyntaxKind.LastKeyword;
     }
 
@@ -3327,7 +3327,7 @@ namespace ts {
         return node.escapedText === "push" || node.escapedText === "unshift";
     }
 
-    export function isParameterDeclaration(node: VariableLikeDeclaration) {
+    export function isParameterDeclaration(node: VariableLikeDeclaration): node is ParameterDeclaration {
         const root = getRootDeclaration(node);
         return root.kind === SyntaxKind.Parameter;
     }

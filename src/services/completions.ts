@@ -760,8 +760,11 @@ namespace ts.Completions {
         let body;
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
-            const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier("$1"));
-            body = factory.createBlock([tabStopStatement], /* multiline */ true);
+            // const tabStopStatement = factory.createExpressionStatement(factory.createIdentifier("$1"));
+            // body = factory.createBlock([tabStopStatement], /* multiline */ true);
+            const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
+            setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
+            body = factory.createBlock([emptyStatement], /* multiline */ true);
         }
         else {
             body = factory.createBlock([], /* multiline */ true);
@@ -813,6 +816,7 @@ namespace ts.Completions {
                         concatenate([factory.createModifier(SyntaxKind.OverrideKeyword)], node.modifiers),
                     );
                 }
+                addSnippets(node);
                 completionNodes.push(node);
             },
             body);
@@ -821,6 +825,32 @@ namespace ts.Completions {
             insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
         return { insertText, isSnippet };
+    }
+
+
+    function addSnippets(node: Node): void {
+        let order = 1;
+        addSnippetsWorker(node);
+
+        function addSnippetsWorker(node: Node) {
+            if (isVariableLike(node) && isParameterDeclaration(node)) {
+                // Placeholder
+                setSnippetElement(node.name, { kind: SnippetKind.Placeholder, order });
+                order += 1;
+                if (node.type) {
+                    setSnippetElement(node.type, { kind: SnippetKind.Placeholder, order });
+                    order += 1;
+                }
+            }
+            else if (isFunctionLikeDeclaration(node)) {
+                if (node.type) {
+                    setSnippetElement(node.type, { kind: SnippetKind.Placeholder, order });
+                    order += 1;
+                }
+            }
+
+            forEachChild(node, addSnippetsWorker);
+        }
     }
 
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {

@@ -1302,7 +1302,13 @@ namespace ts {
             currentParenthesizerRule = undefined;
         }
 
-        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node): void {
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, allowSnippets = true): void {
+            if (allowSnippets) {
+                const snippet = getSnippetElement(node);
+                if (snippet) {
+                    return emitSnippetNode(hint, node, snippet);
+                }
+            }
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -1935,6 +1941,30 @@ namespace ts {
                 section.end = writer.getTextPos();
                 bundleFileInfo.sections.push(section);
             }
+        }
+
+        //
+        // Snippet Elements
+        //
+
+        function emitSnippetNode(hint: EmitHint, node: Node, snippet: SnippetElement) {
+            switch (snippet.kind) {
+                case SnippetKind.Placeholder:
+                    return emitPlaceholder(hint, node, snippet);
+                case SnippetKind.TabStop:
+                    return emitTabStop(snippet);
+            }
+        }
+
+        function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
+            // write(`\$\{${order}:${defaultText}\}`);
+            write(`\$\{${snippet.order}:`);
+            pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false);
+            write(`\}`);
+        }
+
+        function emitTabStop(snippet: TabStop) {
+            write(`\$${snippet.order}`);
         }
 
         //

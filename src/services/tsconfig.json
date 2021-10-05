@@ -33,6 +33,7 @@
         "preProcess.ts",
         "rename.ts",
         "smartSelection.ts",
+        "snippets.ts",
         "signatureHelp.ts",
         "inlayHints.ts",
         "sourcemaps.ts",

@@ -256,6 +256,22 @@ namespace ts {
         }
     }
 
+    /**
+     * Gets the SnippetElement of a node.
+     */
+    export function getSnippetElement(node: Node): SnippetElement | undefined {
+        return node.emitNode?.snippetElement;
+    }
+
+    /**
+     * Sets the SnippetElement of a node.
+     */
+    export function setSnippetElement<T extends Node>(node: T, snippet: SnippetElement): T {
+        const emitNode = getOrCreateEmitNode(node);
+        emitNode.snippetElement = snippet;
+        return node;
+    }
+
     /* @internal */
     export function ignoreSourceNewlines<T extends Node>(node: T): T {
         getOrCreateEmitNode(node).flags |= EmitFlags.IgnoreSourceNewlines;

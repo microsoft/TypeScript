@@ -6740,16 +6740,14 @@ namespace ts {
         snippetElement?: SnippetElement;         // Snippet element of the node
     }
 
-    export interface SnippetElement {
-        kind: SnippetKind;
-    }
+    export type SnippetElement = TabStop | Placeholder;
 
-    export interface TabStop extends SnippetElement {
+    export interface TabStop {
         kind: SnippetKind.TabStop;
         order: number;
     }
 
-    export interface PlaceHolder extends SnippetElement {
+    export interface Placeholder {
         kind: SnippetKind.Placeholder;
         order: number;
     }
