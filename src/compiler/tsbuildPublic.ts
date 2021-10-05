@@ -872,12 +872,12 @@ namespace ts {
                 getConfigFileParsingDiagnostics(config),
                 config.projectReferences
             );
-            state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
-                state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
-                ([path, data]) => ([state.host.realpath ? toPath(state, state.host.realpath(path)) : path, data] as const)
-            ));
-
             if (state.watch) {
+                state.lastCachedPackageJsonLookups.set(projectPath, state.moduleResolutionCache && map(
+                    state.moduleResolutionCache.getPackageJsonInfoCache().entries(),
+                    ([path, data]) => ([state.host.realpath && data ? toPath(state, state.host.realpath(path)) : path, data] as const)
+                ));
+
                 state.builderPrograms.set(projectPath, program);
             }
             step++;

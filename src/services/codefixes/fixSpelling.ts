@@ -6,6 +6,7 @@ namespace ts.codefix {
         Diagnostics.Property_0_may_not_exist_on_type_1_Did_you_mean_2.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
         Diagnostics.Could_not_find_name_0_Did_you_mean_1.code,
+        Diagnostics.Cannot_find_namespace_0_Did_you_mean_1.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0.code,
         Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code,
         Diagnostics._0_has_no_exported_member_named_1_Did_you_mean_2.code,

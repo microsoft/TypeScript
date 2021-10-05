@@ -1,4 +1,4 @@
-tests/cases/compiler/test.tsx(9,17): error TS2304: Cannot find name 'MyElement'.
+tests/cases/compiler/test.tsx(9,17): error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
 
 
 ==== tests/cases/compiler/test.tsx (1 errors) ====
@@ -12,6 +12,7 @@ tests/cases/compiler/test.tsx(9,17): error TS2304: Cannot find name 'MyElement'.
         render(createElement) {
             return <div />;
                     ~~~
-!!! error TS2304: Cannot find name 'MyElement'.
+!!! error TS2552: Cannot find name 'MyElement'. Did you mean 'Element'?
+!!! related TS2728 /.ts/lib.dom.d.ts:4792:13: 'Element' is declared here.
         }
     }
