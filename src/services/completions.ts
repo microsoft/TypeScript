@@ -816,23 +816,25 @@ namespace ts.Completions {
                         concatenate([factory.createModifier(SyntaxKind.OverrideKeyword)], node.modifiers),
                     );
                 }
-                addSnippets(node);
                 completionNodes.push(node);
             },
             body);
 
         if (completionNodes.length) {
+            addSnippets(completionNodes);
             insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
         return { insertText, isSnippet };
     }
 
 
-    function addSnippets(node: Node): void {
+    function addSnippets(nodes: Node[]): void {
         let order = 1;
-        addSnippetsWorker(node);
+        for (const node of nodes) {
+            addSnippetsWorker(node, undefined);
+        }
 
-        function addSnippetsWorker(node: Node) {
+        function addSnippetsWorker(node: Node, parent: Node | undefined) {
             if (isVariableLike(node) && isParameterDeclaration(node)) {
                 // Placeholder
                 setSnippetElement(node.name, { kind: SnippetKind.Placeholder, order });
@@ -842,14 +844,12 @@ namespace ts.Completions {
                     order += 1;
                 }
             }
-            else if (isFunctionLikeDeclaration(node)) {
-                if (node.type) {
-                    setSnippetElement(node.type, { kind: SnippetKind.Placeholder, order });
-                    order += 1;
-                }
+            else if (isTypeNode(node) && parent && isFunctionLikeDeclaration(parent)) {
+                setSnippetElement(node, { kind: SnippetKind.Placeholder, order });
+                order += 1;
             }
 
-            forEachChild(node, addSnippetsWorker);
+            forEachChild(node, child => addSnippetsWorker(child, node));
         }
     }
 

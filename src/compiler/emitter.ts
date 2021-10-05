@@ -1957,10 +1957,10 @@ namespace ts {
         }
 
         function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
-            // write(`\$\{${order}:${defaultText}\}`);
-            write(`\$\{${snippet.order}:`);
-            pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false);
-            write(`\}`);
+            write(`\$\{${snippet.order}:`); // `${2:`
+            pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
+            write(`\}`); // `}`
+            // `${2:...}`
         }
 
         function emitTabStop(snippet: TabStop) {
