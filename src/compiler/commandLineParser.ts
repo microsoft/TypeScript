@@ -748,6 +748,8 @@ namespace ts {
             type: new Map(getEntries({
                 node: ModuleResolutionKind.NodeJs,
                 classic: ModuleResolutionKind.Classic,
+                node12: ModuleResolutionKind.Node12,
+                nodenext: ModuleResolutionKind.NodeNext,
             })),
             affectsModuleResolution: true,
             paramType: Diagnostics.STRATEGY,
