@@ -1,0 +1,80 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesIncompatibleModifiersJs.js ===
+class A {
+>A : Symbol(A, Decl(privateNamesIncompatibleModifiersJs.js, 0, 0))
+
+    /**
+     * @public
+     */
+    #a = 1;
+>#a : Symbol(A.#a, Decl(privateNamesIncompatibleModifiersJs.js, 0, 9))
+
+    /**
+     * @private
+     */
+    #b = 1;
+>#b : Symbol(A.#b, Decl(privateNamesIncompatibleModifiersJs.js, 4, 11))
+
+    /**
+     * @protected
+     */
+    #c = 1;
+>#c : Symbol(A.#c, Decl(privateNamesIncompatibleModifiersJs.js, 9, 11))
+
+    /**
+     * @public
+     */
+    #aMethod() { return 1; }
+>#aMethod : Symbol(A.#aMethod, Decl(privateNamesIncompatibleModifiersJs.js, 14, 11))
+
+    /**
+     * @private
+     */
+    #bMethod() { return 1; }
+>#bMethod : Symbol(A.#bMethod, Decl(privateNamesIncompatibleModifiersJs.js, 19, 28))
+
+    /**
+     * @protected
+     */
+    #cMethod() { return 1; }
+>#cMethod : Symbol(A.#cMethod, Decl(privateNamesIncompatibleModifiersJs.js, 24, 28))
+
+    /**
+     * @public
+     */
+    get #aProp() { return 1; }
+>#aProp : Symbol(A.#aProp, Decl(privateNamesIncompatibleModifiersJs.js, 29, 28), Decl(privateNamesIncompatibleModifiersJs.js, 34, 30))
+
+    /**
+     * @public
+     */
+    set #aProp(value) { }
+>#aProp : Symbol(A.#aProp, Decl(privateNamesIncompatibleModifiersJs.js, 29, 28), Decl(privateNamesIncompatibleModifiersJs.js, 34, 30))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiersJs.js, 38, 15))
+
+    /**
+     * @private
+     */
+    get #bProp() { return 1; }
+>#bProp : Symbol(A.#bProp, Decl(privateNamesIncompatibleModifiersJs.js, 38, 25), Decl(privateNamesIncompatibleModifiersJs.js, 43, 30))
+
+    /**
+     * @private
+     */
+    set #bProp(value) { }
+>#bProp : Symbol(A.#bProp, Decl(privateNamesIncompatibleModifiersJs.js, 38, 25), Decl(privateNamesIncompatibleModifiersJs.js, 43, 30))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiersJs.js, 47, 15))
+
+    /**
+    * @protected
+    */
+    get #cProp() { return 1; }
+>#cProp : Symbol(A.#cProp, Decl(privateNamesIncompatibleModifiersJs.js, 47, 25), Decl(privateNamesIncompatibleModifiersJs.js, 52, 30))
+
+    /**
+     * @protected
+     */
+    set #cProp(value) { }
+>#cProp : Symbol(A.#cProp, Decl(privateNamesIncompatibleModifiersJs.js, 47, 25), Decl(privateNamesIncompatibleModifiersJs.js, 52, 30))
+>value : Symbol(value, Decl(privateNamesIncompatibleModifiersJs.js, 56, 15))
+}
+

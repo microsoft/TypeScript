@@ -271,7 +271,7 @@ namespace Harness {
         }
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
-            switch (options.target) {
+            switch (ts.getEmitScriptTarget(options)) {
                 case ts.ScriptTarget.ESNext:
                 case ts.ScriptTarget.ES2017:
                     return "lib.es2017.d.ts";
@@ -391,7 +391,7 @@ namespace Harness {
             symlinks?: vfs.FileSet
         ): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
-            options.target = options.target || ts.ScriptTarget.ES3;
+            options.target = ts.getEmitScriptTarget(options);
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
             options.skipDefaultLibCheck = typeof options.skipDefaultLibCheck === "undefined" ? true : options.skipDefaultLibCheck;
@@ -505,7 +505,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
+                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.getDeclarationEmitExtensionForPath(sourceFileName);
                 return result.dts.get(dTsFileName);
             }
 
@@ -897,7 +897,7 @@ namespace Harness {
                     jsCode += "\r\n";
                 }
                 if (!result.diagnostics.length && !ts.endsWith(file.file, ts.Extension.Json)) {
-                    const fileParseResult = ts.createSourceFile(file.file, file.text, options.target || ts.ScriptTarget.ES3, /*parentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
+                    const fileParseResult = ts.createSourceFile(file.file, file.text, ts.getEmitScriptTarget(options), /*parentNodes*/ false, ts.endsWith(file.file, "x") ? ts.ScriptKind.JSX : ts.ScriptKind.JS);
                     if (ts.length(fileParseResult.parseDiagnostics)) {
                         jsCode += getErrorBaseline([file.asTestFile()], fileParseResult.parseDiagnostics);
                         return;

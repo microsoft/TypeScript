@@ -568,6 +568,7 @@ type Qux<T, Q extends Bar<T>> = { [K in keyof Q]: T[Q[K]["0"]] };
 
 const actions = ['resizeTo', 'resizeBy'] as const;
 >actions : Symbol(actions, Decl(keyofAndIndexedAccess2.ts, 160, 5))
+>const : Symbol(const)
 
 for (const action of actions) {
 >action : Symbol(action, Decl(keyofAndIndexedAccess2.ts, 161, 10))

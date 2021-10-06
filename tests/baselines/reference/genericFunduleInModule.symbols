@@ -20,6 +20,7 @@ module A {
 var b: A.B;
 >b : Symbol(b, Decl(genericFunduleInModule.ts, 7, 3))
 >A : Symbol(A, Decl(genericFunduleInModule.ts, 0, 0))
+>B : Symbol(A.B)
 
 A.B(1);
 >A.B : Symbol(A.B, Decl(genericFunduleInModule.ts, 0, 10), Decl(genericFunduleInModule.ts, 1, 44))

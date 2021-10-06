@@ -2,9 +2,10 @@ tests/cases/compiler/infiniteConstraints.ts(4,37): error TS2536: Type '"val"' ca
 tests/cases/compiler/infiniteConstraints.ts(31,43): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(31,63): error TS2322: Type 'Value<"dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
+tests/cases/compiler/infiniteConstraints.ts(48,27): error TS2321: Excessive stack depth comparing types 'Conv<ExactExtract<U, T>, ExactExtract<U, T>>' and 'unknown[]'.
 
 
-==== tests/cases/compiler/infiniteConstraints.ts (4 errors) ====
+==== tests/cases/compiler/infiniteConstraints.ts (5 errors) ====
     // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
     
     type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
@@ -63,4 +64,6 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     
     type Conv<T, U = T> =
       { 0: [T]; 1: Prepend<T, Conv<ExactExtract<U, T>>>;}[U extends T ? 0 : 1];
+                              ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2321: Excessive stack depth comparing types 'Conv<ExactExtract<U, T>, ExactExtract<U, T>>' and 'unknown[]'.
     

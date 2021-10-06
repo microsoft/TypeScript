@@ -594,9 +594,11 @@ const obj10 = {
     ['x']: 0 as const,
 >['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
 >'x' : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
+>const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 204, 22))
+>const : Symbol(const)
 
 };
 
@@ -606,9 +608,11 @@ const obj11 = {
     [1]: 2 as const,
 >[1] : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
 >1 : Symbol([1], Decl(indexSignatures1.ts, 208, 15))
+>const : Symbol(const)
 
     [1 + 2]: 3 as const,
 >[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 209, 20))
+>const : Symbol(const)
 
 };
 
@@ -618,10 +622,12 @@ const obj12 = {
     [sym]: 4 as const,
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 213, 15))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 214, 22))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
 
 };
 
@@ -631,24 +637,30 @@ const obj13 = {
     ['x']: 0 as const,
 >['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
 >'x' : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
+>const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
 >['a' + 'b'] : Symbol(['a' + 'b'], Decl(indexSignatures1.ts, 219, 22))
+>const : Symbol(const)
 
     [1]: 2 as const,
 >[1] : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
 >1 : Symbol([1], Decl(indexSignatures1.ts, 220, 28))
+>const : Symbol(const)
 
     [1 + 2]: 3 as const,
 >[1 + 2] : Symbol([1 + 2], Decl(indexSignatures1.ts, 221, 20))
+>const : Symbol(const)
 
     [sym]: 4 as const,
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 222, 24))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+>const : Symbol(const)
 
     [Symbol()]: 5 as const,
 >[Symbol()] : Symbol([Symbol()], Decl(indexSignatures1.ts, 223, 22))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+>const : Symbol(const)
 
 };
 
@@ -898,4 +910,28 @@ const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 >key : Symbol(key, Decl(indexSignatures1.ts, 311, 15))
 >[sym] : Symbol([sym], Decl(indexSignatures1.ts, 311, 41))
 >sym : Symbol(sym, Decl(indexSignatures1.ts, 2, 5))
+
+// Repro from #45772
+
+type Id = string & { __tag: 'id '};
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+>__tag : Symbol(__tag, Decl(indexSignatures1.ts, 315, 20))
+
+type Rec1 = { [key: Id]: number };
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+>key : Symbol(key, Decl(indexSignatures1.ts, 316, 15))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type Rec2 = Record<Id, number>;
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Id : Symbol(Id, Decl(indexSignatures1.ts, 311, 59))
+
+type K1 = keyof Rec1;  // Id
+>K1 : Symbol(K1, Decl(indexSignatures1.ts, 317, 31))
+>Rec1 : Symbol(Rec1, Decl(indexSignatures1.ts, 315, 35))
+
+type K2 = keyof Rec2;  // Id
+>K2 : Symbol(K2, Decl(indexSignatures1.ts, 319, 21))
+>Rec2 : Symbol(Rec2, Decl(indexSignatures1.ts, 316, 34))
 

@@ -1,0 +1,22 @@
+=== /mod.ts ===
+export type A = unknown;
+>A : Symbol(A, Decl(mod.ts, 0, 0))
+
+export type B = never;
+>B : Symbol(B, Decl(mod.ts, 0, 24))
+
+export type C = any;
+>C : Symbol(C, Decl(mod.ts, 1, 22))
+
+=== /index.ts ===
+import { type A, type B, type C } from "./mod.js";
+>A : Symbol(A, Decl(index.ts, 0, 8))
+>B : Symbol(B, Decl(index.ts, 0, 16))
+>C : Symbol(C, Decl(index.ts, 0, 24))
+
+=== /reexport.ts ===
+export { type A, type B, type C } from "./mod.js";
+>A : Symbol(A, Decl(reexport.ts, 0, 8))
+>B : Symbol(B, Decl(reexport.ts, 0, 16))
+>C : Symbol(C, Decl(reexport.ts, 0, 24))
+
