@@ -237,7 +237,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
+                        messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic', 'node12', 'nodenext'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
