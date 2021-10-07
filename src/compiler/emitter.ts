@@ -911,6 +911,9 @@ namespace ts {
         const parenthesizer = factory.parenthesizer;
         const emitBinaryExpression = createEmitBinaryExpression();
 
+        // Snippets
+        let inSnippet = false;
+
         reset();
         return {
             // public API
@@ -1283,8 +1286,9 @@ namespace ts {
             currentParenthesizerRule = undefined;
         }
 
-        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, allowSnippets = true): void {
-            if (allowSnippets) {
+        // >> TODO: remove allowSnippets
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, _allowSnippets = true): void {
+            if (!inSnippet) {
                 const snippet = getSnippetElement(node);
                 if (snippet) {
                     return emitSnippetNode(hint, node, snippet);
@@ -1877,12 +1881,17 @@ namespace ts {
             const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
-                writeLiteral(text);
+                writeLiteral(inSnippet ? escapeSnippetText(text) : text);
             }
             else {
                 // Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for numberLiterals
-                writeStringLiteral(text);
+                writeStringLiteral(inSnippet ? escapeSnippetText(text) : text);
             }
+        }
+
+        // TODO: move this
+        function escapeSnippetText(text: string): string {
+            return text.replace(/\$/gm, "\\$");
         }
 
         // SyntaxKind.UnparsedSource
@@ -1935,12 +1944,16 @@ namespace ts {
         //
 
         function emitSnippetNode(hint: EmitHint, node: Node, snippet: SnippetElement) {
+            inSnippet = true;
             switch (snippet.kind) {
                 case SnippetKind.Placeholder:
-                    return emitPlaceholder(hint, node, snippet);
+                    emitPlaceholder(hint, node, snippet);
+                    break;
                 case SnippetKind.TabStop:
-                    return emitTabStop(snippet);
+                    emitTabStop(snippet);
+                    break;
             }
+            inSnippet = false;
         }
 
         function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
@@ -1960,7 +1973,8 @@ namespace ts {
 
         function emitIdentifier(node: Identifier) {
             const writeText = node.symbol ? writeSymbol : write;
-            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+            const text = getTextOfNode(node, /*includeTrivia*/ false);
+            writeText(inSnippet ? escapeSnippetText(text) : text, node.symbol);
             emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 
@@ -1970,7 +1984,8 @@ namespace ts {
 
         function emitPrivateIdentifier(node: PrivateIdentifier) {
             const writeText = node.symbol ? writeSymbol : write;
-            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+            const text = getTextOfNode(node, /*includeTrivia*/ false);
+            writeText(inSnippet ? escapeSnippetText(text) : text, node.symbol);
         }
 
 
