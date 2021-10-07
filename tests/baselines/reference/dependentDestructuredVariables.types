@@ -1,0 +1,441 @@
+=== tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts ===
+type Action =
+>Action : Action
+
+    | { kind: 'A', payload: number }
+>kind : "A"
+>payload : number
+
+    | { kind: 'B', payload: string };
+>kind : "B"
+>payload : string
+
+function f10({ kind, payload }: Action) {
+>f10 : ({ kind, payload }: Action) => void
+>kind : "A" | "B"
+>payload : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
+function f11(action: Action) {
+>f11 : (action: Action) => void
+>action : Action
+
+    const { kind, payload } = action;
+>kind : "A" | "B"
+>payload : string | number
+>action : Action
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
+function f12({ kind, payload }: Action) {
+>f12 : ({ kind, payload }: Action) => void
+>kind : "A" | "B"
+>payload : string | number
+
+    switch (kind) {
+>kind : "A" | "B"
+
+        case 'A':
+>'A' : "A"
+
+            payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+            break;
+        case 'B':
+>'B' : "B"
+
+            payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+
+            break;
+        default:
+            payload;  // never
+>payload : never
+    }
+}
+
+type Action2 =
+>Action2 : Action2
+
+    | { kind: 'A', payload: number | undefined }
+>kind : "A"
+>payload : number | undefined
+
+    | { kind: 'B', payload: string | undefined };
+>kind : "B"
+>payload : string | undefined
+
+function f20({ kind, payload }: Action2) {
+>f20 : ({ kind, payload }: Action2) => void
+>kind : "A" | "B"
+>payload : string | number | undefined
+
+    if (payload) {
+>payload : string | number | undefined
+
+        if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+            payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+        }
+        if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+            payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+        }
+    }
+}
+
+function f21(action: Action2) {
+>f21 : (action: Action2) => void
+>action : Action2
+
+    const { kind, payload } = action;
+>kind : "A" | "B"
+>payload : string | number | undefined
+>action : Action2
+
+    if (payload) {
+>payload : string | number | undefined
+
+        if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+            payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+        }
+        if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+            payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+        }
+    }
+}
+
+function f22(action: Action2) {
+>f22 : (action: Action2) => void
+>action : Action2
+
+    if (action.payload) {
+>action.payload : string | number | undefined
+>action : Action2
+>payload : string | number | undefined
+
+        const { kind, payload } = action;
+>kind : "A" | "B"
+>payload : string | number
+>action : Action2
+
+        if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+            payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+        }
+        if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+            payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+        }
+    }
+}
+
+function f23({ kind, payload }: Action2) {
+>f23 : ({ kind, payload }: Action2) => void
+>kind : "A" | "B"
+>payload : string | number | undefined
+
+    if (payload) {
+>payload : string | number | undefined
+
+        switch (kind) {
+>kind : "A" | "B"
+
+            case 'A':
+>'A' : "A"
+
+                payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+
+                break;
+            case 'B':
+>'B' : "B"
+
+                payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+
+                break;
+            default:
+                payload;  // never
+>payload : never
+        }
+    }
+}
+
+type Foo =
+>Foo : Foo
+
+    | { kind: 'A', isA: true }
+>kind : "A"
+>isA : true
+>true : true
+
+    | { kind: 'B', isA: false }
+>kind : "B"
+>isA : false
+>false : false
+
+    | { kind: 'C', isA: false };
+>kind : "C"
+>isA : false
+>false : false
+
+function f30({ kind, isA }: Foo) {
+>f30 : ({ kind, isA }: Foo) => void
+>kind : "A" | "B" | "C"
+>isA : boolean
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B" | "C"
+>'A' : "A"
+
+        isA;   // true
+>isA : true
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B" | "C"
+>'B' : "B"
+
+        isA;   // false
+>isA : false
+    }
+    if (kind === 'C') {
+>kind === 'C' : boolean
+>kind : "A" | "B" | "C"
+>'C' : "C"
+
+        isA;   // false
+>isA : false
+    }
+    if (isA) {
+>isA : boolean
+
+        kind;  // 'A'
+>kind : "A"
+    }
+    else {
+        kind;  // 'B' | 'C'
+>kind : "B" | "C"
+    }
+}
+
+// Repro from #35283
+
+interface A<T> { variant: 'a', value: T }
+>variant : "a"
+>value : T
+
+interface B<T> { variant: 'b', value: Array<T> }
+>variant : "b"
+>value : T[]
+
+type AB<T> = A<T> | B<T>;
+>AB : AB<T>
+
+declare function printValue<T>(t: T): void;
+>printValue : <T>(t: T) => void
+>t : T
+
+declare function printValueList<T>(t: Array<T>): void;
+>printValueList : <T>(t: Array<T>) => void
+>t : T[]
+
+function unrefined1<T>(ab: AB<T>): void {
+>unrefined1 : <T>(ab: AB<T>) => void
+>ab : AB<T>
+
+    const { variant, value } = ab;
+>variant : "a" | "b"
+>value : T | T[]
+>ab : AB<T>
+
+    if (variant === 'a') {
+>variant === 'a' : boolean
+>variant : "a" | "b"
+>'a' : "a"
+
+        printValue<T>(value);
+>printValue<T>(value) : void
+>printValue : <T>(t: T) => void
+>value : T
+    }
+    else {
+        printValueList<T>(value);
+>printValueList<T>(value) : void
+>printValueList : <T>(t: T[]) => void
+>value : T[]
+    }
+}
+
+// Repro from #38020
+
+type Action3 =
+>Action3 : Action3
+
+    | {type: 'add', payload: { toAdd: number } }
+>type : "add"
+>payload : { toAdd: number; }
+>toAdd : number
+
+    | {type: 'remove', payload: { toRemove: number } };
+>type : "remove"
+>payload : { toRemove: number; }
+>toRemove : number
+
+const reducerBroken = (state: number, { type, payload }: Action3) => {
+>reducerBroken : (state: number, { type, payload }: Action3) => number
+>(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
+>state : number
+>type : "add" | "remove"
+>payload : { toAdd: number; } | { toRemove: number; }
+
+    switch (type) {
+>type : "add" | "remove"
+
+        case 'add':
+>'add' : "add"
+
+            return state + payload.toAdd;
+>state + payload.toAdd : number
+>state : number
+>payload.toAdd : number
+>payload : { toAdd: number; }
+>toAdd : number
+
+        case 'remove':
+>'remove' : "remove"
+
+            return state - payload.toRemove;
+>state - payload.toRemove : number
+>state : number
+>payload.toRemove : number
+>payload : { toRemove: number; }
+>toRemove : number
+    }
+}
+
+// Repro from #46143
+
+declare var it: Iterator<number>;
+>it : Iterator<number, any, undefined>
+
+const { value, done } = it.next();
+>value : any
+>done : boolean | undefined
+>it.next() : IteratorResult<number, any>
+>it.next : (...args: [] | [undefined]) => IteratorResult<number, any>
+>it : Iterator<number, any, undefined>
+>next : (...args: [] | [undefined]) => IteratorResult<number, any>
+
+if (!done) {
+>!done : boolean
+>done : boolean | undefined
+
+    value;  // number
+>value : number
+}
+
