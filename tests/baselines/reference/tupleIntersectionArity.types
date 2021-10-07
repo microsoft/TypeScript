@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/rest/tupleIntersectionArity.ts ===
+declare const tuple1: [number, number, number] & { _nominal_a: never };
+>tuple1 : [number, number, number] & { _nominal_a: never; }
+>_nominal_a : never
+
+declare const tuple2: [number, number, number] & [string, string, string];
+>tuple2 : [number, number, number] & [string, string, string]
+
+declare const f1: (...params: [number, number, number]) => void;
+>f1 : (params_0: number, params_1: number, params_2: number) => void
+>params : [number, number, number]
+
+f1(...tuple1);
+>f1(...tuple1) : void
+>f1 : (params_0: number, params_1: number, params_2: number) => void
+>...tuple1 : number
+>tuple1 : [number, number, number] & { _nominal_a: never; }
+
+f1(...tuple2); // Error
+>f1(...tuple2) : void
+>f1 : (params_0: number, params_1: number, params_2: number) => void
+>...tuple2 : never
+>tuple2 : [number, number, number] & [string, string, string]
+
+export {}
+
