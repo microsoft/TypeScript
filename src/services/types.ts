@@ -1199,6 +1199,8 @@ namespace ts {
          * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
          */
         exportName: string;
+        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
+        exportMapKey: string;
         /**
          * Set for auto imports with eagerly resolved module specifiers.
          */
