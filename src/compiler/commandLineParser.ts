@@ -197,7 +197,6 @@ namespace ts {
             showInSimplifiedHelpView: false,
             category: Diagnostics.Output_Formatting,
             description: Diagnostics.Disable_wiping_the_console_in_watch_mode,
-            defaultValueDescription: "n/a"
         },
         {
             name: "listFiles",
@@ -499,7 +498,6 @@ namespace ts {
             category: Diagnostics.Emit,
             description: Diagnostics.Specify_a_file_that_bundles_all_outputs_into_one_JavaScript_file_If_declaration_is_true_also_designates_a_file_that_bundles_all_d_ts_output,
             transpileOptionValue: undefined,
-            defaultValueDescription: "n/a"
         },
         {
             name: "outDir",
@@ -510,7 +508,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Specify_an_output_folder_for_all_emitted_files,
-            defaultValueDescription: "n/a"
         },
         {
             name: "rootDir",
@@ -841,7 +838,6 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Interop_Constraints,
             description: Diagnostics.Disable_resolving_symlinks_to_their_realpath_This_correlates_to_the_same_flag_in_node,
-            defaultValueDescription: "n/a"
         },
         {
             name: "allowUmdGlobalAccess",
@@ -945,7 +941,6 @@ namespace ts {
             category: Diagnostics.Backwards_Compatibility,
             paramType: Diagnostics.FILE,
             transpileOptionValue: undefined,
-            defaultValueDescription: "n/a",
             description: Diagnostics.Deprecated_setting_Use_outFile_instead,
         },
         {
@@ -1087,7 +1082,6 @@ namespace ts {
             affectsEmit: true,
             category: Diagnostics.Emit,
             description: Diagnostics.Disable_erasing_const_enum_declarations_in_generated_code,
-            defaultValueDescription: "n/a"
         },
         {
             name: "declarationDir",
@@ -1098,7 +1092,6 @@ namespace ts {
             category: Diagnostics.Emit,
             transpileOptionValue: undefined,
             description: Diagnostics.Specify_the_output_directory_for_generated_declaration_files,
-            defaultValueDescription: "n/a"
         },
         {
             name: "skipLibCheck",
