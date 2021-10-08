@@ -24851,15 +24851,15 @@ namespace ts {
             // as if it occurred in the specified location. We then recompute the narrowed binding element type by
             // destructuring from the narrowed parent type.
             const declaration = symbol.valueDeclaration;
-            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken) {
+            if (declaration && isBindingElement(declaration) && !declaration.initializer && !declaration.dotDotDotToken && declaration.parent.elements.length >= 2) {
                 const parent = declaration.parent.parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) && NodeFlags.Const || parent.kind === SyntaxKind.Parameter && !isSymbolAssigned(symbol)) {
+                if (parent.kind === SyntaxKind.VariableDeclaration && getCombinedNodeFlags(declaration) && NodeFlags.Const || parent.kind === SyntaxKind.Parameter) {
                     const links = getNodeLinks(location);
                     if (!(links.flags & NodeCheckFlags.InCheckIdentifier)) {
                         links.flags |= NodeCheckFlags.InCheckIdentifier;
                         const parentType = getTypeForBindingElementParent(parent);
                         links.flags &= ~NodeCheckFlags.InCheckIdentifier;
-                        if (parentType && parentType.flags & TypeFlags.Union) {
+                        if (parentType && parentType.flags & TypeFlags.Union && !(parent.kind === SyntaxKind.Parameter && isSymbolAssigned(symbol))) {
                             const pattern = declaration.parent;
                             const narrowedType = getFlowTypeOfReference(pattern, parentType, parentType, /*flowContainer*/ undefined, location.flowNode);
                             return getBindingElementTypeFromParentType(declaration, narrowedType);
