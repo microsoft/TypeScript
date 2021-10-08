@@ -568,7 +568,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Une build non-dry va supprimer les fichiers suivants : {0}]]></Val>
+            <Val><![CDATA[Une build non-dry va supprimer les fichiers suivants: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -658,7 +658,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A required element cannot follow an optional element.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Un élément required ne peut pas suivre un élément optional.]]></Val>
+            <Val><![CDATA[Un élément required ne peut pas suivre un élément optionnel.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3589,7 +3589,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Compiler option '{0}' expects an argument.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[L'option de compilateur '{0}' attend an argument.]]></Val>
+            <Val><![CDATA[L'option de compilateur '{0}' attend un argument.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
