@@ -2278,7 +2278,7 @@ namespace ts {
             return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
-            return (optionDefinition as CommandLineOptionOfCustomType).type;
+            return optionDefinition.type;
         }
     }
 
