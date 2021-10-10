@@ -641,6 +641,7 @@ namespace ts {
                 Float64Array: ["at"],
                 BigInt64Array: ["at"],
                 BigUint64Array: ["at"],
+                ObjectConstructor: ["hasOwn"],
             },
             esnext: {
                 NumberFormat: ["formatToParts"]
