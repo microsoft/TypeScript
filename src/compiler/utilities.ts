@@ -627,6 +627,21 @@ namespace ts {
                 PromiseConstructor: ["any"],
                 String: ["replaceAll"]
             },
+            es2022: {
+                Array: ["at"],
+                String: ["at"],
+                Int8Array: ["at"],
+                Uint8Array: ["at"],
+                Uint8ClampedArray: ["at"],
+                Int16Array: ["at"],
+                Uint16Array: ["at"],
+                Int32Array: ["at"],
+                Uint32Array: ["at"],
+                Float32Array: ["at"],
+                Float64Array: ["at"],
+                BigInt64Array: ["at"],
+                BigUint64Array: ["at"],
+            },
             esnext: {
                 NumberFormat: ["formatToParts"]
             }
