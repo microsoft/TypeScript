@@ -606,6 +606,7 @@ namespace ts {
                 AsyncIterableIterator: emptyArray,
                 AsyncGenerator: emptyArray,
                 AsyncGeneratorFunction: emptyArray,
+                NumberFormat: ["formatToParts"]
             },
             es2019: {
                 Array: ["flat", "flatMap"],
@@ -641,10 +642,7 @@ namespace ts {
                 Float64Array: ["at"],
                 BigInt64Array: ["at"],
                 BigUint64Array: ["at"],
-                ObjectConstructor: ["hasOwn"],
-            },
-            esnext: {
-                NumberFormat: ["formatToParts"]
+                ObjectConstructor: ["hasOwn"]
             }
         };
     }
