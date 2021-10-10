@@ -42,8 +42,14 @@ namespace ts.projectSystem {
                 source: "/a",
                 sourceDisplay: undefined,
                 isSnippet: undefined,
-                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined, moduleSpecifier: undefined }
+                data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined }
             };
+
+            // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.
+            // Just assert that it's a string and then delete it so we can compare everything else with `deepEqual`.
+            const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
+            assert.isString(exportMapKey);
+            delete (response?.entries[0].data as any).exportMapKey;
             assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
                 isGlobalCompletion: true,
                 isIncomplete: undefined,
@@ -55,7 +61,7 @@ namespace ts.projectSystem {
 
             const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
                 ...requestLocation,
-                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts" } }],
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             };
 
             const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);

@@ -1187,23 +1187,31 @@ namespace ts {
         entries: CompletionEntry[];
     }
 
-    export interface CompletionEntryData {
+    export interface CompletionEntryDataAutoImport {
+        /**
+         * The name of the property or export in the module's symbol table. Differs from the completion name
+         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
+         */
+        exportName: string;
+        moduleSpecifier?: string;
         /** The file name declaring the export's module symbol, if it was an external module */
         fileName?: string;
         /** The module name (with quotes stripped) of the export's module symbol, if it was an ambient module */
         ambientModuleName?: string;
         /** True if the export was found in the package.json AutoImportProvider */
         isPackageJsonImport?: true;
-        /**
-         * The name of the property or export in the module's symbol table. Differs from the completion name
-         * in the case of InternalSymbolName.ExportEquals and InternalSymbolName.Default.
-         */
-        exportName: string;
-        /**
-         * Set for auto imports with eagerly resolved module specifiers.
-         */
-        moduleSpecifier?: string;
     }
+
+    export interface CompletionEntryDataUnresolved extends CompletionEntryDataAutoImport {
+        /** The key in the `ExportMapCache` where the completion entry's `SymbolExportInfo[]` is found */
+        exportMapKey: string;
+    }
+
+    export interface CompletionEntryDataResolved extends CompletionEntryDataAutoImport {
+        moduleSpecifier: string;
+    }
+
+    export type CompletionEntryData = CompletionEntryDataUnresolved | CompletionEntryDataResolved;
 
     // see comments in protocol.ts
     export interface CompletionEntry {
