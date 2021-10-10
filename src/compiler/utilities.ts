@@ -6227,6 +6227,7 @@ namespace ts {
         | "strictPropertyInitialization"
         | "alwaysStrict"
         | "useUnknownInCatchVariables"
+        | "strictJsxAttributeChecks"
         ;
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {

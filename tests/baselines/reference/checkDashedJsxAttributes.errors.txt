@@ -1,0 +1,80 @@
+tests/cases/compiler/checkDashedJsxAttributes.tsx(20,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/checkDashedJsxAttributes.tsx(23,38): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/checkDashedJsxAttributes.tsx(30,5): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/checkDashedJsxAttributes.tsx(34,38): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/checkDashedJsxAttributes.tsx(45,10): error TS2322: Type '{ foo: string; bar: number; "data-yadda": number; }' is not assignable to type 'Props'.
+  Property '"data-yadda"' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/checkDashedJsxAttributes.tsx(47,1): error TS2322: Type '{ foo: string; bar: number; "data-yadda": number; }' is not assignable to type 'Props'.
+  Property '"data-yadda"' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/checkDashedJsxAttributes.tsx (6 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    
+    // Repro from #44797
+    
+    import * as React from "react";
+    
+    interface Props {
+        foo: string;
+        bar: number;
+        [dataProp: `data-${string}`]: string;
+    }
+    
+    function Yadda(props: Props) {
+        return <div />;
+    }
+    
+    let props: Props = {
+        foo: "",
+        bar: 0,
+        "data-yadda": 42,
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/compiler/checkDashedJsxAttributes.tsx:10:5: The expected type comes from this index signature.
+    };
+    
+    let x1 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+                                         ~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/compiler/checkDashedJsxAttributes.tsx:10:5: The expected type comes from this index signature.
+    
+    
+    
+    let propsObj1: Props = {
+        foo: "",
+        bar: 0,
+        "data-yadda": 42,
+        ~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/compiler/checkDashedJsxAttributes.tsx:10:5: The expected type comes from this index signature.
+    };
+    
+    // Should error on data-yadda
+    let x2 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+                                         ~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6501 tests/cases/compiler/checkDashedJsxAttributes.tsx:10:5: The expected type comes from this index signature.
+    
+    /////////
+    
+    let propsObj2 = {
+        foo: "",
+        bar: 0,
+        "data-yadda": 42,
+    };
+    
+    // Should error on data-yadda
+    let y = <Yadda {...propsObj2} />
+             ~~~~~
+!!! error TS2322: Type '{ foo: string; bar: number; "data-yadda": number; }' is not assignable to type 'Props'.
+!!! error TS2322:   Property '"data-yadda"' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    
+    propsObj1 = propsObj2;
+    ~~~~~~~~~
+!!! error TS2322: Type '{ foo: string; bar: number; "data-yadda": number; }' is not assignable to type 'Props'.
+!!! error TS2322:   Property '"data-yadda"' is incompatible with index signature.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.

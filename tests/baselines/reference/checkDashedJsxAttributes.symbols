@@ -1,0 +1,103 @@
+=== tests/cases/compiler/checkDashedJsxAttributes.tsx ===
+/// <reference path="react16.d.ts" />
+
+// Repro from #44797
+
+import * as React from "react";
+>React : Symbol(React, Decl(checkDashedJsxAttributes.tsx, 4, 6))
+
+interface Props {
+>Props : Symbol(Props, Decl(checkDashedJsxAttributes.tsx, 4, 31))
+
+    foo: string;
+>foo : Symbol(Props.foo, Decl(checkDashedJsxAttributes.tsx, 6, 17))
+
+    bar: number;
+>bar : Symbol(Props.bar, Decl(checkDashedJsxAttributes.tsx, 7, 16))
+
+    [dataProp: `data-${string}`]: string;
+>dataProp : Symbol(dataProp, Decl(checkDashedJsxAttributes.tsx, 9, 5))
+}
+
+function Yadda(props: Props) {
+>Yadda : Symbol(Yadda, Decl(checkDashedJsxAttributes.tsx, 10, 1))
+>props : Symbol(props, Decl(checkDashedJsxAttributes.tsx, 12, 15))
+>Props : Symbol(Props, Decl(checkDashedJsxAttributes.tsx, 4, 31))
+
+    return <div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+let props: Props = {
+>props : Symbol(props, Decl(checkDashedJsxAttributes.tsx, 16, 3))
+>Props : Symbol(Props, Decl(checkDashedJsxAttributes.tsx, 4, 31))
+
+    foo: "",
+>foo : Symbol(foo, Decl(checkDashedJsxAttributes.tsx, 16, 20))
+
+    bar: 0,
+>bar : Symbol(bar, Decl(checkDashedJsxAttributes.tsx, 17, 12))
+
+    "data-yadda": 42,
+>"data-yadda" : Symbol("data-yadda", Decl(checkDashedJsxAttributes.tsx, 18, 11))
+
+};
+
+let x1 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+>x1 : Symbol(x1, Decl(checkDashedJsxAttributes.tsx, 22, 3))
+>Yadda : Symbol(Yadda, Decl(checkDashedJsxAttributes.tsx, 10, 1))
+>foo : Symbol(foo, Decl(checkDashedJsxAttributes.tsx, 22, 15))
+>bar : Symbol(bar, Decl(checkDashedJsxAttributes.tsx, 22, 27))
+>data-yadda : Symbol(data-yadda, Decl(checkDashedJsxAttributes.tsx, 22, 36))
+
+
+
+let propsObj1: Props = {
+>propsObj1 : Symbol(propsObj1, Decl(checkDashedJsxAttributes.tsx, 26, 3))
+>Props : Symbol(Props, Decl(checkDashedJsxAttributes.tsx, 4, 31))
+
+    foo: "",
+>foo : Symbol(foo, Decl(checkDashedJsxAttributes.tsx, 26, 24))
+
+    bar: 0,
+>bar : Symbol(bar, Decl(checkDashedJsxAttributes.tsx, 27, 12))
+
+    "data-yadda": 42,
+>"data-yadda" : Symbol("data-yadda", Decl(checkDashedJsxAttributes.tsx, 28, 11))
+
+};
+
+// Should error on data-yadda
+let x2 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+>x2 : Symbol(x2, Decl(checkDashedJsxAttributes.tsx, 33, 3))
+>Yadda : Symbol(Yadda, Decl(checkDashedJsxAttributes.tsx, 10, 1))
+>foo : Symbol(foo, Decl(checkDashedJsxAttributes.tsx, 33, 15))
+>bar : Symbol(bar, Decl(checkDashedJsxAttributes.tsx, 33, 27))
+>data-yadda : Symbol(data-yadda, Decl(checkDashedJsxAttributes.tsx, 33, 36))
+
+/////////
+
+let propsObj2 = {
+>propsObj2 : Symbol(propsObj2, Decl(checkDashedJsxAttributes.tsx, 37, 3))
+
+    foo: "",
+>foo : Symbol(foo, Decl(checkDashedJsxAttributes.tsx, 37, 17))
+
+    bar: 0,
+>bar : Symbol(bar, Decl(checkDashedJsxAttributes.tsx, 38, 12))
+
+    "data-yadda": 42,
+>"data-yadda" : Symbol("data-yadda", Decl(checkDashedJsxAttributes.tsx, 39, 11))
+
+};
+
+// Should error on data-yadda
+let y = <Yadda {...propsObj2} />
+>y : Symbol(y, Decl(checkDashedJsxAttributes.tsx, 44, 3))
+>Yadda : Symbol(Yadda, Decl(checkDashedJsxAttributes.tsx, 10, 1))
+>propsObj2 : Symbol(propsObj2, Decl(checkDashedJsxAttributes.tsx, 37, 3))
+
+propsObj1 = propsObj2;
+>propsObj1 : Symbol(propsObj1, Decl(checkDashedJsxAttributes.tsx, 26, 3))
+>propsObj2 : Symbol(propsObj2, Decl(checkDashedJsxAttributes.tsx, 37, 3))
+

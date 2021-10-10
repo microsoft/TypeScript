@@ -1,4 +1,5 @@
 // @strict: true
+// @strictJsxAttributeChecks: false
 // @jsx: react
 /// <reference path="/.lib/react16.d.ts" />
 

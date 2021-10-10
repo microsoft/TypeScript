@@ -1,0 +1,119 @@
+=== tests/cases/compiler/checkDashedJsxAttributes.tsx ===
+/// <reference path="react16.d.ts" />
+
+// Repro from #44797
+
+import * as React from "react";
+>React : typeof React
+
+interface Props {
+    foo: string;
+>foo : string
+
+    bar: number;
+>bar : number
+
+    [dataProp: `data-${string}`]: string;
+>dataProp : `data-${string}`
+}
+
+function Yadda(props: Props) {
+>Yadda : (props: Props) => JSX.Element
+>props : Props
+
+    return <div />;
+><div /> : JSX.Element
+>div : any
+}
+
+let props: Props = {
+>props : Props
+>{    foo: "",    bar: 0,    "data-yadda": 42,} : { foo: string; bar: number; "data-yadda": number; }
+
+    foo: "",
+>foo : string
+>"" : ""
+
+    bar: 0,
+>bar : number
+>0 : 0
+
+    "data-yadda": 42,
+>"data-yadda" : number
+>42 : 42
+
+};
+
+let x1 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+>x1 : JSX.Element
+><Yadda foo="hello" bar={42} data-yadda={42} /> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
+>foo : string
+>bar : number
+>42 : 42
+>data-yadda : number
+>42 : 42
+
+
+
+let propsObj1: Props = {
+>propsObj1 : Props
+>{    foo: "",    bar: 0,    "data-yadda": 42,} : { foo: string; bar: number; "data-yadda": number; }
+
+    foo: "",
+>foo : string
+>"" : ""
+
+    bar: 0,
+>bar : number
+>0 : 0
+
+    "data-yadda": 42,
+>"data-yadda" : number
+>42 : 42
+
+};
+
+// Should error on data-yadda
+let x2 = <Yadda foo="hello" bar={42} data-yadda={42} />;
+>x2 : JSX.Element
+><Yadda foo="hello" bar={42} data-yadda={42} /> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
+>foo : string
+>bar : number
+>42 : 42
+>data-yadda : number
+>42 : 42
+
+/////////
+
+let propsObj2 = {
+>propsObj2 : { foo: string; bar: number; "data-yadda": number; }
+>{    foo: "",    bar: 0,    "data-yadda": 42,} : { foo: string; bar: number; "data-yadda": number; }
+
+    foo: "",
+>foo : string
+>"" : ""
+
+    bar: 0,
+>bar : number
+>0 : 0
+
+    "data-yadda": 42,
+>"data-yadda" : number
+>42 : 42
+
+};
+
+// Should error on data-yadda
+let y = <Yadda {...propsObj2} />
+>y : JSX.Element
+><Yadda {...propsObj2} /> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
+>propsObj2 : { foo: string; bar: number; "data-yadda": number; }
+
+propsObj1 = propsObj2;
+>propsObj1 = propsObj2 : { foo: string; bar: number; "data-yadda": number; }
+>propsObj1 : Props
+>propsObj2 : { foo: string; bar: number; "data-yadda": number; }
+
