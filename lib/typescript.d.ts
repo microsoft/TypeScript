@@ -5198,7 +5198,7 @@ declare namespace ts {
         extraFileExtensions?: readonly FileExtensionInfo[];
         /**
          * Used to generate source file names from the config file and its include, exclude, files rules
-         * and also to cache the directory stucture
+         * and also to cache the directory structure
          */
         readDirectory(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     }
@@ -5274,7 +5274,7 @@ declare namespace ts {
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
     }
     /**
-     * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
+     * Create a function that reports watch status by writing to the system and handles the formatting of the diagnostic
      */
     function createBuilderStatusReporter(system: System, pretty?: boolean): DiagnosticReporter;
     function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system?: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary): SolutionBuilderHost<T>;
