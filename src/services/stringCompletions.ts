@@ -504,7 +504,7 @@ namespace ts.Completions.StringCompletions {
     /**
      * Check all of the declared modules and those in node modules. Possible sources of modules:
      *      Modules that are found by the type checker
-     *      Modules found relative to "baseUrl" compliler options (including patterns from "paths" compiler option)
+     *      Modules found relative to "baseUrl" compiler options (including patterns from "paths" compiler option)
      *      Modules from node_modules (i.e. those listed in package.json)
      *          This includes all files that are found in node_modules/moduleName/ with acceptable file extensions
      */

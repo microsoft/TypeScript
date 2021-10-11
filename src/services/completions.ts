@@ -1559,7 +1559,7 @@ namespace ts.Completions {
                             case SyntaxKind.Identifier:
                                 isJsxIdentifierExpected = true;
                                 // For `<div x=[|f/**/|]`, `parent` will be `x` and `previousToken.parent` will be `f` (which is its own JsxAttribute)
-                                // Note for `<div someBool f>` we don't want to treat this as a jsx inializer, instead it's the attribute name.
+                                // Note for `<div someBool f>` we don't want to treat this as a jsx initializer, instead it's the attribute name.
                                 if (parent !== previousToken.parent &&
                                     !(parent as JsxAttribute).initializer &&
                                     findChildOfKind(parent, SyntaxKind.EqualsToken, sourceFile)) {
@@ -1698,7 +1698,7 @@ namespace ts.Completions {
                             }
                         }
 
-                        // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
+                        // If the module is merged with a value, we must get the type of the class and add its properties (for inherited static methods).
                         if (!isTypeLocation &&
                             symbol.declarations &&
                             symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
@@ -2796,9 +2796,9 @@ namespace ts.Completions {
                 return false; // Don't block completions.
             }
 
-            const ancestorPropertyDeclaraion = getAncestor(contextToken.parent, SyntaxKind.PropertyDeclaration);
+            const ancestorPropertyDeclaration = getAncestor(contextToken.parent, SyntaxKind.PropertyDeclaration);
             // If we are inside a class declaration and typing `constructor` after property declaration...
-            if (ancestorPropertyDeclaraion
+            if (ancestorPropertyDeclaration
                 && contextToken !== previousToken
                 && isClassLike(previousToken.parent.parent)
                 // And the cursor is at the token...
@@ -2810,8 +2810,8 @@ namespace ts.Completions {
                 else if (contextToken.kind !== SyntaxKind.EqualsToken
                     // Should not block: `class C { blah = c/**/ }`
                     // But should block: `class C { blah = somewhat c/**/ }` and `class C { blah: SomeType c/**/ }`
-                    && (isInitializedProperty(ancestorPropertyDeclaraion as PropertyDeclaration)
-                    || hasType(ancestorPropertyDeclaraion))) {
+                    && (isInitializedProperty(ancestorPropertyDeclaration as PropertyDeclaration)
+                    || hasType(ancestorPropertyDeclaration))) {
                     return true;
                 }
             }
@@ -2945,7 +2945,7 @@ namespace ts.Completions {
         /**
          * Filters out completion suggestions for class elements.
          *
-         * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
+         * @returns Symbols to be suggested in an class element depending on existing members and symbol flags
          */
         function filterClassMembersList(baseSymbols: readonly Symbol[], existingMembers: readonly ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
             const existingMemberNames = new Set<__String>();
@@ -3548,7 +3548,7 @@ namespace ts.Completions {
 
     /**
      * True if the first character of `lowercaseCharacters` is the first character
-     * of some "word" in `identiferString` (where the string is split into "words"
+     * of some "word" in `identifierString` (where the string is split into "words"
      * by camelCase and snake_case segments), then if the remaining characters of
      * `lowercaseCharacters` appear, in order, in the rest of `identifierString`.
      *
@@ -3600,4 +3600,3 @@ namespace ts.Completions {
         return charCode;
     }
 }
-

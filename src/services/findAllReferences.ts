@@ -2058,7 +2058,7 @@ namespace ts.FindAllReferences {
         function forEachRelatedSymbol<T>(
             symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean, onlyIncludeBindingElementAtReferenceLocation: boolean,
             /**
-             * @param baseSymbol This symbol means one property/mehtod from base class or interface when it is not null or undefined,
+             * @param baseSymbol This symbol means one property/method from base class or interface when it is not null or undefined,
              */
             cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol, kind?: NodeEntryKind) => T | undefined,
             allowBaseTypes: (rootSymbol: Symbol) => boolean,
