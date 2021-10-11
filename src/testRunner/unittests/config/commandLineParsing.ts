@@ -526,7 +526,7 @@ namespace ts {
                     nonNullValue,
                     diagnosticMessage: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file_or_set_to_null_on_command_line,
                     workerDiagnostic: () => {
-                        const optionDeclarations = [
+                        const optionDeclarations: CommandLineOption[] = [
                             ...compilerOptionsDidYouMeanDiagnostics.optionDeclarations,
                             {
                                 name: "optionName",
@@ -534,6 +534,7 @@ namespace ts {
                                 isTSConfigOnly: true,
                                 category: Diagnostics.Backwards_Compatibility,
                                 description: Diagnostics.Enable_project_compilation,
+                                defaultValueDescription: "undefined",
                             }
                         ];
                         return {

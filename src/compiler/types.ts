@@ -6345,13 +6345,13 @@ namespace ts {
     /* @internal */
     export interface CommandLineOptionOfNumberType extends CommandLineOptionBase {
         type: "number";
-        defaultValueDescription?: `${number | undefined}` | DiagnosticMessage;
+        defaultValueDescription: `${number | undefined}` | DiagnosticMessage;
     }
 
     /* @internal */
     export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
         type: "boolean";
-        defaultValueDescription?: `${boolean | undefined}` | DiagnosticMessage;
+        defaultValueDescription: `${boolean | undefined}` | DiagnosticMessage;
     }
 
     /* @internal */
