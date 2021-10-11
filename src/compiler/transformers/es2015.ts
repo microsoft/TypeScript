@@ -4147,7 +4147,8 @@ namespace ts {
             // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
             Debug.assert(node.templateSpans.length !== 0);
 
-            return node.head.text.length !== 0 || node.templateSpans[0].literal.text.length === 0;
+            const span = node.templateSpans[0];
+            return node.head.text.length !== 0 || span.literal.text.length === 0 || !!length(getLeadingCommentRangesOfNode(span.expression, currentSourceFile));
         }
 
         /**
