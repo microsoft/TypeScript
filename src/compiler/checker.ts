@@ -22652,8 +22652,9 @@ namespace ts {
         // constituent types keyed by the literal types of the property by that name in each constituent type.
         function getKeyPropertyName(unionType: UnionType): __String | undefined {
             const types = unionType.types;
-            // We only construct maps for large unions with non-primitive constituents.
-            if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion) {
+            // We only construct maps for unions with many non-primitive constituents.
+            if (types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion ||
+                countWhere(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.InstantiableNonPrimitive))) < 10) {
                 return undefined;
             }
             if (unionType.keyPropertyName === undefined) {
