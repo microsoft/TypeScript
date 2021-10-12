@@ -3416,7 +3416,8 @@ namespace ts {
                     findAncestor(location, isExportDeclaration)?.moduleSpecifier ||
                     (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                     (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
-            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : undefined)!; // TODO: GH#18217
+            const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
+            const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode)!; // TODO: GH#18217
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
             if (sourceFile) {
