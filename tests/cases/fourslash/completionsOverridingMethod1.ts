@@ -21,7 +21,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -32,9 +32,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"override foo(a: string): void {\r\n    $1;\r\n}\r\n",
+"override foo(a: string): void {\r\n}\r\n",
         }
     ],
 });

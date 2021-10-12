@@ -81,6 +81,20 @@
 ////    f/*g*/
 ////}
 
+// @Filename: h.ts
+// Case: Static method
+// Note: static methods are only suggested for completions after the `static` keyword
+////class HBase {
+////    static met(n: number): number {
+////        return n;
+////    }
+////}
+////
+////class HSub extends HBase {
+////    /*h1*/
+////    static /*h2*/
+////}
+
 // format.setFormatOptions({
 //     newLineCharacter: "\n",
 // });
@@ -91,7 +105,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -102,9 +116,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(param1: string, param2: boolean): Promise<void> {\r\n    $1;\r\n}\r\n",
+"foo(param1: string, param2: boolean): Promise<void> {\r\n}\r\n",
         }
     ],
 });
@@ -114,7 +127,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -125,9 +138,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(a: string, b: string): string {\r\n    $1;\r\n}\r\n",
+"foo(a: string, b: string): string {\r\n}\r\n",
         }
     ],
 });
@@ -137,7 +149,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -148,9 +160,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(a: string): string {\r\n    $1;\r\n}\r\n",
+"foo(a: string): string {\r\n}\r\n",
         }
     ],
 });
@@ -160,7 +171,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -171,9 +182,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(a: string): string {\r\n    $1;\r\n}\r\n",
+"foo(a: string): string {\r\n}\r\n",
         }
     ],
 });
@@ -183,7 +193,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -194,9 +204,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(a: string): string {\r\n    $1;\r\n}\r\n",
+"foo(a: string): string {\r\n}\r\n",
         }
     ],
 });
@@ -206,7 +215,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -217,9 +226,8 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
-"foo(a: string): string {\r\n    $1;\r\n}\r\n",
+"foo(a: string): string {\r\n}\r\n",
         }
     ],
 });
@@ -229,7 +237,7 @@ verify.completions({
     isNewIdentifierLocation: true,
     preferences: {
         includeCompletionsWithInsertText: true,
-        includeCompletionsWithSnippetText: true,
+        includeCompletionsWithSnippetText: false,
     },
     includes: [
         {
@@ -240,11 +248,41 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            isSnippet: true,
             insertText:
 "foo(a: string): string;\r\n\
 foo(a: undefined, b: number): string;\r\n\
-foo(a: any, b?: any): string {\r\n    $1;\r\n}\r\n",
+foo(a: any, b?: any): string {\r\n}\r\n",
+        }
+    ],
+});
+
+verify.completions({
+    marker: "h1",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+    },
+    excludes: "met",
+});
+verify.completions({
+    marker: "h2",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+    },
+    includes: [
+        {
+            name: "met",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            insertText:
+"met(n: number): number {\r\n}\r\n",
         }
     ],
 });

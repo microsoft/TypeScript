@@ -4551,10 +4551,6 @@ namespace ts {
             writer.write(s);
         }
 
-        function escapeSnippetText(text: string): string {
-            return text.replace(/\$/gm, "\\$");
-        }
-
         function increaseIndent() {
             writer.increaseIndent();
         }

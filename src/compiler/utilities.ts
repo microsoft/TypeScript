@@ -7419,4 +7419,8 @@ namespace ts {
     export function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
         return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
     }
+
+    export function escapeSnippetText(text: string): string {
+        return text.replace(/\$/gm, "\\$");
+    }
 }

@@ -909,11 +909,6 @@ namespace ts.Completions {
         }
     }
 
-    // TODO: move to services/utilities?
-    function escapeSnippetText(text: string): string {
-        return text.replace(/\$/gm, "\\$");
-    }
-
     function originToCompletionEntryData(origin: SymbolOriginInfoExport): CompletionEntryData | undefined {
         return {
             exportName: origin.exportName,

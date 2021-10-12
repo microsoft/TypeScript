@@ -32,7 +32,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"$usd(a: number): number {\r\n    $0\r\n}\r\n",
+"\"\\$usd\"(${1:a}: ${2:number}): ${3:number} {\r\n    $0\r\n}\r\n",
         }
     ],
 });
