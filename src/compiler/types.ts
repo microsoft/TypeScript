@@ -8201,6 +8201,7 @@ namespace ts {
         /*@internal*/ preserveSourceNewlines?: boolean;
         /*@internal*/ terminateUnterminatedLiterals?: boolean;
         /*@internal*/ relativeToBuildInfo?: (path: string) => string;
+        /*@internal*/ hasSnippet?: boolean;
     }
 
     /* @internal */

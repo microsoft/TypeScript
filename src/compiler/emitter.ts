@@ -867,6 +867,27 @@ namespace ts {
         const newLine = getNewLineCharacter(printerOptions);
         const moduleKind = getEmitModuleKind(printerOptions);
         const bundledHelpers = new Map<string, boolean>();
+        const hasSnippet = !!printerOptions.hasSnippet;
+
+        // Writers that must handle snippet text escaping, if enabled
+        let writeLiteral = noEscapeWriteLiteral;
+        let writeStringLiteral = noEscapeWriteStringLiteral;
+        let writeBase = noEscapeWriteBase;
+        let writeSymbol = noEscapeWriteSymbol;
+        let writeParameter = noEscapeWriteParameter;
+        let writeComment = noEscapeWriteComment;
+        let writeProperty = noEscapeWriteProperty;
+
+        if (hasSnippet) {
+            writeLiteral = escapeWriteLiteral;
+            writeStringLiteral = escapeWriteStringLiteral;
+            writeBase = escapeWriteBase;
+            writeSymbol = escapeWriteSymbol;
+            writeParameter = escapeWriteParameter;
+            writeComment = escapeWriteComment;
+            writeProperty = escapeWriteProperty;
+        }
+
 
         let currentSourceFile: SourceFile | undefined;
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
@@ -910,9 +931,6 @@ namespace ts {
         const { enter: enterComment, exit: exitComment } = performance.createTimerIf(extendedDiagnostics, "commentTime", "beforeComment", "afterComment");
         const parenthesizer = factory.parenthesizer;
         const emitBinaryExpression = createEmitBinaryExpression();
-
-        // Snippets
-        let inSnippet = false;
 
         reset();
         return {
@@ -1286,14 +1304,16 @@ namespace ts {
             currentParenthesizerRule = undefined;
         }
 
-        // >> TODO: remove allowSnippets
-        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, _allowSnippets = true): void {
-            if (!inSnippet) {
+        function pipelineEmitWithHintWorker(hint: EmitHint, node: Node, allowSnippets = true): void {
+            if (allowSnippets) {
                 const snippet = getSnippetElement(node);
                 if (snippet) {
                     return emitSnippetNode(hint, node, snippet);
                 }
             }
+            // else {
+            //     Debug.assert(!getSnippetElement(node), "A snippet cannot exist inside another snippet.");
+            // }
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -1881,17 +1901,12 @@ namespace ts {
             const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape, jsxAttributeEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
-                writeLiteral(inSnippet ? escapeSnippetText(text) : text);
+                writeLiteral(text);
             }
             else {
                 // Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for numberLiterals
-                writeStringLiteral(inSnippet ? escapeSnippetText(text) : text);
+                writeStringLiteral(text);
             }
-        }
-
-        // TODO: move this
-        function escapeSnippetText(text: string): string {
-            return text.replace(/\$/gm, "\\$");
         }
 
         // SyntaxKind.UnparsedSource
@@ -1944,7 +1959,6 @@ namespace ts {
         //
 
         function emitSnippetNode(hint: EmitHint, node: Node, snippet: SnippetElement) {
-            inSnippet = true;
             switch (snippet.kind) {
                 case SnippetKind.Placeholder:
                     emitPlaceholder(hint, node, snippet);
@@ -1953,18 +1967,17 @@ namespace ts {
                     emitTabStop(snippet);
                     break;
             }
-            inSnippet = false;
         }
 
         function emitPlaceholder(hint: EmitHint, node: Node, snippet: Placeholder) {
-            write(`\$\{${snippet.order}:`); // `${2:`
+            noEscapeWrite(`\$\{${snippet.order}:`); // `${2:`
             pipelineEmitWithHintWorker(hint, node, /*allowSnippets*/ false); // `...`
-            write(`\}`); // `}`
+            noEscapeWrite(`\}`); // `}`
             // `${2:...}`
         }
 
         function emitTabStop(snippet: TabStop) {
-            write(`\$${snippet.order}`);
+            noEscapeWrite(`\$${snippet.order}`);
         }
 
         //
@@ -1973,8 +1986,7 @@ namespace ts {
 
         function emitIdentifier(node: Identifier) {
             const writeText = node.symbol ? writeSymbol : write;
-            const text = getTextOfNode(node, /*includeTrivia*/ false);
-            writeText(inSnippet ? escapeSnippetText(text) : text, node.symbol);
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
             emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 
@@ -1984,8 +1996,7 @@ namespace ts {
 
         function emitPrivateIdentifier(node: PrivateIdentifier) {
             const writeText = node.symbol ? writeSymbol : write;
-            const text = getTextOfNode(node, /*includeTrivia*/ false);
-            writeText(inSnippet ? escapeSnippetText(text) : text, node.symbol);
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
         }
 
 
@@ -4454,20 +4465,36 @@ namespace ts {
 
         // Writers
 
-        function writeLiteral(s: string) {
+        function noEscapeWriteLiteral(s: string) {
             writer.writeLiteral(s);
         }
 
-        function writeStringLiteral(s: string) {
+        function escapeWriteLiteral(s: string) {
+            writer.writeLiteral(escapeSnippetText(s));
+        }
+
+        function noEscapeWriteStringLiteral(s: string) {
             writer.writeStringLiteral(s);
         }
 
-        function writeBase(s: string) {
+        function escapeWriteStringLiteral(s: string) {
+            writer.writeStringLiteral(escapeSnippetText(s));
+        }
+
+        function noEscapeWriteBase(s: string) {
             writer.write(s);
         }
 
-        function writeSymbol(s: string, sym: Symbol) {
+        function escapeWriteBase(s: string) {
+            writer.write(escapeSnippetText(s));
+        }
+
+        function noEscapeWriteSymbol(s: string, sym: Symbol) {
             writer.writeSymbol(s, sym);
+        }
+
+        function escapeWriteSymbol(s: string, sym: Symbol) {
+            writer.writeSymbol(escapeSnippetText(s), sym);
         }
 
         function writePunctuation(s: string) {
@@ -4486,26 +4513,46 @@ namespace ts {
             writer.writeOperator(s);
         }
 
-        function writeParameter(s: string) {
+        function noEscapeWriteParameter(s: string) {
             writer.writeParameter(s);
         }
 
-        function writeComment(s: string) {
+        function escapeWriteParameter(s: string) {
+            writer.writeParameter(escapeSnippetText(s));
+        }
+
+        function noEscapeWriteComment(s: string) {
             writer.writeComment(s);
+        }
+
+        function escapeWriteComment(s: string) {
+            writer.writeComment(escapeSnippetText(s));
         }
 
         function writeSpace() {
             writer.writeSpace(" ");
         }
 
-        function writeProperty(s: string) {
+        function noEscapeWriteProperty(s: string) {
             writer.writeProperty(s);
+        }
+
+        function escapeWriteProperty(s: string) {
+            writer.writeProperty(escapeSnippetText(s));
         }
 
         function writeLine(count = 1) {
             for (let i = 0; i < count; i++) {
                 writer.writeLine(i > 0);
             }
+        }
+
+        function noEscapeWrite(s: string) { // >> update
+            writer.write(s);
+        }
+
+        function escapeSnippetText(text: string): string {
+            return text.replace(/\$/gm, "\\$");
         }
 
         function increaseIndent() {

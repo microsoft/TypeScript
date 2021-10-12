@@ -807,6 +807,7 @@ namespace ts.Completions {
             module: options.module,
             target: options.target,
             omitTrailingSemicolon: true,
+            hasSnippet: true,
         });
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
 
@@ -908,7 +909,7 @@ namespace ts.Completions {
         }
     }
 
-    // TODO: move to snippets file?
+    // TODO: move to services/utilities?
     function escapeSnippetText(text: string): string {
         return text.replace(/\$/gm, "\\$");
     }
