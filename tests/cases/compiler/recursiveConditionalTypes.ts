@@ -163,7 +163,7 @@ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['lengt
     ? A
     : _Enumerate<_PrependNextNum<A>, N> & number;
 
-export type Enumerate<N extends number> = number extends N
+type Enumerate<N extends number> = number extends N
     ? number
     : _Enumerate<[], N> extends (infer E)[]
     ? E
