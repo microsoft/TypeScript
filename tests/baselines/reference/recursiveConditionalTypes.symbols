@@ -598,15 +598,15 @@ type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['lengt
 >A : Symbol(A, Decl(recursiveConditionalTypes.ts, 157, 16))
 >N : Symbol(N, Decl(recursiveConditionalTypes.ts, 157, 41))
 
-export type Enumerate<N extends number> = number extends N
+type Enumerate<N extends number> = number extends N
 >Enumerate : Symbol(Enumerate, Decl(recursiveConditionalTypes.ts, 159, 49))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 22))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 22))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
 
     ? number
     : _Enumerate<[], N> extends (infer E)[]
 >_Enumerate : Symbol(_Enumerate, Decl(recursiveConditionalTypes.ts, 155, 12))
->N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 22))
+>N : Symbol(N, Decl(recursiveConditionalTypes.ts, 161, 15))
 >E : Symbol(E, Decl(recursiveConditionalTypes.ts, 163, 38))
 
     ? E

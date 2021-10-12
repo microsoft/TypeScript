@@ -222,7 +222,7 @@ tests/cases/compiler/recursiveConditionalTypes.ts(169,5): error TS2322: Type 'nu
         ? A
         : _Enumerate<_PrependNextNum<A>, N> & number;
     
-    export type Enumerate<N extends number> = number extends N
+    type Enumerate<N extends number> = number extends N
         ? number
         : _Enumerate<[], N> extends (infer E)[]
         ? E
