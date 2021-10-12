@@ -200,59 +200,27 @@ namespace ts {
         }
 
         function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
+            const prop = convertJsxChildrenToChildrenPropAssignment(children);
+            return prop && factory.createObjectLiteralExpression([prop]);
+        }
+
+        function convertJsxChildrenToChildrenPropAssignment(children: readonly JsxChild[]) {
             const nonWhitespaceChildren = getSemanticJsxChildren(children);
             if (length(nonWhitespaceChildren) === 1) {
                 const result = transformJsxChildToExpression(nonWhitespaceChildren[0]);
-                return result && factory.createObjectLiteralExpression([
-                    factory.createPropertyAssignment("children", result)
-                ]);
+                return result && factory.createPropertyAssignment("children", result);
             }
             const result = mapDefined(children, transformJsxChildToExpression);
-            return !result.length ? undefined : factory.createObjectLiteralExpression([
-                factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result))
-            ]);
+            return length(result) ? factory.createPropertyAssignment("children", factory.createArrayLiteralExpression(result)) : undefined;
         }
 
         function visitJsxOpeningLikeElementJSX(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
-            let objectProperties: Expression;
+            const childrenProp = children && children.length ? convertJsxChildrenToChildrenPropAssignment(children) : undefined;
             const keyAttr = find(node.attributes.properties, p => !!p.name && isIdentifier(p.name) && p.name.escapedText === "key") as JsxAttribute | undefined;
             const attrs = keyAttr ? filter(node.attributes.properties, p => p !== keyAttr) : node.attributes.properties;
-
-            let segments: Expression[] = [];
-            if (attrs.length) {
-                // Map spans of JsxAttribute nodes into object literals and spans
-                // of JsxSpreadAttribute nodes into expressions.
-                segments = flatten(
-                    spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                        ? map(attrs, transformJsxSpreadAttributeToExpression)
-                        : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                    )
-                );
-
-                if (isJsxSpreadAttribute(attrs[0])) {
-                    // We must always emit at least one object literal before a spread
-                    // argument.factory.createObjectLiteral
-                    segments.unshift(factory.createObjectLiteralExpression());
-                }
-            }
-            if (children && children.length) {
-                const result = convertJsxChildrenToChildrenPropObject(children);
-                if (result) {
-                    segments.push(result);
-                }
-            }
-
-            if (segments.length === 0) {
-                objectProperties = factory.createObjectLiteralExpression([]);
-                // When there are no attributes, React wants {}
-            }
-            else {
-                // Either emit one big object literal (no spread attribs), or
-                // a call to the __assign helper.
-                objectProperties = singleOrUndefined(segments) || emitHelpers().createAssignHelper(segments);
-            }
-
+            const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs, childrenProp) :
+                factory.createObjectLiteralExpression(childrenProp ? [childrenProp] : emptyArray); // When there are no attributes, React wants {}
             return visitJsxOpeningLikeElementOrFragmentJSX(tagName, objectProperties, keyAttr, length(getSemanticJsxChildren(children || emptyArray)), isChild, location);
         }
 
@@ -285,47 +253,9 @@ namespace ts {
 
         function visitJsxOpeningLikeElementCreateElement(node: JsxOpeningLikeElement, children: readonly JsxChild[] | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
-            let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
-            if (attrs.length === 0) {
-                objectProperties = factory.createNull();
-                // When there are no attributes, React wants "null"
-            }
-            else {
-                const target = getEmitScriptTarget(compilerOptions);
-                if (target && target >= ScriptTarget.ES2018) {
-                    objectProperties = factory.createObjectLiteralExpression(
-                        flatten<SpreadAssignment | PropertyAssignment>(
-                            spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
-                                isSpread ? map(attrs, transformJsxSpreadAttributeToSpreadAssignment) : map(attrs, transformJsxAttributeToObjectLiteralElement)
-                            )
-                        )
-                    );
-                }
-                else {
-                    // Map spans of JsxAttribute nodes into object literals and spans
-                    // of JsxSpreadAttribute nodes into expressions.
-                    const segments = flatten<Expression | ObjectLiteralExpression>(
-                        spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
-                            ? map(attrs, transformJsxSpreadAttributeToExpression)
-                            : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
-                        )
-                    );
-
-                    if (isJsxSpreadAttribute(attrs[0])) {
-                        // We must always emit at least one object literal before a spread
-                        // argument.factory.createObjectLiteral
-                        segments.unshift(factory.createObjectLiteralExpression());
-                    }
-
-                    // Either emit one big object literal (no spread attribs), or
-                    // a call to the __assign helper.
-                    objectProperties = singleOrUndefined(segments);
-                    if (!objectProperties) {
-                        objectProperties = emitHelpers().createAssignHelper(segments);
-                    }
-                }
-            }
+            const objectProperties = length(attrs) ? transformJsxAttributesToObjectProps(attrs) :
+                factory.createNull(); // When there are no attributes, React wants "null"
 
             const callee = currentFileState.importSpecifier === undefined
                 ? createJsxFactoryExpression(
@@ -390,6 +320,44 @@ namespace ts {
 
         function transformJsxSpreadAttributeToSpreadAssignment(node: JsxSpreadAttribute) {
             return factory.createSpreadAssignment(visitNode(node.expression, visitor, isExpression));
+        }
+
+        function transformJsxAttributesToObjectProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+            const target = getEmitScriptTarget(compilerOptions);
+            return target && target >= ScriptTarget.ES2018 ? factory.createObjectLiteralExpression(transformJsxAttributesToProps(attrs, children)) :
+                transformJsxAttributesToExpression(attrs, children);
+        }
+
+        function transformJsxAttributesToProps(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+            const props = flatten<SpreadAssignment | PropertyAssignment>(spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) =>
+                map(attrs, attr => isSpread ? transformJsxSpreadAttributeToSpreadAssignment(attr as JsxSpreadAttribute) : transformJsxAttributeToObjectLiteralElement(attr as JsxAttribute))));
+            if (children) {
+                props.push(children);
+            }
+            return props;
+        }
+
+        function transformJsxAttributesToExpression(attrs: readonly(JsxSpreadAttribute | JsxAttribute)[], children?: PropertyAssignment) {
+            // Map spans of JsxAttribute nodes into object literals and spans
+            // of JsxSpreadAttribute nodes into expressions.
+            const expressions = flatten(
+                spanMap(attrs, isJsxSpreadAttribute, (attrs, isSpread) => isSpread
+                    ? map(attrs, transformJsxSpreadAttributeToExpression)
+                    : factory.createObjectLiteralExpression(map(attrs, transformJsxAttributeToObjectLiteralElement))
+                )
+            );
+
+            if (isJsxSpreadAttribute(attrs[0])) {
+                // We must always emit at least one object literal before a spread
+                // argument.factory.createObjectLiteral
+                expressions.unshift(factory.createObjectLiteralExpression());
+            }
+
+            if (children) {
+                expressions.push(factory.createObjectLiteralExpression([children]));
+            }
+
+            return singleOrUndefined(expressions) || emitHelpers().createAssignHelper(expressions);
         }
 
         function transformJsxSpreadAttributeToExpression(node: JsxSpreadAttribute) {
