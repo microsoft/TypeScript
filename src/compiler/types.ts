@@ -1707,6 +1707,7 @@ namespace ts {
         readonly nameType?: TypeNode;
         readonly questionToken?: QuestionToken | PlusToken | MinusToken;
         readonly type?: TypeNode;
+        /** Used only to produce grammar errors */
         readonly members?: NodeArray<TypeElement>;
     }
 
