@@ -26811,7 +26811,8 @@ namespace ts {
         function checkComputedPropertyName(node: ComputedPropertyName): Type {
             const links = getNodeLinks(node.expression);
             if (!links.resolvedType) {
-                if (isTypeLiteralNode(node.parent.parent) && isBinaryExpression(node.expression) && node.expression.operatorToken.kind === SyntaxKind.InKeyword) {
+                if ((isTypeLiteralNode(node.parent.parent) || isClassLike(node.parent.parent) || isInterfaceDeclaration(node.parent.parent))
+                    && isBinaryExpression(node.expression) && node.expression.operatorToken.kind === SyntaxKind.InKeyword) {
                     return links.resolvedType = errorType;
                 }
                 links.resolvedType = checkExpression(node.expression);
@@ -43427,6 +43428,11 @@ namespace ts {
         }
 
         function checkGrammarProperty(node: PropertyDeclaration | PropertySignature) {
+            if (isComputedPropertyName(node.name) && isBinaryExpression(node.name.expression) && node.name.expression.operatorToken.kind === SyntaxKind.InKeyword) {
+                return grammarErrorOnNode(
+                    (node.parent as ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode).members[0],
+                    Diagnostics.A_mapped_type_may_not_declare_properties_or_methods);
+            }
             if (isClassLike(node.parent)) {
                 if (isStringLiteral(node.name) && node.name.text === "constructor") {
                     return grammarErrorOnNode(node.name, Diagnostics.Classes_may_not_have_a_field_named_constructor);
@@ -43447,9 +43453,6 @@ namespace ts {
                 }
             }
             else if (isTypeLiteralNode(node.parent)) {
-                if (isComputedPropertyName(node.name) && isBinaryExpression(node.name.expression) && node.name.expression.operatorToken.kind === SyntaxKind.InKeyword) {
-                    return grammarErrorOnNode(node.parent.members[0], Diagnostics.A_mapped_type_may_not_declare_properties_or_methods);
-                }
                 if (checkGrammarForInvalidDynamicName(node.name, Diagnostics.A_computed_property_name_in_a_type_literal_must_refer_to_an_expression_whose_type_is_a_literal_type_or_a_unique_symbol_type)) {
                     return true;
                 }

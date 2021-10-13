@@ -27,8 +27,16 @@ type AfterImplicitQ = {
     [placeType in PlaceType]?
     model: 'hour' | 'day'
 }
-type AfterImplicitQ = {
-    [placeType in PlaceType]?
-    model(): 'hour' | 'day'
-}
 
+interface I {
+    [P in PlaceType]: any
+}
+class C {
+    [P in PlaceType]: any
+}
+const D = class {
+    [P in PlaceType]: any
+}
+const E = class {
+    [P in 'a' | 'b']: any
+}

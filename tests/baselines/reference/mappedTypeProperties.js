@@ -27,16 +27,45 @@ type AfterImplicitQ = {
     [placeType in PlaceType]?
     model: 'hour' | 'day'
 }
-type AfterImplicitQ = {
-    [placeType in PlaceType]?
-    model(): 'hour' | 'day'
-}
 
+interface I {
+    [P in PlaceType]: any
+}
+class C {
+    [P in PlaceType]: any
+}
+const D = class {
+    [P in PlaceType]: any
+}
+const E = class {
+    [P in 'a' | 'b']: any
+}
 
 
 //// [mappedTypeProperties.js]
 "use strict";
+var _a, _b;
 exports.__esModule = true;
+var C = /** @class */ (function () {
+    function C() {
+    }
+    return C;
+}());
+P in PlaceType;
+var D = (_a = /** @class */ (function () {
+        function class_1() {
+        }
+        return class_1;
+    }()),
+    P in PlaceType,
+    _a);
+var E = (_b = /** @class */ (function () {
+        function class_2() {
+        }
+        return class_2;
+    }()),
+    P in 'a' | 'b',
+    _b);
 
 
 //// [mappedTypeProperties.d.ts]
