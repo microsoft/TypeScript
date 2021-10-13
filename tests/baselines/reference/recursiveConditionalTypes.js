@@ -138,6 +138,38 @@ type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null
 
 type TP2 = ParseManyWhitespace2<" foo">;
 
+// Repro from #46183
+
+type NTuple<N extends number, Tup extends unknown[] = []> =
+    Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+
+type Add<A extends number, B extends number> =
+    [...NTuple<A>, ...NTuple<B>]['length'];
+
+let five: Add<2, 3>;
+
+// Repro from #46316
+
+type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T
+    ? [T, ...A] extends [...infer X] 
+        ? X
+        : never
+    : never;
+
+type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length']
+    ? A
+    : _Enumerate<_PrependNextNum<A>, N> & number;
+
+type Enumerate<N extends number> = number extends N
+    ? number
+    : _Enumerate<[], N> extends (infer E)[]
+    ? E
+    : never;
+
+function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
+    return value.length;  // Error
+}
+
 
 //// [recursiveConditionalTypes.js]
 "use strict";
@@ -168,6 +200,10 @@ function f20(x, y) {
 }
 function f21(x, y) {
     f21(y, x); // Error
+}
+let five;
+function foo2(value) {
+    return value.length; // Error
 }
 
 
@@ -244,3 +280,13 @@ declare type TP1 = ParseManyWhitespace<" foo">;
 declare type ParseManyWhitespace2<S extends string> = S extends ` ${infer R0}` ? Helper<ParseManyWhitespace2<R0>> : ParseSuccess<S>;
 declare type Helper<T> = T extends ParseSuccess<infer R> ? ParseSuccess<R> : null;
 declare type TP2 = ParseManyWhitespace2<" foo">;
+declare type NTuple<N extends number, Tup extends unknown[] = []> = Tup['length'] extends N ? Tup : NTuple<N, [...Tup, unknown]>;
+declare type Add<A extends number, B extends number> = [
+    ...NTuple<A>,
+    ...NTuple<B>
+]['length'];
+declare let five: Add<2, 3>;
+declare type _PrependNextNum<A extends Array<unknown>> = A['length'] extends infer T ? [T, ...A] extends [...infer X] ? X : never : never;
+declare type _Enumerate<A extends Array<unknown>, N extends number> = N extends A['length'] ? A : _Enumerate<_PrependNextNum<A>, N> & number;
+declare type Enumerate<N extends number> = number extends N ? number : _Enumerate<[], N> extends (infer E)[] ? E : never;
+declare function foo2<T extends unknown[]>(value: T): Enumerate<T['length']>;
