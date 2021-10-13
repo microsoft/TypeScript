@@ -34636,7 +34636,7 @@ namespace ts {
             forEach(node.members, checkSourceElement);
             if (produceDiagnostics) {
                 const type = getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node);
-                checkIndexConstraints(type);
+                checkIndexConstraints(type, type.symbol);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkObjectTypeForDuplicateDeclarations(node);
             }
@@ -38069,7 +38069,7 @@ namespace ts {
             }
         }
 
-        function checkIndexConstraints(type: Type, isStaticIndex?: boolean) {
+        function checkIndexConstraints(type: Type, symbol: Symbol, isStaticIndex?: boolean) {
             const indexInfos = getIndexInfosOfType(type);
             if (indexInfos.length === 0) {
                 return;
@@ -38079,7 +38079,7 @@ namespace ts {
                     checkIndexConstraintForProperty(type, prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*includeNonPublic*/ true), getNonMissingTypeOfSymbol(prop));
                 }
             }
-            const typeDeclaration = type.symbol.valueDeclaration;
+            const typeDeclaration = symbol.valueDeclaration;
             if (typeDeclaration && isClassLike(typeDeclaration)) {
                 for (const member of typeDeclaration.members) {
                     // Only process instance properties with computed names here. Static properties cannot be in conflict with indexers,
@@ -38420,8 +38420,8 @@ namespace ts {
             }
 
             if (produceDiagnostics) {
-                checkIndexConstraints(type);
-                checkIndexConstraints(staticType, /*isStaticIndex*/ true);
+                checkIndexConstraints(type, symbol);
+                checkIndexConstraints(staticType, symbol, /*isStaticIndex*/ true);
                 checkTypeForDuplicateIndexSignatures(node);
                 checkPropertyInitialization(node);
             }
@@ -38848,7 +38848,7 @@ namespace ts {
                         for (const baseType of getBaseTypes(type)) {
                             checkTypeAssignableTo(typeWithThis, getTypeWithThisArgument(baseType, type.thisType), node.name, Diagnostics.Interface_0_incorrectly_extends_interface_1);
                         }
-                        checkIndexConstraints(type);
+                        checkIndexConstraints(type, symbol);
                     }
                 }
                 checkObjectTypeForDuplicateDeclarations(node);
