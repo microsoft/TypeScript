@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/mapped/mappedTypeProperties.ts ===
+export type PlaceType = 'openSky' | 'roofed' | 'garage'
+>PlaceType : PlaceType
+
+type Before = {
+>Before : Before
+
+    model: 'hour' | 'day';
+>model : "hour" | "day"
+
+    [placeType in PlaceType]: void;
+>[placeType in PlaceType] : void
+>placeType in PlaceType : boolean
+>placeType : any
+>PlaceType : any
+}
+
+type After = {
+>After : After
+
+    [placeType in PlaceType]: void;
+    model: 'hour' | 'day'
+>model : "hour" | "day"
+}
+
+type AfterQuestion = {
+>AfterQuestion : AfterQuestion
+
+    [placeType in PlaceType]?: void;
+    model: 'hour' | 'day';
+>model : "hour" | "day"
+}
+type AfterMethod = {
+>AfterMethod : AfterMethod
+
+    [placeType in PlaceType]?: void;
+    model(duration: number): 'hour' | 'day';
+>model : (duration: number) => 'hour' | 'day'
+>duration : number
+}
+
+type AfterImplicit = {
+>AfterImplicit : AfterImplicit
+
+    [placeType in PlaceType]
+    model: 'hour' | 'day';
+>model : "hour" | "day"
+}
+type AfterImplicitQ = {
+>AfterImplicitQ : AfterImplicitQ
+
+    [placeType in PlaceType]?
+    model: 'hour' | 'day'
+>model : "hour" | "day"
+}
+type AfterImplicitQ = {
+>AfterImplicitQ : { openSky?: any; roofed?: any; garage?: any; }
+
+    [placeType in PlaceType]?
+    model(): 'hour' | 'day'
+>model : () => 'hour' | 'day'
+}
+
+

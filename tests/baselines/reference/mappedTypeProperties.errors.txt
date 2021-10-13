@@ -1,0 +1,64 @@
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(3,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(9,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(14,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(18,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(23,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(25,6): error TS2300: Duplicate identifier 'AfterImplicitQ'.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(27,5): error TS7061: A mapped type may not declare properties or methods.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(29,6): error TS2300: Duplicate identifier 'AfterImplicitQ'.
+tests/cases/conformance/types/mapped/mappedTypeProperties.ts(31,5): error TS7061: A mapped type may not declare properties or methods.
+
+
+==== tests/cases/conformance/types/mapped/mappedTypeProperties.ts (9 errors) ====
+    export type PlaceType = 'openSky' | 'roofed' | 'garage'
+    type Before = {
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+        [placeType in PlaceType]: void;
+    }
+    
+    type After = {
+        [placeType in PlaceType]: void;
+        model: 'hour' | 'day'
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    type AfterQuestion = {
+        [placeType in PlaceType]?: void;
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    type AfterMethod = {
+        [placeType in PlaceType]?: void;
+        model(duration: number): 'hour' | 'day';
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    type AfterImplicit = {
+        [placeType in PlaceType]
+        model: 'hour' | 'day';
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    type AfterImplicitQ = {
+         ~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'AfterImplicitQ'.
+        [placeType in PlaceType]?
+        model: 'hour' | 'day'
+        ~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    type AfterImplicitQ = {
+         ~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'AfterImplicitQ'.
+        [placeType in PlaceType]?
+        model(): 'hour' | 'day'
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7061: A mapped type may not declare properties or methods.
+    }
+    
+    
