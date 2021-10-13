@@ -166,10 +166,10 @@ function watch(rootFileNames, options) {
     function emitFile(fileName) {
         var output = services.getEmitOutput(fileName);
         if (!output.emitSkipped) {
-            console.log("Emitting " + fileName);
+            console.log("Emitting ".concat(fileName));
         }
         else {
-            console.log("Emitting " + fileName + " failed");
+            console.log("Emitting ".concat(fileName, " failed"));
             logErrors(fileName);
         }
         output.outputFiles.forEach(function (o) {
@@ -184,10 +184,10 @@ function watch(rootFileNames, options) {
             var message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             if (diagnostic.file) {
                 var _a = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start), line = _a.line, character = _a.character;
-                console.log("  Error " + diagnostic.file.fileName + " (" + (line + 1) + "," + (character + 1) + "): " + message);
+                console.log("  Error ".concat(diagnostic.file.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
             }
             else {
-                console.log("  Error: " + message);
+                console.log("  Error: ".concat(message));
             }
         });
     }

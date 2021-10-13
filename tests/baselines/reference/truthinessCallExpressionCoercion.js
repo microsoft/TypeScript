@@ -159,7 +159,7 @@ var Foo = /** @class */ (function () {
 // Test for GH-35557 where ids were not assigned for a symbol.
 function A(stats) {
     if (stats.isDirectory) { // err
-        console.log("[Directory] " + stats.ctime);
+        console.log("[Directory] ".concat(stats.ctime));
     }
 }
 function B(a, b) {

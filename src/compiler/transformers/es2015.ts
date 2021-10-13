@@ -4102,87 +4102,22 @@ namespace ts {
          * @param node A TemplateExpression node.
          */
         function visitTemplateExpression(node: TemplateExpression): Expression {
-            const expressions: Expression[] = [];
-            addTemplateHead(expressions, node);
-            addTemplateSpans(expressions, node);
-
-            // createAdd will check if each expression binds less closely than binary '+'.
-            // If it does, it wraps the expression in parentheses. Otherwise, something like
-            //    `abc${ 1 << 2 }`
-            // becomes
-            //    "abc" + 1 << 2 + ""
-            // which is really
-            //    ("abc" + 1) << (2 + "")
-            // rather than
-            //    "abc" + (1 << 2) + ""
-            const expression = reduceLeft(expressions, factory.createAdd)!;
-            if (nodeIsSynthesized(expression)) {
-                setTextRange(expression, node);
-            }
-
-            return expression;
-        }
-
-        /**
-         * Gets a value indicating whether we need to include the head of a TemplateExpression.
-         *
-         * @param node A TemplateExpression node.
-         */
-        function shouldAddTemplateHead(node: TemplateExpression) {
-            // If this expression has an empty head literal and the first template span has a non-empty
-            // literal, then emitting the empty head literal is not necessary.
-            //     `${ foo } and ${ bar }`
-            // can be emitted as
-            //     foo + " and " + bar
-            // This is because it is only required that one of the first two operands in the emit
-            // output must be a string literal, so that the other operand and all following operands
-            // are forced into strings.
-            //
-            // If the first template span has an empty literal, then the head must still be emitted.
-            //     `${ foo }${ bar }`
-            // must still be emitted as
-            //     "" + foo + bar
-
-            // There is always atleast one templateSpan in this code path, since
-            // NoSubstitutionTemplateLiterals are directly emitted via emitLiteral()
-            Debug.assert(node.templateSpans.length !== 0);
-
-            const span = node.templateSpans[0];
-            return node.head.text.length !== 0 || span.literal.text.length === 0 || !!length(getLeadingCommentRangesOfNode(span.expression, currentSourceFile));
-        }
-
-        /**
-         * Adds the head of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateHead(expressions: Expression[], node: TemplateExpression): void {
-            if (!shouldAddTemplateHead(node)) {
-                return;
-            }
-
-            expressions.push(factory.createStringLiteral(node.head.text));
-        }
-
-        /**
-         * Visits and adds the template spans of a TemplateExpression to an array of expressions.
-         *
-         * @param expressions An array of expressions.
-         * @param node A TemplateExpression node.
-         */
-        function addTemplateSpans(expressions: Expression[], node: TemplateExpression): void {
+            let expression: Expression = factory.createStringLiteral(node.head.text);
             for (const span of node.templateSpans) {
-                expressions.push(visitNode(span.expression, visitor, isExpression));
+                const args = [visitNode(span.expression, visitor, isExpression)];
 
-                // Only emit if the literal is non-empty.
-                // The binary '+' operator is left-associative, so the first string concatenation
-                // with the head will force the result up to this point to be a string.
-                // Emitting a '+ ""' has no semantic effect for middles and tails.
-                if (span.literal.text.length !== 0) {
-                    expressions.push(factory.createStringLiteral(span.literal.text));
+                if (span.literal.text.length > 0) {
+                    args.push(factory.createStringLiteral(span.literal.text));
                 }
+
+                expression = factory.createCallExpression(
+                    factory.createPropertyAccessExpression(expression, "concat"),
+                    /*typeArguments*/ undefined,
+                    args,
+                );
             }
+
+            return setTextRange(expression, node);
         }
 
         /**
