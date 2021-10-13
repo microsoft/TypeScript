@@ -95,6 +95,23 @@
 ////    static /*h2*/
 ////}
 
+// @Filename: i.ts
+// Case: Generic method
+////class IBase {
+////    met<T>(t: T): T {
+////        return t;
+////    }
+////    metcons<T extends string | number>(t: T): T {
+////        return t;
+////    }
+////}
+////
+////class ISub extends IBase {
+////    /*i*/
+////}
+
+
+
 // format.setFormatOptions({
 //     newLineCharacter: "\n",
 // });
@@ -283,6 +300,39 @@ verify.completions({
             },
             insertText:
 "met(n: number): number {\r\n}\r\n",
+        }
+    ],
+});
+
+verify.completions({
+    marker: "i",
+    isNewIdentifierLocation: true,
+    preferences: {
+        includeCompletionsWithInsertText: true,
+        includeCompletionsWithSnippetText: false,
+    },
+    includes: [
+        {
+            name: "met",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            insertText:
+"met<T>(t: T): T {\r\n}\r\n",
+        },
+        {
+            name: "metcons",
+            sortText: completion.SortText.LocationPriority,
+            replacementSpan: {
+                fileName: "",
+                pos: 0,
+                end: 0,
+            },
+            insertText:
+"metcons<T extends string | number>(t: T): T {\r\n}\r\n",
         }
     ],
 });

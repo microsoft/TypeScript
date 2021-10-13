@@ -702,10 +702,9 @@ namespace ts.Completions {
         }
 
         if (isClassLikeMemberCompletion(symbol, location)) {
-            ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location));
+            ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken));
         }
 
-        // >> Should this actually be here and not at the very end of the function?
         if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
             return undefined;
         }
@@ -772,16 +771,29 @@ namespace ts.Completions {
         };
     }
 
-    // >> TODO: Find better location for code
     function isClassLikeMemberCompletion(symbol: Symbol, location: Node): boolean {
+        // TODO: support JS files.
+        if (isInJSFile(location)) {
+            return false;
+        }
+
         const memberFlags =
-            // SymbolFlags.Method
-            // | SymbolFlags.Accessor
-            // | SymbolFlags.Property
             SymbolFlags.ClassMember
             & SymbolFlags.EnumMemberExcludes;
-        // >> TODO: Flags: Constructor? Signature?
-        return !!findAncestor(location, isClassLike) && !!(symbol.flags & memberFlags);
+        /* In
+        `class C {
+            |
+        }`
+        `location` is a class-like declaration.
+        In
+        `class C {
+            m|
+        }`
+        `location` is an identifier declaration, `location.parent` is a class element declaration,
+        and `location.parent.parent` is a class-like declaration.
+        */
+        return !!(symbol.flags & memberFlags) &&
+            (isClassLike(location) || (isClassElement(location.parent) && isClassLike(location.parent.parent)));
     }
 
     function getEntryForMemberCompletion(
@@ -791,7 +803,9 @@ namespace ts.Completions {
         preferences: UserPreferences,
         name: string,
         symbol: Symbol,
-        location: Node): { insertText: string, isSnippet?: true } {
+        location: Node,
+        contextToken: Node | undefined,
+    ): { insertText: string, isSnippet?: true } {
         const classLikeDeclaration = findAncestor(location, isClassLike);
         if (!classLikeDeclaration) {
             return { insertText: name };
@@ -815,7 +829,7 @@ namespace ts.Completions {
         if (preferences.includeCompletionsWithSnippetText) {
             isSnippet = true;
             // We are adding a final tabstop (i.e. $0) in the body of the suggested member, if it has one.
-            // NOTE: this assumes we won't have more than one body in the completion nodes.
+            // Note: this assumes we won't have more than one body in the completion nodes, which should be the case.
             const emptyStatement = factory.createExpressionStatement(factory.createIdentifier(""));
             setSnippetElement(emptyStatement, { kind: SnippetKind.TabStop, order: 0 });
             body = factory.createBlock([emptyStatement], /* multiline */ true);
@@ -835,34 +849,36 @@ namespace ts.Completions {
             // `addNewNodeForMemberSymbol` calls this callback function for each new member node
             // it adds for the given member symbol.
             // We store these member nodes in the `completionNodes` array.
-            // Note that there might be:
+            // Note: there might be:
             //  - No nodes if `addNewNodeForMemberSymbol` cannot figure out a node for the member;
             //  - One node;
             //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
             node => {
-                // >> TODO: making it abstract. might not need it after all.
-                // if (hasAbstractModifier(classLikeDeclaration)) {
-                    // Add `abstract` modifier
-                    // node = factory.updateModifiers(
-                    //     node,
-                    //     concatenate([factory.createModifier(SyntaxKind.AbstractKeyword)], node.modifiers),
-                    // );
-                    // if (isMethodDeclaration(node)) {
-                    //     // Remove method body
-                    //     node = factory.updateMethodDeclaration(
-                    //         node,
-                    //         node.decorators,
-                    //         node.modifiers,
-                    //         node.asteriskToken,
-                    //         node.name,
-                    //         node.questionToken,
-                    //         node.typeParameters,
-                    //         node.parameters,
-                    //         node.type,
-                    //         /* body */ undefined,
-                    //     );
-                    // }
-                // }
+                // Check if the suggested method should be abstract.
+                // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
+                // Note: We are relying on checking if the context token is `abstract`,
+                // since other visibility modifiers (e.g. `protected`) should come *before* `abstract`.
+                // However, that is not true for the e.g. `override` modifier, so this check has its limitations.
+                const isAbstract = contextToken &&
+                    (isAbstractModifier(contextToken) ||
+                        (isIdentifier(contextToken) && contextToken.escapedText === "abstract"));
+                if (isAbstract) {
+                    if (isMethodDeclaration(node)) {
+                        // Remove method body
+                        node = factory.updateMethodDeclaration(
+                            node,
+                            node.decorators,
+                            node.modifiers,
+                            node.asteriskToken,
+                            node.name,
+                            node.questionToken,
+                            node.typeParameters,
+                            node.parameters,
+                            node.type,
+                            /* body */ undefined,
+                        );
+                    }
+                }
                 if (isClassElement(node)
                     && checker.getMemberOverrideModifierDiagnostic(classLikeDeclaration, node) === MemberOverrideDiagnostic.NeedsOverride) {
                     node = factory.updateModifiers(
@@ -901,6 +917,10 @@ namespace ts.Completions {
                 }
             }
             else if (isTypeNode(node) && parent && isFunctionLikeDeclaration(parent)) {
+                setSnippetElement(node, { kind: SnippetKind.Placeholder, order });
+                order += 1;
+            }
+            else if (isTypeParameterDeclaration(node) && parent && isFunctionLikeDeclaration(parent)) {
                 setSnippetElement(node, { kind: SnippetKind.Placeholder, order });
                 order += 1;
             }
