@@ -84,11 +84,15 @@ interface d extends a {
 >a : Symbol(a, Decl(interfacedeclWithIndexerErrors.ts, 29, 1))
 }
 
+interface e extends number {
+>e : Symbol(e, Decl(interfacedeclWithIndexerErrors.ts, 41, 1))
+}
+
 class c1 implements a {
->c1 : Symbol(c1, Decl(interfacedeclWithIndexerErrors.ts, 41, 1))
+>c1 : Symbol(c1, Decl(interfacedeclWithIndexerErrors.ts, 44, 1))
 >a : Symbol(a, Decl(interfacedeclWithIndexerErrors.ts, 29, 1))
 }
 var instance2 = new c1();
->instance2 : Symbol(instance2, Decl(interfacedeclWithIndexerErrors.ts, 45, 3))
->c1 : Symbol(c1, Decl(interfacedeclWithIndexerErrors.ts, 41, 1))
+>instance2 : Symbol(instance2, Decl(interfacedeclWithIndexerErrors.ts, 48, 3))
+>c1 : Symbol(c1, Decl(interfacedeclWithIndexerErrors.ts, 44, 1))
 

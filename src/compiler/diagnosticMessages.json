@@ -3341,6 +3341,10 @@
         "category": "Error",
         "code": 2833
     },
+    "An interface cannot extend a primitive type like '{0}'; an interface can only extend named types and classes": {
+        "category": "Error",
+        "code": 2834
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
