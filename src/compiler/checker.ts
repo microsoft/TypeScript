@@ -38517,7 +38517,7 @@ namespace ts {
             baseWithThis: Type | undefined,
             type: InterfaceType,
             typeWithThis: Type,
-            memberHasOverrideModifier: boolean, // >> Note: we need this because this is computed from a node, but we don't have any (it would be synthetic)
+            memberHasOverrideModifier: boolean,
             memberHasAbstractModifier: boolean,
             memberIsStatic: boolean,
             memberIsParameterProperty: boolean,

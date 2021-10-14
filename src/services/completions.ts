@@ -795,7 +795,7 @@ namespace ts.Completions {
         and `location.parent.parent` is a class-like declaration.
         In
         `abstract class C {
-            abstract 
+            abstract
             abstract m|
         }`
         `location` is a syntax list (with modifiers as children),
@@ -803,8 +803,8 @@ namespace ts.Completions {
         */
         return !!(symbol.flags & memberFlags) &&
             (isClassLike(location) ||
-                (isClassElement(location.parent) && isClassLike(location.parent.parent)) ||
-                (isSyntaxList(location) && isClassLike(location.parent)));
+                (location.parent && location.parent.parent && isClassElement(location.parent) && isClassLike(location.parent.parent)) ||
+                (location.parent && isSyntaxList(location) && isClassLike(location.parent)));
     }
 
     function getEntryForMemberCompletion(
@@ -849,6 +849,7 @@ namespace ts.Completions {
             body = factory.createBlock([], /* multiline */ true);
         }
 
+        let modifiers = ModifierFlags.None;
         const completionNodes: Node[] = [];
         codefix.addNewNodeForMemberSymbol(
             symbol,
@@ -896,12 +897,18 @@ namespace ts.Completions {
                 }
 
                 let presentModifiers = ModifierFlags.None;
-                // Omit already present modifiers from the first completion node.
-                if (!completionNodes.length && contextToken) {
-                    presentModifiers = getPresentModifiers(contextToken);
+                if (!completionNodes.length) {
+                    // Omit already present modifiers from the first completion node/signature.
+                    if (contextToken) {
+                        presentModifiers = getPresentModifiers(contextToken);
+                    }
+                    // Keep track of added missing required modifiers and modifiers already present.
+                    // This is needed when we have overloaded signatures,
+                    // so this callback will be called for multiple nodes/signatures,
+                    // and we need to make sure the modifiers are uniform for all nodes/signatures.
+                    modifiers = node.modifierFlagsCache | requiredModifiers | presentModifiers;
                 }
-                // Update modifiers to add missing required ones, and remove modifiers already present.
-                node = factory.updateModifiers(node, (node.modifierFlagsCache | requiredModifiers) & (~presentModifiers));
+                node = factory.updateModifiers(node, modifiers & (~presentModifiers));
 
                 completionNodes.push(node);
             },
@@ -944,7 +951,6 @@ namespace ts.Completions {
         }
         if (isPropertyDeclaration(contextToken.parent)) {
             modifiers |= modifiersToFlags(contextToken.parent.modifiers);
-            // >> TODO: does this work? is the node going to have modifiers already or should we call `.getChildren()`?
         }
         return modifiers;
     }
