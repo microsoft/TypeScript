@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: boo.d.ts
 // Case: Declaration files
 ////interface Ghost {
@@ -10,10 +11,6 @@
 ////    /*b*/
 ////}
 
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
 
 verify.completions({
     marker: "b",
@@ -32,7 +29,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"boo(): string;\r\n",
+"boo(): string;\n",
         }
     ],
 });

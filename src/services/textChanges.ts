@@ -1037,7 +1037,7 @@ namespace ts.textChanges {
         /** Note: output node may be mutated input node. */
         export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = createWriter(newLineCharacter);
-            const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+            const newLine = getNewLineKind(newLineCharacter);
             createPrinter({
                 newLine,
                 neverAsciiEscape: true,

@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: secret.ts
 // Case: accessibility modifier inheritance
 ////class Secret {
@@ -26,11 +27,6 @@
 ////}
 
 
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
-
 verify.completions({
     marker: "a",
     isNewIdentifierLocation: true,
@@ -51,7 +47,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "protected hint(): string {\r\n}\r\n",
+            insertText: "protected hint(): string {\n}\n",
         },
         {
             name: "refuse",
@@ -61,7 +57,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "public refuse(): string {\r\n}\r\n",
+            insertText: "public refuse(): string {\n}\n",
         }
     ],
 });

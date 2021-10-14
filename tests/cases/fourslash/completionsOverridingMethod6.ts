@@ -1,6 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
+// @newline: LF
 // Case: modifier inheritance/deduplication
 ////class A {
 ////    public method(): number {
@@ -25,12 +26,6 @@
 ////    public f/*c*/
 ////}
 
-
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
-
 verify.completions({
     marker: "a",
     isNewIdentifierLocation: true,
@@ -47,7 +42,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "method(): number {\r\n}\r\n",
+            insertText: "method(): number {\n}\n",
         },
     ],
 });
@@ -68,7 +63,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "method(): number;\r\n",
+            insertText: "method(): number;\n",
         },
     ],
 });
@@ -90,9 +85,9 @@ verify.completions({
                 end: 0,
             },
             insertText:
-                "fun(a: number): number;\r\n\
-public fun(a: undefined, b: string): number;\r\n\
-public fun(a: any, b?: any): number {\r\n}\r\n",
+                "fun(a: number): number;\n\
+public fun(a: undefined, b: string): number;\n\
+public fun(a: any, b?: any): number {\n}\n",
         },
     ],
 });

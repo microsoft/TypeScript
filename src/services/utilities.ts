@@ -3262,5 +3262,9 @@ namespace ts {
         return decisionFromFile ?? program.usesUriStyleNodeCoreModules;
     }
 
+    export function getNewLineKind(newLineCharacter: string): NewLineKind {
+        return newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
+    }
+
     // #endregion
 }

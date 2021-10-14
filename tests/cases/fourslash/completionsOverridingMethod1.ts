@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: h.ts
 // @noImplicitOverride: true
 // Case: Suggested method needs `override` modifier
@@ -11,10 +12,6 @@
 ////    f/*h*/
 ////}
 
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
 
 verify.completions({
     marker: "h",
@@ -33,7 +30,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"override foo(a: string): void {\r\n}\r\n",
+"override foo(a: string): void {\n}\n",
         }
     ],
 });

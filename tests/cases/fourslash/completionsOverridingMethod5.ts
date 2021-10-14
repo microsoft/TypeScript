@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: a.ts
 // Case: abstract methods
 ////abstract class Ab {
@@ -15,10 +16,6 @@
 ////    abstract m/*c*/
 ////}
 
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
 
 verify.completions({
     marker: "a",
@@ -36,7 +33,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void {\r\n}\r\n",
+            insertText: "met(n: string): void {\n}\n",
         },
         {
             name: "met2",
@@ -46,7 +43,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void {\r\n}\r\n",
+            insertText: "met2(n: number): void {\n}\n",
         }
     ],
 });
@@ -67,7 +64,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void;\r\n",
+            insertText: "met(n: string): void;\n",
         },
         {
             name: "met2",
@@ -77,7 +74,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void;\r\n",
+            insertText: "met2(n: number): void;\n",
         }
     ],
 });
@@ -98,7 +95,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met(n: string): void;\r\n",
+            insertText: "met(n: string): void;\n",
         },
         {
             name: "met2",
@@ -108,7 +105,7 @@ verify.completions({
                 pos: 0,
                 end: 0,
             },
-            insertText: "met2(n: number): void;\r\n",
+            insertText: "met2(n: number): void;\n",
         }
     ],
 });

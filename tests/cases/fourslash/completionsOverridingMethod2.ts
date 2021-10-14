@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: a.ts
 // Case: Snippet text needs escaping
 ////interface DollarSign {
@@ -9,10 +10,6 @@
 ////    /*a*/
 ////}
 
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
 
 verify.completions({
     marker: "a",
@@ -32,7 +29,7 @@ verify.completions({
             },
             isSnippet: true,
             insertText:
-"\"\\$usd\"(${1:a}: ${2:number}): ${3:number} {\r\n    $0\r\n}\r\n",
+"\"\\$usd\"(${1:a}: ${2:number}): ${3:number} {\n    $0\n}\n",
         }
     ],
 });

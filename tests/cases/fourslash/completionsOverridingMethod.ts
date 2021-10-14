@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @newline: LF
 // @Filename: a.ts
 // Case: Concrete class implements abstract method
 ////abstract class ABase {
@@ -111,12 +112,6 @@
 ////}
 
 
-
-// format.setFormatOptions({
-//     newLineCharacter: "\n",
-// });
-// format.setOption("newline", "\n");
-
 verify.completions({
     marker: "a",
     isNewIdentifierLocation: true,
@@ -134,7 +129,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(param1: string, param2: boolean): Promise<void> {\r\n}\r\n",
+"foo(param1: string, param2: boolean): Promise<void> {\n}\n",
         }
     ],
 });
@@ -156,7 +151,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string, b: string): string {\r\n}\r\n",
+"foo(a: string, b: string): string {\n}\n",
         }
     ],
 });
@@ -178,7 +173,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string {\r\n}\r\n",
+"foo(a: string): string {\n}\n",
         }
     ],
 });
@@ -200,7 +195,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string {\r\n}\r\n",
+"foo(a: string): string {\n}\n",
         }
     ],
 });
@@ -222,7 +217,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string {\r\n}\r\n",
+"foo(a: string): string {\n}\n",
         }
     ],
 });
@@ -244,7 +239,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string {\r\n}\r\n",
+"foo(a: string): string {\n}\n",
         }
     ],
 });
@@ -266,9 +261,9 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"foo(a: string): string;\r\n\
-foo(a: undefined, b: number): string;\r\n\
-foo(a: any, b?: any): string {\r\n}\r\n",
+"foo(a: string): string;\n\
+foo(a: undefined, b: number): string;\n\
+foo(a: any, b?: any): string {\n}\n",
         }
     ],
 });
@@ -299,7 +294,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"met(n: number): number {\r\n}\r\n",
+"met(n: number): number {\n}\n",
         }
     ],
 });
@@ -321,7 +316,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"met<T>(t: T): T {\r\n}\r\n",
+"met<T>(t: T): T {\n}\n",
         },
         {
             name: "metcons",
@@ -332,7 +327,7 @@ verify.completions({
                 end: 0,
             },
             insertText:
-"metcons<T extends string | number>(t: T): T {\r\n}\r\n",
+"metcons<T extends string | number>(t: T): T {\n}\n",
         }
     ],
 });
