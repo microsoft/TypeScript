@@ -777,6 +777,7 @@ namespace ts.Completions {
             return false;
         }
 
+        // Completion symbol must be for a class member.
         const memberFlags =
             SymbolFlags.ClassMember
             & SymbolFlags.EnumMemberExcludes;
@@ -789,11 +790,21 @@ namespace ts.Completions {
         `class C {
             m|
         }`
-        `location` is an identifier declaration, `location.parent` is a class element declaration,
+        `location` is an identifier declaration,
+        `location.parent` is a class element declaration,
         and `location.parent.parent` is a class-like declaration.
+        In
+        `abstract class C {
+            abstract 
+            abstract m|
+        }`
+        `location` is a syntax list (with modifiers as children),
+        and `location.parent` is a class-like declaration.
         */
         return !!(symbol.flags & memberFlags) &&
-            (isClassLike(location) || (isClassElement(location.parent) && isClassLike(location.parent.parent)));
+            (isClassLike(location) ||
+                (isClassElement(location.parent) && isClassLike(location.parent.parent)) ||
+                (isSyntaxList(location) && isClassLike(location.parent)));
     }
 
     function getEntryForMemberCompletion(
@@ -854,17 +865,17 @@ namespace ts.Completions {
             //  - One node;
             //  - More than one node if the member is overloaded (e.g. a method with overload signatures).
             node => {
+                let requiredModifiers = ModifierFlags.None;
                 // Check if the suggested method should be abstract.
                 // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
                 // Note: We are relying on checking if the context token is `abstract`,
                 // since other visibility modifiers (e.g. `protected`) should come *before* `abstract`.
                 // However, that is not true for the e.g. `override` modifier, so this check has its limitations.
-                const isAbstract = contextToken &&
-                    (isAbstractModifier(contextToken) ||
-                        (isIdentifier(contextToken) && contextToken.escapedText === "abstract"));
+                const isAbstract = contextToken && isModifierLike(contextToken) === SyntaxKind.AbstractKeyword;
                 if (isAbstract) {
+                    requiredModifiers |= ModifierFlags.Abstract;
                     if (isMethodDeclaration(node)) {
-                        // Remove method body
+                        // Remove method body.
                         node = factory.updateMethodDeclaration(
                             node,
                             node.decorators,
@@ -881,11 +892,17 @@ namespace ts.Completions {
                 }
                 if (isClassElement(node)
                     && checker.getMemberOverrideModifierDiagnostic(classLikeDeclaration, node) === MemberOverrideDiagnostic.NeedsOverride) {
-                    node = factory.updateModifiers(
-                        node,
-                        concatenate([factory.createModifier(SyntaxKind.OverrideKeyword)], node.modifiers),
-                    );
+                    requiredModifiers |= ModifierFlags.Override;
                 }
+
+                let presentModifiers = ModifierFlags.None;
+                // Omit already present modifiers from the first completion node.
+                if (!completionNodes.length && contextToken) {
+                    presentModifiers = getPresentModifiers(contextToken);
+                }
+                // Update modifiers to add missing required ones, and remove modifiers already present.
+                node = factory.updateModifiers(node, (node.modifierFlagsCache | requiredModifiers) & (~presentModifiers));
+
                 completionNodes.push(node);
             },
             body);
@@ -896,9 +913,51 @@ namespace ts.Completions {
             }
             insertText = printer.printList(ListFormat.MultiLine, factory.createNodeArray(completionNodes), sourceFile);
         }
+
         return { insertText, isSnippet };
     }
 
+    function getPresentModifiers(contextToken: Node): ModifierFlags {
+        let modifiers = ModifierFlags.None;
+        let contextMod;
+        /*
+        Cases supported:
+        In
+        `class C {
+            public abstract |
+        }`
+        `contextToken` is ``abstract`` (as an identifier),
+        `contextToken.parent` is property declaration,
+        `location` is class declaration ``class C { ... }``.
+        In
+        `class C {
+            protected override m|
+        }`
+            `contextToken` is ``override`` (as a keyword),
+        `contextToken.parent` is property declaration,
+        `location` is identifier ``m``,
+        `location.parent` is property declaration ``protected override m``,
+        `location.parent.parent` is class declaration ``class C { ... }``.
+        */
+        if (contextMod = isModifierLike(contextToken)) {
+            modifiers |= modifierToFlag(contextMod);
+        }
+        if (isPropertyDeclaration(contextToken.parent)) {
+            modifiers |= modifiersToFlags(contextToken.parent.modifiers);
+            // >> TODO: does this work? is the node going to have modifiers already or should we call `.getChildren()`?
+        }
+        return modifiers;
+    }
+
+    function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
+        if (isModifier(node)) {
+            return node.kind;
+        }
+        if (isIdentifier(node) && node.originalKeywordKind && isModifierKind(node.originalKeywordKind)) {
+            return node.originalKeywordKind;
+        }
+        return undefined;
+    }
 
     function addSnippets(nodes: Node[]): void {
         let order = 1;
