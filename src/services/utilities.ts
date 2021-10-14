@@ -1124,29 +1124,86 @@ namespace ts {
     /** Get the token whose text contains the position */
     function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: ((n: Node) => boolean) | undefined, includeEndPosition: boolean): Node {
         let current: Node = sourceFile;
+        let foundToken: Node | undefined;
         outer: while (true) {
             // find the child that contains 'position'
-            for (const child of current.getChildren(sourceFile)) {
-                const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, /*includeJsDoc*/ true);
+
+            const children = current.getChildren(sourceFile);
+            const i = binarySearchKey(children, position, (_, i) => i, (middle, _) => {
+                // This last callback is more of a selector than a comparator -
+                // `EqualTo` causes the `middle` result to be returned
+                // `GreaterThan` causes recursion on the left of the middle
+                // `LessThan` causes recursion on the right of the middle
+
+                // Let's say you have 3 nodes, spanning positons
+                // pos: 1, end: 3
+                // pos: 3, end: 3
+                // pos: 3, end: 5
+                // and you're looking for the token at positon 3 - all 3 of these nodes are overlapping with position 3.
+                // In fact, there's a _good argument_ that node 2 shouldn't even be allowed to exist - depending on if
+                // the start or end of the ranges are considered inclusive, it's either wholly subsumed by the first or the last node.
+                // Unfortunately, such nodes do exist. :( - See fourslash/completionsImport_tsx.tsx - empty jsx attributes create
+                // a zero-length node.
+                // What also you may not expect is that which node we return depends on the includePrecedingTokenAtEndPosition flag.
+                // Specifically, if includePrecedingTokenAtEndPosition is set, we return the 1-3 node, while if it's unset, we
+                // return the 3-5 node. (The zero length node is never correct.) This is because the includePrecedingTokenAtEndPosition
+                // flag causes us to return the first node whose end position matches the position and which produces and acceptable token
+                // kind. Meanwhile, if includePrecedingTokenAtEndPosition is unset, we look for the first node whose start is <= the
+                // position and whose end is greater than the position.
+
+
+                const start = allowPositionInLeadingTrivia ? children[middle].getFullStart() : children[middle].getStart(sourceFile, /*includeJsDoc*/ true);
                 if (start > position) {
-                    // If this child begins after position, then all subsequent children will as well.
-                    break;
+                    return Comparison.GreaterThan;
                 }
 
-                const end = child.getEnd();
-                if (position < end || (position === end && (child.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
-                    current = child;
-                    continue outer;
-                }
-                else if (includePrecedingTokenAtEndPosition && end === position) {
-                    const previousToken = findPrecedingToken(position, sourceFile, child);
-                    if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
-                        return previousToken;
+                // first element whose start position is before the input and whose end position is after or equal to the input
+                if (nodeContainsPosition(children[middle])) {
+                    if (children[middle - 1]) {
+                        // we want the _first_ element that contains the position, so left-recur if the prior node also contains the position
+                        if (nodeContainsPosition(children[middle - 1])) {
+                            return Comparison.GreaterThan;
+                        }
                     }
+                    return Comparison.EqualTo;
                 }
+
+                // this complex condition makes us left-recur around a zero-length node when includePrecedingTokenAtEndPosition is set, rather than right-recur on it
+                if (includePrecedingTokenAtEndPosition && start === position && children[middle - 1] && children[middle - 1].getEnd() === position && nodeContainsPosition(children[middle - 1])) {
+                    return Comparison.GreaterThan;
+                }
+                return Comparison.LessThan;
+            });
+
+            if (foundToken) {
+                return foundToken;
+            }
+            if (i >= 0 && children[i]) {
+                current = children[i];
+                continue outer;
             }
 
             return current;
+        }
+
+        function nodeContainsPosition(node: Node) {
+            const start = allowPositionInLeadingTrivia ? node.getFullStart() : node.getStart(sourceFile, /*includeJsDoc*/ true);
+            if (start > position) {
+                // If this child begins after position, then all subsequent children will as well.
+                return false;
+            }
+            const end = node.getEnd();
+            if (position < end || (position === end && (node.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
+                return true;
+            }
+            else if (includePrecedingTokenAtEndPosition && end === position) {
+                const previousToken = findPrecedingToken(position, sourceFile, node);
+                if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
+                    foundToken = previousToken;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

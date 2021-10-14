@@ -6743,10 +6743,14 @@ namespace ts {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
             case Extension.Js:
+            case Extension.Cjs:
+            case Extension.Mjs:
                 return ScriptKind.JS;
             case Extension.Jsx:
                 return ScriptKind.JSX;
             case Extension.Ts:
+            case Extension.Cts:
+            case Extension.Mts:
                 return ScriptKind.TS;
             case Extension.Tsx:
                 return ScriptKind.TSX;

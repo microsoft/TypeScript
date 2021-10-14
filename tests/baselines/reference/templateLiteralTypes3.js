@@ -179,11 +179,11 @@ function f1(s, n, b, t) {
     var x1 = foo1('hello'); // Error
     var x2 = foo1('*hello*');
     var x3 = foo1('**hello**');
-    var x4 = foo1("*" + s + "*");
-    var x5 = foo1("*" + n + "*");
-    var x6 = foo1("*" + b + "*");
-    var x7 = foo1("*" + t + "*");
-    var x8 = foo1("**" + s + "**");
+    var x4 = foo1("*".concat(s, "*"));
+    var x5 = foo1("*".concat(n, "*"));
+    var x6 = foo1("*".concat(b, "*"));
+    var x7 = foo1("*".concat(t, "*"));
+    var x8 = foo1("**".concat(s, "**"));
 }
 function f2() {
     var x;
@@ -201,27 +201,27 @@ function f3(s, n, b, t) {
     x = 'hello'; // Error
     x = '*hello*';
     x = '**hello**';
-    x = "*" + s + "*";
-    x = "*" + n + "*";
-    x = "*" + b + "*";
-    x = "*" + t + "*";
-    x = "**" + s + "**";
+    x = "*".concat(s, "*");
+    x = "*".concat(n, "*");
+    x = "*".concat(b, "*");
+    x = "*".concat(t, "*");
+    x = "**".concat(s, "**");
 }
 function f4(s, n, b, t) {
     var x;
     x = '123'; // Error
     x = '*123*';
     x = '**123**'; // Error
-    x = "*" + s + "*"; // Error
-    x = "*" + n + "*";
-    x = "*" + b + "*"; // Error
-    x = "*" + t + "*";
+    x = "*".concat(s, "*"); // Error
+    x = "*".concat(n, "*");
+    x = "*".concat(b, "*"); // Error
+    x = "*".concat(t, "*");
 }
 var value1 = "abc";
-var templated1 = value1 + " abc";
+var templated1 = "".concat(value1, " abc");
 // Type '`${string} abc`' is not assignable to type '`${string} ${string}`'.
 var value2 = "abc";
-var templated2 = value2 + " abc";
+var templated2 = "".concat(value2, " abc");
 chain("a");
 // Repro from #46125
 function ff1(x, y, z) {
