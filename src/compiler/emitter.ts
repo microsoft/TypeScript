@@ -1311,9 +1311,6 @@ namespace ts {
                     return emitSnippetNode(hint, node, snippet);
                 }
             }
-            // else {
-            //     Debug.assert(!getSnippetElement(node), "A snippet cannot exist inside another snippet.");
-            // }
             if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
             if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
             if (hint === EmitHint.JsxAttributeValue) return emitLiteral(cast(node, isStringLiteral), /*jsxAttributeEscape*/ true);
@@ -4547,7 +4544,7 @@ namespace ts {
             }
         }
 
-        function noEscapeWrite(s: string) { // >> update
+        function noEscapeWrite(s: string) {
             writer.write(s);
         }
 
