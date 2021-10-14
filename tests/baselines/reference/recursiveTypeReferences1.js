@@ -191,7 +191,7 @@ function parse(node, index) {
         var el = _a[0], children = _a[1];
         var idx = __spreadArray(__spreadArray([], index, true), [i + 1], false);
         return html('li', [
-            html('a', { href: "#" + el.id, rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
+            html('a', { href: "#".concat(el.id), rel: 'noopener', 'data-index': idx.join('.') }, el.textContent),
             children.length > 0 ? parse(children, idx) : frag()
         ]);
     }));

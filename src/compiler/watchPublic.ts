@@ -560,6 +560,9 @@ namespace ts {
                         sourceFilesCache.set(path, false);
                     }
                 }
+                if (sourceFile) {
+                    sourceFile.impliedNodeFormat = getImpliedNodeFormatForFile(path, resolutionCache.getModuleResolutionCache().getPackageJsonInfoCache(), compilerHost, compilerHost.getCompilationSettings());
+                }
                 return sourceFile;
             }
             return hostSourceFile.sourceFile;
