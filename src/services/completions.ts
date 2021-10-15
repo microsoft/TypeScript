@@ -697,17 +697,8 @@ namespace ts.Completions {
             }
         }
 
-        if (isClassLikeMemberCompletion(symbol, location)) {
+        if (preferences.includeCompletionsWithInsertText && isClassLikeMemberCompletion(symbol, location)) {
             ({ insertText, isSnippet } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken));
-        }
-
-        if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
-            return undefined;
-        }
-
-        if (originIsExport(origin) || originIsResolvedExport(origin)) {
-            data = originToCompletionEntryData(origin);
-            hasAction = !importCompletionNode;
         }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, location);
@@ -739,6 +730,15 @@ namespace ts.Completions {
             if (isSnippet) {
                 replacementSpan = createTextSpanFromNode(location, sourceFile);
             }
+        }
+
+        if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
+            return undefined;
+        }
+
+        if (originIsExport(origin) || originIsResolvedExport(origin)) {
+            data = originToCompletionEntryData(origin);
+            hasAction = !importCompletionNode;
         }
 
         // TODO(drosen): Right now we just permit *all* semantic meanings when calling
@@ -786,7 +786,7 @@ namespace ts.Completions {
         `class C {
             m|
         }`
-        `location` is an identifier declaration,
+        `location` is an identifier,
         `location.parent` is a class element declaration,
         and `location.parent.parent` is a class-like declaration.
         In
@@ -798,9 +798,21 @@ namespace ts.Completions {
         and `location.parent` is a class-like declaration.
         */
         return !!(symbol.flags & memberFlags) &&
-            (isClassLike(location) ||
-                (location.parent && location.parent.parent && isClassElement(location.parent) && isClassLike(location.parent.parent)) ||
-                (location.parent && isSyntaxList(location) && isClassLike(location.parent)));
+            (
+                isClassLike(location) ||
+                (
+                    location.parent &&
+                    location.parent.parent &&
+                    isClassElement(location.parent) &&
+                    location === location.parent.name &&
+                    isClassLike(location.parent.parent)
+                ) ||
+                (
+                    location.parent &&
+                    isSyntaxList(location) &&
+                    isClassLike(location.parent)
+                )
+            );
     }
 
     function getEntryForMemberCompletion(
@@ -965,7 +977,7 @@ namespace ts.Completions {
     function addSnippets(nodes: Node[]): void {
         let order = 1;
         for (const node of nodes) {
-            addSnippetsWorker(node, undefined);
+            addSnippetsWorker(node, /*parent*/ undefined);
         }
 
         function addSnippetsWorker(node: Node, parent: Node | undefined) {

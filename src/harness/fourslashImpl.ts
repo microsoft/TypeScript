@@ -2290,10 +2290,6 @@ namespace FourSlash {
             if (this.testType === FourSlashTestType.Server) {
                 (this.languageService as ts.server.SessionClient).setFormattingOptions(this.formatCodeSettings);
             }
-            else {
-                throw Error(`'setFormatOptions' is not implemented for test type ${formatTestType(this.testType)}.
-Try setting options via compiler options.`);
-            }
             return oldFormatCodeOptions;
         }
 
@@ -4607,18 +4603,5 @@ Try setting options via compiler options.`);
             emTarget = before + lhs + between + rhs + after;
         });
         return emTarget;
-      }
-
-      function formatTestType(testType: FourSlashTestType): string {
-        switch (testType) {
-            case FourSlashTestType.Native:
-                return "Native";
-            case FourSlashTestType.Shims:
-                return "Shims";
-            case FourSlashTestType.ShimsWithPreprocess:
-                return "ShimsWithPreprocess";
-            case FourSlashTestType.Server:
-                return "Server";
-        }
       }
 }

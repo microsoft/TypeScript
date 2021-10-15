@@ -38471,7 +38471,7 @@ namespace ts {
         /**
          * @param member Existing member node to be checked.
          * Note: `member` cannot be a synthetic node.
-        */
+         */
         function checkExistingMemberForOverrideModifier(
             node: ClassLikeDeclaration,
             staticType: ObjectType,
