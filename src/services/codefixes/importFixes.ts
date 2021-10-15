@@ -766,9 +766,13 @@ namespace ts.codefix {
         return { fixes, symbolName };
     }
 
+    function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
+        return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
+    }
+
     function getSymbolName(sourceFile: SourceFile, checker: TypeChecker, symbolToken: Identifier, compilerOptions: CompilerOptions): string {
         const parent = symbolToken.parent;
-        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && compilerOptions.jsx !== JsxEmit.ReactJSX && compilerOptions.jsx !== JsxEmit.ReactJSXDev) {
+        if ((isJsxOpeningLikeElement(parent) || isJsxClosingElement(parent)) && parent.tagName === symbolToken && jsxModeNeedsExplicitImport(compilerOptions.jsx)) {
             const jsxNamespace = checker.getJsxNamespace(sourceFile);
             if (isIntrinsicJsxName(symbolToken.text) || !checker.resolveName(jsxNamespace, parent, SymbolFlags.Value, /*excludeGlobals*/ true)) {
                 return jsxNamespace;
