@@ -12,18 +12,18 @@ function function1<T extends 'a' | 'b'>(key: T) {
 >'a' : "a"
 
       key.toLowerCase();
->key.toLowerCase() : string
->key.toLowerCase : () => string
+>key.toLowerCase() : "a"
+>key.toLowerCase : <T extends string>(this: T) => Lowercase<T>
 >key : "a"
->toLowerCase : () => string
+>toLowerCase : <T extends string>(this: T) => Lowercase<T>
 
       break;
     default:
       key.toLowerCase();
->key.toLowerCase() : string
->key.toLowerCase : () => string
+>key.toLowerCase() : "b"
+>key.toLowerCase : <T extends string>(this: T) => Lowercase<T>
 >key : "b"
->toLowerCase : () => string
+>toLowerCase : <T extends string>(this: T) => Lowercase<T>
 
       break;
   }

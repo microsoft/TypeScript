@@ -465,13 +465,13 @@ interface String {
     substring(start: number, end?: number): string;
 
     /** Converts all the alphabetic characters in a string to lowercase. */
-    toLowerCase(): string;
+    toLowerCase<T extends string>(this: T): Lowercase<T>;
 
     /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
     toLocaleLowerCase(locales?: string | string[]): string;
 
     /** Converts all the alphabetic characters in a string to uppercase. */
-    toUpperCase(): string;
+    toUpperCase<T extends string>(this: T): Uppercase<T>;
 
     /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
     toLocaleUpperCase(locales?: string | string[]): string;

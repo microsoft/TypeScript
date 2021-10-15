@@ -18,7 +18,7 @@ var r = a || ((a) => a.toLowerCase());
 >(a) => a.toLowerCase() : (a: string) => string
 >a : string
 >a.toLowerCase() : string
->a.toLowerCase : () => string
+>a.toLowerCase : <T extends string>(this: T) => Lowercase<T>
 >a : string
->toLowerCase : () => string
+>toLowerCase : <T extends string>(this: T) => Lowercase<T>
 
