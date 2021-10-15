@@ -10,7 +10,7 @@ namespace ts {
 
         if (!isCommonJSFile &&
             sourceFile.commonJsModuleIndicator &&
-            (programContainsEs6Modules(program) || compilerOptionsIndicateEs6Modules(program.getCompilerOptions())) &&
+            (programContainsEsModules(program) || compilerOptionsIndicateEsModules(program.getCompilerOptions())) &&
             containsTopLevelCommonjs(sourceFile)) {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module));
         }

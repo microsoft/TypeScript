@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, preferences } = context;
             const changes = textChanges.ChangeTracker.with(context, changes => {
-                const moduleExportsChangedToDefault = convertFileToEs6Module(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
+                const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
                 if (moduleExportsChangedToDefault) {
                     for (const importingFile of program.getSourceFiles()) {
                         fixImportOfModuleExports(importingFile, sourceFile, changes, getQuotePreference(importingFile, preferences));
@@ -39,7 +39,7 @@ namespace ts.codefix {
     }
 
     /** @returns Whether we converted a `module.exports =` to a default export. */
-    function convertFileToEs6Module(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
+    function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
         const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
         const exports = collectExportRenames(sourceFile, checker, identifiers);
         convertExportsAccesses(sourceFile, exports, changes);
