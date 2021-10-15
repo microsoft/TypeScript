@@ -12581,7 +12581,7 @@ namespace ts {
                 if (!node) return false;
                 switch (node.kind) {
                     case SyntaxKind.Identifier:
-                        return (node as Identifier).escapedText === argumentsSymbol.escapedName && getResolvedSymbol(node as Identifier) === argumentsSymbol;
+                        return (node as Identifier).escapedText === argumentsSymbol.escapedName && getReferencedValueSymbol(node as Identifier) === argumentsSymbol;
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
