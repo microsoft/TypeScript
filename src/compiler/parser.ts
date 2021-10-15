@@ -7277,19 +7277,24 @@ namespace ts {
             const pos = getNodePos();
             parseExpected(SyntaxKind.AssertKeyword);
             const openBracePosition = scanner.getTokenPos();
-            parseExpected(SyntaxKind.OpenBraceToken);
-            const multiLine = scanner.hasPrecedingLineBreak();
-            const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
-            if (!parseExpected(SyntaxKind.CloseBraceToken)) {
-                const lastError = lastOrUndefined(parseDiagnostics);
-                if (lastError && lastError.code === Diagnostics._0_expected.code) {
-                    addRelatedInfo(
-                        lastError,
-                        createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
-                    );
+            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                const multiLine = scanner.hasPrecedingLineBreak();
+                const elements = parseDelimitedList(ParsingContext.AssertEntries, parseAssertEntry, /*considerSemicolonAsDelimiter*/ true);
+                if (!parseExpected(SyntaxKind.CloseBraceToken)) {
+                    const lastError = lastOrUndefined(parseDiagnostics);
+                    if (lastError && lastError.code === Diagnostics._0_expected.code) {
+                        addRelatedInfo(
+                            lastError,
+                            createDetachedDiagnostic(fileName, openBracePosition, 1, Diagnostics.The_parser_expected_to_find_a_to_match_the_token_here)
+                        );
+                    }
                 }
+                return finishNode(factory.createAssertClause(elements, multiLine), pos);
             }
-            return finishNode(factory.createAssertClause(elements, multiLine), pos);
+            else {
+                const elements = createNodeArray([], getNodePos(), /*end*/ undefined, /*hasTrailingComma*/ false);
+                return finishNode(factory.createAssertClause(elements, /*multiLine*/ false), pos);
+            }
         }
 
         function tokenAfterImportDefinitelyProducesImportDeclaration() {
