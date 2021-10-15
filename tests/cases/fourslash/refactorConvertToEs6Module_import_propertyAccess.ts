@@ -12,7 +12,7 @@
 ////x; a; b;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `import x from "x";
 import { c as a } from "b";

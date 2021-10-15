@@ -26,6 +26,6 @@ verify.codeFixAvailable([]);
 
 goTo.file("/d.js");
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent: 'export default 0;',
 });

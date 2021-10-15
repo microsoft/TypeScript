@@ -9,7 +9,7 @@
 ////module.exports = exportsAlias;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent: `
 export function f() {}
 `,

@@ -10,12 +10,12 @@
 ////console.log(privateUnrelated);
 
 verify.getSuggestionDiagnostics([{
-    message: "File is a CommonJS module; it may be converted to an ES6 module.",
+    message: "File is a CommonJS module; it may be converted to an ES module.",
     code: 80001,
 }]);
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `var privateUnrelated;
 export function f() {}

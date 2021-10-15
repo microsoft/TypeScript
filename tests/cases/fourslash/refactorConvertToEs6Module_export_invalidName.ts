@@ -10,7 +10,7 @@
 ////exports.async = 1;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `const _class = 0;
 export { _class as class };

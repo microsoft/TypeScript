@@ -7,6 +7,6 @@
 ////const a = require('a'); a;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent: "import a from 'a'; a;",
 });

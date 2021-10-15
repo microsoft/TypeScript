@@ -13,7 +13,7 @@
 // See also `refactorConvertToEs6Module_export_moduleDotExportsEqualsRequire.ts`
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `export default function() {}
 export default function f() {}

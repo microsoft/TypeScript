@@ -8,7 +8,7 @@
 ////let x; x;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `import "m";
 let x; x;`

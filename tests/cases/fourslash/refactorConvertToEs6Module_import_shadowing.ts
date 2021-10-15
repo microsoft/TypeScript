@@ -9,7 +9,7 @@
 ////mod.x(x);
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `import { x as _x } from "mod";
 const x = 0;

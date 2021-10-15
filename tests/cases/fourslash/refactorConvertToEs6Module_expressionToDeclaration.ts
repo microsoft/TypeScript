@@ -10,7 +10,7 @@
 ////exports.C = class C extends D { m() {} }
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `var C = {};
 console.log(C);

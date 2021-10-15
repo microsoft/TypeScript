@@ -10,7 +10,7 @@
 ////exports.default;
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `const _default = 0;
 export { _default as default };

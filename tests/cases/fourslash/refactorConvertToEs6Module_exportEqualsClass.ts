@@ -12,7 +12,7 @@
 ////};
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `import { x } from "./b";
 export default class C {

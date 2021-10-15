@@ -8,7 +8,7 @@
 ////exports.h = function h() { h(); }
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `export const f = function g() { g(); }
 export function h() { h(); }`,

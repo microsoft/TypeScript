@@ -14,11 +14,11 @@
 
 const [r0, r1, r2] = test.ranges();
 verify.getSuggestionDiagnostics([
-    { message: "File is a CommonJS module; it may be converted to an ES6 module.", code: 80001, range: r0 },
+    { message: "File is a CommonJS module; it may be converted to an ES module.", code: 80001, range: r0 },
 ]);
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `export function f() {}
 export class C {}

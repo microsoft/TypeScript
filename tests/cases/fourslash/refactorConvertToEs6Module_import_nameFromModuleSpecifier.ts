@@ -9,7 +9,7 @@
 ////const [] = require("1a");
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent:
 `import aB from "a-b";
 const [] = aB;

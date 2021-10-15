@@ -13,7 +13,7 @@
 ////const a = require("./a");
 
 verify.codeFix({
-    description: "Convert to ES6 module",
+    description: "Convert to ES module",
     newFileContent: {
         "/a.js": "export default 0;",
         "/b.ts": 'import a from "./a";',
