@@ -6216,7 +6216,7 @@
         "code": 18003
     },
 
-    "File is a CommonJS module; it may be converted to an ES6 module.": {
+    "File is a CommonJS module; it may be converted to an ES module.": {
         "category": "Suggestion",
         "code": 80001
     },
@@ -6465,7 +6465,7 @@
         "category": "Message",
         "code": 95016
     },
-    "Convert to ES6 module": {
+    "Convert to ES module": {
         "category": "Message",
         "code": 95017
     },
