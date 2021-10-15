@@ -22329,12 +22329,11 @@ namespace ts {
                 if (signature) {
                     const inferredCovariantType = inference.candidates ? getCovariantInference(inference, signature) : undefined;
                     if (inference.contraCandidates) {
-                        const inferredContravariantType = getContravariantInference(inference);
                         // If we have both co- and contra-variant inferences, we prefer the contra-variant inference
-                        // unless the co-variant inference is a subtype and not 'never'.
+                        // unless the co-variant inference is a subtype of some contra-variant inference and not 'never'.
                         inferredType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
-                            isTypeSubtypeOf(inferredCovariantType, inferredContravariantType) ?
-                            inferredCovariantType : inferredContravariantType;
+                            some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) ?
+                            inferredCovariantType : getContravariantInference(inference);
                     }
                     else if (inferredCovariantType) {
                         inferredType = inferredCovariantType;
