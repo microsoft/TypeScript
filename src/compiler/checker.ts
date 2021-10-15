@@ -2410,7 +2410,7 @@ namespace ts {
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: __String, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (isPrimitiveTypeName(name)) {
-                    if (isPartOfInterfaceDeclaration(errorLocation)) {
+                    if (isExtendedByInterface(errorLocation)) {
                         error(errorLocation, Diagnostics.An_interface_cannot_extend_a_primitive_type_like_0_an_interface_can_only_extend_named_types_and_classes, unescapeLeadingUnderscores(name));
                     }
                     else {
@@ -2436,8 +2436,15 @@ namespace ts {
             return false;
         }
 
-        function isPartOfInterfaceDeclaration(node: Node): boolean {
-            return !!findAncestor(node, (item: Node) => isInterfaceDeclaration(item));
+        function isExtendedByInterface(node: Node): boolean {
+            const grandparent = node.parent.parent;
+            const parentOfGrandparent = grandparent.parent;
+            if(grandparent && parentOfGrandparent){
+                const isExtending = isHeritageClause(grandparent) && grandparent.token === SyntaxKind.ExtendsKeyword;
+                const isInterface = isInterfaceDeclaration(parentOfGrandparent);
+                return isExtending && isInterface;
+            }
+            return false;
         }
 
         function maybeMappedType(node: Node, symbol: Symbol) {

@@ -45,6 +45,10 @@ interface d extends a {
 interface e extends number {
 }
 
+interface f {
+    prop: typeof string;
+}
+
 class c1 implements a {
 }
 var instance2 = new c1();
